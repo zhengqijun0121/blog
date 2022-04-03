@@ -1,8 +1,6 @@
 # ssh 使用和配置
 
 
-# ssh 使用和配置
-
 ## Ubuntu 安装 ssh 命令
 
 ```bash

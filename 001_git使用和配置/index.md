@@ -1,8 +1,6 @@
 # git 使用和配置
 
 
-# git 使用和配置
-
 ## Ubuntu 安装 git 命令
 
 ```bash

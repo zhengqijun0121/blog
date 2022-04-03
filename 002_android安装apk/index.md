@@ -1,8 +1,6 @@
 # Android 安装 APK
 
 
-# Android 安装 APK
-
 ## adb 命令安装
 
 - 查看当前设备已安装包名

@@ -1,9 +1,7 @@
 # emoji 🌺
 
 
-# emoji 🌺
-
-EMOJI CHEAT SHEET
+**EMOJI CHEAT SHEET**
 
 ----
 
