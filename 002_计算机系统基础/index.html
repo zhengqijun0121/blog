@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title class="pjax-title">计算机系统基础 - Hello World</title><meta name="Description" content="Hello World"><meta property="og:title" content="计算机系统基础" />
+<meta property="og:description" content="1 一、处理器体系结构1.1 CPU中的时序电路1.1.1 组合电路和时序电路是什么，它们有什么区别 组合电路：将逻辑门组合成一张网，所构成的计算块" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zhengqijun0121.github.io/blog/002_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" /><meta property="og:image" content="https://zhengqijun0121.github.io/images/avatar.webp"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-06-16T14:30:20+08:00" />
+<meta property="article:modified_time" content="2020-06-16T14:30:20+08:00" /><meta property="og:site_name" content="Hugo DoIt Theme Documentation" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://zhengqijun0121.github.io/images/avatar.webp"/>
+
+<meta name="twitter:title" content="计算机系统基础"/>
+<meta name="twitter:description" content="1 一、处理器体系结构1.1 CPU中的时序电路1.1.1 组合电路和时序电路是什么，它们有什么区别 组合电路：将逻辑门组合成一张网，所构成的计算块"/>
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/002_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/001_%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/003_%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" /><link rel="stylesheet" href="/blog/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/blog/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/blog/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/blog/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/blog/lib/animate/animate.min.css"></noscript>
+    
+    
+    
+    <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "计算机系统基础",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/002_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "961, 计算机系统基础","wordcount":  3305 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/002_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80\/","datePublished": "2020-06-16T14:30:20+08:00","dateModified": "2020-06-16T14:30:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "zhengqijun","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/zhengqijun0121.github.io\/blog\/images\/avatar.webp",
+                    "width":  528 ,
+                    "height":  560 
+                }},"author": {
+                "@type": "Person",
+                "name": "zhengqijun"
+            },"description": ""
+    }
+    </script></head>
+
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme);}
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="Hello World"><span class="header-title-pre"><i class='far fa-edit fa-fw'></i></span>Hello World<span class="header-title-post">🌈</span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/series/"> 系列 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" onclick="return false;" class="menu-item theme-select" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                    <select class="color-theme-select" id="theme-select-desktop" title="切换主题">
+                        <option value="light">浅色</option>
+                        <option value="dark">深色</option>
+                        <option value="black">黑色</option>
+                        <option value="auto">跟随系统</option>
+                    </select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="Hello World"><span class="header-title-pre"><i class='far fa-edit fa-fw'></i></span>Hello World<span class="header-title-post">🌈</span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" onclick="return false;" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/series/" title="">系列</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="#" onclick="return false;" class="menu-item theme-select" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+                <select class="color-theme-select" id="theme-select-mobile" title="切换主题">
+                    <option value="light">浅色</option>
+                    <option value="dark">深色</option>
+                    <option value="black">黑色</option>
+                    <option value="auto">跟随系统</option>
+                </select>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一处理器体系结构">一、处理器体系结构</a>
+      <ul>
+        <li><a href="#cpu中的时序电路">CPU中的时序电路</a>
+          <ul>
+            <li><a href="#组合电路和时序电路是什么它们有什么区别">组合电路和时序电路是什么，它们有什么区别</a></li>
+          </ul>
+        </li>
+        <li><a href="#单周期处理器的设计">单周期处理器的设计</a></li>
+        <li><a href="#流水线处理器的基本原理">流水线处理器的基本原理</a>
+          <ul>
+            <li><a href="#流水线处理器的概念及基本原理">流水线处理器的概念及基本原理</a></li>
+            <li><a href="#流水线处理器的局限性">流水线处理器的局限性</a></li>
+            <li><a href="#流水线冒险冒险的种类及对应解决方法">流水线冒险、冒险的种类及对应解决方法</a></li>
+            <li><a href="#影响流水线效率的因素">影响流水线效率的因素</a></li>
+            <li><a href="#流水线插入气泡技术">流水线插入气泡技术</a></li>
+          </ul>
+        </li>
+        <li><a href="#data-hazard的处理">Data Hazard的处理</a></li>
+        <li><a href="#流水线设计中的其他问题">流水线设计中的其他问题</a>
+          <ul>
+            <li><a href="#流水线若干问题及注意点">流水线若干问题及注意点</a></li>
+            <li><a href="#解决流水线的局限性-不一致的划分超标量技术选看">解决流水线的局限性-不一致的划分，超标量技术（选看）</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#二优化程序性能">二、优化程序性能</a>
+      <ul>
+        <li><a href="#优化程序性能">优化程序性能</a></li>
+        <li><a href="#优化编译器的能力和局限性以及表示程序性能">优化编译器的能力和局限性以及表示程序性能</a></li>
+        <li><a href="#特定体系结构或应用特性的性能优化">特定体系结构或应用特性的性能优化</a></li>
+        <li><a href="#限制因素">限制因素</a></li>
+        <li><a href="#确认和消除性能瓶颈">确认和消除性能瓶颈</a></li>
+        <li><a href="#amdahl定律">Amdahl定律</a></li>
+      </ul>
+    </li>
+    <li><a href="#三存储器结构及虚拟存储器">三、存储器结构及虚拟存储器</a>
+      <ul>
+        <li><a href="#局部性">局部性</a></li>
+        <li><a href="#存储器层级结构">存储器层级结构</a>
+          <ul>
+            <li><a href="#存储器的层级结构">存储器的层级结构</a></li>
+          </ul>
+        </li>
+        <li><a href="#计算机高速缓存器原理">计算机高速缓存器原理</a></li>
+        <li><a href="#高速缓存对性能的影响">高速缓存对性能的影响</a></li>
+        <li><a href="#地址空间">地址空间</a></li>
+        <li><a href="#虚拟存储器">虚拟存储器</a></li>
+        <li><a href="#虚拟内存的管理翻译和映射">虚拟内存的管理、翻译和映射</a></li>
+        <li><a href="#tlb">TLB</a></li>
+        <li><a href="#动态存储器分配">动态存储器分配</a></li>
+        <li><a href="#垃圾收集">垃圾收集</a></li>
+      </ul>
+    </li>
+    <li><a href="#四链接进程及并发编程">四、链接、进程及并发编程</a>
+      <ul>
+        <li><a href="#静态链接">静态链接</a></li>
+        <li><a href="#目标文件">目标文件</a></li>
+        <li><a href="#符号和符号表">符号和符号表</a></li>
+        <li><a href="#重定位和加载">重定位和加载</a></li>
+        <li><a href="#动态链接库">动态链接库</a></li>
+        <li><a href="#异常">异常</a></li>
+        <li><a href="#进程">进程</a></li>
+        <li><a href="#进程控制和信号">进程控制和信号</a></li>
+        <li><a href="#进程间的通信">进程间的通信</a></li>
+        <li><a href="#进程间信号量的控制信号量">进程间信号量的控制、信号量</a></li>
+        <li><a href="#各种并发编程模式">各种并发编程模式</a></li>
+        <li><a href="#共享变量">共享变量</a></li>
+        <li><a href="#线程同步">线程同步</a></li>
+        <li><a href="#其他并行问题">其他并行问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#五系统级io和网络编程">五、系统级I/O和网络编程</a>
+      <ul>
+        <li><a href="#io相关概念">I/O相关概念</a></li>
+        <li><a href="#文件及文件操作">文件及文件操作</a></li>
+        <li><a href="#共享文件">共享文件</a></li>
+        <li><a href="#网络编程">网络编程</a></li>
+        <li><a href="#客户端-服务器模型">客户端-服务器模型</a></li>
+        <li><a href="#套接字接口">套接字接口</a></li>
+        <li><a href="#http请求">HTTP请求</a></li>
+        <li><a href="#web服务器">Web服务器</a></li>
+      </ul>
+    </li>
+    <li><a href="#risc和cisc20年考到了但是考纲中没有">RISC和CISC（20年考到了但是考纲中没有）</a></li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">计算机系统基础</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="https://github.com/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author">zhengqijun</a>
+                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/blog/categories/961/"><i class="far fa-folder fa-fw"></i>961</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-16">2020-06-16</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2020-06-16">2020-06-16</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3305 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;<span id="/blog/002_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" class="leancloud_visitors" data-flag-title="计算机系统基础">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count id=twikoo_visitors></span>&nbsp;次阅读
+                    </span>&nbsp;<span id="/blog/002_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" class="comment_count" data-flag-title="计算机系统基础">
+                        <i class="far fa-comments fa-fw"></i>&nbsp;<span class="twikoo-comment-count" id="twikoo-comment-count"></span>&nbsp;条评论
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一处理器体系结构">一、处理器体系结构</a>
+      <ul>
+        <li><a href="#cpu中的时序电路">CPU中的时序电路</a>
+          <ul>
+            <li><a href="#组合电路和时序电路是什么它们有什么区别">组合电路和时序电路是什么，它们有什么区别</a></li>
+          </ul>
+        </li>
+        <li><a href="#单周期处理器的设计">单周期处理器的设计</a></li>
+        <li><a href="#流水线处理器的基本原理">流水线处理器的基本原理</a>
+          <ul>
+            <li><a href="#流水线处理器的概念及基本原理">流水线处理器的概念及基本原理</a></li>
+            <li><a href="#流水线处理器的局限性">流水线处理器的局限性</a></li>
+            <li><a href="#流水线冒险冒险的种类及对应解决方法">流水线冒险、冒险的种类及对应解决方法</a></li>
+            <li><a href="#影响流水线效率的因素">影响流水线效率的因素</a></li>
+            <li><a href="#流水线插入气泡技术">流水线插入气泡技术</a></li>
+          </ul>
+        </li>
+        <li><a href="#data-hazard的处理">Data Hazard的处理</a></li>
+        <li><a href="#流水线设计中的其他问题">流水线设计中的其他问题</a>
+          <ul>
+            <li><a href="#流水线若干问题及注意点">流水线若干问题及注意点</a></li>
+            <li><a href="#解决流水线的局限性-不一致的划分超标量技术选看">解决流水线的局限性-不一致的划分，超标量技术（选看）</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#二优化程序性能">二、优化程序性能</a>
+      <ul>
+        <li><a href="#优化程序性能">优化程序性能</a></li>
+        <li><a href="#优化编译器的能力和局限性以及表示程序性能">优化编译器的能力和局限性以及表示程序性能</a></li>
+        <li><a href="#特定体系结构或应用特性的性能优化">特定体系结构或应用特性的性能优化</a></li>
+        <li><a href="#限制因素">限制因素</a></li>
+        <li><a href="#确认和消除性能瓶颈">确认和消除性能瓶颈</a></li>
+        <li><a href="#amdahl定律">Amdahl定律</a></li>
+      </ul>
+    </li>
+    <li><a href="#三存储器结构及虚拟存储器">三、存储器结构及虚拟存储器</a>
+      <ul>
+        <li><a href="#局部性">局部性</a></li>
+        <li><a href="#存储器层级结构">存储器层级结构</a>
+          <ul>
+            <li><a href="#存储器的层级结构">存储器的层级结构</a></li>
+          </ul>
+        </li>
+        <li><a href="#计算机高速缓存器原理">计算机高速缓存器原理</a></li>
+        <li><a href="#高速缓存对性能的影响">高速缓存对性能的影响</a></li>
+        <li><a href="#地址空间">地址空间</a></li>
+        <li><a href="#虚拟存储器">虚拟存储器</a></li>
+        <li><a href="#虚拟内存的管理翻译和映射">虚拟内存的管理、翻译和映射</a></li>
+        <li><a href="#tlb">TLB</a></li>
+        <li><a href="#动态存储器分配">动态存储器分配</a></li>
+        <li><a href="#垃圾收集">垃圾收集</a></li>
+      </ul>
+    </li>
+    <li><a href="#四链接进程及并发编程">四、链接、进程及并发编程</a>
+      <ul>
+        <li><a href="#静态链接">静态链接</a></li>
+        <li><a href="#目标文件">目标文件</a></li>
+        <li><a href="#符号和符号表">符号和符号表</a></li>
+        <li><a href="#重定位和加载">重定位和加载</a></li>
+        <li><a href="#动态链接库">动态链接库</a></li>
+        <li><a href="#异常">异常</a></li>
+        <li><a href="#进程">进程</a></li>
+        <li><a href="#进程控制和信号">进程控制和信号</a></li>
+        <li><a href="#进程间的通信">进程间的通信</a></li>
+        <li><a href="#进程间信号量的控制信号量">进程间信号量的控制、信号量</a></li>
+        <li><a href="#各种并发编程模式">各种并发编程模式</a></li>
+        <li><a href="#共享变量">共享变量</a></li>
+        <li><a href="#线程同步">线程同步</a></li>
+        <li><a href="#其他并行问题">其他并行问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#五系统级io和网络编程">五、系统级I/O和网络编程</a>
+      <ul>
+        <li><a href="#io相关概念">I/O相关概念</a></li>
+        <li><a href="#文件及文件操作">文件及文件操作</a></li>
+        <li><a href="#共享文件">共享文件</a></li>
+        <li><a href="#网络编程">网络编程</a></li>
+        <li><a href="#客户端-服务器模型">客户端-服务器模型</a></li>
+        <li><a href="#套接字接口">套接字接口</a></li>
+        <li><a href="#http请求">HTTP请求</a></li>
+        <li><a href="#web服务器">Web服务器</a></li>
+      </ul>
+    </li>
+    <li><a href="#risc和cisc20年考到了但是考纲中没有">RISC和CISC（20年考到了但是考纲中没有）</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="一处理器体系结构" class="headerLink">
+    <a href="#%e4%b8%80%e5%a4%84%e7%90%86%e5%99%a8%e4%bd%93%e7%b3%bb%e7%bb%93%e6%9e%84" class="header-mark"></a>1 一、处理器体系结构</h2><h3 id="cpu中的时序电路" class="headerLink">
+    <a href="#cpu%e4%b8%ad%e7%9a%84%e6%97%b6%e5%ba%8f%e7%94%b5%e8%b7%af" class="header-mark"></a>1.1 CPU中的时序电路</h3><h4 id="组合电路和时序电路是什么它们有什么区别" class="headerLink">
+    <a href="#%e7%bb%84%e5%90%88%e7%94%b5%e8%b7%af%e5%92%8c%e6%97%b6%e5%ba%8f%e7%94%b5%e8%b7%af%e6%98%af%e4%bb%80%e4%b9%88%e5%ae%83%e4%bb%ac%e6%9c%89%e4%bb%80%e4%b9%88%e5%8c%ba%e5%88%ab" class="header-mark"></a>1.1.1 组合电路和时序电路是什么，它们有什么区别</h4><ul>
+<li>组合电路：将逻辑门组合成一张网，所构成的计算块</li>
+<li>时序电路：逻辑门电路和反馈逻辑回路或器件（寄存器）组成</li>
+</ul>
+<p>核心区别是：时序电路的输出不仅取决于当时的输入值，而且还与电路过去的状态有关；任意时刻的输出仅仅取决于该时刻的输入，与电路原来的状态无关。</p>
+<h3 id="单周期处理器的设计" class="headerLink">
+    <a href="#%e5%8d%95%e5%91%a8%e6%9c%9f%e5%a4%84%e7%90%86%e5%99%a8%e7%9a%84%e8%ae%be%e8%ae%a1" class="header-mark"></a>1.2 单周期处理器的设计</h3><p>单周期处理器：在一个时钟周期内完成单条指令：取指、译码、执行、访存、写回、更新PC</p>
+<ul>
+<li>1、取指：从内存中读取指令，加载至处理器</li>
+<li>2、译码：对取指令操作中得到的指令进行分析并译码，确定这条指令需要完成的操作，从而产生相的操作控制信号</li>
+<li>3、执行：进行相应的逻辑或算术运算</li>
+<li>4、访存：内存访问（非必要）</li>
+<li>5、写回：将指令结果写回至寄存器（非必要）</li>
+<li>6、更新PC：更新程序计数器（将程序计数器指向接下来要执行的指令的地址）</li>
+</ul>
+<h3 id="流水线处理器的基本原理" class="headerLink">
+    <a href="#%e6%b5%81%e6%b0%b4%e7%ba%bf%e5%a4%84%e7%90%86%e5%99%a8%e7%9a%84%e5%9f%ba%e6%9c%ac%e5%8e%9f%e7%90%86" class="header-mark"></a>1.3 流水线处理器的基本原理</h3><h4 id="流水线处理器的概念及基本原理" class="headerLink">
+    <a href="#%e6%b5%81%e6%b0%b4%e7%ba%bf%e5%a4%84%e7%90%86%e5%99%a8%e7%9a%84%e6%a6%82%e5%bf%b5%e5%8f%8a%e5%9f%ba%e6%9c%ac%e5%8e%9f%e7%90%86" class="header-mark"></a>1.3.1 流水线处理器的概念及基本原理</h4><p>可以结合单周期处理器的不足进行回答，因为流水线就是单周期处理器的改进。</p>
+<p>！！！！一定要点出<strong>并行</strong>！！！！！</p>
+<ul>
+<li>
+<p>概念：流水线处理器将待执行的指令拆分成若干个阶段，每个阶段后添加寄存器，使每个阶段
+可以在允许其独立使用的硬件电路上与其他阶段并行，以此提高系统的吞吐量。</p>
+</li>
+<li>
+<p>流水线是如何提高程序性能的？（或者说是流水线的特点）</p>
+<ul>
+<li>拆分指令，并且在每个阶段对应的硬件电路后添加寄存器</li>
+<li>以流水线的形式执行指令，充分利用硬件，减少了硬件的闲置时间（对比单周期处理器）</li>
+</ul>
+</li>
+</ul>
+<h4 id="流水线处理器的局限性" class="headerLink">
+    <a href="#%e6%b5%81%e6%b0%b4%e7%ba%bf%e5%a4%84%e7%90%86%e5%99%a8%e7%9a%84%e5%b1%80%e9%99%90%e6%80%a7" class="header-mark"></a>1.3.2 流水线处理器的局限性</h4><ul>
+<li>不一致的划分：每个阶段的延迟不一致，导致系统吞吐量取决于最慢的阶段。</li>
+<li>流水线过深，收益反而下降：在组合逻辑被分成较小的块时，由寄存器更新引起的延迟成为了一个限制因素，降低了收益。</li>
+</ul>
+<h4 id="流水线冒险冒险的种类及对应解决方法" class="headerLink">
+    <a href="#%e6%b5%81%e6%b0%b4%e7%ba%bf%e5%86%92%e9%99%a9%e5%86%92%e9%99%a9%e7%9a%84%e7%a7%8d%e7%b1%bb%e5%8f%8a%e5%af%b9%e5%ba%94%e8%a7%a3%e5%86%b3%e6%96%b9%e6%b3%95" class="header-mark"></a>1.3.3 流水线冒险、冒险的种类及对应解决方法</h4><p>流水线冒险：邻近指令之间出现了某种关联后，下一条指令无法正确执行。</p>
+<p>冒险的种类及解决方法：</p>
+<ul>
+<li>
+<p>结构冒险：争用硬件（一个指令需要的硬件部件还在为之前的指令工作，而无法为这条指令提供服务）</p>
+<ul>
+<li>插入气泡（流水线气泡）</li>
+<li>设置相互独立的指令存储和数据存储</li>
+</ul>
+</li>
+<li>
+<p>数据冒险：存在数据依赖，数据还未产生</p>
+<ul>
+<li>插入气泡（流水线气泡或者空指令：气泡前的指令继续执行，气泡后的指令被阻塞。直到冒险条件不再满足）</li>
+<li>数据转发（将结果值直接从一个流水线阶段传到较早阶段，需要在硬件结构中增加一些额外的数据连接和控制逻辑）</li>
+<li>加载互锁（就是暂停加上数据转发，因为在转发将值转发到已经过去的时间中，所以要插入暂停周期）</li>
+<li>乱序执行（这个CSAPP中没有，但是应用广泛，可以了解。就是分析指令间的依赖，将无依赖关系的指令提前执行，代替暂停周期，避免时钟浪费）</li>
+</ul>
+</li>
+<li>
+<p>控制冒险：存在分支和跳转时可能发生，不确定下一条执行什么指令</p>
+<ul>
+<li>插入气泡</li>
+<li>分支预测策略：从不选择策略（60%），反向选择策略（40%），正向选择反向不选择（65%）</li>
+<li>条件跳转语句中，可以将每个条件的结果都进行计算，计算的开销小于流水线清空带来的代建</li>
+</ul>
+</li>
+</ul>
+<h4 id="影响流水线效率的因素" class="headerLink">
+    <a href="#%e5%bd%b1%e5%93%8d%e6%b5%81%e6%b0%b4%e7%ba%bf%e6%95%88%e7%8e%87%e7%9a%84%e5%9b%a0%e7%b4%a0" class="header-mark"></a>1.3.4 影响流水线效率的因素</h4><p>局限性和流水线冒险，根据上面的解释这两点</p>
+<h4 id="流水线插入气泡技术" class="headerLink">
+    <a href="#%e6%b5%81%e6%b0%b4%e7%ba%bf%e6%8f%92%e5%85%a5%e6%b0%94%e6%b3%a1%e6%8a%80%e6%9c%af" class="header-mark"></a>1.3.5 流水线插入气泡技术</h4><p>插入气泡技术可以解决所有的流水线冒险，但是每一个气泡都会浪费一个时钟周期，代价非常高。因此尽量少用插入气泡解决流水线冒险，选用其他效率高的方法。参考上面提到的。</p>
+<h3 id="data-hazard的处理" class="headerLink">
+    <a href="#data-hazard%e7%9a%84%e5%a4%84%e7%90%86" class="header-mark"></a>1.4 Data Hazard的处理</h3><h3 id="流水线设计中的其他问题" class="headerLink">
+    <a href="#%e6%b5%81%e6%b0%b4%e7%ba%bf%e8%ae%be%e8%ae%a1%e4%b8%ad%e7%9a%84%e5%85%b6%e4%bb%96%e9%97%ae%e9%a2%98" class="header-mark"></a>1.5 流水线设计中的其他问题</h3><h4 id="流水线若干问题及注意点" class="headerLink">
+    <a href="#%e6%b5%81%e6%b0%b4%e7%ba%bf%e8%8b%a5%e5%b9%b2%e9%97%ae%e9%a2%98%e5%8f%8a%e6%b3%a8%e6%84%8f%e7%82%b9" class="header-mark"></a>1.5.1 流水线若干问题及注意点</h4><ul>
+<li>流水线并不能减少(而且一般是增加)单条指令的执行时间，但却能提高系统吞吐率。</li>
+<li>适当增加流水线的深度(段数)可以提高流水线的性能。（参考流水线的局限性-不一致的划分）</li>
+<li>流水线的深度(级数)受限于流水线的延迟和流水线的额外开销</li>
+<li>如果流水线中的指令相互独立 ，则可以充分发挥流水线的性能。但在实际中 ，指令间可能会是相互依赖，这会降低流水线的性能。</li>
+</ul>
+<h4 id="解决流水线的局限性-不一致的划分超标量技术选看" class="headerLink">
+    <a href="#%e8%a7%a3%e5%86%b3%e6%b5%81%e6%b0%b4%e7%ba%bf%e7%9a%84%e5%b1%80%e9%99%90%e6%80%a7-%e4%b8%8d%e4%b8%80%e8%87%b4%e7%9a%84%e5%88%92%e5%88%86%e8%b6%85%e6%a0%87%e9%87%8f%e6%8a%80%e6%9c%af%e9%80%89%e7%9c%8b" class="header-mark"></a>1.5.2 解决流水线的局限性-不一致的划分，超标量技术（选看）</h4><p>Intel处理器中的超线程技术的本质就是超标量技术。</p>
+<p>在CPU中有一条以上的流水线，并且每时钟周期内可以完成一条以上的指令，这种设计就叫超标量技术。其实质是以时间换取空间。</p>
+<p>处理器的执行阶段往往是处理器中最耗时的阶段，也就是说执行阶段往往是处理器的瓶颈。</p>
+<hr>
+<h2 id="二优化程序性能" class="headerLink">
+    <a href="#%e4%ba%8c%e4%bc%98%e5%8c%96%e7%a8%8b%e5%ba%8f%e6%80%a7%e8%83%bd" class="header-mark"></a>2 二、优化程序性能</h2><h3 id="优化程序性能" class="headerLink">
+    <a href="#%e4%bc%98%e5%8c%96%e7%a8%8b%e5%ba%8f%e6%80%a7%e8%83%bd" class="header-mark"></a>2.1 优化程序性能</h3><h3 id="优化编译器的能力和局限性以及表示程序性能" class="headerLink">
+    <a href="#%e4%bc%98%e5%8c%96%e7%bc%96%e8%af%91%e5%99%a8%e7%9a%84%e8%83%bd%e5%8a%9b%e5%92%8c%e5%b1%80%e9%99%90%e6%80%a7%e4%bb%a5%e5%8f%8a%e8%a1%a8%e7%a4%ba%e7%a8%8b%e5%ba%8f%e6%80%a7%e8%83%bd" class="header-mark"></a>2.2 优化编译器的能力和局限性以及表示程序性能</h3><ul>
+<li>1、高级设计：选择合适的算法和数据结构。</li>
+<li>2、基本编码原则：避免限制优化的因素，使编译器产生高效的代码
+<ul>
+<li>1)、消除连续的函数调用（消除低效率循环、减少过程调用）：在可能时，将计算移到循环外。</li>
+<li>2)、消除不必要的内存引用：引入临时变量来保存中间结果，只有在最后的值计算出来时，才将结果存放到数组或全局变量中。</li>
+</ul>
+</li>
+<li>3、低级优化：结构化代码以利用硬件功能。
+<ul>
+<li>1)、展开循环，降低开销</li>
+<li>2)、提高指令级并行：通过多个累积变量和重新结合技术</li>
+<li>3)、用功能性的风格重写条件操作，使得编译采用数据传送。</li>
+</ul>
+</li>
+</ul>
+<h3 id="特定体系结构或应用特性的性能优化" class="headerLink">
+    <a href="#%e7%89%b9%e5%ae%9a%e4%bd%93%e7%b3%bb%e7%bb%93%e6%9e%84%e6%88%96%e5%ba%94%e7%94%a8%e7%89%b9%e6%80%a7%e7%9a%84%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96" class="header-mark"></a>2.3 特定体系结构或应用特性的性能优化</h3><h3 id="限制因素" class="headerLink">
+    <a href="#%e9%99%90%e5%88%b6%e5%9b%a0%e7%b4%a0" class="header-mark"></a>2.4 限制因素</h3><ul>
+<li>1、寄存器溢出：并行度超过了可用寄存器的数量，就会发生溢出。将某些临时值放到内存中，通常是在运行时堆栈上分配空间。</li>
+<li>2、分支预测和预测错误的惩罚：分支预测逻辑不能正确预测分支是否要跳转，这时条件分支可能会招致很大的预测错误处罚
+<ul>
+<li>不要过分关心可预测分支</li>
+<li>书写适合用条件传送实现的代码</li>
+</ul>
+</li>
+</ul>
+<h3 id="确认和消除性能瓶颈" class="headerLink">
+    <a href="#%e7%a1%ae%e8%ae%a4%e5%92%8c%e6%b6%88%e9%99%a4%e6%80%a7%e8%83%bd%e7%93%b6%e9%a2%88" class="header-mark"></a>2.5 确认和消除性能瓶颈</h3><p>程序剖析运行版本的一个版本，其中插入了工具代码，以确定程序的各个部分需要多少时间．再根据Amdahl定律进行优化。</p>
+<h3 id="amdahl定律" class="headerLink">
+    <a href="#amdahl%e5%ae%9a%e5%be%8b" class="header-mark"></a>2.6 Amdahl定律</h3><p><strong>Amdahl定律</strong>的主要思想是当我们加快系统的一个部分的速度时，对系统整体性能的影响依赖于这个部分有多重要和速度提高了多少．</p>
+<p>公式：<code>S = 1 / ((1 - a) + a / k)</code></p>
+<p>其中a为某部分需要时间的百分比，k为性能提升倍数．</p>
+<p>主要观点是要想大幅度提高整个系统的速度，我们必须提高整个系统很大一部分的速度．</p>
+<hr>
+<h2 id="三存储器结构及虚拟存储器" class="headerLink">
+    <a href="#%e4%b8%89%e5%ad%98%e5%82%a8%e5%99%a8%e7%bb%93%e6%9e%84%e5%8f%8a%e8%99%9a%e6%8b%9f%e5%ad%98%e5%82%a8%e5%99%a8" class="header-mark"></a>3 三、存储器结构及虚拟存储器</h2><h3 id="局部性" class="headerLink">
+    <a href="#%e5%b1%80%e9%83%a8%e6%80%a7" class="header-mark"></a>3.1 局部性</h3><p><strong>局部性</strong>通常有两种形式：时间局部性(temporal locality)和空间局部性(spatial locality)．</p>
+<ul>
+<li>在一个具有良好时间局部性的程序中，被引用过一次的存储器位置很可能在不远的将来再被多次引用．</li>
+<li>在一个具有良好空间局部性的程序中，如果一个存储器位置被引用了一次，那么程序很可能在不远的将来引用附近的一个存储器位置．</li>
+</ul>
+<h3 id="存储器层级结构" class="headerLink">
+    <a href="#%e5%ad%98%e5%82%a8%e5%99%a8%e5%b1%82%e7%ba%a7%e7%bb%93%e6%9e%84" class="header-mark"></a>3.2 存储器层级结构</h3><p><img
+        class="lazyload"
+        data-src="memoryHierarchy.png"
+        data-srcset="memoryHierarchy.png, memoryHierarchy.png 1.5x, memoryHierarchy.png 2x"
+        data-sizes="auto"
+        alt="memoryHierarchy.png"
+        title="memoryHierarchy.png"></p>
+<h4 id="存储器的层级结构" class="headerLink">
+    <a href="#%e5%ad%98%e5%82%a8%e5%99%a8%e7%9a%84%e5%b1%82%e7%ba%a7%e7%bb%93%e6%9e%84" class="header-mark"></a>3.2.1 存储器的层级结构</h4><p>从高层往低层走，存储设备逐渐从小而快变得更大、更慢、更便宜，每层都会缓存来自较低一层的数据对象。被缓存的数据对象一般是处理器近期可能会需要的信息，这样可以有效提高读/写效率。</p>
+<ul>
+<li>寄存器</li>
+<li>L1高速缓存</li>
+<li>L2高速缓存</li>
+<li>L3高速缓存</li>
+<li>主存</li>
+<li>本地二级存储（本地磁盘）</li>
+<li>远程二级存储（分布式文件系统，WEB服务器）</li>
+</ul>
+<p>主要思想：上一层的存储器作为低一层的存储器的高速缓存。利用高速缓存的局部性原理：程序具有访问局部区域里的数据和代码的趋势。</p>
+<h3 id="计算机高速缓存器原理" class="headerLink">
+    <a href="#%e8%ae%a1%e7%ae%97%e6%9c%ba%e9%ab%98%e9%80%9f%e7%bc%93%e5%ad%98%e5%99%a8%e5%8e%9f%e7%90%86" class="header-mark"></a>3.3 计算机高速缓存器原理</h3><h3 id="高速缓存对性能的影响" class="headerLink">
+    <a href="#%e9%ab%98%e9%80%9f%e7%bc%93%e5%ad%98%e5%af%b9%e6%80%a7%e8%83%bd%e7%9a%84%e5%bd%b1%e5%93%8d" class="header-mark"></a>3.4 高速缓存对性能的影响</h3><h3 id="地址空间" class="headerLink">
+    <a href="#%e5%9c%b0%e5%9d%80%e7%a9%ba%e9%97%b4" class="header-mark"></a>3.5 地址空间</h3><p>地址空间是一个非负整数地址的有序集合．</p>
+<p>如果地址空间中的整数是连续的，那么就是一个线性地址空间．</p>
+<p>在一个带虚拟存储器的系统中，CPU从一个有2^n个地址的地址空间中生产虚拟地址，这个地址空间称为虚拟地址空间．</p>
+<p>物理地址空间与系统中的物理存储器相对应．</p>
+<h3 id="虚拟存储器" class="headerLink">
+    <a href="#%e8%99%9a%e6%8b%9f%e5%ad%98%e5%82%a8%e5%99%a8" class="header-mark"></a>3.6 虚拟存储器</h3><p>虚拟存储器是硬件异常、硬件地址翻译、主存、磁盘文件和内核软件的完美交互，它为每个进程提供了一个大的、一致的、私有地址空间．</p>
+<h3 id="虚拟内存的管理翻译和映射" class="headerLink">
+    <a href="#%e8%99%9a%e6%8b%9f%e5%86%85%e5%ad%98%e7%9a%84%e7%ae%a1%e7%90%86%e7%bf%bb%e8%af%91%e5%92%8c%e6%98%a0%e5%b0%84" class="header-mark"></a>3.7 虚拟内存的管理、翻译和映射</h3><h3 id="tlb" class="headerLink">
+    <a href="#tlb" class="header-mark"></a>3.8 TLB</h3><p>TLB(Translation Lookaside Buffer)叫做翻译后备缓冲器．</p>
+<p>TLB是一个小的、虚拟寻址的缓存，其中每一行都保存着一个由PTE组成的块．</p>
+<h3 id="动态存储器分配" class="headerLink">
+    <a href="#%e5%8a%a8%e6%80%81%e5%ad%98%e5%82%a8%e5%99%a8%e5%88%86%e9%85%8d" class="header-mark"></a>3.9 动态存储器分配</h3><h3 id="垃圾收集" class="headerLink">
+    <a href="#%e5%9e%83%e5%9c%be%e6%94%b6%e9%9b%86" class="header-mark"></a>3.10 垃圾收集</h3><hr>
+<h2 id="四链接进程及并发编程" class="headerLink">
+    <a href="#%e5%9b%9b%e9%93%be%e6%8e%a5%e8%bf%9b%e7%a8%8b%e5%8f%8a%e5%b9%b6%e5%8f%91%e7%bc%96%e7%a8%8b" class="header-mark"></a>4 四、链接、进程及并发编程</h2><h3 id="静态链接" class="headerLink">
+    <a href="#%e9%9d%99%e6%80%81%e9%93%be%e6%8e%a5" class="header-mark"></a>4.1 静态链接</h3><h3 id="目标文件" class="headerLink">
+    <a href="#%e7%9b%ae%e6%a0%87%e6%96%87%e4%bb%b6" class="header-mark"></a>4.2 目标文件</h3><h3 id="符号和符号表" class="headerLink">
+    <a href="#%e7%ac%a6%e5%8f%b7%e5%92%8c%e7%ac%a6%e5%8f%b7%e8%a1%a8" class="header-mark"></a>4.3 符号和符号表</h3><h3 id="重定位和加载" class="headerLink">
+    <a href="#%e9%87%8d%e5%ae%9a%e4%bd%8d%e5%92%8c%e5%8a%a0%e8%bd%bd" class="header-mark"></a>4.4 重定位和加载</h3><h3 id="动态链接库" class="headerLink">
+    <a href="#%e5%8a%a8%e6%80%81%e9%93%be%e6%8e%a5%e5%ba%93" class="header-mark"></a>4.5 动态链接库</h3><h3 id="异常" class="headerLink">
+    <a href="#%e5%bc%82%e5%b8%b8" class="header-mark"></a>4.6 异常</h3><h3 id="进程" class="headerLink">
+    <a href="#%e8%bf%9b%e7%a8%8b" class="header-mark"></a>4.7 进程</h3><h3 id="进程控制和信号" class="headerLink">
+    <a href="#%e8%bf%9b%e7%a8%8b%e6%8e%a7%e5%88%b6%e5%92%8c%e4%bf%a1%e5%8f%b7" class="header-mark"></a>4.8 进程控制和信号</h3><h3 id="进程间的通信" class="headerLink">
+    <a href="#%e8%bf%9b%e7%a8%8b%e9%97%b4%e7%9a%84%e9%80%9a%e4%bf%a1" class="header-mark"></a>4.9 进程间的通信</h3><h3 id="进程间信号量的控制信号量" class="headerLink">
+    <a href="#%e8%bf%9b%e7%a8%8b%e9%97%b4%e4%bf%a1%e5%8f%b7%e9%87%8f%e7%9a%84%e6%8e%a7%e5%88%b6%e4%bf%a1%e5%8f%b7%e9%87%8f" class="header-mark"></a>4.10 进程间信号量的控制、信号量</h3><h3 id="各种并发编程模式" class="headerLink">
+    <a href="#%e5%90%84%e7%a7%8d%e5%b9%b6%e5%8f%91%e7%bc%96%e7%a8%8b%e6%a8%a1%e5%bc%8f" class="header-mark"></a>4.11 各种并发编程模式</h3><h3 id="共享变量" class="headerLink">
+    <a href="#%e5%85%b1%e4%ba%ab%e5%8f%98%e9%87%8f" class="header-mark"></a>4.12 共享变量</h3><h3 id="线程同步" class="headerLink">
+    <a href="#%e7%ba%bf%e7%a8%8b%e5%90%8c%e6%ad%a5" class="header-mark"></a>4.13 线程同步</h3><h3 id="其他并行问题" class="headerLink">
+    <a href="#%e5%85%b6%e4%bb%96%e5%b9%b6%e8%a1%8c%e9%97%ae%e9%a2%98" class="header-mark"></a>4.14 其他并行问题</h3><hr>
+<h2 id="五系统级io和网络编程" class="headerLink">
+    <a href="#%e4%ba%94%e7%b3%bb%e7%bb%9f%e7%ba%a7io%e5%92%8c%e7%bd%91%e7%bb%9c%e7%bc%96%e7%a8%8b" class="header-mark"></a>5 五、系统级I/O和网络编程</h2><h3 id="io相关概念" class="headerLink">
+    <a href="#io%e7%9b%b8%e5%85%b3%e6%a6%82%e5%bf%b5" class="header-mark"></a>5.1 I/O相关概念</h3><h3 id="文件及文件操作" class="headerLink">
+    <a href="#%e6%96%87%e4%bb%b6%e5%8f%8a%e6%96%87%e4%bb%b6%e6%93%8d%e4%bd%9c" class="header-mark"></a>5.2 文件及文件操作</h3><h3 id="共享文件" class="headerLink">
+    <a href="#%e5%85%b1%e4%ba%ab%e6%96%87%e4%bb%b6" class="header-mark"></a>5.3 共享文件</h3><h3 id="网络编程" class="headerLink">
+    <a href="#%e7%bd%91%e7%bb%9c%e7%bc%96%e7%a8%8b" class="header-mark"></a>5.4 网络编程</h3><h3 id="客户端-服务器模型" class="headerLink">
+    <a href="#%e5%ae%a2%e6%88%b7%e7%ab%af-%e6%9c%8d%e5%8a%a1%e5%99%a8%e6%a8%a1%e5%9e%8b" class="header-mark"></a>5.5 客户端-服务器模型</h3><h3 id="套接字接口" class="headerLink">
+    <a href="#%e5%a5%97%e6%8e%a5%e5%ad%97%e6%8e%a5%e5%8f%a3" class="header-mark"></a>5.6 套接字接口</h3><h3 id="http请求" class="headerLink">
+    <a href="#http%e8%af%b7%e6%b1%82" class="header-mark"></a>5.7 HTTP请求</h3><h3 id="web服务器" class="headerLink">
+    <a href="#web%e6%9c%8d%e5%8a%a1%e5%99%a8" class="header-mark"></a>5.8 Web服务器</h3><h2 id="risc和cisc20年考到了但是考纲中没有" class="headerLink">
+    <a href="#risc%e5%92%8ccisc20%e5%b9%b4%e8%80%83%e5%88%b0%e4%ba%86%e4%bd%86%e6%98%af%e8%80%83%e7%ba%b2%e4%b8%ad%e6%b2%a1%e6%9c%89" class="header-mark"></a>6 RISC和CISC（20年考到了但是考纲中没有）</h2><hr>
+<!-- EOF -->
+</div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-06-16</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="https://zhengqijun0121.github.io/blog/002_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" data-title="计算机系统基础" data-hashtags="961,计算机系统基础"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="https://zhengqijun0121.github.io/blog/002_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" data-hashtag="961"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 微博" data-sharer="weibo" data-url="https://zhengqijun0121.github.io/blog/002_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" data-title="计算机系统基础"><i class="fab fa-weibo fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Evernote" data-sharer="evernote" data-url="https://zhengqijun0121.github.io/blog/002_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" data-title="计算机系统基础"><i class="fab fa-evernote fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Telegram" data-sharer="telegram" data-url="https://zhengqijun0121.github.io/blog/002_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/" data-title="计算机系统基础" data-web><i class="fab fa-telegram-plane fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/blog/tags/961/">961</a>,&nbsp;<a href="/blog/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/">计算机系统基础</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/001_%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/" class="prev" rel="prev" title="数据结构与算法分析"><i class="fas fa-angle-left fa-fw"></i>数据结构与算法分析</a>
+            <a href="/blog/003_%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" class="next" rel="next" title="软件工程">软件工程<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="twikoo"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://twikoo.js.org/">Twikoo</a>.
+            </noscript></div></article></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">
+                    由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.96.0">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href="https://github.com/HEIGE-PCloud/DoIt" target="_blank" rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2018 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://github.com/zhengqijun0121" target="_blank" rel="noopener noreferrer">zhengqijun</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div><script>
+                    if('serviceWorker' in navigator) {
+                        navigator.serviceWorker
+                            .register('/sw.min.js', { scope: '/' })
+                            .then(function(registration) {
+                            });
+                
+                        navigator.serviceWorker
+                            .ready
+                            .then(function(registration) {
+                            });
+                    }
+                </script></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div class="assets"><script type="text/javascript" src="/blog/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/blog/lib/fuse/fuse.min.js"></script><script type="text/javascript" src="/blog/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/blog/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/blog/lib/topbar/topbar.min.js"></script><script type="text/javascript" src="/blog/lib/pjax/pjax.min.js"></script><script type="text/javascript" src="/blog/js/theme.min.js" defer></script></div>
+
+<div class="pjax-assets"><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":20},"comment":{"twikoo":{"commentCount":true,"el":"#twikoo","envId":"https://doit-docs-comment-twikoo.vercel.app/","lang":"zh-cn"}},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/blog/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":true,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":50,"threshold":0.1,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true}};</script><script type="text/javascript" src="/blog/lib/twikoo/twikoo.all.min.js" defer></script><script type="text/javascript" src="/blog/js/twikoo.min.js" defer></script><script type="text/javascript" src="/blog/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/blog/lib/sharer/sharer.min.js"></script></div>
+</body>
+
+</html>
