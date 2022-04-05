@@ -82,7 +82,7 @@ JVM (Java Virtual Machine)，是运行所有 Java 程序的抽象计算机，是
 作用范围：定义开始到定义它的代码块结束
 
 {{< admonition warning >}}
-**注意同一范围内，不允许定义多个同名局部变量！**
+**注意同一作用域内，不允许定义多个同名局部变量！**
 {{< /admonition >}}
 
 ### 成员变量和局部变量
@@ -229,14 +229,199 @@ for (;;) {
 | 返回值类型 | 返回值的数据类型         |
 | 方法签名   | 方法名和方法的参数列表   |
 
+### 重载
 
-TODO
+在同一个类中，允许存在一个以上的同名方法，只要它们的参数个数或者参数类型或者参数顺序不同即可。
 
+函数重载与返回值类型无关，只与参数列表有关。
+
+```java
+// eg.
+public void func(int a);
+public int func();
+public void func(int a, String s);
+```
+
+### 可变参数
+
+从 java5 开始出现了可变参数，这是对 java 方法及数组的拓展!
+
+可变参数定义格式：
+
+```java
+返回值类型 方法名(参数类型 ... 形式参数) {
+    // do something
+}
+```
+
+{{< admonition >}}
+**可变参数只能出现在参数列表的最后！**
+{{< /admonition >}}
+
+调用可变参数的方法时，编译器为该可变参数隐含创建一个数组，在方法体中以数组的形式访问可变参数。
+
+----
+
+### 数组简介
+
+数组 (Array) 是 Java 语言中内置的一种基本数据存储结构，通俗的理解，就是一组数的集合。
+
+- 数组的元素编号从 0 开始，依次递增，方便访问。
+- 必须先声明数组，再给数组分配内存。
+- 数组对应内存中的一段连续空间。
+- 数组元素是同一类数据类型。
+
+### 一维数组
+
+1. 声明
+
+```java
+type varName[];
+// or
+type[] varName[];  // 推荐
+```
+
+2. 初始化
+
+- 静态初始化：初始化时指定每个数组元素的初始值，由系统决定数组长度。
+
+```java
+数组名 = new 数组类型[]{元素1，元素2，...};
+// or
+数组名 = {元素1，元素2，...};  // 简化
+```
+
+- 动态初始化：初始化时指定数组长度，由系统为数组元素分配初始值。
+
+```java
+数组名 = new 数组类型[数组长度];
+```
+
+{{< admonition >}}
+**静态初始化和动态初始化不能同时使用！**
+{{< /admonition >}}
+
+3. 数组的使用
+
+```java
+public class Demo {
+    public static void main(String[] args) {
+        int[] age = {1, 2, 3, 4, 5};
+        for (int i = 0; i < age.length - 1; ++i) {
+            System.out.println("age[" + i + "] = " + age[i]);
+        }
+    }
+}
+```
+
+### 二维数组
+
+二维数组其实是一个大的一维数组，它的每一个元素都是一个一维数组，可以看作是一张表格。
+
+```java
+int[][] arr = {{1, 2}, {3, 4}};  // 静态初始化
+int[][] arr = new int[2][2];     // 动态初始化
+```
+
+### Arrays 类
+
+{{< admonition >}}
+使用数组工具类可以节省时间，提高效率，注意常查阅 api！
+{{< /admonition >}}
+
+```java
+static int binarySearch(type[] a, type key);  // 二分搜索法
+static int binarySearch(type[] a, int fromIndex, int toIndex, type key);  // 二分搜索法
+static boolean[] copyOf(type[] original, int newLength);  // 复制指定的数组
+static byte[] copyOfRange(type[] original, int from, int to);  // 将数组的指定范围复制到一个新数组
+static boolean equals(type[] a, type[] a2);  // 判断数组元素相等
+static void fill(type[] a, type val);  // 数组所有元素都赋为 val
+static void fill(type[] a, int fromIndex, int toIndex, type val);  // 数组元素都赋为 val
+static void sort(type[] a);  // 按升序排序
+static void sort(type[] a, int fromIndex, int toIndex);  // 按升序排序
+static String toString(type[] a);  // 返回字符串表示形式
+```
+
+### for-each
+
+```java
+for (type varName : arrName) {
+    // do something
+}
+```
 
 ----
 
 ## 面向对象
 
+### 什么叫面向对象
+
+面向对象 (Object-Oriented，简称 OO) 就是一种常见的程序结构设计方法。面向对象思想的基础是将相关的数据和方法放在一起，形成一种新的复合数据类型。
+
+**面向对象的三个特征：**
+
+- 封装
+- 继承
+- 多态
+
+面向过程强调的是具体的功能实现，面向对象强调的是具备功能的对象。
+
+### 类
+
+类 (class) 是Java 语言的最小编程单位，也是设计和实现Java 程序的基础。
+
+类是一组事物共有特征和功能的描述。类是抽象的，对象是具体的。
+
+类的定义格式：
+
+```java
+[修饰符] class 类名 {
+    构造方法;
+    字段;
+    方法;
+}
+```
+
+### 构造方法
+
+- 构造方法是用来构造类的实例，每一个类都有默认的无参构造方法。
+- 字段是类或对象所包含的数据，对类状态的一种描述。
+- 方法是类或对象的特征或行为。
+
+作用：给类中的字段初始化，可以用来创建对象。
+
+{{< admonition >}}
+**构造方法与类名相同，没有返回值。多个构造方法以重载的形式存在。**
+{{< /admonition >}}
+
+### static
+
+`static` 的特点：
+
+- 随着类的加载而加载
+- 优先于对象存在
+- 被所有对象所共享
+- 可以直接被类名调用
+
+{{< admonition >}}
+1. 静态方法只能访问静态成员，但是非静态方法可以访问静态成员。
+2. 静态方法中不可以使用 `this`、`super` 关键字
+3. 利用类名调用静态 main 方法会陷入死循环，导致内存溢出，jvm 自动停止！
+{{< /admonition >}}
+
+`static` 修饰的字段和方法表示属于类共用，而不属于单个实例。既可以通过类调用，也可以通过实例调用。
+
+### 匿名对象
+
+匿名对象是指一个没有名字的对象，只能调用一次。
+
+### this
+
+`this` 表示当前对象。
+
+在类的构造器中相互调用，`this` 只能写在构造方法的第一行！
+
+TODO
 
 ----
 
