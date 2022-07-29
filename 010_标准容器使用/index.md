@@ -43,6 +43,49 @@
 template <class T, size_t N> class array;
 ```
 
+**API 定义**
+
+```cpp
+template <class T, size_t N>
+class array {
+public:
+    // Iterators
+    iterator begin() noexcept;
+    const_iterator begin() const noexcept;
+    iterator end() noexcept;
+    const_iterator end() const noexcept;
+    reverse_iterator rbegin() noexcept;
+    const_reverse_iterator rbegin() const noexcept;
+    reverse_iterator rend() noexcept;
+    const_reverse_iterator rend() const noexcept;
+    const_iterator cbegin() const noexcept;
+    const_iterator cend() const noexcept;
+    const_reverse_iterator crbegin() const noexcept;
+    const_reverse_iterator crend() const noexcept;
+
+    // Capacity
+    constexpr size_type size() noexcept;
+    constexpr size_type max_size() noexcept;
+    constexpr bool empty() noexcept;
+
+    // Element Access
+    reference operator[](size_type n);
+    const_reference operator[](size_type n) const;
+    reference at(size_type n);
+    const_reference at(size_type n) const;
+    reference front();
+    const_reference front() const;
+    reference back();
+    const_reference back() const;
+    value_type* data() noexcept;
+    const value_type* data() const noexcept;
+
+    // Modifiers
+    void fill(const value_type& val);
+    void swap(array& x) noexcept(noexcept(swap(declval<value_type&>(), declval<value_type&>())));
+};
+```
+
 ### 使用
 
 1. 头文件
@@ -111,6 +154,152 @@ for (auto it = arr.begin(); it != arr.end(); ++it) {
 
 ```cpp
 typedef basic_string<char> string;
+```
+
+**API 定义**
+
+```cpp
+class string {
+public:
+    string();
+    string(const string& str);	
+    string(const string& str, size_t pos, size_t len = npos);
+    string(const char* s);
+    string(const char* s, size_t n);
+    string(size_t n, char c);
+    template <class InputIterator> string(InputIterator first, InputIterator last);
+    string(initializer_list<char> il);
+    string(string&& str) noexcept;
+    ~string();
+    string& operator=(const string& str);
+    string& operator=(const char* s);
+    string& operator=(char c);
+    string& operator=(initializer_list<char> il);
+    string& operator=(string&& str) noexcept;
+
+    // Iterators
+    iterator begin() noexcept;
+    const_iterator begin() const noexcept;
+    iterator end() noexcept;
+    const_iterator end() const noexcept;
+    reverse_iterator rbegin() noexcept;
+    const_reverse_iterator rbegin() const noexcept;
+    reverse_iterator rend() noexcept;
+    const_reverse_iterator rend() const noexcept;
+    const_iterator cbegin() const noexcept;
+    const_iterator cend() const noexcept;
+    const_reverse_iterator crbegin() const noexcept;
+    const_reverse_iterator crend() const noexcept;
+
+    // Capacity
+    size_t size() const noexcept;
+    size_t length() const noexcept;
+    size_t max_size() const noexcept;
+    void resize(size_t n);
+    void resize(size_t n, char c);
+    size_t capacity() const noexcept;
+    void reserve(size_t n = 0);
+    void clear() noexcept;
+    bool empty() const noexcept;
+    void shrink_to_fit();
+
+    // Element Access
+    char& operator[](size_t pos);
+    const char& operator[](size_t pos) const;
+    char& at(size_t pos);
+    const char& at(size_t pos) const;
+    char& back();
+    const char& back() const;
+    char& front();
+    const char& front() const;
+
+    // Modifiers
+    string& operator+=(const string& str);
+    string& operator+=(const char* s);
+    string& operator+=(char c);
+    string& operator+=(initializer_list<char> il);
+    string& append(const string& str);
+    string& append(const string& str, size_t subpos, size_t sublen);
+    string& append(const char* s);
+    string& append(const char* s, size_t n);
+    string& append(size_t n, char c);
+    template <class InputIterator> string& append(InputIterator first, InputIterator last);
+    string& append(initializer_list<char> il);
+    void push_back(char c);
+    string& assign(const string& str);
+    string& assign(const string& str, size_t subpos, size_t sublen);
+    string& assign(const char* s);
+    string& assign(const char* s, size_t n);
+    string& assign(size_t n, char c);
+    template <class InputIterator> string& assign(InputIterator first, InputIterator last);
+    string& assign(initializer_list<char> il);
+    string& assign(string&& str) noexcept;
+    string& insert(size_t pos, const string& str);
+    string& insert(size_t pos, const string& str, size_t subpos, size_t sublen);
+    string& insert(size_t pos, const char* s);
+    string& insert(size_t pos, const char* s, size_t n);
+    string& insert(size_t pos, size_t n, char c);
+    iterator insert(const_iterator p, size_t n, char c);
+    iterator insert(const_iterator p, char c);
+    template <class InputIterator> iterator insert(iterator p, InputIterator first, InputIterator last);
+    string& insert(const_iterator p, initializer_list<char> il);
+    string& erase(size_t pos = 0, size_t len = npos);
+    iterator erase(const_iterator p);
+    iterator erase(const_iterator first, const_iterator last);
+    string& replace(size_t pos, size_t len, const string& str);
+    string& replace(const_iterator i1, const_iterator i2, const string& str);
+    string& replace(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen);
+    string& replace(size_t pos, size_t len, const char* s);
+    string& replace(const_iterator i1, const_iterator i2, const char* s);
+    string& replace(size_t pos, size_t len, const char* s, size_t n);
+    string& replace(const_iterator i1, const_iterator i2, const char* s, size_t n);
+    string& replace(size_t pos, size_t len, size_t n, char c);
+    string& replace(const_iterator i1, const_iterator i2, size_t n, char c);
+    template <class InputIterator> string& replace(const_iterator i1, const_iterator i2, InputIterator first, InputIterator last);
+    string& replace(const_iterator i1, const_iterator i2, initializer_list<char> il);
+    void swap(string& str);
+    void pop_back();
+
+    // String Operations
+    const char* c_str() const noexcept;
+    const char* data() const noexcept;
+    allocator_type get_allocator() const noexcept;
+    size_t copy(char* s, size_t len, size_t pos = 0) const;
+    size_t find(const string& str, size_t pos = 0) const noexcept;
+    size_t find(const char* s, size_t pos = 0) const;
+    size_t find(const char* s, size_t pos, size_type n) const;
+    size_t find(char c, size_t pos = 0) const noexcept;
+    size_t rfind(const string& str, size_t pos = npos) const noexcept;
+    size_t rfind(const char* s, size_t pos = npos) const;
+    size_t rfind(const char* s, size_t pos, size_t n) const;
+    size_t rfind(char c, size_t pos = npos) const noexcept;
+    size_t find_first_of(const string& str, size_t pos = 0) const noexcept;
+    size_t find_first_of(const char* s, size_t pos = 0) const;
+    size_t find_first_of(const char* s, size_t pos, size_t n) const;
+    size_t find_first_of(char c, size_t pos = 0) const noexcept;
+    size_t find_last_of(const string& str, size_t pos = npos) const noexcept;
+    size_t find_last_of(const char* s, size_t pos = npos) const;
+    size_t find_last_of(const char* s, size_t pos, size_t n) const;
+    size_t find_last_of(char c, size_t pos = npos) const noexcept;
+    size_t find_first_not_of(const string& str, size_t pos = 0) const noexcept;
+    size_t find_first_not_of(const char* s, size_t pos = 0) const;
+    size_t find_first_not_of(const char* s, size_t pos, size_t n) const;
+    size_t find_first_not_of(char c, size_t pos = 0) const noexcept;
+    size_t find_last_not_of(const string& str, size_t pos = npos) const noexcept;
+    size_t find_last_not_of(const char* s, size_t pos = npos) const;
+    size_t find_last_not_of(const char* s, size_t pos, size_t n) const;
+    size_t find_last_not_of(char c, size_t pos = npos) const noexcept;
+    string substr(size_t pos = 0, size_t len = npos) const;
+    int compare(const string& str) const noexcept;
+    int compare(size_t pos, size_t len, const string& str) const;
+    int compare(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen) const;
+    int compare(const char* s) const;
+    int compare(size_t pos, size_t len, const char* s) const;
+    int compare(size_t pos, size_t len, const char* s, size_t n) const;
+
+    // Member Constants
+    static const size_t npos = -1;
+};
 ```
 
 ### 使用
@@ -224,16 +413,348 @@ std::cout << str.substr() << std::endl;  // 子串
 
 ### 定义
 
+向量是表示可以更改大小的数组的序列容器。和数组一样，其元素使用连续的存储位置，但不同的是向量大小是可以动态变化。
 
+原型如下：
 
+```cpp
+template <class T, class Alloc = allocator<T>> class vector;
+```
+
+**API 定义**
+
+```cpp
+template <class T, class Alloc = allocator<T>>
+class vector {
+public:
+    explicit vector(const allocator_type& alloc = allocator_type());
+    explicit vector(size_type n);
+    vector(size_type n, const value_type& val, const allocator_type& alloc = allocator_type());
+    template <class InputIterator> vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+    vector(const vector& x);
+    vector(const vector& x, const allocator_type& alloc);
+    vector(vector&& x);
+    vector(vector&& x, const allocator_type& alloc);
+    vector(initializer_list<value_type> il, const allocator_type& alloc = allocator_type());
+    ~vector();
+    vector& operator=(const vector& x);
+    vector& operator=(vector&& x);
+    vector& oerator=(initializer_list<value_type> il);
+
+    // Iterators
+    iterator begin() noexcept;
+    const_iterator begin() const noexcept;
+    iterator end() noexcept;
+    const_iterator end() const noexcept;
+    reverse_iterator rbegin() noexcept;
+    const_reverse_iterator rbegin() const noexcept;
+    reverse_iterator rend() noexcept;
+    const_reverse_iterator rend() const noexcept;
+    const_iterator cbegin() const noexcept;
+    const_iterator cend() const noexcept;
+    const_reverse_iterator crbegin() const noexcept;
+    const_reverse_iterator crend() const noexcept;
+
+    // Capacity
+    size_type size() const noexcept;
+    size_type max_size() const noexcept;
+    void resize(size_type n);
+    void resize(size_type n, const value_type& val);
+    size_type capacity() const noexcept;
+    bool empty() const noexcept;
+    void reserve(size_type n);
+    void shrink_to_fit();
+
+    // Element Access
+    reference operator[](size_type n);
+    const_reference operator[](size_type n) const;
+    reference at(size_type n);
+    const_reference at(size_type n) const;
+    reference front();
+    const_reference front() const;
+    reference back();
+    const_reference back() const;
+    value_type* data() noexcept;
+    const value_type* data() const noexcept;
+
+    // Modifiers
+    template <class InputIterator> void assign(InputIterator first, InputIterator last);
+    void assign(size_type n, const value_type& val);
+    void assign(initializer_list<value_type> il);
+    void push_back(const value_type& val);
+    void push_back(value_type&& val);
+    void pop_back();
+    iterator insert(const_iterator position, const value_type& val);
+    iterator insert(const_iterator position, size_type n, const value_type& val);
+    template <class InputIterator> iterator insert(const_iterator position, InputIterator first, InputIterator last);
+    iterator insert(const_iterator position, value_type&& val);
+    iterator insert(const_iterator position, initializer_list<value_type> il);
+    iterator erase(const_iterator position);
+    iterator erase(const_iterator first, const_iterator last);
+    void swap(vector& x);
+    void clear() noexcept;
+    template <class... Args> iterator emplace(const_iterator position, Args&&... args);
+    template <class... Args> void emplace_back(Args&&... args);
+
+    // Allocator
+    allocator_type get_allocator() const noexcept;
+};
+```
 
 ### 使用
 
+1. 头文件
+
+```cpp
+#include <vector>
+```
+
+2. 新增操作
+
+```cpp
+std::vector<int> vec;
+vec.push_back(1);
+vec.insert(vec.begin(), 2);
+vec.emplace(vec.begin(), 3);
+vec.emplace_back(4);
+```
+
+3. 删除操作
+
+```cpp
+std::vector<int> vec;
+vec.pop_back();
+vec.erase(vec.begin());
+vec.clear();
+std::vector<int>().swap(vec);
+```
 
 
+4. 修改操作
+
+```cpp
+std::vector<int> vec;
+vec[0] = 10;
+int *p = vec.data();
+*p = 11;
+```
+
+5. 查找操作
+
+```cpp
+auto it = find(vec.begin(), vec.end(), 11);
+if (it != vec.end()) {
+    std::cout << "found" << std::endl;
+} else {
+    std::cout << "not found" << std::endl;
+}
+```
+
+6. 遍历操作
+
+```cpp
+for (size_t i = 0; i < vec.size(); ++i) {
+    std::cout << vec[i] << std::endl;
+}
+// or
+for (const auto& it : vec) {
+    std::cout << *it << std::endl;
+}
+// or
+for (auto it = vec.begin(); it != vec.end(); ++it) {
+    std::cout << *it << std::endl;
+}
+```
+
+----
+
+## list
+
+### 定义
+
+列表是序列容器，允许在序列中的任何位置进行恒定时间插入和擦除操作，并允许双向迭代。列表容器实现为双链接列表。
+
+原型如下:
+
+```cpp
+template <class T, class Alloc = allocator<T>> class list;
+```
+
+**API 定义**
+
+```cpp
+template <class T, class Alloc = allocator<T>>
+class list {
+public:
+    explicit list(const allocator_type& alloc = allocator_type());
+    explicit list(size_type n);
+    list(size_type n, const value_type& val, const allocator_type& alloc = allocator_type());
+    template <class InputIterator> list(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+    list(const list& x);
+    list(const list& x, const allocator_type& alloc);
+    list(list&& x);
+    list(list&& x, const allocator_type& alloc);
+    list(initializer_list<value_type> il, const allocator_type& alloc = allocator_type());
+    ~list();
+    list& operator=(const list& x);
+    list& operator=(list&& x);
+    list& operator=(initializer_list<value_type> il);
+
+    // Iterators
+    iterator begin() noexcept;
+    const_iterator begin() const noexcept;
+    iterator end() noexcept;
+    const_iterator end() const noexcept;
+    reverse_iterator rbegin() noexcept;
+    const_reverse_iterator rbegin() const noexcept;
+    reverse_iterator rend() noexcept;
+    const_reverse_iterator rend() const noexcept;
+    const_iterator cbegin() const noexcept;
+    const_iterator cend() const noexcept;
+    const_reverse_iterator crbegin() const noexcept;
+    const_reverse_iterator crend() const noexcept;
+
+    // Capacity
+    size_type size() const noexcept;
+    size_type max_size() const noexcept;
+    bool empty() const noexcept;
+
+    // Element Access
+    reference front();
+    const_reference front() const;
+    reference back();
+    const_reference back() const;
+
+    // Modifiers
+    template <class InputIterator> void assign(InputIterator first, InputIterator last);
+    void assign(size_type n, const value_type& val);
+    void assign(initializer_list<value_type> il);
+    template <class... Args> void emplace_front(Args&&... args);
+    void push_back(const value_type& val);
+    void push_back(value_type&& val);
+    void pop_back();
+    template <class... Args> iterator emplace(const_iterator position, Args&&... args);
+    iterator insert(const_iterator position, const value_type& val);
+    iterator insert(const_iterator position, size_type n, const value_type& val);
+    template <class InputIterator> iterator insert(const_iterator position, InputIterator first, InputIterator last);
+    iterator insert(const_iterator position, value_type&& val);
+    iterator insert(const_iterator position, initializer_list<value_type> il);
+    iterator erase(const_iterator position);
+    iterator erase(const_iterator first, const_iterator last);
+    void swap(vector& x);
+    void resize(size_type n);
+    void resize(size_type n, const value_type& val);
+    void clear() noexcept;
+
+    // Operations
+    void splice(const_iterator position, list& x);
+    void splice(const_iterator position, list&& x);
+    void splice(const_iterator position, list& x, const_iterator i);
+    void splice(const_iterator position, list&& x, const_iterator i);
+    void splice(const_iterator position, list& x, const_iterator first, const_iterator last);
+    void splice(const_iterator position, list&& x, const_iterator first, const_iterator last);
+    void remove(const value_type& val);
+    template <class Predicate> void remove_if(Predicate pred);
+    void unique();
+    template <class BinaryPredicate> void unique(BinaryPredicate binary_pred);
+    void merge(list& x);
+    void merge(list&& x);
+    template <class Compare> void merge(list& x, Compare comp);
+    template <class Compare> void merge(list&& x, Compare comp);
+    void sort();
+    template <class Compare> void sort(Compare comp);
+    void reverse() noexcept;
+
+    // Allocator
+    allocator_type get_allocator() const noexcept;
+};
+```
+
+### 使用
+
+1. 头文件
+
+```cpp
+#include <list>
+```
+
+2. 新增操作
+
+```cpp
+std::list<int> li;
+li.emplace_front(1);
+li.emplace_back(2);
+li.push_front(3);
+li.push_back(4);
+li.emplace(li.begin(), 5);
+li.insert(li.begin(), 6);
+```
+
+3. 删除操作
+
+```cpp
+std::list<int> li;
+li.pop_front();
+li.pop_back();
+li.remove(7);
+li.clear();
+li.erase(li.begin());
+```
+
+4. 修改操作
+
+列表只能用迭代器进行访问元素。
+
+5. 查找操作
+
+```cpp
+auto it = find(li.begin(), li.end(), 11);
+if (it != li.end()) {
+    std::cout << "found" << std::endl;
+} else {
+    std::cout << "not found" << std::endl;
+}
+```
+
+6. 遍历操作
+
+```cpp
+for (const auto& it : li) {
+    std::cout << *it << std::endl;
+}
+// or
+for (auto it = li.begin(); it != li.end(); ++it) {
+    std::cout << *it << std::endl;
+}
+```
+
+----
+
+## forward_list
+
+### 定义
+
+### 使用
+
+1. 头文件
+
+```cpp
+#include <forward_list>
+```
+
+2. 新增操作
 
 
+3. 删除操作
 
+
+4. 修改操作
+
+
+5. 查找操作
+
+
+6. 遍历操作
 
 ----
 
