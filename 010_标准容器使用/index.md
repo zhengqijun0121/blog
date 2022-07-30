@@ -734,6 +734,92 @@ for (auto it = li.begin(); it != li.end(); ++it) {
 
 ### 定义
 
+前向列表是序列容器，允许恒定时间插入和擦除序列中的任何地方操作。前向列表实现为单链接列表。
+
+原型如下:
+
+```cpp
+template <class T, class Alloc = allocator<T>> class forward_list;
+```
+
+**API 定义**
+
+```cpp
+template <class T, class Alloc = allocator<T>>
+class forward_list {
+public:
+    explicit forward_list(const allocator_type& alloc = allocator_type());
+    explicit forward_list(size_type n);
+    forward_list(size_type n, const value_type& val, const allocator_type& alloc = allocator_type());
+    template <class InputIterator> forward_list(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+    forward_list(const forward_list& fwdlst);
+    forward_list(const forward_list& fwdlst, const allocator_type& alloc);
+    forward_list(forward_list&& fwdlst);
+    forward_list(forward_list&& fwdlst, const allocator_type& alloc);
+    forward_list(initializer_list<value_type> il, const allocator_type& alloc = allocator_type());
+    ~forward_list();
+    forward_list& operator=(const forward_list& fwdlst);
+    forward_list& operator=(forward_list&& fwdlst);
+    forward_list& operator=(initializer_list<value_type> il);
+
+    // Iterators
+    iterator before_begin() noexcept;
+    const_iterator before_begin() const noexcept;
+    iterator begin() noexcept;
+    const_iterator begin() const noexcept;
+    iterator end() noexcept;
+    const_iterator end() const noexcept;
+    const_iterator cbefore_begin() const noexcept;
+    const_iterator cbegin() const noexcept;
+    const_iterator cend() const noexcept;
+
+    // Capacity
+    size_type max_size() const noexcept;
+    bool empty() const noexcept;
+
+    // Element Access
+    reference front();
+    const_reference front() const;
+
+    // Modifiers
+    template <class InputIterator> void assign(InputIterator first, InputIterator last);
+    void assign(size_type n, const value_type& val);
+    void assign(initializer_list<value_type> il);
+    template <class... Args> void emplace_front(Args&&... args);
+    void push_front(const value_type& val);
+    void push_front(value_type&& val);
+    void pop_front();
+    template <class... Args> iterator emplace_after(const_iterator position, Args&&... args);
+    iterator insert_after(const_iterator position, const value_type& val);
+    iterator insert_after(const_iterator position, value_type&& val);
+    iterator insert_after(const_iterator position, size_type n, const value_type& val);
+    template <class InputIterator> iterator insert_after(const_iterator position, InputIterator first, InputIterator last);
+    iterator insert_after(const_iterator position, initializer_list<value_type> il);
+    iterator erase_after(const_iterator position);
+    iterator erase_after(const_iterator position, const_iterator last);
+    void swap(forward_list& fwdlst);
+    void resize(size_type n);
+    void resize(size_type n, const value_type& val);
+    void clear() noexcept;
+
+    // Operations
+    void remove(const value_type& val);
+    template <class Predicate> void remove_if(Predicate pred);
+    void unique();
+    template <class BinaryPredicate> void unique(BinaryPredicate binary_pred);
+    void merge(forward_list& fwdlst);
+    void merge(forward_list&& fwdlst);
+    template <class Compare> void merge(forward_list& fwdlst, Compare comp);
+    template <class Compare> void merge(forward_list&& fwdlst, Compare comp);
+    void sort();
+    template <class Compare> void sort(Compare comp);
+    void reverse() noexcept;
+
+    // Allocator
+    allocator_type get_allocator() const noexcept;
+};
+```
+
 ### 使用
 
 1. 头文件
@@ -744,17 +830,366 @@ for (auto it = li.begin(); it != li.end(); ++it) {
 
 2. 新增操作
 
+```cpp
+std::forward_list<int> fl;
+fl.emplace_front(10);
+fl.push_front(11);
+fl.emplace_back(fl.begin(), 12);
+fl.insert_after(fl.begin(), 13);
+```
 
 3. 删除操作
 
+```cpp
+std::forward_list<int> fl;
+fl.pop_front();
+fl.erase_after(fl.begin());
+fl.remove(14);
+fl.remove_if([](const int& value) {
+    return value < 15;
+});
+```
 
 4. 修改操作
 
+前向列表只能用迭代器进行访问元素。
 
 5. 查找操作
 
+```cpp
+auto it = find(fl.begin(), fl.end(), 11);
+if (it != fl.end()) {
+    std::cout << "found" << std::endl;
+} else {
+    std::cout << "not found" << std::endl;
+}
+```
 
 6. 遍历操作
+
+```cpp
+for (const auto& it : fl) {
+    std::cout << *it << std::endl;
+}
+// or
+for (auto it = fl.begin(); it != fl.end(); ++it) {
+    std::cout << *it << std::endl;
+}
+```
+
+----
+
+## dequeue
+
+### 定义
+
+原型如下:
+
+```cpp
+template <class T, class Alloc = allocator<T>> class deque;
+```
+
+**API 定义**
+
+```cpp
+template <class T, class Alloc = allocator<T>>
+class deque {
+public:
+    explicit deque(const allocator_type& alloc = allocator_type());
+    explicit deque(size_type n);
+    deque(size_type n, const value_type& val, const allocator_type& alloc = allocator_type());
+    template <class InputIterator> deque(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+    deque(const deque& x);
+    deque(const deque& x, const allocator_type& alloc);
+    deque(deque&& x);
+    deque(deque&& x, const allocator_type& alloc);
+    deque(initializer_list<value_type> il, const allocator_type& alloc = allocator_type());
+    ~deque();
+    deque& operator=(const deque& x);
+    deque& operator=(deque&& x);
+    deque& operator=(initializerlist<value_type> il);
+
+    // Iterators
+    iterator begin() noexcept;
+    const_iterator begin() const noexcept;
+    iterator end() noexcept;
+    const_iterator end() const noexcept;
+    reverse_iterator rbegin() noexcept;
+    const_reverse_iterator rbegin() const noexcept;
+    reverse_iterator rend() noexcept;
+    const_reverse_iterator rend() const noexcept;
+    const_iterator cbegin() const noexcept;
+    const_iterator cend() const noexcept;
+    const_reverse_iterator crbegin() const noexcept;
+    const_reverse_iterator crend() const noexcept;
+
+    // Capacity
+    size_type size() const noexcept;
+    size_type max_size() const noexcept
+    void resize(size_type n);
+    void resize(size_type n, const value_type& val);
+    bool empty() const noexcept;
+    void shrink_to_fit();
+
+    // Element Access
+    reference operator[](size_type n);
+    const_reference operator[](size_type n) const;
+    reference at(size_type n);
+    const_reference at(size_type n) const;
+    reference front();
+    const_reference front() const;
+    reference back();
+    const_reference back() const;
+
+    // Modifiers
+    template <class InputIterator> void assign(InputIterator first, InputIterator last);
+    void assign(size_type n, const value_type& val);
+    void assign(initializer_list<value_type> il);
+    template <class... Args> void emplace_front(Args&&... args);
+    void push_front(const value_type& val);
+    void push_front(value_type&& val);
+    void push_back(const value_type& val);
+    void push_back(value_type&& val);
+    void pop_front();
+    void pop_back();
+    iterator insert(const_iterator position, const value_type& val);
+    iterator insert(const_iterator position, size_type n, const value_type& val);
+    template <class InputIterator> iterator insert(const_iterator position, InputIterator first, InputIterator last);
+    iterator insert(const_iterator position, value_type&& val);
+    iterator insert(const_iterator position, initializer_list<value_type> il);
+    iterator erase(const_iterator position);
+    iterator erase(const_iterator first, const_iterator last);
+    void swap(deque& x);
+    void clear() noexcept;
+    template <class... Args> iterator emplace(const_iterator position, Args&&... args);
+    template <class... Args> void emplace_front(Args&&... args);
+    template <class... Args> void emplace_back(Args&&... args);
+
+    // Allocator
+    allocator_type get_allocator() const noexcept;
+};
+```
+
+### 使用
+
+1. 头文件
+
+```cpp
+#include <deque>
+```
+
+2. 新增操作
+
+```cpp
+std::deque<int> q;
+q.push_front(1);
+q.push_back(2);
+q.insert(q.begin(), 3);
+q.emplace(q.begin(), 4);
+q.emplace_front(5);
+q.emplace_back(6);
+```
+
+3. 删除操作
+
+```cpp
+std::deque<int> q;
+q.pop_front();
+q.pop_back();
+q.erase(q.begin());
+q.clear();
+```
+
+4. 修改操作
+
+```cpp
+std::deque<int> q;
+q[0] = 7;
+q.at(1) = 8;
+```
+
+5. 查找操作
+
+```cpp
+auto it = find(q.begin(), q.end(), 11);
+if (it != q.end()) {
+    std::cout << "found" << std::endl;
+} else {
+    std::cout << "not found" << std::endl;
+}
+```
+
+6. 遍历操作
+
+```cpp
+for (size_t i = 0; i < q.size(); ++i) {
+    std::cout << q[i] << std::endl;
+}
+// or
+for (const auto& it : q) {
+    std::cout << *it << std::endl;
+}
+// or
+for (auto it = q.begin(); it != q.end(); ++it) {
+    std::cout << *it << std::endl;
+}
+```
+
+----
+
+## map
+
+### 定义
+
+`map` 是有序关联容器，其元素是由键值对的方式存储，底层是用红黑二叉树实现的，可以快速的查找对象。
+
+原型如下:
+
+```cpp
+template <class Key,                                    // map::key_type
+          class T,                                      // map::mapped_type
+          class Compare = less<Key>,                    // map::key_compare
+          class Alloc = allocator<pair<const Key, T>>   // map::allocator_type
+          > class map;
+```
+
+**API 定义**
+
+```cpp
+template <class Key,                                    // map::key_type
+          class T,                                      // map::mapped_type
+          class Compare = less<Key>,                    // map::key_compare
+          class Alloc = allocator<pair<const Key, T>>>  // map::allocator_type
+class map {
+public:
+    explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
+    explicit map(const allocator_type& alloc);
+    template <class InputIterator> map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& = allocator_type());
+    map(const map& x);
+    map(const map& x, const allocator_type& alloc);
+    map(map&& x);
+    map(map&& x, const allcator_type& alloc);
+    map(initializer_list<value_type> il, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
+    ~map();
+    map& operator=(const map& x);
+    map& operator=(map&& x);
+    map& operator=(initializer_list<value_type> il);
+
+    // Iterators
+    iterator begin() noexcept;
+    const_iterator begin() const noexcept;
+    iterator end() noexcept;
+    const_iterator end() const noexcept;
+    reverse_iterator rbegin() noexcept;
+    const_reverse_iterator rbegin() const noexcept;
+    reverse_iterator rend() noexcept;
+    const_reverse_iterator rend() const noexcept;
+    const_iterator cbegin() const noexcept;
+    const_iterator cend() const noexcept;
+    const_reverse_iterator crbegin() const noexcept;
+    const_reverse_iterator crend() const noexcept;
+
+    // Capacity
+    size_type size() const noexcept;
+    size_type max_size() const noexcept
+    bool empty() const noexcept;
+
+    // Element Access
+    mapped_type& operator[](const key_type& k);
+    mapped_type& operator[](key_type&& k);
+    mapped_type& at(const key_type& k);
+    const mapped_type& at(const key_type& k) const;
+
+    // Modifiers
+    pair<iterator, bool> insert(const value_type& val);
+    template <class P> pair<iterator, bool> insert(P&& val);
+    iterator insert(const_iterator position, const value_type& val);
+    template <class P> iterator insert(const_iterator position, P&& val);
+    template <class InputIterator> void insert(InputIterator first, InputIterator last);
+    void insert(initializer_list<value_type> il);
+    iterator  erase(const_iterator position);
+    size_type erase(const key_type& k);
+    iterator  erase(const_iterator first, const_iterator last);
+    void swap(map& x);
+    void clear() noexcept;
+    template <class... Args> pair<iterator, bool> emplace(Args&&... args);
+    template <class... Args> iterator emplace_hint(const_iterator position, Args&&... args);
+
+    // Observers
+    key_compare key_comp() const;
+    value_compare value_comp() const;
+
+    // Operations
+    iterator find(const key_type& k);
+    const_iterator find(const key_type& k) const;
+    size_type count(const key_type& k) const;
+    iterator lower_bound(const key_type& k);
+    const_iterator lower_bound(const key_type& k) const;
+    iterator upper_bound(const key_type& k);
+    const_iterator upper_bound(const key_type& k) const;
+    pair<const_iterator, const_iterator> equal_range(const key_type& k) const;
+    pair<iterator, iterator> equal_range(const key_type& k);
+
+    // Allocator
+    allocator_type get_allocator() const noexcept;
+};
+```
+
+### 使用
+
+1. 头文件
+
+```cpp
+#include <map>
+```
+
+2. 新增操作
+
+```cpp
+std::map<int, std::string> m;
+m[1] = "Hello";
+a.at(2) = " ";
+m.insert(std::pair<int, std::string>(3, "World"));
+m.emplace(4, "!");
+m.emplace_hint(5, "hahhh");
+```
+
+3. 删除操作
+
+```cpp
+std::map<int, std::string> m;
+m.erase(m.begin());
+m.erase(2);
+m.clear();
+```
+
+4. 修改操作
+
+```cpp
+std::map<int, std::string> m;
+m[2] = "OK";
+```
+
+5. 查找操作
+
+```cpp
+auto& it = m.find(2);
+if (it != m.end()) {
+    m.erase(it);
+}
+```
+
+6. 遍历操作
+
+```cpp
+for (auto& it : m) {
+    std::cout << "m[" << it.first << "] = " << it.second << std::endl;
+}
+// or
+for (auto& it = m.begin(); it != m.end(); ++it) {
+    std::cout << "m[" << it->first << "] = " << it->second << std::endl;
+}
+```
 
 ----
 
