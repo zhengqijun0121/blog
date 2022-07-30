@@ -879,7 +879,7 @@ for (auto it = fl.begin(); it != fl.end(); ++it) {
 
 ----
 
-## dequeue
+## deque
 
 ### 定义
 
@@ -1041,7 +1041,7 @@ for (auto it = q.begin(); it != q.end(); ++it) {
 
 ### 定义
 
-`map` 是有序关联容器，其元素是由键值对的方式存储，底层是用红黑二叉树实现的，可以快速的查找对象。
+`map` 是有序关联容器，其元素是由键值对的方式存储，底层是用红黑树实现的，可以快速的查找对象。
 
 原型如下:
 
@@ -1188,6 +1188,491 @@ for (auto& it : m) {
 // or
 for (auto& it = m.begin(); it != m.end(); ++it) {
     std::cout << "m[" << it->first << "] = " << it->second << std::endl;
+}
+```
+
+----
+
+## unordered_map
+
+### 定义
+
+`unordered_map` 是无序关联容器，其元素是由键值对的方式存储，底层是用哈希表实现的，可以根据单个元素的密钥快速检索。
+
+原型如下:
+
+```cpp
+template <class Key,                                    // unordered_map::key_type
+          class T,                                      // unordered_map::mapped_type
+          class Hash = hash<Key>,                       // unordered_map::hasher
+          class Pred = equal_to<Key>,                   // unordered_map::key_equal
+          class Alloc = allocator<pair<const Key, T>>   // unordered_map::allocator_type
+          > class unordered_map;
+```
+
+**API 定义**
+
+```cpp
+template <class Key,                                    // unordered_map::key_type
+          class T,                                      // unordered_map::mapped_type
+          class Hash = hash<Key>,                       // unordered_map::hasher
+          class Pred = equal_to<Key>,                   // unordered_map::key_equal
+          class Alloc = allocator<pair<const Key, T>>>  // unordered_map::allocator_type
+class unordered_map {
+public:
+    explicit unordered_map(size_type n = /* see below */, 
+                           const hasher& hf = hasher(),
+                           const key_equal& eql = key_equal(),
+                           const allocator_type& alloc = allocator_type());
+    explicit unordered_map(const allocator_type& alloc);
+    template <class InputIterator>
+    unordered_map(InputIterator first, InputIterator last,
+                  size_type n = /* see below */,
+                  const hasher& hf = hasher(),
+                  const key_equal& eql = key_equal(),
+                  const allocator_type& alloc = allocator_type());
+    unordered_map(const unordered_map& ump);
+    unordered_map(const unordered_map& ump, const allocator_type& alloc);
+    unordered_map(unordered_map&& ump);
+    unordered_map(unordered_map&& ump, const allocator_type& alloc);
+    unordered_map(initializer_list<value_type> il,
+                  size_type n = /* see below */,
+                  const hasher& hf = hasher(),
+                  const key_equal& eql = key_equal(),
+                  const allocator_type& alloc = allocator_type());
+    ~unordered_map();
+    unordered_map& operator=(const unordered_map& ump);
+    unordered_map& operator=(unordered_map&& ump);
+    unordered_map& operator=(initializer_list<value_type> il);
+
+    // Iterators
+    iterator begin() noexcept;
+    const_iterator begin() const noexcept;
+    local_iterator begin(size_type n);
+    const_local_iterator begin(size_type n) const;
+    iterator end() noexcept;
+    const_iterator end() const noexcept;
+    local_iterator end(size_type n);
+    const_local_iterator end(size_type n) const;
+    const_iterator cbegin() const noexcept;
+    const_local_iterator cbegin(size_type n) const;
+    const_iterator cend() const noexcept;
+    const_local_iterator cend(size_type n)const;
+
+    // Capacity
+    size_type size() const noexcept;
+    size_type max_size() const noexcept
+    bool empty() const noexcept;
+
+    // Element Access
+    mapped_type& operator[](const key_type& k);
+    mapped_type& operator[](key_type&& k);
+    mapped_type& at(const key_type& k);
+    const mapped_type& at(const key_type& k) const;
+
+    // Element Lookup
+    iterator find(const key_type& k);
+    const_iterator find(const key_type& k) const;
+    size_type count(const key_type& k) const;
+    pair<iterator, iterator> equal_range(const key_type& k);
+    pair<const_iterator, const_iterator> equal_range(const key_type& k) const;
+
+    // Modifiers
+    template <class... Args> pair<iterator, bool> emplace(Args&&... args);
+    template <class... Args> iterator emplace_hint(const_iterator position, Args&&... args);
+    pair<iterator, bool> insert(const value_type& val);
+    template <class P> pair<iterator, bool> insert(P&& val);
+    iterator insert(const_iterator hint, const value_type& val);
+    template <class P> iterator insert(const_iterator hint, P&& val);
+    template <class InputIterator> void insert(InputIterator first, InputIterator last);
+    void insert(initializer_list<value_type> il);
+    iterator erase(const_iterator position);
+    size_type erase(const key_type& k);
+    iterator erase(const_iterator first, const_iterator last);
+    void clear() noexcept;
+    void swap(unordered_map& ump);
+
+    // Buckets
+    size_type bucket_count() const noexcept;
+    size_type max_bucket_count() const noexcept;
+    size_type bucket_size(size_type n) const;
+    size_type bucket(const key_type& k) const;
+
+    // Hash Policy
+    float load_factor() const noexcept;
+    float max_load_factor() const noexcept;
+    void max_load_factor(float z);
+    void rehash( size_type n);
+    void reserve(size_type n);
+
+    // Observers
+    hasher hash_function() const;
+    key_equal key_eq() const;
+    allocator_type get_allocator() const noexcept;
+};
+```
+
+### 使用
+
+1. 头文件
+
+```cpp
+#include <unordered_map>
+```
+
+2. 新增操作
+
+```cpp
+std::unordered_map<int, std::string> umap;
+umap[1] = "Hello";
+umap.at(2) = "World";
+umap.emplace(3, "Face");
+umap.emplace(umap.begin(), "To");
+umap.insert({4, "Smile"});
+umap.insert(std::make_pair<int, std::string>(5, "OK"));
+```
+
+3. 删除操作
+
+```cpp
+std::unordered_map<int, std::string> umap;
+umap.erase(umap.begin());
+umap.clear();
+```
+
+4. 修改操作
+
+```cpp
+std::unordered_map<int, std::string> umap;
+umap[1] = "Map";
+```
+
+5. 查找操作
+
+```cpp
+auto& it = umap.find(2);
+if (it != umap.end()) {
+    umap.erase(it);
+}
+```
+
+6. 遍历操作
+
+```cpp
+for (auto& it : umap) {
+    std::cout << "umap[" << it.first << "] = " << it.second << std::endl;
+}
+// or
+for (auto& it = umap.begin(); it != umap.end(); ++it) {
+    std::cout << "umap[" << it->first << "] = " << it->second << std::endl;
+}
+```
+
+----
+
+## set
+
+### 定义
+
+集合是按照特定顺序存储唯一元素的容器。底层是用红黑树实现的，可以快速的查找对象。
+
+原型如下:
+
+```cpp
+template <class T,                      // set::key_type/value_type
+          class Compare = less<T>,      // set::key_compare/value_compare
+          class Alloc = allocator<T>    // set::allocator_type
+          > class set;
+```
+
+**API 定义**
+
+```cpp
+template <class T,                      // set::key_type/value_type
+          class Compare = less<T>,      // set::key_compare/value_compare
+          class Alloc = allocator<T>>   // set::allocator_type
+class set {
+public:
+    explicit set(const key_compare& comp = key_compare(),
+                 const allocator_type& alloc = allocator_type());
+    explicit set(const allocator_type& alloc);
+    template <class InputIterator>
+    set(InputIterator first, InputIterator last,
+        const key_compare& comp = key_compare(),
+        const allocator_type& = allocator_type());
+    set(const set& x);
+    set(const set& x, const allocator_type& alloc);
+    set(set&& x);
+    set(set&& x, const allocator_type& alloc);
+    set(initializer_list<value_type> il,
+       const key_compare& comp = key_compare(),
+        const allocator_type& alloc = allocator_type());
+    ~set();
+    set& operator=(const set& x);
+    set& operator=(set&& x);
+    set& operator=(initializer_list<value_type> il);
+
+    // Iterators
+    iterator begin() noexcept;
+    const_iterator begin() const noexcept;
+    iterator end() noexcept;
+    const_iterator end() const noexcept;
+    reverse_iterator rbegin() noexcept;
+    const_reverse_iterator rbegin() const noexcept;
+    reverse_iterator rend() noexcept;
+    const_reverse_iterator rend() const noexcept;
+    const_iterator cbegin() const noexcept;
+    const_iterator cend() const noexcept;
+    const_reverse_iterator crbegin() const noexcept;
+    const_reverse_iterator crend() const noexcept;
+
+    // Capacity
+    size_type size() const noexcept;
+    size_type max_size() const noexcept
+    bool empty() const noexcept;
+
+    // Modifiers
+    pair<iterator, bool> insert(const value_type& val);
+    pair<iterator, bool> insert(value_type&& val);
+    iterator insert(const_iterator position, const value_type& val);
+    iterator insert(const_iterator position, value_type&& val);
+    template <class InputIterator> void insert(InputIterator first, InputIterator last);
+    void insert(initializer_list<value_type> il);
+    iterator  erase(const_iterator position);
+    size_type erase(const value_type& val);
+    iterator  erase(const_iterator first, const_iterator last);
+    void clear() noexcept;
+    void swap(set& ump);
+    template <class... Args> pair<iterator, bool> emplace(Args&&... args);
+    template <class... Args> iterator emplace_hint(const_iterator position, Args&&... args);
+
+    // Observers
+    key_compare key_comp() const;
+    value_compare value_comp() const;
+
+    // Operations
+    const_iterator find(const value_type& val) const;
+    iterator find(const value_type& val);
+    size_type count(const value_type& val) const;
+    iterator lower_bound(const value_type& val);
+    const_iterator lower_bound(const value_type& val) const;
+    iterator upper_bound(const value_type& val);
+    const_iterator upper_bound(const value_type& val) const;
+    pair<const_iterator, const_iterator> equal_range(const value_type& val) const;
+    pair<iterator, iterator> equal_range(const value_type& val);
+
+    // Allocator
+    allocator_type get_allocator() const noexcept;
+};
+```
+
+### 使用
+
+1. 头文件
+
+```cpp
+#include <set>
+```
+
+2. 新增操作
+
+```cpp
+std::set<int> s;
+s.insert(10);
+s.emplace(11);
+s.emplace_hint(s.begin(), 12);
+```
+
+3. 删除操作
+
+```cpp
+std::set<int> s;
+s.erase(s.begin());
+s.erase(13);
+s.clear();
+```
+
+4. 修改操作
+
+集合中元素的值是常量，不能在容器中进行修改，但它们可以从容器中插入或删除。
+
+5. 查找操作
+
+```cpp
+auto& it = s.find(2);
+if (it != s.end()) {
+    s.erase(it);
+}
+```
+
+6. 遍历操作
+
+```cpp
+for (auto& it : s) {
+    std::cout << "s[" << it.first << "] = " << it.second << std::endl;
+}
+// or
+for (auto& it = s.begin(); it != s.end(); ++it) {
+    std::cout << "s[" << it->first << "] = " << it->second << std::endl;
+}
+```
+
+----
+
+## unordered_set
+
+### 定义
+
+`unordered_set` 是无序关联容器，底层是用哈希表实现的，可以根据元素的值快速检索。
+
+原型如下:
+
+```cpp
+template <class Key,                    // unordered_set::key_type/value_type
+          class Hash = hash<Key>,       // unordered_set::hasher
+          class Pred = equal_to<Key>,   // unordered_set::key_equal
+          class Alloc = allocator<Key>  // unordered_set::allocator_type
+          > class unordered_set;
+```
+
+**API 定义**
+
+```cpp
+template <class Key,                        // unordered_set::key_type/value_type
+          class Hash = hash<Key>,           // unordered_set::hasher
+          class Pred = equal_to<Key>,       // unordered_set::key_equal
+          class Alloc = allocator<Key>>     // unordered_set::allocator_type
+class unordered_set {
+public:
+    explicit unordered_set(size_type n = /* see below */,
+                           const hasher& hf = hasher(),
+                           const key_equal& eql = key_equal(),
+                           const allocator_type& alloc = allocator_type());
+    explicit unordered_set(const allocator_type& alloc);
+    template <class InputIterator>
+    unordered_set(InputIterator first, InputIterator last,
+                  size_type n = /* see below */,
+                  const hasher& hf = hasher(),
+                  const key_equal& eql = key_equal(),
+                  const allocator_type& alloc = allocator_type());
+    unordered_set(const unordered_set& ust);
+    unordered_set(const unordered_set& ust, const allocator_type& alloc);
+    unordered_set(unordered_set&& ust);
+    unordered_set(unordered_set&& ust, const allocator_type& alloc);
+    unordered_set(initializer_list<value_type> il,
+                  size_type n = /* see below */,
+                  const hasher& hf = hasher(),
+                  const key_equal& eql = key_equal(),
+                  const allocator_type& alloc = allocator_type());
+    ~unordered_set();
+    unordered_set& operator=(const unordered_set& ust);
+    unordered_set& operator=(unordered_set&& ust);
+    unordered_set& operator=(initializer_list<value_type> il);
+
+    // Iterators
+    iterator begin() noexcept;
+    const_iterator begin() const noexcept;
+    local_iterator begin(size_type n);
+    const_local_iterator begin(size_type n) const;
+    iterator end() noexcept;
+    const_iterator end() const noexcept;
+    local_iterator end(size_type n);
+    const_local_iterator end(size_type n) const;
+    const_iterator cbegin() const noexcept;
+    const_local_iterator cbegin(size_type n) const;
+    const_iterator cend() const noexcept;
+    const_local_iterator cend(size_type n) const;
+
+    // Element Lookup
+    iterator find(const key_type& k);
+    const_iterator find(const key_type& k) const;
+    size_type count(const key_type& k) const;
+    pair<iterator, iterator> equal_range(const key_type& k);
+    pair<const_iterator, const_iterator> equal_range(const key_type& k) const;
+
+    // Modifiers
+    template <class... Args> pair<iterator, bool> emplace(Args&&... args);
+    template <class... Args> iterator emplace_hint(const_iterator position, Args&&... args);
+    pair<iterator, bool> insert(const value_type& val);
+    pair<iterator, bool> insert(value_type&& val);
+    iterator insert(const_iterator hint, const value_type& val);
+    iterator insert(const_iterator hint, value_type&& val);
+    template <class InputIterator> void insert(InputIterator first, InputIterator last);
+    void insert(initializer_list<value_type> il);
+    iterator erase(const_iterator position);
+    size_type erase(const key_type& k);
+    iterator erase(const_iterator first, const_iterator last);
+    void clear() noexcept;
+    void swap(unordered_set& ump);
+
+    // Buckets
+    size_type bucket_count() const noexcept;
+    size_type max_bucket_count() const noexcept;
+    size_type bucket_size(size_type n) const;
+    size_type bucket(const key_type& k) const;
+
+    // Hash Policy
+    float load_factor() const noexcept;
+    float max_load_factor() const noexcept;
+    void max_load_factor(float z);
+    void rehash(size_type n);
+    void reserve(size_type n);
+
+    // Observers
+    hasher hash_function() const;
+    key_equal key_eq() const;
+    allocator_type get_allocator() const noexcept;
+};
+```
+
+### 使用
+
+1. 头文件
+
+```cpp
+#include <unordered_set>
+```
+
+2. 新增操作
+
+```cpp
+std::unordered_set<int> uset;
+uset.insert(10);
+uset.emplace(11);
+uset.emplace_hint(uset.begin(), 13);
+```
+
+3. 删除操作
+
+```cpp
+std::unordered_set<int> uset;
+uset.erase(uset.begin());
+uset.erase(12);
+uset.clear();
+```
+
+4. 修改操作
+
+`unordered_set` 元素的值同时是其密钥，可以唯一地标识它。键是不可变的，因此 `unordered_set` 中的元素不能修改。不过，它们可以插入和删除。
+
+5. 查找操作
+
+```cpp
+auto& it = uset.find(2);
+if (it != uset.end()) {
+    uset.erase(it);
+}
+```
+
+6. 遍历操作
+
+```cpp
+for (auto& it : uset) {
+    std::cout << "uset[" << it.first << "] = " << it.second << std::endl;
+}
+// or
+for (auto& it = uset.begin(); it != uset.end(); ++it) {
+    std::cout << "uset[" << it->first << "] = " << it->second << std::endl;
 }
 ```
 
