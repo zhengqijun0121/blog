@@ -1678,4 +1678,273 @@ for (auto& it = uset.begin(); it != uset.end(); ++it) {
 
 ----
 
+## stack
+
+### 定义
+
+栈是一种容器适配器，专门设计用于先进先出，其中元素仅从容器的一端插入和提取。
+
+原型如下:
+
+```cpp
+template <class T, class Container = deque<T>> class stack;
+```
+
+**API 定义**
+
+```cpp
+template <class T, class Container = deque<T>>
+class stack {
+public:
+    explicit stack(const container_type& ctnr);
+    explicit stack(container_type&& ctnr = container_type());
+    template <class Alloc> explicit stack(const Alloc& alloc);
+    template <class Alloc> stack(const container_type& ctnr, const Alloc& alloc);
+    template <class Alloc> stack(container_type&& ctnr, const Alloc& alloc);
+    template <class Alloc> stack(const stack& x, const Alloc& alloc);
+    template <class Alloc> stack(stack&& x, const Alloc& alloc);
+    ~stack();
+
+    bool empty() const;
+    size_type size() const;
+    reference top();
+    const_reference top() const;
+    void push(const value_type& val);
+    void push(value_type&& val);
+    void pop();
+    void swap(stack& x) noexcept(/*see below*/);
+};
+```
+
+### 使用
+
+1. 头文件
+
+```cpp
+#include <stack>
+```
+
+2. 新增操作
+
+```cpp
+std::stack<int> s;
+s.push(1);
+s.emplace(2);
+```
+
+3. 删除操作
+
+```cpp
+std::stack<int> s;
+s.pop();
+```
+
+4. 修改操作
+
+```cpp
+std::stack<int> s;
+s.top() = 3;
+```
+
+5. 查找操作
+
+无查找操作
+
+6. 遍历操作
+
+```cpp
+std::stack<int> s;
+while (!s.empty()) {
+    int item = s.top();
+    s.pop();
+    std::cout << item << std::endl;
+}
+```
+
+----
+
+## queue
+
+### 定义
+
+队列是一种容器适配器，专门设计用于先入先出，其中元素插入容器的一端并从另一端提取。
+
+原型如下:
+
+```cpp
+template <class T, class Container = deque<T>> class queue;
+```
+
+**API 定义**
+
+```cpp
+template <class T, class Container = deque<T>>
+class queue {
+public:
+    explicit queue(const container_type& ctnr);
+    explicit queue(container_type&& ctnr = container_type());
+    template <class Alloc> explicit queue(const Alloc& alloc);
+    template <class Alloc> queue(const container_type& ctnr, const Alloc& alloc);
+    template <class Alloc> queue(container_type&& ctnr, const Alloc& alloc);
+    template <class Alloc> queue(const queue& x, const Alloc& alloc);
+    template <class Alloc> queue(queue&& x, const Alloc& alloc);
+    ~queue();
+
+    bool empty() const;
+    size_type size() const;
+    reference& front();
+    const_reference& front() const;
+    reference& back();
+    const_reference& back() const;
+    void push(const value_type& val);
+   void push(value_type&& val);
+    void pop();
+    template <class... Args> void emplace(Args&&... args);
+    void swap(queue& x) noexcept(/*see below*/);
+};
+```
+
+### 使用
+
+1. 头文件
+
+```cpp
+#include <queue>
+```
+
+2. 新增操作
+
+```cpp
+std::queue<int> q;
+q.push(1);
+q.emplace(2);
+```
+
+3. 删除操作
+
+```cpp
+std::queue<int> q;
+q.pop();
+```
+
+4. 修改操作
+
+```cpp
+std::queue<int> q;
+q.front() = 3;
+q.back() = 4;
+```
+
+5. 查找操作
+
+无查找操作
+
+6. 遍历操作
+
+```cpp
+std::queue<int> q;
+while (!q.empty()) {
+    int item = q.front();
+    q.pop();
+    std::cout << item << std::endl;
+}
+```
+
+----
+
+## priority_queue
+
+### 定义
+
+优先级队列是一种容器适配器，专门设计使其第一个元素始终是其包含的最大元素。
+
+原型如下:
+
+```cpp
+template <class T,
+          class Container = vector<T>,
+          class Compare = less<typename Container::value_type>
+          > class priority_queue;
+```
+
+**API 定义**
+
+```cpp
+template <class T,
+          class Container = vector<T>,
+          class Compare = less<typename Container::value_type>>
+class priority_queue {
+public:
+    priority_queue(const Compare& comp, const Container& ctnr);
+    template <class InputIterator>
+    priority_queue(InputIterator first, InputIterator last, const Compare& comp, const Container& ctnr);
+    explicit priority_queue(const Compare& comp = Compare(), Container&& ctnr = Container());
+    template <class InputIterator>
+    priority_queue(InputIterator first, InputIterator last, const Compare& comp, Container&& ctnr = Container());
+    template <class Alloc> explicit priority_queue(const Alloc& alloc);
+    template <class Alloc> priority_queue(const Compare& comp, const Alloc& alloc);
+    tmplate <class Alloc> priority_queue(const Compare& comp, const Container& ctnr, const Alloc& alloc);
+    template <class Alloc> priority_queue(const Compare& comp, Container&& ctnr, const Alloc& alloc);
+    template <class Alloc> priority_queue(const priority_queue& x, const Alloc& alloc);
+    template <class Alloc> priority_queue(priority_queue&& x, const Alloc& alloc);
+    ~priority_queue();
+
+    bool empty() const;
+    size_type size() const;
+    const_reference top() const;
+    void push(const value_type& val);
+    void push(value_type&& val);
+    void pop();
+    template <class... Args> void emplace(Args&&... args);
+    void swap(priority_queue& x) noexcept(/*see below*/);
+};
+```
+
+### 使用
+
+1. 头文件
+
+```cpp
+#include <priority_queue>
+```
+
+2. 新增操作
+
+```cpp
+std::priority_queue<int> pq;
+pq.push(1);
+pq.emplace(2);
+```
+
+3. 删除操作
+
+```cpp
+std::priority_queue<int> pq;
+pq.pop();
+```
+
+4. 修改操作
+
+```cpp
+std::priority_queue<int> pq;
+pq.top() = 3;
+```
+
+5. 查找操作
+
+无查找操作
+
+6. 遍历操作
+
+```cpp
+std::priority_queue<int> pq;
+while (!pq.empty()) {
+    int item = pq.top();
+    pq.pop();
+    std::cout << item << std::endl;
+}
+```
+
+----
+
 

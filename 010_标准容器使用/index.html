@@ -37,7 +37,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/zhengqijun0121.github.io\/blog\/010_%E6%A0%87%E5%87%86%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8\/"
-        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, Cpp, Cpp11","wordcount":  7211 ,
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, Cpp, Cpp11","wordcount":  8040 ,
         "url": "https:\/\/zhengqijun0121.github.io\/blog\/010_%E6%A0%87%E5%87%86%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8\/","datePublished": "2022-07-28T23:53:00+08:00","dateModified": "2022-07-29T00:30:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "zhengqijun","logo": {
@@ -199,14 +199,32 @@
         <li><a href="#使用-9">使用</a></li>
       </ul>
     </li>
+    <li><a href="#stack">stack</a>
+      <ul>
+        <li><a href="#定义-10">定义</a></li>
+        <li><a href="#使用-10">使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#queue">queue</a>
+      <ul>
+        <li><a href="#定义-11">定义</a></li>
+        <li><a href="#使用-11">使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#priority_queue">priority_queue</a>
+      <ul>
+        <li><a href="#定义-12">定义</a></li>
+        <li><a href="#使用-12">使用</a></li>
+      </ul>
+    </li>
   </ul>
 </nav></div>
     </div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">C&#43;&#43;11 标准容器使用</h1><div class="post-meta">
             <div class="post-meta-line">
                 <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="https://github.com/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author">zhengqijun</a>
                 </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/blog/categories/programming/"><i class="far fa-folder fa-fw"></i>编程语言</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-07-28">2022-07-28</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2022-07-29">2022-07-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 7211 字&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 15 分钟&nbsp;<span id="/blog/010_%E6%A0%87%E5%87%86%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8/" class="leancloud_visitors" data-flag-title="C&#43;&#43;11 标准容器使用">
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-07-28">2022-07-28</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2022-07-29">2022-07-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8040 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 17 分钟&nbsp;<span id="/blog/010_%E6%A0%87%E5%87%86%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8/" class="leancloud_visitors" data-flag-title="C&#43;&#43;11 标准容器使用">
                         <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count id=twikoo_visitors></span>&nbsp;次阅读
                     </span>&nbsp;<span id="/blog/010_%E6%A0%87%E5%87%86%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8/" class="comment_count" data-flag-title="C&#43;&#43;11 标准容器使用">
                         <i class="far fa-comments fa-fw"></i>&nbsp;<span class="twikoo-comment-count" id="twikoo-comment-count"></span>&nbsp;条评论
@@ -278,6 +296,24 @@
       <ul>
         <li><a href="#定义-9">定义</a></li>
         <li><a href="#使用-9">使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#stack">stack</a>
+      <ul>
+        <li><a href="#定义-10">定义</a></li>
+        <li><a href="#使用-10">使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#queue">queue</a>
+      <ul>
+        <li><a href="#定义-11">定义</a></li>
+        <li><a href="#使用-11">使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#priority_queue">priority_queue</a>
+      <ul>
+        <li><a href="#定义-12">定义</a></li>
+        <li><a href="#使用-12">使用</a></li>
       </ul>
     </li>
   </ul>
@@ -3295,6 +3331,454 @@
 </span></span><span class="line"><span class="cl"><span class="c1">// or
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">it</span> <span class="o">=</span> <span class="n">uset</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">it</span> <span class="o">!=</span> <span class="n">uset</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;uset[&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;] = &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="stack" class="headerLink">
+    <a href="#stack" class="header-mark"></a>13 stack</h2><h3 id="定义-10" class="headerLink">
+    <a href="#%e5%ae%9a%e4%b9%89-10" class="header-mark"></a>13.1 定义</h3><p>栈是一种容器适配器，专门设计用于先进先出，其中元素仅从容器的一端插入和提取。</p>
+<p>原型如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Container</span> <span class="o">=</span> <span class="n">deque</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span> <span class="k">class</span> <span class="nc">stack</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>API 定义</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Container</span> <span class="o">=</span> <span class="n">deque</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">stack</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">explicit</span> <span class="n">stack</span><span class="p">(</span><span class="k">const</span> <span class="n">container_type</span><span class="o">&amp;</span> <span class="n">ctnr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">explicit</span> <span class="nf">stack</span><span class="p">(</span><span class="n">container_type</span><span class="o">&amp;&amp;</span> <span class="n">ctnr</span> <span class="o">=</span> <span class="n">container_type</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="k">explicit</span> <span class="n">stack</span><span class="p">(</span><span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="n">stack</span><span class="p">(</span><span class="k">const</span> <span class="n">container_type</span><span class="o">&amp;</span> <span class="n">ctnr</span><span class="p">,</span> <span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="n">stack</span><span class="p">(</span><span class="n">container_type</span><span class="o">&amp;&amp;</span> <span class="n">ctnr</span><span class="p">,</span> <span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="n">stack</span><span class="p">(</span><span class="k">const</span> <span class="n">stack</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">,</span> <span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="n">stack</span><span class="p">(</span><span class="n">stack</span><span class="o">&amp;&amp;</span> <span class="n">x</span><span class="p">,</span> <span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">stack</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">empty</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size_type</span> <span class="nf">size</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reference</span> <span class="nf">top</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">const_reference</span> <span class="nf">top</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="k">const</span> <span class="n">value_type</span><span class="o">&amp;</span> <span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="n">value_type</span><span class="o">&amp;&amp;</span> <span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">swap</span><span class="p">(</span><span class="n">stack</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">(</span><span class="cm">/*see below*/</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="使用-10" class="headerLink">
+    <a href="#%e4%bd%bf%e7%94%a8-10" class="header-mark"></a>13.2 使用</h3><ol>
+<li>头文件</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stack&gt;</span><span class="cp">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>新增操作</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>删除操作</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>修改操作</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
+<li>查找操作</li>
+</ol>
+<p>无查找操作</p>
+<ol start="6">
+<li>遍历操作</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">s</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">item</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">item</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="queue" class="headerLink">
+    <a href="#queue" class="header-mark"></a>14 queue</h2><h3 id="定义-11" class="headerLink">
+    <a href="#%e5%ae%9a%e4%b9%89-11" class="header-mark"></a>14.1 定义</h3><p>队列是一种容器适配器，专门设计用于先入先出，其中元素插入容器的一端并从另一端提取。</p>
+<p>原型如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Container</span> <span class="o">=</span> <span class="n">deque</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span> <span class="k">class</span> <span class="nc">queue</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>API 定义</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Container</span> <span class="o">=</span> <span class="n">deque</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">queue</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">explicit</span> <span class="n">queue</span><span class="p">(</span><span class="k">const</span> <span class="n">container_type</span><span class="o">&amp;</span> <span class="n">ctnr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">explicit</span> <span class="nf">queue</span><span class="p">(</span><span class="n">container_type</span><span class="o">&amp;&amp;</span> <span class="n">ctnr</span> <span class="o">=</span> <span class="n">container_type</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="k">explicit</span> <span class="n">queue</span><span class="p">(</span><span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="n">queue</span><span class="p">(</span><span class="k">const</span> <span class="n">container_type</span><span class="o">&amp;</span> <span class="n">ctnr</span><span class="p">,</span> <span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="n">queue</span><span class="p">(</span><span class="n">container_type</span><span class="o">&amp;&amp;</span> <span class="n">ctnr</span><span class="p">,</span> <span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="n">queue</span><span class="p">(</span><span class="k">const</span> <span class="n">queue</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">,</span> <span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="n">queue</span><span class="p">(</span><span class="n">queue</span><span class="o">&amp;&amp;</span> <span class="n">x</span><span class="p">,</span> <span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">queue</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">empty</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size_type</span> <span class="nf">size</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reference</span><span class="o">&amp;</span> <span class="n">front</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">const_reference</span><span class="o">&amp;</span> <span class="n">front</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reference</span><span class="o">&amp;</span> <span class="n">back</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">const_reference</span><span class="o">&amp;</span> <span class="n">back</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="k">const</span> <span class="n">value_type</span><span class="o">&amp;</span> <span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">   <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="n">value_type</span><span class="o">&amp;&amp;</span> <span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span><span class="err">... </span><span class="nc">Args</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">emplace</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">swap</span><span class="p">(</span><span class="n">queue</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">(</span><span class="cm">/*see below*/</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="使用-11" class="headerLink">
+    <a href="#%e4%bd%bf%e7%94%a8-11" class="header-mark"></a>14.2 使用</h3><ol>
+<li>头文件</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;queue&gt;</span><span class="cp">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>新增操作</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">q</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>删除操作</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>修改操作</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">()</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">q</span><span class="p">.</span><span class="n">back</span><span class="p">()</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
+<li>查找操作</li>
+</ol>
+<p>无查找操作</p>
+<ol start="6">
+<li>遍历操作</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">item</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">item</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="priority_queue" class="headerLink">
+    <a href="#priority_queue" class="header-mark"></a>15 priority_queue</h2><h3 id="定义-12" class="headerLink">
+    <a href="#%e5%ae%9a%e4%b9%89-12" class="header-mark"></a>15.1 定义</h3><p>优先级队列是一种容器适配器，专门设计使其第一个元素始终是其包含的最大元素。</p>
+<p>原型如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="k">class</span> <span class="nc">Container</span> <span class="o">=</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="k">class</span> <span class="nc">Compare</span> <span class="o">=</span> <span class="n">less</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Container</span><span class="o">::</span><span class="n">value_type</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="o">&gt;</span> <span class="k">class</span> <span class="nc">priority_queue</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>API 定义</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="k">class</span> <span class="nc">Container</span> <span class="o">=</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="k">class</span> <span class="nc">Compare</span> <span class="o">=</span> <span class="n">less</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Container</span><span class="o">::</span><span class="n">value_type</span><span class="o">&gt;&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">priority_queue</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">priority_queue</span><span class="p">(</span><span class="k">const</span> <span class="n">Compare</span><span class="o">&amp;</span> <span class="n">comp</span><span class="p">,</span> <span class="k">const</span> <span class="n">Container</span><span class="o">&amp;</span> <span class="n">ctnr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputIterator</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">priority_queue</span><span class="p">(</span><span class="n">InputIterator</span> <span class="n">first</span><span class="p">,</span> <span class="n">InputIterator</span> <span class="n">last</span><span class="p">,</span> <span class="k">const</span> <span class="n">Compare</span><span class="o">&amp;</span> <span class="n">comp</span><span class="p">,</span> <span class="k">const</span> <span class="n">Container</span><span class="o">&amp;</span> <span class="n">ctnr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">explicit</span> <span class="nf">priority_queue</span><span class="p">(</span><span class="k">const</span> <span class="n">Compare</span><span class="o">&amp;</span> <span class="n">comp</span> <span class="o">=</span> <span class="n">Compare</span><span class="p">(),</span> <span class="n">Container</span><span class="o">&amp;&amp;</span> <span class="n">ctnr</span> <span class="o">=</span> <span class="n">Container</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputIterator</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">priority_queue</span><span class="p">(</span><span class="n">InputIterator</span> <span class="n">first</span><span class="p">,</span> <span class="n">InputIterator</span> <span class="n">last</span><span class="p">,</span> <span class="k">const</span> <span class="n">Compare</span><span class="o">&amp;</span> <span class="n">comp</span><span class="p">,</span> <span class="n">Container</span><span class="o">&amp;&amp;</span> <span class="n">ctnr</span> <span class="o">=</span> <span class="n">Container</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="k">explicit</span> <span class="n">priority_queue</span><span class="p">(</span><span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="n">priority_queue</span><span class="p">(</span><span class="k">const</span> <span class="n">Compare</span><span class="o">&amp;</span> <span class="n">comp</span><span class="p">,</span> <span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tmplate</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="n">priority_queue</span><span class="p">(</span><span class="k">const</span> <span class="n">Compare</span><span class="o">&amp;</span> <span class="n">comp</span><span class="p">,</span> <span class="k">const</span> <span class="n">Container</span><span class="o">&amp;</span> <span class="n">ctnr</span><span class="p">,</span> <span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="n">priority_queue</span><span class="p">(</span><span class="k">const</span> <span class="n">Compare</span><span class="o">&amp;</span> <span class="n">comp</span><span class="p">,</span> <span class="n">Container</span><span class="o">&amp;&amp;</span> <span class="n">ctnr</span><span class="p">,</span> <span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="n">priority_queue</span><span class="p">(</span><span class="k">const</span> <span class="n">priority_queue</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">,</span> <span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Alloc</span><span class="o">&gt;</span> <span class="n">priority_queue</span><span class="p">(</span><span class="n">priority_queue</span><span class="o">&amp;&amp;</span> <span class="n">x</span><span class="p">,</span> <span class="k">const</span> <span class="n">Alloc</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">priority_queue</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">empty</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size_type</span> <span class="nf">size</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">const_reference</span> <span class="nf">top</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="k">const</span> <span class="n">value_type</span><span class="o">&amp;</span> <span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="n">value_type</span><span class="o">&amp;&amp;</span> <span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span><span class="err">... </span><span class="nc">Args</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">emplace</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">swap</span><span class="p">(</span><span class="n">priority_queue</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">(</span><span class="cm">/*see below*/</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="使用-12" class="headerLink">
+    <a href="#%e4%bd%bf%e7%94%a8-12" class="header-mark"></a>15.2 使用</h3><ol>
+<li>头文件</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;priority_queue&gt;</span><span class="cp">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>新增操作</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">pq</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">pq</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">pq</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>删除操作</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">pq</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>修改操作</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">pq</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
+<li>查找操作</li>
+</ol>
+<p>无查找操作</p>
+<ol start="6">
+<li>遍历操作</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">pq</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">pq</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">item</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pq</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">item</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
