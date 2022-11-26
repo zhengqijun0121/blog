@@ -26,7 +26,7 @@
 - [ ] VSCode 配置 🐡
 - [ ] i3wm 配置 🍼
 - [ ] alacritty 配置 😈
-- [ ] 国内源配置 🎢
+- [x] 国内源配置 🎢
 - [ ] font 安装配置 🌈
 - [ ] barrier 配置 👻
 
