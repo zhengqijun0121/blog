@@ -66,19 +66,21 @@ bash: logout: not login shell: use `exit'
 
 ### Bash
 
-![](../posts/03_学习/21_开发环境/img/005-1-Bash加载配置文件.png)
+{{< image src="../posts/03_学习/21_开发环境/img/005-1-Bash加载配置文件.png" >}}
+
+![](https://zhengqijun0121.github.io/blog/posts/03_学习/21_开发环境/img/005-1-Bash加载配置文件.png)
 
 ----
 
 ### Zsh
 
-![](../posts/03_学习/21_开发环境/img/005-2-Zsh加载配置文件.png)
+{{< image src="../posts/03_学习/21_开发环境/img/005-2-Zsh加载配置文件.png" >}}
 
 ----
 
 ### Ash
 
-![](../posts/03_学习/21_开发环境/img/005-3-Ash加载配置文件.png)
+{{< image src="../posts/03_学习/21_开发环境/img/005-3-Ash加载配置文件.png" >}}
 
 ---
 

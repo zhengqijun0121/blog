@@ -53,7 +53,7 @@
     </script></head>
 
 <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
-        function setTheme(theme) {document.body.setAttribute('theme', theme);}
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark');}
         function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
         function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
         if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
@@ -67,7 +67,7 @@
             <a href="/blog/" title="Hello World"><span class="header-title-pre"><i class='far fa-edit fa-fw'></i></span>Hello World<span class="header-title-post">🌈</span></a>
         </div>
         <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/series/"> 系列 </a><a class="menu-item active" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/series/"> 系列 </a><a class="menu-item active" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
                         <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
                             <i class="fas fa-search fa-fw"></i>
@@ -115,7 +115,7 @@
                     <a href="#" onclick="return false;" class="search-cancel" id="search-cancel-mobile">
                         取消
                     </a>
-                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/series/" title="">系列</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="#" onclick="return false;" class="menu-item theme-select" title="切换主题">
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/series/" title="">系列</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="#" onclick="return false;" class="menu-item theme-select" title="切换主题">
                 <i class="fas fa-adjust fa-fw"></i>
                 <select class="color-theme-select" id="theme-select-mobile" title="切换主题">
                     <option value="light">浅色</option>
@@ -133,43 +133,48 @@
     <div id="search-dropdown-mobile"></div>
 </div>
 <main class="main">
-            <div class="container"><div class="page single special"><h1 class="single-title animate__animated animate__pulse animate__faster"></h1><div class="content" id="content"><p><img
-        class="lazyload"
-        data-src="squirrel.png"
-        data-srcset="/blog/about/squirrel.png, squirrel.png 1.5x, /blog/about/squirrel.png 2x"
-        data-sizes="auto"
-        alt="/blog/about/squirrel.png"
-        title="/blog/about/squirrel.png"></p>
+            <div class="container"><div class="page single special"><h1 class="single-title animate__animated animate__pulse animate__faster"></h1><div class="content" id="content"><p><a class="lightgallery" href="/blog/about/squirrel.png" title="/blog/about/squirrel.png" data-thumbnail="/blog/about/squirrel.png">
+        <img
+            class="lazyload"
+            data-src="squirrel.png"
+            data-srcset="/blog/about/squirrel.png, squirrel.png 1.5x, /blog/about/squirrel.png 2x"
+            data-sizes="auto"
+            alt="/blog/about/squirrel.png">
+    </a></p>
 <hr>
 <h2 id="hey--im-zhengqijun" class="headerLink">
-    <a href="#hey--im-zhengqijun" class="header-mark"></a>1 Hey 👋, I&#39;m Zhengqijun!</h2><p><a href="https://github.com/zhengqijun0121" target="_blank" rel="noopener noreffer"><img
-        class="lazyload"
-        data-src="https://img.shields.io/badge/-Github-0e76a8?style=flat-square&amp;logo=Github&amp;logoColor=white"
-        data-srcset="https://img.shields.io/badge/-Github-0e76a8?style=flat-square&amp;logo=Github&amp;logoColor=white, https://img.shields.io/badge/-Github-0e76a8?style=flat-square&amp;logo=Github&amp;logoColor=white 1.5x, https://img.shields.io/badge/-Github-0e76a8?style=flat-square&amp;logo=Github&amp;logoColor=white 2x"
-        data-sizes="auto"
-        alt="https://img.shields.io/badge/-Github-0e76a8?style=flat-square&amp;logo=Github&amp;logoColor=white"
-        title="Github"></a>
-<a href="https://zhengqijun0121.github.io/" target="_blank" rel="noopener noreffer"><img
-        class="lazyload"
-        data-src="https://img.shields.io/badge/-Blog-3b5998?style=flat-square&amp;logo=google-chrome&amp;logoColor=white"
-        data-srcset="https://img.shields.io/badge/-Blog-3b5998?style=flat-square&amp;logo=google-chrome&amp;logoColor=white, https://img.shields.io/badge/-Blog-3b5998?style=flat-square&amp;logo=google-chrome&amp;logoColor=white 1.5x, https://img.shields.io/badge/-Blog-3b5998?style=flat-square&amp;logo=google-chrome&amp;logoColor=white 2x"
-        data-sizes="auto"
-        alt="https://img.shields.io/badge/-Blog-3b5998?style=flat-square&amp;logo=google-chrome&amp;logoColor=white"
-        title="Website Badge"></a>
-<img
-        class="lazyload"
-        data-src="https://visitor-badge.glitch.me/badge?page_id=zhengqijun0121.zhengqijun0121&amp;style=flat-square&amp;color=0088cc"
-        data-srcset="https://visitor-badge.glitch.me/badge?page_id=zhengqijun0121.zhengqijun0121&amp;style=flat-square&amp;color=0088cc, https://visitor-badge.glitch.me/badge?page_id=zhengqijun0121.zhengqijun0121&amp;style=flat-square&amp;color=0088cc 1.5x, https://visitor-badge.glitch.me/badge?page_id=zhengqijun0121.zhengqijun0121&amp;style=flat-square&amp;color=0088cc 2x"
-        data-sizes="auto"
-        alt="https://visitor-badge.glitch.me/badge?page_id=zhengqijun0121.zhengqijun0121&amp;style=flat-square&amp;color=0088cc"
-        title="https://visitor-badge.glitch.me/badge?page_id=zhengqijun0121.zhengqijun0121&amp;style=flat-square&amp;color=0088cc">
-<a href="https://gitwar.herokuapp.com/" target="_blank" rel="noopener noreffer"><img
-        class="lazyload"
-        data-src="https://gitwar.herokuapp.com/badge?username=zhengqijun0121&amp;label=Gitwar%20Profile%20Score&amp;style=for-the-badge&amp;color=0088cc"
-        data-srcset="https://gitwar.herokuapp.com/badge?username=zhengqijun0121&amp;label=Gitwar%20Profile%20Score&amp;style=for-the-badge&amp;color=0088cc, https://gitwar.herokuapp.com/badge?username=zhengqijun0121&amp;label=Gitwar%20Profile%20Score&amp;style=for-the-badge&amp;color=0088cc 1.5x, https://gitwar.herokuapp.com/badge?username=zhengqijun0121&amp;label=Gitwar%20Profile%20Score&amp;style=for-the-badge&amp;color=0088cc 2x"
-        data-sizes="auto"
-        alt="https://gitwar.herokuapp.com/badge?username=zhengqijun0121&amp;label=Gitwar%20Profile%20Score&amp;style=for-the-badge&amp;color=0088cc"
-        title="https://gitwar.herokuapp.com/badge?username=zhengqijun0121&amp;label=Gitwar%20Profile%20Score&amp;style=for-the-badge&amp;color=0088cc"></a></p>
+    <a href="#hey--im-zhengqijun" class="header-mark"></a>1 Hey 👋, I'm Zhengqijun!</h2><p><a href="https://github.com/zhengqijun0121" target="_blank" rel="noopener noreferrer"><a class="lightgallery" href="https://img.shields.io/badge/-Github-0e76a8?style=flat-square&amp;logo=Github&amp;logoColor=white" title="Github" data-thumbnail="https://img.shields.io/badge/-Github-0e76a8?style=flat-square&amp;logo=Github&amp;logoColor=white">
+        <img
+            class="lazyload"
+            data-src="https://img.shields.io/badge/-Github-0e76a8?style=flat-square&amp;logo=Github&amp;logoColor=white"
+            data-srcset="https://img.shields.io/badge/-Github-0e76a8?style=flat-square&amp;logo=Github&amp;logoColor=white, https://img.shields.io/badge/-Github-0e76a8?style=flat-square&amp;logo=Github&amp;logoColor=white 1.5x, https://img.shields.io/badge/-Github-0e76a8?style=flat-square&amp;logo=Github&amp;logoColor=white 2x"
+            data-sizes="auto"
+            alt="https://img.shields.io/badge/-Github-0e76a8?style=flat-square&amp;logo=Github&amp;logoColor=white">
+    </a></a>
+<a href="https://zhengqijun0121.github.io/" target="_blank" rel="noopener noreferrer"><a class="lightgallery" href="https://img.shields.io/badge/-Blog-3b5998?style=flat-square&amp;logo=google-chrome&amp;logoColor=white" title="Website Badge" data-thumbnail="https://img.shields.io/badge/-Blog-3b5998?style=flat-square&amp;logo=google-chrome&amp;logoColor=white">
+        <img
+            class="lazyload"
+            data-src="https://img.shields.io/badge/-Blog-3b5998?style=flat-square&amp;logo=google-chrome&amp;logoColor=white"
+            data-srcset="https://img.shields.io/badge/-Blog-3b5998?style=flat-square&amp;logo=google-chrome&amp;logoColor=white, https://img.shields.io/badge/-Blog-3b5998?style=flat-square&amp;logo=google-chrome&amp;logoColor=white 1.5x, https://img.shields.io/badge/-Blog-3b5998?style=flat-square&amp;logo=google-chrome&amp;logoColor=white 2x"
+            data-sizes="auto"
+            alt="https://img.shields.io/badge/-Blog-3b5998?style=flat-square&amp;logo=google-chrome&amp;logoColor=white">
+    </a></a>
+<a class="lightgallery" href="https://visitor-badge.glitch.me/badge?page_id=zhengqijun0121.zhengqijun0121&amp;style=flat-square&amp;color=0088cc" title="https://visitor-badge.glitch.me/badge?page_id=zhengqijun0121.zhengqijun0121&amp;style=flat-square&amp;color=0088cc" data-thumbnail="https://visitor-badge.glitch.me/badge?page_id=zhengqijun0121.zhengqijun0121&amp;style=flat-square&amp;color=0088cc">
+        <img
+            class="lazyload"
+            data-src="https://visitor-badge.glitch.me/badge?page_id=zhengqijun0121.zhengqijun0121&amp;style=flat-square&amp;color=0088cc"
+            data-srcset="https://visitor-badge.glitch.me/badge?page_id=zhengqijun0121.zhengqijun0121&amp;style=flat-square&amp;color=0088cc, https://visitor-badge.glitch.me/badge?page_id=zhengqijun0121.zhengqijun0121&amp;style=flat-square&amp;color=0088cc 1.5x, https://visitor-badge.glitch.me/badge?page_id=zhengqijun0121.zhengqijun0121&amp;style=flat-square&amp;color=0088cc 2x"
+            data-sizes="auto"
+            alt="https://visitor-badge.glitch.me/badge?page_id=zhengqijun0121.zhengqijun0121&amp;style=flat-square&amp;color=0088cc">
+    </a>
+<a href="https://gitwar.herokuapp.com/" target="_blank" rel="noopener noreferrer"><a class="lightgallery" href="https://gitwar.herokuapp.com/badge?username=zhengqijun0121&amp;label=Gitwar%20Profile%20Score&amp;style=for-the-badge&amp;color=0088cc" title="https://gitwar.herokuapp.com/badge?username=zhengqijun0121&amp;label=Gitwar%20Profile%20Score&amp;style=for-the-badge&amp;color=0088cc" data-thumbnail="https://gitwar.herokuapp.com/badge?username=zhengqijun0121&amp;label=Gitwar%20Profile%20Score&amp;style=for-the-badge&amp;color=0088cc">
+        <img
+            class="lazyload"
+            data-src="https://gitwar.herokuapp.com/badge?username=zhengqijun0121&amp;label=Gitwar%20Profile%20Score&amp;style=for-the-badge&amp;color=0088cc"
+            data-srcset="https://gitwar.herokuapp.com/badge?username=zhengqijun0121&amp;label=Gitwar%20Profile%20Score&amp;style=for-the-badge&amp;color=0088cc, https://gitwar.herokuapp.com/badge?username=zhengqijun0121&amp;label=Gitwar%20Profile%20Score&amp;style=for-the-badge&amp;color=0088cc 1.5x, https://gitwar.herokuapp.com/badge?username=zhengqijun0121&amp;label=Gitwar%20Profile%20Score&amp;style=for-the-badge&amp;color=0088cc 2x"
+            data-sizes="auto"
+            alt="https://gitwar.herokuapp.com/badge?username=zhengqijun0121&amp;label=Gitwar%20Profile%20Score&amp;style=for-the-badge&amp;color=0088cc">
+    </a></a></p>
 <h3 id="glad-to-see-you-here" class="headerLink">
     <a href="#glad-to-see-you-here" class="header-mark"></a>1.1 Glad to see you here!</h3><p><img src="cat.gif" width="22px"> I&rsquo;m a final year student pursuing Bachelors&rsquo;s in Computer Science 🎓 from XX University 🏛. I&rsquo;m a passionate learner who&rsquo;s always willing to learn and work across technologies and domains 💡. I love to explore new technologies and leverage them to solve real-life problems ✨. Apart from that I also love to guide and mentor newbies 👨🏻‍💻. I&rsquo;m currently into Android Development 🕸️ and working on my Data Structures and Algorithms 🤓.</p>
 <img align="right" height="250" width="375" alt="" src="coder.gif" />
@@ -177,9 +182,9 @@
     <a href="#talking-about-personal-stuffs" class="header-mark"></a>1.2 Talking about Personal Stuffs:</h3><ul>
 <li>🛠   I’m currently working with Cpp, Java, Python, etc.</li>
 <li>🚀   I’m currently learning Full Stack Development.</li>
-<li>📝   I’m currently sharing on <a href="https://zhengqijun0121.github.io/" target="_blank" rel="noopener noreffer">Blog</a>.</li>
-<li>👨🏻‍💻   Most of my projects are available on <a href="https://github.com/zhengqijun0121" target="_blank" rel="noopener noreffer">Github</a>.</li>
-<li>💬   Ask me about anything <a href="https://github.com/zhengqijun0121/zhengqijun0121/issues" target="_blank" rel="noopener noreffer">here</a>! I am happy to help.</li>
+<li>📝   I’m currently sharing on <a href="https://zhengqijun0121.github.io/" target="_blank" rel="noopener noreferrer">Blog</a>.</li>
+<li>👨🏻‍💻   Most of my projects are available on <a href="https://github.com/zhengqijun0121" target="_blank" rel="noopener noreferrer">Github</a>.</li>
+<li>💬   Ask me about anything <a href="https://github.com/zhengqijun0121/zhengqijun0121/issues" target="_blank" rel="noopener noreferrer">here</a>! I am happy to help.</li>
 <li>👾   Fun fact: Equal is Not Always Equal in Javascript.</li>
 <li>📫   How to reach me: <a href="mailto:zhengqijun0121@qq.com" rel="">zhengqijun0121@qq.com</a>.</li>
 <li>😄   Pronouns: Interesting soul.</li>
@@ -276,7 +281,7 @@
 </div></div></div>
         </main><footer class="footer">
         <div class="footer-container"><div class="footer-line">
-                    由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.107.0">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href="https://github.com/HEIGE-PCloud/DoIt" target="_blank" rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a>
+                    由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreferrer" title="Hugo 0.107.0">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href="https://github.com/HEIGE-PCloud/DoIt" target="_blank" rel="noopener noreferrer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a>
                 </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2018 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://github.com/zhengqijun0121" target="_blank" rel="noopener noreferrer">zhengqijun</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
             <div class="footer-line"></div>
             <div class="footer-line">
