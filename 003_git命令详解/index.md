@@ -13,7 +13,7 @@
 
 ## 基本语法
 
-![](../posts/03_学习/21_开发环境/img/003-1-git.png)
+![](../posts/03_工作/21_开发工具/img/003-1-git.png)
 
 - Workspace：工作区
 - Index/Stage：暂存区
