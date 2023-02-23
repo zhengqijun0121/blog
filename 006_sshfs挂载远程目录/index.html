@@ -5,24 +5,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noodp" />
-    <title class="pjax-title">JDK 导入 CA 证书 - Hello World</title><meta name="Description" content="Hello World"><meta property="og:title" content="JDK 导入 CA 证书" />
-<meta property="og:description" content="1 显示的错误信息 1 javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target 导致这个错误的原因是没有有效的证书，因此导入相应的证书就可以正常访问了。 证书可以通过网站 -&gt;" />
+    <title class="pjax-title">sshfs 挂载远程目录 - Hello World</title><meta name="Description" content="Hello World"><meta property="og:title" content="sshfs 挂载远程目录" />
+<meta property="og:description" content="sshfs 是连接到 SSH 服务器的网络文件系统客户端，方便本地操作远程文件。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://zhengqijun0121.github.io/blog/004_jdk%E5%AF%BC%E5%85%A5ca%E8%AF%81%E4%B9%A6/" /><meta property="og:image" content="https://zhengqijun0121.github.io/images/avatar.webp"/><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-03-24T14:18:36+08:00" />
-<meta property="article:modified_time" content="2022-03-24T14:18:36+08:00" /><meta property="og:site_name" content="Hugo DoIt Theme Documentation" />
+<meta property="og:url" content="https://zhengqijun0121.github.io/blog/006_sshfs%E6%8C%82%E8%BD%BD%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/" /><meta property="og:image" content="https://zhengqijun0121.github.io/images/avatar.webp"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-02-23T11:08:00+08:00" />
+<meta property="article:modified_time" content="2023-02-23T12:00:00+08:00" /><meta property="og:site_name" content="Hugo DoIt Theme Documentation" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://zhengqijun0121.github.io/images/avatar.webp"/>
 
-<meta name="twitter:title" content="JDK 导入 CA 证书"/>
-<meta name="twitter:description" content="1 显示的错误信息 1 javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target 导致这个错误的原因是没有有效的证书，因此导入相应的证书就可以正常访问了。 证书可以通过网站 -&gt;"/>
+<meta name="twitter:title" content="sshfs 挂载远程目录"/>
+<meta name="twitter:description" content="sshfs 是连接到 SSH 服务器的网络文件系统客户端，方便本地操作远程文件。"/>
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 
 <meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/004_jdk%E5%AF%BC%E5%85%A5ca%E8%AF%81%E4%B9%A6/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/002_ssh%E4%BD%BF%E7%94%A8%E5%92%8C%E9%85%8D%E7%BD%AE/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/001_git%E4%BD%BF%E7%94%A8%E5%92%8C%E9%85%8D%E7%BD%AE/" /><link rel="stylesheet" href="/blog/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/blog/lib/fontawesome-free/all.min.css">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/006_sshfs%E6%8C%82%E8%BD%BD%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/002_bash%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7/" /><link rel="stylesheet" href="/blog/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/blog/lib/fontawesome-free/all.min.css">
         <noscript><link rel="stylesheet" href="/blog/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/blog/lib/animate/animate.min.css">
         <noscript><link rel="stylesheet" href="/blog/lib/animate/animate.min.css"></noscript>
     
@@ -32,13 +32,13 @@
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "JDK 导入 CA 证书",
+        "headline": "sshfs 挂载远程目录",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/004_jdk%E5%AF%BC%E5%85%A5ca%E8%AF%81%E4%B9%A6\/"
-        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "Android, jdk, CA","wordcount":  124 ,
-        "url": "https:\/\/zhengqijun0121.github.io\/blog\/004_jdk%E5%AF%BC%E5%85%A5ca%E8%AF%81%E4%B9%A6\/","datePublished": "2022-03-24T14:18:36+08:00","dateModified": "2022-03-24T14:18:36+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/006_sshfs%E6%8C%82%E8%BD%BD%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "dev-tools, ssh","wordcount":  250 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/006_sshfs%E6%8C%82%E8%BD%BD%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95\/","datePublished": "2023-02-23T11:08:00+08:00","dateModified": "2023-02-23T12:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "zhengqijun","logo": {
                     "@type": "ImageObject",
@@ -135,20 +135,33 @@
 <main class="main">
             <div class="container"><div class="toc" id="toc-auto">
         <h2 class="toc-title">目录</h2>
-        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+        <div class="toc-content always-active" id="toc-content-auto"><nav id="TableOfContents">
   <ul>
-    <li><a href="#显示的错误信息">显示的错误信息</a></li>
-    <li><a href="#证书管理">证书管理</a></li>
+    <li><a href="#ubuntu-平台">Ubuntu 平台</a>
+      <ul>
+        <li><a href="#ubuntu-安装-sshfs">Ubuntu 安装 <code>sshfs</code></a></li>
+        <li><a href="#ubuntu-使用-sshfs-挂载目录">Ubuntu 使用 <code>sshfs</code> 挂载目录</a></li>
+        <li><a href="#ubuntu-卸载挂载目录">Ubuntu 卸载挂载目录</a></li>
+      </ul>
+    </li>
+    <li><a href="#windows-平台">Windows 平台</a>
+      <ul>
+        <li><a href="#windows-安装-sshfs">Windows 安装 <code>sshfs</code></a></li>
+        <li><a href="#windows-使用-sshfs">Windows 使用 <code>sshfs</code></a></li>
+        <li><a href="#windows-卸载挂载目录">Windows 卸载挂载目录</a></li>
+        <li><a href="#sshfs-win-命令说明"><code>sshfs-win</code> 命令说明</a></li>
+      </ul>
+    </li>
   </ul>
 </nav></div>
-    </div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">JDK 导入 CA 证书</h1><div class="post-meta">
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">sshfs 挂载远程目录</h1><div class="post-meta">
             <div class="post-meta-line">
                 <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="https://github.com/zhengqijun0121" title="Author" target="_blank" rel="noopener noreferrer author" class="author">zhengqijun</a>
-                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/blog/categories/android/"><i class="far fa-folder fa-fw"></i>Android</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-24">2022-03-24</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2022-03-24">2022-03-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 124 字&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;<span id="/blog/004_jdk%E5%AF%BC%E5%85%A5ca%E8%AF%81%E4%B9%A6/" class="leancloud_visitors" data-flag-title="JDK 导入 CA 证书">
+                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/blog/categories/dev-tools/"><i class="far fa-folder fa-fw"></i>开发工具</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-02-23">2023-02-23</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-02-23">2023-02-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 250 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;<span id="/blog/006_sshfs%E6%8C%82%E8%BD%BD%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="leancloud_visitors" data-flag-title="sshfs 挂载远程目录">
                         <i class="far fa-eye fa-fw"></i>&nbsp;<span class="leancloud-visitors-count" id=twikoo_visitors></span>&nbsp;次阅读
-                    </span>&nbsp;<span id="/blog/004_jdk%E5%AF%BC%E5%85%A5ca%E8%AF%81%E4%B9%A6/" class="comment_count" data-flag-title="JDK 导入 CA 证书">
+                    </span>&nbsp;<span id="/blog/006_sshfs%E6%8C%82%E8%BD%BD%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/" class="comment_count" data-flag-title="sshfs 挂载远程目录">
                         <i class="far fa-comments fa-fw"></i>&nbsp;<span class="twikoo-comment-count" id="twikoo-comment-count"></span>&nbsp;条评论
                     </span>&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
@@ -158,82 +171,109 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#显示的错误信息">显示的错误信息</a></li>
-    <li><a href="#证书管理">证书管理</a></li>
+    <li><a href="#ubuntu-平台">Ubuntu 平台</a>
+      <ul>
+        <li><a href="#ubuntu-安装-sshfs">Ubuntu 安装 <code>sshfs</code></a></li>
+        <li><a href="#ubuntu-使用-sshfs-挂载目录">Ubuntu 使用 <code>sshfs</code> 挂载目录</a></li>
+        <li><a href="#ubuntu-卸载挂载目录">Ubuntu 卸载挂载目录</a></li>
+      </ul>
+    </li>
+    <li><a href="#windows-平台">Windows 平台</a>
+      <ul>
+        <li><a href="#windows-安装-sshfs">Windows 安装 <code>sshfs</code></a></li>
+        <li><a href="#windows-使用-sshfs">Windows 使用 <code>sshfs</code></a></li>
+        <li><a href="#windows-卸载挂载目录">Windows 卸载挂载目录</a></li>
+        <li><a href="#sshfs-win-命令说明"><code>sshfs-win</code> 命令说明</a></li>
+      </ul>
+    </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="显示的错误信息" class="headerLink">
-    <a href="#%e6%98%be%e7%a4%ba%e7%9a%84%e9%94%99%e8%af%af%e4%bf%a1%e6%81%af" class="header-mark"></a>1 显示的错误信息</h2><div class="highlight"><div class="chroma">
+            </div><div class="content" id="content"><p><code>sshfs</code> 是连接到 SSH 服务器的网络文件系统客户端，方便本地操作远程文件。</p>
+<h2 id="ubuntu-平台" class="headerLink">
+    <a href="#ubuntu-%e5%b9%b3%e5%8f%b0" class="header-mark"></a>1 Ubuntu 平台</h2><h3 id="ubuntu-安装-sshfs" class="headerLink">
+    <a href="#ubuntu-%e5%ae%89%e8%a3%85-sshfs" class="header-mark"></a>1.1 Ubuntu 安装 <code>sshfs</code></h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get install sshfs
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>导致这个错误的原因是没有有效的证书，因此导入相应的证书就可以正常访问了。</p>
-<p>证书可以通过网站 -&gt; Certificate -&gt; Details -&gt; Export 获取。</p>
-<h2 id="证书管理" class="headerLink">
-    <a href="#%e8%af%81%e4%b9%a6%e7%ae%a1%e7%90%86" class="header-mark"></a>2 证书管理</h2><ol>
-<li>导入证书</li>
-</ol>
+</div><h3 id="ubuntu-使用-sshfs-挂载目录" class="headerLink">
+    <a href="#ubuntu-%e4%bd%bf%e7%94%a8-sshfs-%e6%8c%82%e8%bd%bd%e7%9b%ae%e5%bd%95" class="header-mark"></a>1.2 Ubuntu 使用 <code>sshfs</code> 挂载目录</h3><p>将 <code>user@hostname</code> 的 <code>/home/user</code> 远程目录挂载到 <code>/home/user/sshfs</code> 本地目录下，<code>/home/user/sshfs</code> 本地目录需要先创建，否则会执行失败。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">keytool -import -keystore ~/Opt/jdk1.8.0_181/jre/lib/security/cacerts -alias ca -storepass changeit -keypass changeit -file ~/Downloads/ca.crt
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sshfs user@hostname:/home/user/ /home/user/sshfs/
 </span></span></code></pre></td></tr></table>
 </div>
-</div><ol start="2">
-<li>删除证书</li>
+</div><h3 id="ubuntu-卸载挂载目录" class="headerLink">
+    <a href="#ubuntu-%e5%8d%b8%e8%bd%bd%e6%8c%82%e8%bd%bd%e7%9b%ae%e5%bd%95" class="header-mark"></a>1.3 Ubuntu 卸载挂载目录</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo umount /home/user/sshfs
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="windows-平台" class="headerLink">
+    <a href="#windows-%e5%b9%b3%e5%8f%b0" class="header-mark"></a>2 Windows 平台</h2><h3 id="windows-安装-sshfs" class="headerLink">
+    <a href="#windows-%e5%ae%89%e8%a3%85-sshfs" class="header-mark"></a>2.1 Windows 安装 <code>sshfs</code></h3><ol>
+<li>
+<p><a href="https://github.com/winfsp/winfsp" target="_blank" rel="noopener noreferrer">https://github.com/winfsp/winfsp</a></p>
+</li>
+<li>
+<p><a href="https://github.com/winfsp/sshfs-win" target="_blank" rel="noopener noreferrer">https://github.com/winfsp/sshfs-win</a></p>
+</li>
 </ol>
+<h3 id="windows-使用-sshfs" class="headerLink">
+    <a href="#windows-%e4%bd%bf%e7%94%a8-sshfs" class="header-mark"></a>2.2 Windows 使用 <code>sshfs</code></h3><p>打开文件资源管理器，点击映射网络驱动器，输入远程目录即可。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">keytool -delete -keystore ~/Opt/jdk1.8.0_181/jre/lib/security/cacerts -alias ca -storepass changeit
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="p">\\</span><span class="n">sshfs</span><span class="p">.</span><span class="n">r</span><span class="p">\</span><span class="n">user</span><span class="nv">@hostname</span><span class="p">!</span><span class="n">port</span><span class="p">\</span><span class="n">path</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><ol start="3">
-<li>查看证书</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">keytool -list -keystore ~/Opt/jdk1.8.0_181/jre/lib/security/cacerts -alias ca
-</span></span></code></pre></td></tr></table>
-</div>
-</div></div>
+</div><h3 id="windows-卸载挂载目录" class="headerLink">
+    <a href="#windows-%e5%8d%b8%e8%bd%bd%e6%8c%82%e8%bd%bd%e7%9b%ae%e5%bd%95" class="header-mark"></a>2.3 Windows 卸载挂载目录</h3><p>打开文件资源管理器，点击断开连接。</p>
+<h3 id="sshfs-win-命令说明" class="headerLink">
+    <a href="#sshfs-win-%e5%91%bd%e4%bb%a4%e8%af%b4%e6%98%8e" class="header-mark"></a>2.4 <code>sshfs-win</code> 命令说明</h3><ul>
+<li><code>sshfs</code> 是相对于 <code>HOME</code> 目录</li>
+<li><code>sshfs.r</code> 是相对于 <code>ROOT</code> 目录</li>
+<li><code>sshfs.k</code> 是相对于 <code>HOME</code> 目录，并使用 ssh 密钥</li>
+<li><code>sshfs.kr</code> 是相对于 <code>ROOT</code> 目录，并使用 ssh 密钥</li>
+</ul>
+<hr></div>
 
         <div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>更新于 2022-03-24</span>
+                <span>更新于 2023-02-23</span>
             </div>
             <div class="post-info-license"></div>
         </div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="https://zhengqijun0121.github.io/blog/004_jdk%E5%AF%BC%E5%85%A5ca%E8%AF%81%E4%B9%A6/" data-title="JDK 导入 CA 证书" data-hashtags="Android,jdk,CA"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="https://zhengqijun0121.github.io/blog/004_jdk%E5%AF%BC%E5%85%A5ca%E8%AF%81%E4%B9%A6/" data-hashtag="Android"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 微博" data-sharer="weibo" data-url="https://zhengqijun0121.github.io/blog/004_jdk%E5%AF%BC%E5%85%A5ca%E8%AF%81%E4%B9%A6/" data-title="JDK 导入 CA 证书"><i class="fab fa-weibo fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Evernote" data-sharer="evernote" data-url="https://zhengqijun0121.github.io/blog/004_jdk%E5%AF%BC%E5%85%A5ca%E8%AF%81%E4%B9%A6/" data-title="JDK 导入 CA 证书"><i class="fab fa-evernote fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Telegram" data-sharer="telegram" data-url="https://zhengqijun0121.github.io/blog/004_jdk%E5%AF%BC%E5%85%A5ca%E8%AF%81%E4%B9%A6/" data-title="JDK 导入 CA 证书" data-web><i class="fab fa-telegram-plane fa-fw"></i></a></span>
+                <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="https://zhengqijun0121.github.io/blog/006_sshfs%E6%8C%82%E8%BD%BD%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/" data-title="sshfs 挂载远程目录" data-hashtags="dev-tools,ssh"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="https://zhengqijun0121.github.io/blog/006_sshfs%E6%8C%82%E8%BD%BD%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/" data-hashtag="dev-tools"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 微博" data-sharer="weibo" data-url="https://zhengqijun0121.github.io/blog/006_sshfs%E6%8C%82%E8%BD%BD%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/" data-title="sshfs 挂载远程目录"><i class="fab fa-weibo fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Evernote" data-sharer="evernote" data-url="https://zhengqijun0121.github.io/blog/006_sshfs%E6%8C%82%E8%BD%BD%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/" data-title="sshfs 挂载远程目录"><i class="fab fa-evernote fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Telegram" data-sharer="telegram" data-url="https://zhengqijun0121.github.io/blog/006_sshfs%E6%8C%82%E8%BD%BD%E8%BF%9C%E7%A8%8B%E7%9B%AE%E5%BD%95/" data-title="sshfs 挂载远程目录" data-web><i class="fab fa-telegram-plane fa-fw"></i></a></span>
             </div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/blog/tags/android/">Android</a>,&nbsp;<a href="/blog/tags/jdk/">jdk</a>,&nbsp;<a href="/blog/tags/ca/">CA</a></section>
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/blog/tags/dev-tools/">开发工具</a>,&nbsp;<a href="/blog/tags/ssh/">ssh</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/blog/002_ssh%E4%BD%BF%E7%94%A8%E5%92%8C%E9%85%8D%E7%BD%AE/" class="prev" rel="prev" title="ssh 使用和配置"><i class="fas fa-angle-left fa-fw"></i>ssh 使用和配置</a>
-            <a href="/blog/001_git%E4%BD%BF%E7%94%A8%E5%92%8C%E9%85%8D%E7%BD%AE/" class="next" rel="next" title="git 使用和配置">git 使用和配置<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/blog/002_bash%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7/" class="prev" rel="prev" title="Bash 调试技巧"><i class="fas fa-angle-left fa-fw"></i>Bash 调试技巧</a></div>
 </div>
 <div id="comments"><div id="twikoo"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://twikoo.js.org/">Twikoo</a>.
