@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>JNI 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_jni%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="JNI 语法详细总结">
+  <meta property="og:description" content="JNI 语法详细总结 JNI（Java Native Interface，Java本地接口）是Java平台提供的标准化编程规范，用于实现Java代码与C/C&#43;&#43;本地代码的双向交互：Java层可调用Native实现的高性能/系统级逻辑，Native层也可反向访问Java层的类、对象、方法和字段。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-02-14T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-02-14T10:00:20+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="Android">
+    <meta property="article:tag" content="JNI">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="JNI 语法详细总结">
+  <meta name="twitter:description" content="JNI 语法详细总结 JNI（Java Native Interface，Java本地接口）是Java平台提供的标准化编程规范，用于实现Java代码与C/C&#43;&#43;本地代码的双向交互：Java层可调用Native实现的高性能/系统级逻辑，Native层也可反向访问Java层的类、对象、方法和字段。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/001_jni%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/001_yaml%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/002_hidl%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "JNI 语法详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/001_jni%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, Android, JNI","wordcount":  6520 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/001_jni%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-02-14T09:00:20+08:00","dateModified": "2026-02-14T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/001_jni%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/001_jni%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">JNI 语法详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-02-14">2026-02-14</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 6520 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 14 分钟&nbsp;<span id="/blog/001_jni%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="JNI 语法详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一jni开发完整流程">一、JNI开发完整流程</a></li>
+    <li><a href="#二jni数据类型映射">二、JNI数据类型映射</a>
+      <ul>
+        <li><a href="#21-基本类型映射">2.1 基本类型映射</a></li>
+        <li><a href="#22-引用类型映射">2.2 引用类型映射</a></li>
+      </ul>
+    </li>
+    <li><a href="#三jni函数签名规则">三、JNI函数签名规则</a>
+      <ul>
+        <li><a href="#31-核心签名规则">3.1 核心签名规则</a></li>
+        <li><a href="#32-签名示例">3.2 签名示例</a></li>
+        <li><a href="#33-快速生成签名">3.3 快速生成签名</a></li>
+      </ul>
+    </li>
+    <li><a href="#四jni核心结构体jnienv与javavm">四、JNI核心结构体：JNIEnv与JavaVM</a>
+      <ul>
+        <li><a href="#41-jnienv">4.1 JNIEnv</a></li>
+        <li><a href="#42-javavm">4.2 JavaVM</a></li>
+      </ul>
+    </li>
+    <li><a href="#五native方法注册方式">五、Native方法注册方式</a>
+      <ul>
+        <li><a href="#51-静态注册">5.1 静态注册</a></li>
+        <li><a href="#52-动态注册">5.2 动态注册</a></li>
+      </ul>
+    </li>
+    <li><a href="#六jni核心api详解">六、JNI核心API详解</a>
+      <ul>
+        <li><a href="#61-字符串操作jstring">6.1 字符串操作（jstring）</a></li>
+        <li><a href="#62-数组操作">6.2 数组操作</a>
+          <ul>
+            <li><a href="#621-基本类型数组">6.2.1 基本类型数组</a></li>
+            <li><a href="#622-对象数组">6.2.2 对象数组</a></li>
+          </ul>
+        </li>
+        <li><a href="#63-类与对象操作">6.3 类与对象操作</a></li>
+        <li><a href="#64-字段与方法访问">6.4 字段与方法访问</a>
+          <ul>
+            <li><a href="#641-字段访问">6.4.1 字段访问</a></li>
+            <li><a href="#642-方法调用">6.4.2 方法调用</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#七jni引用管理">七、JNI引用管理</a>
+      <ul>
+        <li><a href="#71-局部引用local-reference">7.1 局部引用（Local Reference）</a></li>
+        <li><a href="#72-全局引用global-reference">7.2 全局引用（Global Reference）</a></li>
+        <li><a href="#73-弱全局引用weak-global-reference">7.3 弱全局引用（Weak Global Reference）</a></li>
+      </ul>
+    </li>
+    <li><a href="#八jni异常处理">八、JNI异常处理</a>
+      <ul>
+        <li><a href="#81-核心异常处理api">8.1 核心异常处理API</a></li>
+        <li><a href="#82-异常处理规范">8.2 异常处理规范</a></li>
+      </ul>
+    </li>
+    <li><a href="#九jni线程相关">九、JNI线程相关</a>
+      <ul>
+        <li><a href="#91-核心规则">9.1 核心规则</a></li>
+        <li><a href="#92-完整示例">9.2 完整示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#十常见坑与最佳实践">十、常见坑与最佳实践</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="jni-语法详细总结">JNI 语法详细总结</h1>
+<p>JNI（Java Native Interface，Java本地接口）是Java平台提供的标准化编程规范，用于实现<strong>Java代码与C/C++本地代码的双向交互</strong>：Java层可调用Native实现的高性能/系统级逻辑，Native层也可反向访问Java层的类、对象、方法和字段。</p>
+<h2 id="一jni开发完整流程">一、JNI开发完整流程</h2>
+<ol>
+<li><strong>Java层声明native方法</strong>：用<code>native</code>关键字标记本地方法，通过静态代码块加载动态库</li>
+<li><strong>生成JNI头文件</strong>：JDK8+使用<code>javac -h 输出目录 源文件.java</code>生成头文件（替代旧版javah）</li>
+<li><strong>Native层实现函数</strong>：C/C++引入头文件，实现函数逻辑</li>
+<li><strong>编译生成动态库</strong>：Linux/Android编译为<code>.so</code>，Windows编译为<code>.dll</code>，Mac编译为<code>.jnilib</code></li>
+<li><strong>Java层调用</strong>：运行Java程序，加载动态库后调用native方法</li>
+</ol>
+<p>示例Java基础代码：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-java">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">JniTest</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 实例native方法</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">native</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">sayHello</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 静态native方法</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">native</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 加载动态库（无需写lib前缀和.so/.dll后缀）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">loadLibrary</span><span class="p">(</span><span class="s">&#34;test&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">JniTest</span><span class="w"> </span><span class="n">test</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JniTest</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">test</span><span class="p">.</span><span class="na">sayHello</span><span class="p">(</span><span class="s">&#34;JNI&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="n">1</span><span class="p">,</span><span class="w"> </span><span class="n">2</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<p>生成头文件命令：<code>javac -h . JniTest.java</code>，当前目录会生成<code>JniTest.h</code>头文件。</p>
+<h2 id="二jni数据类型映射">二、JNI数据类型映射</h2>
+<p>JNI定义了与Java完全对应的类型体系，分为<strong>基本类型</strong>（值传递）和<strong>引用类型</strong>（引用传递），所有引用类型的基类都是<code>jobject</code>。</p>
+<h3 id="21-基本类型映射">2.1 基本类型映射</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Java基本类型</th>
+          <th>JNI类型</th>
+          <th>签名标识</th>
+          <th>C/C++对应类型</th>
+          <th>字节数</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>boolean</td>
+          <td>jboolean</td>
+          <td>Z</td>
+          <td>unsigned char</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>byte</td>
+          <td>jbyte</td>
+          <td>B</td>
+          <td>signed char</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>char</td>
+          <td>jchar</td>
+          <td>C</td>
+          <td>unsigned short</td>
+          <td>2</td>
+      </tr>
+      <tr>
+          <td>short</td>
+          <td>jshort</td>
+          <td>S</td>
+          <td>short</td>
+          <td>2</td>
+      </tr>
+      <tr>
+          <td>int</td>
+          <td>jint</td>
+          <td>I</td>
+          <td>int</td>
+          <td>4</td>
+      </tr>
+      <tr>
+          <td>long</td>
+          <td>jlong</td>
+          <td>J</td>
+          <td>long long</td>
+          <td>8</td>
+      </tr>
+      <tr>
+          <td>float</td>
+          <td>jfloat</td>
+          <td>F</td>
+          <td>float</td>
+          <td>4</td>
+      </tr>
+      <tr>
+          <td>double</td>
+          <td>jdouble</td>
+          <td>D</td>
+          <td>double</td>
+          <td>8</td>
+      </tr>
+      <tr>
+          <td>void</td>
+          <td>void</td>
+          <td>V</td>
+          <td>void</td>
+          <td>-</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="22-引用类型映射">2.2 引用类型映射</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Java引用类型</th>
+          <th>JNI类型</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>java.lang.Object</td>
+          <td>jobject</td>
+          <td>所有Java对象的基类</td>
+      </tr>
+      <tr>
+          <td>java.lang.Class</td>
+          <td>jclass</td>
+          <td>Java类的Class对象</td>
+      </tr>
+      <tr>
+          <td>java.lang.String</td>
+          <td>jstring</td>
+          <td>Java字符串类型</td>
+      </tr>
+      <tr>
+          <td>java.lang.Throwable</td>
+          <td>jthrowable</td>
+          <td>Java异常/Throwable类型</td>
+      </tr>
+      <tr>
+          <td>Object[]</td>
+          <td>jobjectArray</td>
+          <td>Java对象数组</td>
+      </tr>
+      <tr>
+          <td>boolean[]</td>
+          <td>jbooleanArray</td>
+          <td>boolean基本类型数组</td>
+      </tr>
+      <tr>
+          <td>byte[]</td>
+          <td>jbyteArray</td>
+          <td>byte基本类型数组</td>
+      </tr>
+      <tr>
+          <td>char[]</td>
+          <td>jcharArray</td>
+          <td>char基本类型数组</td>
+      </tr>
+      <tr>
+          <td>short[]</td>
+          <td>jshortArray</td>
+          <td>short基本类型数组</td>
+      </tr>
+      <tr>
+          <td>int[]</td>
+          <td>jintArray</td>
+          <td>int基本类型数组</td>
+      </tr>
+      <tr>
+          <td>long[]</td>
+          <td>jlongArray</td>
+          <td>long基本类型数组</td>
+      </tr>
+      <tr>
+          <td>float[]</td>
+          <td>jfloatArray</td>
+          <td>float基本类型数组</td>
+      </tr>
+      <tr>
+          <td>double[]</td>
+          <td>jdoubleArray</td>
+          <td>double基本类型数组</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="三jni函数签名规则">三、JNI函数签名规则</h2>
+<p>JNI通过<strong>函数签名</strong>唯一标识一个方法，解决Java方法重载问题，签名不匹配会导致方法找不到、程序崩溃。</p>
+<h3 id="31-核心签名规则">3.1 核心签名规则</h3>
+<ol>
+<li><strong>基本类型</strong>：使用上表中的单个字符标识（如int→I，boolean→Z）</li>
+<li><strong>类对象</strong>：格式为<code>L+全类名(包名用/分隔)+;</code>，例：<code>java.lang.String</code> → <code>Ljava/lang/String;</code></li>
+<li><strong>数组</strong>：格式为<code>[+元素类型签名</code>，多维数组每增加一维加一个<code>[</code>
+<ul>
+<li>示例：int[] → <code>[I</code>，String[] → <code>[Ljava/lang/String;</code>，int[][] → <code>[[I</code></li>
+</ul>
+</li>
+<li><strong>方法签名</strong>：固定格式为<code>(参数类型签名列表)+返回值类型签名</code>，无参数时括号内为空
+<ul>
+<li>注意：参数列表按顺序拼接无分隔符；void返回值必须写<code>V</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="32-签名示例">3.2 签名示例</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Java方法声明</th>
+          <th>JNI方法签名</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>void test()</td>
+          <td>()V</td>
+      </tr>
+      <tr>
+          <td>int add(int a, int b)</td>
+          <td>(II)I</td>
+      </tr>
+      <tr>
+          <td>String getName(long id)</td>
+          <td>(J)Ljava/lang/String;</td>
+      </tr>
+      <tr>
+          <td>boolean setInfo(String name, int age)</td>
+          <td>(Ljava/lang/String;I)Z</td>
+      </tr>
+      <tr>
+          <td>int[] getArray(String[] arr)</td>
+          <td>([Ljava/lang/String;)[I</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="33-快速生成签名">3.3 快速生成签名</h3>
+<p>命令行执行<code>javap -s -p 全类名</code>，可直接输出类中所有方法/字段的完整签名，避免手写出错。
+示例：<code>javap -s -p JniTest</code></p>
+<h2 id="四jni核心结构体jnienv与javavm">四、JNI核心结构体：JNIEnv与JavaVM</h2>
+<h3 id="41-jnienv">4.1 JNIEnv</h3>
+<ul>
+<li><strong>定义</strong>：JNIEnv是JNI函数表的指针，<strong>线程私有</strong>，每个线程有独立的JNIEnv实例，<strong>绝对不能跨线程使用</strong></li>
+<li><strong>核心作用</strong>：Native层通过JNIEnv调用所有JNI API，实现对Java层的所有访问操作</li>
+<li><strong>获取方式</strong>：
+<ol>
+<li>Native方法的第一个参数，JVM自动传入</li>
+<li>Native线程中，通过JavaVM的<code>AttachCurrentThread</code>获取</li>
+</ol>
+</li>
+<li><strong>语法差异</strong>：C语言中使用<code>(*env)-&gt;函数名(env, 参数)</code>，C++中可简化为<code>env-&gt;函数名(参数)</code></li>
+</ul>
+<h3 id="42-javavm">4.2 JavaVM</h3>
+<ul>
+<li><strong>定义</strong>：JavaVM是Java虚拟机的全局代表，<strong>一个进程只有一个JavaVM实例</strong>，可全局共享、跨线程使用</li>
+<li><strong>核心作用</strong>：管理虚拟机生命周期，获取/释放线程的JNIEnv，实现Native线程与虚拟机的绑定</li>
+<li><strong>获取方式</strong>：
+<ol>
+<li>JNI_OnLoad函数的第一个参数，加载so库时自动传入</li>
+<li>通过JNIEnv的<code>GetJavaVM(env, &amp;jvm)</code>函数获取</li>
+</ol>
+</li>
+<li><strong>核心API</strong>：
+<table>
+  <thead>
+      <tr>
+          <th>函数名</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>AttachCurrentThread(JavaVM *vm, JNIEnv **env, void *args)</code></td>
+          <td>将Native线程绑定到虚拟机，获取当前线程的JNIEnv</td>
+      </tr>
+      <tr>
+          <td><code>AttachCurrentThreadAsDaemon(JavaVM *vm, JNIEnv **env, void *args)</code></td>
+          <td>绑定为守护线程</td>
+      </tr>
+      <tr>
+          <td><code>DetachCurrentThread(JavaVM *vm)</code></td>
+          <td>解绑线程，必须与Attach成对调用，否则线程退出时崩溃</td>
+      </tr>
+      <tr>
+          <td><code>DestroyJavaVM(JavaVM *vm)</code></td>
+          <td>销毁Java虚拟机</td>
+      </tr>
+  </tbody>
+</table>
+</li>
+</ul>
+<h2 id="五native方法注册方式">五、Native方法注册方式</h2>
+<p>Native方法有两种注册方式，用于建立Java native方法与Native函数的映射关系。</p>
+<h3 id="51-静态注册">5.1 静态注册</h3>
+<ul>
+<li><strong>原理</strong>：通过固定的函数命名规则，JVM加载so库时自动完成方法映射</li>
+<li><strong>函数命名规则</strong>：<code>Java_+全类名(包名用_分隔)+_+方法名</code>
+<ul>
+<li>特殊转义：类名/方法名中的下划线<code>_</code>需转义为<code>_1</code>，美元符<code>$</code>转义为<code>_00024</code></li>
+</ul>
+</li>
+<li><strong>固定参数规则</strong>：
+<ol>
+<li>第一个参数：<code>JNIEnv *env</code>，JNI环境指针</li>
+<li>第二个参数：实例方法传入<code>jobject thiz</code>（Java当前this对象）；静态方法传入<code>jclass clazz</code>（Java当前类的Class对象）</li>
+<li>后续参数：与Java native方法的参数一一对应</li>
+</ol>
+</li>
+</ul>
+<p>示例头文件<code>JniTest.h</code>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;jni.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#ifndef _Included_JniTest
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define _Included_JniTest
+</span></span></span><span class="line"><span class="cl"><span class="cp">#ifdef __cplusplus
+</span></span></span><span class="line"><span class="cl"><span class="k">extern</span> <span class="s">&#34;C&#34;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 实例方法sayHello
+</span></span></span><span class="line"><span class="cl"><span class="n">JNIEXPORT</span> <span class="n">jstring</span> <span class="n">JNICALL</span> <span class="nf">Java_JniTest_sayHello</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="p">,</span> <span class="n">jobject</span><span class="p">,</span> <span class="n">jstring</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 静态方法add
+</span></span></span><span class="line"><span class="cl"><span class="n">JNIEXPORT</span> <span class="n">jint</span> <span class="n">JNICALL</span> <span class="nf">Java_JniTest_add</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="p">,</span> <span class="n">jclass</span><span class="p">,</span> <span class="n">jint</span><span class="p">,</span> <span class="n">jint</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#ifdef __cplusplus
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp">#endif</span></span></span></code></pre></div></div>
+<p>C++实现示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;JniTest.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">JNIEXPORT</span> <span class="n">jstring</span> <span class="n">JNICALL</span> <span class="nf">Java_JniTest_sayHello</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">thiz</span><span class="p">,</span> <span class="n">jstring</span> <span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">c_name</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetStringUTFChars</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">res</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sprintf</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="s">&#34;Hello, %s!&#34;</span><span class="p">,</span> <span class="n">c_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">env</span><span class="o">-&gt;</span><span class="n">ReleaseStringUTFChars</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">c_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">JNIEXPORT</span> <span class="n">jint</span> <span class="n">JNICALL</span> <span class="nf">Java_JniTest_add</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">,</span> <span class="n">jclass</span> <span class="n">clazz</span><span class="p">,</span> <span class="n">jint</span> <span class="n">a</span><span class="p">,</span> <span class="n">jint</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<ul>
+<li><strong>优缺点</strong>：
+<ul>
+<li>优点：简单直观，工具自动生成声明，不易出错</li>
+<li>缺点：函数名冗长，运行时才匹配映射，修改包名/类名需重新生成头文件</li>
+</ul>
+</li>
+</ul>
+<h3 id="52-动态注册">5.2 动态注册</h3>
+<ul>
+<li><strong>原理</strong>：在<code>JNI_OnLoad</code>函数中，通过<code>RegisterNatives</code>手动建立方法映射，无需遵循固定命名规则</li>
+<li><strong>核心结构体</strong>：<code>JNINativeMethod</code>，描述方法映射关系</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>       <span class="c1">// Java native方法名
+</span></span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">signature</span><span class="p">;</span>  <span class="c1">// Java方法的JNI签名
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="o">*</span><span class="n">fnPtr</span><span class="p">;</span>            <span class="c1">// Native层对应的函数指针
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">JNINativeMethod</span><span class="p">;</span></span></span></code></pre></div></div>
+<ul>
+<li><strong>核心API</strong>：<code>RegisterNatives(JNIEnv *env, jclass clazz, const JNINativeMethod *methods, jint nMethods)</code>
+<ul>
+<li>参数：env→JNI环境，clazz→目标Java类对象，methods→映射数组，nMethods→映射方法数量</li>
+<li>返回值：成功返回0，失败返回负数</li>
+</ul>
+</li>
+</ul>
+<p>完整示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;jni.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Native函数实现，无需遵循静态注册命名规则
+</span></span></span><span class="line"><span class="cl"><span class="n">jstring</span> <span class="nf">native_sayHello</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">thiz</span><span class="p">,</span> <span class="n">jstring</span> <span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">c_name</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetStringUTFChars</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">res</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sprintf</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="s">&#34;Hello, %s!&#34;</span><span class="p">,</span> <span class="n">c_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">env</span><span class="o">-&gt;</span><span class="n">ReleaseStringUTFChars</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">c_name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">jint</span> <span class="nf">native_add</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">,</span> <span class="n">jclass</span> <span class="n">clazz</span><span class="p">,</span> <span class="n">jint</span> <span class="n">a</span><span class="p">,</span> <span class="n">jint</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 方法映射表
+</span></span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="k">const</span> <span class="n">JNINativeMethod</span> <span class="n">gMethods</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="s">&#34;sayHello&#34;</span><span class="p">,</span> <span class="s">&#34;(Ljava/lang/String;)Ljava/lang/String;&#34;</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">native_sayHello</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="s">&#34;add&#34;</span><span class="p">,</span> <span class="s">&#34;(II)I&#34;</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">native_add</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// so库加载时自动调用
+</span></span></span><span class="line"><span class="cl"><span class="n">JNIEXPORT</span> <span class="n">jint</span> <span class="n">JNICALL</span> <span class="nf">JNI_OnLoad</span><span class="p">(</span><span class="n">JavaVM</span> <span class="o">*</span><span class="n">vm</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">reserved</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 获取JNIEnv
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">vm</span><span class="o">-&gt;</span><span class="n">GetEnv</span><span class="p">((</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">env</span><span class="p">,</span> <span class="n">JNI_VERSION_1_6</span><span class="p">)</span> <span class="o">!=</span> <span class="n">JNI_OK</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">JNI_ERR</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 找到目标Java类
+</span></span></span><span class="line"><span class="cl">    <span class="n">jclass</span> <span class="n">clazz</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">FindClass</span><span class="p">(</span><span class="s">&#34;JniTest&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">clazz</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">JNI_ERR</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 注册方法
+</span></span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">methodNum</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">gMethods</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">gMethods</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">RegisterNatives</span><span class="p">(</span><span class="n">clazz</span><span class="p">,</span> <span class="n">gMethods</span><span class="p">,</span> <span class="n">methodNum</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">JNI_ERR</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 返回JNI版本
+</span></span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">JNI_VERSION_1_6</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<ul>
+<li><strong>优缺点</strong>：
+<ul>
+<li>优点：函数名简洁灵活，加载时完成映射，运行效率高，修改包名/类名只需修改映射表，适合大量native方法的项目</li>
+<li>缺点：需手动维护映射表，签名写错会直接导致崩溃</li>
+</ul>
+</li>
+</ul>
+<h2 id="六jni核心api详解">六、JNI核心API详解</h2>
+<h3 id="61-字符串操作jstring">6.1 字符串操作（jstring）</h3>
+<p>jstring不能直接当作C/C++的char*使用，必须通过JNI函数完成转换，且必须成对执行申请/释放操作。</p>
+<table>
+  <thead>
+      <tr>
+          <th>函数名</th>
+          <th>功能说明</th>
+          <th>注意事项</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>jstring NewStringUTF(JNIEnv *env, const char *bytes)</code></td>
+          <td>用UTF-8编码的C字符串创建jstring</td>
+          <td>传入NULL会崩溃</td>
+      </tr>
+      <tr>
+          <td><code>const char* GetStringUTFChars(JNIEnv *env, jstring str, jboolean *isCopy)</code></td>
+          <td>将jstring转为UTF-8编码的C字符串</td>
+          <td>isCopy标识是否拷贝了Java堆数据；<strong>使用完必须调用ReleaseStringUTFChars释放</strong></td>
+      </tr>
+      <tr>
+          <td><code>void ReleaseStringUTFChars(JNIEnv *env, jstring str, const char *utf)</code></td>
+          <td>释放GetStringUTFChars获取的C字符串</td>
+          <td>必须成对调用，否则内存泄漏</td>
+      </tr>
+      <tr>
+          <td><code>jsize GetStringUTFLength(JNIEnv *env, jstring str)</code></td>
+          <td>获取UTF-8编码的字符串字节长度</td>
+          <td>对应Java的<code>String.getBytes(&quot;UTF-8&quot;).length</code></td>
+      </tr>
+      <tr>
+          <td><code>jsize GetStringLength(JNIEnv *env, jstring str)</code></td>
+          <td>获取Unicode编码的字符串字符长度</td>
+          <td>对应Java的<code>String.length()</code></td>
+      </tr>
+      <tr>
+          <td><code>void GetStringUTFRegion(JNIEnv *env, jstring str, jsize start, jsize len, char *buf)</code></td>
+          <td>将jstring指定区间的UTF-8字符拷贝到buf</td>
+          <td>无需释放，需提前分配buf内存，避免越界</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="62-数组操作">6.2 数组操作</h3>
+<p>分为<strong>基本类型数组</strong>和<strong>对象数组</strong>，操作API差异较大。</p>
+<h4 id="621-基本类型数组">6.2.1 基本类型数组</h4>
+<p>以jintArray为例，其他基本类型数组（jbooleanArray、jbyteArray等）API格式完全一致，替换类型前缀即可。</p>
+<table>
+  <thead>
+      <tr>
+          <th>函数名</th>
+          <th>功能说明</th>
+          <th>注意事项</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>&lt;Type&gt;Array New&lt;Type&gt;Array(JNIEnv *env, jsize length)</code></td>
+          <td>创建指定长度的基本类型数组</td>
+          <td>例：<code>NewIntArray(env, 10)</code>创建长度10的int数组</td>
+      </tr>
+      <tr>
+          <td><code>jsize GetArrayLength(JNIEnv *env, jarray array)</code></td>
+          <td>获取数组长度</td>
+          <td>通用所有数组类型</td>
+      </tr>
+      <tr>
+          <td><code>&lt;Type&gt;* Get&lt;Type&gt;ArrayElements(JNIEnv *env, &lt;Type&gt;Array array, jboolean *isCopy)</code></td>
+          <td>获取数组元素指针</td>
+          <td>用完必须Release释放；isCopy标识是否拷贝数据</td>
+      </tr>
+      <tr>
+          <td><code>void Release&lt;Type&gt;ArrayElements(JNIEnv *env, &lt;Type&gt;Array array, &lt;Type&gt; *elems, jint mode)</code></td>
+          <td>释放数组元素指针</td>
+          <td>mode：0→拷贝回原数组+释放缓冲区；JNI_COMMIT→拷贝回原数组+不释放；JNI_ABORT→不拷贝+释放</td>
+      </tr>
+      <tr>
+          <td><code>void Get&lt;Type&gt;ArrayRegion(JNIEnv *env, &lt;Type&gt;Array array, jsize start, jsize len, &lt;Type&gt; *buf)</code></td>
+          <td>批量拷贝数组元素到buf</td>
+          <td>无需释放，推荐小数据量使用</td>
+      </tr>
+      <tr>
+          <td><code>void Set&lt;Type&gt;ArrayRegion(JNIEnv *env, &lt;Type&gt;Array array, jsize start, jsize len, const &lt;Type&gt; *buf)</code></td>
+          <td>批量将buf数据写入数组</td>
+          <td>无内存泄漏风险</td>
+      </tr>
+      <tr>
+          <td><code>void* GetPrimitiveArrayCritical(JNIEnv *env, jarray array, jboolean *isCopy)</code></td>
+          <td>获取数组临界区指针，尽量避免拷贝</td>
+          <td>临界区内<strong>禁止调用任何其他JNI函数、不能阻塞</strong>，否则会导致虚拟机死锁</td>
+      </tr>
+      <tr>
+          <td><code>void ReleasePrimitiveArrayCritical(JNIEnv *env, jarray array, void *carray, jint mode)</code></td>
+          <td>释放临界区指针</td>
+          <td>必须与Get成对调用</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="622-对象数组">6.2.2 对象数组</h4>
+<p>对象数组类型为<code>jobjectArray</code>，不支持批量操作，只能单个元素读写。</p>
+<table>
+  <thead>
+      <tr>
+          <th>函数名</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>jobjectArray NewObjectArray(JNIEnv *env, jsize length, jclass elementClass, jobject initialElement)</code></td>
+          <td>创建指定长度、指定元素类型的对象数组</td>
+      </tr>
+      <tr>
+          <td><code>jobject GetObjectArrayElement(JNIEnv *env, jobjectArray array, jsize index)</code></td>
+          <td>获取数组指定索引的元素</td>
+      </tr>
+      <tr>
+          <td><code>void SetObjectArrayElement(JNIEnv *env, jobjectArray array, jsize index, jobject value)</code></td>
+          <td>给数组指定索引设置元素</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="63-类与对象操作">6.3 类与对象操作</h3>
+<table>
+  <thead>
+      <tr>
+          <th>函数名</th>
+          <th>功能说明</th>
+          <th>注意事项</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>jclass FindClass(JNIEnv *env, const char *name)</code></td>
+          <td>查找Java类，name为全类名（/分隔包名）</td>
+          <td>例：<code>env-&gt;FindClass(&quot;java/util/ArrayList&quot;)</code>；返回局部引用，需长期使用要转全局引用</td>
+      </tr>
+      <tr>
+          <td><code>jobject NewObject(JNIEnv *env, jclass clazz, jmethodID methodID, ...)</code></td>
+          <td>创建Java对象，调用构造方法</td>
+          <td>methodID为构造方法的ID，固定名为<code>&lt;init&gt;</code>，返回值签名为V</td>
+      </tr>
+      <tr>
+          <td><code>jclass GetObjectClass(JNIEnv *env, jobject obj)</code></td>
+          <td>获取对象对应的Class对象</td>
+          <td>对应Java的<code>obj.getClass()</code></td>
+      </tr>
+      <tr>
+          <td><code>jboolean IsInstanceOf(JNIEnv *env, jobject obj, jclass clazz)</code></td>
+          <td>判断对象是否是类的实例</td>
+          <td>对应Java的<code>instanceof</code>关键字</td>
+      </tr>
+      <tr>
+          <td><code>jboolean IsSameObject(JNIEnv *env, jobject ref1, jobject ref2)</code></td>
+          <td>判断两个引用是否指向同一个Java对象</td>
+          <td>可用于判断弱引用是否被回收（与NULL比较）</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="64-字段与方法访问">6.4 字段与方法访问</h3>
+<p>Native层可反向访问Java对象的字段、调用Java方法，分为<strong>实例字段/方法</strong>和<strong>静态字段/方法</strong>。</p>
+<h4 id="641-字段访问">6.4.1 字段访问</h4>
+<table>
+  <thead>
+      <tr>
+          <th>函数名</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>jfieldID GetFieldID(JNIEnv *env, jclass clazz, const char *name, const char *sig)</code></td>
+          <td>获取实例字段的ID</td>
+      </tr>
+      <tr>
+          <td><code>&lt;Type&gt; Get&lt;Type&gt;Field(JNIEnv *env, jobject obj, jfieldID fieldID)</code></td>
+          <td>获取实例字段的值</td>
+      </tr>
+      <tr>
+          <td><code>void Set&lt;Type&gt;Field(JNIEnv *env, jobject obj, jfieldID fieldID, &lt;Type&gt; value)</code></td>
+          <td>设置实例字段的值</td>
+      </tr>
+      <tr>
+          <td><code>jfieldID GetStaticFieldID(JNIEnv *env, jclass clazz, const char *name, const char *sig)</code></td>
+          <td>获取静态字段的ID</td>
+      </tr>
+      <tr>
+          <td><code>&lt;Type&gt; GetStatic&lt;Type&gt;Field(JNIEnv *env, jclass clazz, jfieldID fieldID)</code></td>
+          <td>获取静态字段的值</td>
+      </tr>
+      <tr>
+          <td><code>void SetStatic&lt;Type&gt;Field(JNIEnv *env, jclass clazz, jfieldID fieldID, &lt;Type&gt; value)</code></td>
+          <td>设置静态字段的值</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="642-方法调用">6.4.2 方法调用</h4>
+<table>
+  <thead>
+      <tr>
+          <th>函数名</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>jmethodID GetMethodID(JNIEnv *env, jclass clazz, const char *name, const char *sig)</code></td>
+          <td>获取实例方法的ID</td>
+      </tr>
+      <tr>
+          <td><code>&lt;Type&gt; Call&lt;Type&gt;Method(JNIEnv *env, jobject obj, jmethodID methodID, ...)</code></td>
+          <td>调用实例方法</td>
+      </tr>
+      <tr>
+          <td><code>jmethodID GetStaticMethodID(JNIEnv *env, jclass clazz, const char *name, const char *sig)</code></td>
+          <td>获取静态方法的ID</td>
+      </tr>
+      <tr>
+          <td><code>&lt;Type&gt; CallStatic&lt;Type&gt;Method(JNIEnv *env, jclass clazz, jmethodID methodID, ...)</code></td>
+          <td>调用静态方法</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="七jni引用管理">七、JNI引用管理</h2>
+<p>JNI将引用分为3类，用于管理Java对象的生命周期，防止内存泄漏和对象被GC意外回收。</p>
+<h3 id="71-局部引用local-reference">7.1 局部引用（Local Reference）</h3>
+<ul>
+<li><strong>生命周期</strong>：Native方法调用期间有效，方法返回后自动被JVM释放，也可手动提前释放</li>
+<li><strong>创建方式</strong>：绝大多数JNI函数返回的引用都是局部引用（如FindClass、NewObject等）</li>
+<li><strong>核心特性</strong>：线程私有，<strong>不能跨线程、跨Native方法传递使用</strong>；占用局部引用表（Android默认512个），大量创建会导致溢出崩溃</li>
+<li><strong>手动管理API</strong>：
+<ul>
+<li><code>void DeleteLocalRef(JNIEnv *env, jobject ref)</code>：手动释放单个局部引用</li>
+<li><code>jint PushLocalFrame(JNIEnv *env, jint capacity)</code>：创建局部引用帧，预分配引用空间</li>
+<li><code>jobject PopLocalFrame(JNIEnv *env, jobject result)</code>：弹出当前帧，释放帧内所有局部引用，仅保留result返回</li>
+</ul>
+</li>
+<li><strong>最佳实践</strong>：循环内创建的局部引用用完立即释放；大量局部引用使用Push/PopLocalFrame批量管理</li>
+</ul>
+<h3 id="72-全局引用global-reference">7.2 全局引用（Global Reference）</h3>
+<ul>
+<li><strong>生命周期</strong>：手动创建后，直到手动释放前一直有效，不会被GC回收</li>
+<li><strong>创建/释放</strong>：<code>jobject NewGlobalRef(JNIEnv *env, jobject obj)</code> / <code>void DeleteGlobalRef(JNIEnv *env, jobject ref)</code></li>
+<li><strong>核心特性</strong>：进程全局有效，<strong>可跨线程、跨方法传递使用</strong>；不会自动释放，必须手动Delete，否则会造成永久内存泄漏</li>
+<li><strong>典型场景</strong>：缓存jclass、Java回调对象等需要长期跨线程使用的对象</li>
+</ul>
+<h3 id="73-弱全局引用weak-global-reference">7.3 弱全局引用（Weak Global Reference）</h3>
+<ul>
+<li><strong>生命周期</strong>：手动创建后，直到手动释放前有效，但<strong>不会阻止GC回收</strong>，GC运行时若该对象无其他强引用，会被回收</li>
+<li><strong>创建/释放</strong>：<code>jweak NewWeakGlobalRef(JNIEnv *env, jobject obj)</code> / <code>void DeleteWeakGlobalRef(JNIEnv *env, jweak ref)</code></li>
+<li><strong>核心特性</strong>：可跨线程使用，避免内存泄漏，适合缓存非必需的对象，防止类加载器泄漏</li>
+<li><strong>有效性判断</strong>：<code>IsSameObject(env, weakRef, NULL)</code>，返回JNI_TRUE表示已被回收，不可再使用</li>
+</ul>
+<h2 id="八jni异常处理">八、JNI异常处理</h2>
+<p>JNI的异常机制与Java不同：<strong>JNI函数抛出异常后，不会立即中断Native代码的执行，必须手动检查、处理、清除异常</strong>，否则后续JNI调用会导致程序崩溃。</p>
+<h3 id="81-核心异常处理api">8.1 核心异常处理API</h3>
+<table>
+  <thead>
+      <tr>
+          <th>函数名</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>jboolean ExceptionCheck(JNIEnv *env)</code></td>
+          <td>检查当前是否有挂起的异常，返回JNI_TRUE表示有异常</td>
+      </tr>
+      <tr>
+          <td><code>jthrowable ExceptionOccurred(JNIEnv *env)</code></td>
+          <td>获取当前挂起的异常对象，无异常返回NULL</td>
+      </tr>
+      <tr>
+          <td><code>void ExceptionDescribe(JNIEnv *env)</code></td>
+          <td>打印异常堆栈信息，用于调试</td>
+      </tr>
+      <tr>
+          <td><code>void ExceptionClear(JNIEnv *env)</code></td>
+          <td>清除当前挂起的异常</td>
+      </tr>
+      <tr>
+          <td><code>jint ThrowNew(JNIEnv *env, jclass clazz, const char *message)</code></td>
+          <td>向Java层抛出指定类型、指定信息的异常</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="82-异常处理规范">8.2 异常处理规范</h3>
+<ol>
+<li>调用JNI函数后，必须及时检查异常，尤其是FindClass、GetMethodID等高频出错的函数</li>
+<li>存在挂起异常时，<strong>只能调用异常处理相关的JNI函数</strong>，禁止调用其他JNI函数，否则行为未定义</li>
+<li>异常处理完成后，必须调用<code>ExceptionClear</code>清除异常，才能继续执行其他逻辑</li>
+<li>Native层抛出的异常，Java层可通过try-catch捕获</li>
+</ol>
+<p>示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">callJavaMethodSafe</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">obj</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jclass</span> <span class="n">clazz</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetObjectClass</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jmethodID</span> <span class="n">methodID</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetMethodID</span><span class="p">(</span><span class="n">clazz</span><span class="p">,</span> <span class="s">&#34;test&#34;</span><span class="p">,</span> <span class="s">&#34;()V&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 检查异常
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">ExceptionCheck</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">env</span><span class="o">-&gt;</span><span class="n">ExceptionDescribe</span><span class="p">();</span> <span class="c1">// 打印堆栈
+</span></span></span><span class="line"><span class="cl">        <span class="n">env</span><span class="o">-&gt;</span><span class="n">ExceptionClear</span><span class="p">();</span> <span class="c1">// 清除异常
+</span></span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 无异常才调用方法
+</span></span></span><span class="line"><span class="cl">    <span class="n">env</span><span class="o">-&gt;</span><span class="n">CallVoidMethod</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">methodID</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h2 id="九jni线程相关">九、JNI线程相关</h2>
+<p>Native线程（如pthread创建的线程）要访问Java层，必须先与JavaVM绑定，否则无法获取有效的JNIEnv，也无法安全访问Java对象。</p>
+<h3 id="91-核心规则">9.1 核心规则</h3>
+<ol>
+<li><strong>JavaVM全局唯一</strong>，可跨线程共享，建议在JNI_OnLoad中缓存全局指针</li>
+<li><strong>JNIEnv线程私有</strong>，不能跨线程传递使用，每个线程必须通过Attach获取专属的JNIEnv</li>
+<li><strong>Attach与Detach必须成对调用</strong>：Native线程退出前必须Detach，否则虚拟机无法释放线程资源，导致崩溃</li>
+<li>Java主线程/Java创建的线程，无需手动Attach/Detach，JVM自动管理</li>
+<li>局部引用不能跨线程传递，跨线程共享Java对象必须使用全局引用</li>
+</ol>
+<h3 id="92-完整示例">9.2 完整示例</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;pthread.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;jni.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 全局缓存JavaVM
+</span></span></span><span class="line"><span class="cl"><span class="n">JavaVM</span> <span class="o">*</span><span class="n">g_jvm</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 全局引用，缓存Java回调对象
+</span></span></span><span class="line"><span class="cl"><span class="n">jobject</span> <span class="n">g_callback_obj</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// JNI_OnLoad中缓存JavaVM
+</span></span></span><span class="line"><span class="cl"><span class="n">JNIEXPORT</span> <span class="n">jint</span> <span class="n">JNICALL</span> <span class="nf">JNI_OnLoad</span><span class="p">(</span><span class="n">JavaVM</span> <span class="o">*</span><span class="n">vm</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">reserved</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">g_jvm</span> <span class="o">=</span> <span class="n">vm</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">vm</span><span class="o">-&gt;</span><span class="n">GetEnv</span><span class="p">((</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">env</span><span class="p">,</span> <span class="n">JNI_VERSION_1_6</span><span class="p">)</span> <span class="o">!=</span> <span class="n">JNI_OK</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">JNI_ERR</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">JNI_VERSION_1_6</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 线程执行函数
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="o">*</span> <span class="nf">thread_func</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 绑定线程到虚拟机
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">g_jvm</span><span class="o">-&gt;</span><span class="n">AttachCurrentThread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">env</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">!=</span> <span class="n">JNI_OK</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 执行JNI操作，调用Java回调
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">g_callback_obj</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">jclass</span> <span class="n">clazz</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetObjectClass</span><span class="p">(</span><span class="n">g_callback_obj</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">jmethodID</span> <span class="n">callbackID</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetMethodID</span><span class="p">(</span><span class="n">clazz</span><span class="p">,</span> <span class="s">&#34;onNativeCallback&#34;</span><span class="p">,</span> <span class="s">&#34;(I)V&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">callbackID</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">env</span><span class="o">-&gt;</span><span class="n">ExceptionCheck</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">env</span><span class="o">-&gt;</span><span class="n">CallVoidMethod</span><span class="p">(</span><span class="n">g_callback_obj</span><span class="p">,</span> <span class="n">callbackID</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 解绑线程，必须调用
+</span></span></span><span class="line"><span class="cl">    <span class="n">g_jvm</span><span class="o">-&gt;</span><span class="n">DetachCurrentThread</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Java层调用，启动Native线程
+</span></span></span><span class="line"><span class="cl"><span class="n">JNIEXPORT</span> <span class="kt">void</span> <span class="n">JNICALL</span> <span class="nf">Java_JniTest_startThread</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">thiz</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">callback</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 保存回调对象为全局引用
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">g_callback_obj</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">env</span><span class="o">-&gt;</span><span class="n">DeleteGlobalRef</span><span class="p">(</span><span class="n">g_callback_obj</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">g_callback_obj</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">NewGlobalRef</span><span class="p">(</span><span class="n">callback</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 创建线程
+</span></span></span><span class="line"><span class="cl">    <span class="n">pthread_t</span> <span class="n">tid</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tid</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">thread_func</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h2 id="十常见坑与最佳实践">十、常见坑与最佳实践</h2>
+<ol>
+<li><strong>JNIEnv跨线程使用</strong>：绝对禁止跨线程传递JNIEnv，必须通过JavaVM的AttachCurrentThread获取当前线程的JNIEnv</li>
+<li><strong>内存泄漏</strong>：GetStringUTFChars、Get<Type>ArrayElements必须与Release成对调用；全局引用必须手动Delete；循环内局部引用用完立即释放</li>
+<li><strong>异常未处理</strong>：JNI函数抛出异常后，未检查、未清除就继续调用其他JNI函数，导致崩溃</li>
+<li><strong>签名错误</strong>：方法/字段签名手写错误，推荐用<code>javap -s</code>自动生成签名</li>
+<li><strong>类名错误</strong>：FindClass的类名必须用<code>/</code>分隔包名，而非<code>.</code></li>
+<li><strong>引用滥用</strong>：局部引用跨线程/跨方法使用，导致野指针崩溃；全局引用未释放导致永久内存泄漏</li>
+<li><strong>临界区滥用</strong>：GetPrimitiveArrayCritical临界区内调用其他JNI函数、阻塞，导致虚拟机死锁</li>
+<li><strong>Native线程未Detach</strong>：Attach后未Detach，线程退出时导致虚拟机崩溃</li>
+<li><strong>缓存错误</strong>：FindClass返回的是局部引用，长期缓存必须转为全局引用；jmethodID/jfieldID不是引用类型，无需转全局引用，只要类不被卸载就长期有效</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-02-14</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/001_jni%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/android/">Android</a>,&nbsp;<a href="/blog/tags/jni/">JNI</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/001_yaml%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="YAML 语法详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>YAML 语法详细总结</a>
+            <a href="/blog/002_hidl%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="HIDL 语法详细总结">HIDL 语法详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

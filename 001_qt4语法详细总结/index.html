@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Qt4 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_qt4%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="Qt4 语法详细总结">
+  <meta property="og:description" content="Qt4 语法详细总结 Qt4 是 Qt 经典的长期支持版本（最终稳定版为 Qt4.8.7），基于元对象系统扩展标准C&#43;&#43;，核心主打跨平台GUI开发，同时提供完善的网络、数据库、XML、线程等能力。以下是其核心语法、模块特性与使用规范的完整总结，同时标注与Qt5的核心差异，避免混淆。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-02-19T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-02-19T10:00:20+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="Qt">
+    <meta property="article:tag" content="Qt4">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="Qt4 语法详细总结">
+  <meta name="twitter:description" content="Qt4 语法详细总结 Qt4 是 Qt 经典的长期支持版本（最终稳定版为 Qt4.8.7），基于元对象系统扩展标准C&#43;&#43;，核心主打跨平台GUI开发，同时提供完善的网络、数据库、XML、线程等能力。以下是其核心语法、模块特性与使用规范的完整总结，同时标注与Qt5的核心差异，避免混淆。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/001_qt4%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/005_android.bp%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/001_typescript%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Qt4 语法详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/001_qt4%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, Qt, Qt4","wordcount":  8691 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/001_qt4%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-02-19T09:00:20+08:00","dateModified": "2026-02-19T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/001_qt4%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/001_qt4%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Qt4 语法详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-02-19">2026-02-19</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 8691 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 18 分钟&nbsp;<span id="/blog/001_qt4%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="Qt4 语法详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一qt4-核心基石元对象系统meta-object-system">一、Qt4 核心基石：元对象系统（Meta-Object System）</a>
+      <ul>
+        <li><a href="#11-核心宏语法">1.1 核心宏语法</a></li>
+        <li><a href="#12-核心配套语法">1.2 核心配套语法</a></li>
+      </ul>
+    </li>
+    <li><a href="#二qt4-核心特性信号与槽signals--slots">二、Qt4 核心特性：信号与槽（Signals &amp; Slots）</a>
+      <ul>
+        <li><a href="#21-信号的声明语法">2.1 信号的声明语法</a></li>
+        <li><a href="#22-槽的声明语法">2.2 槽的声明语法</a></li>
+        <li><a href="#23-信号发射与连接核心语法">2.3 信号发射与连接核心语法</a>
+          <ul>
+            <li><a href="#1-信号发射emit关键字">1. 信号发射：emit关键字</a></li>
+            <li><a href="#2-连接函数connectqt4标准语法">2. 连接函数connect（Qt4标准语法）</a></li>
+            <li><a href="#3-连接类型枚举">3. 连接类型枚举</a></li>
+            <li><a href="#4-断开连接disconnect语法">4. 断开连接disconnect语法</a></li>
+          </ul>
+        </li>
+        <li><a href="#24-信号槽核心注意事项">2.4 信号槽核心注意事项</a></li>
+      </ul>
+    </li>
+    <li><a href="#三qt4-项目构建pro-项目文件语法">三、Qt4 项目构建：.pro 项目文件语法</a>
+      <ul>
+        <li><a href="#31-基础配置项">3.1 基础配置项</a></li>
+        <li><a href="#32-进阶配置项">3.2 进阶配置项</a></li>
+      </ul>
+    </li>
+    <li><a href="#四qt4-核心模块与常用类语法">四、Qt4 核心模块与常用类语法</a>
+      <ul>
+        <li><a href="#41-core核心模块非gui基础能力">4.1 Core核心模块（非GUI基础能力）</a>
+          <ul>
+            <li><a href="#1-跨平台基础数据类型">1. 跨平台基础数据类型</a></li>
+            <li><a href="#2-核心字符串与字节数组">2. 核心字符串与字节数组</a></li>
+            <li><a href="#3-容器类">3. 容器类</a></li>
+            <li><a href="#4-事件系统">4. 事件系统</a></li>
+            <li><a href="#5-线程与定时器">5. 线程与定时器</a></li>
+            <li><a href="#6-文件与io操作">6. 文件与IO操作</a></li>
+          </ul>
+        </li>
+        <li><a href="#42-gui模块qt4核心可视化能力">4.2 GUI模块（Qt4核心可视化能力）</a>
+          <ul>
+            <li><a href="#1-窗口基础语法">1. 窗口基础语法</a></li>
+            <li><a href="#2-布局管理qt4核心自适应方案">2. 布局管理（Qt4核心自适应方案）</a></li>
+            <li><a href="#3-常用可视化部件">3. 常用可视化部件</a></li>
+            <li><a href="#4-2d绘图与图形视图">4. 2D绘图与图形视图</a></li>
+            <li><a href="#5-资源系统">5. 资源系统</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-其他常用模块语法">4.3 其他常用模块语法</a>
+          <ul>
+            <li><a href="#1-网络模块qtnetwork">1. 网络模块QtNetwork</a></li>
+            <li><a href="#2-数据库模块qtsql">2. 数据库模块QtSql</a></li>
+            <li><a href="#3-xml模块qtxml">3. XML模块QtXml</a></li>
+            <li><a href="#4-国际化">4. 国际化</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#五qt4-中文乱码解决方案专属语法">五、Qt4 中文乱码解决方案（专属语法）</a></li>
+    <li><a href="#六qt4-与-qt5-核心语法差异">六、Qt4 与 Qt5 核心语法差异</a></li>
+    <li><a href="#七qt4-完整语法示例">七、Qt4 完整语法示例</a>
+      <ul>
+        <li><a href="#71-头文件-mainwindowh">7.1 头文件 mainwindow.h</a></li>
+        <li><a href="#72-源文件-mainwindowcpp">7.2 源文件 mainwindow.cpp</a></li>
+        <li><a href="#73-主函数-maincpp">7.3 主函数 main.cpp</a></li>
+        <li><a href="#74-项目文件-qt4demopro">7.4 项目文件 Qt4Demo.pro</a></li>
+      </ul>
+    </li>
+    <li><a href="#八qt4-语法核心避坑指南">八、Qt4 语法核心避坑指南</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="qt4-语法详细总结">Qt4 语法详细总结</h1>
+<p>Qt4 是 Qt 经典的长期支持版本（最终稳定版为 Qt4.8.7），基于<strong>元对象系统</strong>扩展标准C++，核心主打跨平台GUI开发，同时提供完善的网络、数据库、XML、线程等能力。以下是其核心语法、模块特性与使用规范的完整总结，同时标注与Qt5的核心差异，避免混淆。</p>
+<hr>
+<h2 id="一qt4-核心基石元对象系统meta-object-system">一、Qt4 核心基石：元对象系统（Meta-Object System）</h2>
+<p>元对象系统是Qt对C++的核心扩展，实现了信号槽、属性系统、运行时类型信息等核心特性，<strong>使用必须满足3个必要条件</strong>：</p>
+<ol>
+<li>类必须直接或间接继承自 <code>QObject</code></li>
+<li>类声明的私有区域必须添加 <code>Q_OBJECT</code> 宏</li>
+<li>源文件必须通过MOC（元对象编译器）预处理，再参与编译</li>
+</ol>
+<h3 id="11-核心宏语法">1.1 核心宏语法</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">宏</th>
+          <th style="text-align: left">作用与语法规范</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>Q_OBJECT</code></td>
+          <td style="text-align: left">核心宏，必须放在类声明的最开头（私有区），启用元对象特性，无参数。添加后必须重新执行qmake，否则会编译报错</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>Q_PROPERTY(type name READ getFunc WRITE setFunc [NOTIFY signal] [DESIGNABLE bool] ...)</code></td>
+          <td style="text-align: left">属性系统宏，为类声明可通过元对象访问的属性。<br>必填：<code>type</code>属性类型、<code>name</code>属性名、<code>READ</code>读函数、<code>WRITE</code>写函数<br>可选：<code>NOTIFY</code>属性变化时触发的信号、<code>DESIGNABLE</code>是否在设计师可见</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>Q_ENUM(EnumType)</code></td>
+          <td style="text-align: left">注册枚举类型到元对象系统，可通过元对象获取枚举名、值，支持字符串与枚举值互转</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>Q_FLAGS(FlagsType)</code></td>
+          <td style="text-align: left">注册位运算枚举（标志位），支持按位与/或操作</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="12-核心配套语法">1.2 核心配套语法</h3>
+<ul>
+<li><strong>父子对象机制</strong>：<code>QObject</code> 构造函数默认带父对象参数 <code>QObject *parent = 0</code>，设置父对象后，子对象会被加入父对象的子列表，<strong>父对象析构时会自动销毁所有子对象</strong>，是Qt核心的内存管理方案。
+示例：<code>QPushButton *btn = new QPushButton(&quot;确定&quot;, this);</code> 无需手动delete btn</li>
+<li><strong>国际化tr()函数</strong>：所有需要翻译的字符串必须用 <code>tr()</code> 包裹，由元对象系统处理国际化，语法：<code>tr(&quot;你好Qt4&quot;)</code>，支持多语言切换。</li>
+<li><strong>调试输出qDebug()</strong>：Qt4标准调试输出，需包含头文件 <code>&lt;QDebug&gt;</code>，语法：<code>qDebug() &lt;&lt; &quot;数值:&quot; &lt;&lt; 100 &lt;&lt; &quot;字符串:&quot; &lt;&lt; tr(&quot;测试&quot;);</code></li>
+</ul>
+<hr>
+<h2 id="二qt4-核心特性信号与槽signals--slots">二、Qt4 核心特性：信号与槽（Signals &amp; Slots）</h2>
+<p>信号槽是Qt的核心通信机制，实现了对象间的解耦通信，<strong>Qt4的语法与Qt5有本质区别，必须严格遵守规范</strong>。</p>
+<h3 id="21-信号的声明语法">2.1 信号的声明语法</h3>
+<ul>
+<li>关键字：<code>signals:</code>（Qt4专属宏，不可加访问控制修饰符，默认展开为protected）</li>
+<li>语法规则：
+<ol>
+<li>仅可声明，不可实现（MOC自动生成实现代码）</li>
+<li>返回值固定为 <code>void</code>，可自定义任意个数、类型的参数</li>
+<li>不可手动调用，仅可通过 <code>emit</code> 关键字发射</li>
+</ol>
+</li>
+<li>示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MyWidget</span> <span class="o">:</span> <span class="k">public</span> <span class="n">QWidget</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Q_OBJECT</span>
+</span></span><span class="line"><span class="cl"><span class="nl">signals</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 自定义信号，无实现
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">valueChanged</span><span class="p">(</span><span class="kt">int</span> <span class="n">newValue</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">userLogin</span><span class="p">(</span><span class="n">QString</span> <span class="n">username</span><span class="p">,</span> <span class="kt">int</span> <span class="n">userId</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></div></div>
+<h3 id="22-槽的声明语法">2.2 槽的声明语法</h3>
+<ul>
+<li>关键字：<code>slots:</code>，必须搭配访问控制符，分为 <code>public slots</code> / <code>protected slots</code> / <code>private slots</code></li>
+<li>语法规则：
+<ol>
+<li><strong>Qt4强制要求</strong>：槽函数必须声明在slots块中，普通成员函数无法直接作为槽使用</li>
+<li>槽函数是普通的成员函数，可手动调用，也可被信号触发</li>
+<li>槽函数的参数类型、顺序必须与连接的信号匹配，信号参数个数可多于槽（多余参数会被忽略）</li>
+</ol>
+</li>
+<li>示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">public</span> <span class="nl">slots</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 与信号valueChanged(int)匹配的槽
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">onValueChanged</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;当前值:&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 无参槽，可连接无参信号clicked()
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">onBtnClicked</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">QMessageBox</span><span class="o">::</span><span class="n">information</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s">&#34;提示&#34;</span><span class="p">,</span> <span class="s">&#34;按钮被点击&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="23-信号发射与连接核心语法">2.3 信号发射与连接核心语法</h3>
+<h4 id="1-信号发射emit关键字">1. 信号发射：emit关键字</h4>
+<p><code>emit</code> 是Qt专属宏，展开为空，仅做语法提示，用于发射信号，语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 发射信号，传递参数
+</span></span></span><span class="line"><span class="cl"><span class="n">emit</span> <span class="nf">valueChanged</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">emit</span> <span class="nf">userLogin</span><span class="p">(</span><span class="s">&#34;zhangsan&#34;</span><span class="p">,</span> <span class="mi">1001</span><span class="p">);</span></span></span></code></pre></div></div>
+<h4 id="2-连接函数connectqt4标准语法">2. 连接函数connect（Qt4标准语法）</h4>
+<p>Qt4仅支持基于宏的连接方式，语法固定，参数错误会导致运行时连接失败（编译不报错）。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 函数原型
+</span></span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">QObject</span><span class="o">::</span><span class="n">connect</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">QObject</span> <span class="o">*</span><span class="n">sender</span><span class="p">,</span>      <span class="c1">// 信号发送者
+</span></span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">signal</span><span class="p">,</span>          <span class="c1">// 信号，必须用SIGNAL()宏包裹
+</span></span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">QObject</span> <span class="o">*</span><span class="n">receiver</span><span class="p">,</span>    <span class="c1">// 信号接收者
+</span></span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">method</span><span class="p">,</span>          <span class="c1">// 槽函数，必须用SLOT()宏包裹
+</span></span></span><span class="line"><span class="cl">    <span class="n">Qt</span><span class="o">::</span><span class="n">ConnectionType</span> <span class="n">type</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">::</span><span class="n">AutoConnection</span>  <span class="c1">// 连接类型，可选
+</span></span></span><span class="line"><span class="cl"><span class="p">);</span></span></span></code></pre></div></div>
+<p><strong>核心语法规范（Qt4强制要求）</strong>：</p>
+<ol>
+<li>信号必须用 <code>SIGNAL(函数签名)</code> 包裹，槽必须用 <code>SLOT(函数签名)</code> 包裹</li>
+<li>宏内的函数签名<strong>仅可写参数类型，不可写变量名</strong>，否则MOC无法匹配</li>
+<li>函数签名必须与声明完全一致，包括const修饰符</li>
+<li>返回值：连接成功返回true，失败返回false，可通过返回值判断连接状态</li>
+</ol>
+<p><strong>正确示例</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">QPushButton</span> <span class="o">*</span><span class="n">btn</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s">&#34;点击&#34;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 正确：无参信号连接无参槽
+</span></span></span><span class="line"><span class="cl"><span class="n">connect</span><span class="p">(</span><span class="n">btn</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="n">clicked</span><span class="p">()),</span> <span class="k">this</span><span class="p">,</span> <span class="n">SLOT</span><span class="p">(</span><span class="n">onBtnClicked</span><span class="p">()));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">QSlider</span> <span class="o">*</span><span class="n">slider</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QSlider</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">Horizontal</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 正确：带参信号连接带参槽，仅写类型
+</span></span></span><span class="line"><span class="cl"><span class="n">connect</span><span class="p">(</span><span class="n">slider</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="n">valueChanged</span><span class="p">(</span><span class="kt">int</span><span class="p">)),</span> <span class="k">this</span><span class="p">,</span> <span class="n">SLOT</span><span class="p">(</span><span class="n">onValueChanged</span><span class="p">(</span><span class="kt">int</span><span class="p">)));</span></span></span></code></pre></div></div>
+<p><strong>错误示例</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 错误1：宏内写了变量名
+</span></span></span><span class="line"><span class="cl"><span class="n">connect</span><span class="p">(</span><span class="n">slider</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="n">valueChanged</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">)),</span> <span class="k">this</span><span class="p">,</span> <span class="n">SLOT</span><span class="p">(</span><span class="n">onValueChanged</span><span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 错误2：槽函数未声明在slots块中
+</span></span></span><span class="line"><span class="cl"><span class="n">connect</span><span class="p">(</span><span class="n">btn</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="n">clicked</span><span class="p">()),</span> <span class="k">this</span><span class="p">,</span> <span class="n">SLOT</span><span class="p">(</span><span class="n">normalFunc</span><span class="p">()));</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 错误3：参数类型不匹配
+</span></span></span><span class="line"><span class="cl"><span class="n">connect</span><span class="p">(</span><span class="n">slider</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="n">valueChanged</span><span class="p">(</span><span class="kt">int</span><span class="p">)),</span> <span class="k">this</span><span class="p">,</span> <span class="n">SLOT</span><span class="p">(</span><span class="n">onValueChanged</span><span class="p">(</span><span class="n">QString</span><span class="p">)));</span></span></span></code></pre></div></div>
+<h4 id="3-连接类型枚举">3. 连接类型枚举</h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">枚举值</th>
+          <th style="text-align: left">作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>Qt::AutoConnection</code>（默认）</td>
+          <td style="text-align: left">自动判断：发送者和接收者在同一线程用直连，跨线程用队列连接</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>Qt::DirectConnection</code></td>
+          <td style="text-align: left">信号发射时，立即调用槽函数，槽函数在发送者线程执行</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>Qt::QueuedConnection</code></td>
+          <td style="text-align: left">信号发射后，放入接收者线程的事件队列，等待事件循环执行，槽函数在接收者线程执行</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>Qt::BlockingQueuedConnection</code></td>
+          <td style="text-align: left">阻塞队列连接，槽函数执行完成后，发送者线程才继续运行，<strong>禁止同一线程使用，会死锁</strong></td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="4-断开连接disconnect语法">4. 断开连接disconnect语法</h4>
+<p>Qt4中断开连接同样使用宏语法，示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 断开指定发送者、信号、接收者、槽的连接
+</span></span></span><span class="line"><span class="cl"><span class="n">disconnect</span><span class="p">(</span><span class="n">btn</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="n">clicked</span><span class="p">()),</span> <span class="k">this</span><span class="p">,</span> <span class="n">SLOT</span><span class="p">(</span><span class="n">onBtnClicked</span><span class="p">()));</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 断开btn所有信号的所有连接
+</span></span></span><span class="line"><span class="cl"><span class="n">disconnect</span><span class="p">(</span><span class="n">btn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 断开btn的clicked信号的所有连接
+</span></span></span><span class="line"><span class="cl"><span class="n">disconnect</span><span class="p">(</span><span class="n">btn</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="n">clicked</span><span class="p">()),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span></span></span></code></pre></div></div>
+<h3 id="24-信号槽核心注意事项">2.4 信号槽核心注意事项</h3>
+<ol>
+<li>包含<code>Q_OBJECT</code>宏的类，必须写在头文件中，MOC仅处理头文件的类声明</li>
+<li>新增/修改信号槽后，必须重新执行qmake，否则会出现编译报错或连接失败</li>
+<li>信号槽的参数类型必须是Qt元对象系统支持的类型，自定义类型需用 <code>qRegisterMetaType&lt;Type&gt;()</code> 注册</li>
+<li>一个信号可连接多个槽，多个信号可连接同一个槽，信号之间也可互相连接</li>
+</ol>
+<hr>
+<h2 id="三qt4-项目构建pro-项目文件语法">三、Qt4 项目构建：.pro 项目文件语法</h2>
+<p>Qt4默认使用qmake构建系统，通过<code>.pro</code>文件配置项目，核心语法如下：</p>
+<h3 id="31-基础配置项">3.1 基础配置项</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">配置项</th>
+          <th style="text-align: left">语法与说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>TEMPLATE</code></td>
+          <td style="text-align: left">项目模板，必填。<br><code>app</code>：桌面应用程序（默认）；<code>lib</code>：静态/动态库；<code>dll</code>：动态库；<code>subdirs</code>：子目录项目</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>TARGET</code></td>
+          <td style="text-align: left">生成的目标文件名，示例：<code>TARGET = MyQt4App</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>QT</code></td>
+          <td style="text-align: left">引入Qt模块，<strong>Qt4默认包含core和gui模块，无需手动添加</strong>。<br>示例：<code>QT += network sql xml</code>（引入网络、数据库、XML模块）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>SOURCES</code></td>
+          <td style="text-align: left">源文件列表，示例：<code>SOURCES += main.cpp mainwindow.cpp</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>HEADERS</code></td>
+          <td style="text-align: left">头文件列表，示例：<code>HEADERS += mainwindow.h</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>FORMS</code></td>
+          <td style="text-align: left">Qt设计师界面文件(.ui)，示例：<code>FORMS += mainwindow.ui</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>RESOURCES</code></td>
+          <td style="text-align: left">Qt资源文件(.qrc)，示例：<code>RESOURCES += res.qrc</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="32-进阶配置项">3.2 进阶配置项</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">配置项</th>
+          <th style="text-align: left">语法与说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>CONFIG</code></td>
+          <td style="text-align: left">通用配置，示例：<br><code>CONFIG += c++11</code>（启用C++11，Qt4.8+支持）；<br><code>CONFIG += static</code>（编译静态库）；<br><code>CONFIG += console</code>（启用控制台输出）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>DEFINES</code></td>
+          <td style="text-align: left">全局宏定义，示例：<code>DEFINES += MY_APP_VERSION=100</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>INCLUDEPATH</code></td>
+          <td style="text-align: left">头文件搜索路径，示例：<code>INCLUDEPATH += ./3rdparty/include</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>LIBS</code></td>
+          <td style="text-align: left">链接外部库，示例：<code>LIBS += -L./3rdparty/lib -lmysql</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>DESTDIR</code></td>
+          <td style="text-align: left">目标文件输出路径，示例：<code>DESTDIR = ./bin</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="四qt4-核心模块与常用类语法">四、Qt4 核心模块与常用类语法</h2>
+<h3 id="41-core核心模块非gui基础能力">4.1 Core核心模块（非GUI基础能力）</h3>
+<h4 id="1-跨平台基础数据类型">1. 跨平台基础数据类型</h4>
+<p>Qt4提供固定宽度的跨平台类型，避免不同系统的基础类型宽度差异：</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">类型</th>
+          <th style="text-align: left">说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>qint8</code>/<code>quint8</code></td>
+          <td style="text-align: left">8位有符号/无符号整型</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>qint16</code>/<code>quint16</code></td>
+          <td style="text-align: left">16位有符号/无符号整型</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>qint32</code>/<code>quint32</code></td>
+          <td style="text-align: left">32位有符号/无符号整型</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>qint64</code>/<code>quint64</code></td>
+          <td style="text-align: left">64位有符号/无符号整型</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>qreal</code></td>
+          <td style="text-align: left">浮点类型，默认是double，嵌入式平台可配置为float</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="2-核心字符串与字节数组">2. 核心字符串与字节数组</h4>
+<ul>
+<li><strong>QString</strong>：Qt核心字符串类，基于Unicode，支持全平台中文处理，常用语法：
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 构造
+</span></span></span><span class="line"><span class="cl"><span class="n">QString</span> <span class="n">str1</span> <span class="o">=</span> <span class="s">&#34;Hello Qt4&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">QString</span> <span class="n">str2</span> <span class="o">=</span> <span class="n">QString</span><span class="o">::</span><span class="n">fromUtf8</span><span class="p">(</span><span class="s">&#34;你好Qt4&#34;</span><span class="p">);</span> <span class="c1">// UTF-8编码转QString
+</span></span></span><span class="line"><span class="cl"><span class="n">QString</span> <span class="n">str3</span> <span class="o">=</span> <span class="n">QString</span><span class="o">::</span><span class="n">fromLocal8Bit</span><span class="p">(</span><span class="s">&#34;本地编码中文&#34;</span><span class="p">);</span> <span class="c1">// 系统本地编码（Windows GBK/Linux UTF-8）
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 格式化（Qt4主推，替代sprintf）
+</span></span></span><span class="line"><span class="cl"><span class="n">QString</span> <span class="n">info</span> <span class="o">=</span> <span class="n">QString</span><span class="p">(</span><span class="s">&#34;姓名：%1 年龄：%2&#34;</span><span class="p">).</span><span class="n">arg</span><span class="p">(</span><span class="s">&#34;张三&#34;</span><span class="p">).</span><span class="n">arg</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 常用方法
+</span></span></span><span class="line"><span class="cl"><span class="n">str1</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#34; World&#34;</span><span class="p">);</span> <span class="c1">// 追加
+</span></span></span><span class="line"><span class="cl"><span class="n">str1</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#34;Hello&#34;</span><span class="p">,</span> <span class="s">&#34;Hi&#34;</span><span class="p">);</span> <span class="c1">// 替换
+</span></span></span><span class="line"><span class="cl"><span class="n">QStringList</span> <span class="n">list</span> <span class="o">=</span> <span class="n">str1</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#34; &#34;</span><span class="p">);</span> <span class="c1">// 分割
+</span></span></span><span class="line"><span class="cl"><span class="n">str1</span><span class="p">.</span><span class="n">trimmed</span><span class="p">();</span> <span class="c1">// 去除首尾空白
+</span></span></span></code></pre></div></div>
+</li>
+<li><strong>QByteArray</strong>：二进制数据处理类，用于文件、网络数据传输，支持与<code>char*</code>互转。</li>
+</ul>
+<h4 id="3-容器类">3. 容器类</h4>
+<p>Qt4容器基于<strong>隐式共享（写时复制）</strong>，内存效率高，兼容Java风格和STL风格迭代器，同时提供专属<code>foreach</code>遍历宏。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">容器类型</th>
+          <th style="text-align: left">常用类</th>
+          <th style="text-align: left">核心语法</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">顺序容器</td>
+          <td style="text-align: left"><code>QList&lt;T&gt;</code>（通用列表，Qt4主推）、<code>QVector&lt;T&gt;</code>、<code>QLinkedList&lt;T&gt;</code>、<code>QStack&lt;T&gt;</code>、<code>QQueue&lt;T&gt;</code></td>
+          <td style="text-align: left">初始化：<code>QList&lt;QString&gt; list; list &lt;&lt; &quot;A&quot; &lt;&lt; &quot;B&quot; &lt;&lt; &quot;C&quot;;</code><br>增删：<code>list.append(&quot;D&quot;); list.removeAt(0);</code><br>取值：<code>list[0]</code>、<code>list.at(1)</code>（只读，效率更高）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">关联容器</td>
+          <td style="text-align: left"><code>QMap&lt;K,T&gt;</code>（有序键值对）、<code>QMultiMap&lt;K,T&gt;</code>、<code>QHash&lt;K,T&gt;</code>（无序哈希表，效率更高）、<code>QMultiHash&lt;K,T&gt;</code>、<code>QSet&lt;T&gt;</code></td>
+          <td style="text-align: left">初始化：<code>QMap&lt;int, QString&gt; map; map[1] = &quot;张三&quot;; map[2] = &quot;李四&quot;;</code><br>取值：<code>map.value(1)</code>、<code>map[2]</code><br>遍历：<code>foreach(int key, map.keys()) { qDebug() &lt;&lt; map[key]; }</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Qt4专属foreach遍历宏</strong>：简化容器遍历，无需迭代器，语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 遍历QList
+</span></span></span><span class="line"><span class="cl"><span class="n">foreach</span><span class="p">(</span><span class="n">QString</span> <span class="n">item</span><span class="p">,</span> <span class="n">list</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">item</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 遍历QMap
+</span></span></span><span class="line"><span class="cl"><span class="n">foreach</span><span class="p">(</span><span class="kt">int</span> <span class="n">key</span><span class="p">,</span> <span class="n">map</span><span class="p">.</span><span class="n">keys</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">key</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;:&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">map</span><span class="p">[</span><span class="n">key</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h4 id="4-事件系统">4. 事件系统</h4>
+<p>Qt4是事件驱动框架，所有事件继承自<code>QEvent</code>，事件处理有2种核心方式：</p>
+<ol>
+<li><strong>重写专属事件处理函数</strong>：最常用方式，重写对应事件的虚函数，示例：
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 头文件声明
+</span></span></span><span class="line"><span class="cl"><span class="k">protected</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">mousePressEvent</span><span class="p">(</span><span class="n">QMouseEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span> <span class="c1">// 鼠标按下事件
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">keyPressEvent</span><span class="p">(</span><span class="n">QKeyEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>     <span class="c1">// 键盘按下事件
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">paintEvent</span><span class="p">(</span><span class="n">QPaintEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>      <span class="c1">// 绘制事件
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">resizeEvent</span><span class="p">(</span><span class="n">QResizeEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>    <span class="c1">// 窗口大小变化事件
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 源文件实现
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">MyWidget</span><span class="o">::</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">QMouseEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">event</span><span class="o">-&gt;</span><span class="n">button</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">::</span><span class="n">LeftButton</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;鼠标左键按下，坐标：&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">event</span><span class="o">-&gt;</span><span class="n">pos</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 事件传递：accept()接收事件，不再向上传递；ignore()忽略事件，传递给父窗口
+</span></span></span><span class="line"><span class="cl">    <span class="n">event</span><span class="o">-&gt;</span><span class="n">accept</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+</li>
+<li><strong>事件过滤器eventFilter</strong>：监听其他对象的事件，无需继承子类，语法：
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 安装事件过滤器，给btn安装当前类的过滤器
+</span></span></span><span class="line"><span class="cl"><span class="n">btn</span><span class="o">-&gt;</span><span class="n">installEventFilter</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 重写eventFilter函数
+</span></span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">MyWidget</span><span class="o">::</span><span class="n">eventFilter</span><span class="p">(</span><span class="n">QObject</span> <span class="o">*</span><span class="n">obj</span><span class="p">,</span> <span class="n">QEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">obj</span> <span class="o">==</span> <span class="n">btn</span> <span class="o">&amp;&amp;</span> <span class="n">event</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">QEvent</span><span class="o">::</span><span class="n">MouseButtonPress</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;按钮被点击，事件过滤器拦截&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// 返回true表示拦截事件，不再传递给原对象
+</span></span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 其他事件交给父类处理
+</span></span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">QWidget</span><span class="o">::</span><span class="n">eventFilter</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">event</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+</li>
+</ol>
+<h4 id="5-线程与定时器">5. 线程与定时器</h4>
+<ul>
+<li>
+<p><strong>QThread线程类</strong>：Qt4线程核心类，有2种使用方式：</p>
+<ol>
+<li>继承QThread，重写<code>run()</code>函数（Qt4主流用法），<code>run()</code>内的代码在子线程执行：
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MyThread</span> <span class="o">:</span> <span class="k">public</span> <span class="n">QThread</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Q_OBJECT</span>
+</span></span><span class="line"><span class="cl"><span class="k">protected</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">run</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 子线程执行的代码，耗时操作放在这里
+</span></span></span><span class="line"><span class="cl">        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">msleep</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span> <span class="c1">// 线程休眠
+</span></span></span><span class="line"><span class="cl">            <span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;子线程运行：&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 使用
+</span></span></span><span class="line"><span class="cl"><span class="n">MyThread</span> <span class="o">*</span><span class="kr">thread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MyThread</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kr">thread</span><span class="o">-&gt;</span><span class="n">start</span><span class="p">();</span> <span class="c1">// 启动线程，自动调用run()
+</span></span></span></code></pre></div></div>
+</li>
+<li><code>moveToThread()</code>：将QObject子类移到线程中，通过信号槽触发执行，Qt4已支持。
+线程同步类：<code>QMutex</code>/<code>QMutexLocker</code>、<code>QSemaphore</code>、<code>QWaitCondition</code>。</li>
+</ol>
+</li>
+<li>
+<p><strong>QTimer定时器类</strong>：Qt4主推的定时器，基于事件循环，语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">QTimer</span> <span class="o">*</span><span class="n">timer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QTimer</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 连接超时信号
+</span></span></span><span class="line"><span class="cl"><span class="n">connect</span><span class="p">(</span><span class="n">timer</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="n">timeout</span><span class="p">()),</span> <span class="k">this</span><span class="p">,</span> <span class="n">SLOT</span><span class="p">(</span><span class="n">onTimeout</span><span class="p">()));</span>
+</span></span><span class="line"><span class="cl"><span class="n">timer</span><span class="o">-&gt;</span><span class="n">start</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">// 启动定时器，1000ms触发一次
+</span></span></span><span class="line"><span class="cl"><span class="n">timer</span><span class="o">-&gt;</span><span class="n">setSingleShot</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span> <span class="c1">// 设置为单次触发
+</span></span></span></code></pre></div></div>
+</li>
+</ul>
+<h4 id="6-文件与io操作">6. 文件与IO操作</h4>
+<p>核心类：<code>QFile</code>（文件操作）、<code>QTextStream</code>（文本流）、<code>QDataStream</code>（二进制数据流，跨平台序列化）、<code>QDir</code>（目录操作）、<code>QFileInfo</code>（文件信息）。
+示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 文本文件读取
+</span></span></span><span class="line"><span class="cl"><span class="n">QFile</span> <span class="nf">file</span><span class="p">(</span><span class="s">&#34;test.txt&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="n">QIODevice</span><span class="o">::</span><span class="n">ReadOnly</span> <span class="o">|</span> <span class="n">QIODevice</span><span class="o">::</span><span class="n">Text</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QTextStream</span> <span class="nf">in</span><span class="p">(</span><span class="o">&amp;</span><span class="n">file</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">in</span><span class="p">.</span><span class="n">setCodec</span><span class="p">(</span><span class="s">&#34;UTF-8&#34;</span><span class="p">);</span> <span class="c1">// 设置编码
+</span></span></span><span class="line"><span class="cl">    <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">in</span><span class="p">.</span><span class="n">atEnd</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">QString</span> <span class="n">line</span> <span class="o">=</span> <span class="n">in</span><span class="p">.</span><span class="n">readLine</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">line</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 文本文件写入
+</span></span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="n">file</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="n">QIODevice</span><span class="o">::</span><span class="n">WriteOnly</span> <span class="o">|</span> <span class="n">QIODevice</span><span class="o">::</span><span class="n">Text</span> <span class="o">|</span> <span class="n">QIODevice</span><span class="o">::</span><span class="n">Truncate</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QTextStream</span> <span class="nf">out</span><span class="p">(</span><span class="o">&amp;</span><span class="n">file</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">out</span><span class="p">.</span><span class="n">setCodec</span><span class="p">(</span><span class="s">&#34;UTF-8&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;你好Qt4&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="42-gui模块qt4核心可视化能力">4.2 GUI模块（Qt4核心可视化能力）</h3>
+<p>Qt4的GUI能力全部集成在gui模块中（Qt5才拆分为gui和widgets模块），所有可视化部件的基类是<code>QWidget</code>。</p>
+<h4 id="1-窗口基础语法">1. 窗口基础语法</h4>
+<ul>
+<li><strong>基础窗口QWidget</strong>：
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">QWidget</span> <span class="o">*</span><span class="n">w</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QWidget</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">w</span><span class="o">-&gt;</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s">&#34;Qt4窗口&#34;</span><span class="p">);</span> <span class="c1">// 设置窗口标题
+</span></span></span><span class="line"><span class="cl"><span class="n">w</span><span class="o">-&gt;</span><span class="n">resize</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">);</span> <span class="c1">// 设置窗口大小
+</span></span></span><span class="line"><span class="cl"><span class="n">w</span><span class="o">-&gt;</span><span class="n">setFixedSize</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">);</span> <span class="c1">// 固定窗口大小
+</span></span></span><span class="line"><span class="cl"><span class="n">w</span><span class="o">-&gt;</span><span class="n">move</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span> <span class="c1">// 移动窗口位置
+</span></span></span><span class="line"><span class="cl"><span class="n">w</span><span class="o">-&gt;</span><span class="n">show</span><span class="p">();</span> <span class="c1">// 显示窗口
+</span></span></span></code></pre></div></div>
+</li>
+<li><strong>主窗口QMainWindow</strong>：标准桌面主窗口，自带菜单栏、工具栏、状态栏、中央部件，语法：
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">QMainWindow</span> <span class="o">*</span><span class="n">mw</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QMainWindow</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">mw</span><span class="o">-&gt;</span><span class="n">resize</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">600</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 必须设置中央部件
+</span></span></span><span class="line"><span class="cl"><span class="n">QWidget</span> <span class="o">*</span><span class="n">centralWidget</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QWidget</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">mw</span><span class="o">-&gt;</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 状态栏
+</span></span></span><span class="line"><span class="cl"><span class="n">mw</span><span class="o">-&gt;</span><span class="n">statusBar</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">showMessage</span><span class="p">(</span><span class="s">&#34;就绪&#34;</span><span class="p">,</span> <span class="mi">3000</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 菜单栏
+</span></span></span><span class="line"><span class="cl"><span class="n">QMenu</span> <span class="o">*</span><span class="n">fileMenu</span> <span class="o">=</span> <span class="n">mw</span><span class="o">-&gt;</span><span class="n">menuBar</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">addMenu</span><span class="p">(</span><span class="s">&#34;文件&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">fileMenu</span><span class="o">-&gt;</span><span class="n">addAction</span><span class="p">(</span><span class="s">&#34;新建&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">fileMenu</span><span class="o">-&gt;</span><span class="n">addAction</span><span class="p">(</span><span class="s">&#34;退出&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">mw</span><span class="o">-&gt;</span><span class="n">show</span><span class="p">();</span></span></span></code></pre></div></div>
+</li>
+<li><strong>对话框QDialog</strong>：
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 模态对话框：阻塞父窗口，exec()返回后才继续执行
+</span></span></span><span class="line"><span class="cl"><span class="n">QDialog</span> <span class="nf">dialog</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">dialog</span><span class="p">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s">&#34;模态对话框&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">dialog</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">dialog</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="n">ret</span> <span class="o">==</span> <span class="n">QDialog</span><span class="o">::</span><span class="n">Accepted</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;对话框确认&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 非模态对话框：不阻塞父窗口
+</span></span></span><span class="line"><span class="cl"><span class="n">QDialog</span> <span class="o">*</span><span class="n">dialog2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QDialog</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">dialog2</span><span class="o">-&gt;</span><span class="n">setAttribute</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">WA_DeleteOnClose</span><span class="p">);</span> <span class="c1">// 关闭时自动销毁
+</span></span></span><span class="line"><span class="cl"><span class="n">dialog2</span><span class="o">-&gt;</span><span class="n">show</span><span class="p">();</span></span></span></code></pre></div></div>
+</li>
+</ul>
+<h4 id="2-布局管理qt4核心自适应方案">2. 布局管理（Qt4核心自适应方案）</h4>
+<p>Qt4布局实现窗口自适应缩放，替代固定坐标，四大核心布局类：</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">布局类</th>
+          <th style="text-align: left">作用</th>
+          <th style="text-align: left">核心语法</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>QHBoxLayout</code></td>
+          <td style="text-align: left">水平布局，控件从左到右排列</td>
+          <td style="text-align: left"><code>QHBoxLayout *layout = new QHBoxLayout();</code><br><code>layout-&gt;addWidget(btn1);</code><br><code>layout-&gt;addWidget(btn2);</code><br><code>w-&gt;setLayout(layout);</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>QVBoxLayout</code></td>
+          <td style="text-align: left">垂直布局，控件从上到下排列</td>
+          <td style="text-align: left">同水平布局，控件垂直排列</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>QGridLayout</code></td>
+          <td style="text-align: left">网格布局，按行、列排列控件</td>
+          <td style="text-align: left"><code>QGridLayout *layout = new QGridLayout();</code><br><code>layout-&gt;addWidget(label, 0, 0); // 第0行第0列</code><br><code>layout-&gt;addWidget(edit, 0, 1); // 第0行第1列</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>QFormLayout</code></td>
+          <td style="text-align: left">表单布局，标签+输入框的两列布局（Qt4.2+引入）</td>
+          <td style="text-align: left"><code>QFormLayout *layout = new QFormLayout();</code><br><code>layout-&gt;addRow(&quot;姓名：&quot;, nameEdit);</code><br><code>layout-&gt;addRow(&quot;年龄：&quot;, ageEdit);</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>常用布局方法</strong>：</p>
+<ul>
+<li><code>addWidget()</code>：添加控件，可设置拉伸系数、对齐方式</li>
+<li><code>addLayout()</code>：嵌套布局，实现复杂界面</li>
+<li><code>addStretch()</code>：添加拉伸项，填充空白区域</li>
+<li><code>setSpacing()</code>：设置控件之间的间距</li>
+<li><code>setContentsMargins()</code>：设置布局的内边距</li>
+</ul>
+<p>示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">QWidget</span> <span class="o">*</span><span class="n">w</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QWidget</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">w</span><span class="o">-&gt;</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s">&#34;布局示例&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">w</span><span class="o">-&gt;</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 垂直布局
+</span></span></span><span class="line"><span class="cl"><span class="n">QVBoxLayout</span> <span class="o">*</span><span class="n">mainLayout</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">w</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 表单布局
+</span></span></span><span class="line"><span class="cl"><span class="n">QFormLayout</span> <span class="o">*</span><span class="n">formLayout</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QFormLayout</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">formLayout</span><span class="o">-&gt;</span><span class="n">addRow</span><span class="p">(</span><span class="s">&#34;用户名：&#34;</span><span class="p">,</span> <span class="k">new</span> <span class="n">QLineEdit</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="n">formLayout</span><span class="o">-&gt;</span><span class="n">addRow</span><span class="p">(</span><span class="s">&#34;密码：&#34;</span><span class="p">,</span> <span class="k">new</span> <span class="n">QLineEdit</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="n">mainLayout</span><span class="o">-&gt;</span><span class="n">addLayout</span><span class="p">(</span><span class="n">formLayout</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 水平按钮布局
+</span></span></span><span class="line"><span class="cl"><span class="n">QHBoxLayout</span> <span class="o">*</span><span class="n">btnLayout</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QHBoxLayout</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">btnLayout</span><span class="o">-&gt;</span><span class="n">addStretch</span><span class="p">();</span> <span class="c1">// 左侧拉伸
+</span></span></span><span class="line"><span class="cl"><span class="n">btnLayout</span><span class="o">-&gt;</span><span class="n">addWidget</span><span class="p">(</span><span class="k">new</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s">&#34;登录&#34;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="n">btnLayout</span><span class="o">-&gt;</span><span class="n">addWidget</span><span class="p">(</span><span class="k">new</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s">&#34;取消&#34;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="n">mainLayout</span><span class="o">-&gt;</span><span class="n">addLayout</span><span class="p">(</span><span class="n">btnLayout</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">mainLayout</span><span class="o">-&gt;</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">mainLayout</span><span class="o">-&gt;</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">15</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">w</span><span class="o">-&gt;</span><span class="n">show</span><span class="p">();</span></span></span></code></pre></div></div>
+<h4 id="3-常用可视化部件">3. 常用可视化部件</h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">部件类</th>
+          <th style="text-align: left">作用</th>
+          <th style="text-align: left">核心语法</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>QLabel</code></td>
+          <td style="text-align: left">标签，显示文本、图片、动画</td>
+          <td style="text-align: left"><code>QLabel *label = new QLabel(&quot;文本标签&quot;);</code><br><code>label-&gt;setPixmap(QPixmap(&quot;:/images/icon.png&quot;)); // 显示图片</code><br><code>label-&gt;setAlignment(Qt::AlignCenter); // 居中对齐</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>QPushButton</code></td>
+          <td style="text-align: left">普通按钮</td>
+          <td style="text-align: left"><code>QPushButton *btn = new QPushButton(&quot;按钮文本&quot;);</code><br><code>connect(btn, SIGNAL(clicked()), this, SLOT(onBtnClicked()));</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>QLineEdit</code></td>
+          <td style="text-align: left">单行文本输入框</td>
+          <td style="text-align: left"><code>QLineEdit *edit = new QLineEdit();</code><br><code>edit-&gt;setPlaceholderText(&quot;请输入内容&quot;);</code><br><code>edit-&gt;setEchoMode(QLineEdit::Password); // 密码模式</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>QTextEdit</code></td>
+          <td style="text-align: left">多行富文本编辑器</td>
+          <td style="text-align: left"><code>QTextEdit *edit = new QTextEdit();</code><br><code>edit-&gt;setHtml(&quot;&lt;b&gt;富文本内容&lt;/b&gt;&quot;);</code><br><code>QString text = edit-&gt;toPlainText();</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>QCheckBox</code></td>
+          <td style="text-align: left">复选框</td>
+          <td style="text-align: left"><code>QCheckBox *check = new QCheckBox(&quot;记住密码&quot;);</code><br><code>connect(check, SIGNAL(stateChanged(int)), this, SLOT(onCheckChanged(int)));</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>QRadioButton</code></td>
+          <td style="text-align: left">单选按钮</td>
+          <td style="text-align: left">需搭配<code>QButtonGroup</code>实现互斥</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>QComboBox</code></td>
+          <td style="text-align: left">下拉选择框</td>
+          <td style="text-align: left"><code>QComboBox *combo = new QComboBox();</code><br><code>combo-&gt;addItem(&quot;选项1&quot;);</code><br><code>combo-&gt;addItems(QStringList() &lt;&lt; &quot;选项2&quot; &lt;&lt; &quot;选项3&quot;);</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>QSlider</code></td>
+          <td style="text-align: left">滑块</td>
+          <td style="text-align: left"><code>QSlider *slider = new QSlider(Qt::Horizontal);</code><br><code>slider-&gt;setRange(0, 100);</code><br><code>slider-&gt;setValue(50);</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>QProgressBar</code></td>
+          <td style="text-align: left">进度条</td>
+          <td style="text-align: left"><code>QProgressBar *bar = new QProgressBar();</code><br><code>bar-&gt;setRange(0, 100);</code><br><code>bar-&gt;setValue(30);</code></td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="4-2d绘图与图形视图">4. 2D绘图与图形视图</h4>
+<ul>
+<li><strong>QPainter绘图</strong>：Qt4核心2D绘图类，<strong>必须在<code>paintEvent</code>函数中使用</strong>，语法：
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">MyWidget</span><span class="o">::</span><span class="n">paintEvent</span><span class="p">(</span><span class="n">QPaintEvent</span> <span class="o">*</span><span class="n">event</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QPainter</span> <span class="nf">painter</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 设置画笔（线条）
+</span></span></span><span class="line"><span class="cl">    <span class="n">painter</span><span class="p">.</span><span class="n">setPen</span><span class="p">(</span><span class="n">QPen</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">Qt</span><span class="o">::</span><span class="n">SolidLine</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 设置画刷（填充）
+</span></span></span><span class="line"><span class="cl">    <span class="n">painter</span><span class="p">.</span><span class="n">setBrush</span><span class="p">(</span><span class="n">QBrush</span><span class="p">(</span><span class="n">Qt</span><span class="o">::</span><span class="n">blue</span><span class="p">,</span> <span class="n">Qt</span><span class="o">::</span><span class="n">DiagCrossPattern</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 绘制图形
+</span></span></span><span class="line"><span class="cl">    <span class="n">painter</span><span class="p">.</span><span class="n">drawRect</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span> <span class="c1">// 矩形
+</span></span></span><span class="line"><span class="cl">    <span class="n">painter</span><span class="p">.</span><span class="n">drawEllipse</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span> <span class="c1">// 圆形
+</span></span></span><span class="line"><span class="cl">    <span class="n">painter</span><span class="p">.</span><span class="n">drawLine</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">150</span><span class="p">);</span> <span class="c1">// 直线
+</span></span></span><span class="line"><span class="cl">    <span class="c1">// 绘制文本
+</span></span></span><span class="line"><span class="cl">    <span class="n">painter</span><span class="p">.</span><span class="n">drawText</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="s">&#34;Qt4 绘图示例&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 绘制图片
+</span></span></span><span class="line"><span class="cl">    <span class="n">painter</span><span class="p">.</span><span class="n">drawPixmap</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">QPixmap</span><span class="p">(</span><span class="s">&#34;:/images/test.png&#34;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+</li>
+<li><strong>QGraphicsView图形视图框架</strong>：Qt4.2+引入，用于管理大量2D图形项，支持缩放、旋转、碰撞检测，核心三要素：<code>QGraphicsScene</code>（场景，存放图形项）、<code>QGraphicsView</code>（视图，显示场景）、<code>QGraphicsItem</code>（图形项）。</li>
+</ul>
+<h4 id="5-资源系统">5. 资源系统</h4>
+<p>Qt4资源系统将图片、配置文件等资源编译到可执行文件中，避免路径问题，语法规范：</p>
+<ol>
+<li>创建<code>.qrc</code>资源文件，格式如下：
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-xml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;RCC&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;qresource</span> <span class="na">prefix=</span><span class="s">&#34;/&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;file&gt;</span>images/icon.png<span class="nt">&lt;/file&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;file&gt;</span>css/style.qss<span class="nt">&lt;/file&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/qresource&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/RCC&gt;</span></span></span></code></pre></div></div>
+</li>
+<li>在<code>.pro</code>文件中添加：<code>RESOURCES += res.qrc</code></li>
+<li>代码中访问资源，路径格式为 <code>:/前缀/文件路径</code>，示例：
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">QPixmap</span><span class="p">(</span><span class="s">&#34;:/images/icon.png&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">QFile</span> <span class="nf">file</span><span class="p">(</span><span class="s">&#34;:/css/style.qss&#34;</span><span class="p">);</span></span></span></code></pre></div></div>
+</li>
+</ol>
+<h3 id="43-其他常用模块语法">4.3 其他常用模块语法</h3>
+<h4 id="1-网络模块qtnetwork">1. 网络模块QtNetwork</h4>
+<p>需在<code>.pro</code>中添加 <code>QT += network</code>，核心类：</p>
+<ul>
+<li><code>QTcpSocket</code>/<code>QTcpServer</code>：TCP通信</li>
+<li><code>QUdpSocket</code>：UDP通信</li>
+<li><code>QHttp</code>/<code>QFtp</code>：HTTP/FTP通信（Qt4内置，Qt5移到QtExtras）</li>
+</ul>
+<p>TCP客户端示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">QTcpSocket</span> <span class="o">*</span><span class="n">socket</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QTcpSocket</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 连接服务器
+</span></span></span><span class="line"><span class="cl"><span class="n">socket</span><span class="o">-&gt;</span><span class="n">connectToHost</span><span class="p">(</span><span class="s">&#34;127.0.0.1&#34;</span><span class="p">,</span> <span class="mi">8080</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 接收数据
+</span></span></span><span class="line"><span class="cl"><span class="n">connect</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="n">readyRead</span><span class="p">()),</span> <span class="k">this</span><span class="p">,</span> <span class="n">SLOT</span><span class="p">(</span><span class="n">onReadData</span><span class="p">()));</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 发送数据
+</span></span></span><span class="line"><span class="cl"><span class="n">socket</span><span class="o">-&gt;</span><span class="n">write</span><span class="p">(</span><span class="s">&#34;Hello Server&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 槽函数实现
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">MyWidget</span><span class="o">::</span><span class="n">onReadData</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QByteArray</span> <span class="n">data</span> <span class="o">=</span> <span class="n">socket</span><span class="o">-&gt;</span><span class="n">readAll</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;收到数据：&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">data</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h4 id="2-数据库模块qtsql">2. 数据库模块QtSql</h4>
+<p>需在<code>.pro</code>中添加 <code>QT += sql</code>，核心类：</p>
+<ul>
+<li><code>QSqlDatabase</code>：数据库连接管理</li>
+<li><code>QSqlQuery</code>：SQL语句执行</li>
+<li><code>QSqlTableModel</code>/<code>QSqlQueryModel</code>：Model/View数据库模型</li>
+</ul>
+<p>示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 添加SQLite数据库连接
+</span></span></span><span class="line"><span class="cl"><span class="n">QSqlDatabase</span> <span class="n">db</span> <span class="o">=</span> <span class="n">QSqlDatabase</span><span class="o">::</span><span class="n">addDatabase</span><span class="p">(</span><span class="s">&#34;QSQLITE&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">db</span><span class="p">.</span><span class="n">setDatabaseName</span><span class="p">(</span><span class="s">&#34;test.db&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 打开数据库
+</span></span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">db</span><span class="p">.</span><span class="n">open</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;数据库打开失败&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 执行SQL语句
+</span></span></span><span class="line"><span class="cl"><span class="n">QSqlQuery</span> <span class="n">query</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 创建表
+</span></span></span><span class="line"><span class="cl"><span class="n">query</span><span class="p">.</span><span class="n">exec</span><span class="p">(</span><span class="s">&#34;CREATE TABLE IF NOT EXISTS user(id INT PRIMARY KEY, name VARCHAR(20), age INT)&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 插入数据
+</span></span></span><span class="line"><span class="cl"><span class="n">query</span><span class="p">.</span><span class="n">prepare</span><span class="p">(</span><span class="s">&#34;INSERT INTO user(id, name, age) VALUES (?, ?, ?)&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">query</span><span class="p">.</span><span class="n">addBindValue</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">query</span><span class="p">.</span><span class="n">addBindValue</span><span class="p">(</span><span class="s">&#34;张三&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">query</span><span class="p">.</span><span class="n">addBindValue</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">query</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 查询数据
+</span></span></span><span class="line"><span class="cl"><span class="n">query</span><span class="p">.</span><span class="n">exec</span><span class="p">(</span><span class="s">&#34;SELECT * FROM user&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span><span class="p">(</span><span class="n">query</span><span class="p">.</span><span class="n">next</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">id</span> <span class="o">=</span> <span class="n">query</span><span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">toInt</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QString</span> <span class="n">name</span> <span class="o">=</span> <span class="n">query</span><span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">toString</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">id</span> <span class="o">&lt;&lt;</span> <span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h4 id="3-xml模块qtxml">3. XML模块QtXml</h4>
+<p>需在<code>.pro</code>中添加 <code>QT += xml</code>，提供DOM方式（<code>QDomDocument</code>）和流方式（<code>QXmlStreamReader</code>/<code>QXmlStreamWriter</code>，Qt4.3+引入）解析XML。</p>
+<h4 id="4-国际化">4. 国际化</h4>
+<p>Qt4国际化核心语法：</p>
+<ol>
+<li>所有用户可见的字符串用<code>tr()</code>包裹</li>
+<li><code>.pro</code>文件添加翻译文件：<code>TRANSLATIONS += myapp_zh_CN.ts</code></li>
+<li>用<code>lupdate</code>工具提取字符串生成<code>.ts</code>文件，用Qt Linguist编辑翻译</li>
+<li>用<code>lrelease</code>工具生成<code>.qm</code>二进制翻译文件</li>
+<li>代码中加载翻译文件：
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">QApplication</span> <span class="nf">a</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">QTranslator</span> <span class="n">translator</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="n">translator</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">&#34;myapp_zh_CN.qm&#34;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">a</span><span class="p">.</span><span class="n">installTranslator</span><span class="p">(</span><span class="o">&amp;</span><span class="n">translator</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+</li>
+</ol>
+<hr>
+<h2 id="五qt4-中文乱码解决方案专属语法">五、Qt4 中文乱码解决方案（专属语法）</h2>
+<p>Qt4中文乱码是高频问题，核心是编码不匹配，通用解决方案：</p>
+<ol>
+<li>代码文件编码统一为UTF-8</li>
+<li>在main函数开头设置全局编码：
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;QTextCodec&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QApplication</span> <span class="n">a</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 设置全局编码
+</span></span></span><span class="line"><span class="cl">    <span class="n">QTextCodec</span> <span class="o">*</span><span class="n">codec</span> <span class="o">=</span> <span class="n">QTextCodec</span><span class="o">::</span><span class="n">codecForName</span><span class="p">(</span><span class="s">&#34;UTF-8&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QTextCodec</span><span class="o">::</span><span class="n">setCodecForTr</span><span class="p">(</span><span class="n">codec</span><span class="p">);</span>       <span class="c1">// 设置tr()函数编码
+</span></span></span><span class="line"><span class="cl">    <span class="n">QTextCodec</span><span class="o">::</span><span class="n">setCodecForCStrings</span><span class="p">(</span><span class="n">codec</span><span class="p">);</span> <span class="c1">// 设置字符串常量编码
+</span></span></span><span class="line"><span class="cl">    <span class="n">QTextCodec</span><span class="o">::</span><span class="n">setCodecForLocale</span><span class="p">(</span><span class="n">codec</span><span class="p">);</span>   <span class="c1">// 设置本地编码
+</span></span></span><span class="line"><span class="cl">    <span class="c1">// 其他代码
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+</li>
+</ol>
+<blockquote>
+<p>注意：这三个setCodecFor*函数在Qt5中已被废弃，是Qt4专属语法。</p>
+</blockquote>
+<hr>
+<h2 id="六qt4-与-qt5-核心语法差异">六、Qt4 与 Qt5 核心语法差异</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">特性</th>
+          <th style="text-align: left">Qt4 语法</th>
+          <th style="text-align: left">Qt5 语法</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">信号槽连接</td>
+          <td style="text-align: left">仅支持<code>SIGNAL()</code>/<code>SLOT()</code>宏，槽必须声明在slots块</td>
+          <td style="text-align: left">兼容宏语法，新增函数指针语法，普通成员函数可作为槽</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">模块划分</td>
+          <td style="text-align: left">core和gui默认包含，gui集成所有widgets</td>
+          <td style="text-align: left">core和gui默认包含，widgets拆分为独立模块，需手动加<code>QT += widgets</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">中文编码</td>
+          <td style="text-align: left">提供<code>setCodecForTr</code>/<code>setCodecForCStrings</code>设置全局编码</td>
+          <td style="text-align: left">废弃上述函数，默认全UTF-8编码</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">容器遍历</td>
+          <td style="text-align: left">主推<code>foreach</code>宏</td>
+          <td style="text-align: left">推荐C++11范围for，<code>foreach</code>保留但不推荐</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">网络模块</td>
+          <td style="text-align: left">内置<code>QHttp</code>/<code>QFtp</code>类</td>
+          <td style="text-align: left">移除上述类，移到QtExtras模块</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">线程用法</td>
+          <td style="text-align: left">继承QThread重写<code>run()</code>为主流</td>
+          <td style="text-align: left">推荐<code>moveToThread()</code>方式，<code>run()</code>默认启动事件循环</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="七qt4-完整语法示例">七、Qt4 完整语法示例</h2>
+<h3 id="71-头文件-mainwindowh">7.1 头文件 mainwindow.h</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#ifndef MAINWINDOW_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define MAINWINDOW_H
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;QMainWindow&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;QPushButton&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;QLineEdit&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MainWindow</span> <span class="o">:</span> <span class="k">public</span> <span class="n">QMainWindow</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Q_OBJECT</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MainWindow</span><span class="p">(</span><span class="n">QWidget</span> <span class="o">*</span><span class="n">parent</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">MainWindow</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nl">signals</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">loginSuccess</span><span class="p">(</span><span class="n">QString</span> <span class="n">username</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">public</span> <span class="nl">slots</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">onLoginBtnClicked</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">onLoginSuccess</span><span class="p">(</span><span class="n">QString</span> <span class="n">username</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QLineEdit</span> <span class="o">*</span><span class="n">m_userEdit</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QLineEdit</span> <span class="o">*</span><span class="n">m_pwdEdit</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QPushButton</span> <span class="o">*</span><span class="n">m_loginBtn</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#endif </span><span class="c1">// MAINWINDOW_H
+</span></span></span></code></pre></div></div>
+<h3 id="72-源文件-mainwindowcpp">7.2 源文件 mainwindow.cpp</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;mainwindow.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;QVBoxLayout&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;QFormLayout&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;QMessageBox&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;QDebug&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">MainWindow</span><span class="o">::</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">QWidget</span> <span class="o">*</span><span class="n">parent</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">:</span> <span class="n">QMainWindow</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="o">-&gt;</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s">&#34;Qt4 登录示例&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="o">-&gt;</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 中央部件
+</span></span></span><span class="line"><span class="cl">    <span class="n">QWidget</span> <span class="o">*</span><span class="n">centralWidget</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QWidget</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="o">-&gt;</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 布局
+</span></span></span><span class="line"><span class="cl">    <span class="n">QVBoxLayout</span> <span class="o">*</span><span class="n">mainLayout</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">centralWidget</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QFormLayout</span> <span class="o">*</span><span class="n">formLayout</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QFormLayout</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 控件创建
+</span></span></span><span class="line"><span class="cl">    <span class="n">m_userEdit</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QLineEdit</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m_pwdEdit</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QLineEdit</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m_pwdEdit</span><span class="o">-&gt;</span><span class="n">setEchoMode</span><span class="p">(</span><span class="n">QLineEdit</span><span class="o">::</span><span class="n">Password</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m_loginBtn</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s">&#34;登录&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 添加到布局
+</span></span></span><span class="line"><span class="cl">    <span class="n">formLayout</span><span class="o">-&gt;</span><span class="n">addRow</span><span class="p">(</span><span class="s">&#34;用户名：&#34;</span><span class="p">,</span> <span class="n">m_userEdit</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">formLayout</span><span class="o">-&gt;</span><span class="n">addRow</span><span class="p">(</span><span class="s">&#34;密码：&#34;</span><span class="p">,</span> <span class="n">m_pwdEdit</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mainLayout</span><span class="o">-&gt;</span><span class="n">addLayout</span><span class="p">(</span><span class="n">formLayout</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mainLayout</span><span class="o">-&gt;</span><span class="n">addWidget</span><span class="p">(</span><span class="n">m_loginBtn</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Qt</span><span class="o">::</span><span class="n">AlignCenter</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mainLayout</span><span class="o">-&gt;</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mainLayout</span><span class="o">-&gt;</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 信号槽连接
+</span></span></span><span class="line"><span class="cl">    <span class="n">connect</span><span class="p">(</span><span class="n">m_loginBtn</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="n">clicked</span><span class="p">()),</span> <span class="k">this</span><span class="p">,</span> <span class="n">SLOT</span><span class="p">(</span><span class="n">onLoginBtnClicked</span><span class="p">()));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">connect</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="n">loginSuccess</span><span class="p">(</span><span class="n">QString</span><span class="p">)),</span> <span class="k">this</span><span class="p">,</span> <span class="n">SLOT</span><span class="p">(</span><span class="n">onLoginSuccess</span><span class="p">(</span><span class="n">QString</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">MainWindow</span><span class="o">::~</span><span class="n">MainWindow</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">MainWindow</span><span class="o">::</span><span class="n">onLoginBtnClicked</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QString</span> <span class="n">username</span> <span class="o">=</span> <span class="n">m_userEdit</span><span class="o">-&gt;</span><span class="n">text</span><span class="p">().</span><span class="n">trimmed</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QString</span> <span class="n">password</span> <span class="o">=</span> <span class="n">m_pwdEdit</span><span class="o">-&gt;</span><span class="n">text</span><span class="p">().</span><span class="n">trimmed</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">username</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">()</span> <span class="o">||</span> <span class="n">password</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">QMessageBox</span><span class="o">::</span><span class="n">warning</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s">&#34;警告&#34;</span><span class="p">,</span> <span class="s">&#34;用户名和密码不能为空&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 简单校验
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">username</span> <span class="o">==</span> <span class="s">&#34;admin&#34;</span> <span class="o">&amp;&amp;</span> <span class="n">password</span> <span class="o">==</span> <span class="s">&#34;123456&#34;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">emit</span> <span class="nf">loginSuccess</span><span class="p">(</span><span class="n">username</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">QMessageBox</span><span class="o">::</span><span class="n">critical</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s">&#34;错误&#34;</span><span class="p">,</span> <span class="s">&#34;用户名或密码错误&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">MainWindow</span><span class="o">::</span><span class="n">onLoginSuccess</span><span class="p">(</span><span class="n">QString</span> <span class="n">username</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QMessageBox</span><span class="o">::</span><span class="n">information</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s">&#34;成功&#34;</span><span class="p">,</span> <span class="n">QString</span><span class="p">(</span><span class="s">&#34;欢迎你，%1&#34;</span><span class="p">).</span><span class="n">arg</span><span class="p">(</span><span class="n">username</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">qDebug</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;用户&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">username</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;登录成功&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="73-主函数-maincpp">7.3 主函数 main.cpp</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;QApplication&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;mainwindow.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;QTextCodec&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QApplication</span> <span class="n">a</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 设置全局编码，解决中文乱码
+</span></span></span><span class="line"><span class="cl">    <span class="n">QTextCodec</span> <span class="o">*</span><span class="n">codec</span> <span class="o">=</span> <span class="n">QTextCodec</span><span class="o">::</span><span class="n">codecForName</span><span class="p">(</span><span class="s">&#34;UTF-8&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QTextCodec</span><span class="o">::</span><span class="n">setCodecForTr</span><span class="p">(</span><span class="n">codec</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QTextCodec</span><span class="o">::</span><span class="n">setCodecForCStrings</span><span class="p">(</span><span class="n">codec</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">QTextCodec</span><span class="o">::</span><span class="n">setCodecForLocale</span><span class="p">(</span><span class="n">codec</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">MainWindow</span> <span class="n">w</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">w</span><span class="p">.</span><span class="n">show</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">exec</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="74-项目文件-qt4demopro">7.4 项目文件 Qt4Demo.pro</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">TEMPLATE</span> <span class="o">=</span> <span class="n">app</span>
+</span></span><span class="line"><span class="cl"><span class="n">TARGET</span> <span class="o">=</span> <span class="n">Qt4Demo</span>
+</span></span><span class="line"><span class="cl"><span class="n">SOURCES</span> <span class="o">+=</span> <span class="n">main</span><span class="p">.</span><span class="n">cpp</span> <span class="n">mainwindow</span><span class="p">.</span><span class="n">cpp</span>
+</span></span><span class="line"><span class="cl"><span class="n">HEADERS</span> <span class="o">+=</span> <span class="n">mainwindow</span><span class="p">.</span><span class="n">h</span>
+</span></span><span class="line"><span class="cl"><span class="n">QT</span> <span class="o">+=</span> <span class="n">core</span> <span class="n">gui</span>
+</span></span><span class="line"><span class="cl"><span class="n">CONFIG</span> <span class="o">+=</span> <span class="n">c</span><span class="o">++</span><span class="mi">11</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="八qt4-语法核心避坑指南">八、Qt4 语法核心避坑指南</h2>
+<ol>
+<li><strong>Q_OBJECT宏必须加</strong>：继承QObject的类，若使用信号槽、属性系统，必须加Q_OBJECT宏，新增/修改后必须重新qmake。</li>
+<li><strong>信号槽宏内禁止写变量名</strong>：<code>SIGNAL()</code>和<code>SLOT()</code>宏内仅可写参数类型，不可写变量名，否则运行时连接失败。</li>
+<li><strong>槽函数必须声明在slots块中</strong>：Qt4强制要求，普通成员函数无法作为槽使用。</li>
+<li><strong>QObject子类禁止拷贝</strong>：QObject的拷贝构造和赋值运算符是私有的，不可值传递，必须用指针操作。</li>
+<li><strong>GUI操作必须在主线程</strong>：所有QWidget相关的创建、修改、显示操作，必须在主线程执行，禁止在子线程操作GUI。</li>
+<li><strong>中文乱码统一编码</strong>：代码文件编码、全局编码、文件读取编码必须统一，推荐全程使用UTF-8。</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-02-19</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/001_qt4%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/qt/">Qt</a>,&nbsp;<a href="/blog/tags/qt4/">Qt4</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/005_android.bp%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="Android.bp 语法详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>Android.bp 语法详细总结</a>
+            <a href="/blog/001_typescript%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="TypeScript 语法详细总结">TypeScript 语法详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

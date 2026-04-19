@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>gdb 使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/013_gdb%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="gdb 使用详细总结">
+  <meta property="og:description" content="GDB 使用详细总结 GDB（GNU Project Debugger）是GNU开源组织发布的跨平台程序调试器，是Linux/Unix环境下C/C&#43;&#43;、Go、Rust等编译型语言的核心调试工具，核心能力包括控制程序执行流程、查看/修改运行时数据、定位崩溃与逻辑bug、事后分析core dump文件，是后端开发、底层开发的必备技能。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-20T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-03-20T10:00:20+08:00">
+    <meta property="article:tag" content="开发工具">
+    <meta property="article:tag" content="Shell">
+    <meta property="article:tag" content="Gdb">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="gdb 使用详细总结">
+  <meta name="twitter:description" content="GDB 使用详细总结 GDB（GNU Project Debugger）是GNU开源组织发布的跨平台程序调试器，是Linux/Unix环境下C/C&#43;&#43;、Go、Rust等编译型语言的核心调试工具，核心能力包括控制程序执行流程、查看/修改运行时数据、定位崩溃与逻辑bug、事后分析core dump文件，是后端开发、底层开发的必备技能。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/013_gdb%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/011_mcp%E5%8D%8F%E8%AE%AE%E5%AE%9E%E7%8E%B0%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/014_repo%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "gdb 使用详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/013_gdb%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "dev-tools, Shell, gdb","wordcount":  6719 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/013_gdb%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-03-20T09:00:20+08:00","dateModified": "2026-03-20T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/013_gdb%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/013_gdb%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">gdb 使用详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/dev-tools/"><i class="far fa-folder" aria-hidden="true"></i>开发工具</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-03-20">2026-03-20</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 6719 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 14 分钟&nbsp;<span id="/blog/013_gdb%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="gdb 使用详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一基础入门环境准备与启动">一、基础入门：环境准备与启动</a>
+      <ul>
+        <li><a href="#11-安装gdb">1.1 安装GDB</a></li>
+        <li><a href="#12-调试前必备准备">1.2 调试前必备准备</a></li>
+        <li><a href="#13-gdb-4种核心启动方式">1.3 GDB 4种核心启动方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#二核心调试命令体系">二、核心调试命令体系</a>
+      <ul>
+        <li><a href="#21-程序执行控制命令">2.1 程序执行控制命令</a></li>
+        <li><a href="#22-断点观察点与捕获点管理">2.2 断点、观察点与捕获点管理</a>
+          <ul>
+            <li><a href="#221-断点breakpoint缩写-b">2.2.1 断点（Breakpoint，缩写 b）</a>
+              <ul>
+                <li><a href="#基础断点设置">基础断点设置</a></li>
+                <li><a href="#进阶断点用法">进阶断点用法</a></li>
+                <li><a href="#断点管理命令">断点管理命令</a></li>
+              </ul>
+            </li>
+            <li><a href="#222-观察点watchpoint数据断点">2.2.2 观察点（Watchpoint，数据断点）</a></li>
+            <li><a href="#223-捕获点catchpoint">2.2.3 捕获点（Catchpoint）</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-数据查看与修改">2.3 数据查看与修改</a>
+          <ul>
+            <li><a href="#231-打印变量表达式print缩写-p">2.3.1 打印变量/表达式（print，缩写 p）</a></li>
+            <li><a href="#232-自动显示变量display缩写-disp">2.3.2 自动显示变量（display，缩写 disp）</a></li>
+            <li><a href="#233-内存查看examine缩写-x">2.3.3 内存查看（examine，缩写 x）</a></li>
+            <li><a href="#234-数据修改">2.3.4 数据修改</a></li>
+            <li><a href="#235-寄存器查看">2.3.5 寄存器查看</a></li>
+          </ul>
+        </li>
+        <li><a href="#24-调用栈与函数调试">2.4 调用栈与函数调试</a></li>
+        <li><a href="#25-多线程与多进程调试">2.5 多线程与多进程调试</a>
+          <ul>
+            <li><a href="#251-多线程调试">2.5.1 多线程调试</a></li>
+            <li><a href="#252-多进程调试">2.5.2 多进程调试</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#三高级调试场景实战">三、高级调试场景实战</a>
+      <ul>
+        <li><a href="#31-core-dump-崩溃调试线上崩溃排查核心">3.1 Core Dump 崩溃调试（线上崩溃排查核心）</a>
+          <ul>
+            <li><a href="#311-前置配置必须开启否则不生成core文件">3.1.1 前置配置（必须开启，否则不生成core文件）</a></li>
+            <li><a href="#312-core文件调试完整流程">3.1.2 Core文件调试完整流程</a></li>
+          </ul>
+        </li>
+        <li><a href="#32-attach-运行中进程调试">3.2 Attach 运行中进程调试</a>
+          <ul>
+            <li><a href="#321-前置条件">3.2.1 前置条件</a></li>
+            <li><a href="#322-调试完整流程">3.2.2 调试完整流程</a></li>
+          </ul>
+        </li>
+        <li><a href="#33-反汇编与底层调试">3.3 反汇编与底层调试</a></li>
+        <li><a href="#34-gdb自动化与脚本">3.4 GDB自动化与脚本</a></li>
+      </ul>
+    </li>
+    <li><a href="#四实用技巧与避坑指南">四、实用技巧与避坑指南</a>
+      <ul>
+        <li><a href="#41-高频效率快捷键">4.1 高频效率快捷键</a></li>
+        <li><a href="#42-常见问题与避坑方案">4.2 常见问题与避坑方案</a></li>
+        <li><a href="#43-进阶效率技巧">4.3 进阶效率技巧</a></li>
+      </ul>
+    </li>
+    <li><a href="#五gdb标准调试流程新手快速上手">五、GDB标准调试流程（新手快速上手）</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="gdb-使用详细总结">GDB 使用详细总结</h1>
+<p>GDB（GNU Project Debugger）是GNU开源组织发布的跨平台程序调试器，是Linux/Unix环境下C/C++、Go、Rust等编译型语言的核心调试工具，核心能力包括控制程序执行流程、查看/修改运行时数据、定位崩溃与逻辑bug、事后分析core dump文件，是后端开发、底层开发的必备技能。</p>
+<h2 id="一基础入门环境准备与启动">一、基础入门：环境准备与启动</h2>
+<h3 id="11-安装gdb">1.1 安装GDB</h3>
+<table>
+  <thead>
+      <tr>
+          <th>系统环境</th>
+          <th>安装命令</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Debian/Ubuntu 系列</td>
+          <td><code>sudo apt update &amp;&amp; sudo apt install gdb</code></td>
+      </tr>
+      <tr>
+          <td>CentOS/RHEL/Fedora 系列</td>
+          <td><code>sudo yum install gdb</code> 或 <code>sudo dnf install gdb</code></td>
+      </tr>
+      <tr>
+          <td>macOS</td>
+          <td><code>brew install gdb</code>（需额外完成代码签名才能attach进程）</td>
+      </tr>
+      <tr>
+          <td>源码安装</td>
+          <td>从<a href="sslocal://flow/file_open?url=https%3A%2F%2Fwww.gnu.org%2Fsoftware%2Fgdb%2F&amp;flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=" target="_blank" rel="noopener noreffer ">GNU官网</a>下载源码编译，适配定制化场景</td>
+      </tr>
+  </tbody>
+</table>
+<p>安装完成后，通过 <code>gdb --version</code> 验证安装是否成功。</p>
+<h3 id="12-调试前必备准备">1.2 调试前必备准备</h3>
+<p>GDB源码级调试依赖程序中的调试符号，<strong>编译时必须添加 <code>-g</code> 参数</strong>，同时建议关闭编译器优化（<code>-O0</code>），避免优化导致断点不命中、变量被优化、执行流程错乱的问题。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 单文件编译（推荐）</span>
+</span></span><span class="line"><span class="cl">gcc -g -O0 test.c -o <span class="nb">test</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># C++ 程序编译</span>
+</span></span><span class="line"><span class="cl">g++ -g -O0 test.cpp -o <span class="nb">test</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Makefile 项目：在 CFLAGS/CXXFLAGS 中添加 -g -O0</span></span></span></code></pre></div></div>
+<ul>
+<li><code>-g</code>：生成包含行号、变量类型、函数定义等信息的调试符号</li>
+<li><code>-O0</code>：关闭所有编译器优化，保证执行流程和源码完全一致</li>
+<li>进阶：线上部署可通过 <code>strip</code> 剥离符号减小程序体积，调试时用带符号的备份程序匹配core文件</li>
+</ul>
+<h3 id="13-gdb-4种核心启动方式">1.3 GDB 4种核心启动方式</h3>
+<table>
+  <thead>
+      <tr>
+          <th>启动场景</th>
+          <th>命令格式</th>
+          <th>适用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>直接调试可执行文件</td>
+          <td><code>gdb &lt;可执行程序&gt;</code></td>
+          <td>从头启动程序，复现可稳定触发的bug</td>
+      </tr>
+      <tr>
+          <td>带启动参数调试</td>
+          <td><code>gdb --args &lt;可执行程序&gt; &lt;参数1&gt; &lt;参数2&gt;...</code></td>
+          <td>程序依赖命令行参数启动</td>
+      </tr>
+      <tr>
+          <td>attach到运行中进程</td>
+          <td><code>gdb -p &lt;pid&gt;</code> 或 <code>gdb &lt;可执行程序&gt; &lt;pid&gt;</code></td>
+          <td>调试线上正在运行的服务/进程，无需重启程序</td>
+      </tr>
+      <tr>
+          <td>调试core dump崩溃文件</td>
+          <td><code>gdb &lt;可执行程序&gt; &lt;core文件&gt;</code></td>
+          <td>程序崩溃后的事后分析，定位崩溃根因</td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li>附加启动参数：<code>gdb -q &lt;程序&gt;</code> 安静模式启动，不打印版本冗余信息；<code>gdb -tui &lt;程序&gt;</code> 启动分屏源码界面，调试更直观。</li>
+</ul>
+<h2 id="二核心调试命令体系">二、核心调试命令体系</h2>
+<h3 id="21-程序执行控制命令">2.1 程序执行控制命令</h3>
+<p>控制程序的启动、停止、单步执行，是调试的基础操作。</p>
+<table>
+  <thead>
+      <tr>
+          <th>命令</th>
+          <th>缩写</th>
+          <th>功能说明与示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>run</td>
+          <td>r</td>
+          <td>启动程序，从头开始执行；可直接跟启动参数 <code>r arg1 arg2</code>；程序已运行时会提示重启</td>
+      </tr>
+      <tr>
+          <td>continue</td>
+          <td>c</td>
+          <td>从暂停位置继续执行，直到遇到下一个断点/观察点/程序结束；<code>c 5</code> 跳过接下来5个断点</td>
+      </tr>
+      <tr>
+          <td>next</td>
+          <td>n</td>
+          <td>单步执行，<strong>不进入函数内部</strong>（将函数调用视为整体执行），俗称“单步跳过”；<code>n 3</code> 连续执行3行</td>
+      </tr>
+      <tr>
+          <td>step</td>
+          <td>s</td>
+          <td>单步执行，<strong>进入函数内部</strong>（遇到函数调用会进入函数体第一行），俗称“单步进入”；<code>s 2</code> 连续单步2次</td>
+      </tr>
+      <tr>
+          <td>finish</td>
+          <td>fin</td>
+          <td>执行完当前函数的剩余代码，跳出函数体，停在函数调用的下一行，用于快速跳出误进入的函数</td>
+      </tr>
+      <tr>
+          <td>until</td>
+          <td>u</td>
+          <td>执行到指定行号/地址，<code>u 100</code> 执行到第100行停下；核心用法是跳出循环，避免逐行循环执行</td>
+      </tr>
+      <tr>
+          <td>return</td>
+          <td>-</td>
+          <td>强制当前函数立即返回，可指定返回值 <code>return 0</code>，跳过函数剩余代码，用于绕过错误逻辑</td>
+      </tr>
+      <tr>
+          <td>kill</td>
+          <td>k</td>
+          <td>终止当前正在调试的程序，不退出GDB，可重新run启动</td>
+      </tr>
+      <tr>
+          <td>quit</td>
+          <td>q</td>
+          <td>退出GDB调试器</td>
+      </tr>
+      <tr>
+          <td>Ctrl+C</td>
+          <td>-</td>
+          <td>中断正在运行的程序，回到GDB命令行，用于调试卡死/死循环的程序</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="22-断点观察点与捕获点管理">2.2 断点、观察点与捕获点管理</h3>
+<p>断点是控制程序暂停位置的核心，观察点（数据断点）用于监控内存/变量变化，捕获点用于监控特定事件。</p>
+<h4 id="221-断点breakpoint缩写-b">2.2.1 断点（Breakpoint，缩写 b）</h4>
+<h5 id="基础断点设置">基础断点设置</h5>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 按行号设置（当前文件）</span>
+</span></span><span class="line"><span class="cl">b <span class="m">20</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 按文件+行号设置（多文件项目必备）</span>
+</span></span><span class="line"><span class="cl">b main.c:20
+</span></span><span class="line"><span class="cl"><span class="c1"># 按函数名设置</span>
+</span></span><span class="line"><span class="cl">b main
+</span></span><span class="line"><span class="cl">b test_func
+</span></span><span class="line"><span class="cl"><span class="c1"># C++ 类成员函数设置</span>
+</span></span><span class="line"><span class="cl">b namespace::class::method
+</span></span><span class="line"><span class="cl"><span class="c1"># 按内存地址设置（无源码调试）</span>
+</span></span><span class="line"><span class="cl">b *0x400520</span></span></code></pre></div></div>
+<h5 id="进阶断点用法">进阶断点用法</h5>
+<ul>
+<li><strong>条件断点</strong>：仅当条件满足时断点生效，解决循环内断点的痛点，是高频使用的进阶功能
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 当i等于100时，第30行断点才触发</span>
+</span></span><span class="line"><span class="cl">b main.c:30 <span class="k">if</span> <span class="nv">i</span><span class="o">==</span><span class="m">100</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 函数入参为NULL时断住，定位空指针崩溃</span>
+</span></span><span class="line"><span class="cl">b process_data <span class="k">if</span> <span class="nv">ptr</span><span class="o">==</span>NULL</span></span></code></pre></div></div>
+</li>
+<li><strong>临时断点（tbreak/tb）</strong>：仅生效一次，命中后自动删除，适合单次触发的场景
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">tb main.c:50</span></span></code></pre></div></div>
+</li>
+<li><strong>断点绑定自动命令</strong>：断点命中后自动执行一组命令，无需人工干预
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">b main.c:30
+</span></span><span class="line"><span class="cl">commands <span class="m">1</span>  <span class="c1"># 1为断点编号</span>
+</span></span><span class="line"><span class="cl">&gt; print i    <span class="c1"># 命中后自动打印i的值</span>
+</span></span><span class="line"><span class="cl">&gt; bt         <span class="c1"># 打印调用栈</span>
+</span></span><span class="line"><span class="cl">&gt; <span class="k">continue</span>   <span class="c1"># 自动继续执行</span>
+</span></span><span class="line"><span class="cl">&gt; end        <span class="c1"># 结束命令列表</span></span></span></code></pre></div></div>
+</li>
+</ul>
+<h5 id="断点管理命令">断点管理命令</h5>
+<table>
+  <thead>
+      <tr>
+          <th>命令</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>info breakpoints (info b)</td>
+          <td>查看所有断点/观察点/捕获点列表，包含编号、位置、命中次数、启用状态</td>
+      </tr>
+      <tr>
+          <td>disable &lt;断点编号&gt;</td>
+          <td>禁用指定断点，不填编号则禁用所有</td>
+      </tr>
+      <tr>
+          <td>enable &lt;断点编号&gt;</td>
+          <td>启用指定断点</td>
+      </tr>
+      <tr>
+          <td>delete &lt;断点编号&gt; (d)</td>
+          <td>删除指定断点，不填编号则删除所有</td>
+      </tr>
+      <tr>
+          <td>clear &lt;位置&gt;</td>
+          <td>删除指定位置的断点，示例 <code>clear main.c:20</code></td>
+      </tr>
+      <tr>
+          <td>ignore &lt;断点编号&gt; &lt;次数&gt;</td>
+          <td>忽略断点N次，示例 <code>ignore 1 10</code> 1号断点接下来10次命中不触发</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="222-观察点watchpoint数据断点">2.2.2 观察点（Watchpoint，数据断点）</h4>
+<p>用于定位变量被异常修改、内存被篡改、野指针越界等问题，是调试内存问题的核心神器。</p>
+<table>
+  <thead>
+      <tr>
+          <th>命令</th>
+          <th>功能说明与示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>watch &lt;变量/表达式&gt;</td>
+          <td>写观察点（默认），当变量/表达式的值被修改时，程序立即断住<br>示例：<code>watch i</code>、<code>watch *0x7fffffffde40</code>（监控指定内存地址）</td>
+      </tr>
+      <tr>
+          <td>rwatch &lt;变量/表达式&gt;</td>
+          <td>读观察点，当变量/表达式被读取时，程序断住</td>
+      </tr>
+      <tr>
+          <td>awatch &lt;变量/表达式&gt;</td>
+          <td>读写观察点，当变量被读/写时，都会触发断住</td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li>管理：观察点和断点共用 <code>info b</code>、<code>disable</code>、<code>enable</code>、<code>delete</code> 命令，在列表中有独立编号。</li>
+</ul>
+<h4 id="223-捕获点catchpoint">2.2.3 捕获点（Catchpoint）</h4>
+<p>捕获特定事件发生时断住程序，常用场景：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">catch throw   <span class="c1"># 捕获C++异常抛出时断住</span>
+</span></span><span class="line"><span class="cl">catch catch   <span class="c1"># 捕获C++异常被捕获时断住</span>
+</span></span><span class="line"><span class="cl">catch fork    <span class="c1"># 捕获程序调用fork系统调用时断住</span>
+</span></span><span class="line"><span class="cl">catch <span class="nb">exec</span>    <span class="c1"># 捕获程序调用exec系统调用时断住</span>
+</span></span><span class="line"><span class="cl">catch syscall <span class="c1"># 捕获所有系统调用时断住</span></span></span></code></pre></div></div>
+<h3 id="23-数据查看与修改">2.3 数据查看与修改</h3>
+<p>调试的核心是验证程序运行时数据是否符合预期，GDB提供了丰富的变量、内存、寄存器查看与修改能力。</p>
+<h4 id="231-打印变量表达式print缩写-p">2.3.1 打印变量/表达式（print，缩写 p）</h4>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 基础打印</span>
+</span></span><span class="line"><span class="cl">p i             <span class="c1"># 打印变量i的值</span>
+</span></span><span class="line"><span class="cl">p <span class="p">&amp;</span>i            <span class="c1"># 打印变量i的内存地址</span>
+</span></span><span class="line"><span class="cl">p a+b*c         <span class="c1"># 计算并打印表达式结果</span>
+</span></span><span class="line"><span class="cl">p test_func<span class="o">(</span>5<span class="o">)</span>  <span class="c1"># 调用函数并打印返回值</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 格式化打印（核心）</span>
+</span></span><span class="line"><span class="cl">p /x i  <span class="c1"># 十六进制格式打印</span>
+</span></span><span class="line"><span class="cl">p /d i  <span class="c1"># 十进制有符号整数</span>
+</span></span><span class="line"><span class="cl">p /u i  <span class="c1"># 十进制无符号整数</span>
+</span></span><span class="line"><span class="cl">p /t i  <span class="c1"># 二进制格式</span>
+</span></span><span class="line"><span class="cl">p /c buf<span class="o">[</span>0<span class="o">]</span> <span class="c1"># 字符格式</span>
+</span></span><span class="line"><span class="cl">p /f score  <span class="c1"># 浮点数格式</span>
+</span></span><span class="line"><span class="cl">p /s buf    <span class="c1"># 字符串格式</span>
+</span></span><span class="line"><span class="cl">p /a ptr    <span class="c1"># 地址格式</span></span></span></code></pre></div></div>
+<ul>
+<li>必备优化：<code>set print pretty on</code> 开启后，C/C++结构体、类对象会格式化分层输出，层级清晰，建议写入~/.gdbinit永久生效。</li>
+<li>宏调试：编译时添加 <code>-g3</code> 参数（<code>gcc -g3 -O0</code>），可在GDB中打印宏定义、展开宏。</li>
+</ul>
+<h4 id="232-自动显示变量display缩写-disp">2.3.2 自动显示变量（display，缩写 disp）</h4>
+<p>程序每次停下时，自动打印指定变量/表达式，适合循环内跟踪变量变化，无需反复执行print命令。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 基础用法</span>
+</span></span><span class="line"><span class="cl">display i
+</span></span><span class="line"><span class="cl">display /x ptr
+</span></span><span class="line"><span class="cl"><span class="c1"># 管理命令</span>
+</span></span><span class="line"><span class="cl">info display          <span class="c1"># 查看所有自动显示条目</span>
+</span></span><span class="line"><span class="cl">undisplay &lt;编号&gt;      <span class="c1"># 删除指定条目</span>
+</span></span><span class="line"><span class="cl">disable display &lt;编号&gt; <span class="c1"># 禁用自动显示</span>
+</span></span><span class="line"><span class="cl"><span class="nb">enable</span> display &lt;编号&gt;  <span class="c1"># 启用自动显示</span></span></span></code></pre></div></div>
+<h4 id="233-内存查看examine缩写-x">2.3.3 内存查看（examine，缩写 x）</h4>
+<p>查看指定内存地址的内容，定位缓冲区溢出、内存越界、野指针问题必备。</p>
+<ul>
+<li>格式：<code>x /&lt;数量&gt;&lt;格式符&gt;&lt;单位&gt; &lt;内存地址/指针&gt;</code>
+<ul>
+<li>数量：要查看的内存单元个数</li>
+<li>格式符：和print的格式符一致（x/d/u/c/s等）</li>
+<li>单位：b(1字节)、h(2字节，半字)、w(4字节，字)、g(8字节，双字)</li>
+</ul>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 常用示例</span>
+</span></span><span class="line"><span class="cl">x /10xw 0x7fffffffde40  <span class="c1"># 从指定地址开始，查看10个4字节单元，十六进制显示</span>
+</span></span><span class="line"><span class="cl">x /20cb buf              <span class="c1"># 查看buf指向的20个字节，以字符格式显示</span>
+</span></span><span class="line"><span class="cl">x /s str                 <span class="c1"># 查看字符串完整内容</span>
+</span></span><span class="line"><span class="cl">x /i <span class="nv">$pc</span>                 <span class="c1"># 查看当前程序计数器（rip/eip）指向的汇编指令</span></span></span></code></pre></div></div>
+<h4 id="234-数据修改">2.3.4 数据修改</h4>
+<p>调试时动态修改数据，复现边界场景、绕过错误逻辑、验证修复方案。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 修改变量（必须加var关键字，避免和GDB自身命令冲突）</span>
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> var <span class="nv">i</span><span class="o">=</span><span class="m">100</span>
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> var <span class="nv">ptr</span><span class="o">=</span>NULL
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> var <span class="nv">str</span><span class="o">=</span><span class="s2">&#34;test&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 修改指定内存地址的值</span>
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> <span class="o">{</span>int<span class="o">}</span><span class="nv">0x7fffffffde40</span><span class="o">=</span><span class="m">200</span>  <span class="c1"># 把指定地址的int型数据改为200</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 修改寄存器值</span>
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> <span class="nv">$rax</span><span class="o">=</span><span class="m">0</span>  <span class="c1"># 修改rax寄存器的值为0</span></span></span></code></pre></div></div>
+<h4 id="235-寄存器查看">2.3.5 寄存器查看</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">info registers <span class="o">(</span>info r<span class="o">)</span>  <span class="c1"># 查看所有通用寄存器的值</span>
+</span></span><span class="line"><span class="cl">info all-registers        <span class="c1"># 查看所有寄存器（包括浮点、SIMD寄存器）</span>
+</span></span><span class="line"><span class="cl">p <span class="nv">$rip</span>                    <span class="c1"># 打印指定寄存器的值，$rip是当前指令指针</span></span></span></code></pre></div></div>
+<h3 id="24-调用栈与函数调试">2.4 调用栈与函数调试</h3>
+<p>程序崩溃时，第一时间通过栈回溯定位崩溃位置和调用链路，是排查崩溃问题的核心。</p>
+<table>
+  <thead>
+      <tr>
+          <th>命令</th>
+          <th>缩写</th>
+          <th>功能说明与示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>backtrace</td>
+          <td>bt</td>
+          <td>打印完整的函数调用栈，从栈顶（当前函数）到栈底（main函数），快速定位崩溃位置</td>
+      </tr>
+      <tr>
+          <td>bt full</td>
+          <td>-</td>
+          <td>打印完整调用栈+每层栈帧的局部变量、入参，定位问题的核心命令</td>
+      </tr>
+      <tr>
+          <td>bt N</td>
+          <td>-</td>
+          <td>只打印栈顶N层调用栈，适合调用栈过长的场景</td>
+      </tr>
+      <tr>
+          <td>frame</td>
+          <td>f</td>
+          <td>切换到指定栈帧，<code>f 3</code> 切换到第3层栈帧；栈帧编号从0开始（0是当前栈顶）</td>
+      </tr>
+      <tr>
+          <td>up</td>
+          <td>-</td>
+          <td>向上切换一层栈帧（往函数调用者方向）</td>
+      </tr>
+      <tr>
+          <td>down</td>
+          <td>-</td>
+          <td>向下切换一层栈帧（往函数被调用者方向）</td>
+      </tr>
+      <tr>
+          <td>list</td>
+          <td>l</td>
+          <td>查看当前行附近的源码（默认10行）；<code>l 20</code> 查看第20行附近；<code>l test_func</code> 查看指定函数源码</td>
+      </tr>
+      <tr>
+          <td>info locals</td>
+          <td>-</td>
+          <td>查看当前栈帧的所有局部变量</td>
+      </tr>
+      <tr>
+          <td>info args</td>
+          <td>-</td>
+          <td>查看当前函数的入参值</td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li>核心流程：程序崩溃后，先执行 <code>bt full</code> 找到崩溃栈帧，再用 <code>f &lt;编号&gt;</code> 切换到对应栈帧，通过 <code>list</code>、<code>info locals</code>、<code>info args</code> 查看源码和变量，定位根因。</li>
+</ul>
+<h3 id="25-多线程与多进程调试">2.5 多线程与多进程调试</h3>
+<p>并发程序调试的核心难点是执行流的管控，GDB提供了完整的线程/进程调试能力。</p>
+<h4 id="251-多线程调试">2.5.1 多线程调试</h4>
+<table>
+  <thead>
+      <tr>
+          <th>命令</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>info threads</td>
+          <td>查看当前进程的所有线程，包含编号、线程ID、执行状态，*号标记当前调试线程</td>
+      </tr>
+      <tr>
+          <td>thread &lt;线程编号&gt;</td>
+          <td>切换到指定线程，切换后bt、print等命令均作用于该线程</td>
+      </tr>
+      <tr>
+          <td>thread apply &lt;编号&gt; &lt;命令&gt;</td>
+          <td>对指定线程执行GDB命令，示例：<code>thread apply 1 3 bt</code></td>
+      </tr>
+      <tr>
+          <td>thread apply all bt</td>
+          <td>对所有线程打印调用栈，<strong>死锁排查的核心命令</strong></td>
+      </tr>
+      <tr>
+          <td>break &lt;位置&gt; thread &lt;线程编号&gt;</td>
+          <td>断点仅对指定线程生效</td>
+      </tr>
+      <tr>
+          <td>set scheduler-locking on</td>
+          <td>开启线程调度锁定，continue/next/step时<strong>只有当前线程执行</strong>，其他线程暂停，彻底解决多线程调试时断点乱跑的问题</td>
+      </tr>
+      <tr>
+          <td>set scheduler-locking off</td>
+          <td>关闭调度锁定（默认），所有线程同步执行</td>
+      </tr>
+      <tr>
+          <td>set scheduler-locking step</td>
+          <td>单步时仅当前线程执行，continue时所有线程执行</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="252-多进程调试">2.5.2 多进程调试</h4>
+<p>GDB默认只调试父进程，fork出的子进程不会被跟踪，需通过以下配置调整调试模式：</p>
+<table>
+  <thead>
+      <tr>
+          <th>配置命令</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>set follow-fork-mode parent</td>
+          <td>默认模式，fork后继续调试父进程，子进程正常运行</td>
+      </tr>
+      <tr>
+          <td>set follow-fork-mode child</td>
+          <td>fork后切换到子进程调试，父进程正常运行</td>
+      </tr>
+      <tr>
+          <td>set detach-on-fork on</td>
+          <td>默认模式，fork后只调试一个进程，另一个进程脱离GDB控制正常运行</td>
+      </tr>
+      <tr>
+          <td>set detach-on-fork off</td>
+          <td>fork后，GDB同时跟踪父进程和子进程，未被调试的进程暂停运行</td>
+      </tr>
+      <tr>
+          <td>info inferiors</td>
+          <td>查看所有被GDB跟踪的进程（inferior）</td>
+      </tr>
+      <tr>
+          <td>inferior &lt;编号&gt;</td>
+          <td>切换到指定进程调试</td>
+      </tr>
+      <tr>
+          <td>attach <pid></td>
+          <td>附着到运行中的子进程调试</td>
+      </tr>
+      <tr>
+          <td>detach</td>
+          <td>分离当前调试的进程，进程恢复正常运行</td>
+      </tr>
+  </tbody>
+</table>
+<p>两种模式组合效果：</p>
+<table>
+  <thead>
+      <tr>
+          <th>follow-fork-mode</th>
+          <th>detach-on-fork</th>
+          <th>效果说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>parent</td>
+          <td>on</td>
+          <td>默认模式，只调试父进程，子进程正常运行</td>
+      </tr>
+      <tr>
+          <td>child</td>
+          <td>on</td>
+          <td>只调试子进程，父进程正常运行</td>
+      </tr>
+      <tr>
+          <td>parent</td>
+          <td>off</td>
+          <td>同时调试父子进程，gdb跟随父进程，子进程阻塞在fork位置</td>
+      </tr>
+      <tr>
+          <td>child</td>
+          <td>off</td>
+          <td>同时调试父子进程，gdb跟随子进程，父进程阻塞在fork位置</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="三高级调试场景实战">三、高级调试场景实战</h2>
+<h3 id="31-core-dump-崩溃调试线上崩溃排查核心">3.1 Core Dump 崩溃调试（线上崩溃排查核心）</h3>
+<p>Core Dump是程序崩溃时，操作系统把程序的内存、寄存器、运行状态完整转储到文件中，可通过GDB事后分析，精准定位崩溃根因。</p>
+<h4 id="311-前置配置必须开启否则不生成core文件">3.1.1 前置配置（必须开启，否则不生成core文件）</h4>
+<ol>
+<li>开启core文件大小限制</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 临时开启（当前终端生效）</span>
+</span></span><span class="line"><span class="cl"><span class="nb">ulimit</span> -c unlimited
+</span></span><span class="line"><span class="cl"><span class="c1"># 永久开启：修改 /etc/security/limits.conf，添加以下两行</span>
+</span></span><span class="line"><span class="cl">* soft core unlimited
+</span></span><span class="line"><span class="cl">* hard core unlimited
+</span></span><span class="line"><span class="cl"><span class="c1"># 保存后重新登录或执行 sysctl -p 生效</span></span></span></code></pre></div></div>
+<ol start="2">
+<li>配置core文件存储路径与命名（可选，推荐）</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 修改 /etc/sysctl.conf，添加以下配置</span>
+</span></span><span class="line"><span class="cl">kernel.core_pattern <span class="o">=</span> /var/coredumps/core_%e_%p_%t
+</span></span><span class="line"><span class="cl">kernel.core_uses_pid <span class="o">=</span> <span class="m">0</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 创建目录并授权</span>
+</span></span><span class="line"><span class="cl">mkdir -p /var/coredumps
+</span></span><span class="line"><span class="cl">chmod <span class="m">777</span> /var/coredumps
+</span></span><span class="line"><span class="cl"><span class="c1"># 生效配置</span>
+</span></span><span class="line"><span class="cl">sysctl -p</span></span></code></pre></div></div>
+<ul>
+<li>命名参数：<code>%e</code> 程序名，<code>%p</code> 进程PID，<code>%t</code> 崩溃时间戳，避免core文件被覆盖。</li>
+</ul>
+<h4 id="312-core文件调试完整流程">3.1.2 Core文件调试完整流程</h4>
+<ol>
+<li>启动GDB加载core文件</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">gdb &lt;崩溃程序的可执行文件&gt; &lt;core文件&gt;
+</span></span><span class="line"><span class="cl"><span class="c1"># 示例</span>
+</span></span><span class="line"><span class="cl">gdb ./test /var/coredumps/core_test_1234_1713000000</span></span></code></pre></div></div>
+<blockquote>
+<p>关键要求：可执行文件必须和生成core文件的程序是<strong>同一个编译版本</strong>，且带-g调试符号，否则会出现符号不匹配，无法正常调试。</p>
+</blockquote>
+<ol start="2">
+<li>核心分析步骤</li>
+</ol>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 1. 第一步：查看完整调用栈，定位崩溃位置</span>
+</span></span><span class="line"><span class="cl">bt full
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. 第二步：切换到崩溃的栈帧（0号栈帧是崩溃发生的函数）</span>
+</span></span><span class="line"><span class="cl">f <span class="m">0</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 3. 第三步：查看崩溃行的源码、局部变量、入参</span>
+</span></span><span class="line"><span class="cl">list
+</span></span><span class="line"><span class="cl">info locals
+</span></span><span class="line"><span class="cl">info args
+</span></span><span class="line"><span class="cl"><span class="c1"># 4. 第四步：查看寄存器状态、崩溃地址的内存，定位空指针/野指针/越界问题</span>
+</span></span><span class="line"><span class="cl">info registers
+</span></span><span class="line"><span class="cl">x /xw <span class="nv">$rsp</span>  <span class="c1"># 查看栈顶内存</span>
+</span></span><span class="line"><span class="cl">p *ptr      <span class="c1"># 查看指针指向的内容</span></span></span></code></pre></div></div>
+<ol start="3">
+<li>自动化批量分析</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 批量导出崩溃调用栈，无需进入交互界面</span>
+</span></span><span class="line"><span class="cl">gdb -batch -ex <span class="s2">&#34;bt full&#34;</span> ./test core_test_1234 &gt; crash_backtrace.txt</span></span></code></pre></div></div>
+<h3 id="32-attach-运行中进程调试">3.2 Attach 运行中进程调试</h3>
+<p>适用于线上服务卡死、死锁、CPU占用高、内存泄漏等场景，无需重启程序，在线调试不影响业务。</p>
+<h4 id="321-前置条件">3.2.1 前置条件</h4>
+<ul>
+<li>进程的可执行文件编译时带-g调试符号</li>
+<li>执行GDB的用户是root或进程所属用户，具备调试权限</li>
+<li>关闭系统ptrace限制（部分系统默认开启）：
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 临时关闭</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="m">0</span> &gt; /proc/sys/kernel/yama/ptrace_scope
+</span></span><span class="line"><span class="cl"><span class="c1"># 永久关闭：修改 /etc/sysctl.d/10-ptrace.conf，设置 kernel.yama.ptrace_scope = 0</span></span></span></code></pre></div></div>
+</li>
+</ul>
+<h4 id="322-调试完整流程">3.2.2 调试完整流程</h4>
+<ol>
+<li>找到目标进程PID</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ps -ef <span class="p">|</span> grep &lt;进程名&gt;</span></span></code></pre></div></div>
+<ol start="2">
+<li>启动GDB attach进程</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 方式1：直接attach</span>
+</span></span><span class="line"><span class="cl">gdb -p &lt;pid&gt;
+</span></span><span class="line"><span class="cl"><span class="c1"># 方式2：启动后attach并加载符号</span>
+</span></span><span class="line"><span class="cl">gdb
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> file &lt;可执行程序路径&gt;
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> attach &lt;pid&gt;</span></span></code></pre></div></div>
+<blockquote>
+<p>attach成功后，进程会被GDB暂停，此时可执行调试命令。</p>
+</blockquote>
+<ol start="3">
+<li>核心调试操作</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 死锁排查：查看所有线程的调用栈，找到锁等待的线程</span>
+</span></span><span class="line"><span class="cl">thread apply all bt
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看程序运行状态：打印关键变量、全局状态</span>
+</span></span><span class="line"><span class="cl">p global_status
+</span></span><span class="line"><span class="cl">info threads
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置断点/观察点，复现问题</span>
+</span></span><span class="line"><span class="cl">b process_data <span class="k">if</span> <span class="nv">data</span><span class="o">==</span>NULL
+</span></span><span class="line"><span class="cl"><span class="c1"># 继续执行程序</span>
+</span></span><span class="line"><span class="cl"><span class="k">continue</span></span></span></code></pre></div></div>
+<ol start="4">
+<li>安全退出</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 先分离进程，让程序恢复正常运行，再退出GDB，禁止直接quit！</span>
+</span></span><span class="line"><span class="cl">detach
+</span></span><span class="line"><span class="cl">quit</span></span></code></pre></div></div>
+<blockquote>
+<p>直接quit会终止被调试的进程，线上环境务必先detach再退出。</p>
+</blockquote>
+<h3 id="33-反汇编与底层调试">3.3 反汇编与底层调试</h3>
+<p>适用于无源码调试、编译器优化问题排查、汇编级逻辑分析。</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 反汇编指定函数</span>
+</span></span><span class="line"><span class="cl">disassemble <span class="o">(</span>disas<span class="o">)</span> main
+</span></span><span class="line"><span class="cl"><span class="c1"># 反汇编当前函数</span>
+</span></span><span class="line"><span class="cl">disas
+</span></span><span class="line"><span class="cl"><span class="c1"># 反汇编指定地址范围</span>
+</span></span><span class="line"><span class="cl">disas 0x400520,0x400550
+</span></span><span class="line"><span class="cl"><span class="c1"># 切换汇编语法为Intel格式（默认AT&amp;T），x86架构推荐</span>
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> disassembly-flavor intel
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看源码行对应的汇编指令地址范围</span>
+</span></span><span class="line"><span class="cl">info line main.c:20
+</span></span><span class="line"><span class="cl"><span class="c1"># 汇编级单步执行</span>
+</span></span><span class="line"><span class="cl">stepi <span class="o">(</span>si<span class="o">)</span>  <span class="c1"># 单步执行，进入汇编函数调用</span>
+</span></span><span class="line"><span class="cl">nexti <span class="o">(</span>ni<span class="o">)</span>  <span class="c1"># 单步执行，不进入汇编函数调用</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看当前执行的汇编指令</span>
+</span></span><span class="line"><span class="cl">x /i <span class="nv">$pc</span></span></span></code></pre></div></div>
+<h3 id="34-gdb自动化与脚本">3.4 GDB自动化与脚本</h3>
+<p>GDB支持脚本编写，批量执行调试命令，提升重复调试场景的效率。</p>
+<ol>
+<li>全局配置文件 <code>~/.gdbinit</code>
+GDB启动时会自动加载该文件，可写入常用配置、别名、自定义命令，示例：</li>
+</ol>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># ~/.gdbinit</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 美化结构体打印</span>
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> print pretty on
+</span></span><span class="line"><span class="cl"><span class="c1"># 切换Intel汇编语法</span>
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> disassembly-flavor intel
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置list默认显示20行</span>
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> listsize <span class="m">20</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 命令别名</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">ll</span> <span class="o">=</span> list
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">ta</span> <span class="o">=</span> thread apply all
+</span></span><span class="line"><span class="cl"><span class="c1"># 开启日志记录</span>
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> logging on overwrite gdb.log</span></span></code></pre></div></div>
+<ol start="2">
+<li>自定义脚本执行</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 编写脚本文件 debug.gdb</span>
+</span></span><span class="line"><span class="cl">b main
+</span></span><span class="line"><span class="cl">run
+</span></span><span class="line"><span class="cl">bt full
+</span></span><span class="line"><span class="cl"><span class="c1"># 启动时执行脚本</span>
+</span></span><span class="line"><span class="cl">gdb -x debug.gdb ./test
+</span></span><span class="line"><span class="cl"><span class="c1"># 调试时加载脚本</span>
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> debug.gdb</span></span></code></pre></div></div>
+<h2 id="四实用技巧与避坑指南">四、实用技巧与避坑指南</h2>
+<h3 id="41-高频效率快捷键">4.1 高频效率快捷键</h3>
+<table>
+  <thead>
+      <tr>
+          <th>快捷键</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>回车</td>
+          <td>重复执行上一条命令，单步调试时无需反复输入n/s</td>
+      </tr>
+      <tr>
+          <td>Tab</td>
+          <td>命令、变量名、函数名自动补全</td>
+      </tr>
+      <tr>
+          <td>Ctrl+L</td>
+          <td>清屏</td>
+      </tr>
+      <tr>
+          <td>Ctrl+D</td>
+          <td>退出GDB，等效quit</td>
+      </tr>
+      <tr>
+          <td>Ctrl+X A</td>
+          <td>开启/关闭TUI分屏界面，上半部分显示源码，下半部分是命令行</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="42-常见问题与避坑方案">4.2 常见问题与避坑方案</h3>
+<table>
+  <thead>
+      <tr>
+          <th>问题现象</th>
+          <th>根因分析</th>
+          <th>解决方案</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>断点不生效、无法查看变量</td>
+          <td>1. 编译未加-g参数；2. 开启了-O优化，代码流程/变量被优化</td>
+          <td>重新编译，添加 <code>-g -O0</code> 参数，关闭优化</td>
+      </tr>
+      <tr>
+          <td>无法生成core文件</td>
+          <td>1. ulimit -c 为0，未开启core dump；2. 运行目录无写权限；3. 磁盘空间不足；4. 程序设置了setuid/setgid</td>
+          <td>按3.1节步骤开启core dump，检查目录权限与磁盘空间</td>
+      </tr>
+      <tr>
+          <td>多线程调试时断点乱跑、程序直接退出</td>
+          <td>默认scheduler-locking off，continue时所有线程同步执行，其他线程触发了信号/退出</td>
+          <td>执行 <code>set scheduler-locking on</code>，锁定仅当前线程执行</td>
+      </tr>
+      <tr>
+          <td>attach进程失败，提示Operation not permitted</td>
+          <td>1. 无进程调试权限；2. 系统开启了ptrace限制；3. macOS下GDB未完成代码签名</td>
+          <td>切换root用户，关闭ptrace限制，macOS完成GDB代码签名</td>
+      </tr>
+      <tr>
+          <td>调试时看不到源码、提示No such file or directory</td>
+          <td>可执行文件和源码路径不匹配，或编译后源码被移动/删除</td>
+          <td>用 <code>dir &lt;源码目录&gt;</code> 命令添加源码搜索路径</td>
+      </tr>
+      <tr>
+          <td>打印变量提示optimized out</td>
+          <td>编译器优化把变量优化掉了，无运行时数据</td>
+          <td>关闭编译器优化，重新用 <code>-O0</code> 编译</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="43-进阶效率技巧">4.3 进阶效率技巧</h3>
+<ol>
+<li>配合AddressSanitizer快速定位内存问题：编译时添加 <code>-fsanitize=address -g</code>，可直接定位内存越界、野指针、内存泄漏、释放后使用等问题，比纯GDB调试效率提升数倍。</li>
+<li>用cgdb替代原生GDB：cgdb是GDB的增强终端界面，默认分屏显示源码和调试命令，操作更直观，安装命令 <code>sudo apt install cgdb</code>。</li>
+<li>远程调试：嵌入式开发、跨平台调试场景，目标机运行 <code>gdbserver &lt;ip:port&gt; &lt;程序&gt;</code>，本地GDB通过 <code>target remote &lt;ip:port&gt;</code> 连接远程目标机调试。</li>
+<li>日志断点：不暂停程序，仅打印日志，通过 <code>commands</code> 实现断点命中后打印信息并自动continue，不影响程序运行。</li>
+</ol>
+<h2 id="五gdb标准调试流程新手快速上手">五、GDB标准调试流程（新手快速上手）</h2>
+<ol>
+<li>编译程序：<code>gcc -g -O0 test.c -o test</code></li>
+<li>启动GDB：<code>gdb ./test</code></li>
+<li>设置入口断点：<code>b main</code></li>
+<li>运行程序：<code>run</code></li>
+<li>流程控制：通过 <code>n/s/c</code> 控制程序执行，配合断点定位问题位置</li>
+<li>数据验证：通过 <code>p/display/x</code> 查看变量、内存，验证程序运行状态</li>
+<li>根因定位：通过 <code>bt/f</code> 查看调用栈，切换栈帧分析崩溃/逻辑错误</li>
+<li>退出调试：<code>quit</code></li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-03-20</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/013_gdb%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/dev-tools/">开发工具</a>,&nbsp;<a href="/blog/tags/shell/">Shell</a>,&nbsp;<a href="/blog/tags/gdb/">Gdb</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/011_mcp%E5%8D%8F%E8%AE%AE%E5%AE%9E%E7%8E%B0%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="MCP 协议详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>MCP 协议详细总结</a>
+            <a href="/blog/014_repo%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="Repo 命令使用详细总结">Repo 命令使用详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

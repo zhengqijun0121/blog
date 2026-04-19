@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>awk 命令使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/010_awk%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="awk 命令使用详细总结">
+  <meta property="og:description" content="awk 命令使用详细总结 awk 是 Unix/Linux 生态中模式驱动的文本处理编程语言，由 Alfred Aho、Peter Weinberger、Brian Kernighan 三位开发者创造，是 Shell 三剑客（grep/sed/awk）中功能最全面的工具，核心用于文本扫描、字段提取、数据统计、格式化输出，原生支持变量、数组、循环、函数等完整编程能力，是运维、开发人员的核心文本处理工具。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-01-15T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-01-15T09:00:00+08:00">
+    <meta property="article:tag" content="开发工具">
+    <meta property="article:tag" content="Shell">
+    <meta property="article:tag" content="Awk">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="awk 命令使用详细总结">
+  <meta name="twitter:description" content="awk 命令使用详细总结 awk 是 Unix/Linux 生态中模式驱动的文本处理编程语言，由 Alfred Aho、Peter Weinberger、Brian Kernighan 三位开发者创造，是 Shell 三剑客（grep/sed/awk）中功能最全面的工具，核心用于文本扫描、字段提取、数据统计、格式化输出，原生支持变量、数组、循环、函数等完整编程能力，是运维、开发人员的核心文本处理工具。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/010_awk%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/003_zsh%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/011_sed%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "awk 命令使用详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/010_awk%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "dev-tools, Shell, awk","wordcount":  6056 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/010_awk%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-01-15T09:00:00+08:00","dateModified": "2026-01-15T09:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/010_awk%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/010_awk%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">awk 命令使用详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/dev-tools/"><i class="far fa-folder" aria-hidden="true"></i>开发工具</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-15">2026-01-15</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 6056 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 13 分钟&nbsp;<span id="/blog/010_awk%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="awk 命令使用详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一核心语法与执行流程">一、核心语法与执行流程</a>
+      <ul>
+        <li><a href="#1-基础命令格式">1. 基础命令格式</a></li>
+        <li><a href="#2-脚本三大核心块">2. 脚本三大核心块</a></li>
+        <li><a href="#3-完整执行流程">3. 完整执行流程</a></li>
+        <li><a href="#4-高频命令行选项">4. 高频命令行选项</a></li>
+      </ul>
+    </li>
+    <li><a href="#二核心内置变量">二、核心内置变量</a>
+      <ul>
+        <li><a href="#1-记录行相关变量">1. 记录（行）相关变量</a></li>
+        <li><a href="#2-字段列相关变量">2. 字段（列）相关变量</a></li>
+        <li><a href="#3-文件与参数相关变量">3. 文件与参数相关变量</a></li>
+        <li><a href="#4-正则与格式相关变量">4. 正则与格式相关变量</a></li>
+      </ul>
+    </li>
+    <li><a href="#三运算符与模式匹配">三、运算符与模式匹配</a>
+      <ul>
+        <li><a href="#1-完整运算符体系优先级从高到低">1. 完整运算符体系（优先级从高到低）</a></li>
+        <li><a href="#2-核心模式类型">2. 核心模式类型</a>
+          <ul>
+            <li><a href="#1空模式">（1）空模式</a></li>
+            <li><a href="#2正则表达式模式">（2）正则表达式模式</a></li>
+            <li><a href="#3关系表达式模式">（3）关系表达式模式</a></li>
+            <li><a href="#4范围模式">（4）范围模式</a></li>
+            <li><a href="#5特殊模式">（5）特殊模式</a></li>
+            <li><a href="#6模式组合">（6）模式组合</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#四流程控制语句">四、流程控制语句</a>
+      <ul>
+        <li><a href="#1-条件判断">1. 条件判断</a></li>
+        <li><a href="#2-循环语句">2. 循环语句</a></li>
+        <li><a href="#3-流程控制关键字">3. 流程控制关键字</a></li>
+      </ul>
+    </li>
+    <li><a href="#五内置函数大全">五、内置函数大全</a>
+      <ul>
+        <li><a href="#1-高频字符串处理函数">1. 高频字符串处理函数</a></li>
+        <li><a href="#2-数值计算函数">2. 数值计算函数</a></li>
+        <li><a href="#3-时间处理函数gawk-扩展">3. 时间处理函数（gawk 扩展）</a></li>
+        <li><a href="#4-io-与系统函数">4. IO 与系统函数</a></li>
+      </ul>
+    </li>
+    <li><a href="#六数组关联数组">六、数组（关联数组）</a>
+      <ul>
+        <li><a href="#1-数组定义与赋值">1. 数组定义与赋值</a></li>
+        <li><a href="#2-数组遍历">2. 数组遍历</a></li>
+        <li><a href="#3-成员判断与删除">3. 成员判断与删除</a></li>
+        <li><a href="#4-多维数组模拟">4. 多维数组模拟</a></li>
+      </ul>
+    </li>
+    <li><a href="#七高频实战场景可直接复制使用">七、高频实战场景（可直接复制使用）</a>
+      <ul>
+        <li><a href="#1-基础列提取与格式化">1. 基础列提取与格式化</a></li>
+        <li><a href="#2-行过滤与筛选">2. 行过滤与筛选</a></li>
+        <li><a href="#3-数值统计与计算">3. 数值统计与计算</a></li>
+        <li><a href="#4-文本去重与频次统计">4. 文本去重与频次统计</a></li>
+        <li><a href="#5-文本替换与修改">5. 文本替换与修改</a></li>
+        <li><a href="#6-日志分析实战">6. 日志分析实战</a></li>
+        <li><a href="#7-多文件处理">7. 多文件处理</a></li>
+      </ul>
+    </li>
+    <li><a href="#八高级用法">八、高级用法</a>
+      <ul>
+        <li><a href="#1-自定义函数">1. 自定义函数</a></li>
+        <li><a href="#2-复杂格式处理csv">2. 复杂格式处理（CSV）</a></li>
+        <li><a href="#3-与shell交互">3. 与Shell交互</a>
+          <ul>
+            <li><a href="#1向awk传递shell变量">（1）向awk传递Shell变量</a></li>
+            <li><a href="#2awk中调用shell命令">（2）awk中调用Shell命令</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-大文件处理优化">4. 大文件处理优化</a></li>
+      </ul>
+    </li>
+    <li><a href="#九避坑指南与注意事项">九、避坑指南与注意事项</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="awk-命令使用详细总结">awk 命令使用详细总结</h1>
+<p>awk 是 Unix/Linux 生态中<strong>模式驱动的文本处理编程语言</strong>，由 Alfred Aho、Peter Weinberger、Brian Kernighan 三位开发者创造，是 Shell 三剑客（grep/sed/awk）中功能最全面的工具，核心用于文本扫描、字段提取、数据统计、格式化输出，原生支持变量、数组、循环、函数等完整编程能力，是运维、开发人员的核心文本处理工具。</p>
+<p>Linux 系统中默认的 <code>awk</code> 是 GNU awk（gawk），是标准 awk 的超集，提供了大量扩展功能，本文默认基于 gawk 讲解，同时标注 POSIX 标准兼容内容。</p>
+<hr>
+<h2 id="一核心语法与执行流程">一、核心语法与执行流程</h2>
+<h3 id="1-基础命令格式">1. 基础命令格式</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 单行命令模式（最常用）</span>
+</span></span><span class="line"><span class="cl">awk <span class="o">[</span>选项<span class="o">]</span> <span class="s1">&#39;模式{动作}&#39;</span> 输入文件1 输入文件2...
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 脚本文件模式（适合复杂逻辑）</span>
+</span></span><span class="line"><span class="cl">awk <span class="o">[</span>选项<span class="o">]</span> -f 脚本文件.awk 输入文件</span></span></code></pre></div></div>
+<ul>
+<li>
+<p><strong>模式（Pattern）</strong>：筛选条件，只有匹配模式的行才会执行对应的动作，省略则匹配所有行</p>
+</li>
+<li>
+<p><strong>动作（Action）</strong>：对匹配行执行的代码，用 <code>{}</code> 包裹，省略则默认执行 <code>{print $0}</code>（打印整行）</p>
+</li>
+<li>
+<p>输入文件省略时，默认从标准输入（stdin）读取数据</p>
+</li>
+</ul>
+<h3 id="2-脚本三大核心块">2. 脚本三大核心块</h3>
+<p>一个完整的 awk 脚本由三个可选块组成，分工明确：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">BEGIN { 预处理动作 }       # 1. 读取输入前执行，仅执行1次
+</span></span></span><span class="line"><span class="cl"><span class="s1">模式{ 逐行处理动作 }       # 2. 逐行读取输入，匹配模式则执行，循环执行
+</span></span></span><span class="line"><span class="cl"><span class="s1">END { 收尾汇总动作 }       # 3. 所有输入读取完成后执行，仅执行1次
+</span></span></span><span class="line"><span class="cl"><span class="s1">&#39;</span> 输入文件</span></span></code></pre></div></div>
+<ul>
+<li>
+<p><strong>BEGIN 块</strong>：常用于初始化变量、设置分隔符、打印表头、加载配置</p>
+</li>
+<li>
+<p><strong>主体块</strong>：核心处理逻辑，逐行扫描文本的核心循环</p>
+</li>
+<li>
+<p><strong>END 块</strong>：常用于统计结果输出、数据汇总、格式化报表</p>
+</li>
+</ul>
+<h3 id="3-完整执行流程">3. 完整执行流程</h3>
+<ol>
+<li>
+<p>解析命令行选项与参数</p>
+</li>
+<li>
+<p>执行 BEGIN 块中的所有代码</p>
+</li>
+<li>
+<p>循环执行：读取一行输入 → 拆分字段 → 匹配模式 → 执行对应动作，直到输入读取完毕</p>
+</li>
+<li>
+<p>执行 END 块中的所有代码</p>
+</li>
+<li>
+<p>退出程序，返回退出码</p>
+</li>
+</ol>
+<h3 id="4-高频命令行选项">4. 高频命令行选项</h3>
+<table>
+  <thead>
+      <tr>
+          <th>选项</th>
+          <th>功能说明</th>
+          <th>典型示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>-F 分隔符</code></td>
+          <td>指定输入字段分隔符，支持字符串/正则，等价于内置变量 <code>FS</code></td>
+          <td><code>awk -F: '{print $1}' /etc/passwd</code>（冒号分隔）</td>
+      </tr>
+      <tr>
+          <td><code>-v 变量名=值</code></td>
+          <td>执行脚本前定义/传递变量，支持外部 Shell 变量传入</td>
+          <td><code>awk -v num=10 'BEGIN{print num+5}'</code></td>
+      </tr>
+      <tr>
+          <td><code>-f 脚本文件</code></td>
+          <td>从指定文件读取 awk 脚本，适合复杂逻辑封装</td>
+          <td><code>awk -f handle.awk data.txt</code></td>
+      </tr>
+      <tr>
+          <td><code>-W posix</code></td>
+          <td>严格遵循 POSIX 标准，禁用 gawk 扩展特性</td>
+          <td><code>awk -W posix '{print $1}' file</code></td>
+      </tr>
+      <tr>
+          <td><code>-W compat</code></td>
+          <td>兼容传统 awk 语法，禁用 gawk 扩展</td>
+          <td><code>awk -W compat '{print $1}' file</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="二核心内置变量">二、核心内置变量</h2>
+<p>awk 提供了丰富的内置变量，无需声明即可直接使用，按用途分为以下几类：</p>
+<h3 id="1-记录行相关变量">1. 记录（行）相关变量</h3>
+<table>
+  <thead>
+      <tr>
+          <th>变量</th>
+          <th>功能说明</th>
+          <th>核心用法</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>$0</code></td>
+          <td>当前读取的整行完整内容</td>
+          <td><code>awk '{print $0}' file</code> 打印整行</td>
+      </tr>
+      <tr>
+          <td><code>NR</code></td>
+          <td>Number of Record，已读取的总记录数（全局行号），多文件连续计数</td>
+          <td><code>awk 'NR==5' file</code> 打印第5行</td>
+      </tr>
+      <tr>
+          <td><code>FNR</code></td>
+          <td>File Number of Record，当前文件的记录数（文件内行号），多文件单独计数</td>
+          <td><code>awk 'FNR==1{print FILENAME}' file1 file2</code> 打印每个文件名</td>
+      </tr>
+      <tr>
+          <td><code>RS</code></td>
+          <td>Record Separator，输入记录分隔符，**默认值为换行符 ** <strong><code>\n</code></strong></td>
+          <td><code>awk 'BEGIN{RS=&quot;&quot;} {print $1}' file</code> 按空行分隔段落</td>
+      </tr>
+      <tr>
+          <td><code>ORS</code></td>
+          <td>Output Record Separator，输出记录分隔符，**默认值为换行符 ** <strong><code>\n</code></strong></td>
+          <td><code>awk 'BEGIN{ORS=&quot; &quot;} {print $0}' file</code> 将所有行合并为一行</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-字段列相关变量">2. 字段（列）相关变量</h3>
+<table>
+  <thead>
+      <tr>
+          <th>变量</th>
+          <th>功能说明</th>
+          <th>核心用法</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>$1~$n</code></td>
+          <td>当前行的第 n 个字段，由 <code>FS</code> 拆分</td>
+          <td><code>awk '{print $1, $3}' file</code> 打印第1、3列</td>
+      </tr>
+      <tr>
+          <td><code>NF</code></td>
+          <td>Number of Fields，当前行的字段总数（列数）</td>
+          <td><code>awk '{print $NF}' file</code> 打印最后一列；<code>$(NF-1)</code> 打印倒数第二列</td>
+      </tr>
+      <tr>
+          <td><code>FS</code></td>
+          <td>Field Separator，输入字段分隔符，<strong>默认值为连续空白符（空格/制表符/换行符）</strong></td>
+          <td><code>awk 'BEGIN{FS=&quot;:&quot;} {print $1}' /etc/passwd</code></td>
+      </tr>
+      <tr>
+          <td><code>OFS</code></td>
+          <td>Output Field Separator，输出字段分隔符，<strong>默认值为单个空格</strong></td>
+          <td><code>awk 'BEGIN{OFS=&quot;,&quot;} {print $1,$3}' file</code> 输出用逗号分隔</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-文件与参数相关变量">3. 文件与参数相关变量</h3>
+<table>
+  <thead>
+      <tr>
+          <th>变量</th>
+          <th>功能说明</th>
+          <th>核心用法</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>FILENAME</code></td>
+          <td>当前正在处理的输入文件名</td>
+          <td><code>awk '{print FILENAME, FNR, $0}' file1 file2</code></td>
+      </tr>
+      <tr>
+          <td><code>ARGC</code></td>
+          <td>命令行参数的总个数</td>
+          <td><code>awk 'END{print ARGC}' file1 file2</code></td>
+      </tr>
+      <tr>
+          <td><code>ARGV</code></td>
+          <td>命令行参数数组，<code>ARGV[0]</code> 固定为 <code>awk</code>，<code>ARGV[1]</code> 开始为输入文件/参数</td>
+          <td><code>awk 'BEGIN{print ARGV[1]}' file1</code></td>
+      </tr>
+      <tr>
+          <td><code>ENVIRON</code></td>
+          <td>系统环境变量的关联数组</td>
+          <td><code>awk 'BEGIN{print ENVIRON[&quot;HOME&quot;]}'</code> 打印用户家目录</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="4-正则与格式相关变量">4. 正则与格式相关变量</h3>
+<table>
+  <thead>
+      <tr>
+          <th>变量</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>RSTART</code></td>
+          <td><code>match()</code> 函数匹配到的字符串的起始位置，匹配失败为0</td>
+      </tr>
+      <tr>
+          <td><code>RLENGTH</code></td>
+          <td><code>match()</code> 函数匹配到的字符串的长度，匹配失败为-1</td>
+      </tr>
+      <tr>
+          <td><code>SUBSEP</code></td>
+          <td>多维数组下标的分隔符，默认值为不可打印字符 <code>\034</code></td>
+      </tr>
+      <tr>
+          <td><code>OFMT</code></td>
+          <td>数字的默认输出格式，默认值为 <code>%.6g</code></td>
+      </tr>
+      <tr>
+          <td><code>CONVFMT</code></td>
+          <td>数字转字符串的默认格式，默认值为 <code>%.6g</code></td>
+      </tr>
+      <tr>
+          <td><code>IGNORECASE</code></td>
+          <td>gawk 扩展，设置为1时，正则匹配忽略大小写，默认0</td>
+      </tr>
+      <tr>
+          <td><code>FPAT</code></td>
+          <td>gawk 扩展，定义字段的正则匹配规则，替代分隔符模式，适合处理 CSV 等复杂格式</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="三运算符与模式匹配">三、运算符与模式匹配</h2>
+<h3 id="1-完整运算符体系优先级从高到低">1. 完整运算符体系（优先级从高到低）</h3>
+<table>
+  <thead>
+      <tr>
+          <th>运算符类型</th>
+          <th>运算符列表</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>字段引用</td>
+          <td><code>$</code></td>
+          <td>字段引用，如 <code>$1</code>、<code>$NF</code></td>
+      </tr>
+      <tr>
+          <td>自增自减</td>
+          <td><code>++</code> <code>--</code></td>
+          <td>前缀/后缀自增、自减，同C语言</td>
+      </tr>
+      <tr>
+          <td>幂运算</td>
+          <td><code>^</code> <code>**</code></td>
+          <td>幂运算，<code>2^3=8</code>，<code>**</code> 为 gawk 扩展</td>
+      </tr>
+      <tr>
+          <td>算术运算</td>
+          <td><code>*</code> <code>/</code> <code>%</code></td>
+          <td>乘、除、取模</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>+</code> <code>-</code></td>
+          <td>加、减</td>
+      </tr>
+      <tr>
+          <td>字符串拼接</td>
+          <td>空格</td>
+          <td>隐式拼接，<code>&quot;a&quot; &quot;b&quot;</code> 等价于 <code>&quot;ab&quot;</code></td>
+      </tr>
+      <tr>
+          <td>关系运算</td>
+          <td><code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code></td>
+          <td>数值/字符串比较</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>==</code> <code>!=</code></td>
+          <td>精确等于、不等于</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>~</code> <code>!~</code></td>
+          <td>正则匹配、正则不匹配（核心）</td>
+      </tr>
+      <tr>
+          <td>逻辑运算</td>
+          <td><code>!</code></td>
+          <td>逻辑非</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>&amp;&amp;</code></td>
+          <td>逻辑与（短路）</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>`</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>三元运算</td>
+          <td><code>?:</code></td>
+          <td><code>条件?表达式1:表达式2</code>，同C语言</td>
+      </tr>
+      <tr>
+          <td>赋值运算</td>
+          <td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code> <code>^=</code></td>
+          <td>赋值与复合赋值</td>
+      </tr>
+      <tr>
+          <td>数组成员</td>
+          <td><code>in</code></td>
+          <td>判断下标是否存在于数组中</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-核心模式类型">2. 核心模式类型</h3>
+<p>awk 是模式驱动的语言，模式决定了动作是否执行，支持以下6种模式：</p>
+<h4 id="1空模式">（1）空模式</h4>
+<p>省略模式，匹配所有输入行，每行都会执行动作，是最基础的用法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{print $1}&#39;</span> file  <span class="c1"># 所有行都打印第1列</span></span></span></code></pre></div></div>
+<h4 id="2正则表达式模式">（2）正则表达式模式</h4>
+<p>格式：<code>/正则表达式/</code>，匹配内容符合正则的行，支持 POSIX 正则规范：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;/error/&#39;</span> file  <span class="c1"># 打印包含 error 的行</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;$1 ~ /^root/&#39;</span> /etc/passwd  <span class="c1"># 第1列以 root 开头的行</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;$7 !~ /nologin$/&#39;</span> /etc/passwd  <span class="c1"># 第7列不以 nologin 结尾的行</span></span></span></code></pre></div></div>
+<h4 id="3关系表达式模式">（3）关系表达式模式</h4>
+<p>用关系运算符构成的条件，条件为真时执行动作：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;NR&gt;5 &amp;&amp; NR&lt;10&#39;</span> file  <span class="c1"># 打印第6-9行</span>
+</span></span><span class="line"><span class="cl">awk -F: <span class="s1">&#39;$3&gt;=1000&#39;</span> /etc/passwd  <span class="c1"># 打印普通用户（UID&gt;=1000）</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;NF==5&#39;</span> file  <span class="c1"># 打印字段数为5的行</span></span></span></code></pre></div></div>
+<h4 id="4范围模式">（4）范围模式</h4>
+<p>格式：<code>模式1,模式2</code>，从匹配模式1的行开始，到匹配模式2的行结束，中间所有行都执行动作：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;/start/,/end/&#39;</span> file  <span class="c1"># 打印 start 到 end 之间的所有行</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;NR==10,NR==20&#39;</span> file  <span class="c1"># 打印第10到20行</span></span></span></code></pre></div></div>
+<p>注意：范围模式是贪婪匹配，若没有匹配到模式2，会一直匹配到文件末尾。</p>
+<h4 id="5特殊模式">（5）特殊模式</h4>
+<ul>
+<li>
+<p><code>BEGIN</code>：读取输入前执行，仅执行1次</p>
+</li>
+<li>
+<p><code>END</code>：所有输入读取完成后执行，仅执行1次</p>
+</li>
+<li>
+<p><code>BEGINFILE</code>/<code>ENDFILE</code>：gawk 扩展，处理每个文件的前后分别执行，适合多文件处理的初始化/收尾</p>
+</li>
+</ul>
+<h4 id="6模式组合">（6）模式组合</h4>
+<p>支持用逻辑运算符 <code>&amp;&amp;</code> <code>||</code> <code>!</code> 组合多个模式，实现复杂筛选：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;NR&gt;10 &amp;&amp; /error/ &amp;&amp; $NF&gt;500&#39;</span> file  <span class="c1"># 10行后、包含error、最后一列大于500的行</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="四流程控制语句">四、流程控制语句</h2>
+<p>awk 支持类C语言的流程控制语法，可实现复杂的逻辑处理。</p>
+<h3 id="1-条件判断">1. 条件判断</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 单分支</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">(</span>条件<span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    动作
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 双分支</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">(</span>条件<span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    动作1
+</span></span><span class="line"><span class="cl"><span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    动作2
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 多分支</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">(</span>条件1<span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    动作1
+</span></span><span class="line"><span class="cl"><span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span>条件2<span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    动作2
+</span></span><span class="line"><span class="cl"><span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    动作3
+</span></span><span class="line"><span class="cl"><span class="o">}</span></span></span></code></pre></div></div>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">awk -F: <span class="s1">&#39;{
+</span></span></span><span class="line"><span class="cl"><span class="s1">    if($3==0) print &#34;管理员用户：&#34;$1;
+</span></span></span><span class="line"><span class="cl"><span class="s1">    else if($3&gt;=1000) print &#34;普通用户：&#34;$1;
+</span></span></span><span class="line"><span class="cl"><span class="s1">    else print &#34;系统用户：&#34;$1;
+</span></span></span><span class="line"><span class="cl"><span class="s1">}&#39;</span> /etc/passwd</span></span></code></pre></div></div>
+<h3 id="2-循环语句">2. 循环语句</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># for 循环（固定次数）</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="o">(</span>初始化<span class="p">;</span> 条件<span class="p">;</span> 递增<span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    动作
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># for 循环（遍历数组）</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="o">(</span>下标 in 数组<span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    动作
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># while 循环</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="o">(</span>条件<span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    动作
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># do-while 循环（先执行一次，再判断）</span>
+</span></span><span class="line"><span class="cl"><span class="k">do</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    动作
+</span></span><span class="line"><span class="cl"><span class="o">}</span> <span class="k">while</span> <span class="o">(</span>条件<span class="o">)</span></span></span></code></pre></div></div>
+<p>示例1：遍历字段</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{for(i=1;i&lt;=NF;i++) print &#34;第&#34;i&#34;列：&#34;$i}&#39;</span> file</span></span></code></pre></div></div>
+<p>示例2：遍历数组</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{arr[$1]++} END{for(i in arr) print i, arr[i]}&#39;</span> access.log</span></span></code></pre></div></div>
+<h3 id="3-流程控制关键字">3. 流程控制关键字</h3>
+<table>
+  <thead>
+      <tr>
+          <th>关键字</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>break</code></td>
+          <td>立即跳出当前循环，执行循环后的代码</td>
+      </tr>
+      <tr>
+          <td><code>continue</code></td>
+          <td>跳过本次循环剩余代码，直接进入下一次循环</td>
+      </tr>
+      <tr>
+          <td><code>next</code></td>
+          <td>跳过当前行的所有后续处理，直接读取下一行，进入下一轮主循环</td>
+      </tr>
+      <tr>
+          <td><code>exit n</code></td>
+          <td>立即终止主循环，执行 END 块，n 为退出码（省略则为0）</td>
+      </tr>
+      <tr>
+          <td>示例：</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;/^#/{next} {print $0}&#39;</span> file  <span class="c1"># 跳过注释行，打印其他行</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;NR&gt;100{exit} {print NR, $0}&#39;</span> file  <span class="c1"># 打印前100行后退出</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="五内置函数大全">五、内置函数大全</h2>
+<p>awk 提供了丰富的内置函数，覆盖字符串、数值、时间、IO 等场景，是文本处理的核心能力。</p>
+<h3 id="1-高频字符串处理函数">1. 高频字符串处理函数</h3>
+<table>
+  <thead>
+      <tr>
+          <th>函数</th>
+          <th>语法</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>length</code></td>
+          <td><code>length(str)</code></td>
+          <td>返回字符串 str 的长度，无参数则返回 <code>$0</code> 的长度</td>
+      </tr>
+      <tr>
+          <td><code>index</code></td>
+          <td><code>index(str, substr)</code></td>
+          <td>返回 substr 在 str 中首次出现的位置，找不到返回0</td>
+      </tr>
+      <tr>
+          <td><code>substr</code></td>
+          <td><code>substr(str, start, len)</code></td>
+          <td>从 str 的 start 位置截取 len 个字符，len 省略则截取到末尾</td>
+      </tr>
+      <tr>
+          <td><code>split</code></td>
+          <td><code>split(str, arr, sep)</code></td>
+          <td>将 str 按 sep 拆分存入数组 arr，返回字段总数，sep 省略则使用 <code>FS</code></td>
+      </tr>
+      <tr>
+          <td><code>match</code></td>
+          <td><code>match(str, regex)</code></td>
+          <td>在 str 中匹配正则 regex，返回匹配起始位置，设置 <code>RSTART</code> 和 <code>RLENGTH</code>，找不到返回0</td>
+      </tr>
+      <tr>
+          <td><code>sub</code></td>
+          <td><code>sub(regex, repl, str)</code></td>
+          <td>替换 str 中<strong>第一个</strong>匹配 regex 的内容为 repl，str 省略则为 <code>$0</code>，支持 <code>&amp;</code> 引用匹配内容</td>
+      </tr>
+      <tr>
+          <td><code>gsub</code></td>
+          <td><code>sub(regex, repl, str)</code></td>
+          <td>全局替换，替换 str 中<strong>所有</strong>匹配 regex 的内容，其他同 <code>sub</code></td>
+      </tr>
+      <tr>
+          <td><code>tolower</code></td>
+          <td><code>tolower(str)</code></td>
+          <td>将字符串 str 全部转为小写</td>
+      </tr>
+      <tr>
+          <td><code>toupper</code></td>
+          <td><code>toupper(str)</code></td>
+          <td>将字符串 str 全部转为大写</td>
+      </tr>
+      <tr>
+          <td><code>sprintf</code></td>
+          <td><code>sprintf(format, args)</code></td>
+          <td>格式化字符串，返回格式化后的结果，用法同C语言 <code>sprintf</code></td>
+      </tr>
+      <tr>
+          <td>示例：</td>
+          <td></td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 全局替换</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{gsub(/foo/, &#34;bar&#34;); print}&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 截取字符串</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{print substr($0, 1, 10)}&#39;</span> file  <span class="c1"># 截取每行前10个字符</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 字符串拆分</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{split($0, arr, &#34;,&#34;); print arr[1], arr[3]}&#39;</span> file.csv</span></span></code></pre></div></div>
+<h3 id="2-数值计算函数">2. 数值计算函数</h3>
+<table>
+  <thead>
+      <tr>
+          <th>函数</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>int(x)</code></td>
+          <td>对 x 取整，向0截断，如 <code>int(3.9)=3</code>，<code>int(-3.9)=-3</code></td>
+      </tr>
+      <tr>
+          <td><code>sqrt(x)</code></td>
+          <td>返回 x 的平方根</td>
+      </tr>
+      <tr>
+          <td><code>exp(x)</code></td>
+          <td>返回 e 的 x 次方</td>
+      </tr>
+      <tr>
+          <td><code>log(x)</code></td>
+          <td>返回 x 的自然对数</td>
+      </tr>
+      <tr>
+          <td><code>sin(x)</code>/<code>cos(x)</code>/<code>atan2(y,x)</code></td>
+          <td>三角函数</td>
+      </tr>
+      <tr>
+          <td><code>rand()</code></td>
+          <td>返回 0~1 之间的随机浮点数</td>
+      </tr>
+      <tr>
+          <td><code>srand(x)</code></td>
+          <td>设置随机数种子，x 省略则使用当前系统时间，返回旧种子</td>
+      </tr>
+      <tr>
+          <td>示例：</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 生成0-100的随机整数</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;BEGIN{srand(); print int(rand()*100)}&#39;</span></span></span></code></pre></div></div>
+<h3 id="3-时间处理函数gawk-扩展">3. 时间处理函数（gawk 扩展）</h3>
+<table>
+  <thead>
+      <tr>
+          <th>函数</th>
+          <th>语法</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>systime()</code></td>
+          <td><code>systime()</code></td>
+          <td>返回当前时间的 Unix 时间戳（秒级）</td>
+      </tr>
+      <tr>
+          <td><code>strftime</code></td>
+          <td><code>strftime(format, timestamp)</code></td>
+          <td>将时间戳格式化为指定格式的字符串，format 同 date 命令</td>
+      </tr>
+      <tr>
+          <td><code>mktime</code></td>
+          <td><code>mktime(&quot;YYYY MM DD HH MM SS&quot;)</code></td>
+          <td>将时间字符串转为 Unix 时间戳</td>
+      </tr>
+      <tr>
+          <td>示例：</td>
+          <td></td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 打印当前时间</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;BEGIN{print strftime(&#34;%Y-%m-%d %H:%M:%S&#34;, systime())}&#39;</span></span></span></code></pre></div></div>
+<h3 id="4-io-与系统函数">4. IO 与系统函数</h3>
+<table>
+  <thead>
+      <tr>
+          <th>函数</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>getline</code></td>
+          <td>读取下一行输入，可赋值给变量，成功返回1，EOF返回0，出错返回-1</td>
+      </tr>
+      <tr>
+          <td><code>close(filename)</code></td>
+          <td>关闭打开的文件/管道，避免 too many open files 错误</td>
+      </tr>
+      <tr>
+          <td><code>system(cmd)</code></td>
+          <td>执行 Shell 命令，返回命令的退出码</td>
+      </tr>
+      <tr>
+          <td><code>fflush()</code></td>
+          <td>刷新输出缓冲区，实时打印内容</td>
+      </tr>
+      <tr>
+          <td>示例：</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 执行Shell命令</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;BEGIN{system(&#34;ls -l&#34;)}&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 读取下一行</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{getline next_line; print $0, next_line}&#39;</span> file</span></span></code></pre></div></div>
+<hr>
+<h2 id="六数组关联数组">六、数组（关联数组）</h2>
+<p>awk 的数组是<strong>关联数组（哈希表）</strong>，是其核心特色之一，下标可以是数字、字符串，无需提前声明大小，支持动态扩容。</p>
+<h3 id="1-数组定义与赋值">1. 数组定义与赋值</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 直接赋值</span>
+</span></span><span class="line"><span class="cl">arr<span class="o">[</span><span class="s2">&#34;name&#34;</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&#34;zhangsan&#34;</span>
+</span></span><span class="line"><span class="cl">arr<span class="o">[</span>1<span class="o">]</span> <span class="o">=</span> <span class="m">100</span>
+</span></span><span class="line"><span class="cl">arr<span class="o">[</span><span class="s2">&#34;ip_192.168.1.1&#34;</span><span class="o">]</span> <span class="o">=</span> <span class="m">5</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 批量赋值（拆分字符串）</span>
+</span></span><span class="line"><span class="cl">split<span class="o">(</span><span class="s2">&#34;a,b,c,d&#34;</span>, arr, <span class="s2">&#34;,&#34;</span><span class="o">)</span>  <span class="c1"># arr[1]=a, arr[2]=b, arr[3]=c, arr[4]=d</span></span></span></code></pre></div></div>
+<h3 id="2-数组遍历">2. 数组遍历</h3>
+<p>awk 数组遍历只能用 <code>for (下标 in 数组)</code> 的格式，遍历的是数组的下标，而非值，且遍历顺序不固定：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{arr[$1]++} END{
+</span></span></span><span class="line"><span class="cl"><span class="s1">    for (key in arr) {
+</span></span></span><span class="line"><span class="cl"><span class="s1">        print &#34;key:&#34;, key, &#34;value:&#34;, arr[key]
+</span></span></span><span class="line"><span class="cl"><span class="s1">    }
+</span></span></span><span class="line"><span class="cl"><span class="s1">}&#39;</span> access.log</span></span></code></pre></div></div>
+<h3 id="3-成员判断与删除">3. 成员判断与删除</h3>
+<ul>
+<li>
+<p><strong>成员判断</strong>：必须用 <code>if (key in arr)</code>，避免访问不存在的下标时自动创建元素</p>
+</li>
+<li>
+<p><strong>删除元素</strong>：用 <code>delete</code> 关键字</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 判断成员是否存在</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">(</span><span class="s2">&#34;root&#34;</span> in user_arr<span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    print <span class="s2">&#34;root 存在&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 删除单个元素</span>
+</span></span><span class="line"><span class="cl">delete arr<span class="o">[</span><span class="s2">&#34;root&#34;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 删除整个数组</span>
+</span></span><span class="line"><span class="cl">delete arr</span></span></code></pre></div></div>
+<h3 id="4-多维数组模拟">4. 多维数组模拟</h3>
+<p>awk 不支持真正的多维数组，通过 <code>SUBSEP</code> 分隔符模拟多维数组：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 二维数组赋值</span>
+</span></span><span class="line"><span class="cl">arr<span class="o">[</span><span class="s2">&#34;a&#34;</span>, <span class="s2">&#34;b&#34;</span><span class="o">]</span> <span class="o">=</span> <span class="m">100</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 等价于 arr[&#34;a&#34; SUBSEP &#34;b&#34;] = 100</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 二维数组遍历</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="o">(</span>key in arr<span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    split<span class="o">(</span>key, idx, SUBSEP<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    print <span class="s2">&#34;第一维：&#34;</span>idx<span class="o">[</span>1<span class="o">]</span>, <span class="s2">&#34;第二维：&#34;</span>idx<span class="o">[</span>2<span class="o">]</span>, <span class="s2">&#34;值：&#34;</span>arr<span class="o">[</span>key<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="七高频实战场景可直接复制使用">七、高频实战场景（可直接复制使用）</h2>
+<h3 id="1-基础列提取与格式化">1. 基础列提取与格式化</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 提取/etc/passwd的用户名和登录Shell</span>
+</span></span><span class="line"><span class="cl">awk -F: <span class="s1">&#39;{print $1, $7}&#39;</span> /etc/passwd
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 格式化输出，左对齐用户名，右对齐UID</span>
+</span></span><span class="line"><span class="cl">awk -F: <span class="s1">&#39;{printf &#34;%-20s %5d\n&#34;, $1, $3}&#39;</span> /etc/passwd
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 打印最后一列</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{print $NF}&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 打印除最后一列外的所有列</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{$NF=&#34;&#34;; print $0}&#39;</span> file</span></span></code></pre></div></div>
+<h3 id="2-行过滤与筛选">2. 行过滤与筛选</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 打印第5行</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;NR==5&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 打印前10行（替代head）</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;NR&lt;=10&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 打印包含error的行（替代grep）</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;/error/&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 打印不包含comment的行（替代grep -v）</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;!/comment/&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 打印空行的行号</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;/^$/{print NR}&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 打印行号大于5且字段数等于6的行</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;NR&gt;5 &amp;&amp; NF==6&#39;</span> file</span></span></code></pre></div></div>
+<h3 id="3-数值统计与计算">3. 数值统计与计算</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 统计文件行数（替代wc -l）</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;END{print NR}&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 统计第二列的总和</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{sum+=$2} END{print &#34;总和：&#34;, sum}&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 统计第三列的平均值</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{sum+=$3; n++} END{print &#34;平均值：&#34;, sum/n}&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 统计最大值、最小值</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">BEGIN{max=0; min=999999}
+</span></span></span><span class="line"><span class="cl"><span class="s1">{
+</span></span></span><span class="line"><span class="cl"><span class="s1">    if($2&gt;max) max=$2;
+</span></span></span><span class="line"><span class="cl"><span class="s1">    if($2&lt;min) min=$2;
+</span></span></span><span class="line"><span class="cl"><span class="s1">}
+</span></span></span><span class="line"><span class="cl"><span class="s1">END{print &#34;最大值：&#34;, max, &#34;最小值：&#34;, min}
+</span></span></span><span class="line"><span class="cl"><span class="s1">&#39;</span> file</span></span></code></pre></div></div>
+<h3 id="4-文本去重与频次统计">4. 文本去重与频次统计</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 整行去重，保留第一次出现的行（替代uniq，无需排序）</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;!arr[$0]++&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 统计第一列的不重复值出现次数</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{arr[$1]++} END{for(i in arr) print i, arr[i]}&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 统计Nginx访问日志中IP的访问次数，按次数降序排序</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{arr[$1]++} END{for(i in arr) print i, arr[i]}&#39;</span> access.log <span class="p">|</span> sort -rnk2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 统计HTTP状态码的出现次数</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{arr[$9]++} END{for(k in arr) print &#34;状态码：&#34;k, &#34;次数：&#34;arr[k]}&#39;</span> access.log</span></span></code></pre></div></div>
+<h3 id="5-文本替换与修改">5. 文本替换与修改</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 将所有foo替换为bar（替代sed）</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{gsub(/foo/, &#34;bar&#34;); print}&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 仅在包含error的行中替换foo为bar</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;/error/{gsub(/foo/, &#34;bar&#34;)} {print}&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 去掉行首空格</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{sub(/^[ \t]+/, &#34;&#34;); print}&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 去掉行尾空格</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{sub(/[ \t]+$/, &#34;&#34;); print}&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 去掉行首行尾空格</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{gsub(/^[ \t]+|[ \t]+$/, &#34;&#34;); print}&#39;</span> file</span></span></code></pre></div></div>
+<h3 id="6-日志分析实战">6. 日志分析实战</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 找出Nginx日志中响应时间超过500ms的慢请求</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{
+</span></span></span><span class="line"><span class="cl"><span class="s1">    gsub(/cost=|ms/, &#34;&#34;, $4);
+</span></span></span><span class="line"><span class="cl"><span class="s1">    if($4 &gt; 500) print &#34;慢请求：&#34; $0
+</span></span></span><span class="line"><span class="cl"><span class="s1">}&#39;</span> access.log
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 打印匹配error的行及其前后2行</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{a[NR]=$0} /error/{for(i=NR-2;i&lt;=NR+2;i++) if(i&gt;0) print a[i]}&#39;</span> file
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 统计SSH登录失败的IP地址</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;/Invalid user/{arr[$10]++} END{for(i in arr) print i, arr[i]}&#39;</span> /var/log/secure</span></span></code></pre></div></div>
+<h3 id="7-多文件处理">7. 多文件处理</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 分别统计每个文件的行数</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">FNR==1{
+</span></span></span><span class="line"><span class="cl"><span class="s1">    if(NR&gt;1) print fname, cnt;
+</span></span></span><span class="line"><span class="cl"><span class="s1">    fname=FILENAME;
+</span></span></span><span class="line"><span class="cl"><span class="s1">    cnt=0;
+</span></span></span><span class="line"><span class="cl"><span class="s1">}
+</span></span></span><span class="line"><span class="cl"><span class="s1">{cnt++}
+</span></span></span><span class="line"><span class="cl"><span class="s1">END{print fname, cnt}
+</span></span></span><span class="line"><span class="cl"><span class="s1">&#39;</span> file1 file2 file3
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 合并两个文件，按关键字匹配</span>
+</span></span><span class="line"><span class="cl">awk -F: <span class="s1">&#39;NR==FNR{a[$1]=$3; next} {print $1, a[$1]}&#39;</span> file1 file2</span></span></code></pre></div></div>
+<hr>
+<h2 id="八高级用法">八、高级用法</h2>
+<h3 id="1-自定义函数">1. 自定义函数</h3>
+<p>awk 支持自定义函数，实现代码复用，语法如下：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">function</span> 函数名<span class="o">(</span>参数列表<span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    函数体
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> 返回值  <span class="c1"># 可选</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span></span></span></code></pre></div></div>
+<p>示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1"># 定义求最大值的函数
+</span></span></span><span class="line"><span class="cl"><span class="s1">function max(a, b) {
+</span></span></span><span class="line"><span class="cl"><span class="s1">    return a &gt; b ? a : b
+</span></span></span><span class="line"><span class="cl"><span class="s1">}
+</span></span></span><span class="line"><span class="cl"><span class="s1"># 主逻辑
+</span></span></span><span class="line"><span class="cl"><span class="s1">{
+</span></span></span><span class="line"><span class="cl"><span class="s1">    print max($1, $2)
+</span></span></span><span class="line"><span class="cl"><span class="s1">}
+</span></span></span><span class="line"><span class="cl"><span class="s1">&#39;</span> file</span></span></code></pre></div></div>
+<h3 id="2-复杂格式处理csv">2. 复杂格式处理（CSV）</h3>
+<p>gawk 提供 <code>FPAT</code> 变量，可定义字段的正则规则，完美处理带引号、包含分隔符的 CSV 文件：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 处理标准CSV，正确解析带引号的字段</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">BEGIN{
+</span></span></span><span class="line"><span class="cl"><span class="s1">    FPAT = &#34;([^,]+)|(\&#34;[^\&#34;]+\&#34;)&#34;  # 定义CSV字段规则
+</span></span></span><span class="line"><span class="cl"><span class="s1">    OFS = &#34;,&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s1">}
+</span></span></span><span class="line"><span class="cl"><span class="s1">{
+</span></span></span><span class="line"><span class="cl"><span class="s1">    print $1, $3, $5  # 提取第1、3、5列
+</span></span></span><span class="line"><span class="cl"><span class="s1">}
+</span></span></span><span class="line"><span class="cl"><span class="s1">&#39;</span> data.csv</span></span></code></pre></div></div>
+<h3 id="3-与shell交互">3. 与Shell交互</h3>
+<h4 id="1向awk传递shell变量">（1）向awk传递Shell变量</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 方法1：-v 选项（推荐，支持特殊字符）</span>
+</span></span><span class="line"><span class="cl"><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;root&#34;</span>
+</span></span><span class="line"><span class="cl">awk -v <span class="nv">user</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$name</span><span class="s2">&#34;</span> -F: <span class="s1">&#39;$1==user{print $0}&#39;</span> /etc/passwd
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 方法2：环境变量</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">name</span><span class="o">=</span><span class="s2">&#34;root&#34;</span>
+</span></span><span class="line"><span class="cl">awk -F: <span class="s1">&#39;$1==ENVIRON[&#34;name&#34;]{print $0}&#39;</span> /etc/passwd</span></span></code></pre></div></div>
+<h4 id="2awk中调用shell命令">（2）awk中调用Shell命令</h4>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 用system()执行命令</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;BEGIN{system(&#34;echo 当前时间：$(date +%Y-%m-%d)&#34;)}&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 用管道获取命令输出</span>
+</span></span><span class="line"><span class="cl">awk <span class="s1">&#39;BEGIN{
+</span></span></span><span class="line"><span class="cl"><span class="s1">    while(&#34;ls -l&#34; | getline line) {
+</span></span></span><span class="line"><span class="cl"><span class="s1">        print line
+</span></span></span><span class="line"><span class="cl"><span class="s1">    }
+</span></span></span><span class="line"><span class="cl"><span class="s1">    close(&#34;ls -l&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="s1">}&#39;</span></span></span></code></pre></div></div>
+<h3 id="4-大文件处理优化">4. 大文件处理优化</h3>
+<ol>
+<li>
+<p><strong>流式处理</strong>：避免用数组缓存所有行，尽量逐行处理，减少内存占用</p>
+</li>
+<li>
+<p><strong>提前终止</strong>：满足条件时用 <code>exit</code> 提前退出，避免读取整个文件</p>
+</li>
+<li>
+<p><strong>减少正则</strong>：能用字符串精确匹配（<code>==</code>）就不用正则匹配（<code>~</code>）</p>
+</li>
+<li>
+<p><strong>及时关闭文件/管道</strong>：用 <code>close()</code> 关闭打开的文件，避免句柄泄漏</p>
+</li>
+<li>
+<p><strong>前置筛选</strong>：用 <code>grep</code> 先过滤核心行，再用 awk 处理，减少 awk 处理的数据量</p>
+</li>
+</ol>
+<hr>
+<h2 id="九避坑指南与注意事项">九、避坑指南与注意事项</h2>
+<ol>
+<li>
+<p><strong>字段分隔符的坑</strong></p>
+<ul>
+<li>
+<p>默认 <code>FS</code> 是<strong>连续空白符</strong>，多个空格/制表符会合并为一个分隔符，行首行尾的空白会被忽略；而 <code>-F&quot; &quot;</code> 是单个空格作为分隔符，二者行为不同</p>
+</li>
+<li>
+<p>特殊字符分隔符（如 <code>|</code> <code>*</code> <code>.</code>）是正则元字符，需要转义，如 <code>-F&quot;\|&quot;</code> 或 <code>-F&quot;[|]&quot;</code></p>
+</li>
+<li>
+<p>多分隔符用正则字符集，如 <code>-F&quot;[:,;]&quot;</code> 同时用冒号、逗号、分号分隔</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>变量与类型的坑</strong></p>
+<ul>
+<li>
+<p>awk 是弱类型语言，字符串和数字自动转换，非数字字符串参与运算时会被视为0，如 <code>&quot;abc&quot;+123=123</code></p>
+</li>
+<li>
+<p>字符串精确匹配必须用双引号包裹，如 <code>$1==&quot;root&quot;</code>，<code>$1==root</code> 会把 <code>root</code> 视为变量，而非字符串</p>
+</li>
+<li>
+<p>浮点数运算存在精度问题，如 <code>0.1+0.2!=0.3</code>，处理金额时建议放大为整数运算</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>数组使用的坑</strong></p>
+<ul>
+<li>
+<p>访问不存在的数组下标时，会<strong>自动创建该下标</strong>，值为空字符串，因此判断成员是否存在必须用 <code>if (key in arr)</code>，而非 <code>if (arr[key]!=&quot;&quot;)</code></p>
+</li>
+<li>
+<p><code>for (i in arr)</code> 遍历的是数组的下标，而非值，且遍历顺序不固定，需要有序输出需自行排序</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>正则匹配的坑</strong></p>
+<ul>
+<li>
+<p><code>~</code> 是<strong>包含匹配</strong>，<code>==</code> 是<strong>精确匹配</strong>，二者不可混用。如 <code>$1 ~ /root/</code> 匹配包含 root 的内容，<code>$1 == &quot;root&quot;</code> 仅匹配完全等于 root 的内容</p>
+</li>
+<li>
+<p>正则匹配默认区分大小写，忽略大小写需设置 <code>IGNORECASE=1</code>（gawk 扩展）</p>
+</li>
+<li>
+<p>范围模式 <code>/start/,/end/</code> 是贪婪匹配，没有结束标记会匹配到文件末尾</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>跨平台兼容性</strong></p>
+<ul>
+<li>
+<p><code>IGNORECASE</code>、<code>FPAT</code>、<code>BEGINFILE</code>、<code>systime()</code> 等是 gawk 扩展，POSIX 标准 awk 不支持，跨平台脚本需避免使用</p>
+</li>
+<li>
+<p>不同系统的 awk 版本差异较大，Linux 用 gawk，macOS 默认用 BSD awk，很多扩展功能不支持</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>其他常见坑</strong></p>
+<ul>
+<li>
+<p>空行的 <code>NF=0</code>，此时 <code>$NF</code> 等价于 <code>$0</code>，也就是空行，使用前需判断 <code>NF&gt;0</code></p>
+</li>
+<li>
+<p>awk 脚本放在单引号中，单引号内无法直接使用单引号，需用 <code>'''</code> 或 <code>\x27</code> 替代</p>
+</li>
+<li>
+<p><code>next</code> 仅跳过当前行的主循环处理，不会跳过 END 块；<code>exit</code> 会终止主循环，但仍会执行 END 块</p>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>（注：文档部分内容可能由 AI 生成）</p>
+</blockquote>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-01-15</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/010_awk%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/dev-tools/">开发工具</a>,&nbsp;<a href="/blog/tags/shell/">Shell</a>,&nbsp;<a href="/blog/tags/awk/">Awk</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/003_zsh%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="Zsh 语法详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>Zsh 语法详细总结</a>
+            <a href="/blog/011_sed%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="sed 命令使用详细总结">sed 命令使用详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

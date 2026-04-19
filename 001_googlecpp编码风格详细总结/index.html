@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Google C&#43;&#43; 编码风格详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_googlecpp%E7%BC%96%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="Google C&#43;&#43; 编码风格详细总结">
+  <meta property="og:description" content="Google C&#43;&#43; 编码风格详细总结 本文基于Google官方最新C&#43;&#43; Style Guide（2025版，目标C&#43;&#43;20标准）编写，完整覆盖规范的核心设计哲学、强制规则与工程最佳实践，是工业界最具影响力的C&#43;&#43;工程化编码标准。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-04-05T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-04-05T10:00:00+08:00">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="Google C&#43;&#43; 编码风格详细总结">
+  <meta name="twitter:description" content="Google C&#43;&#43; 编码风格详细总结 本文基于Google官方最新C&#43;&#43; Style Guide（2025版，目标C&#43;&#43;20标准）编写，完整覆盖规范的核心设计哲学、强制规则与工程最佳实践，是工业界最具影响力的C&#43;&#43;工程化编码标准。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/001_googlecpp%E7%BC%96%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/003_colcon%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/002_misracpp2008%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Google C++ 编码风格详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/001_googlecpp%E7%BC%96%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "","wordcount":  6285 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/001_googlecpp%E7%BC%96%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-04-05T09:00:00+08:00","dateModified": "2026-04-05T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/001_googlecpp%E7%BC%96%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/001_googlecpp%E7%BC%96%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Google C++ 编码风格详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/"><i class="far fa-folder" aria-hidden="true"></i>Categories</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-04-05">2026-04-05</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 6285 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 13 分钟&nbsp;<span id="/blog/001_googlecpp%E7%BC%96%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="Google C&#43;&#43; 编码风格详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一核心设计哲学">一、核心设计哲学</a></li>
+    <li><a href="#二c版本与基础约束">二、C++版本与基础约束</a></li>
+    <li><a href="#三头文件规范">三、头文件规范</a>
+      <ul>
+        <li><a href="#31-基础要求">3.1 基础要求</a></li>
+        <li><a href="#32-头文件保护宏">3.2 头文件保护宏</a></li>
+        <li><a href="#33-前置声明">3.3 前置声明</a></li>
+        <li><a href="#34-内联函数">3.4 内联函数</a></li>
+        <li><a href="#35-头文件包含顺序与格式">3.5 头文件包含顺序与格式</a></li>
+      </ul>
+    </li>
+    <li><a href="#四作用域与命名空间规则">四、作用域与命名空间规则</a>
+      <ul>
+        <li><a href="#41-命名空间核心规则">4.1 命名空间核心规则</a></li>
+        <li><a href="#42-变量作用域规则">4.2 变量作用域规则</a></li>
+      </ul>
+    </li>
+    <li><a href="#五类与对象设计规范">五、类与对象设计规范</a>
+      <ul>
+        <li><a href="#51-核心设计原则">5.1 核心设计原则</a></li>
+        <li><a href="#52-构造函数规则">5.2 构造函数规则</a></li>
+        <li><a href="#53-成员声明顺序">5.3 成员声明顺序</a></li>
+        <li><a href="#54-其他类规则">5.4 其他类规则</a></li>
+      </ul>
+    </li>
+    <li><a href="#六函数设计规则">六、函数设计规则</a>
+      <ul>
+        <li><a href="#61-函数基础规范">6.1 函数基础规范</a></li>
+        <li><a href="#62-特殊函数规则">6.2 特殊函数规则</a></li>
+      </ul>
+    </li>
+    <li><a href="#七命名约定">七、命名约定</a>
+      <ul>
+        <li><a href="#命名补充规则">命名补充规则</a></li>
+      </ul>
+    </li>
+    <li><a href="#八代码格式化规则">八、代码格式化规则</a></li>
+    <li><a href="#九注释规范">九、注释规范</a>
+      <ul>
+        <li><a href="#91-核心原则">9.1 核心原则</a></li>
+        <li><a href="#92-注释分类与规则">9.2 注释分类与规则</a></li>
+      </ul>
+    </li>
+    <li><a href="#十核心特性管控与最佳实践">十、核心特性管控与最佳实践</a>
+      <ul>
+        <li><a href="#101-类型与类型转换">10.1 类型与类型转换</a></li>
+        <li><a href="#102-内存管理">10.2 内存管理</a></li>
+        <li><a href="#103-现代c特性使用边界">10.3 现代C++特性使用边界</a></li>
+        <li><a href="#104-多线程与并发">10.4 多线程与并发</a></li>
+      </ul>
+    </li>
+    <li><a href="#十一其他重要规则">十一、其他重要规则</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="google-c-编码风格详细总结">Google C++ 编码风格详细总结</h1>
+<p>本文基于<strong>Google官方最新C++ Style Guide</strong>（2025版，目标C++20标准）编写，完整覆盖规范的核心设计哲学、强制规则与工程最佳实践，是工业界最具影响力的C++工程化编码标准。</p>
+<h2 id="一核心设计哲学">一、核心设计哲学</h2>
+<p>规范的所有规则均围绕以下核心目标设计，是判断规则适用边界的根本依据：</p>
+<ol>
+<li><strong>读者优先</strong>：代码的可读性优先于编写便利性，代码应像散文而非密码，让新读者能快速理解逻辑。</li>
+<li><strong>一致性优先</strong>：全代码库保持统一风格，避免个人偏好导致的碎片化，降低团队协作成本。</li>
+<li><strong>风险管控</strong>：主动规避C++中易引发未定义行为、隐式bug、维护困难的语言特性，按「风险-收益比」严格管控高级特性的使用。</li>
+<li><strong>工程可扩展性</strong>：适配超大规模代码库的演进，避免构建依赖膨胀、命名空间污染、ABI兼容问题。</li>
+<li><strong>适度优化</strong>：仅在性能收益可验证时牺牲可读性，常规场景优先保证可维护性。</li>
+</ol>
+<h2 id="二c版本与基础约束">二、C++版本与基础约束</h2>
+<ol>
+<li><strong>目标标准</strong>：代码需面向<strong>C++20</strong>，禁止使用C++23及以上的新特性；使用C++17/C++20特性前需考虑项目可移植性。</li>
+<li><strong>禁用非标准扩展</strong>：不使用编译器专属的非标准语法扩展，保证跨编译器兼容性。</li>
+<li><strong>禁用特性红线</strong>：明确禁止使用异常（exceptions）、RTTI（运行时类型识别，如<code>dynamic_cast</code>）、C++20 Modules、<code>&lt;ratio&gt;</code>/<code>&lt;cfenv&gt;</code>/<code>&lt;filesystem&gt;</code>等标准库特性。</li>
+<li><strong>第三方库约束</strong>：仅使用官方许可的Boost子集，禁止使用未获批的Boost库特性。</li>
+</ol>
+<h2 id="三头文件规范">三、头文件规范</h2>
+<p>头文件的正确使用直接决定代码的编译效率、可读性和依赖管理，核心规则如下：</p>
+<h3 id="31-基础要求">3.1 基础要求</h3>
+<ul>
+<li>每个<code>.cc</code>实现文件原则上必须对应一个关联的<code>.h</code>头文件，例外仅为单元测试、仅含<code>main()</code>函数的小型文件。</li>
+<li>头文件必须是<strong>自包含的（Self-contained）</strong>，用户无需额外引入其他头文件即可正常使用其提供的接口。</li>
+<li>禁止在头文件中定义具名命名空间的<code>static</code>变量/函数，禁止使用<code>using namespace xxx;</code>（尤其是<code>using namespace std;</code>），避免全局命名空间污染。</li>
+</ul>
+<h3 id="32-头文件保护宏">3.2 头文件保护宏</h3>
+<p>必须使用<code>#define</code>头文件保护机制，防止头文件被重复包含，格式为：<code>&lt;PROJECT&gt;_&lt;PATH&gt;_&lt;FILE&gt;_H_</code></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#ifndef FOO_BAR_BAZ_H_
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define FOO_BAR_BAZ_H_
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 头文件核心内容
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#endif  </span><span class="c1">// FOO_BAR_BAZ_H_
+</span></span></span></code></pre></div></div>
+<ul>
+<li>禁止使用<code>#pragma once</code>等非标准编译器扩展。</li>
+</ul>
+<h3 id="33-前置声明">3.3 前置声明</h3>
+<p><strong>优先使用<code>#include</code>引入完整头文件，尽量避免前置声明</strong>。仅在无依赖风险的极特殊场景可使用，核心原因：</p>
+<ul>
+<li>前置声明会隐藏依赖关系，头文件修改时无法触发依赖代码的重编译，引发静默的语义变更。</li>
+<li>前置声明<code>std</code>命名空间的符号会导致未定义行为。</li>
+<li>函数/模板的前置声明会限制API的兼容变更（如参数类型加宽、新增默认模板参数）。</li>
+</ul>
+<h3 id="34-内联函数">3.4 内联函数</h3>
+<ul>
+<li>仅当函数体极短（通常1-10行）、性能敏感且无复杂逻辑时，才允许在头文件中定义内联函数，必须显式标记<code>inline</code>保证ODR（单一定义规则）安全。</li>
+<li>禁止在头文件内联定义析构函数、虚函数，其隐式生成的代码往往比表面更复杂，易导致代码膨胀。</li>
+</ul>
+<h3 id="35-头文件包含顺序与格式">3.5 头文件包含顺序与格式</h3>
+<p>包含顺序必须严格遵循以下分组，每组之间用空行分隔，同组内按字母序排序：</p>
+<ol>
+<li>关联头文件（当前<code>.cc</code>对应的<code>.h</code>文件，优先保证头文件自包含性）</li>
+<li>C系统头文件（如<code>&lt;unistd.h&gt;</code>、<code>&lt;stdlib.h&gt;</code>）</li>
+<li>C++标准库头文件（如<code>&lt;string&gt;</code>、<code>&lt;vector&gt;</code>）</li>
+<li>第三方库头文件</li>
+<li>项目内其他头文件</li>
+</ol>
+<ul>
+<li>标准库/系统头文件使用尖括号<code>&lt;&gt;</code>，项目内头文件使用双引号<code>&quot;&quot;</code>，禁止使用<code>.</code>/<code>..</code>相对路径别名。
+示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;foo/server/fooserver.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;base/basictypes.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;foo/server/bar.h&#34;</span></span></span></code></pre></div></div>
+<h2 id="四作用域与命名空间规则">四、作用域与命名空间规则</h2>
+<h3 id="41-命名空间核心规则">4.1 命名空间核心规则</h3>
+<ul>
+<li>除极少数例外，所有代码必须置于命名空间中，顶层命名空间必须基于项目名全局唯一，禁止污染全局命名空间。</li>
+<li>命名空间名称使用<strong>全小写+下划线（snake_case）</strong> 命名。</li>
+<li>禁止使用<code>using namespace xxx;</code>的using指令，仅允许在<code>.cc</code>文件内使用<code>using ::foo::bar;</code>的有限using声明，禁止在头文件中使用。</li>
+<li>禁止使用内联命名空间（inline namespaces）。</li>
+<li><code>.cc</code>文件中，无需对外暴露的辅助函数/变量，优先使用<strong>匿名命名空间</strong>封装，实现内部链接，禁止在头文件中使用匿名命名空间。</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// .cc文件示例
+</span></span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">int</span> <span class="n">kMaxRetryCount</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">HelperFunc</span><span class="p">()</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>  <span class="c1">// namespace
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="n">foo</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 对外暴露的代码
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>  <span class="c1">// namespace foo
+</span></span></span></code></pre></div></div>
+<h3 id="42-变量作用域规则">4.2 变量作用域规则</h3>
+<ul>
+<li>局部变量：在函数内尽可能晚声明，就近初始化，禁止在循环头外声明循环变量；允许在<code>if</code>/<code>while</code>/<code>for</code>语句中声明变量，限制其作用域。</li>
+<li>静态/全局变量：禁止使用非POD类型的静态/全局变量，避免跨编译单元的初始化顺序未定义问题；静态变量必须保证线程安全。</li>
+<li>禁止使用全局函数，优先将非成员函数置于命名空间中，禁止仅为了分组静态成员而创建类。</li>
+<li>成员变量：类的非静态数据成员必须设为<code>private</code>，仅常量成员可例外；测试夹具类的成员变量仅在<code>.cc</code>文件内可设为<code>protected</code>。</li>
+</ul>
+<h2 id="五类与对象设计规范">五、类与对象设计规范</h2>
+<h3 id="51-核心设计原则">5.1 核心设计原则</h3>
+<ul>
+<li><strong>优先组合，而非继承</strong>：仅当满足「is-a」关系时使用继承，且必须使用<code>public</code>继承，禁止使用私有/保护继承，禁止虚继承（除非极特殊场景）。</li>
+<li><strong>单一职责</strong>：一个类应只负责一件事，公有API数量尽量精简，不超过7个为宜。</li>
+<li><strong>struct与class的边界</strong>：<code>struct</code>仅用于纯数据聚合（无私有成员、无自定义构造函数、无虚函数、无继承）；只要包含行为（方法），必须使用<code>class</code>。</li>
+</ul>
+<h3 id="52-构造函数规则">5.2 构造函数规则</h3>
+<ul>
+<li>单参数构造函数必须加<code>explicit</code>关键字，禁止隐式类型转换。</li>
+<li>禁止在构造函数中执行复杂、可能失败、会引发副作用的初始化逻辑；若初始化可能失败，使用工厂函数替代。</li>
+<li>禁止在构造函数中调用虚函数，避免未定义行为。</li>
+<li>委托构造函数、继承构造函数仅在简化代码、无歧义时使用。</li>
+<li>对于可拷贝/移动的类，要么显式定义拷贝/移动构造函数和赋值运算符，要么显式用<code>=delete</code>禁用，要么完全不定义（使用编译器默认生成）。</li>
+</ul>
+<h3 id="53-成员声明顺序">5.3 成员声明顺序</h3>
+<p>类内成员必须严格按以下顺序声明，空的区段可省略：</p>
+<ol>
+<li><code>public:</code>区段 → <code>protected:</code>区段 → <code>private:</code>区段（对外接口优先，隐藏实现细节）</li>
+<li>每个区段内的顺序：
+<ul>
+<li>类型与类型别名（<code>typedef</code>/<code>using</code>、枚举、嵌套类/结构体）</li>
+<li>（仅struct允许）非静态数据成员</li>
+<li>静态常量</li>
+<li>工厂函数</li>
+<li>构造函数与赋值运算符</li>
+<li>析构函数</li>
+<li>所有其他成员函数（静态/非静态、友元函数）</li>
+<li>所有其他数据成员（静态/非静态）</li>
+</ul>
+</li>
+</ol>
+<h3 id="54-其他类规则">5.4 其他类规则</h3>
+<ul>
+<li>虚函数必须显式标记<code>override</code>或<code>final</code>，禁止重复写<code>virtual</code>关键字。</li>
+<li>友元仅用于类与其紧密关联的类/函数，禁止滥用友元打破封装。</li>
+<li>禁止将类的大方法内联定义在类声明中，仅极短、性能敏感的 trivial 方法可内联。</li>
+</ul>
+<h2 id="六函数设计规则">六、函数设计规则</h2>
+<h3 id="61-函数基础规范">6.1 函数基础规范</h3>
+<ul>
+<li><strong>短小聚焦</strong>：函数长度建议不超过40行，过长的函数必须拆分为更小的子函数，保证逻辑可理解、可测试。</li>
+<li><strong>参数顺序</strong>：输入参数在前，输出参数在后；输入参数优先使用<code>const T&amp;</code>常量引用，输出参数必须使用指针<code>T*</code>，明确标识可修改语义。
+示例：<code>void Parse(const std::string&amp; input, int* output);</code></li>
+<li>禁止使用默认函数参数，避免重载决议歧义、API兼容问题。</li>
+<li>函数重载仅当所有重载版本语义完全一致时使用，保证读者无需查看定义即可理解调用行为。</li>
+<li>函数返回值：禁止忽略有状态的返回值（如<code>absl::Status</code>），必须做错误处理。</li>
+</ul>
+<h3 id="62-特殊函数规则">6.2 特殊函数规则</h3>
+<ul>
+<li>普通函数与静态成员函数：优先置于命名空间中，禁止创建仅包含静态成员的「工具类」。</li>
+<li>虚函数：接口类的虚析构函数必须为<code>public</code>，基类的虚函数必须保证派生类的兼容性。</li>
+<li>lambda表达式：仅用于短平快的局部逻辑，禁止复杂嵌套，捕获列表必须显式，避免隐式捕获导致的生命周期问题。</li>
+</ul>
+<h2 id="七命名约定">七、命名约定</h2>
+<p>命名规则是规范中最核心的一致性约束，<strong>见名知意+无歧义</strong>是核心原则，不同类型的实体有严格的命名区分。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">实体类型</th>
+          <th style="text-align: left">命名规则</th>
+          <th style="text-align: left">正确示例</th>
+          <th style="text-align: left">错误示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">文件名</td>
+          <td style="text-align: left">全小写+下划线（优先）/短横线</td>
+          <td style="text-align: left"><code>my_class.h</code>、<code>http_server.cc</code></td>
+          <td style="text-align: left"><code>MyClass.h</code>、<code>myClass.cc</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">类型名（类、结构体、枚举、类型别名）</td>
+          <td style="text-align: left">大驼峰（PascalCase），首字母大写，无下划线</td>
+          <td style="text-align: left"><code>FooBar</code>、<code>UrlTable</code>、<code>Status</code></td>
+          <td style="text-align: left"><code>fooBar</code>、<code>foo_bar</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">函数名（普通函数、类成员函数）</td>
+          <td style="text-align: left">大驼峰（PascalCase）</td>
+          <td style="text-align: left"><code>DoSomething()</code>、<code>GetValue()</code></td>
+          <td style="text-align: left"><code>doSomething()</code>、<code>do_something()</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">变量（局部变量、函数参数、全局变量）</td>
+          <td style="text-align: left">全小写+下划线（snake_case）</td>
+          <td style="text-align: left"><code>user_name</code>、<code>buffer_size</code></td>
+          <td style="text-align: left"><code>userName</code>、<code>UserName</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">类私有/保护成员变量</td>
+          <td style="text-align: left">全小写+下划线，<strong>必须以下划线结尾</strong></td>
+          <td style="text-align: left"><code>buffer_size_</code>、<code>user_name_</code></td>
+          <td style="text-align: left"><code>m_bufferSize</code>、<code>buffer_size</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">常量（const/constexpr，全局/类内）</td>
+          <td style="text-align: left"><code>k</code>开头 + 大驼峰</td>
+          <td style="text-align: left"><code>kMaxBufferSize</code>、<code>kDaysInWeek</code></td>
+          <td style="text-align: left"><code>MAX_BUFFER_SIZE</code>、<code>max_buffer_size</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">枚举值</td>
+          <td style="text-align: left">同常量规则，<code>k</code>开头 + 大驼峰</td>
+          <td style="text-align: left"><code>kErrorOk</code>、<code>kErrorNotFound</code></td>
+          <td style="text-align: left"><code>ERROR_OK</code>、<code>error_ok</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">宏定义</td>
+          <td style="text-align: left">全大写+下划线，必须带项目前缀</td>
+          <td style="text-align: left"><code>PROJECT_MY_MACRO</code></td>
+          <td style="text-align: left"><code>my_macro</code>、<code>MY_MACRO</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">命名空间名</td>
+          <td style="text-align: left">全小写+下划线</td>
+          <td style="text-align: left"><code>foo_bar</code>、<code>google_base</code></td>
+          <td style="text-align: left"><code>FooBar</code>、<code>FOO_BAR</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">模板参数</td>
+          <td style="text-align: left">大驼峰（类型参数）/ 全小写（非类型参数）</td>
+          <td style="text-align: left"><code>typename T</code>、<code>int MaxSize</code></td>
+          <td style="text-align: left"><code>typename t</code>、<code>int max_size</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="命名补充规则">命名补充规则</h3>
+<ol>
+<li>名称必须表意清晰，禁止无意义缩写，仅允许通用缩写（如<code>i</code>作为循环索引、<code>fqdn</code>、<code>rpc</code>），禁止通过删字母缩写（如<code>cstmr_id</code>替代<code>customer_id</code>）。</li>
+<li>全局变量必须极少使用，命名需加项目前缀，避免冲突；禁止在头文件中定义全局变量。</li>
+<li>宏定义必须尽量避免，优先使用内联函数、枚举、const常量；必须使用时，仅在<code>.cc</code>文件内定义，用后立即<code>#undef</code>，禁止在头文件中导出宏。</li>
+</ol>
+<h2 id="八代码格式化规则">八、代码格式化规则</h2>
+<p>格式化规则的核心是保证视觉一致性，所有规则可通过<code>clang-format</code>工具自动化落地。</p>
+<ol>
+<li><strong>行长度</strong>：每行代码最多80个字符，仅注释中的长URL、不可拆分的字符串字面量、头文件保护宏、include语句可例外。</li>
+<li><strong>缩进</strong>：每个嵌套块使用<strong>2个空格</strong>缩进，绝对禁止使用Tab字符，编辑器需设置Tab自动转为空格。</li>
+<li><strong>大括号</strong>：
+<ul>
+<li>所有控制流语句（<code>if</code>/<code>else</code>/<code>for</code>/<code>while</code>/<code>switch</code>）必须使用大括号，即使单行语句也不例外，杜绝Apple goto fail类漏洞。</li>
+<li>大括号使用「K&amp;R风格」：左大括号不换行，与语句同行；右大括号单独一行；else与前一个if的右大括号同行。
+示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">condition</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DoSomething</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DoOtherThing</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+</li>
+<li><strong>空格规则</strong>：
+<ul>
+<li>条件语句的括号与条件之间留1个空格，函数名与参数括号之间无空格。</li>
+<li>二元运算符（<code>=</code>/<code>+</code>/<code>-</code>/<code>*</code>/<code>/</code>/<code>&lt;</code>/<code>&gt;</code>等）两侧各留1个空格。</li>
+<li>预处理指令<code>#include</code>/<code>#define</code>后留1个空格，无额外缩进。</li>
+</ul>
+</li>
+<li><strong>指针与引用</strong>：<code>*</code>和<code>&amp;</code>紧贴类型名，而非变量名。示例：<code>const std::string&amp; input</code>、<code>int* output</code>。</li>
+<li><strong>换行规则</strong>：函数参数过长时，每个参数单独换行，与左括号对齐；表达式过长时，在运算符前换行，保证可读性。</li>
+<li><strong>编码</strong>：源文件使用UTF-8编码，非ASCII字符必须极少使用，且必须使用UTF-8格式，禁止使用<code>wchar_t</code>/<code>char16_t</code>/<code>char32_t</code>（Windows API交互除外）。</li>
+</ol>
+<h2 id="九注释规范">九、注释规范</h2>
+<h3 id="91-核心原则">9.1 核心原则</h3>
+<p>注释必须解释**「为什么这么做」<strong>，而非</strong>「代码做了什么」**；代码本身应能清晰表达「做什么」，无需冗余注释复述代码逻辑。</p>
+<h3 id="92-注释分类与规则">9.2 注释分类与规则</h3>
+<ol>
+<li><strong>文件注释</strong>：每个头文件/实现文件顶部必须有版权声明，简要说明文件的功能、用途、作者信息，禁止冗余的文件描述。</li>
+<li><strong>类注释</strong>：类声明前必须加注释，说明类的功能、使用场景、线程安全特性、生命周期约束，无需复述实现细节。</li>
+<li><strong>函数注释</strong>：
+<ul>
+<li>对外暴露的API函数必须加注释，说明函数的功能、输入输出参数的含义、返回值、副作用、线程安全、错误处理、调用前提。</li>
+<li>内部辅助函数若逻辑清晰，可省略注释；复杂逻辑必须加注释说明设计思路。</li>
+<li>函数重载集仅需一个统一的「伞形注释」，无需每个重载单独注释。</li>
+</ul>
+</li>
+<li><strong>变量注释</strong>：全局变量、类成员变量必须加注释说明用途、取值范围、生命周期约束；局部变量仅当逻辑不清晰时加注释。</li>
+<li><strong>实现注释</strong>：函数内的复杂逻辑、非显而易见的分支、特殊处理、性能优化、临时方案，必须加行内注释。</li>
+<li><strong>TODO注释</strong>：必须使用全大写<code>TODO</code>，后跟责任人/BUG ID/设计文档链接，以及明确的修复时间/触发事件，禁止无明确上下文的TODO。
+示例：<code>// TODO(bug 123456): 移除该兼容逻辑，2026Q4后所有客户端已支持新接口</code></li>
+<li><strong>禁用注释</strong>：禁止注释掉的代码（死代码），直接删除；禁止无意义的吐槽、梗、个人标记类注释。</li>
+</ol>
+<h2 id="十核心特性管控与最佳实践">十、核心特性管控与最佳实践</h2>
+<h3 id="101-类型与类型转换">10.1 类型与类型转换</h3>
+<ul>
+<li>禁止使用C风格强制类型转换，必须使用C++的<code>static_cast</code>/<code>const_cast</code>/<code>reinterpret_cast</code>，且仅在必要时使用；<code>reinterpret_cast</code>必须极度谨慎，保证内存布局安全。</li>
+<li>禁止隐式类型转换，尤其是整数、指针、bool之间的隐式转换。</li>
+<li><code>auto</code>仅当类型显而易见、且不损害可读性时使用，禁止滥用<code>auto</code>隐藏类型信息，降低代码可读性。</li>
+<li>优先使用<code>std::string_view</code>替代<code>const char*</code>/<code>const std::string&amp;</code>作为只读字符串输入参数，避免拷贝。</li>
+<li>优先使用<code>absl::Span</code>替代裸指针+长度的数组参数，保证边界安全。</li>
+</ul>
+<h3 id="102-内存管理">10.2 内存管理</h3>
+<ul>
+<li>优先使用智能指针，禁止裸指针管理所有权：优先使用<code>std::unique_ptr</code>，仅当确需共享所有权时使用<code>std::shared_ptr</code>，禁止使用已废弃的<code>std::auto_ptr</code>。</li>
+<li>裸指针仅用于不持有所有权的场景，必须保证指针的生命周期短于所指向的对象。</li>
+<li>禁止手动调用<code>new</code>/<code>delete</code>，优先使用<code>std::make_unique</code>/<code>std::make_shared</code>创建对象。</li>
+<li>禁止内存池之外的自定义<code>new</code>/<code>delete</code>重载。</li>
+</ul>
+<h3 id="103-现代c特性使用边界">10.3 现代C++特性使用边界</h3>
+<ul>
+<li>模板：仅当能显著提升代码复用性、无歧义时使用，禁止复杂的模板元编程、SFINAE等高级特性，除非收益可明确验证。</li>
+<li>概念（Concepts）：仅用于简化模板约束、提升可读性，禁止复杂的约束组合。</li>
+<li>协程：仅在官方许可的场景使用，禁止滥用。</li>
+<li>Lambda：仅用于局部回调、短逻辑，禁止长生命周期的lambda捕获，避免悬垂引用。</li>
+<li>移动语义：合理使用右值引用、移动构造/赋值，避免不必要的拷贝，禁止对右值引用参数滥用<code>std::move</code>/<code>std::forward</code>。</li>
+</ul>
+<h3 id="104-多线程与并发">10.4 多线程与并发</h3>
+<ul>
+<li>全局/静态变量必须保证线程安全，禁止线程不安全的懒初始化。</li>
+<li>禁止使用线程局部存储<code>thread_local</code>，除非极特殊场景。</li>
+<li>优先使用标准库的互斥量、条件变量，禁止无锁编程（除非性能收益可验证，且有充分的测试）。</li>
+</ul>
+<h2 id="十一其他重要规则">十一、其他重要规则</h2>
+<ol>
+<li><strong>包容性语言</strong>：代码命名、注释中必须使用包容性语言，禁止使用带有歧视、冒犯性的术语（如master/slave、blacklist/whitelist），使用性别中立的语言。</li>
+<li><strong>预处理宏</strong>：尽量避免使用宏，禁止使用宏定义C++ API、类结构、函数；必须使用时，名称必须全局唯一，带项目前缀。</li>
+<li><strong>可移植性</strong>：代码需考虑编译器、平台的可移植性，避免依赖编译器未定义行为、平台专属特性。</li>
+<li><strong>测试友好</strong>：代码设计需保证可测试性，核心逻辑必须可单元测试，禁止在核心逻辑中硬编码依赖。</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-04-05</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/001_googlecpp%E7%BC%96%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/">Tags</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/003_colcon%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="colcon 使用详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>colcon 使用详细总结</a>
+            <a href="/blog/002_misracpp2008%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="Misra C&#43;&#43; 2008 详细总结">Misra C++ 2008 详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

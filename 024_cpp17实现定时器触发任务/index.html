@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>C&#43;&#43;17 实现定时器触发任务 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/024_cpp17%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A7%A6%E5%8F%91%E4%BB%BB%E5%8A%A1/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="C&#43;&#43;17 实现定时器触发任务">
+  <meta property="og:description" content="C&#43;&#43;17 定时器实现（支持单次/循环任务、线程安全） 该实现完全基于C&#43;&#43;17标准特性，核心采用单调时钟steady_clock（避免系统时间修改导致的计时偏差）、优先队列管理任务（按触发时间排序，效率最优），支持线程安全的任务添加、取消、定时器启停，同时处理了任务异常、计时累积误差等常见问题。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-01-10T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-01-10T09:30:00+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="Cpp17">
+    <meta property="article:tag" content="Timer">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="C&#43;&#43;17 实现定时器触发任务">
+  <meta name="twitter:description" content="C&#43;&#43;17 定时器实现（支持单次/循环任务、线程安全） 该实现完全基于C&#43;&#43;17标准特性，核心采用单调时钟steady_clock（避免系统时间修改导致的计时偏差）、优先队列管理任务（按触发时间排序，效率最优），支持线程安全的任务添加、取消、定时器启停，同时处理了任务异常、计时累积误差等常见问题。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/024_cpp17%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A7%A6%E5%8F%91%E4%BB%BB%E5%8A%A1/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/023_cpp17%E5%AE%9E%E7%8E%B0%E5%8D%8F%E7%A8%8B%E6%9C%BA%E5%88%B6/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/006_cpp%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "C++17 实现定时器触发任务",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/024_cpp17%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A7%A6%E5%8F%91%E4%BB%BB%E5%8A%A1\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, Cpp17, Timer","wordcount":  4488 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/024_cpp17%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A7%A6%E5%8F%91%E4%BB%BB%E5%8A%A1\/","datePublished": "2026-01-10T09:00:00+08:00","dateModified": "2026-01-10T09:30:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/024_cpp17%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A7%A6%E5%8F%91%E4%BB%BB%E5%8A%A1/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/024_cpp17%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A7%A6%E5%8F%91%E4%BB%BB%E5%8A%A1/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">C++17 实现定时器触发任务</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-10">2026-01-10</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 4488 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 9 分钟&nbsp;<span id="/blog/024_cpp17%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A7%A6%E5%8F%91%E4%BB%BB%E5%8A%A1/" class="leancloud_visitors" data-flag-title="C&#43;&#43;17 实现定时器触发任务">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#c17-定时器实现支持单次循环任务线程安全">C++17 定时器实现（支持单次/循环任务、线程安全）</a>
+      <ul>
+        <li><a href="#完整代码实现">完整代码实现</a></li>
+        <li><a href="#核心特性说明">核心特性说明</a></li>
+        <li><a href="#使用注意事项">使用注意事项</a></li>
+      </ul>
+    </li>
+    <li><a href="#核心实现原理">核心实现原理</a>
+      <ul>
+        <li><a href="#完整c17实现代码">完整C++17实现代码</a></li>
+        <li><a href="#编译与运行">编译与运行</a></li>
+        <li><a href="#关键说明与注意事项">关键说明与注意事项</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="c17-定时器实现支持单次循环任务线程安全">C++17 定时器实现（支持单次/循环任务、线程安全）</h2>
+<p>该实现完全基于C++17标准特性，核心采用<strong>单调时钟steady_clock</strong>（避免系统时间修改导致的计时偏差）、优先队列管理任务（按触发时间排序，效率最优），支持线程安全的任务添加、取消、定时器启停，同时处理了任务异常、计时累积误差等常见问题。</p>
+<hr>
+<h3 id="完整代码实现">完整代码实现</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;chrono&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;mutex&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;condition_variable&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;queue&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;functional&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;atomic&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;unordered_map&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdexcept&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 定时器类，C++17兼容，线程安全
+</span></span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Timer</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 构造函数：启动定时器工作线程
+</span></span></span><span class="line"><span class="cl">    <span class="n">Timer</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">m_running</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">m_worker</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">Timer</span><span class="o">::</span><span class="n">worker_thread</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 析构函数：自动停止定时器，释放线程资源
+</span></span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">Timer</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">stop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 禁止拷贝、移动（mutex和thread不可拷贝/移动）
+</span></span></span><span class="line"><span class="cl">    <span class="n">Timer</span><span class="p">(</span><span class="k">const</span> <span class="n">Timer</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Timer</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Timer</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Timer</span><span class="p">(</span><span class="n">Timer</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Timer</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Timer</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @brief 添加单次执行任务
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param delay 延迟执行时间（毫秒）
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param task 待执行的任务函数
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @return 任务唯一ID，失败返回0
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint64_t</span> <span class="nf">add_once_task</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span> <span class="n">delay</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span> <span class="n">task</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_running</span><span class="p">.</span><span class="n">load</span><span class="p">()</span> <span class="o">||</span> <span class="o">!</span><span class="n">task</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kt">uint64_t</span> <span class="n">task_id</span> <span class="o">=</span> <span class="n">m_next_task_id</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">trigger_time</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">delay</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">is_valid</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">TimerTask</span> <span class="n">new_task</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">task_id</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">trigger_time</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">task</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">            <span class="n">is_valid</span>
+</span></span><span class="line"><span class="cl">        <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">m_task_queue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">new_task</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">            <span class="n">m_task_valid_map</span><span class="p">[</span><span class="n">task_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_valid</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">m_cv</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span> <span class="c1">// 唤醒工作线程，更新等待时间
+</span></span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">task_id</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @brief 添加循环执行任务
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param interval 循环执行间隔（毫秒）
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param task 待执行的任务函数
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param first_delay 首次执行延迟（毫秒），默认0
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @return 任务唯一ID，失败返回0
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint64_t</span> <span class="nf">add_repeat_task</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span> <span class="n">interval</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                              <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span> <span class="n">task</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                              <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span> <span class="n">first_delay</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_running</span><span class="p">.</span><span class="n">load</span><span class="p">()</span> <span class="o">||</span> <span class="o">!</span><span class="n">task</span> <span class="o">||</span> <span class="n">interval</span><span class="p">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kt">uint64_t</span> <span class="n">task_id</span> <span class="o">=</span> <span class="n">m_next_task_id</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">trigger_time</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">first_delay</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">is_valid</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">TimerTask</span> <span class="n">new_task</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">task_id</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">trigger_time</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">interval</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">task</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">            <span class="n">is_valid</span>
+</span></span><span class="line"><span class="cl">        <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">m_task_queue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">new_task</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">            <span class="n">m_task_valid_map</span><span class="p">[</span><span class="n">task_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_valid</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">m_cv</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">task_id</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @brief 取消指定任务
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @param task_id 任务ID
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @return 取消成功返回true，任务不存在/已取消返回false
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">cancel_task</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">task_id</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">m_task_valid_map</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">task_id</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">==</span> <span class="n">m_task_valid_map</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 标记任务无效（惰性删除，出队时才会清理）
+</span></span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">is_valid</span> <span class="o">=</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">is_valid</span><span class="o">-&gt;</span><span class="n">store</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">m_task_valid_map</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">it</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * @brief 停止定时器，终止工作线程，清空所有任务
+</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">stop</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 标记停止状态
+</span></span></span><span class="line"><span class="cl">        <span class="n">m_running</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">m_cv</span><span class="p">.</span><span class="n">notify_all</span><span class="p">();</span> <span class="c1">// 唤醒所有等待，退出线程
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 等待线程安全退出
+</span></span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">m_worker</span><span class="p">.</span><span class="n">joinable</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">m_worker</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 清空剩余任务
+</span></span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">m_task_queue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">m_task_queue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">m_task_valid_map</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 定时任务结构体
+</span></span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="nc">TimerTask</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">uint64_t</span> <span class="n">task_id</span><span class="p">;</span>                                  <span class="c1">// 任务唯一ID
+</span></span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">time_point</span> <span class="n">trigger_time</span><span class="p">;</span> <span class="c1">// 触发时间点
+</span></span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span> <span class="n">interval</span><span class="p">;</span>                <span class="c1">// 循环间隔
+</span></span></span><span class="line"><span class="cl">        <span class="kt">bool</span> <span class="n">is_repeat</span><span class="p">;</span>                                     <span class="c1">// 是否循环执行
+</span></span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span> <span class="n">task</span><span class="p">;</span>                         <span class="c1">// 任务函数
+</span></span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;&gt;</span> <span class="n">is_valid</span><span class="p">;</span>       <span class="c1">// 任务有效标记（用于取消）
+</span></span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 优先队列比较器：构建小顶堆，最早触发的任务在堆顶
+</span></span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="nc">TaskComparator</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">bool</span> <span class="nf">operator</span><span class="p">()(</span><span class="k">const</span> <span class="n">TimerTask</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">TimerTask</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">trigger_time</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">trigger_time</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 工作线程核心循环
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">worker_thread</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">m_running</span><span class="p">.</span><span class="n">load</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">m_mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 等待：队列非空 或 定时器停止（处理虚假唤醒）
+</span></span></span><span class="line"><span class="cl">            <span class="n">m_cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span> <span class="p">[</span><span class="k">this</span><span class="p">]()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="o">!</span><span class="n">m_task_queue</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">||</span> <span class="o">!</span><span class="n">m_running</span><span class="p">.</span><span class="n">load</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 定时器停止，退出循环
+</span></span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_running</span><span class="p">.</span><span class="n">load</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 检查堆顶任务是否到触发时间
+</span></span></span><span class="line"><span class="cl">            <span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">top_task</span> <span class="o">=</span> <span class="n">m_task_queue</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="k">auto</span> <span class="n">now</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 未到触发时间，等待到触发时间点（或被新任务/停止唤醒）
+</span></span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">top_task</span><span class="p">.</span><span class="n">trigger_time</span> <span class="o">&gt;</span> <span class="n">now</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">m_cv</span><span class="p">.</span><span class="n">wait_until</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span> <span class="n">top_task</span><span class="p">.</span><span class="n">trigger_time</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">continue</span><span class="p">;</span> <span class="c1">// 等待结束后重新校验队列状态
+</span></span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 取出到期任务
+</span></span></span><span class="line"><span class="cl">            <span class="k">auto</span> <span class="n">task</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">m_task_queue</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">            <span class="n">m_task_queue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 执行任务前解锁，避免任务执行阻塞其他操作
+</span></span></span><span class="line"><span class="cl">            <span class="n">lock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 执行有效任务，捕获异常避免线程崩溃
+</span></span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">task</span><span class="p">.</span><span class="n">is_valid</span><span class="o">-&gt;</span><span class="n">load</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">try</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">task</span><span class="p">.</span><span class="n">task</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span> <span class="k">catch</span> <span class="p">(...)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">// 可在此处添加异常日志输出
+</span></span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 循环任务：更新触发时间，重新入队（无累积误差）
+</span></span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">task</span><span class="p">.</span><span class="n">is_repeat</span> <span class="o">&amp;&amp;</span> <span class="n">task</span><span class="p">.</span><span class="n">is_valid</span><span class="o">-&gt;</span><span class="n">load</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// 用原触发时间+间隔，避免任务执行耗时导致的计时偏差
+</span></span></span><span class="line"><span class="cl">                <span class="n">task</span><span class="p">.</span><span class="n">trigger_time</span> <span class="o">+=</span> <span class="n">task</span><span class="p">.</span><span class="n">interval</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock2</span><span class="p">(</span><span class="n">m_mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">m_task_queue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">task</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="n">m_cv</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// 单次任务/已取消任务，清理映射表
+</span></span></span><span class="line"><span class="cl">                <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock2</span><span class="p">(</span><span class="n">m_mutex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">m_task_valid_map</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">task</span><span class="p">.</span><span class="n">task_id</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">TimerTask</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">TimerTask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">TaskComparator</span><span class="o">&gt;</span> <span class="n">m_task_queue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">m_mutex</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">condition_variable</span> <span class="n">m_cv</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">m_worker</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">m_running</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>               <span class="c1">// 定时器运行状态
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span> <span class="n">m_next_task_id</span><span class="p">{</span><span class="mi">1</span><span class="p">};</span>          <span class="c1">// 自增任务ID（0为无效ID）
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;&gt;&gt;</span> <span class="n">m_task_valid_map</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 测试示例
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Timer</span> <span class="n">timer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1. 添加单次任务：1秒后执行
+</span></span></span><span class="line"><span class="cl">    <span class="n">timer</span><span class="p">.</span><span class="n">add_once_task</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="p">[]()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;[单次任务] 执行完成，时间戳：&#34;</span>
+</span></span><span class="line"><span class="cl">                  <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="o">&gt;</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">().</span><span class="n">time_since_epoch</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                  <span class="p">).</span><span class="n">count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 2. 添加循环任务：每500ms执行一次，无首次延迟
+</span></span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">repeat_task_id</span> <span class="o">=</span> <span class="n">timer</span><span class="p">.</span><span class="n">add_repeat_task</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span> <span class="p">[]()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;[循环任务] 执行完成，时间戳：&#34;</span>
+</span></span><span class="line"><span class="cl">                  <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="o">&gt;</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">().</span><span class="n">time_since_epoch</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                  <span class="p">).</span><span class="n">count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 3秒后取消循环任务
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">3</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">timer</span><span class="p">.</span><span class="n">cancel_task</span><span class="p">(</span><span class="n">repeat_task_id</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;&gt;&gt;&gt; 已取消循环任务 &lt;&lt;&lt;&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 再运行2秒后停止定时器
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">timer</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;&gt;&gt;&gt; 定时器已停止 &lt;&lt;&lt;&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<hr>
+<h3 id="核心特性说明">核心特性说明</h3>
+<ol>
+<li><strong>C++17标准兼容</strong>：所有特性均为C++17原生支持，无第三方依赖，兼容C++11/14/17标准</li>
+<li><strong>高精度计时</strong>：采用<code>std::chrono::steady_clock</code>单调时钟，不受系统时间修改、时区调整影响，无计时漂移</li>
+<li><strong>无累积误差</strong>：循环任务采用「原触发时间+间隔」的方式更新下一次执行时间，避免任务执行耗时导致的计时偏差</li>
+<li><strong>线程安全</strong>：所有对外接口均加锁保护，支持多线程并发添加、取消任务</li>
+<li><strong>异常安全</strong>：任务执行时捕获所有异常，避免单个任务异常导致定时器线程崩溃</li>
+<li><strong>资源安全</strong>：析构函数自动停止线程并释放资源，无内存泄漏、野线程问题</li>
+</ol>
+<hr>
+<h3 id="使用注意事项">使用注意事项</h3>
+<ol>
+<li><strong>任务耗时限制</strong>：定时器为单线程执行，若任务执行耗时过长，会阻塞后续任务的触发。耗时任务建议在任务内部开启异步线程/线程池执行</li>
+<li><strong>时间精度</strong>：计时精度取决于操作系统，Linux系统通常可达1ms，Windows系统默认精度为10-15ms</li>
+<li><strong>任务取消</strong>：采用惰性删除机制，取消任务仅标记为无效，不会立即从队列中删除，待任务到期出队时自动清理，不影响正常使用</li>
+<li><strong>生命周期</strong>：定时器对象销毁时会自动停止所有任务，请勿在任务中直接销毁定时器对象本身</li>
+</ol>
+<hr>
+<h2 id="核心实现原理">核心实现原理</h2>
+<p>本方案基于Linux特有的<code>epoll</code>（IO多路复用）、<code>timerfd</code>（定时器文件描述符）、<code>eventfd</code>（事件唤醒）实现，结合C++17特性完成线程安全的定时器任务调度，核心设计如下：</p>
+<ol>
+<li><strong>单timerfd+最小堆</strong>：仅用1个定时器fd，通过优先队列（最小堆）管理所有定时任务，避免大量fd占用，保证每次取到最早到期的任务。</li>
+<li><strong>单调时钟</strong>：使用<code>std::chrono::steady_clock</code>，不受系统时间跳变影响，保证定时器精度。</li>
+<li><strong>eventfd唤醒机制</strong>：解决epoll阻塞时新增更早任务无法及时生效的问题，同时用于安全停止事件循环。</li>
+<li><strong>线程安全</strong>：互斥锁保护任务队列操作，支持多线程添加/取消任务；回调执行时解锁，避免死锁。</li>
+<li><strong>ET边缘触发+非阻塞IO</strong>：降低epoll事件触发频率，提升性能，避免水平触发的持续通知问题。</li>
+<li><strong>惰性删除</strong>：通过有效标记实现任务取消，解决优先队列不支持随机删除的问题。</li>
+</ol>
+<hr>
+<h3 id="完整c17实现代码">完整C++17实现代码</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/epoll.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/timerfd.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/eventfd.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;cerrno&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;chrono&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;functional&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;queue&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;mutex&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;atomic&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;unordered_map&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;optional&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">TimerEpoll</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">using</span> <span class="n">Clock</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">using</span> <span class="n">TimePoint</span> <span class="o">=</span> <span class="n">Clock</span><span class="o">::</span><span class="n">time_point</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">using</span> <span class="n">Duration</span> <span class="o">=</span> <span class="n">Clock</span><span class="o">::</span><span class="n">duration</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">using</span> <span class="n">TaskCallback</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 构造函数：初始化epoll、timerfd、eventfd
+</span></span></span><span class="line"><span class="cl">    <span class="n">TimerEpoll</span><span class="p">()</span> <span class="o">:</span> <span class="n">is_running_</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span> <span class="n">next_task_id_</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 1. 创建epoll实例，EPOLL_CLOEXEC避免fd泄漏
+</span></span></span><span class="line"><span class="cl">        <span class="n">epoll_fd_</span> <span class="o">=</span> <span class="n">epoll_create1</span><span class="p">(</span><span class="n">EPOLL_CLOEXEC</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">epoll_fd_</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&#34;epoll_create1 failed: &#34;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 2. 创建timerfd：单调时钟、非阻塞、CLOEXEC
+</span></span></span><span class="line"><span class="cl">        <span class="n">timer_fd_</span> <span class="o">=</span> <span class="n">timerfd_create</span><span class="p">(</span><span class="n">CLOCK_MONOTONIC</span><span class="p">,</span> <span class="n">TFD_NONBLOCK</span> <span class="o">|</span> <span class="n">TFD_CLOEXEC</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">timer_fd_</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">close</span><span class="p">(</span><span class="n">epoll_fd_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&#34;timerfd_create failed: &#34;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 3. 创建eventfd：用于唤醒epoll_wait，非阻塞、CLOEXEC
+</span></span></span><span class="line"><span class="cl">        <span class="n">wakeup_fd_</span> <span class="o">=</span> <span class="n">eventfd</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">EFD_NONBLOCK</span> <span class="o">|</span> <span class="n">EFD_CLOEXEC</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">wakeup_fd_</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">close</span><span class="p">(</span><span class="n">timer_fd_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">close</span><span class="p">(</span><span class="n">epoll_fd_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&#34;eventfd_create failed: &#34;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 4. 注册timerfd到epoll：边缘触发ET，监听可读事件
+</span></span></span><span class="line"><span class="cl">        <span class="n">epoll_event</span> <span class="n">ev</span><span class="p">{};</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ev</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">EPOLLIN</span> <span class="o">|</span> <span class="n">EPOLLET</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ev</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="n">timer_fd_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">epoll_ctl</span><span class="p">(</span><span class="n">epoll_fd_</span><span class="p">,</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">timer_fd_</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ev</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">close</span><span class="p">(</span><span class="n">wakeup_fd_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">close</span><span class="p">(</span><span class="n">timer_fd_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">close</span><span class="p">(</span><span class="n">epoll_fd_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&#34;epoll_ctl add timerfd failed: &#34;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 5. 注册wakeup_fd到epoll：边缘触发ET，监听可读事件
+</span></span></span><span class="line"><span class="cl">        <span class="n">ev</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="n">wakeup_fd_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">epoll_ctl</span><span class="p">(</span><span class="n">epoll_fd_</span><span class="p">,</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">wakeup_fd_</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ev</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">close</span><span class="p">(</span><span class="n">wakeup_fd_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">close</span><span class="p">(</span><span class="n">timer_fd_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">close</span><span class="p">(</span><span class="n">epoll_fd_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&#34;epoll_ctl add wakeup_fd failed: &#34;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 析构函数：停止循环，释放fd资源
+</span></span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">TimerEpoll</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Stop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">close</span><span class="p">(</span><span class="n">wakeup_fd_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">close</span><span class="p">(</span><span class="n">timer_fd_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">close</span><span class="p">(</span><span class="n">epoll_fd_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 禁止拷贝构造和赋值
+</span></span></span><span class="line"><span class="cl">    <span class="n">TimerEpoll</span><span class="p">(</span><span class="k">const</span> <span class="n">TimerEpoll</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">TimerEpoll</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">TimerEpoll</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 启动事件循环（阻塞运行，建议在独立线程中调用）
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">Start</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">is_running_</span><span class="p">.</span><span class="n">exchange</span><span class="p">(</span><span class="nb">true</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span><span class="p">;</span> <span class="c1">// 已在运行，直接返回
+</span></span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">constexpr</span> <span class="kt">int</span> <span class="n">MAX_EVENTS</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">epoll_event</span> <span class="n">events</span><span class="p">[</span><span class="n">MAX_EVENTS</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">is_running_</span><span class="p">.</span><span class="n">load</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 永久阻塞，直到有事件触发
+</span></span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">nfds</span> <span class="o">=</span> <span class="n">epoll_wait</span><span class="p">(</span><span class="n">epoll_fd_</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">MAX_EVENTS</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">nfds</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">errno</span> <span class="o">==</span> <span class="n">EINTR</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span> <span class="c1">// 被信号中断，继续循环
+</span></span></span><span class="line"><span class="cl">                <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&#34;epoll_wait failed: &#34;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 遍历处理所有触发的事件
+</span></span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nfds</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">ev</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">ev</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span> <span class="o">==</span> <span class="n">timer_fd_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">HandleTimerFdEvent</span><span class="p">();</span> <span class="c1">// 处理定时器到期事件
+</span></span></span><span class="line"><span class="cl">                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ev</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span> <span class="o">==</span> <span class="n">wakeup_fd_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">HandleWakeupFdEvent</span><span class="p">();</span> <span class="c1">// 处理唤醒事件
+</span></span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 重新设置timerfd的超时时间
+</span></span></span><span class="line"><span class="cl">            <span class="n">ResetTimerFd</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 停止事件循环
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">Stop</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">is_running_</span><span class="p">.</span><span class="n">exchange</span><span class="p">(</span><span class="nb">false</span><span class="p">))</span> <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Wakeup</span><span class="p">();</span> <span class="c1">// 唤醒epoll_wait，让循环立即退出
+</span></span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 添加一次性定时任务，返回任务ID（用于取消），失败返回nullopt
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span> <span class="n">AddTask</span><span class="p">(</span><span class="n">Duration</span> <span class="n">delay</span><span class="p">,</span> <span class="n">TaskCallback</span> <span class="n">callback</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">callback</span> <span class="o">||</span> <span class="o">!</span><span class="n">is_running_</span><span class="p">.</span><span class="n">load</span><span class="p">())</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">TimePoint</span> <span class="n">expire_time</span> <span class="o">=</span> <span class="n">Clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">delay</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nf">AddTaskInternal</span><span class="p">(</span><span class="n">expire_time</span><span class="p">,</span> <span class="n">Duration</span><span class="o">::</span><span class="n">zero</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">callback</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 添加周期性定时任务，返回任务ID（用于取消），失败返回nullopt
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span> <span class="n">AddPeriodicTask</span><span class="p">(</span><span class="n">Duration</span> <span class="n">period</span><span class="p">,</span> <span class="n">TaskCallback</span> <span class="n">callback</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">callback</span> <span class="o">||</span> <span class="n">period</span> <span class="o">&lt;=</span> <span class="n">Duration</span><span class="o">::</span><span class="n">zero</span><span class="p">()</span> <span class="o">||</span> <span class="o">!</span><span class="n">is_running_</span><span class="p">.</span><span class="n">load</span><span class="p">())</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">TimePoint</span> <span class="n">first_expire</span> <span class="o">=</span> <span class="n">Clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">period</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nf">AddTaskInternal</span><span class="p">(</span><span class="n">first_expire</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">callback</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 取消指定ID的任务，成功返回true，失败返回false
+</span></span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">CancelTask</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">task_id</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">mutex_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">task_map_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">task_id</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">==</span> <span class="n">task_map_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="o">-&gt;</span><span class="n">is_valid</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Wakeup</span><span class="p">();</span> <span class="c1">// 唤醒epoll，重新处理队列
+</span></span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 定时任务结构体
+</span></span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="nc">TimerTask</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">uint64_t</span> <span class="n">task_id</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">TimePoint</span> <span class="n">expire_time</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Duration</span> <span class="n">period</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">TaskCallback</span> <span class="n">callback</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">bool</span> <span class="n">is_valid</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">TimerTask</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">id</span><span class="p">,</span> <span class="n">TimePoint</span> <span class="n">expire</span><span class="p">,</span> <span class="n">Duration</span> <span class="n">p</span><span class="p">,</span> <span class="n">TaskCallback</span> <span class="n">cb</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="o">:</span> <span class="n">task_id</span><span class="p">(</span><span class="n">id</span><span class="p">),</span> <span class="n">expire_time</span><span class="p">(</span><span class="n">expire</span><span class="p">),</span> <span class="n">period</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">callback</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">cb</span><span class="p">)),</span> <span class="n">is_valid</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 优先队列比较器，实现最小堆（最早到期的任务在队首）
+</span></span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="nc">TaskComparator</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">bool</span> <span class="nf">operator</span><span class="p">()(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">TimerTask</span><span class="o">&gt;&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">TimerTask</span><span class="o">&gt;&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">a</span><span class="o">-&gt;</span><span class="n">expire_time</span> <span class="o">&gt;</span> <span class="n">b</span><span class="o">-&gt;</span><span class="n">expire_time</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 任务添加内部实现
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span> <span class="n">AddTaskInternal</span><span class="p">(</span><span class="n">TimePoint</span> <span class="n">expire_time</span><span class="p">,</span> <span class="n">Duration</span> <span class="n">period</span><span class="p">,</span> <span class="n">TaskCallback</span> <span class="n">callback</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">uint64_t</span> <span class="n">task_id</span> <span class="o">=</span> <span class="n">next_task_id_</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">task</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">TimerTask</span><span class="o">&gt;</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">expire_time</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">callback</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">mutex_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">task_map_</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">task</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">task_queue_</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">task</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">Wakeup</span><span class="p">();</span> <span class="c1">// 唤醒epoll，更新定时器超时时间
+</span></span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">task_id</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 处理timerfd可读事件
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">HandleTimerFdEvent</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ET模式必须读完所有数据，直到EAGAIN
+</span></span></span><span class="line"><span class="cl">        <span class="kt">uint64_t</span> <span class="n">count</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">timer_fd_</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">count</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">count</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 处理所有到期任务
+</span></span></span><span class="line"><span class="cl">        <span class="n">HandleExpiredTasks</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 处理wakeup_fd可读事件
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">HandleWakeupFdEvent</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">uint64_t</span> <span class="n">count</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">wakeup_fd_</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">count</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">count</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 唤醒epoll_wait
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">Wakeup</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">uint64_t</span> <span class="n">one</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">write</span><span class="p">(</span><span class="n">wakeup_fd_</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">one</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">one</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 处理所有到期的任务
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">HandleExpiredTasks</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">mutex_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">TimePoint</span> <span class="n">now</span> <span class="o">=</span> <span class="n">Clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 遍历所有到期的任务
+</span></span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">task_queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">auto</span> <span class="n">top_task</span> <span class="o">=</span> <span class="n">task_queue_</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 队首任务未到期，退出循环
+</span></span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">top_task</span><span class="o">-&gt;</span><span class="n">expire_time</span> <span class="o">&gt;</span> <span class="n">now</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">task_queue_</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 惰性删除：跳过已取消的无效任务
+</span></span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">top_task</span><span class="o">-&gt;</span><span class="n">is_valid</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">task_map_</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">top_task</span><span class="o">-&gt;</span><span class="n">task_id</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 拷贝回调，提前处理周期性任务的重入
+</span></span></span><span class="line"><span class="cl">            <span class="n">TaskCallback</span> <span class="n">callback</span> <span class="o">=</span> <span class="n">top_task</span><span class="o">-&gt;</span><span class="n">callback</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">bool</span> <span class="n">is_periodic</span> <span class="o">=</span> <span class="n">top_task</span><span class="o">-&gt;</span><span class="n">period</span> <span class="o">&gt;</span> <span class="n">Duration</span><span class="o">::</span><span class="n">zero</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">is_periodic</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// 周期性任务：更新到期时间，重新入队
+</span></span></span><span class="line"><span class="cl">                <span class="n">top_task</span><span class="o">-&gt;</span><span class="n">expire_time</span> <span class="o">=</span> <span class="n">now</span> <span class="o">+</span> <span class="n">top_task</span><span class="o">-&gt;</span><span class="n">period</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">task_queue_</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">top_task</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// 一次性任务：从map中移除
+</span></span></span><span class="line"><span class="cl">                <span class="n">task_map_</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">top_task</span><span class="o">-&gt;</span><span class="n">task_id</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// 解锁后执行回调，避免死锁和阻塞队列操作
+</span></span></span><span class="line"><span class="cl">            <span class="n">mutex_</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="k">try</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">callback</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">catch</span> <span class="p">(...)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Task callback exception, task_id: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">top_task</span><span class="o">-&gt;</span><span class="n">task_id</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">mutex_</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span> <span class="c1">// 重新加锁，继续处理队列
+</span></span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 重新设置timerfd的超时时间
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">ResetTimerFd</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">mutex_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">itimerspec</span> <span class="n">new_spec</span><span class="p">{};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 无任务时，关闭定时器
+</span></span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">task_queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">timerfd_settime</span><span class="p">(</span><span class="n">timer_fd_</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">new_spec</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 取队首任务的到期时间，设置为绝对超时时间
+</span></span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">top_task</span> <span class="o">=</span> <span class="n">task_queue_</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">expire_sec</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">top_task</span><span class="o">-&gt;</span><span class="n">expire_time</span><span class="p">.</span><span class="n">time_since_epoch</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">expire_nsec</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">nanoseconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">top_task</span><span class="o">-&gt;</span><span class="n">expire_time</span><span class="p">.</span><span class="n">time_since_epoch</span><span class="p">()</span> <span class="o">-</span> <span class="n">expire_sec</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">new_spec</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">=</span> <span class="n">expire_sec</span><span class="p">.</span><span class="n">count</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_spec</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_nsec</span> <span class="o">=</span> <span class="n">expire_nsec</span><span class="p">.</span><span class="n">count</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_spec</span><span class="p">.</span><span class="n">it_interval</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_spec</span><span class="p">.</span><span class="n">it_interval</span><span class="p">.</span><span class="n">tv_nsec</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// TFD_TIMER_ABSTIME：使用绝对时间，匹配单调时钟
+</span></span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">timerfd_settime</span><span class="p">(</span><span class="n">timer_fd_</span><span class="p">,</span> <span class="n">TFD_TIMER_ABSTIME</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">new_spec</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;timerfd_settime failed: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">epoll_fd_</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">timer_fd_</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">wakeup_fd_</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">is_running_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span> <span class="n">next_task_id_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">mutex_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 任务最小堆：按到期时间升序排列
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">TimerTask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">TimerTask</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="n">TaskComparator</span><span class="o">&gt;</span> <span class="n">task_queue_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 任务ID映射：用于快速取消任务
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">TimerTask</span><span class="o">&gt;&gt;</span> <span class="n">task_map_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 测试代码
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">TimerEpoll</span> <span class="n">timer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 启动定时器事件循环，在独立线程运行
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">timer_thread</span><span class="p">([</span><span class="o">&amp;</span><span class="n">timer</span><span class="p">]()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Timer event loop start&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">timer</span><span class="p">.</span><span class="n">Start</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Timer event loop stop&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 等待循环启动
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">100</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1. 添加1秒后执行的一次性任务
+</span></span></span><span class="line"><span class="cl">    <span class="n">timer</span><span class="p">.</span><span class="n">AddTask</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="p">[]()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;One-shot task: 1s expired, timestamp: &#34;</span>
+</span></span><span class="line"><span class="cl">                  <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="o">&gt;</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">().</span><span class="n">time_since_epoch</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                  <span class="p">).</span><span class="n">count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 2. 添加3秒后执行的一次性任务（后续会取消）
+</span></span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">task_to_cancel</span> <span class="o">=</span> <span class="n">timer</span><span class="p">.</span><span class="n">AddTask</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="p">[]()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;This task will be canceled, will not print&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 3. 添加500ms周期执行的任务
+</span></span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">periodic_task</span> <span class="o">=</span> <span class="n">timer</span><span class="p">.</span><span class="n">AddPeriodicTask</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">500</span><span class="p">),</span> <span class="p">[]()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">static</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Periodic task: count=&#34;</span> <span class="o">&lt;&lt;</span> <span class="o">++</span><span class="n">count</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;, timestamp: &#34;</span>
+</span></span><span class="line"><span class="cl">                  <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="o">&gt;</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">().</span><span class="n">time_since_epoch</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                  <span class="p">).</span><span class="n">count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 2秒后取消3秒的一次性任务
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">task_to_cancel</span><span class="p">.</span><span class="n">has_value</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">bool</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">timer</span><span class="p">.</span><span class="n">CancelTask</span><span class="p">(</span><span class="n">task_to_cancel</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cancel task &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">task_to_cancel</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;, result: &#34;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">ret</span> <span class="o">?</span> <span class="s">&#34;success&#34;</span> <span class="o">:</span> <span class="s">&#34;fail&#34;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 再运行3秒后，取消周期性任务
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">3</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">periodic_task</span><span class="p">.</span><span class="n">has_value</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">bool</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">timer</span><span class="p">.</span><span class="n">CancelTask</span><span class="p">(</span><span class="n">periodic_task</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Cancel periodic task &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">periodic_task</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;, result: &#34;</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">ret</span> <span class="o">?</span> <span class="s">&#34;success&#34;</span> <span class="o">:</span> <span class="s">&#34;fail&#34;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 再运行2秒后退出程序
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">timer</span><span class="p">.</span><span class="n">Stop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">timer_thread</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<hr>
+<h3 id="编译与运行">编译与运行</h3>
+<ol>
+<li><strong>环境要求</strong>：Linux系统（内核≥2.6.25，支持timerfd、eventfd、epoll），编译器支持C++17标准（g++7+、clang++5+）。</li>
+<li><strong>编译命令</strong>：
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">g++ -std<span class="o">=</span>c++17 timer_epoll.cpp -o timer_epoll -lpthread</span></span></code></pre></div></div>
+</li>
+<li><strong>运行命令</strong>：
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./timer_epoll</span></span></code></pre></div></div>
+</li>
+</ol>
+<hr>
+<h3 id="关键说明与注意事项">关键说明与注意事项</h3>
+<ol>
+<li>
+<p><strong>C++17特性使用</strong></p>
+<ul>
+<li><code>std::optional</code>：安全处理任务添加的返回值，避免无效ID的误用。</li>
+<li><code>std::atomic</code>：无锁保证循环状态和任务ID的线程安全。</li>
+<li>移动语义：<code>std::move</code>转移回调函数，减少拷贝开销。</li>
+<li>类型安全的时间处理：<code>std::chrono</code>系列接口，避免原始时间类型的转换错误。</li>
+</ul>
+</li>
+<li>
+<p><strong>核心约束与优化</strong></p>
+<ul>
+<li><strong>回调执行</strong>：用户回调应避免耗时操作，否则会阻塞事件循环导致定时器延迟；耗时任务建议丢入线程池执行。</li>
+<li><strong>时间精度</strong>：默认毫秒级精度，微秒级高精度需要配合Linux实时内核和线程优先级调整。</li>
+<li><strong>平台限制</strong>：仅支持Linux系统，epoll/timerfd/eventfd均为Linux特有API，Windows/macOS不兼容。</li>
+<li><strong>线程安全</strong>：<code>AddTask</code>/<code>CancelTask</code>支持多线程并发调用，<code>Start</code>仅允许在单线程运行。</li>
+</ul>
+</li>
+<li>
+<p><strong>可扩展方向</strong></p>
+<ul>
+<li>集成线程池，处理耗时回调任务；</li>
+<li>支持任务暂停/恢复、优先级调度；</li>
+<li>增加任务执行完成的回调通知；</li>
+<li>优化无效任务的清理机制，减少堆内存占用。</li>
+</ul>
+</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-01-10</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/024_cpp17%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A7%A6%E5%8F%91%E4%BB%BB%E5%8A%A1/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/cpp17/">Cpp17</a>,&nbsp;<a href="/blog/tags/timer/">Timer</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/023_cpp17%E5%AE%9E%E7%8E%B0%E5%8D%8F%E7%A8%8B%E6%9C%BA%E5%88%B6/" class="prev" rel="prev" title="C&#43;&#43;17 实现协程机制"><i class="fas fa-angle-left" aria-hidden="true"></i>C++17 实现协程机制</a>
+            <a href="/blog/006_cpp%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="C&#43;&#43; 模板编程详细总结">C++ 模板编程详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

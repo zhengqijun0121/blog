@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>top 命令使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/007_top%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="top 命令使用详细总结">
+  <meta property="og:description" content="top命令使用详细总结 top 是 Linux/Unix 系统中实时动态监控系统资源与进程状态的核心工具，相当于 Windows 系统的任务管理器，是运维、开发人员排查系统性能问题的首选工具。它默认每3秒刷新一次数据，支持丰富的排序、筛选、自定义配置与进程管理能力。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-01-19T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-01-19T09:00:00+08:00">
+    <meta property="article:tag" content="开发工具">
+    <meta property="article:tag" content="Shell">
+    <meta property="article:tag" content="Top">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="top 命令使用详细总结">
+  <meta name="twitter:description" content="top命令使用详细总结 top 是 Linux/Unix 系统中实时动态监控系统资源与进程状态的核心工具，相当于 Windows 系统的任务管理器，是运维、开发人员排查系统性能问题的首选工具。它默认每3秒刷新一次数据，支持丰富的排序、筛选、自定义配置与进程管理能力。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/007_top%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/001_c%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/012_tcpdump%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "top 命令使用详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/007_top%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "dev-tools, Shell, top","wordcount":  3611 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/007_top%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-01-19T09:00:00+08:00","dateModified": "2026-01-19T09:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/007_top%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/007_top%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">top 命令使用详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/dev-tools/"><i class="far fa-folder" aria-hidden="true"></i>开发工具</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-19">2026-01-19</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 3611 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 8 分钟&nbsp;<span id="/blog/007_top%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="top 命令使用详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一基础语法与启动">一、基础语法与启动</a>
+      <ul>
+        <li><a href="#基础语法">基础语法</a></li>
+      </ul>
+    </li>
+    <li><a href="#二监控界面全字段详解">二、监控界面全字段详解</a>
+      <ul>
+        <li><a href="#21-系统概览区全局资源状态">2.1 系统概览区（全局资源状态）</a>
+          <ul>
+            <li><a href="#第1行系统基础信息与平均负载">第1行：系统基础信息与平均负载</a></li>
+            <li><a href="#第2行进程tasks统计">第2行：进程（Tasks）统计</a></li>
+            <li><a href="#第3行cpu-使用率状态核心重点">第3行：CPU 使用率状态（核心重点）</a></li>
+            <li><a href="#第4行物理内存mem状态">第4行：物理内存（Mem）状态</a></li>
+            <li><a href="#第5行交换分区swap状态">第5行：交换分区（Swap）状态</a></li>
+          </ul>
+        </li>
+        <li><a href="#22-进程列表区单进程资源详情">2.2 进程列表区（单进程资源详情）</a></li>
+      </ul>
+    </li>
+    <li><a href="#三常用启动参数">三、常用启动参数</a></li>
+    <li><a href="#四高频交互快捷键">四、高频交互快捷键</a>
+      <ul>
+        <li><a href="#41-排序类核心高频">4.1 排序类（核心高频）</a></li>
+        <li><a href="#42-视图切换类">4.2 视图切换类</a></li>
+        <li><a href="#43-筛选过滤类">4.3 筛选过滤类</a></li>
+        <li><a href="#44-进程操作类">4.4 进程操作类</a></li>
+        <li><a href="#45-配置与其他类">4.5 配置与其他类</a></li>
+      </ul>
+    </li>
+    <li><a href="#五高级用法与实战技巧">五、高级用法与实战技巧</a>
+      <ul>
+        <li><a href="#51-自定义显示列并永久保存">5.1 自定义显示列并永久保存</a></li>
+        <li><a href="#52-线程级cpu占用排查">5.2 线程级CPU占用排查</a></li>
+        <li><a href="#53-脚本化采集监控数据">5.3 脚本化采集监控数据</a></li>
+      </ul>
+    </li>
+    <li><a href="#六常见认知误区纠正">六、常见认知误区纠正</a></li>
+    <li><a href="#七典型性能问题排查流程">七、典型性能问题排查流程</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="top命令使用详细总结">top命令使用详细总结</h1>
+<p><code>top</code> 是 Linux/Unix 系统中<strong>实时动态监控系统资源与进程状态</strong>的核心工具，相当于 Windows 系统的任务管理器，是运维、开发人员排查系统性能问题的首选工具。它默认每3秒刷新一次数据，支持丰富的排序、筛选、自定义配置与进程管理能力。</p>
+<h2 id="一基础语法与启动">一、基础语法与启动</h2>
+<h3 id="基础语法">基础语法</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">top <span class="o">[</span>选项<span class="o">]</span></span></span></code></pre></div></div>
+<ul>
+<li>最简启动：终端直接输入 <code>top</code> 回车即可进入监控界面</li>
+<li>退出方式：按 <code>q</code> 键，或使用 <code>Ctrl+C</code> 强制退出</li>
+</ul>
+<h2 id="二监控界面全字段详解">二、监控界面全字段详解</h2>
+<p>top 界面分为两大核心区域：<strong>系统概览区（前5行）</strong> 和 <strong>进程列表区</strong>，所有字段的含义如下：</p>
+<h3 id="21-系统概览区全局资源状态">2.1 系统概览区（全局资源状态）</h3>
+<h4 id="第1行系统基础信息与平均负载">第1行：系统基础信息与平均负载</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>top - 23:10:30 up 12 days,  4:25,  2 users,  load average: 0.68, 0.75, 0.82</code></pre></div>
+<table>
+  <thead>
+      <tr>
+          <th>字段</th>
+          <th>含义说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>23:10:30</td>
+          <td>当前系统时间</td>
+      </tr>
+      <tr>
+          <td>up 12 days, 4:25</td>
+          <td>系统连续运行时长（天、时、分）</td>
+      </tr>
+      <tr>
+          <td>2 users</td>
+          <td>当前登录系统的用户数</td>
+      </tr>
+      <tr>
+          <td>load average: 0.68, 0.75, 0.82</td>
+          <td>系统过去1分钟、5分钟、15分钟的平均负载；单核CPU满负载为1.00，N核CPU满负载为N.00，负载长期超过核心数70%需警惕</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="第2行进程tasks统计">第2行：进程（Tasks）统计</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Tasks: 201 total,   1 running, 200 sleeping,   0 stopped,   0 zombie</code></pre></div>
+<table>
+  <thead>
+      <tr>
+          <th>字段</th>
+          <th>含义说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>total</td>
+          <td>系统总进程数</td>
+      </tr>
+      <tr>
+          <td>running</td>
+          <td>正在运行的进程数</td>
+      </tr>
+      <tr>
+          <td>sleeping</td>
+          <td>睡眠状态的进程数（大部分进程默认状态）</td>
+      </tr>
+      <tr>
+          <td>stopped</td>
+          <td>停止状态的进程数</td>
+      </tr>
+      <tr>
+          <td>zombie</td>
+          <td>僵尸进程数，数值持续大于0需排查父进程回收逻辑</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="第3行cpu-使用率状态核心重点">第3行：CPU 使用率状态（核心重点）</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>%Cpu(s):  3.2 us,  1.0 sy,  0.0 ni, 95.1 id,  0.5 wa,  0.1 hi,  0.1 si,  0.0 st</code></pre></div>
+<table>
+  <thead>
+      <tr>
+          <th>字段</th>
+          <th>含义说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>us</td>
+          <td>用户态进程占用CPU百分比（业务程序占用，高占用优先排查）</td>
+      </tr>
+      <tr>
+          <td>sy</td>
+          <td>内核态进程占用CPU百分比（系统调用、内核操作占用）</td>
+      </tr>
+      <tr>
+          <td>ni</td>
+          <td>调整过nice值的进程占用CPU百分比</td>
+      </tr>
+      <tr>
+          <td>id</td>
+          <td>空闲CPU百分比，数值越低CPU负载越高</td>
+      </tr>
+      <tr>
+          <td>wa</td>
+          <td>CPU等待IO完成的时间百分比，数值高说明磁盘/网络IO存在瓶颈</td>
+      </tr>
+      <tr>
+          <td>hi</td>
+          <td>硬中断占用CPU百分比</td>
+      </tr>
+      <tr>
+          <td>si</td>
+          <td>软中断占用CPU百分比</td>
+      </tr>
+      <tr>
+          <td>st</td>
+          <td>虚拟化环境中被宿主机抢占的CPU时间百分比</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="第4行物理内存mem状态">第4行：物理内存（Mem）状态</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>KiB Mem :  8191408 total,  1256320 free,  3215488 used,  3719600 buff/cache</code></pre></div>
+<table>
+  <thead>
+      <tr>
+          <th>字段</th>
+          <th>含义说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>total</td>
+          <td>物理内存总大小</td>
+      </tr>
+      <tr>
+          <td>free</td>
+          <td>完全未使用的空闲内存</td>
+      </tr>
+      <tr>
+          <td>used</td>
+          <td>已使用的物理内存（含进程、内核、共享内存占用）</td>
+      </tr>
+      <tr>
+          <td>buff/cache</td>
+          <td>缓冲区+页缓存内存，系统用空闲内存做的性能优化，进程需要时可快速释放</td>
+      </tr>
+      <tr>
+          <td>avail Mem</td>
+          <td>真正可分配给新进程的可用内存（含free + 可回收的cache），比free更能反映真实内存余量</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="第5行交换分区swap状态">第5行：交换分区（Swap）状态</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>KiB Swap:  4194300 total,  4194300 free,        0 used.  3567890 avail Mem</code></pre></div>
+<table>
+  <thead>
+      <tr>
+          <th>字段</th>
+          <th>含义说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>total</td>
+          <td>交换分区总大小</td>
+      </tr>
+      <tr>
+          <td>free</td>
+          <td>空闲交换分区大小</td>
+      </tr>
+      <tr>
+          <td>used</td>
+          <td>已使用的交换分区大小，持续升高说明物理内存不足</td>
+      </tr>
+      <tr>
+          <td>avail Mem</td>
+          <td>交换分区中可用于分配的内存</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="22-进程列表区单进程资源详情">2.2 进程列表区（单进程资源详情）</h3>
+<p>默认显示的核心列含义如下，可自定义增减列：</p>
+<table>
+  <thead>
+      <tr>
+          <th>列名</th>
+          <th>含义说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>PID</td>
+          <td>进程唯一ID号，用于进程管理、过滤</td>
+      </tr>
+      <tr>
+          <td>USER</td>
+          <td>运行该进程的所属用户</td>
+      </tr>
+      <tr>
+          <td>PR</td>
+          <td>进程内核调度优先级，数值越小优先级越高，默认PR=NI+20</td>
+      </tr>
+      <tr>
+          <td>NI</td>
+          <td>进程Nice值，用户可调整的优先级，范围-20~19，负值提升优先级，正值降低优先级</td>
+      </tr>
+      <tr>
+          <td>VIRT</td>
+          <td>进程占用的虚拟内存总量（含进程代码、数据、共享库、交换空间、堆/栈等），不代表实际物理内存占用</td>
+      </tr>
+      <tr>
+          <td>RES</td>
+          <td>进程常驻物理内存大小（进程当前实际在物理内存中占用的空间，不含交换出去的部分），是判断进程内存占用的核心指标</td>
+      </tr>
+      <tr>
+          <td>SHR</td>
+          <td>进程共享内存大小（含与其他进程共享的共享库、共享内存段）</td>
+      </tr>
+      <tr>
+          <td>S</td>
+          <td>进程状态，常见值：R=运行、S=睡眠、D=不可中断睡眠、T=停止、Z=僵尸进程</td>
+      </tr>
+      <tr>
+          <td>%CPU</td>
+          <td>上一个刷新周期内进程占用CPU的百分比，<strong>多核系统中可超过100%</strong>（100%代表占满1个逻辑核心，N核CPU最大值为N*100%）</td>
+      </tr>
+      <tr>
+          <td>%MEM</td>
+          <td>进程占用的物理内存占总内存的百分比</td>
+      </tr>
+      <tr>
+          <td>TIME+</td>
+          <td>进程自启动以来累计使用的CPU时间，精确到百分之一秒</td>
+      </tr>
+      <tr>
+          <td>COMMAND</td>
+          <td>进程启动的命令名/完整命令行</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="三常用启动参数">三、常用启动参数</h2>
+<p>启动top时可携带参数，直接指定监控规则，高频参数如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>参数</th>
+          <th>功能说明</th>
+          <th>实用示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>-d 秒数</td>
+          <td>设置界面刷新间隔（默认3秒），支持小数</td>
+          <td><code>top -d 1</code> 每秒刷新1次；<code>top -d 0.5</code> 每500毫秒刷新1次</td>
+      </tr>
+      <tr>
+          <td>-n 次数</td>
+          <td>刷新指定次数后自动退出top</td>
+          <td><code>top -n 5</code> 刷新5次后退出，适合单次采集数据</td>
+      </tr>
+      <tr>
+          <td>-p PID</td>
+          <td>仅监控指定PID的进程，支持多个PID逗号分隔</td>
+          <td><code>top -p 1234</code> 监控PID1234；<code>top -p 1234,5678</code> 监控两个进程</td>
+      </tr>
+      <tr>
+          <td>-u 用户名</td>
+          <td>仅显示指定用户的进程</td>
+          <td><code>top -u root</code> 只看root用户的进程；<code>top -u mysql</code> 只看mysql进程</td>
+      </tr>
+      <tr>
+          <td>-b</td>
+          <td>批处理模式，输出不刷新覆盖，适合写入文件/脚本调用</td>
+          <td><code>top -b -n 10 &gt; top.log</code> 将10次刷新结果写入日志</td>
+      </tr>
+      <tr>
+          <td>-c</td>
+          <td>启动时直接显示进程完整命令行（默认仅显示命令名）</td>
+          <td><code>top -c</code></td>
+      </tr>
+      <tr>
+          <td>-i</td>
+          <td>启动时隐藏空闲/无资源消耗的进程，只显示活跃进程</td>
+          <td><code>top -i</code></td>
+      </tr>
+      <tr>
+          <td>-H</td>
+          <td>启动线程视图，显示所有线程而非仅进程，排查多线程程序CPU占用必备</td>
+          <td><code>top -H -p 1234</code> 查看PID1234进程的所有线程资源占用</td>
+      </tr>
+      <tr>
+          <td>-S</td>
+          <td>开启CPU时间累积模式，将已退出子进程的CPU时间累计到父进程</td>
+          <td><code>top -S</code></td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="四高频交互快捷键">四、高频交互快捷键</h2>
+<p>top运行过程中，可通过单键快捷键实时调整监控视图、执行操作，无需退出重启，按功能分类如下：</p>
+<h3 id="41-排序类核心高频">4.1 排序类（核心高频）</h3>
+<table>
+  <thead>
+      <tr>
+          <th>快捷键</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>P</td>
+          <td>按%CPU使用率降序排序（默认排序规则）</td>
+      </tr>
+      <tr>
+          <td>M</td>
+          <td>按%MEM内存使用率降序排序，快速定位内存占用大户</td>
+      </tr>
+      <tr>
+          <td>T</td>
+          <td>按累计CPU时间TIME+降序排序</td>
+      </tr>
+      <tr>
+          <td>N</td>
+          <td>按PID号降序排序</td>
+      </tr>
+      <tr>
+          <td>R</td>
+          <td>切换排序方向（升序/降序）</td>
+      </tr>
+      <tr>
+          <td>x</td>
+          <td>高亮显示当前排序的列</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="42-视图切换类">4.2 视图切换类</h3>
+<table>
+  <thead>
+      <tr>
+          <th>快捷键</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1（数字1）</td>
+          <td>切换CPU总览/单个逻辑核心的CPU状态，排查多核负载不均问题</td>
+      </tr>
+      <tr>
+          <td>c</td>
+          <td>切换显示进程命令名/完整命令行</td>
+      </tr>
+      <tr>
+          <td>l</td>
+          <td>开启/关闭第一行负载信息显示</td>
+      </tr>
+      <tr>
+          <td>m</td>
+          <td>切换内存信息显示模式（数值/进度条）</td>
+      </tr>
+      <tr>
+          <td>t</td>
+          <td>切换CPU/进程状态显示模式（数值/进度条）</td>
+      </tr>
+      <tr>
+          <td>V</td>
+          <td>切换进程树视图，直观显示父子进程关系</td>
+      </tr>
+      <tr>
+          <td>f</td>
+          <td>进入字段编辑界面，可添加/删除/排序进程列表的显示列</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="43-筛选过滤类">4.3 筛选过滤类</h3>
+<table>
+  <thead>
+      <tr>
+          <th>快捷键</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>u</td>
+          <td>输入用户名，仅显示该用户的进程，回车清空显示所有用户</td>
+      </tr>
+      <tr>
+          <td>U</td>
+          <td>同u，支持按有效用户/真实用户过滤</td>
+      </tr>
+      <tr>
+          <td>i</td>
+          <td>切换是否隐藏空闲/僵死进程</td>
+      </tr>
+      <tr>
+          <td>L</td>
+          <td>输入关键词，高亮匹配的进程</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="44-进程操作类">4.4 进程操作类</h3>
+<table>
+  <thead>
+      <tr>
+          <th>快捷键</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>k</td>
+          <td>终止进程，输入k后按提示输入PID，再输入信号（默认15优雅终止，9强制终止）</td>
+      </tr>
+      <tr>
+          <td>r</td>
+          <td>调整进程nice值，输入r后按提示输入PID，再输入nice值（负值需root权限）</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="45-配置与其他类">4.5 配置与其他类</h3>
+<table>
+  <thead>
+      <tr>
+          <th>快捷键</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>d / s</td>
+          <td>修改界面刷新间隔，输入新的秒数回车即可</td>
+      </tr>
+      <tr>
+          <td>W</td>
+          <td>将当前top的配置（排序、显示列、刷新间隔等）写入~/.toprc文件，下次启动自动生效</td>
+      </tr>
+      <tr>
+          <td>h / ?</td>
+          <td>打开top帮助界面，查看所有快捷键说明</td>
+      </tr>
+      <tr>
+          <td>Ctrl+L</td>
+          <td>刷新整个屏幕，重置显示界面</td>
+      </tr>
+      <tr>
+          <td>q</td>
+          <td>退出top</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="五高级用法与实战技巧">五、高级用法与实战技巧</h2>
+<h3 id="51-自定义显示列并永久保存">5.1 自定义显示列并永久保存</h3>
+<ol>
+<li>运行top，按 <code>f</code> 进入字段编辑界面</li>
+<li>上下方向键选择字段，按空格勾选/取消显示</li>
+<li>左右方向键选择字段，按s设置为排序列</li>
+<li>按q退出编辑界面，按 <code>W</code> 保存配置到~/.toprc，永久生效</li>
+</ol>
+<h3 id="52-线程级cpu占用排查">5.2 线程级CPU占用排查</h3>
+<p>多线程程序（如Java、Go服务）CPU飙高时，需定位到具体异常线程：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 方式1：启动时直接开启线程视图</span>
+</span></span><span class="line"><span class="cl">top -H -p 进程PID
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 方式2：运行中切换线程视图</span>
+</span></span><span class="line"><span class="cl">top -p 进程PID → 运行中按大写H</span></span></code></pre></div></div>
+<p>获取异常线程PID后，可转换为16进制，结合jstack等工具定位代码堆栈。</p>
+<h3 id="53-脚本化采集监控数据">5.3 脚本化采集监控数据</h3>
+<p>通过批处理模式，可将top数据写入文件，用于后续分析或告警：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 每秒采集1次，共采集60次，写入top_monitor.log</span>
+</span></span><span class="line"><span class="cl">top -b -d <span class="m">1</span> -n <span class="m">60</span> &gt; top_monitor.log
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 定时采集特定进程的资源占用，追加到日志</span>
+</span></span><span class="line"><span class="cl">*/1 * * * * /usr/bin/top -b -n <span class="m">1</span> -p <span class="m">1234</span> &gt;&gt; /var/log/process_top.log</span></span></code></pre></div></div>
+<h2 id="六常见认知误区纠正">六、常见认知误区纠正</h2>
+<ol>
+<li><strong>%CPU超过100%是异常</strong>：错误。top的%CPU是单核维度，8核服务器中，进程%CPU最高可达800%，超过100%仅代表进程使用了多核并行计算，是正常现象。</li>
+<li><strong>load average高 = CPU满负载</strong>：错误。load average是「等待CPU运行的进程数 + 不可中断睡眠的进程数」，IO瓶颈（wa高）会导致load飙升，但CPU idle可能仍很高。</li>
+<li><strong>free内存很小 = 内存不足</strong>：错误。Linux会用空闲内存做buff/cache优化性能，free小不代表内存不够，核心看avail Mem，只要avail Mem充足，就无需担心。</li>
+<li><strong>VIRT内存很大 = 内存泄漏</strong>：错误。VIRT包含虚拟内存、共享库、映射文件等，不代表实际物理内存占用，判断内存泄漏核心看RES常驻内存是否持续无节制上涨。</li>
+<li><strong>wa高是CPU性能问题</strong>：错误。wa是CPU等待IO的时间，数值高说明磁盘读写、网络IO存在瓶颈，需排查磁盘性能、数据库慢查询、大文件读写等，而非优化CPU。</li>
+</ol>
+<h2 id="七典型性能问题排查流程">七、典型性能问题排查流程</h2>
+<ol>
+<li><strong>CPU飙高排查</strong>
+<ul>
+<li>执行top，按 <code>P</code> 按CPU排序，定位占用最高的进程PID</li>
+<li>按 <code>1</code> 查看是否单核负载不均，按 <code>H</code> 切换线程视图，定位异常线程PID</li>
+<li>查看us/sy占比，us高排查业务代码，sy高排查系统调用、频繁创建进程/线程</li>
+</ul>
+</li>
+<li><strong>内存泄漏排查</strong>
+<ul>
+<li>执行top，按 <code>M</code> 按内存排序，定位RES持续上涨的进程</li>
+<li>关注%MEM、RES是否持续升高，swap used是否持续增长</li>
+<li>结合smem、jmap等工具进一步分析进程内存分布</li>
+</ul>
+</li>
+<li><strong>系统卡顿排查</strong>
+<ul>
+<li>先看load average，对比1/5/15分钟趋势，判断负载是突发还是持续</li>
+<li>看CPU的wa占比，wa高结合iostat排查磁盘IO瓶颈</li>
+<li>看%idle，idle持续接近0说明CPU资源耗尽</li>
+</ul>
+</li>
+<li><strong>僵尸进程排查</strong>
+<ul>
+<li>查看Tasks行的zombie数值，大于0则存在僵尸进程</li>
+<li>按 <code>f</code> 勾选PPID列，找到僵尸进程的父进程PID</li>
+<li>排查父进程是否未正确执行wait()回收子进程资源，或重启父进程解决</li>
+</ul>
+</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-01-19</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/007_top%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/dev-tools/">开发工具</a>,&nbsp;<a href="/blog/tags/shell/">Shell</a>,&nbsp;<a href="/blog/tags/top/">Top</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/001_c%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="C 语法详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>C 语法详细总结</a>
+            <a href="/blog/012_tcpdump%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="tcpdump 命令使用详细总结">tcpdump 命令使用详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>GoogleMock 使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/002_googlemock%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="GoogleMock 使用详细总结">
+  <meta property="og:description" content="GoogleMock 使用详细总结 Google Mock（简称gmock）是Google推出的C&#43;&#43;开源Mock框架，与Google Test（gtest）深度集成，是现代C&#43;&#43;单元测试的核心基础设施。它用于在单元测试中创建模拟对象，替代被测代码的外部依赖（数据库、网络、第三方接口、复杂组件等），实现依赖隔离、行为精准控制、交互逻辑验证，让测试更稳定、高效、可复现。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-02T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-03-02T10:00:20+08:00">
+    <meta property="article:tag" content="UT">
+    <meta property="article:tag" content="GoogleMock">
+    <meta property="article:tag" content="Gmock">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="GoogleMock 使用详细总结">
+  <meta name="twitter:description" content="GoogleMock 使用详细总结 Google Mock（简称gmock）是Google推出的C&#43;&#43;开源Mock框架，与Google Test（gtest）深度集成，是现代C&#43;&#43;单元测试的核心基础设施。它用于在单元测试中创建模拟对象，替代被测代码的外部依赖（数据库、网络、第三方接口、复杂组件等），实现依赖隔离、行为精准控制、交互逻辑验证，让测试更稳定、高效、可复现。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/002_googlemock%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/001_googletest%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/010_ucos_ii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "GoogleMock 使用详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/002_googlemock%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "UT, GoogleMock, gmock","wordcount":  7058 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/002_googlemock%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-03-02T09:00:20+08:00","dateModified": "2026-03-02T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/002_googlemock%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/002_googlemock%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">GoogleMock 使用详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/ut/"><i class="far fa-folder" aria-hidden="true"></i>UT</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-03-02">2026-03-02</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 7058 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 15 分钟&nbsp;<span id="/blog/002_googlemock%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="GoogleMock 使用详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一核心基础认知">一、核心基础认知</a>
+      <ul>
+        <li><a href="#11-核心定位与适用场景">1.1 核心定位与适用场景</a></li>
+        <li><a href="#12-与gtest的关系">1.2 与gtest的关系</a></li>
+        <li><a href="#13-三种mock对象模式">1.3 三种Mock对象模式</a></li>
+      </ul>
+    </li>
+    <li><a href="#二环境搭建与项目集成">二、环境搭建与项目集成</a>
+      <ul>
+        <li><a href="#21-源码获取与编译">2.1 源码获取与编译</a></li>
+        <li><a href="#22-cmake项目集成">2.2 CMake项目集成</a>
+          <ul>
+            <li><a href="#方式1系统安装后集成推荐">方式1：系统安装后集成（推荐）</a></li>
+            <li><a href="#方式2子模块嵌入项目">方式2：子模块嵌入项目</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-头文件引入">2.3 头文件引入</a></li>
+      </ul>
+    </li>
+    <li><a href="#三核心概念与语法">三、核心概念与语法</a>
+      <ul>
+        <li><a href="#31-六大核心概念">3.1 六大核心概念</a></li>
+        <li><a href="#32-核心宏语法">3.2 核心宏语法</a>
+          <ul>
+            <li><a href="#1-mock_methodmock函数声明">1. MOCK_METHOD：Mock函数声明</a></li>
+            <li><a href="#2-expect_call期望设置核心语法">2. EXPECT_CALL：期望设置核心语法</a></li>
+            <li><a href="#3-on_call默认行为设置">3. ON_CALL：默认行为设置</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#四基础使用全流程完整可运行示例">四、基础使用全流程（完整可运行示例）</a>
+      <ul>
+        <li><a href="#步骤1定义待模拟的依赖接口">步骤1：定义待模拟的依赖接口</a></li>
+        <li><a href="#步骤2实现mock类">步骤2：实现Mock类</a></li>
+        <li><a href="#步骤3编写被测代码依赖注入">步骤3：编写被测代码（依赖注入）</a></li>
+        <li><a href="#步骤4编写单元测试用例">步骤4：编写单元测试用例</a></li>
+        <li><a href="#步骤5编译与运行">步骤5：编译与运行</a></li>
+      </ul>
+    </li>
+    <li><a href="#五核心能力详解">五、核心能力详解</a>
+      <ul>
+        <li><a href="#51-匹配器matcher全解">5.1 匹配器（Matcher）全解</a>
+          <ul>
+            <li><a href="#1-通用基础匹配器">1. 通用基础匹配器</a></li>
+            <li><a href="#2-字符串匹配器">2. 字符串匹配器</a></li>
+            <li><a href="#3-容器匹配器">3. 容器匹配器</a></li>
+            <li><a href="#4-复合匹配器">4. 复合匹配器</a></li>
+          </ul>
+        </li>
+        <li><a href="#52-基数cardinality调用次数控制">5.2 基数（Cardinality）：调用次数控制</a></li>
+        <li><a href="#53-动作action函数行为定义">5.3 动作（Action）：函数行为定义</a>
+          <ul>
+            <li><a href="#1-基础返回动作">1. 基础返回动作</a></li>
+            <li><a href="#2-出参设置动作">2. 出参设置动作</a></li>
+            <li><a href="#3-复合与自定义动作">3. 复合与自定义动作</a></li>
+          </ul>
+        </li>
+        <li><a href="#54-调用顺序控制">5.4 调用顺序控制</a></li>
+      </ul>
+    </li>
+    <li><a href="#六进阶使用技巧">六、进阶使用技巧</a>
+      <ul>
+        <li><a href="#61-mock重载函数">6.1 Mock重载函数</a></li>
+        <li><a href="#62-mock非虚函数">6.2 Mock非虚函数</a></li>
+        <li><a href="#63-mock静态全局函数">6.3 Mock静态/全局函数</a></li>
+        <li><a href="#64-部分mock委托真实对象">6.4 部分Mock（委托真实对象）</a></li>
+        <li><a href="#65-on_call与expect_call的区别与配合">6.5 ON_CALL与EXPECT_CALL的区别与配合</a></li>
+      </ul>
+    </li>
+    <li><a href="#七最佳实践">七、最佳实践</a></li>
+    <li><a href="#八常见坑与避坑指南">八、常见坑与避坑指南</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="googlemock-使用详细总结">GoogleMock 使用详细总结</h1>
+<p>Google Mock（简称gmock）是Google推出的C++开源Mock框架，与Google Test（gtest）深度集成，是现代C++单元测试的核心基础设施。它用于在单元测试中创建模拟对象，替代被测代码的外部依赖（数据库、网络、第三方接口、复杂组件等），实现<strong>依赖隔离、行为精准控制、交互逻辑验证</strong>，让测试更稳定、高效、可复现。</p>
+<h2 id="一核心基础认知">一、核心基础认知</h2>
+<h3 id="11-核心定位与适用场景">1.1 核心定位与适用场景</h3>
+<ul>
+<li><strong>核心能力</strong>：实现测试替身（Test Double）模式，不仅能预定义依赖的返回值（Stub能力），更能精准校验依赖的调用次数、入参、调用顺序、执行动作（Mock核心能力）。</li>
+<li><strong>核心解决的问题</strong>：
+<ol>
+<li>依赖不可用/不稳定（如数据库、网络服务）导致测试失败；</li>
+<li>真实依赖执行慢，拖慢测试效率；</li>
+<li>难以模拟异常场景（如接口报错、超时、返回异常值）；</li>
+<li>无法验证被测代码与依赖的交互逻辑是否符合预期。</li>
+</ol>
+</li>
+<li><strong>前置要求</strong>：被测代码需遵循<strong>面向接口编程+依赖注入</strong>设计原则，这是gmock落地的核心前提。</li>
+</ul>
+<h3 id="12-与gtest的关系">1.2 与gtest的关系</h3>
+<p>gmock是gtest的配套框架，从1.8.0版本开始已完全整合到googletest仓库中，二者配合使用：</p>
+<ul>
+<li>gtest：负责测试用例管理、断言执行、测试结果统计；</li>
+<li>gmock：负责模拟依赖对象、定义行为、校验交互逻辑。</li>
+</ul>
+<h3 id="13-三种mock对象模式">1.3 三种Mock对象模式</h3>
+<p>gmock提供三种Mock模式，控制对未设置期望的函数调用的处理行为：</p>
+<table>
+  <thead>
+      <tr>
+          <th>模式</th>
+          <th>行为</th>
+          <th>适用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>NaggyMock（默认）</td>
+          <td>未设置期望的函数被调用时，打印警告日志，测试不失败</td>
+          <td>开发调试阶段，兼顾灵活性与提示性</td>
+      </tr>
+      <tr>
+          <td>NiceMock</td>
+          <td>未设置期望的函数被调用时，完全忽略，无警告无报错</td>
+          <td>只关注核心交互，非关键函数不影响测试结果</td>
+      </tr>
+      <tr>
+          <td>StrictMock</td>
+          <td>未设置期望的函数被调用时，直接触发测试失败</td>
+          <td>需严格校验协议，任何非预期调用都视为bug</td>
+      </tr>
+  </tbody>
+</table>
+<p>使用方式：<code>NiceMock&lt;MockDB&gt; mock_db;</code> <code>StrictMock&lt;MockDB&gt; mock_db;</code></p>
+<h2 id="二环境搭建与项目集成">二、环境搭建与项目集成</h2>
+<p>gmock已整合到googletest仓库，推荐使用CMake进行项目集成，支持Linux/macOS/Windows全平台。</p>
+<h3 id="21-源码获取与编译">2.1 源码获取与编译</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 克隆googletest仓库（含gmock）</span>
+</span></span><span class="line"><span class="cl">git clone https://github.com/google/googletest.git
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> googletest <span class="o">&amp;&amp;</span> mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 编译配置（必须启用C++11及以上）</span>
+</span></span><span class="line"><span class="cl">cmake .. -DCMAKE_CXX_STANDARD<span class="o">=</span><span class="m">11</span> -DBUILD_GMOCK<span class="o">=</span>ON -DCMAKE_INSTALL_PREFIX<span class="o">=</span>/usr/local
+</span></span><span class="line"><span class="cl"><span class="c1"># 编译与安装</span>
+</span></span><span class="line"><span class="cl">make -j4 <span class="o">&amp;&amp;</span> sudo make install</span></span></code></pre></div></div>
+<h3 id="22-cmake项目集成">2.2 CMake项目集成</h3>
+<p>提供两种主流集成方式，推荐使用现代CMake写法。</p>
+<h4 id="方式1系统安装后集成推荐">方式1：系统安装后集成（推荐）</h4>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.10</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">gmock_demo</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">11</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 查找gtest/gmock库
+</span></span></span><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">GTest</span> <span class="s">REQUIRED</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 添加测试可执行文件
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_executable</span><span class="p">(</span><span class="s">test_demo</span> <span class="s">test.cpp</span> <span class="s">user_service.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 链接库（现代CMake写法，自动处理头文件与链接路径）
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">test_demo</span> <span class="s">PRIVATE</span> <span class="s">GTest::gtest</span> <span class="s">GTest::gtest_main</span> <span class="s">GTest::gmock</span> <span class="s">GTest::gmock_main</span> <span class="s">pthread</span><span class="p">)</span></span></span></code></pre></div></div>
+<h4 id="方式2子模块嵌入项目">方式2：子模块嵌入项目</h4>
+<p>将googletest源码放入项目<code>third_party/googletest</code>目录，CMake配置如下：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.10</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">gmock_demo</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">11</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 添加gtest/gmock子目录
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">third_party/googletest</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_executable</span><span class="p">(</span><span class="s">test_demo</span> <span class="s">test.cpp</span> <span class="s">user_service.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">test_demo</span> <span class="s">PRIVATE</span> <span class="s">gtest</span> <span class="s">gtest_main</span> <span class="s">gmock</span> <span class="s">gmock_main</span> <span class="s">pthread</span><span class="p">)</span></span></span></code></pre></div></div>
+<h3 id="23-头文件引入">2.3 头文件引入</h3>
+<p>所有gmock能力都通过核心头文件引入，测试文件中需包含：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;gtest/gtest.h&gt;</span><span class="cp">   </span><span class="c1">// gtest核心
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;gmock/gmock.h&gt;</span><span class="cp">   </span><span class="c1">// gmock核心
+</span></span></span></code></pre></div></div>
+<h2 id="三核心概念与语法">三、核心概念与语法</h2>
+<h3 id="31-六大核心概念">3.1 六大核心概念</h3>
+<table>
+  <thead>
+      <tr>
+          <th>概念</th>
+          <th>核心作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Mock类</td>
+          <td>继承自待模拟的接口，通过gmock宏自动生成桩函数，替代真实依赖类</td>
+      </tr>
+      <tr>
+          <td>期望（EXPECT_CALL）</td>
+          <td>核心宏，定义对mock函数的调用预期（是否调用、调用次数、入参要求）</td>
+      </tr>
+      <tr>
+          <td>匹配器（Matcher）</td>
+          <td>校验函数入参是否符合预期，支持精准匹配、模糊匹配、复合匹配</td>
+      </tr>
+      <tr>
+          <td>基数（Cardinality）</td>
+          <td>定义函数的预期调用次数，如恰好1次、至少2次、任意次</td>
+      </tr>
+      <tr>
+          <td>动作（Action）</td>
+          <td>定义mock函数被调用时执行的行为，如设置返回值、修改出参、调用回调</td>
+      </tr>
+      <tr>
+          <td>序列（Sequence）</td>
+          <td>控制多个mock函数的调用顺序，确保执行符合预期时序</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="32-核心宏语法">3.2 核心宏语法</h3>
+<h4 id="1-mock_methodmock函数声明">1. MOCK_METHOD：Mock函数声明</h4>
+<p>C++11及以上推荐使用统一的<code>MOCK_METHOD</code>宏，替代旧版本的<code>MOCK_METHOD0/MOCK_METHOD1</code>等宏。
+<strong>语法</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">MOCK_METHOD</span><span class="p">(</span><span class="err">返回值类型</span><span class="p">,</span> <span class="err">函数名</span><span class="p">,</span> <span class="p">(</span><span class="err">参数列表</span><span class="p">),</span> <span class="p">(</span><span class="err">限定符</span><span class="p">,</span> <span class="err">可选</span><span class="p">));</span></span></span></code></pre></div></div>
+<p><strong>参数说明</strong>：</p>
+<ul>
+<li>第1个参数：原函数的返回值类型；</li>
+<li>第2个参数：原函数的函数名；</li>
+<li>第3个参数：原函数的参数列表，带类型，用括号包裹；</li>
+<li>第4个参数：原函数的限定符，必须和原函数完全一致，包括<code>override</code>、<code>const</code>、<code>noexcept</code>等，多个限定符用逗号分隔。</li>
+</ul>
+<p><strong>示例</strong>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 原接口
+</span></span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">DBInterface</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="o">~</span><span class="n">DBInterface</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="kt">bool</span> <span class="nf">Connect</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">host</span><span class="p">,</span> <span class="kt">int</span> <span class="n">port</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">Query</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">sql</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">result</span><span class="p">)</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">Close</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Mock类
+</span></span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MockDB</span> <span class="o">:</span> <span class="k">public</span> <span class="n">DBInterface</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MOCK_METHOD</span><span class="p">(</span><span class="kt">bool</span><span class="p">,</span> <span class="n">Connect</span><span class="p">,</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">host</span><span class="p">,</span> <span class="kt">int</span> <span class="n">port</span><span class="p">),</span> <span class="p">(</span><span class="k">override</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MOCK_METHOD</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="n">Query</span><span class="p">,</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">sql</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">result</span><span class="p">),</span> <span class="p">(</span><span class="k">const</span><span class="p">,</span> <span class="k">override</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MOCK_METHOD</span><span class="p">(</span><span class="kt">void</span><span class="p">,</span> <span class="n">Close</span><span class="p">,</span> <span class="p">(),</span> <span class="p">(</span><span class="k">override</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></div></div>
+<blockquote>
+<p>注意：无论原函数在基类中是public/protected/private，Mock函数必须声明在Mock类的public区域，否则<code>EXPECT_CALL</code>无法访问。</p>
+</blockquote>
+<h4 id="2-expect_call期望设置核心语法">2. EXPECT_CALL：期望设置核心语法</h4>
+<p><code>EXPECT_CALL</code>是gmock的核心，用于定义函数的调用预期，完整语法如下：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock对象</span><span class="p">,</span> <span class="err">函数名</span><span class="p">(</span><span class="err">匹配器列表</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">Times</span><span class="p">(</span><span class="err">基数</span><span class="p">)</span>              <span class="c1">// 可选：定义调用次数
+</span></span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">With</span><span class="p">(</span><span class="err">多参数联合匹配</span><span class="p">)</span>     <span class="c1">// 可选：多参数联合校验
+</span></span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WillOnce</span><span class="p">(</span><span class="err">动作</span><span class="p">)</span>           <span class="c1">// 可选：单次调用执行的动作
+</span></span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WillRepeatedly</span><span class="p">(</span><span class="err">动作</span><span class="p">)</span>     <span class="c1">// 可选：重复调用执行的动作
+</span></span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">InSequence</span><span class="p">(</span><span class="err">序列</span><span class="p">)</span>         <span class="c1">// 可选：加入调用序列控制
+</span></span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">RetiresOnSaturation</span><span class="p">();</span>   <span class="c1">// 可选：匹配饱和后自动失效
+</span></span></span></code></pre></div></div>
+<h4 id="3-on_call默认行为设置">3. ON_CALL：默认行为设置</h4>
+<p>用于定义mock函数的默认行为，当函数被调用时，若没有匹配的<code>EXPECT_CALL</code>，则执行<code>ON_CALL</code>定义的动作，<strong>不会校验函数是否被调用</strong>，仅设置默认行为。
+<strong>语法</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">ON_CALL</span><span class="p">(</span><span class="n">mock对象</span><span class="p">,</span> <span class="err">函数名</span><span class="p">(</span><span class="err">匹配器列表</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WillByDefault</span><span class="p">(</span><span class="err">默认动作</span><span class="p">);</span></span></span></code></pre></div></div>
+<h2 id="四基础使用全流程完整可运行示例">四、基础使用全流程（完整可运行示例）</h2>
+<p>以用户登录服务为例，完整演示gmock从接口定义到测试用例编写的全流程。</p>
+<h3 id="步骤1定义待模拟的依赖接口">步骤1：定义待模拟的依赖接口</h3>
+<p><code>db_interface.h</code></p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#ifndef DB_INTERFACE_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define DB_INTERFACE_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 数据库依赖接口（纯虚函数）
+</span></span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">DBInterface</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="o">~</span><span class="n">DBInterface</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="kt">bool</span> <span class="nf">Connect</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">host</span><span class="p">,</span> <span class="kt">int</span> <span class="n">port</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">Query</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">sql</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">result</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">Close</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#endif</span></span></span></code></pre></div></div>
+<h3 id="步骤2实现mock类">步骤2：实现Mock类</h3>
+<p><code>mock_db.h</code></p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#ifndef MOCK_DB_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define MOCK_DB_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;gmock/gmock.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;db_interface.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MockDB</span> <span class="o">:</span> <span class="k">public</span> <span class="n">DBInterface</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MOCK_METHOD</span><span class="p">(</span><span class="kt">bool</span><span class="p">,</span> <span class="n">Connect</span><span class="p">,</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">host</span><span class="p">,</span> <span class="kt">int</span> <span class="n">port</span><span class="p">),</span> <span class="p">(</span><span class="k">override</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MOCK_METHOD</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="n">Query</span><span class="p">,</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">sql</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">result</span><span class="p">),</span> <span class="p">(</span><span class="k">override</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MOCK_METHOD</span><span class="p">(</span><span class="kt">void</span><span class="p">,</span> <span class="n">Close</span><span class="p">,</span> <span class="p">(),</span> <span class="p">(</span><span class="k">override</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#endif</span></span></span></code></pre></div></div>
+<h3 id="步骤3编写被测代码依赖注入">步骤3：编写被测代码（依赖注入）</h3>
+<p><code>user_service.h</code></p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#ifndef USER_SERVICE_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define USER_SERVICE_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;db_interface.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">UserService</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 构造函数注入依赖，不直接new真实对象，便于替换为Mock
+</span></span></span><span class="line"><span class="cl">    <span class="k">explicit</span> <span class="n">UserService</span><span class="p">(</span><span class="n">DBInterface</span><span class="o">*</span> <span class="n">db</span><span class="p">)</span> <span class="o">:</span> <span class="n">db_</span><span class="p">(</span><span class="n">db</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">Login</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">username</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">password</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DBInterface</span><span class="o">*</span> <span class="n">db_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#endif</span></span></span></code></pre></div></div>
+<p><code>user_service.cpp</code></p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;user_service.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">UserService</span><span class="o">::</span><span class="n">Login</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">username</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">password</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1. 连接数据库
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">db_</span><span class="o">-&gt;</span><span class="n">Connect</span><span class="p">(</span><span class="s">&#34;127.0.0.1&#34;</span><span class="p">,</span> <span class="mi">3306</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 2. 执行查询
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">sql</span> <span class="o">=</span> <span class="s">&#34;SELECT * FROM users WHERE username=&#39;&#34;</span> <span class="o">+</span> <span class="n">username</span> <span class="o">+</span> <span class="s">&#34;&#39; AND password=&#39;&#34;</span> <span class="o">+</span> <span class="n">password</span> <span class="o">+</span> <span class="s">&#34;&#39;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">row_count</span> <span class="o">=</span> <span class="n">db_</span><span class="o">-&gt;</span><span class="n">Query</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 3. 关闭连接
+</span></span></span><span class="line"><span class="cl">    <span class="n">db_</span><span class="o">-&gt;</span><span class="n">Close</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 4. 结果判断
+</span></span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">row_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="步骤4编写单元测试用例">步骤4：编写单元测试用例</h3>
+<p><code>test.cpp</code></p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;gtest/gtest.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;gmock/gmock.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;mock_db.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;user_service.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 引入常用的匹配器与动作，简化代码
+</span></span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="o">::</span><span class="n">testing</span><span class="o">::</span><span class="n">_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="o">::</span><span class="n">testing</span><span class="o">::</span><span class="n">Return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="o">::</span><span class="n">testing</span><span class="o">::</span><span class="n">SetArgReferee</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="o">::</span><span class="n">testing</span><span class="o">::</span><span class="n">Sequence</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="o">::</span><span class="n">testing</span><span class="o">::</span><span class="n">StartsWith</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="o">::</span><span class="n">testing</span><span class="o">::</span><span class="n">AllOf</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="o">::</span><span class="n">testing</span><span class="o">::</span><span class="n">Gt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="o">::</span><span class="n">testing</span><span class="o">::</span><span class="n">Lt</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 测试场景1：登录成功，验证全流程交互
+</span></span></span><span class="line"><span class="cl"><span class="n">TEST</span><span class="p">(</span><span class="n">UserServiceTest</span><span class="p">,</span> <span class="n">Login_Success</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1. 创建Mock对象
+</span></span></span><span class="line"><span class="cl">    <span class="n">MockDB</span> <span class="n">mock_db</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 2. 设置期望：Connect被调用1次，参数匹配，返回true
+</span></span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Connect</span><span class="p">(</span><span class="s">&#34;127.0.0.1&#34;</span><span class="p">,</span> <span class="mi">3306</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">Times</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">WillOnce</span><span class="p">(</span><span class="n">Return</span><span class="p">(</span><span class="nb">true</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 3. 设置期望：Query被调用1次，sql匹配，设置出参，返回1
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">expect_sql</span> <span class="o">=</span> <span class="s">&#34;SELECT * FROM users WHERE username=&#39;admin&#39; AND password=&#39;123456&#39;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Query</span><span class="p">(</span><span class="n">expect_sql</span><span class="p">,</span> <span class="n">_</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">Times</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">WillOnce</span><span class="p">(</span><span class="n">DoAll</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">SetArgReferee</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&#34;user_data&#34;</span><span class="p">),</span> <span class="c1">// 给第2个参数（索引1，引用类型）赋值
+</span></span></span><span class="line"><span class="cl">            <span class="n">Return</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 4. 设置期望：Close被调用1次
+</span></span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Close</span><span class="p">()).</span><span class="n">Times</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 5. 注入Mock依赖，创建被测对象
+</span></span></span><span class="line"><span class="cl">    <span class="n">UserService</span> <span class="nf">service</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mock_db</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 6. 执行被测函数
+</span></span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="n">Login</span><span class="p">(</span><span class="s">&#34;admin&#34;</span><span class="p">,</span> <span class="s">&#34;123456&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 7. 断言结果
+</span></span></span><span class="line"><span class="cl">    <span class="n">EXPECT_TRUE</span><span class="p">(</span><span class="n">ret</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 测试场景2：数据库连接失败，登录失败，验证后续函数不被调用
+</span></span></span><span class="line"><span class="cl"><span class="n">TEST</span><span class="p">(</span><span class="n">UserServiceTest</span><span class="p">,</span> <span class="n">Login_ConnectFailed</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MockDB</span> <span class="n">mock_db</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 连接返回false，调用1次
+</span></span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Connect</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">Times</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">WillOnce</span><span class="p">(</span><span class="n">Return</span><span class="p">(</span><span class="nb">false</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 连接失败时，Query和Close绝对不能被调用
+</span></span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Query</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)).</span><span class="n">Times</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Close</span><span class="p">()).</span><span class="n">Times</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">UserService</span> <span class="nf">service</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mock_db</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_FALSE</span><span class="p">(</span><span class="n">service</span><span class="p">.</span><span class="n">Login</span><span class="p">(</span><span class="s">&#34;admin&#34;</span><span class="p">,</span> <span class="s">&#34;123456&#34;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 测试场景3：严格校验调用顺序
+</span></span></span><span class="line"><span class="cl"><span class="n">TEST</span><span class="p">(</span><span class="n">UserServiceTest</span><span class="p">,</span> <span class="n">Login_CallOrderCheck</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MockDB</span> <span class="n">mock_db</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Sequence</span> <span class="n">seq</span><span class="p">;</span> <span class="c1">// 创建序列对象
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 所有期望加入序列，必须按声明顺序执行，否则测试失败
+</span></span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Connect</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">InSequence</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">WillOnce</span><span class="p">(</span><span class="n">Return</span><span class="p">(</span><span class="nb">true</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Query</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">InSequence</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">WillOnce</span><span class="p">(</span><span class="n">Return</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Close</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">InSequence</span><span class="p">(</span><span class="n">seq</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">UserService</span> <span class="nf">service</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mock_db</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">service</span><span class="p">.</span><span class="n">Login</span><span class="p">(</span><span class="s">&#34;admin&#34;</span><span class="p">,</span> <span class="s">&#34;123456&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 测试入口
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">testing</span><span class="o">::</span><span class="n">InitGoogleTest</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">testing</span><span class="o">::</span><span class="n">InitGoogleMock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span> <span class="c1">// 必须初始化gmock
+</span></span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">RUN_ALL_TESTS</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="步骤5编译与运行">步骤5：编译与运行</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 编译</span>
+</span></span><span class="line"><span class="cl">cmake -B build <span class="o">&amp;&amp;</span> cmake --build build
+</span></span><span class="line"><span class="cl"><span class="c1"># 运行测试</span>
+</span></span><span class="line"><span class="cl">./build/test_demo</span></span></code></pre></div></div>
+<h2 id="五核心能力详解">五、核心能力详解</h2>
+<h3 id="51-匹配器matcher全解">5.1 匹配器（Matcher）全解</h3>
+<p>匹配器用于校验函数入参是否符合预期，是gmock最常用的能力之一，支持丰富的匹配规则。</p>
+<h4 id="1-通用基础匹配器">1. 通用基础匹配器</h4>
+<table>
+  <thead>
+      <tr>
+          <th>匹配器</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>_</code></td>
+          <td>万能匹配，匹配任意类型、任意值的参数</td>
+      </tr>
+      <tr>
+          <td><code>A&lt;T&gt;()/An&lt;T&gt;()</code></td>
+          <td>匹配任意T类型的参数</td>
+      </tr>
+      <tr>
+          <td><code>Eq(value)</code> / <code>value</code></td>
+          <td>匹配等于value的参数，直接写value等价于Eq(value)</td>
+      </tr>
+      <tr>
+          <td><code>Ne(value)</code></td>
+          <td>匹配不等于value的参数</td>
+      </tr>
+      <tr>
+          <td><code>Gt(value)</code></td>
+          <td>匹配大于value的参数</td>
+      </tr>
+      <tr>
+          <td><code>Ge(value)</code></td>
+          <td>匹配大于等于value的参数</td>
+      </tr>
+      <tr>
+          <td><code>Lt(value)</code></td>
+          <td>匹配小于value的参数</td>
+      </tr>
+      <tr>
+          <td><code>Le(value)</code></td>
+          <td>匹配小于等于value的参数</td>
+      </tr>
+      <tr>
+          <td><code>IsNull()</code></td>
+          <td>匹配空指针</td>
+      </tr>
+      <tr>
+          <td><code>NotNull()</code></td>
+          <td>匹配非空指针</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="2-字符串匹配器">2. 字符串匹配器</h4>
+<p>支持<code>std::string</code>和C风格字符串，大小写敏感/不敏感可选：</p>
+<table>
+  <thead>
+      <tr>
+          <th>匹配器</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>StrEq(str)</code></td>
+          <td>字符串内容完全相等</td>
+      </tr>
+      <tr>
+          <td><code>StrCaseEq(str)</code></td>
+          <td>忽略大小写相等</td>
+      </tr>
+      <tr>
+          <td><code>HasSubstr(substr)</code></td>
+          <td>包含指定子串</td>
+      </tr>
+      <tr>
+          <td><code>StartsWith(prefix)</code></td>
+          <td>以指定前缀开头</td>
+      </tr>
+      <tr>
+          <td><code>EndsWith(suffix)</code></td>
+          <td>以指定后缀结尾</td>
+      </tr>
+      <tr>
+          <td><code>MatchesRegex(regex)</code></td>
+          <td>匹配正则表达式</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="3-容器匹配器">3. 容器匹配器</h4>
+<p>支持vector、list、map等所有STL容器：</p>
+<table>
+  <thead>
+      <tr>
+          <th>匹配器</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>ElementsAre(a,b,c...)</code></td>
+          <td>容器元素按顺序匹配指定值</td>
+      </tr>
+      <tr>
+          <td><code>ContainerEq(container)</code></td>
+          <td>两个容器完全相等</td>
+      </tr>
+      <tr>
+          <td><code>Contains(value)</code></td>
+          <td>容器包含指定值</td>
+      </tr>
+      <tr>
+          <td><code>Each(matcher)</code></td>
+          <td>容器中每个元素都匹配指定规则</td>
+      </tr>
+      <tr>
+          <td><code>SizeIs(matcher)</code></td>
+          <td>容器大小匹配指定规则</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="4-复合匹配器">4. 复合匹配器</h4>
+<p>支持多个匹配器组合，实现复杂逻辑校验：</p>
+<table>
+  <thead>
+      <tr>
+          <th>匹配器</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>Not(matcher)</code></td>
+          <td>逻辑非，不匹配指定规则</td>
+      </tr>
+      <tr>
+          <td><code>AllOf(m1,m2,m3...)</code></td>
+          <td>逻辑与，同时匹配所有规则</td>
+      </tr>
+      <tr>
+          <td><code>AnyOf(m1,m2,m3...)</code></td>
+          <td>逻辑或，匹配任意一个规则</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>示例</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 匹配host以192.168开头，port在1024~65535之间
+</span></span></span><span class="line"><span class="cl"><span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Connect</span><span class="p">(</span><span class="n">StartsWith</span><span class="p">(</span><span class="s">&#34;192.168&#34;</span><span class="p">),</span> <span class="n">AllOf</span><span class="p">(</span><span class="n">Gt</span><span class="p">(</span><span class="mi">1024</span><span class="p">),</span> <span class="n">Lt</span><span class="p">(</span><span class="mi">65535</span><span class="p">))))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WillOnce</span><span class="p">(</span><span class="n">Return</span><span class="p">(</span><span class="nb">true</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 匹配sql包含username，且不是空字符串
+</span></span></span><span class="line"><span class="cl"><span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Query</span><span class="p">(</span><span class="n">AllOf</span><span class="p">(</span><span class="n">HasSubstr</span><span class="p">(</span><span class="s">&#34;username&#34;</span><span class="p">),</span> <span class="n">Not</span><span class="p">(</span><span class="n">StrEq</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">))),</span> <span class="n">_</span><span class="p">));</span></span></span></code></pre></div></div>
+<h3 id="52-基数cardinality调用次数控制">5.2 基数（Cardinality）：调用次数控制</h3>
+<p>用于<code>Times()</code>子句，定义函数的预期调用次数，测试结束时gmock会自动校验，不符合则测试失败。</p>
+<table>
+  <thead>
+      <tr>
+          <th>基数</th>
+          <th>含义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>Times(n)</code></td>
+          <td>必须恰好被调用n次</td>
+      </tr>
+      <tr>
+          <td><code>AtLeast(n)</code></td>
+          <td>至少被调用n次</td>
+      </tr>
+      <tr>
+          <td><code>AtMost(n)</code></td>
+          <td>最多被调用n次</td>
+      </tr>
+      <tr>
+          <td><code>Between(m,n)</code></td>
+          <td>调用次数在m~n之间（包含边界）</td>
+      </tr>
+      <tr>
+          <td><code>AnyNumber()</code></td>
+          <td>任意次数，不校验调用次数</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>自动推断规则：若不写<code>Times()</code>，gmock会根据动作自动推断：</p>
+<ol>
+<li>只有n个<code>WillOnce</code>，无<code>WillRepeatedly</code>：自动推断为<code>Times(n)</code>；</li>
+<li>有n个<code>WillOnce</code> + <code>WillRepeatedly</code>：自动推断为<code>Times(AtLeast(n))</code>。</li>
+</ol>
+</blockquote>
+<h3 id="53-动作action函数行为定义">5.3 动作（Action）：函数行为定义</h3>
+<p>定义mock函数被调用时执行的操作，支持返回值设置、出参修改、回调执行等丰富能力。</p>
+<h4 id="1-基础返回动作">1. 基础返回动作</h4>
+<table>
+  <thead>
+      <tr>
+          <th>动作</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>Return(value)</code></td>
+          <td>返回指定value，必须与函数返回值类型匹配</td>
+      </tr>
+      <tr>
+          <td><code>Return()</code></td>
+          <td>用于void函数，无返回值</td>
+      </tr>
+      <tr>
+          <td><code>ReturnRef(var)</code></td>
+          <td>返回变量的引用</td>
+      </tr>
+      <tr>
+          <td><code>ReturnNew&lt;T&gt;(args)</code></td>
+          <td>返回<code>new T(args)</code>创建的指针</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="2-出参设置动作">2. 出参设置动作</h4>
+<table>
+  <thead>
+      <tr>
+          <th>动作</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>SetArgPointee&lt;N&gt;(value)</code></td>
+          <td>给第N个参数（指针类型）指向的地址赋值</td>
+      </tr>
+      <tr>
+          <td><code>SetArgReferee&lt;N&gt;(value)</code></td>
+          <td>给第N个参数（引用类型）赋值</td>
+      </tr>
+      <tr>
+          <td><code>SaveArg&lt;N&gt;(ptr)</code></td>
+          <td>把第N个参数的值保存到ptr指向的变量</td>
+      </tr>
+      <tr>
+          <td><code>SaveArgPointee&lt;N&gt;(ptr)</code></td>
+          <td>把第N个指针参数指向的值保存到ptr</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>注意：参数索引从0开始，第一个参数索引为0，第二个为1，以此类推。</p>
+</blockquote>
+<h4 id="3-复合与自定义动作">3. 复合与自定义动作</h4>
+<table>
+  <thead>
+      <tr>
+          <th>动作</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>DoAll(a1,a2,a3...)</code></td>
+          <td>按顺序执行多个动作，最后一个动作的返回值作为函数返回值</td>
+      </tr>
+      <tr>
+          <td><code>Invoke(func)</code></td>
+          <td>调用全局函数/仿函数/lambda表达式，入参与mock函数一致</td>
+      </tr>
+      <tr>
+          <td><code>Invoke(obj, &amp;Class::Method)</code></td>
+          <td>调用对象的成员函数</td>
+      </tr>
+      <tr>
+          <td><code>Throw(exception)</code></td>
+          <td>抛出指定异常</td>
+      </tr>
+      <tr>
+          <td><code>Assign(&amp;var, value)</code></td>
+          <td>给指定变量赋值</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>示例</strong>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 1. 指针出参设置
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 原函数：virtual int GetData(int* out_data) = 0;
+</span></span></span><span class="line"><span class="cl"><span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_obj</span><span class="p">,</span> <span class="n">GetData</span><span class="p">(</span><span class="n">_</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WillOnce</span><span class="p">(</span><span class="n">DoAll</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">SetArgPointee</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="c1">// 给指针参数赋值100
+</span></span></span><span class="line"><span class="cl">        <span class="n">Return</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 2. lambda自定义动作
+</span></span></span><span class="line"><span class="cl"><span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Connect</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WillOnce</span><span class="p">(</span><span class="n">Invoke</span><span class="p">([](</span><span class="nl">sslocal</span><span class="p">:</span><span class="c1">//flow/file_open?url=const+std%3A%3Astring%26+host%2C+int+port&amp;flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=) {
+</span></span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Connect to &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">host</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;:&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">port</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">host</span> <span class="o">==</span> <span class="s">&#34;127.0.0.1&#34;</span> <span class="o">&amp;&amp;</span> <span class="n">port</span> <span class="o">==</span> <span class="mi">3306</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 3. 多动作组合
+</span></span></span><span class="line"><span class="cl"><span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Query</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WillOnce</span><span class="p">(</span><span class="n">DoAll</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Assign</span><span class="p">(</span><span class="o">&amp;</span><span class="n">call_count</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="c1">// 记录调用次数
+</span></span></span><span class="line"><span class="cl">        <span class="n">SetArgReferee</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&#34;result&#34;</span><span class="p">),</span> <span class="c1">// 设置出参
+</span></span></span><span class="line"><span class="cl">        <span class="n">Return</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1">// 返回值
+</span></span></span><span class="line"><span class="cl">    <span class="p">));</span></span></span></code></pre></div></div>
+<h3 id="54-调用顺序控制">5.4 调用顺序控制</h3>
+<p>通过<code>Sequence</code>实现严格的调用顺序校验，同一个序列中的期望，必须按声明的顺序执行，否则测试直接失败。</p>
+<p><strong>进阶用法</strong>：支持多个序列，实现多分支的顺序控制：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">TEST</span><span class="p">(</span><span class="n">SequenceTest</span><span class="p">,</span> <span class="n">MultiSequence</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">using</span> <span class="o">::</span><span class="n">testing</span><span class="o">::</span><span class="n">Sequence</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MockDB</span> <span class="n">mock_db</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Sequence</span> <span class="n">seq1</span><span class="p">,</span> <span class="n">seq2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// seq1：Connect-&gt;Query1
+</span></span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Connect</span><span class="p">(</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">)).</span><span class="n">InSequence</span><span class="p">(</span><span class="n">seq1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Query</span><span class="p">(</span><span class="s">&#34;sql1&#34;</span><span class="p">,</span> <span class="n">_</span><span class="p">)).</span><span class="n">InSequence</span><span class="p">(</span><span class="n">seq1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// seq2：Connect-&gt;Query2
+</span></span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Connect</span><span class="p">(</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">)).</span><span class="n">InSequence</span><span class="p">(</span><span class="n">seq2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Query</span><span class="p">(</span><span class="s">&#34;sql2&#34;</span><span class="p">,</span> <span class="n">_</span><span class="p">)).</span><span class="n">InSequence</span><span class="p">(</span><span class="n">seq2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 合法执行顺序：Connect-&gt;Query1-&gt;Query2 或 Connect-&gt;Query2-&gt;Query1
+</span></span></span><span class="line"><span class="cl">    <span class="n">mock_db</span><span class="p">.</span><span class="n">Connect</span><span class="p">(</span><span class="s">&#34;127.0.0.1&#34;</span><span class="p">,</span> <span class="mi">3306</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mock_db</span><span class="p">.</span><span class="n">Query</span><span class="p">(</span><span class="s">&#34;sql2&#34;</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mock_db</span><span class="p">.</span><span class="n">Query</span><span class="p">(</span><span class="s">&#34;sql1&#34;</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h2 id="六进阶使用技巧">六、进阶使用技巧</h2>
+<h3 id="61-mock重载函数">6.1 Mock重载函数</h3>
+<p>对于同名的重载函数，需通过<strong>类型限定符</strong>和<strong>const限定符</strong>区分不同版本，避免匹配模糊。</p>
+<p><strong>示例</strong>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 带重载的接口
+</span></span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">FooInterface</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="o">~</span><span class="n">FooInterface</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">Bar</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">Bar</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">Bar</span><span class="p">(</span><span class="kt">double</span> <span class="n">d</span><span class="p">)</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Mock类
+</span></span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MockFoo</span> <span class="o">:</span> <span class="k">public</span> <span class="n">FooInterface</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MOCK_METHOD</span><span class="p">(</span><span class="kt">void</span><span class="p">,</span> <span class="n">Bar</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">),</span> <span class="p">(</span><span class="k">override</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MOCK_METHOD</span><span class="p">(</span><span class="kt">void</span><span class="p">,</span> <span class="n">Bar</span><span class="p">,</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">),</span> <span class="p">(</span><span class="k">override</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MOCK_METHOD</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="n">Bar</span><span class="p">,</span> <span class="p">(</span><span class="kt">double</span> <span class="n">d</span><span class="p">),</span> <span class="p">(</span><span class="k">const</span><span class="p">,</span> <span class="k">override</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 测试用例：区分重载版本
+</span></span></span><span class="line"><span class="cl"><span class="n">TEST</span><span class="p">(</span><span class="n">MockTest</span><span class="p">,</span> <span class="n">OverloadFunc</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MockFoo</span> <span class="n">mock_foo</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 匹配int版本
+</span></span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_foo</span><span class="p">,</span> <span class="n">Bar</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 匹配string版本，用TypedEq明确类型
+</span></span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_foo</span><span class="p">,</span> <span class="n">Bar</span><span class="p">(</span><span class="n">TypedEq</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;&gt;</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 匹配const版本，用Const()包裹mock对象
+</span></span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">Const</span><span class="p">(</span><span class="n">mock_foo</span><span class="p">),</span> <span class="n">Bar</span><span class="p">(</span><span class="mf">3.14</span><span class="p">)).</span><span class="n">WillOnce</span><span class="p">(</span><span class="n">Return</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 执行调用
+</span></span></span><span class="line"><span class="cl">    <span class="n">mock_foo</span><span class="p">.</span><span class="n">Bar</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mock_foo</span><span class="p">.</span><span class="n">Bar</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">MockFoo</span><span class="o">&amp;</span> <span class="n">const_foo</span> <span class="o">=</span> <span class="n">mock_foo</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">const_foo</span><span class="p">.</span><span class="n">Bar</span><span class="p">(</span><span class="mf">3.14</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="62-mock非虚函数">6.2 Mock非虚函数</h3>
+<p>gmock默认只能mock虚函数，对于非虚函数，需通过<strong>模板化+静态多态</strong>实现，无任何运行时开销，也叫高性能依赖注入。</p>
+<p><strong>示例</strong>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 真实类，无虚函数
+</span></span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">RealDB</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">Connect</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">host</span><span class="p">,</span> <span class="kt">int</span> <span class="n">port</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 真实连接逻辑
+</span></span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 模板化被测代码，不依赖抽象类，依赖模板参数T
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">DBType</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">TemplateUserService</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">explicit</span> <span class="n">TemplateUserService</span><span class="p">(</span><span class="n">DBType</span><span class="o">*</span> <span class="n">db</span><span class="p">)</span> <span class="o">:</span> <span class="n">db_</span><span class="p">(</span><span class="n">db</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="nf">Login</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">db_</span><span class="o">-&gt;</span><span class="n">Connect</span><span class="p">(</span><span class="s">&#34;127.0.0.1&#34;</span><span class="p">,</span> <span class="mi">3306</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DBType</span><span class="o">*</span> <span class="n">db_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Mock类，无需继承，只需实现同名函数
+</span></span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MockDBNoVirtual</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MOCK_METHOD</span><span class="p">(</span><span class="kt">bool</span><span class="p">,</span> <span class="n">Connect</span><span class="p">,</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">host</span><span class="p">,</span> <span class="kt">int</span> <span class="n">port</span><span class="p">),</span> <span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 测试用例
+</span></span></span><span class="line"><span class="cl"><span class="n">TEST</span><span class="p">(</span><span class="n">TemplateTest</span><span class="p">,</span> <span class="n">NonVirtualMock</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MockDBNoVirtual</span> <span class="n">mock_db</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Connect</span><span class="p">(</span><span class="s">&#34;127.0.0.1&#34;</span><span class="p">,</span> <span class="mi">3306</span><span class="p">)).</span><span class="n">WillOnce</span><span class="p">(</span><span class="n">Return</span><span class="p">(</span><span class="nb">true</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 注入Mock类作为模板参数
+</span></span></span><span class="line"><span class="cl">    <span class="n">TemplateUserService</span><span class="o">&lt;</span><span class="n">MockDBNoVirtual</span><span class="o">&gt;</span> <span class="n">service</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mock_db</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_TRUE</span><span class="p">(</span><span class="n">service</span><span class="p">.</span><span class="n">Login</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="63-mock静态全局函数">6.3 Mock静态/全局函数</h3>
+<p>gmock无法直接mock静态函数和全局函数，需通过<strong>包装类+接口抽象</strong>的方式，把函数调用封装到接口中，再mock该接口。</p>
+<p><strong>示例</strong>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 待mock的全局函数
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">GlobalCalc</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 包装接口
+</span></span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">FuncWrapper</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="o">~</span><span class="n">FuncWrapper</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="kt">int</span> <span class="nf">Calc</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">GlobalCalc</span><span class="p">(</span><span class="n">x</span><span class="p">);</span> <span class="c1">// 生产环境调用真实函数
+</span></span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Mock包装类
+</span></span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MockFuncWrapper</span> <span class="o">:</span> <span class="k">public</span> <span class="n">FuncWrapper</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MOCK_METHOD</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="n">Calc</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">),</span> <span class="p">(</span><span class="k">override</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 被测代码，依赖包装接口
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">BusinessLogic</span><span class="p">(</span><span class="n">FuncWrapper</span><span class="o">*</span> <span class="n">wrapper</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">wrapper</span><span class="o">-&gt;</span><span class="n">Calc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 测试用例
+</span></span></span><span class="line"><span class="cl"><span class="n">TEST</span><span class="p">(</span><span class="n">GlobalFuncTest</span><span class="p">,</span> <span class="n">MockGlobal</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MockFuncWrapper</span> <span class="n">mock_wrapper</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_wrapper</span><span class="p">,</span> <span class="n">Calc</span><span class="p">(</span><span class="mi">5</span><span class="p">)).</span><span class="n">WillOnce</span><span class="p">(</span><span class="n">Return</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_EQ</span><span class="p">(</span><span class="n">BusinessLogic</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mock_wrapper</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">11</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="64-部分mock委托真实对象">6.4 部分Mock（委托真实对象）</h3>
+<p>当需要只mock类的部分函数，其他函数调用真实实现时，可通过<code>Invoke</code>委托给真实对象，实现部分Mock。</p>
+<p><strong>示例</strong>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">RealDB</span> <span class="o">:</span> <span class="k">public</span> <span class="n">DBInterface</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">Connect</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">host</span><span class="p">,</span> <span class="kt">int</span> <span class="n">port</span><span class="p">)</span> <span class="k">override</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Real Connect&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">Query</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">sql</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">result</span><span class="p">)</span> <span class="k">override</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">result</span> <span class="o">=</span> <span class="s">&#34;real_data&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">Close</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Real Close&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 部分Mock类
+</span></span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">PartialMockDB</span> <span class="o">:</span> <span class="k">public</span> <span class="n">DBInterface</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">PartialMockDB</span><span class="p">()</span> <span class="o">:</span> <span class="n">real_db_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">RealDB</span><span class="o">&gt;</span><span class="p">())</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 只mock Connect函数
+</span></span></span><span class="line"><span class="cl">    <span class="n">MOCK_METHOD</span><span class="p">(</span><span class="kt">bool</span><span class="p">,</span> <span class="n">Connect</span><span class="p">,</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">host</span><span class="p">,</span> <span class="kt">int</span> <span class="n">port</span><span class="p">),</span> <span class="p">(</span><span class="k">override</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Query和Close调用真实实现
+</span></span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">Query</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">sql</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">result</span><span class="p">)</span> <span class="k">override</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">real_db_</span><span class="o">-&gt;</span><span class="n">Query</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">Close</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">real_db_</span><span class="o">-&gt;</span><span class="n">Close</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">RealDB</span><span class="o">&gt;</span> <span class="n">real_db_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 测试用例
+</span></span></span><span class="line"><span class="cl"><span class="n">TEST</span><span class="p">(</span><span class="n">PartialMockTest</span><span class="p">,</span> <span class="n">DelegateReal</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">PartialMockDB</span> <span class="n">mock_db</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// mock Connect返回false
+</span></span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Connect</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)).</span><span class="n">WillOnce</span><span class="p">(</span><span class="n">Return</span><span class="p">(</span><span class="nb">false</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Query调用真实实现
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_EQ</span><span class="p">(</span><span class="n">mock_db</span><span class="p">.</span><span class="n">Query</span><span class="p">(</span><span class="s">&#34;sql&#34;</span><span class="p">,</span> <span class="n">result</span><span class="p">),</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_EQ</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s">&#34;real_data&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="65-on_call与expect_call的区别与配合">6.5 ON_CALL与EXPECT_CALL的区别与配合</h3>
+<p>这是新手最容易混淆的两个核心宏，核心区别与最佳配合方式如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>特性</th>
+          <th>ON_CALL</th>
+          <th>EXPECT_CALL</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>核心作用</td>
+          <td>设置函数默认行为</td>
+          <td>设置调用期望，校验交互逻辑</td>
+      </tr>
+      <tr>
+          <td>调用校验</td>
+          <td>不校验函数是否被调用</td>
+          <td>严格校验调用次数、入参、顺序，不符合则测试失败</td>
+      </tr>
+      <tr>
+          <td>匹配优先级</td>
+          <td>低，无匹配的EXPECT_CALL时才生效</td>
+          <td>高，优先匹配EXPECT_CALL</td>
+      </tr>
+      <tr>
+          <td>适用场景</td>
+          <td>设置通用默认行为，避免重复代码</td>
+          <td>校验当前测试用例关心的核心交互</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>最佳实践</strong>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">TEST</span><span class="p">(</span><span class="n">OnCallTest</span><span class="p">,</span> <span class="n">BestPractice</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MockDB</span> <span class="n">mock_db</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1. 用ON_CALL设置全局默认行为
+</span></span></span><span class="line"><span class="cl">    <span class="n">ON_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Connect</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)).</span><span class="n">WillByDefault</span><span class="p">(</span><span class="n">Return</span><span class="p">(</span><span class="nb">true</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ON_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Query</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)).</span><span class="n">WillByDefault</span><span class="p">(</span><span class="n">Return</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ON_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Close</span><span class="p">()).</span><span class="n">WillByDefault</span><span class="p">(</span><span class="n">Return</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 2. 用EXPECT_CALL只校验当前用例关心的核心交互
+</span></span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Connect</span><span class="p">(</span><span class="s">&#34;127.0.0.1&#34;</span><span class="p">,</span> <span class="mi">3306</span><span class="p">)).</span><span class="n">Times</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock_db</span><span class="p">,</span> <span class="n">Close</span><span class="p">()).</span><span class="n">Times</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 执行逻辑，Query无EXPECT_CALL，执行ON_CALL默认行为
+</span></span></span><span class="line"><span class="cl">    <span class="n">UserService</span> <span class="nf">service</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mock_db</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">service</span><span class="p">.</span><span class="n">Login</span><span class="p">(</span><span class="s">&#34;admin&#34;</span><span class="p">,</span> <span class="s">&#34;123456&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h2 id="七最佳实践">七、最佳实践</h2>
+<ol>
+<li>
+<p><strong>面向接口编程，强制依赖注入</strong>
+被测代码必须依赖抽象接口，而非具体实现类，通过构造函数/Setter注入依赖，禁止在被测代码中直接new真实依赖对象，这是可测试性的核心基础。</p>
+</li>
+<li>
+<p><strong>最小化期望设置，避免过度Mock</strong>
+一个测试用例只测一个场景，仅设置与当前场景相关的期望，非核心函数用<code>ON_CALL</code>设置默认行为，避免测试用例过于脆弱，微小的代码改动就导致测试失败。</p>
+</li>
+<li>
+<p><strong>优先使用NiceMock，关键场景用StrictMock</strong>
+常规测试使用<code>NiceMock</code>避免无关调用干扰测试结果，仅在需要严格校验协议交互（如RPC接口、硬件驱动）时使用<code>StrictMock</code>。</p>
+</li>
+<li>
+<p><strong>Mock类保持极简，不添加业务逻辑</strong>
+Mock类的唯一作用是模拟依赖行为，禁止在Mock类中添加任何业务逻辑，否则会导致测试本身出现bug，失去测试意义。</p>
+</li>
+<li>
+<p><strong>明确区分Stub与Mock的使用场景</strong>
+只需要控制依赖返回值时，用<code>ON_CALL</code>做Stub；需要验证被测代码与依赖的交互逻辑（调用次数、入参、顺序）时，用<code>EXPECT_CALL</code>做Mock。</p>
+</li>
+<li>
+<p><strong>遵循C++编码规范，避免未定义行为</strong>
+接口类必须声明虚析构函数，Mock函数的限定符必须与原函数完全一致，避免编译错误或运行时未定义行为。</p>
+</li>
+</ol>
+<h2 id="八常见坑与避坑指南">八、常见坑与避坑指南</h2>
+<ol>
+<li>
+<p><strong>接口类未声明虚析构函数</strong>
+问题：基类析构函数非virtual，导致Mock对象销毁时，仅调用基类析构函数，造成内存泄漏、程序崩溃。
+解决：所有接口类的析构函数必须声明为<code>virtual ~Interface() = default;</code>。</p>
+</li>
+<li>
+<p><strong>MOCK_METHOD限定符与原函数不一致</strong>
+问题：原函数是const的，Mock函数未加const限定符，导致未重写原函数，Mock不生效。
+解决：MOCK_METHOD的第四个参数必须与原函数的<code>override</code>、<code>const</code>、<code>noexcept</code>等限定符完全一致。</p>
+</li>
+<li>
+<p><strong>EXPECT_CALL声明顺序导致匹配失效</strong>
+问题：gmock匹配期望时，按<strong>声明的逆序</strong>匹配，先声明的通用期望会覆盖后声明的精准期望。
+解决：先声明通用的、宽泛的期望，后声明特殊的、精准的期望；或给精准期望加上<code>RetiresOnSaturation()</code>。
+反例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 错误写法：Func(5)永远不会被匹配，先匹配到Func(_)
+</span></span></span><span class="line"><span class="cl"><span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock</span><span class="p">,</span> <span class="n">Func</span><span class="p">(</span><span class="n">_</span><span class="p">)).</span><span class="n">WillRepeatedly</span><span class="p">(</span><span class="n">Return</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="n">EXPECT_CALL</span><span class="p">(</span><span class="n">mock</span><span class="p">,</span> <span class="n">Func</span><span class="p">(</span><span class="mi">5</span><span class="p">)).</span><span class="n">WillOnce</span><span class="p">(</span><span class="n">Return</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>出参设置索引错误</strong>
+问题：参数索引从0开始，新手常从1开始，导致设置错参数。
+解决：严格遵循索引规则，第一个参数索引为0，依次递增。</p>
+</li>
+<li>
+<p><strong>void函数使用Return(value)</strong>
+问题：void函数不能设置返回值，使用<code>Return(value)</code>会直接编译报错。
+解决：void函数使用<code>Return()</code>，或其他无返回值的动作。</p>
+</li>
+<li>
+<p><strong>忘记初始化gmock</strong>
+问题：main函数中仅调用<code>InitGoogleTest</code>，未调用<code>InitGoogleMock</code>，导致gmock部分功能不生效。
+解决：main函数中必须同时初始化gtest和gmock。</p>
+</li>
+<li>
+<p><strong>Mock对象生命周期错误</strong>
+问题：Mock对象提前销毁，被测代码持有野指针，导致程序崩溃、未定义行为。
+解决：Mock对象的生命周期必须长于被测对象，推荐在TEST中创建栈上的Mock对象，测试结束时才销毁。</p>
+</li>
+<li>
+<p><strong>重载函数匹配模糊</strong>
+问题：重载函数的期望未明确类型，导致编译器无法匹配到正确的重载版本，编译报错。
+解决：使用<code>TypedEq&lt;T&gt;()</code>明确参数类型，用<code>Const()</code>区分const和非const版本。</p>
+</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-03-02</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/002_googlemock%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/ut/">UT</a>,&nbsp;<a href="/blog/tags/googlemock/">GoogleMock</a>,&nbsp;<a href="/blog/tags/gmock/">Gmock</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/001_googletest%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="GoogleTest 使用详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>GoogleTest 使用详细总结</a>
+            <a href="/blog/010_ucos_ii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" class="next" rel="next" title="uCOS-II 源码详细分析">uCOS-II 源码详细分析<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

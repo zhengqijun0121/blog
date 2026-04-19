@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>SQLite3 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_sqlite3%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="SQLite3 语法详细总结">
+  <meta property="og:description" content="SQLite3 数据库语法详细总结 SQLite3 是一款轻量级、文件型、零配置、支持ACID的关系型数据库，兼容大部分SQL-92标准，同时有自身特有的语法特性与约束。本文从基础到进阶，全面梳理其核心语法、特性与最佳实践。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-02-23T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-02-23T10:00:20+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="Database">
+    <meta property="article:tag" content="SQLite3">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="SQLite3 语法详细总结">
+  <meta name="twitter:description" content="SQLite3 数据库语法详细总结 SQLite3 是一款轻量级、文件型、零配置、支持ACID的关系型数据库，兼容大部分SQL-92标准，同时有自身特有的语法特性与约束。本文从基础到进阶，全面梳理其核心语法、特性与最佳实践。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/001_sqlite3%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/001_rust%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/002_mysql%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "SQLite3 语法详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/001_sqlite3%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, Database, SQLite3","wordcount":  9901 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/001_sqlite3%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-02-23T09:00:20+08:00","dateModified": "2026-02-23T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/001_sqlite3%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/001_sqlite3%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">SQLite3 语法详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-02-23">2026-02-23</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 9901 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 20 分钟&nbsp;<span id="/blog/001_sqlite3%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="SQLite3 语法详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一核心数据类型sqlite特有动态类型系统">一、核心数据类型（SQLite特有动态类型系统）</a>
+      <ul>
+        <li><a href="#1-5种核心存储类">1. 5种核心存储类</a></li>
+        <li><a href="#2-列亲和类型与常用别名">2. 列亲和类型与常用别名</a></li>
+        <li><a href="#3-关键注意事项">3. 关键注意事项</a></li>
+      </ul>
+    </li>
+    <li><a href="#二ddl-数据定义语言">二、DDL 数据定义语言</a>
+      <ul>
+        <li><a href="#1-表操作">1. 表操作</a>
+          <ul>
+            <li><a href="#11-创建表-create-table">1.1 创建表 <code>CREATE TABLE</code></a></li>
+            <li><a href="#12-修改表-alter-table">1.2 修改表 <code>ALTER TABLE</code></a></li>
+            <li><a href="#13-删除表-drop-table">1.3 删除表 <code>DROP TABLE</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#2-索引操作">2. 索引操作</a>
+          <ul>
+            <li><a href="#21-创建索引">2.1 创建索引</a></li>
+            <li><a href="#22-删除索引">2.2 删除索引</a></li>
+            <li><a href="#索引关键注意事项">索引关键注意事项</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-视图操作">3. 视图操作</a>
+          <ul>
+            <li><a href="#31-创建视图">3.1 创建视图</a></li>
+            <li><a href="#32-删除视图">3.2 删除视图</a></li>
+            <li><a href="#视图关键说明">视图关键说明</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-触发器操作">4. 触发器操作</a>
+          <ul>
+            <li><a href="#41-创建触发器">4.1 创建触发器</a></li>
+            <li><a href="#42-删除触发器">4.2 删除触发器</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#三dml-数据操纵语言">三、DML 数据操纵语言</a>
+      <ul>
+        <li><a href="#1-插入数据-insert">1. 插入数据 <code>INSERT</code></a>
+          <ul>
+            <li><a href="#11-基础插入">1.1 基础插入</a></li>
+            <li><a href="#12-冲突解决与upsert核心特有语法">1.2 冲突解决与UPSERT（核心特有语法）</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-更新数据-update">2. 更新数据 <code>UPDATE</code></a></li>
+        <li><a href="#3-删除数据-delete">3. 删除数据 <code>DELETE</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#四dql-数据查询语言">四、DQL 数据查询语言</a>
+      <ul>
+        <li><a href="#1-基础查询语法">1. 基础查询语法</a>
+          <ul>
+            <li><a href="#核心子句说明">核心子句说明</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-联表查询">2. 联表查询</a></li>
+        <li><a href="#3-子查询">3. 子查询</a></li>
+        <li><a href="#4-cte-公用表表达式383版本支持">4. CTE 公用表表达式（3.8.3+版本支持）</a>
+          <ul>
+            <li><a href="#41-普通cte">4.1 普通CTE</a></li>
+            <li><a href="#42-递归cte">4.2 递归CTE</a></li>
+          </ul>
+        </li>
+        <li><a href="#5-集合操作">5. 集合操作</a></li>
+        <li><a href="#6-窗口函数3250版本支持">6. 窗口函数（3.25.0+版本支持）</a>
+          <ul>
+            <li><a href="#常用窗口函数">常用窗口函数</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#五核心内置函数">五、核心内置函数</a>
+      <ul>
+        <li><a href="#1-字符串函数">1. 字符串函数</a></li>
+        <li><a href="#2-数值函数">2. 数值函数</a></li>
+        <li><a href="#3-日期时间函数">3. 日期时间函数</a></li>
+        <li><a href="#4-条件与空值函数">4. 条件与空值函数</a></li>
+      </ul>
+    </li>
+    <li><a href="#六事务与acid控制">六、事务与ACID控制</a>
+      <ul>
+        <li><a href="#1-核心事务语法">1. 核心事务语法</a></li>
+        <li><a href="#2-三种事务类型核心区别锁的获取时机">2. 三种事务类型（核心区别：锁的获取时机）</a></li>
+        <li><a href="#3-保存点savepoint">3. 保存点（SAVEPOINT）</a></li>
+        <li><a href="#事务关键注意事项">事务关键注意事项</a></li>
+      </ul>
+    </li>
+    <li><a href="#七pragma-指令sqlite特有核心配置">七、PRAGMA 指令（SQLite特有核心配置）</a>
+      <ul>
+        <li><a href="#1-核心配置类pragma">1. 核心配置类PRAGMA</a></li>
+        <li><a href="#2-元数据查询类pragma">2. 元数据查询类PRAGMA</a></li>
+      </ul>
+    </li>
+    <li><a href="#八常见坑与最佳实践">八、常见坑与最佳实践</a>
+      <ul>
+        <li><a href="#1-常见避坑指南">1. 常见避坑指南</a></li>
+        <li><a href="#2-性能最佳实践">2. 性能最佳实践</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="sqlite3-数据库语法详细总结">SQLite3 数据库语法详细总结</h1>
+<p>SQLite3 是一款轻量级、文件型、零配置、支持ACID的关系型数据库，兼容大部分SQL-92标准，同时有自身特有的语法特性与约束。本文从基础到进阶，全面梳理其核心语法、特性与最佳实践。</p>
+<h2 id="一核心数据类型sqlite特有动态类型系统">一、核心数据类型（SQLite特有动态类型系统）</h2>
+<p>SQLite 采用<strong>基于存储类的动态类型系统</strong>，而非传统数据库的列强制类型。列声明的类型为「亲和类型」，仅做类型推荐，不强制约束数据存储。</p>
+<h3 id="1-5种核心存储类">1. 5种核心存储类</h3>
+<table>
+  <thead>
+      <tr>
+          <th>存储类</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>NULL</code></td>
+          <td>空值</td>
+      </tr>
+      <tr>
+          <td><code>INTEGER</code></td>
+          <td>带符号整数，根据数值大小自动适配1/2/3/4/6/8字节存储</td>
+      </tr>
+      <tr>
+          <td><code>REAL</code></td>
+          <td>浮点型，8字节IEEE双精度浮点数</td>
+      </tr>
+      <tr>
+          <td><code>TEXT</code></td>
+          <td>字符串，默认使用UTF-8/UTF-16编码存储</td>
+      </tr>
+      <tr>
+          <td><code>BLOB</code></td>
+          <td>二进制数据，完全按输入原样存储</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-列亲和类型与常用别名">2. 列亲和类型与常用别名</h3>
+<p>SQLite 会根据列声明的类型，自动映射为5种亲和类型，兼容主流数据库的类型别名，无需修改语法即可适配。</p>
+<table>
+  <thead>
+      <tr>
+          <th>亲和类型</th>
+          <th>兼容的类型别名</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>INTEGER</code></td>
+          <td><code>INT</code>、<code>BIGINT</code>、<code>SMALLINT</code>、<code>TINYINT</code>、<code>BOOLEAN</code>、<code>SERIAL</code></td>
+      </tr>
+      <tr>
+          <td><code>REAL</code></td>
+          <td><code>FLOAT</code>、<code>DOUBLE</code>、<code>DECIMAL</code>、<code>NUMERIC</code></td>
+      </tr>
+      <tr>
+          <td><code>TEXT</code></td>
+          <td><code>VARCHAR(n)</code>、<code>CHAR(n)</code>、<code>TEXT</code>、<code>CLOB</code></td>
+      </tr>
+      <tr>
+          <td><code>BLOB</code></td>
+          <td><code>BLOB</code>、<code>BINARY</code></td>
+      </tr>
+      <tr>
+          <td><code>NUMERIC</code></td>
+          <td><code>DATE</code>、<code>DATETIME</code>、<code>TIMESTAMP</code>、<code>NUMERIC</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-关键注意事项">3. 关键注意事项</h3>
+<ol>
+<li><strong>无原生布尔类型</strong>：<code>BOOLEAN</code> 本质是 <code>INTEGER</code>，<code>0</code> 代表false，<code>1</code> 代表true。</li>
+<li><strong>无原生日期时间类型</strong>：推荐3种存储方式：
+<ul>
+<li><code>TEXT</code>：ISO8601格式字符串（<code>YYYY-MM-DD HH:MM:SS.SSS</code>，最通用）</li>
+<li><code>INTEGER</code>：Unix时间戳（秒/毫秒级）</li>
+<li><code>REAL</code>：儒略日数，用于日期计算</li>
+</ul>
+</li>
+<li><strong>类型无强制约束</strong>：<code>INT</code> 列可以存储 <code>TEXT</code> 数据，需业务层自行校验，避免隐式转换导致索引失效。</li>
+</ol>
+<hr>
+<h2 id="二ddl-数据定义语言">二、DDL 数据定义语言</h2>
+<p>SQLite 无 <code>CREATE DATABASE</code> 语法，数据库对应单个磁盘文件，直接打开/创建文件即可完成库的初始化。核心DDL围绕表、索引、视图、触发器等对象。</p>
+<h3 id="1-表操作">1. 表操作</h3>
+<h4 id="11-创建表-create-table">1.1 创建表 <code>CREATE TABLE</code></h4>
+<p><strong>核心语法</strong></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 基础语法
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="p">[</span><span class="n">TEMP</span><span class="o">|</span><span class="k">TEMPORARY</span><span class="p">]</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="p">[</span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="p">]</span><span class="w"> </span><span class="err">表名</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="err">列名</span><span class="mi">1</span><span class="w"> </span><span class="err">亲和类型</span><span class="w"> </span><span class="p">[</span><span class="err">列级约束</span><span class="p">],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="err">列名</span><span class="mi">2</span><span class="w"> </span><span class="err">亲和类型</span><span class="w"> </span><span class="p">[</span><span class="err">列级约束</span><span class="p">],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">[</span><span class="err">表级约束</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w"> </span><span class="p">[</span><span class="k">WITHOUT</span><span class="w"> </span><span class="n">ROWID</span><span class="p">];</span></span></span></code></pre></div></div>
+<p><strong>关键参数与示例</strong></p>
+<ul>
+<li><code>TEMP/TEMPORARY</code>：创建临时表，仅当前数据库连接可见，连接关闭自动删除</li>
+<li><code>IF NOT EXISTS</code>：避免表已存在时报错</li>
+<li><code>WITHOUT ROWID</code>：关闭默认的ROWID自增列，必须指定<code>PRIMARY KEY</code>，适合主键查询场景，优化存储空间与性能</li>
+<li><strong>约束支持</strong>：<code>NOT NULL</code>、<code>UNIQUE</code>、<code>PRIMARY KEY</code>、<code>FOREIGN KEY</code>、<code>CHECK</code>、<code>DEFAULT</code></li>
+</ul>
+<p><strong>完整示例</strong></p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 创建用户表
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">user_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">AUTOINCREMENT</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 自增主键
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">username</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">UNIQUE</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 用户名非空唯一
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">age</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">age</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">150</span><span class="p">),</span><span class="w"> </span><span class="c1">-- 年龄校验
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">gender</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;未知&#39;</span><span class="p">,</span><span class="w"> </span><span class="c1">-- 默认值
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">create_time</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;localtime&#39;</span><span class="p">)),</span><span class="w"> </span><span class="c1">-- 创建时间
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">dept_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">-- 表级外键约束（需手动开启外键开关）
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">dept_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">dept_info</span><span class="w"> </span><span class="p">(</span><span class="n">dept_id</span><span class="p">)</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 无ROWID表示例
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">product</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">product_code</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">product_name</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">price</span><span class="w"> </span><span class="nb">REAL</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">price</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w"> </span><span class="k">WITHOUT</span><span class="w"> </span><span class="n">ROWID</span><span class="p">;</span></span></span></code></pre></div></div>
+<p><strong>主键与自增关键说明</strong></p>
+<ol>
+<li><code>INTEGER PRIMARY KEY</code> 列会自动关联SQLite内置的<code>ROWID</code>，插入时不指定值会自动生成唯一自增整数，无额外开销。</li>
+<li><code>AUTOINCREMENT</code>：严格递增不重复的自增主键，保证ID永不复用（即使删除数据），但有额外性能开销，仅需严格唯一ID时使用。</li>
+<li>主键默认自带<code>NOT NULL</code>和<code>UNIQUE</code>约束。</li>
+</ol>
+<h4 id="12-修改表-alter-table">1.2 修改表 <code>ALTER TABLE</code></h4>
+<p>SQLite 的 <code>ALTER TABLE</code> 功能有限，仅支持以下操作，不支持直接删除列、修改列类型/约束：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 1. 重命名表名
+</span></span></span><span class="line"><span class="cl"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="err">旧表名</span><span class="w"> </span><span class="k">RENAME</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="err">新表名</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 2. 新增列（3.25.0+版本支持）
+</span></span></span><span class="line"><span class="cl"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="err">表名</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="err">列名</span><span class="w"> </span><span class="err">亲和类型</span><span class="w"> </span><span class="p">[</span><span class="err">约束</span><span class="p">];</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 3. 重命名列（3.25.0+版本支持）
+</span></span></span><span class="line"><span class="cl"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="err">表名</span><span class="w"> </span><span class="k">RENAME</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="err">旧列名</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="err">新列名</span><span class="p">;</span></span></span></code></pre></div></div>
+<p><strong>不支持操作的替代方案</strong>：新建符合结构的表 → 迁移原表数据 → 删除原表 → 重命名新表。
+示例（删除列）：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">BEGIN</span><span class="w"> </span><span class="k">TRANSACTION</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 新建目标结构表
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">user_info_new</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">user_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">AUTOINCREMENT</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">username</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">UNIQUE</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">age</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">age</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">150</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">create_time</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;localtime&#39;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 迁移数据
+</span></span></span><span class="line"><span class="cl"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_info_new</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">create_time</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 替换表
+</span></span></span><span class="line"><span class="cl"><span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">user_info</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">user_info_new</span><span class="w"> </span><span class="k">RENAME</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">user_info</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">COMMIT</span><span class="p">;</span></span></span></code></pre></div></div>
+<h4 id="13-删除表-drop-table">1.3 删除表 <code>DROP TABLE</code></h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 基础删除
+</span></span></span><span class="line"><span class="cl"><span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="p">[</span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="p">]</span><span class="w"> </span><span class="err">表名</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 删除临时表
+</span></span></span><span class="line"><span class="cl"><span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">temp</span><span class="p">.</span><span class="err">临时表名</span><span class="p">;</span></span></span></code></pre></div></div>
+<ul>
+<li><code>IF EXISTS</code>：避免表不存在时报错</li>
+<li>删除表会同时删除表关联的索引、触发器、约束</li>
+<li>SQLite 不支持 <code>CASCADE</code> 级联删除，需通过外键的<code>ON DELETE</code>子句实现级联操作</li>
+</ul>
+<h3 id="2-索引操作">2. 索引操作</h3>
+<p>索引是优化查询性能的核心，SQLite 支持B树索引、唯一索引、复合索引、覆盖索引。</p>
+<h4 id="21-创建索引">2.1 创建索引</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 普通索引
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="p">[</span><span class="k">UNIQUE</span><span class="p">]</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="p">[</span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="p">]</span><span class="w"> </span><span class="err">索引名</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="err">表名</span><span class="w"> </span><span class="p">(</span><span class="err">列</span><span class="mi">1</span><span class="w"> </span><span class="p">[</span><span class="k">ASC</span><span class="o">/</span><span class="k">DESC</span><span class="p">],</span><span class="w"> </span><span class="err">列</span><span class="mi">2</span><span class="w"> </span><span class="p">[</span><span class="k">ASC</span><span class="o">/</span><span class="k">DESC</span><span class="p">],</span><span class="w"> </span><span class="p">...);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 条件索引（部分索引，仅索引符合条件的数据）
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="p">[</span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="p">]</span><span class="w"> </span><span class="err">索引名</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="err">表名</span><span class="w"> </span><span class="p">(</span><span class="err">列名</span><span class="p">)</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="err">条件</span><span class="p">;</span></span></span></code></pre></div></div>
+<p><strong>示例</strong></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 普通单值索引
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">idx_user_username</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="p">(</span><span class="n">username</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 唯一复合索引
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">UNIQUE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">idx_user_dept_age</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="p">(</span><span class="n">dept_id</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="k">DESC</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 部分索引（仅索引成年用户）
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">idx_user_adult</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="p">(</span><span class="n">age</span><span class="p">)</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">18</span><span class="p">;</span></span></span></code></pre></div></div>
+<h4 id="22-删除索引">2.2 删除索引</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">DROP</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="p">[</span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="p">]</span><span class="w"> </span><span class="err">索引名</span><span class="p">;</span></span></span></code></pre></div></div>
+<h4 id="索引关键注意事项">索引关键注意事项</h4>
+<ol>
+<li>索引会加速<code>WHERE</code>、<code>JOIN</code>、<code>ORDER BY</code>、<code>GROUP BY</code>，但会降低<code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code>的性能，避免过度建索引。</li>
+<li>遵循最左匹配原则：复合索引仅在查询条件包含索引最左前列时生效。</li>
+<li><code>LIKE '%xxx'</code>、<code>!=</code>、<code>NOT IN</code>、函数包裹列 会导致索引失效。</li>
+<li>视图上无法创建索引，仅虚拟表支持特殊索引。</li>
+</ol>
+<h3 id="3-视图操作">3. 视图操作</h3>
+<p>视图是虚拟表，基于查询结果封装，不存储实际数据，简化复杂查询、控制数据访问权限。</p>
+<h4 id="31-创建视图">3.1 创建视图</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="p">[</span><span class="n">TEMP</span><span class="o">|</span><span class="k">TEMPORARY</span><span class="p">]</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="p">[</span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="p">]</span><span class="w"> </span><span class="err">视图名</span><span class="w"> </span><span class="p">[</span><span class="err">列名</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">列名</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p">...]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">AS</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="err">查询语句</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">[</span><span class="k">WITH</span><span class="w"> </span><span class="p">[</span><span class="k">CASCADED</span><span class="o">|</span><span class="k">LOCAL</span><span class="p">]</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="k">OPTION</span><span class="p">];</span></span></span></code></pre></div></div>
+<p><strong>示例</strong></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 创建成年用户视图
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">v_user_adult</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">AS</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">dept_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">WHERE</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">18</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">WITH</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="k">OPTION</span><span class="p">;</span><span class="w"> </span><span class="c1">-- 限制插入/更新的数据必须符合视图WHERE条件</span></span></span></code></pre></div></div>
+<h4 id="32-删除视图">3.2 删除视图</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">DROP</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="p">[</span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="p">]</span><span class="w"> </span><span class="err">视图名</span><span class="p">;</span></span></span></code></pre></div></div>
+<h4 id="视图关键说明">视图关键说明</h4>
+<ol>
+<li>视图默认只读，无法直接执行<code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code>，需通过<code>INSTEAD OF</code>触发器实现可写视图。</li>
+<li><code>WITH CHECK OPTION</code>：确保通过视图修改的数据，始终符合视图的过滤条件。</li>
+<li>视图每次查询都会执行内部的SELECT语句，复杂视图可通过临时表优化性能。</li>
+</ol>
+<h3 id="4-触发器操作">4. 触发器操作</h3>
+<p>触发器是绑定到表的事件回调，当表执行<code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code>时，自动触发预设的SQL逻辑，用于数据校验、审计日志、级联操作等。</p>
+<h4 id="41-创建触发器">4.1 创建触发器</h4>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="p">[</span><span class="n">TEMP</span><span class="o">|</span><span class="k">TEMPORARY</span><span class="p">]</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="p">[</span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="p">]</span><span class="w"> </span><span class="err">触发器名</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">[</span><span class="k">BEFORE</span><span class="o">|</span><span class="k">AFTER</span><span class="o">|</span><span class="k">INSTEAD</span><span class="w"> </span><span class="k">OF</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="k">INSERT</span><span class="o">|</span><span class="k">UPDATE</span><span class="o">|</span><span class="k">UPDATE</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="err">列名</span><span class="o">|</span><span class="k">DELETE</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">ON</span><span class="w"> </span><span class="err">表名</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">[</span><span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span><span class="p">]</span><span class="w"> </span><span class="c1">-- SQLite仅支持行级触发器
+</span></span></span><span class="line"><span class="cl"><span class="p">[</span><span class="k">WHEN</span><span class="w"> </span><span class="err">触发条件</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">BEGIN</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">-- 触发执行的SQL语句
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="err">语句</span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="err">语句</span><span class="mi">2</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">END</span><span class="p">;</span></span></span></code></pre></div></div>
+<p><strong>核心关键字</strong></p>
+<ul>
+<li><code>BEFORE</code>：事件执行前触发，常用于数据校验、修改输入值</li>
+<li><code>AFTER</code>：事件执行后触发，常用于审计日志、数据同步</li>
+<li><code>INSTEAD OF</code>：替代原事件执行，仅用于视图，实现可写视图</li>
+<li><code>NEW</code>：指代插入/更新后的新行数据</li>
+<li><code>OLD</code>：指代更新/删除前的旧行数据</li>
+</ul>
+<p><strong>示例（审计日志触发器）</strong></p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 创建用户操作日志表
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">user_operate_log</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">log_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">AUTOINCREMENT</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">user_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">operate_type</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">operate_time</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;localtime&#39;</span><span class="p">)),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">old_value</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">new_value</span><span class="w"> </span><span class="nb">TEXT</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 创建用户更新后触发器
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">trig_user_update_log</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">AFTER</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">user_info</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">BEGIN</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_operate_log</span><span class="w"> </span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">operate_type</span><span class="p">,</span><span class="w"> </span><span class="n">old_value</span><span class="p">,</span><span class="w"> </span><span class="n">new_value</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="k">OLD</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;UPDATE&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">OLD</span><span class="p">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="k">NEW</span><span class="p">.</span><span class="n">username</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">END</span><span class="p">;</span></span></span></code></pre></div></div>
+<h4 id="42-删除触发器">4.2 删除触发器</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">DROP</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="p">[</span><span class="k">IF</span><span class="w"> </span><span class="k">EXISTS</span><span class="p">]</span><span class="w"> </span><span class="err">触发器名</span><span class="p">;</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="三dml-数据操纵语言">三、DML 数据操纵语言</h2>
+<p>用于数据的增、删、改操作，SQLite 扩展了冲突解决、UPSERT等特有语法。</p>
+<h3 id="1-插入数据-insert">1. 插入数据 <code>INSERT</code></h3>
+<h4 id="11-基础插入">1.1 基础插入</h4>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 单行插入
+</span></span></span><span class="line"><span class="cl"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">表名</span><span class="w"> </span><span class="p">(</span><span class="err">列</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">列</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">列</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="err">值</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">值</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">值</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 多行批量插入（3.7.11+版本支持）
+</span></span></span><span class="line"><span class="cl"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">表名</span><span class="w"> </span><span class="p">(</span><span class="err">列</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">列</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">列</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="err">值</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">值</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">值</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">...),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="p">(</span><span class="err">值</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">值</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">值</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">...),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="p">(</span><span class="err">值</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">值</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">值</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 从其他表查询插入
+</span></span></span><span class="line"><span class="cl"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">表名</span><span class="w"> </span><span class="p">(</span><span class="err">列</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">列</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">列</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="err">列</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">列</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">列</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="err">其他表</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="err">条件</span><span class="p">;</span></span></span></code></pre></div></div>
+<h4 id="12-冲突解决与upsert核心特有语法">1.2 冲突解决与UPSERT（核心特有语法）</h4>
+<p>当插入数据违反<code>UNIQUE</code>/<code>PRIMARY KEY</code>约束时，可通过冲突子句指定处理策略，SQLite 支持两种冲突处理方式：</p>
+<p><strong>方式1：OR 冲突策略（兼容旧版本）</strong></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">INSERT</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="p">[</span><span class="k">ROLLBACK</span><span class="o">|</span><span class="k">ABORT</span><span class="o">|</span><span class="n">FAIL</span><span class="o">|</span><span class="k">IGNORE</span><span class="o">|</span><span class="k">REPLACE</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">INTO</span><span class="w"> </span><span class="err">表名</span><span class="w"> </span><span class="p">(</span><span class="err">列</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">列</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="err">值</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">值</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span></span></span></code></pre></div></div>
+<ul>
+<li><code>IGNORE</code>：忽略冲突行，不插入也不报错，继续执行后续语句</li>
+<li><code>REPLACE</code>：冲突时删除原有冲突行，插入新行（UPSERT核心）</li>
+<li><code>ABORT</code>：默认策略，终止执行，回滚当前语句的修改</li>
+</ul>
+<p><strong>方式2：标准UPSERT语法（3.24.0+版本推荐）</strong>
+兼容PostgreSQL风格的UPSERT，支持冲突时更新或忽略，功能更灵活。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="err">表名</span><span class="w"> </span><span class="p">(</span><span class="err">列</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">列</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="err">值</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">值</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">ON</span><span class="w"> </span><span class="n">CONFLICT</span><span class="w"> </span><span class="p">(</span><span class="err">冲突列</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">冲突列</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span><span class="w"> </span><span class="c1">-- 冲突的唯一键/主键列
+</span></span></span><span class="line"><span class="cl"><span class="k">DO</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="err">列</span><span class="mi">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">新值</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">列</span><span class="mi">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">新值</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">[</span><span class="k">WHERE</span><span class="w"> </span><span class="err">条件</span><span class="p">]</span><span class="w"> </span><span class="c1">-- 冲突时更新
+</span></span></span><span class="line"><span class="cl"><span class="o">|</span><span class="w"> </span><span class="k">DO</span><span class="w"> </span><span class="k">NOTHING</span><span class="p">;</span><span class="w"> </span><span class="c1">-- 冲突时忽略</span></span></span></code></pre></div></div>
+<p><strong>UPSERT示例</strong></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 插入用户，用户名冲突时更新年龄和更新时间
+</span></span></span><span class="line"><span class="cl"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">update_time</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;zhangsan&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="n">datetime</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;localtime&#39;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">ON</span><span class="w"> </span><span class="n">CONFLICT</span><span class="w"> </span><span class="p">(</span><span class="n">username</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">DO</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">excluded</span><span class="p">.</span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">update_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">excluded</span><span class="p">.</span><span class="n">update_time</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- excluded 指代INSERT语句中待插入的新值</span></span></span></code></pre></div></div>
+<h3 id="2-更新数据-update">2. 更新数据 <code>UPDATE</code></h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 基础更新
+</span></span></span><span class="line"><span class="cl"><span class="k">UPDATE</span><span class="w"> </span><span class="err">表名</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SET</span><span class="w"> </span><span class="err">列</span><span class="mi">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">值</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">列</span><span class="mi">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">值</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">[</span><span class="k">WHERE</span><span class="w"> </span><span class="err">条件</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">[</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="err">排序规则</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">[</span><span class="k">LIMIT</span><span class="w"> </span><span class="err">行数</span><span class="p">];</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 关联更新（3.33.0+版本支持 UPDATE FROM）
+</span></span></span><span class="line"><span class="cl"><span class="k">UPDATE</span><span class="w"> </span><span class="err">表名</span><span class="mi">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SET</span><span class="w"> </span><span class="err">列</span><span class="mi">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">表名</span><span class="mi">2</span><span class="p">.</span><span class="err">列值</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="err">表名</span><span class="mi">2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">WHERE</span><span class="w"> </span><span class="err">表名</span><span class="mi">1</span><span class="p">.</span><span class="err">关联列</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">表名</span><span class="mi">2</span><span class="p">.</span><span class="err">关联列</span><span class="w"> </span><span class="p">[</span><span class="k">AND</span><span class="w"> </span><span class="err">其他条件</span><span class="p">];</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 冲突策略更新
+</span></span></span><span class="line"><span class="cl"><span class="k">UPDATE</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="p">[</span><span class="k">ROLLBACK</span><span class="o">|</span><span class="k">ABORT</span><span class="o">|</span><span class="n">FAIL</span><span class="o">|</span><span class="k">IGNORE</span><span class="o">|</span><span class="k">REPLACE</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="err">表名</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="err">列</span><span class="mi">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">值</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">[</span><span class="k">WHERE</span><span class="w"> </span><span class="err">条件</span><span class="p">];</span></span></span></code></pre></div></div>
+<p><strong>示例</strong></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 基础更新
+</span></span></span><span class="line"><span class="cl"><span class="k">UPDATE</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="n">gender</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;男&#39;</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 关联更新：同步部门名称到用户表
+</span></span></span><span class="line"><span class="cl"><span class="k">UPDATE</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="n">u</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SET</span><span class="w"> </span><span class="n">dept_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">dept_name</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="n">dept_info</span><span class="w"> </span><span class="n">d</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">WHERE</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">dept_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">dept_id</span><span class="p">;</span></span></span></code></pre></div></div>
+<h3 id="3-删除数据-delete">3. 删除数据 <code>DELETE</code></h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 基础删除
+</span></span></span><span class="line"><span class="cl"><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="err">表名</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">[</span><span class="k">WHERE</span><span class="w"> </span><span class="err">条件</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">[</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="err">排序规则</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">[</span><span class="k">LIMIT</span><span class="w"> </span><span class="err">行数</span><span class="p">];</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 清空全表数据（无TRUNCATE语法，用DELETE替代）
+</span></span></span><span class="line"><span class="cl"><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="err">表名</span><span class="p">;</span></span></span></code></pre></div></div>
+<ul>
+<li>无<code>WHERE</code>条件时，会删除表中所有数据，自增主键的计数不会重置（需<code>VACUUM</code>重置）</li>
+<li>大表清空推荐：<code>DROP TABLE</code> → 重建表，性能远高于<code>DELETE</code>全表</li>
+</ul>
+<hr>
+<h2 id="四dql-数据查询语言">四、DQL 数据查询语言</h2>
+<p>SQLite 兼容标准SQL的查询语法，支持复杂查询、联表、子查询、CTE、窗口函数等高级特性，是SQLite最核心的语法模块。</p>
+<h3 id="1-基础查询语法">1. 基础查询语法</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="p">[</span><span class="k">DISTINCT</span><span class="p">]</span><span class="w"> </span><span class="err">列</span><span class="mi">1</span><span class="w"> </span><span class="p">[</span><span class="k">AS</span><span class="w"> </span><span class="err">别名</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="err">列</span><span class="mi">2</span><span class="w"> </span><span class="p">[</span><span class="k">AS</span><span class="w"> </span><span class="err">别名</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="err">聚合函数</span><span class="p">(),</span><span class="w"> </span><span class="err">表达式</span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="err">表名</span><span class="w"> </span><span class="p">[</span><span class="k">AS</span><span class="w"> </span><span class="err">表别名</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">[</span><span class="k">WHERE</span><span class="w"> </span><span class="err">行过滤条件</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">[</span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="err">分组列</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">分组列</span><span class="mi">2</span><span class="p">...]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">[</span><span class="k">HAVING</span><span class="w"> </span><span class="err">分组后过滤条件</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">[</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="err">排序列</span><span class="mi">1</span><span class="w"> </span><span class="p">[</span><span class="k">ASC</span><span class="o">/</span><span class="k">DESC</span><span class="p">],</span><span class="w"> </span><span class="err">排序列</span><span class="mi">2</span><span class="w"> </span><span class="p">[</span><span class="k">ASC</span><span class="o">/</span><span class="k">DESC</span><span class="p">]...]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">[</span><span class="k">LIMIT</span><span class="w"> </span><span class="err">行数</span><span class="w"> </span><span class="p">[</span><span class="k">OFFSET</span><span class="w"> </span><span class="err">偏移量</span><span class="p">]];</span></span></span></code></pre></div></div>
+<h4 id="核心子句说明">核心子句说明</h4>
+<ol>
+<li>
+<p><strong>SELECT 子句</strong>：指定查询返回的列，支持常量、表达式、函数、别名</p>
+<ul>
+<li><code>*</code>：匹配所有列，生产环境不推荐，易导致性能问题和字段变更风险</li>
+<li><code>DISTINCT</code>：对结果集去重，去除重复行
+示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">用户名</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">明年年龄</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;SQLite&#39;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">来源</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">gender</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="p">;</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>WHERE 子句</strong>：行级过滤，在分组、聚合前执行，不支持聚合函数
+支持的运算符：</p>
+<ul>
+<li>比较运算符：<code>=</code>、<code>!=</code>/<code>&lt;&gt;</code>、<code>&gt;</code>、<code>&lt;</code>、<code>&gt;=</code>、<code>&lt;=</code></li>
+<li>逻辑运算符：<code>AND</code>、<code>OR</code>、<code>NOT</code></li>
+<li>范围运算符：<code>BETWEEN 最小值 AND 最大值</code>、<code>IN (值1,值2...)</code>、<code>NOT IN (...)</code></li>
+<li>空值判断：<code>IS NULL</code>、<code>IS NOT NULL</code>（禁止用<code>= NULL</code>，永远返回false）</li>
+<li>模糊匹配：<code>LIKE</code>（不区分大小写，通配符<code>%</code>匹配任意字符，<code>_</code>匹配单个字符）、<code>GLOB</code>（区分大小写，通配符<code>*</code>匹配任意字符，<code>?</code>匹配单个字符）</li>
+<li>存在判断：<code>EXISTS (子查询)</code></li>
+</ul>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 18-30岁的男性用户
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="mi">18</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">gender</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;男&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 用户名以zhang开头的用户
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;zhang%&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 部门ID在1/2/3的用户
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">dept_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 存在部门的用户
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">dept_info</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">dept_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">dept_id</span><span class="p">);</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>GROUP BY + HAVING 子句</strong>：分组聚合</p>
+<ul>
+<li><code>GROUP BY</code>：按指定列对结果集分组，相同值分为一组，常与聚合函数搭配</li>
+<li><code>HAVING</code>：分组后的过滤，支持聚合函数，在分组聚合后执行（与WHERE核心区别）</li>
+</ul>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 按部门统计用户数、平均年龄，仅展示用户数大于5的部门
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">dept_id</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">user_count</span><span class="p">,</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">age</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">avg_age</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">WHERE</span><span class="w"> </span><span class="n">dept_id</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">dept_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">HAVING</span><span class="w"> </span><span class="n">user_count</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>ORDER BY 子句</strong>：结果集排序</p>
+<ul>
+<li><code>ASC</code>：升序（默认），<code>DESC</code>：降序</li>
+<li>支持多字段排序，按顺序依次生效</li>
+</ul>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="k">DESC</span><span class="p">,</span><span class="w"> </span><span class="n">create_time</span><span class="w"> </span><span class="k">ASC</span><span class="p">;</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>LIMIT + OFFSET 子句</strong>：分页查询
+两种写法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 写法1：LIMIT 偏移量, 行数（兼容MySQL）
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w"> </span><span class="c1">-- 跳过前10条，取20条
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 写法2：LIMIT 行数 OFFSET 偏移量（SQLite推荐，语义更清晰）
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="k">OFFSET</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span></span></span></code></pre></div></div>
+<p>性能优化：大偏移量分页性能差，推荐主键分页法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 优化后：上一页最后一条user_id为100
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">user_id</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span></span></span></code></pre></div></div>
+</li>
+</ol>
+<h3 id="2-联表查询">2. 联表查询</h3>
+<p>SQLite 支持主流联表类型，<strong>不支持 RIGHT JOIN、FULL OUTER JOIN</strong>，可通过其他方式替代。</p>
+<table>
+  <thead>
+      <tr>
+          <th>联表类型</th>
+          <th>语法</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>内连接 INNER JOIN</td>
+          <td><code>A INNER JOIN B ON A.关联列 = B.关联列</code></td>
+          <td>仅返回两张表中匹配关联条件的行，默认JOIN等价于INNER JOIN</td>
+      </tr>
+      <tr>
+          <td>左连接 LEFT JOIN</td>
+          <td><code>A LEFT JOIN B ON A.关联列 = B.关联列</code></td>
+          <td>返回左表A的所有行，右表B无匹配的行填充NULL</td>
+      </tr>
+      <tr>
+          <td>交叉连接 CROSS JOIN</td>
+          <td><code>A CROSS JOIN B</code></td>
+          <td>返回两张表的笛卡尔积，A的每一行与B的每一行组合，无ON子句</td>
+      </tr>
+      <tr>
+          <td>自然连接 NATURAL JOIN</td>
+          <td><code>A NATURAL JOIN B</code></td>
+          <td>自动按两张表中同名的列进行内连接，无需写ON子句</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>示例</strong></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 内连接：查询用户及其所属部门信息
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">dept_name</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="n">u</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">dept_info</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">dept_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">dept_id</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 左连接：查询所有用户，无部门的用户也展示
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">dept_name</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="n">u</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">dept_info</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">dept_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">dept_id</span><span class="p">;</span></span></span></code></pre></div></div>
+<h3 id="3-子查询">3. 子查询</h3>
+<p>子查询是嵌套在主查询中的SELECT语句，用于复杂条件过滤、数据来源，分为3类：</p>
+<ol>
+<li>
+<p><strong>标量子查询</strong>：返回单个值（1行1列），可用于<code>=</code>、<code>&gt;</code>等比较运算符</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 查询年龄大于平均年龄的用户
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">age</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="p">);</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>列子查询</strong>：返回单列多行，用于<code>IN</code>、<code>EXISTS</code>、<code>ANY</code>、<code>ALL</code></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 查询有用户的部门
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">dept_info</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">dept_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">dept_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="p">);</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>表子查询</strong>：返回多行多列，用于FROM子句作为临时表</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 查询部门平均年龄大于20的部门详情
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">avg_age</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="n">dept_info</span><span class="w"> </span><span class="n">d</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">dept_id</span><span class="p">,</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">age</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">avg_age</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">dept_id</span><span class="p">)</span><span class="w"> </span><span class="n">t</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">ON</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">dept_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">dept_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">WHERE</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">avg_age</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span></span></span></code></pre></div></div>
+</li>
+</ol>
+<h3 id="4-cte-公用表表达式383版本支持">4. CTE 公用表表达式（3.8.3+版本支持）</h3>
+<p>CTE 用于封装子查询，提升SQL可读性，支持递归，分为普通CTE和递归CTE。</p>
+<h4 id="41-普通cte">4.1 普通CTE</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">WITH</span><span class="w"> </span><span class="n">cte名称</span><span class="w"> </span><span class="p">[</span><span class="err">列名</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">列名</span><span class="mi">2</span><span class="p">...]</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="err">查询语句</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">cte名称</span><span class="p">;</span></span></span></code></pre></div></div>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">WITH</span><span class="w"> </span><span class="n">dept_user_stat</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">dept_id</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">user_count</span><span class="p">,</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">age</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">avg_age</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">dept_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">dept_name</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">user_count</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">avg_age</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="n">dept_info</span><span class="w"> </span><span class="n">d</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">dept_user_stat</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">dept_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">dept_id</span><span class="p">;</span></span></span></code></pre></div></div>
+<h4 id="42-递归cte">4.2 递归CTE</h4>
+<p>用于处理树形结构、层级数据（如部门树、分类树），语法固定分为锚点成员和递归成员：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">WITH</span><span class="w"> </span><span class="k">RECURSIVE</span><span class="w"> </span><span class="n">cte名称</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">-- 锚点成员：递归起始点
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="err">表名</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="err">起始条件</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">-- 递归成员：引用自身，实现递归
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="err">表名</span><span class="w"> </span><span class="n">t</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">cte名称</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="err">父级列</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="err">主键列</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">cte名称</span><span class="p">;</span></span></span></code></pre></div></div>
+<p>示例（查询部门树形结构）：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 部门表
+</span></span></span><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">dept_info</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">dept_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">dept_name</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">parent_dept_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">parent_dept_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">dept_info</span><span class="w"> </span><span class="p">(</span><span class="n">dept_id</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 递归查询所有子部门
+</span></span></span><span class="line"><span class="cl"><span class="k">WITH</span><span class="w"> </span><span class="k">RECURSIVE</span><span class="w"> </span><span class="n">dept_tree</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">-- 锚点：顶级部门
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">dept_id</span><span class="p">,</span><span class="w"> </span><span class="n">dept_name</span><span class="p">,</span><span class="w"> </span><span class="n">parent_dept_id</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">dept_level</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">dept_info</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">parent_dept_id</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">-- 递归：查询子部门
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">dept_id</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">dept_name</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">parent_dept_id</span><span class="p">,</span><span class="w"> </span><span class="n">dt</span><span class="p">.</span><span class="n">dept_level</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">dept_level</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">dept_info</span><span class="w"> </span><span class="n">d</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">dept_tree</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">parent_dept_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dt</span><span class="p">.</span><span class="n">dept_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">dept_tree</span><span class="p">;</span></span></span></code></pre></div></div>
+<h3 id="5-集合操作">5. 集合操作</h3>
+<p>用于合并多个SELECT语句的结果集，要求多个查询的列数、列类型一致。</p>
+<table>
+  <thead>
+      <tr>
+          <th>操作符</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>UNION</code></td>
+          <td>合并两个结果集，自动去重</td>
+      </tr>
+      <tr>
+          <td><code>UNION ALL</code></td>
+          <td>合并两个结果集，不去重，性能远高于UNION</td>
+      </tr>
+      <tr>
+          <td><code>INTERSECT</code></td>
+          <td>取两个结果集的交集（同时存在的行），自动去重</td>
+      </tr>
+      <tr>
+          <td><code>EXCEPT</code></td>
+          <td>取两个结果集的差集（第一个有、第二个没有的行），自动去重</td>
+      </tr>
+  </tbody>
+</table>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 合并两个部门的用户，不去重
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">dept_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">dept_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span></span></span></code></pre></div></div>
+<h3 id="6-窗口函数3250版本支持">6. 窗口函数（3.25.0+版本支持）</h3>
+<p>窗口函数基于指定的窗口范围计算，不改变原结果集的行数，实现排名、累计、同比环比等复杂分析，核心语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="err">窗口函数名</span><span class="p">([</span><span class="err">参数</span><span class="p">])</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">[</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="err">分组列</span><span class="p">]</span><span class="w"> </span><span class="c1">-- 按列分区，类似GROUP BY，分区内独立计算
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">[</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="err">排序列</span><span class="w"> </span><span class="p">[</span><span class="k">ASC</span><span class="o">/</span><span class="k">DESC</span><span class="p">]]</span><span class="w"> </span><span class="c1">-- 分区内排序
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">[</span><span class="k">ROWS</span><span class="o">/</span><span class="n">RANGE</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="err">边界</span><span class="mi">1</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="err">边界</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="c1">-- 窗口帧范围
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span></span></span></code></pre></div></div>
+<h4 id="常用窗口函数">常用窗口函数</h4>
+<table>
+  <thead>
+      <tr>
+          <th>分类</th>
+          <th>函数名</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>排名函数</td>
+          <td><code>ROW_NUMBER()</code></td>
+          <td>分区内连续排名，相同值排名不同，无并列</td>
+      </tr>
+      <tr>
+          <td>排名函数</td>
+          <td><code>RANK()</code></td>
+          <td>分区内跳跃排名，相同值排名相同，后续排名跳过</td>
+      </tr>
+      <tr>
+          <td>排名函数</td>
+          <td><code>DENSE_RANK()</code></td>
+          <td>分区内连续排名，相同值排名相同，后续排名不跳过</td>
+      </tr>
+      <tr>
+          <td>偏移函数</td>
+          <td><code>LAG(列名, 偏移量, 默认值)</code></td>
+          <td>取当前行前面第N行的值</td>
+      </tr>
+      <tr>
+          <td>偏移函数</td>
+          <td><code>LEAD(列名, 偏移量, 默认值)</code></td>
+          <td>取当前行后面第N行的值</td>
+      </tr>
+      <tr>
+          <td>聚合函数</td>
+          <td><code>SUM()/AVG()/COUNT()/MAX()/MIN()</code></td>
+          <td>窗口内聚合计算</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>示例</strong></p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 按部门分区，对用户年龄排名
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">dept_id</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">ROW_NUMBER</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">dept_id</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="k">DESC</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">row_num</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">RANK</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">dept_id</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="k">DESC</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">rank_num</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">DENSE_RANK</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">dept_id</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="k">DESC</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">dense_rank_num</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 累计求和：按创建时间排序，累计用户数
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">create_time</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">daily_add</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">SUM</span><span class="p">(</span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">))</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">create_time</span><span class="w"> </span><span class="k">ROWS</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="n">UNBOUNDED</span><span class="w"> </span><span class="n">PRECEDING</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="k">CURRENT</span><span class="w"> </span><span class="k">ROW</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_count</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">create_time</span><span class="p">;</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="五核心内置函数">五、核心内置函数</h2>
+<h3 id="1-字符串函数">1. 字符串函数</h3>
+<table>
+  <thead>
+      <tr>
+          <th>函数</th>
+          <th>语法</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>length</code></td>
+          <td><code>length(str)</code></td>
+          <td>返回字符串的字节长度（UTF-8中文占3字节）</td>
+      </tr>
+      <tr>
+          <td><code>lower/upper</code></td>
+          <td><code>lower(str)</code>/<code>upper(str)</code></td>
+          <td>字符串转小写/大写</td>
+      </tr>
+      <tr>
+          <td><code>trim/ltrim/rtrim</code></td>
+          <td><code>trim(str [, 字符集])</code></td>
+          <td>去除字符串两端/左侧/右侧的指定字符（默认空格）</td>
+      </tr>
+      <tr>
+          <td><code>substr</code></td>
+          <td><code>substr(str, 起始位置, 长度)</code></td>
+          <td>截取子串，起始位置从1开始，负数从末尾倒数</td>
+      </tr>
+      <tr>
+          <td><code>instr</code></td>
+          <td><code>instr(str, 子串)</code></td>
+          <td>返回子串在字符串中第一次出现的位置，无匹配返回0</td>
+      </tr>
+      <tr>
+          <td><code>replace</code></td>
+          <td><code>replace(str, 旧子串, 新子串)</code></td>
+          <td>替换字符串中的指定子串</td>
+      </tr>
+      <tr>
+          <td><code>concat</code></td>
+          <td><code>concat(str1, str2, ...)</code></td>
+          <td>拼接多个字符串（3.38.0+版本支持）</td>
+      </tr>
+      <tr>
+          <td><code>concat_ws</code></td>
+          <td><code>concat_ws(分隔符, str1, str2, ...)</code></td>
+          <td>带分隔符拼接字符串（3.38.0+版本支持）</td>
+      </tr>
+      <tr>
+          <td><code>group_concat</code></td>
+          <td><code>group_concat(列名 [, 分隔符])</code></td>
+          <td>聚合函数，将分组内的字符串拼接，默认分隔符为逗号</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-数值函数">2. 数值函数</h3>
+<table>
+  <thead>
+      <tr>
+          <th>函数</th>
+          <th>语法</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>abs</code></td>
+          <td><code>abs(num)</code></td>
+          <td>返回绝对值</td>
+      </tr>
+      <tr>
+          <td><code>round</code></td>
+          <td><code>round(num, 小数位数)</code></td>
+          <td>四舍五入到指定小数位数</td>
+      </tr>
+      <tr>
+          <td><code>ceil/floor</code></td>
+          <td><code>ceil(num)</code>/<code>floor(num)</code></td>
+          <td>向上取整/向下取整</td>
+      </tr>
+      <tr>
+          <td><code>mod</code></td>
+          <td><code>mod(num, 除数)</code></td>
+          <td>取模运算，返回余数</td>
+      </tr>
+      <tr>
+          <td><code>random</code></td>
+          <td><code>random()</code></td>
+          <td>返回-9223372036854775808到9223372036854775807之间的随机整数</td>
+      </tr>
+      <tr>
+          <td><code>sqrt</code></td>
+          <td><code>sqrt(num)</code></td>
+          <td>平方根</td>
+      </tr>
+      <tr>
+          <td><code>pow</code></td>
+          <td><code>pow(num, 指数)</code></td>
+          <td>幂运算</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-日期时间函数">3. 日期时间函数</h3>
+<p>SQLite 日期函数核心基于ISO8601格式，支持时间戳、日期计算，核心函数如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>函数</th>
+          <th>语法</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>date</code></td>
+          <td><code>date(时间源, 修饰符1, 修饰符2...)</code></td>
+          <td>返回日期字符串，格式<code>YYYY-MM-DD</code></td>
+      </tr>
+      <tr>
+          <td><code>time</code></td>
+          <td><code>time(时间源, 修饰符1, 修饰符2...)</code></td>
+          <td>返回时间字符串，格式<code>HH:MM:SS</code></td>
+      </tr>
+      <tr>
+          <td><code>datetime</code></td>
+          <td><code>datetime(时间源, 修饰符1, 修饰符2...)</code></td>
+          <td>返回日期时间字符串，格式<code>YYYY-MM-DD HH:MM:SS</code></td>
+      </tr>
+      <tr>
+          <td><code>julianday</code></td>
+          <td><code>julianday(时间源, 修饰符...)</code></td>
+          <td>返回儒略日数，用于日期差值计算</td>
+      </tr>
+      <tr>
+          <td><code>strftime</code></td>
+          <td><code>strftime(格式符, 时间源, 修饰符...)</code></td>
+          <td>按指定格式格式化日期，是所有日期函数的底层函数</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>核心参数说明</strong></p>
+<ol>
+<li>
+<p><strong>时间源</strong>：</p>
+<ul>
+<li><code>now</code>：当前UTC时间</li>
+<li><code>localtime</code>：本地时间</li>
+<li>ISO8601格式字符串：<code>2026-04-16</code>、<code>2026-04-16 12:00:00</code></li>
+<li>Unix时间戳：<code>unixepoch</code>修饰符配合，如<code>strftime('%Y-%m-%d', 1713254400, 'unixepoch', 'localtime')</code></li>
+</ul>
+</li>
+<li>
+<p><strong>常用修饰符</strong>：</p>
+<ul>
+<li><code>+N years/months/days/hours/minutes/seconds</code>：时间加N个单位</li>
+<li><code>-N years/months/days/hours/minutes/seconds</code>：时间减N个单位</li>
+<li><code>start of year/month/day/hour</code>：时间取到年/月/日/小时的开始</li>
+<li><code>localtime</code>：UTC时间转本地时间</li>
+<li><code>utc</code>：本地时间转UTC时间</li>
+<li><code>unixepoch</code>：将Unix时间戳转为日期时间</li>
+</ul>
+</li>
+<li>
+<p><strong>常用格式符</strong>：</p>
+<ul>
+<li><code>%Y</code>：4位年份，<code>%m</code>：2位月份，<code>%d</code>：2位日期</li>
+<li><code>%H</code>：24小时制小时，<code>%M</code>：分钟，<code>%S</code>：秒</li>
+<li><code>%s</code>：Unix时间戳（秒），<code>%w</code>：星期几（0=周日，6=周六）</li>
+</ul>
+</li>
+</ol>
+<p><strong>常用示例</strong></p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 当前本地日期时间
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">datetime</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;localtime&#39;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 当前日期
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="nb">date</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 当前Unix时间戳
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%s&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;now&#39;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 日期加减：明天、上个月、一年后
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="nb">date</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;+1 day&#39;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="nb">date</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;-1 month&#39;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="nb">date</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;+1 year&#39;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 当月第一天、当月最后一天
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="nb">date</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;start of month&#39;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="nb">date</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;start of month&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;+1 month&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;-1 day&#39;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 两个日期的差值（天数）
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">julianday</span><span class="p">(</span><span class="s1">&#39;now&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">julianday</span><span class="p">(</span><span class="s1">&#39;2026-01-01&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">day_diff</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 时间戳转日期时间
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">datetime</span><span class="p">(</span><span class="mi">1713254400</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;unixepoch&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;localtime&#39;</span><span class="p">);</span></span></span></code></pre></div></div>
+<h3 id="4-条件与空值函数">4. 条件与空值函数</h3>
+<table>
+  <thead>
+      <tr>
+          <th>函数</th>
+          <th>语法</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>ifnull</code></td>
+          <td><code>ifnull(表达式, 替代值)</code></td>
+          <td>表达式为NULL时返回替代值，否则返回表达式本身（SQLite核心空值处理函数）</td>
+      </tr>
+      <tr>
+          <td><code>nullif</code></td>
+          <td><code>nullif(表达式1, 表达式2)</code></td>
+          <td>两个表达式相等时返回NULL，否则返回表达式1</td>
+      </tr>
+      <tr>
+          <td><code>iif</code></td>
+          <td><code>iif(条件, 真值, 假值)</code></td>
+          <td>三元运算符，条件为true返回真值，否则返回假值（3.32.0+版本支持）</td>
+      </tr>
+      <tr>
+          <td><code>CASE WHEN</code></td>
+          <td>简单CASE：<code>CASE 表达式 WHEN 值1 THEN 结果1 ... ELSE 默认值 END</code> <br> 搜索CASE：<code>CASE WHEN 条件1 THEN 结果1 ... ELSE 默认值 END</code></td>
+          <td>多条件分支判断，兼容所有SQLite版本</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>示例</strong></p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 空值处理：部门ID为NULL时显示&#39;无部门&#39;
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">ifnull</span><span class="p">(</span><span class="n">dept_id</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;无部门&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">dept</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 三元运算：年龄大于等于18标记为成年，否则未成年
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">iif</span><span class="p">(</span><span class="n">age</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;成年&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;未成年&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">age_tag</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- CASE WHEN 多条件判断
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">CASE</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">18</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;未成年&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;青年&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">60</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">&#39;中年&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">&#39;老年&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">age_group</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="n">user_info</span><span class="p">;</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="六事务与acid控制">六、事务与ACID控制</h2>
+<p>SQLite 支持完整的ACID事务特性，默认开启自动提交模式（每条单独的SQL语句都是一个独立事务，执行完成自动提交），手动事务可批量操作、保证数据一致性、提升批量操作性能。</p>
+<h3 id="1-核心事务语法">1. 核心事务语法</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 1. 开启事务
+</span></span></span><span class="line"><span class="cl"><span class="k">BEGIN</span><span class="w"> </span><span class="p">[</span><span class="k">TRANSACTION</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="k">DEFERRED</span><span class="o">|</span><span class="k">IMMEDIATE</span><span class="o">|</span><span class="k">EXCLUSIVE</span><span class="p">];</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 2. 提交事务
+</span></span></span><span class="line"><span class="cl"><span class="k">COMMIT</span><span class="w"> </span><span class="p">[</span><span class="k">TRANSACTION</span><span class="p">];</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 等价于 END TRANSACTION;
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 3. 回滚事务
+</span></span></span><span class="line"><span class="cl"><span class="k">ROLLBACK</span><span class="w"> </span><span class="p">[</span><span class="k">TRANSACTION</span><span class="p">];</span></span></span></code></pre></div></div>
+<h3 id="2-三种事务类型核心区别锁的获取时机">2. 三种事务类型（核心区别：锁的获取时机）</h3>
+<table>
+  <thead>
+      <tr>
+          <th>事务类型</th>
+          <th>说明</th>
+          <th>适用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>DEFERRED</code></td>
+          <td>默认模式，开启事务时不获取任何锁，第一次读操作获取共享锁，第一次写操作获取排他锁</td>
+          <td>只读事务、低并发场景，默认首选</td>
+      </tr>
+      <tr>
+          <td><code>IMMEDIATE</code></td>
+          <td>开启事务时立即获取数据库级共享读锁，其他连接可继续读，无法写</td>
+          <td>读写事务，避免并发写冲突，高并发写推荐</td>
+      </tr>
+      <tr>
+          <td><code>EXCLUSIVE</code></td>
+          <td>开启事务时立即获取数据库级排他锁，其他连接无法读也无法写</td>
+          <td>严格的批量写操作，保证数据绝对一致性</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-保存点savepoint">3. 保存点（SAVEPOINT）</h3>
+<p>SQLite 不支持真正的嵌套事务，通过保存点实现事务内的部分回滚，语法如下：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 创建保存点
+</span></span></span><span class="line"><span class="cl"><span class="n">SAVEPOINT</span><span class="w"> </span><span class="err">保存点名</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 回滚到指定保存点
+</span></span></span><span class="line"><span class="cl"><span class="k">ROLLBACK</span><span class="w"> </span><span class="k">TRANSACTION</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">SAVEPOINT</span><span class="w"> </span><span class="err">保存点名</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- 释放保存点
+</span></span></span><span class="line"><span class="cl"><span class="n">RELEASE</span><span class="w"> </span><span class="n">SAVEPOINT</span><span class="w"> </span><span class="err">保存点名</span><span class="p">;</span></span></span></code></pre></div></div>
+<p><strong>示例</strong></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-sql">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">BEGIN</span><span class="w"> </span><span class="k">TRANSACTION</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;lisi&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">22</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="n">SAVEPOINT</span><span class="w"> </span><span class="n">sp1</span><span class="p">;</span><span class="w"> </span><span class="c1">-- 创建保存点
+</span></span></span><span class="line"><span class="cl"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">user_info</span><span class="w"> </span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">age</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;wangwu&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">ROLLBACK</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">sp1</span><span class="p">;</span><span class="w"> </span><span class="c1">-- 回滚到sp1，wangwu的插入被撤销，lisi的插入保留
+</span></span></span><span class="line"><span class="cl"><span class="k">COMMIT</span><span class="p">;</span><span class="w"> </span><span class="c1">-- 最终仅lisi的数据被提交</span></span></span></code></pre></div></div>
+<h3 id="事务关键注意事项">事务关键注意事项</h3>
+<ol>
+<li>批量插入/更新/删除必须用事务包裹，可提升百倍以上性能（避免每条语句都触发磁盘IO和事务提交）。</li>
+<li>SQLite 写锁是排他锁，同一时间仅允许一个写事务执行，长事务会阻塞其他所有写操作，需避免长事务。</li>
+<li>事务执行中出现异常，必须执行<code>ROLLBACK</code>回滚，否则会一直持有锁，导致数据库锁死。</li>
+</ol>
+<hr>
+<h2 id="七pragma-指令sqlite特有核心配置">七、PRAGMA 指令（SQLite特有核心配置）</h2>
+<p>PRAGMA 是SQLite特有的指令，用于配置数据库参数、查询元数据、控制数据库行为，是SQLite优化和运维的核心。</p>
+<h3 id="1-核心配置类pragma">1. 核心配置类PRAGMA</h3>
+<table>
+  <thead>
+      <tr>
+          <th>指令</th>
+          <th>用法</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>foreign_keys</code></td>
+          <td><code>PRAGMA foreign_keys = ON/OFF;</code></td>
+          <td>开启/关闭外键约束，<strong>默认OFF</strong>，使用外键必须手动开启</td>
+      </tr>
+      <tr>
+          <td><code>journal_mode</code></td>
+          <td><code>PRAGMA journal_mode = WAL;</code></td>
+          <td>设置日志模式，可选值：<code>DELETE</code>(默认)、<code>TRUNCATE</code>、<code>PERSIST</code>、<code>MEMORY</code>、<code>WAL</code>、<code>OFF</code>；<strong>WAL模式推荐高并发场景使用</strong>，支持读写并发，大幅提升读性能</td>
+      </tr>
+      <tr>
+          <td><code>synchronous</code></td>
+          <td><code>PRAGMA synchronous = FULL/NORMAL/OFF;</code></td>
+          <td>同步模式，控制数据持久化安全与性能：<code>FULL</code>(最安全，断电不丢数据)、<code>NORMAL</code>(WAL模式推荐，平衡安全与性能)、<code>OFF</code>(性能最高，断电可能丢数据，仅批量操作临时使用)</td>
+      </tr>
+      <tr>
+          <td><code>busy_timeout</code></td>
+          <td><code>PRAGMA busy_timeout = 5000;</code></td>
+          <td>锁等待超时时间，单位毫秒，锁冲突时等待指定时间再报错，避免频繁锁异常</td>
+      </tr>
+      <tr>
+          <td><code>cache_size</code></td>
+          <td><code>PRAGMA cache_size = -20000;</code></td>
+          <td>设置页面缓存大小，负数代表KB数（-20000=20000KB=20MB），增大缓存可提升查询性能</td>
+      </tr>
+      <tr>
+          <td><code>temp_store</code></td>
+          <td><code>PRAGMA temp_store = MEMORY;</code></td>
+          <td>临时表/索引存储位置，<code>MEMORY</code>(内存，最快)、<code>FILE</code>(磁盘)、<code>DEFAULT</code>(默认)</td>
+      </tr>
+      <tr>
+          <td><code>auto_vacuum</code></td>
+          <td><code>PRAGMA auto_vacuum = 0/1/2;</code></td>
+          <td>自动真空，<code>0</code>(关闭，默认)、<code>1</code>(全量自动)、<code>2</code>(增量自动)，回收删除数据的磁盘空间</td>
+      </tr>
+      <tr>
+          <td><code>encoding</code></td>
+          <td><code>PRAGMA encoding = 'UTF-8';</code></td>
+          <td>设置数据库字符编码，仅新建数据库时可修改，默认UTF-8</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-元数据查询类pragma">2. 元数据查询类PRAGMA</h3>
+<table>
+  <thead>
+      <tr>
+          <th>指令</th>
+          <th>用法</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>table_info</code></td>
+          <td><code>PRAGMA table_info(表名);</code></td>
+          <td>查询表的完整结构：列ID、列名、类型、是否非空、默认值、是否主键</td>
+      </tr>
+      <tr>
+          <td><code>index_list</code></td>
+          <td><code>PRAGMA index_list(表名);</code></td>
+          <td>查询表的所有索引列表：索引名、是否唯一、索引类型</td>
+      </tr>
+      <tr>
+          <td><code>index_info</code></td>
+          <td><code>PRAGMA index_info(索引名);</code></td>
+          <td>查询索引的列信息：列ID、列名</td>
+      </tr>
+      <tr>
+          <td><code>foreign_key_list</code></td>
+          <td><code>PRAGMA foreign_key_list(表名);</code></td>
+          <td>查询表的所有外键约束信息</td>
+      </tr>
+      <tr>
+          <td><code>database_list</code></td>
+          <td><code>PRAGMA database_list;</code></td>
+          <td>查询当前连接的所有数据库列表</td>
+      </tr>
+      <tr>
+          <td><code>version</code></td>
+          <td><code>PRAGMA user_version;</code></td>
+          <td>查询/设置用户自定义版本号，常用于数据库版本升级，<code>PRAGMA user_version = 1;</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="八常见坑与最佳实践">八、常见坑与最佳实践</h2>
+<h3 id="1-常见避坑指南">1. 常见避坑指南</h3>
+<ol>
+<li><strong>外键默认不生效</strong>：必须执行<code>PRAGMA foreign_keys = ON;</code>开启，且仅当前连接有效，每次新建连接都需重新执行。</li>
+<li><strong>动态类型隐式转换坑</strong>：<code>WHERE id = '123'</code> 中id是INTEGER类型，字符串值会导致索引失效，必须保证查询值与列类型一致。</li>
+<li><strong>AUTOINCREMENT滥用</strong>：<code>INTEGER PRIMARY KEY</code> 已实现自增，<code>AUTOINCREMENT</code> 会增加额外的CPU、磁盘、IO开销，仅需ID永不复用时使用。</li>
+<li><strong>LIKE &lsquo;%xxx&rsquo; 索引失效</strong>：前缀模糊匹配<code>LIKE 'xxx%'</code>可使用索引，后缀模糊匹配<code>LIKE '%xxx'</code>无法使用索引，需用全文搜索FTS5优化。</li>
+<li><strong>无WAL模式并发性能差</strong>：默认DELETE模式下，写操作会阻塞所有读操作，高并发场景必须开启WAL模式<code>PRAGMA journal_mode=WAL;</code>。</li>
+<li><strong>大offset分页性能差</strong>：<code>LIMIT 100000, 20</code> 会扫描前10万行数据，推荐用主键分页<code>WHERE id &gt; 100000 LIMIT 20</code>。</li>
+<li><strong>SQLite 不支持存储过程、自定义函数（需扩展）、RIGHT JOIN、FULL OUTER JOIN</strong>，避免直接复用MySQL/PostgreSQL的复杂语法。</li>
+</ol>
+<h3 id="2-性能最佳实践">2. 性能最佳实践</h3>
+<ol>
+<li><strong>批量操作必须用事务</strong>：批量插入/更新/删除时，用BEGIN+COMMIT包裹，避免单条语句自动提交，性能可提升100倍以上。</li>
+<li><strong>合理创建索引</strong>：为<code>WHERE</code>、<code>JOIN</code>、<code>ORDER BY</code>、<code>GROUP BY</code>的高频字段建索引，避免冗余索引，联合索引遵循最左匹配原则。</li>
+<li><strong>开启WAL模式</strong>：高并发场景必开，配合<code>synchronous = NORMAL</code>，平衡性能与数据安全。</li>
+<li>**避免SELECT ***：只查询需要的列，减少数据传输，更容易命中覆盖索引。</li>
+<li><strong>定期执行VACUUM</strong>：频繁删除/更新数据后，执行<code>VACUUM;</code>整理数据库碎片，回收磁盘空间，优化查询性能。</li>
+<li><strong>使用参数化查询</strong>：避免SQL注入，同时复用SQL语句的执行计划，提升查询性能。</li>
+<li><strong>避免长事务</strong>：SQLite的写锁是排他的，长事务会阻塞所有写操作，事务尽量短小精悍，快速提交/回滚。</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-02-23</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/001_sqlite3%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/database/">Database</a>,&nbsp;<a href="/blog/tags/sqlite3/">SQLite3</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/001_rust%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="Rust 语法详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>Rust 语法详细总结</a>
+            <a href="/blog/002_mysql%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="MySQL 语法详细总结">MySQL 语法详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

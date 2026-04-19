@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>MCP 协议详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/011_mcp%E5%8D%8F%E8%AE%AE%E5%AE%9E%E7%8E%B0%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="MCP 协议详细总结">
+  <meta property="og:description" content="MCP（Model Context Protocol）协议实现详细总结 一、MCP核心定义与定位 1. 基础定义 MCP（Model Context Protocol，模型上下文协议）是由Anthropic牵头、多家AI厂商联合推出的开源标准化通信协议，基于JSON-RPC 2.0构建，为大语言模型(LLM)应用与外部工具、数据源、系统服务之间提供统一、安全、可互操作的通信标准，彻底解决了传统Function Calling碎片化开发、多平台适配成本高、安全边界模糊、能力复用性差的行业痛点，实现了“一次开发，全生态兼容”的能力复用。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-17T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-03-17T10:00:20+08:00">
+    <meta property="article:tag" content="协议">
+    <meta property="article:tag" content="MCP">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="MCP 协议详细总结">
+  <meta name="twitter:description" content="MCP（Model Context Protocol）协议实现详细总结 一、MCP核心定义与定位 1. 基础定义 MCP（Model Context Protocol，模型上下文协议）是由Anthropic牵头、多家AI厂商联合推出的开源标准化通信协议，基于JSON-RPC 2.0构建，为大语言模型(LLM)应用与外部工具、数据源、系统服务之间提供统一、安全、可互操作的通信标准，彻底解决了传统Function Calling碎片化开发、多平台适配成本高、安全边界模糊、能力复用性差的行业痛点，实现了“一次开发，全生态兼容”的能力复用。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/011_mcp%E5%8D%8F%E8%AE%AE%E5%AE%9E%E7%8E%B0%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/010_xcp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/013_gdb%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "MCP 协议详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/011_mcp%E5%8D%8F%E8%AE%AE%E5%AE%9E%E7%8E%B0%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "Protocol, MCP","wordcount":  6310 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/011_mcp%E5%8D%8F%E8%AE%AE%E5%AE%9E%E7%8E%B0%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-03-17T09:00:20+08:00","dateModified": "2026-03-17T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/011_mcp%E5%8D%8F%E8%AE%AE%E5%AE%9E%E7%8E%B0%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/011_mcp%E5%8D%8F%E8%AE%AE%E5%AE%9E%E7%8E%B0%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">MCP 协议详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/protocol/"><i class="far fa-folder" aria-hidden="true"></i>协议</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-03-17">2026-03-17</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 6310 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 13 分钟&nbsp;<span id="/blog/011_mcp%E5%8D%8F%E8%AE%AE%E5%AE%9E%E7%8E%B0%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="MCP 协议详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一mcp核心定义与定位">一、MCP核心定义与定位</a>
+      <ul>
+        <li><a href="#1-基础定义">1. 基础定义</a></li>
+        <li><a href="#2-核心价值与传统function-calling的核心区别">2. 核心价值（与传统Function Calling的核心区别）</a></li>
+      </ul>
+    </li>
+    <li><a href="#二mcp核心架构与核心规范">二、MCP核心架构与核心规范</a>
+      <ul>
+        <li><a href="#1-三层核心架构">1. 三层核心架构</a></li>
+        <li><a href="#2-底层协议规范">2. 底层协议规范</a></li>
+        <li><a href="#3-能力协商机制">3. 能力协商机制</a></li>
+        <li><a href="#4-四大核心原语">4. 四大核心原语</a></li>
+      </ul>
+    </li>
+    <li><a href="#三mcp完整通信生命周期">三、MCP完整通信生命周期</a>
+      <ul>
+        <li><a href="#1-初始化握手与能力协商必选">1. 初始化握手与能力协商（必选）</a></li>
+        <li><a href="#2-能力发现阶段按需触发">2. 能力发现阶段（按需触发）</a></li>
+        <li><a href="#3-核心能力调用流程核心业务">3. 核心能力调用流程（核心业务）</a></li>
+        <li><a href="#4-会话管理与销毁">4. 会话管理与销毁</a></li>
+      </ul>
+    </li>
+    <li><a href="#四mcp服务端完整实现">四、MCP服务端完整实现</a>
+      <ul>
+        <li><a href="#1-实现前置准备">1. 实现前置准备</a></li>
+        <li><a href="#2-标准实现步骤">2. 标准实现步骤</a></li>
+        <li><a href="#3-完整可运行代码示例python-fastmcpstdio传输">3. 完整可运行代码示例（Python FastMCP，stdio传输）</a></li>
+        <li><a href="#4-多语言实现支持">4. 多语言实现支持</a></li>
+      </ul>
+    </li>
+    <li><a href="#五mcp客户端实现">五、MCP客户端实现</a>
+      <ul>
+        <li><a href="#1-极简客户端代码示例python">1. 极简客户端代码示例（Python）</a></li>
+      </ul>
+    </li>
+    <li><a href="#六传输层实现方案">六、传输层实现方案</a></li>
+    <li><a href="#七安全机制实现">七、安全机制实现</a></li>
+    <li><a href="#八最佳实践与避坑指南">八、最佳实践与避坑指南</a>
+      <ul>
+        <li><a href="#最佳实践">最佳实践</a></li>
+        <li><a href="#常见避坑指南">常见避坑指南</a></li>
+      </ul>
+    </li>
+    <li><a href="#九典型应用场景">九、典型应用场景</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="mcpmodel-context-protocol协议实现详细总结">MCP（Model Context Protocol）协议实现详细总结</h1>
+<h2 id="一mcp核心定义与定位">一、MCP核心定义与定位</h2>
+<h3 id="1-基础定义">1. 基础定义</h3>
+<p>MCP（Model Context Protocol，模型上下文协议）是由Anthropic牵头、多家AI厂商联合推出的<strong>开源标准化通信协议</strong>，基于JSON-RPC 2.0构建，为大语言模型(LLM)应用与外部工具、数据源、系统服务之间提供统一、安全、可互操作的通信标准，彻底解决了传统Function Calling碎片化开发、多平台适配成本高、安全边界模糊、能力复用性差的行业痛点，实现了“一次开发，全生态兼容”的能力复用。</p>
+<h3 id="2-核心价值与传统function-calling的核心区别">2. 核心价值（与传统Function Calling的核心区别）</h3>
+<table>
+  <thead>
+      <tr>
+          <th>维度</th>
+          <th>MCP</th>
+          <th>传统Function Calling</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>核心目标</td>
+          <td>标准化LLM与外部系统的通信协议，实现跨平台互操作</td>
+          <td>解决单一场景下LLM与特定工具的调用逻辑</td>
+      </tr>
+      <tr>
+          <td>实现方式</td>
+          <td>Client-Server解耦架构，基于统一协议规范</td>
+          <td>与特定模型/应用强绑定，无通用标准</td>
+      </tr>
+      <tr>
+          <td>开发成本</td>
+          <td>一次开发，多宿主（Claude/Cursor/Windsurf等）兼容</td>
+          <td>需为每个应用/模型单独开发适配</td>
+      </tr>
+      <tr>
+          <td>能力边界</td>
+          <td>支持工具调用、资源访问、提示模板、采样回调四大核心原语</td>
+          <td>仅支持基础函数调用</td>
+      </tr>
+      <tr>
+          <td>安全机制</td>
+          <td>内置权限隔离、用户同意、沙箱机制，明确安全边界</td>
+          <td>无统一安全规范，需开发者自行实现</td>
+      </tr>
+      <tr>
+          <td>复用性</td>
+          <td>高，Server可跨场景、跨宿主复用</td>
+          <td>低，函数通常为特定任务/场景定制</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="二mcp核心架构与核心规范">二、MCP核心架构与核心规范</h2>
+<h3 id="1-三层核心架构">1. 三层核心架构</h3>
+<p>MCP采用<strong>Host-Client-Server三层解耦架构</strong>，核心为Client-Server CS模式，每个Host可管理多个Client实例，每个Client与Server保持<strong>1:1独占的有状态长连接</strong>。</p>
+<table>
+  <thead>
+      <tr>
+          <th>核心角色</th>
+          <th>定义与典型代表</th>
+          <th>核心职责</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>MCP Host（宿主）</td>
+          <td>承载LLM能力的AI应用，协议发起方与消费方<br>典型代表：Claude Desktop、Cursor IDE、自研AI平台</td>
+          <td>1. 管理多个Client生命周期，协调多Server连接<br>2. 对接LLM，将模型意图转化为MCP标准指令<br>3. 负责用户交互与权限审批，确保操作获得用户知情同意<br>4. 接收Server返回结果，注入模型上下文完成推理闭环</td>
+      </tr>
+      <tr>
+          <td>MCP Client（客户端）</td>
+          <td>嵌入Host内部的通信中间件，Host与Server的唯一桥梁</td>
+          <td>1. 与对应Server建立并维护长连接，处理保活与异常重连<br>2. 完成协议序列化/反序列化，实现Host与Server的消息双向路由<br>3. 处理初始化握手与能力协商，校验协议版本与能力集<br>4. 管理资源订阅、通知推送与会话状态，维护Server间安全隔离</td>
+      </tr>
+      <tr>
+          <td>MCP Server（服务端）</td>
+          <td>实现MCP协议、封装并暴露特定能力的轻量级程序<br>部署形态：本地子进程、远程HTTP服务、容器化服务</td>
+          <td>1. 通过标准原语对外暴露工具、资源、提示模板三类能力<br>2. 实现业务逻辑，对接数据库、API、文件系统等底层系统<br>3. 响应Client请求，处理能力发现与调用，遵守协议安全约束<br>4. 可主动发起采样请求，反向回调Host的LLM能力<br>5. 维护会话状态，处理资源变更通知与权限校验</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-底层协议规范">2. 底层协议规范</h3>
+<p>MCP完全基于<strong>JSON-RPC 2.0</strong>标准构建，定义了三种核心消息类型，所有通信严格遵循该规范：</p>
+<ol>
+<li><strong>请求（Request）</strong>：带唯一ID、方法名、参数的双向消息，接收方必须返回对应响应</li>
+<li><strong>响应（Response）</strong>：匹配对应请求ID的消息，包含成功结果或标准错误对象</li>
+<li><strong>通知（Notification）</strong>：无ID的单向消息，无需接收方响应，用于事件推送、状态变更</li>
+</ol>
+<h3 id="3-能力协商机制">3. 能力协商机制</h3>
+<p>MCP采用<strong>声明式能力协商</strong>，在初始化握手阶段，Client与Server必须明确声明自身支持的能力集，会话期间仅可使用双方共同支持的协议功能，禁止使用未声明的能力：</p>
+<ul>
+<li>Server端声明：资源订阅、工具调用、提示模板、日志推送等能力</li>
+<li>Client端声明：采样回调、通知处理、根证书校验等能力</li>
+</ul>
+<h3 id="4-四大核心原语">4. 四大核心原语</h3>
+<p>MCP定义了四个标准化能力单元，覆盖LLM与外部系统交互的全场景需求：</p>
+<ol>
+<li><strong>工具（Tool）</strong>：可被LLM调用的执行函数，最常用的原语，支持入参JSON Schema校验，对应标准化的Function Calling能力</li>
+<li><strong>资源（Resource）</strong>：可被LLM读取的上下文数据，支持URI寻址、内容更新通知、增量订阅，如文件内容、数据库表、实时数据</li>
+<li><strong>提示（Prompt）</strong>：标准化的提示词模板，支持参数注入，可被LLM直接调用，实现复杂prompt的复用与标准化</li>
+<li><strong>采样（Sampling）</strong>：Server端主动向Client发起的LLM调用请求，实现反向回调，让服务端可按需使用大模型能力</li>
+</ol>
+<h2 id="三mcp完整通信生命周期">三、MCP完整通信生命周期</h2>
+<p>MCP的全流程通信分为4个核心阶段，严格遵循协议规范执行：</p>
+<h3 id="1-初始化握手与能力协商必选">1. 初始化握手与能力协商（必选）</h3>
+<p>这是会话建立的前提，未完成握手前禁止发送业务请求，步骤如下：</p>
+<ol>
+<li>Client向Server发送<code>initialize</code>请求，携带协议版本、Client支持的能力集、客户端信息</li>
+<li>Server校验协议版本兼容性，返回<code>initialize</code>响应，携带Server能力集、服务端信息、版本确认</li>
+<li>Client验证能力集匹配性，向Server发送<code>initialized</code>通知，确认会话初始化完成</li>
+<li>握手完成，双方进入正常会话状态</li>
+</ol>
+<h3 id="2-能力发现阶段按需触发">2. 能力发现阶段（按需触发）</h3>
+<p>LLM需要获取Server可用能力时，Client发起标准化发现请求：</p>
+<ol>
+<li>发送<code>tools/list</code>请求，获取工具列表（含名称、描述、入参JSON Schema）</li>
+<li>发送<code>resources/list</code>请求，获取资源列表（含URI、名称、描述、MIME类型）</li>
+<li>发送<code>prompts/list</code>请求，获取提示模板列表（含名称、描述、参数定义）</li>
+<li>Host将所有能力合并到统一注册表，注入LLM系统提示，让模型理解可用操作</li>
+</ol>
+<h3 id="3-核心能力调用流程核心业务">3. 核心能力调用流程（核心业务）</h3>
+<p>以最常用的工具调用为例，完整闭环流程如下：</p>
+<ol>
+<li>用户发起提问，LLM判断需要调用MCP工具，生成工具调用指令</li>
+<li>Host将指令下发给对应Client，Client封装为<code>tools/call</code>标准JSON-RPC请求，发送给Server</li>
+<li>Server接收请求后，先校验入参是否符合JSON Schema，再执行工具业务逻辑</li>
+<li>Server执行完成后，返回<code>tools/call</code>响应，携带执行结果或错误信息</li>
+<li>Client将响应回传给Host，Host将结果注入LLM上下文</li>
+<li>LLM基于工具返回结果，生成最终自然语言回答，完成调用闭环</li>
+</ol>
+<h3 id="4-会话管理与销毁">4. 会话管理与销毁</h3>
+<ul>
+<li>会话保活：双方通过心跳通知维持长连接，检测连接健康状态</li>
+<li>增量通知：订阅的资源内容变更时，Server主动发送<code>resources/updated</code>通知</li>
+<li>会话销毁：连接断开时清理会话状态；Client可主动发送关闭通知优雅终止会话；异常断开时触发自动重连</li>
+</ul>
+<h2 id="四mcp服务端完整实现">四、MCP服务端完整实现</h2>
+<p>服务端是MCP能力的核心载体，也是开发者最常开发的部分，主流实现基于官方SDK，以Python FastMCP（最易用）和TypeScript SDK为主。</p>
+<h3 id="1-实现前置准备">1. 实现前置准备</h3>
+<ul>
+<li>开发环境：Python 3.10+ / Node.js 18+</li>
+<li>依赖安装：Python环境执行<code>pip install mcp</code>，Node.js环境执行<code>npm install @modelcontextprotocol/sdk</code></li>
+<li>需求明确：确定Server要暴露的能力、对接的底层系统，选择适配的传输方式（本地选stdio，远程选SSE+HTTP）</li>
+</ul>
+<h3 id="2-标准实现步骤">2. 标准实现步骤</h3>
+<ol>
+<li>实例化MCP服务端对象，配置服务名称、描述、版本等基础信息</li>
+<li>定义并实现核心能力：通过装饰器/注册器声明工具、资源、提示模板</li>
+<li>补充完整元信息：名称、精准的描述、入参Schema、参数定义等，直接决定LLM调用准确率</li>
+<li>实现业务逻辑：对接底层系统、处理异常、格式化LLM友好的返回结果</li>
+<li>配置传输方式，启动服务端，监听Client连接</li>
+<li>测试验证：在支持MCP的Host中配置Server，验证能力调用的兼容性与准确性</li>
+</ol>
+<h3 id="3-完整可运行代码示例python-fastmcpstdio传输">3. 完整可运行代码示例（Python FastMCP，stdio传输）</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-python">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">mcp.server.fastmcp</span> <span class="kn">import</span> <span class="n">FastMCP</span><span class="p">,</span> <span class="n">Context</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">os</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">httpx</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 1. 实例化FastMCP服务端，配置基础信息</span>
+</span></span><span class="line"><span class="cl"><span class="n">mcp</span> <span class="o">=</span> <span class="n">FastMCP</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">name</span><span class="o">=</span><span class="s2">&#34;demo-mcp-server&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">description</span><span class="o">=</span><span class="s2">&#34;演示MCP服务端，包含文件读取、天气查询、提示模板能力&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">version</span><span class="o">=</span><span class="s2">&#34;1.0.0&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. 定义工具：天气查询（对接第三方API）</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@mcp.tool</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="k">async</span> <span class="k">def</span> <span class="nf">query_weather</span><span class="p">(</span><span class="n">city</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">days</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    查询指定城市的未来几天的天气预报
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param city: 要查询的城市名称，必填
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param days: 预报天数，默认3天，最大7天
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :return: 格式化的天气预报文本
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 入参合法性校验</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">days</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">days</span> <span class="o">&gt;</span> <span class="mi">7</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s2">&#34;错误：预报天数必须在1-7天之间&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 第三方API调用逻辑</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="sa">f</span><span class="s2">&#34;https://api.open-meteo.com/v1/forecast?city=</span><span class="si">{</span><span class="n">city</span><span class="si">}</span><span class="s2">&amp;forecast_days=</span><span class="si">{</span><span class="n">days</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span>
+</span></span><span class="line"><span class="cl">            <span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="sa">f</span><span class="s2">&#34;【</span><span class="si">{</span><span class="n">city</span><span class="si">}</span><span class="s2">未来</span><span class="si">{</span><span class="n">days</span><span class="si">}</span><span class="s2">天天气预报】</span><span class="se">\n</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="sa">f</span><span class="s2">&#34;天气查询失败：</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 3. 定义工具：本地文本文件读取</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@mcp.tool</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">read_local_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">Context</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    读取本地指定路径的文本文件内容
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param file_path: 本地文件的绝对路径
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param ctx: MCP上下文对象，用于日志输出
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :return: 文件内容文本
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ctx</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;收到文件读取请求：</span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 安全校验：防止目录遍历攻击</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s2">&#34;错误：必须提供文件的绝对路径&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&#34;r&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ctx</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;文件读取失败：</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="sa">f</span><span class="s2">&#34;文件读取失败：</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 4. 定义资源：系统基础信息，支持LLM读取</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@mcp.resource</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="s2">&#34;demo://system/info&#34;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&#34;系统信息&#34;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&#34;当前服务的基础系统信息&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_system_info</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="sa">f</span><span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    操作系统：</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    工作目录：</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span><span class="si">}</span><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    CPU核心数：</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span><span class="si">}</span><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    服务版本：1.0.0
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 5. 定义提示模板：标准化代码评审模板，支持参数注入</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@mcp.prompt</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">name</span><span class="o">=</span><span class="s2">&#34;code_review&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">description</span><span class="o">=</span><span class="s2">&#34;标准化的代码评审提示模板&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">arguments</span><span class="o">=</span><span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;code&#34;</span><span class="p">,</span> <span class="s2">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;要评审的代码内容&#34;</span><span class="p">,</span> <span class="s2">&#34;required&#34;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span><span class="s2">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;language&#34;</span><span class="p">,</span> <span class="s2">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;代码的编程语言&#34;</span><span class="p">,</span> <span class="s2">&#34;required&#34;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&#34;default&#34;</span><span class="p">:</span> <span class="s2">&#34;Python&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">code_review_prompt</span><span class="p">(</span><span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&#34;Python&#34;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="sa">f</span><span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    你是一名资深的</span><span class="si">{</span><span class="n">language</span><span class="si">}</span><span class="s2">代码评审专家，请对以下代码进行全面评审，输出格式如下：
+</span></span></span><span class="line"><span class="cl"><span class="s2">    1. 代码亮点
+</span></span></span><span class="line"><span class="cl"><span class="s2">    2. 潜在问题与风险
+</span></span></span><span class="line"><span class="cl"><span class="s2">    3. 优化建议
+</span></span></span><span class="line"><span class="cl"><span class="s2">    4. 可直接使用的优化后代码
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    待评审代码：
+</span></span></span><span class="line"><span class="cl"><span class="s2">    ```</span><span class="si">{</span><span class="n">language</span><span class="si">}</span><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    </span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">    ```
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 6. 启动服务端，使用stdio传输（本地场景标准方案）</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mcp</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">transport</span><span class="o">=</span><span class="s2">&#34;stdio&#34;</span><span class="p">)</span></span></span></code></pre></div></div>
+<h3 id="4-多语言实现支持">4. 多语言实现支持</h3>
+<p>官方与社区提供了主流开发语言的SDK，覆盖不同业务场景：</p>
+<ul>
+<li>Python：<code>mcp</code> 包，提供FastMCP高阶封装，开发效率最高，适合快速原型与轻量服务</li>
+<li>TypeScript/JavaScript：<code>@modelcontextprotocol/sdk</code>，适配Node.js生态与前端相关服务</li>
+<li>Go/Java/Kotlin：社区官方兼容SDK，适合高性能、企业级后端服务开发</li>
+</ul>
+<h2 id="五mcp客户端实现">五、MCP客户端实现</h2>
+<p>客户端通常由AI应用（Host）厂商实现，普通开发者仅在自研AI平台需要集成MCP能力时，才需要开发客户端。</p>
+<h3 id="1-极简客户端代码示例python">1. 极简客户端代码示例（Python）</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-python">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">asyncio</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">mcp</span> <span class="kn">import</span> <span class="n">ClientSession</span><span class="p">,</span> <span class="n">StdioServerParameters</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">mcp.client.stdio</span> <span class="kn">import</span> <span class="n">stdio_client</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 1. 配置目标Server的启动参数</span>
+</span></span><span class="line"><span class="cl">    <span class="n">server_params</span> <span class="o">=</span> <span class="n">StdioServerParameters</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">command</span><span class="o">=</span><span class="s2">&#34;python&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="s2">&#34;demo_mcp_server.py&#34;</span><span class="p">]</span>  <span class="c1"># 上述服务端代码的文件路径</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 2. 建立stdio连接，创建客户端会话</span>
+</span></span><span class="line"><span class="cl">    <span class="k">async</span> <span class="k">with</span> <span class="n">stdio_client</span><span class="p">(</span><span class="n">server_params</span><span class="p">)</span> <span class="k">as</span> <span class="p">(</span><span class="n">read</span><span class="p">,</span> <span class="n">write</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">async</span> <span class="k">with</span> <span class="n">ClientSession</span><span class="p">(</span><span class="n">read</span><span class="p">,</span> <span class="n">write</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># 3. 执行初始化握手</span>
+</span></span><span class="line"><span class="cl">            <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;✅ 初始化握手完成，会话建立成功&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># 4. 能力发现：获取工具列表</span>
+</span></span><span class="line"><span class="cl">            <span class="n">tools</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">list_tools</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;📋 可用工具：</span><span class="si">{</span><span class="p">[</span><span class="n">tool</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">tool</span> <span class="ow">in</span> <span class="n">tools</span><span class="o">.</span><span class="n">tools</span><span class="p">]</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># 5. 调用工具：查询上海天气</span>
+</span></span><span class="line"><span class="cl">            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">call_tool</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="n">tool_name</span><span class="o">=</span><span class="s2">&#34;query_weather&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">arguments</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;city&#34;</span><span class="p">:</span> <span class="s2">&#34;上海&#34;</span><span class="p">,</span> <span class="s2">&#34;days&#34;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;🔧 工具调用结果：</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># 6. 读取资源</span>
+</span></span><span class="line"><span class="cl">            <span class="n">resource</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">read_resource</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="s2">&#34;demo://system/info&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;📦 资源读取结果：</span><span class="si">{</span><span class="n">resource</span><span class="o">.</span><span class="n">contents</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># 7. 获取渲染后的提示模板</span>
+</span></span><span class="line"><span class="cl">            <span class="n">prompt</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">get_prompt</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="n">name</span><span class="o">=</span><span class="s2">&#34;code_review&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">arguments</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;code&#34;</span><span class="p">:</span> <span class="s2">&#34;print(&#39;hello world&#39;)&#34;</span><span class="p">,</span> <span class="s2">&#34;language&#34;</span><span class="p">:</span> <span class="s2">&#34;Python&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;📝 提示模板结果：</span><span class="si">{</span><span class="n">prompt</span><span class="o">.</span><span class="n">messages</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span></span></span></code></pre></div></div>
+<h2 id="六传输层实现方案">六、传输层实现方案</h2>
+<p>MCP传输层与业务逻辑完全解耦，官方支持3种主流传输方式，适配不同部署场景：</p>
+<table>
+  <thead>
+      <tr>
+          <th>传输方式</th>
+          <th>实现原理</th>
+          <th>适用场景</th>
+          <th>核心优势</th>
+          <th>注意事项</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>stdio（标准输入输出）</td>
+          <td>Client通过子进程启动Server，通过进程stdin/stdout进行二进制流通信</td>
+          <td>本地部署场景，Claude Desktop/Cursor等本地AI应用</td>
+          <td>开发简单、无端口暴露、安全性高、延迟极低</td>
+          <td>禁止向stdout打印业务日志（需用stderr），仅支持单客户端连接</td>
+      </tr>
+      <tr>
+          <td>SSE+HTTP</td>
+          <td>Client通过HTTP POST发送请求，通过SSE长连接接收服务端响应与通知</td>
+          <td>远程部署、企业内网/云端服务</td>
+          <td>支持跨网络访问、多客户端并发、兼容HTTP网关/鉴权/负载均衡</td>
+          <td>必须配置CORS、HTTPS加密、身份认证，处理网络重连</td>
+      </tr>
+      <tr>
+          <td>WebSocket</td>
+          <td>基于WebSocket全双工长连接实现双向通信</td>
+          <td>实时性要求高、双向消息频繁的场景（如实时数据推送）</td>
+          <td>全双工通信、低延迟、支持双向实时推送</td>
+          <td>官方原生支持度低于前两种，需自行实现心跳保活与消息顺序保证</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="七安全机制实现">七、安全机制实现</h2>
+<p>MCP内置多层安全机制，开发者必须严格落地，避免安全风险：</p>
+<ol>
+<li><strong>权限最小化</strong>：Server仅暴露必要能力，工具/资源仅开放最小必要权限，禁止过度授权</li>
+<li><strong>用户知情同意</strong>：Host必须在敏感操作前获得用户明确同意，禁止静默执行高危操作（如文件写入、命令执行）</li>
+<li><strong>输入校验与防注入</strong>：所有工具入参必须做严格校验，防范SQL注入、命令注入、目录遍历等攻击</li>
+<li><strong>安全隔离</strong>：每个Server连接相互隔离，本地Server使用沙箱限制资源访问范围</li>
+<li><strong>身份认证</strong>：远程Server必须实现API Key、OAuth2.0、JWT等身份认证，禁止匿名访问</li>
+<li><strong>传输加密</strong>：远程传输必须使用HTTPS/WSS加密，禁止明文传输敏感数据</li>
+<li><strong>审计日志</strong>：所有能力调用必须记录完整审计日志，包含调用方、时间、参数、结果等，便于溯源</li>
+<li><strong>异常熔断</strong>：针对高频调用、高失败率请求实现熔断机制，避免服务被滥用</li>
+</ol>
+<h2 id="八最佳实践与避坑指南">八、最佳实践与避坑指南</h2>
+<h3 id="最佳实践">最佳实践</h3>
+<ol>
+<li><strong>元信息极致优化</strong>：工具/资源的description必须精准完整，清晰说明用途、适用场景、入参含义，直接决定LLM调用准确率</li>
+<li><strong>单一职责原则</strong>：每个Server专注于一个业务领域，避免集成过多无关能力，降低维护成本与安全风险</li>
+<li><strong>LLM友好的结果格式化</strong>：返回结果结构化、简洁，避免冗余数据，减少上下文token消耗</li>
+<li><strong>完善的异常处理</strong>：所有业务逻辑必须捕获异常，返回清晰的错误信息，帮助LLM理解失败原因并调整调用方式</li>
+<li><strong>语义化版本管理</strong>：Server遵循语义化版本规范，能力变更时同步更新版本号，避免兼容性问题</li>
+</ol>
+<h3 id="常见避坑指南">常见避坑指南</h3>
+<ol>
+<li><strong>初始化握手失败</strong>：常见原因是协议版本不兼容、能力集声明格式错误、消息帧格式不符合规范</li>
+<li><strong>LLM不调用工具</strong>：90%的原因是工具description不清晰、入参Schema定义不完整、参数描述模糊</li>
+<li><strong>stdio连接失败</strong>：常见原因是Server启动命令错误、依赖缺失、stdout被业务日志占用</li>
+<li><strong>工具调用入参错误</strong>：常见原因是JSON Schema定义不严格，Server端未做入参前置校验</li>
+<li><strong>远程Server访问失败</strong>：常见原因是CORS配置错误、身份认证失败、HTTPS证书无效</li>
+</ol>
+<h2 id="九典型应用场景">九、典型应用场景</h2>
+<ol>
+<li><strong>开发工具集成</strong>：IDE（Cursor/Windsurf）通过MCP对接Git、Jira、数据库、云服务，实现AI全流程开发</li>
+<li><strong>企业数据集成</strong>：通过MCP Server封装内部数据库、CRM、ERP系统，让AI助手安全访问内部数据，实现数据分析与报表生成</li>
+<li><strong>智能运维</strong>：对接监控系统、云平台、K8s集群，实现AI故障排查、资源调度、自动化运维</li>
+<li><strong>生产力工具集成</strong>：对接飞书、钉钉、Notion、Slack，实现AI自动化日程管理、文档处理、消息通知</li>
+<li><strong>专业领域能力封装</strong>：封装金融行情、医疗数据、法律知识库等行业能力，打造专属行业AI助手</li>
+<li><strong>本地设备控制</strong>：对接智能家居、物联网设备，实现AI语音控制与设备自动化</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-03-17</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/011_mcp%E5%8D%8F%E8%AE%AE%E5%AE%9E%E7%8E%B0%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/protocol/">协议</a>,&nbsp;<a href="/blog/tags/mcp/">MCP</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/010_xcp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="XCP 协议详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>XCP 协议详细总结</a>
+            <a href="/blog/013_gdb%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="gdb 使用详细总结">gdb 使用详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

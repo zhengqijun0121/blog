@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>ZMQ 协议详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/005_zmq%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="ZMQ 协议详细总结">
+  <meta property="og:description" content="ZeroMQ（ZMQ）协议详细总结 ZeroMQ（又称ØMQ/0MQ/ZMQ）是一款高性能、异步、无中心化代理（Brokerless） 的消息通信库，其底层基于标准化的ZMTP（ZeroMQ Message Transport Protocol） 传输协议实现，以嵌入式库的形式集成到应用程序中，屏蔽了底层网络通信、连接管理、队列调度、重连机制等复杂细节，通过统一的套接字API提供多种预置的通信模式，专为低延迟、高吞吐、松耦合的分布式系统设计。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-11T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-03-11T10:00:20+08:00">
+    <meta property="article:tag" content="协议">
+    <meta property="article:tag" content="ZMQ">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="ZMQ 协议详细总结">
+  <meta name="twitter:description" content="ZeroMQ（ZMQ）协议详细总结 ZeroMQ（又称ØMQ/0MQ/ZMQ）是一款高性能、异步、无中心化代理（Brokerless） 的消息通信库，其底层基于标准化的ZMTP（ZeroMQ Message Transport Protocol） 传输协议实现，以嵌入式库的形式集成到应用程序中，屏蔽了底层网络通信、连接管理、队列调度、重连机制等复杂细节，通过统一的套接字API提供多种预置的通信模式，专为低延迟、高吞吐、松耦合的分布式系统设计。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/005_zmq%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/004_http%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/006_mqtt%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "ZMQ 协议详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/005_zmq%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "Protocol, ZMQ","wordcount":  5779 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/005_zmq%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-03-11T09:00:20+08:00","dateModified": "2026-03-11T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/005_zmq%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/005_zmq%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">ZMQ 协议详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/protocol/"><i class="far fa-folder" aria-hidden="true"></i>协议</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-03-11">2026-03-11</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 5779 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 12 分钟&nbsp;<span id="/blog/005_zmq%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="ZMQ 协议详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一核心定位与设计理念">一、核心定位与设计理念</a></li>
+    <li><a href="#二zmtp核心传输协议规范">二、ZMTP核心传输协议规范</a>
+      <ul>
+        <li><a href="#21-协议分层架构">2.1 协议分层架构</a></li>
+        <li><a href="#22-连接生命周期">2.2 连接生命周期</a>
+          <ul>
+            <li><a href="#1-问候阶段greeting">1. 问候阶段（Greeting）</a></li>
+            <li><a href="#2-握手阶段handshake">2. 握手阶段（Handshake）</a></li>
+            <li><a href="#3-流量阶段traffic">3. 流量阶段（Traffic）</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-帧格式定义">2.3 帧格式定义</a>
+          <ul>
+            <li><a href="#帧的通用结构">帧的通用结构</a></li>
+            <li><a href="#关键规则">关键规则</a></li>
+          </ul>
+        </li>
+        <li><a href="#24-安全机制">2.4 安全机制</a></li>
+      </ul>
+    </li>
+    <li><a href="#三zmq核心通信模式">三、ZMQ核心通信模式</a>
+      <ul>
+        <li><a href="#31-基础核心模式">3.1 基础核心模式</a>
+          <ul>
+            <li><a href="#1-请求-应答模式reqrep">1. 请求-应答模式（REQ/REP）</a></li>
+            <li><a href="#2-发布-订阅模式pubsub">2. 发布-订阅模式（PUB/SUB）</a></li>
+            <li><a href="#3-推拉模式pushpull">3. 推拉模式（PUSH/PULL）</a></li>
+            <li><a href="#4-独占结对模式pairpair">4. 独占结对模式（PAIR/PAIR）</a></li>
+          </ul>
+        </li>
+        <li><a href="#32-高级扩展模式">3.2 高级扩展模式</a></li>
+      </ul>
+    </li>
+    <li><a href="#四核心传输协议支持">四、核心传输协议支持</a></li>
+    <li><a href="#五核心特性与可靠性机制">五、核心特性与可靠性机制</a>
+      <ul>
+        <li><a href="#51-核心性能特性">5.1 核心性能特性</a></li>
+        <li><a href="#52-可靠性保障机制">5.2 可靠性保障机制</a></li>
+        <li><a href="#53-通用能力特性">5.3 通用能力特性</a></li>
+      </ul>
+    </li>
+    <li><a href="#六与传统消息中间件的核心差异">六、与传统消息中间件的核心差异</a></li>
+    <li><a href="#七典型适用场景">七、典型适用场景</a></li>
+    <li><a href="#八常见使用注意事项">八、常见使用注意事项</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="zeromqzmq协议详细总结">ZeroMQ（ZMQ）协议详细总结</h1>
+<p>ZeroMQ（又称ØMQ/0MQ/ZMQ）是一款<strong>高性能、异步、无中心化代理（Brokerless）</strong> 的消息通信库，其底层基于标准化的<strong>ZMTP（ZeroMQ Message Transport Protocol）</strong> 传输协议实现，以嵌入式库的形式集成到应用程序中，屏蔽了底层网络通信、连接管理、队列调度、重连机制等复杂细节，通过统一的套接字API提供多种预置的通信模式，专为低延迟、高吞吐、松耦合的分布式系统设计。</p>
+<h2 id="一核心定位与设计理念">一、核心定位与设计理念</h2>
+<ol>
+<li><strong>无代理架构</strong>：不同于RabbitMQ、Kafka等依赖中心化Broker的消息中间件，ZMQ无独立部署的服务进程，直接嵌入应用端到端通信，大幅降低架构复杂度与传输延迟。</li>
+<li><strong>消息导向而非字节流</strong>：将TCP字节流抽象为离散的消息帧，开发者无需处理粘包、拆包问题，保证消息的原子性投递。</li>
+<li><strong>通信模式预置</strong>：将通用分布式通信场景抽象为标准化的套接字配对模式，开发者无需手动设计通信拓扑，仅需选择匹配的模式即可快速搭建通信架构。</li>
+<li><strong>全场景传输抽象</strong>：统一线程间、进程间、跨主机、跨网络的通信API，一套代码可无缝适配不同传输层级，仅需修改连接地址即可切换。</li>
+</ol>
+<h2 id="二zmtp核心传输协议规范">二、ZMTP核心传输协议规范</h2>
+<p>ZMTP是ZMQ的底层标准化传输协议，定义了对等节点之间消息交换的完整规则，最新<strong>稳定版本为ZMTP 3.0</strong>，最新草案版本为ZMTP 3.1（新增心跳、资源管理、扩展命令等能力），协议完全开源并遵循RFC标准化流程。</p>
+<h3 id="21-协议分层架构">2.1 协议分层架构</h3>
+<p>ZMTP自下而上分为三层，各层职责清晰且解耦：</p>
+<table>
+  <thead>
+      <tr>
+          <th>层级</th>
+          <th>核心职责</th>
+          <th>关键能力</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>组帧层（Framing Layer）</td>
+          <td>将底层字节流转换为离散的帧，定义帧的编码格式</td>
+          <td>消息边界界定、长短帧适配、帧元数据标记</td>
+      </tr>
+      <tr>
+          <td>连接层（Connection Layer）</td>
+          <td>管理连接生命周期，完成版本协商、安全握手、元数据交换</td>
+          <td>版本兼容、身份认证、加密传输、连接保活</td>
+      </tr>
+      <tr>
+          <td>内容层（Content Layer）</td>
+          <td>基于套接字类型定义消息的路由、过滤、投递语义</td>
+          <td>消息模式匹配、订阅过滤、路由寻址、负载均衡</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="22-连接生命周期">2.2 连接生命周期</h3>
+<p>一个完整的ZMTP连接分为三个核心阶段，严格按顺序执行：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>连接 = 问候阶段（Greeting） → 握手阶段（Handshake） → 流量阶段（Traffic）</code></pre></div>
+<h4 id="1-问候阶段greeting">1. 问候阶段（Greeting）</h4>
+<p>固定64字节长度，用于对等节点之间的版本协商与安全机制确认，是连接建立的首个步骤，格式如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>字段</th>
+          <th>长度</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>签名（Signature）</td>
+          <td>10字节</td>
+          <td>固定格式：<code>0xFF + 8字节填充 + 0x7F</code>，用于标识ZMTP协议，避免与普通TCP流量混淆</td>
+      </tr>
+      <tr>
+          <td>版本（Version）</td>
+          <td>2字节</td>
+          <td>主版本号+次版本号，ZMTP 3.0为<code>0x03 0x00</code>，3.1为<code>0x03 0x01</code>，支持向下兼容协商</td>
+      </tr>
+      <tr>
+          <td>安全机制（Mechanism）</td>
+          <td>20字节</td>
+          <td>ASCII字符串，不足补0x00，用于协商加密认证方式，核心支持<code>NULL</code>/<code>PLAIN</code>/<code>CURVE</code></td>
+      </tr>
+      <tr>
+          <td>服务端标识（as-server）</td>
+          <td>1字节</td>
+          <td>0x00=客户端，0x01=服务端，用于安全握手的角色区分</td>
+      </tr>
+      <tr>
+          <td>填充位（Filler）</td>
+          <td>31字节</td>
+          <td>固定补0x00，将问候帧补齐至64字节</td>
+      </tr>
+  </tbody>
+</table>
+<p>版本协商规则：</p>
+<ul>
+<li>节点必须接受高于自身的主版本号，保证向前兼容；</li>
+<li>可通过前11字节检测旧版本协议，自动降级适配ZMTP 2.0/1.0；</li>
+<li>若双方安全机制不匹配，必须立即关闭连接，防止降级攻击。</li>
+</ul>
+<h4 id="2-握手阶段handshake">2. 握手阶段（Handshake）</h4>
+<p>基于协商好的安全机制执行认证握手，由一个或多个命令帧组成，只有握手成功才能进入流量阶段。</p>
+<ul>
+<li>核心命令：<code>READY</code>（就绪确认）、<code>ERROR</code>（错误终止）；</li>
+<li>握手成功后，双方通过<code>READY</code>命令交换元数据，包括套接字类型、节点身份（Identity）、资源标识等；</li>
+<li>若认证失败，发送<code>ERROR</code>命令并关闭连接，避免无效连接占用资源。</li>
+</ul>
+<h4 id="3-流量阶段traffic">3. 流量阶段（Traffic）</h4>
+<p>连接正式就绪，可双向混合传输<strong>命令帧</strong>与<strong>消息帧</strong>，是应用数据的核心传输阶段。</p>
+<ul>
+<li>内置命令：<code>SUBSCRIBE/CANCEL</code>（订阅管理）、<code>PING/PONG</code>（心跳保活）、<code>JOIN/LEAVE</code>（组播组管理）等；</li>
+<li>消息帧：承载应用层数据，保证原子性、有序性投递。</li>
+</ul>
+<h3 id="23-帧格式定义">2.3 帧格式定义</h3>
+<p>ZMTP中所有数据均以<strong>帧（Frame）</strong> 为单位传输，分为命令帧和消息帧，支持短帧（0-255字节）和长帧（0-2^63-1字节）两种格式，适配不同大小的消息负载。</p>
+<h4 id="帧的通用结构">帧的通用结构</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>帧 = 标志位（1字节） + 长度字段（1/8字节） + 帧体（长度字段指定的字节数）</code></pre></div>
+<ol>
+<li><strong>标志位（Flags）</strong>：1字节，按位定义帧的属性，核心位定义：
+<table>
+  <thead>
+      <tr>
+          <th>位序号</th>
+          <th>名称</th>
+          <th>含义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Bit 0（最低位）</td>
+          <td>MORE</td>
+          <td>后续还有帧，1=多部分消息的中间帧，0=消息最后一帧</td>
+      </tr>
+      <tr>
+          <td>Bit 1</td>
+          <td>LONG</td>
+          <td>长度字段格式，0=1字节短长度，1=8字节网络字节序长长度</td>
+      </tr>
+      <tr>
+          <td>Bit 2</td>
+          <td>COMMAND</td>
+          <td>帧类型，1=命令帧，0=消息帧</td>
+      </tr>
+      <tr>
+          <td>Bit 3-7</td>
+          <td>保留位</td>
+          <td>必须置0，用于未来扩展</td>
+      </tr>
+  </tbody>
+</table>
+</li>
+<li><strong>长度字段</strong>：不包含标志位和自身，仅标识帧体的字节长度；短帧用1字节，长帧用8字节大端序无符号整数。</li>
+<li><strong>帧体</strong>：命令帧承载协议命令与参数，消息帧承载应用数据。</li>
+</ol>
+<h4 id="关键规则">关键规则</h4>
+<ul>
+<li><strong>多部分消息</strong>：一条完整的ZMTP消息可由1个或多个帧组成，除最后一帧外，所有帧的MORE标志位必须置1；消息保证原子性投递，要么全部帧送达，要么完全不送达。</li>
+<li><strong>命令帧约束</strong>：命令帧必须为单帧，MORE标志位必须置0，帧体由命令名称+命令数据组成。</li>
+</ul>
+<h3 id="24-安全机制">2.4 安全机制</h3>
+<p>ZMTP设计了可扩展的安全框架，内置三种核心安全机制，覆盖从无加密到全链路加密认证的场景，禁止非对称的安全机制协商，防止降级攻击：</p>
+<ol>
+<li><strong>NULL机制</strong>：默认机制，无认证、无加密，明文传输，适用于可信内网环境，性能最高；握手仅需交换<code>READY</code>命令即可完成。</li>
+<li><strong>PLAIN机制</strong>：明文用户名/密码认证，无传输加密，适用于内网身份校验场景，密码在网络中明文传输，公网环境需配合VPN使用。</li>
+<li><strong>CURVE机制</strong>：基于Curve25519椭圆曲线算法的全链路加密与双向认证，提供端到端的机密性、完整性与身份防伪造，是公网环境的推荐安全方案。</li>
+</ol>
+<h2 id="三zmq核心通信模式">三、ZMQ核心通信模式</h2>
+<p>ZMQ的核心价值在于将分布式通信场景抽象为标准化的<strong>套接字配对模式</strong>，不同套接字类型严格遵循预定义的消息路由、投递、负载均衡语义，仅允许兼容的套接字类型配对通信。</p>
+<h3 id="31-基础核心模式">3.1 基础核心模式</h3>
+<h4 id="1-请求-应答模式reqrep">1. 请求-应答模式（REQ/REP）</h4>
+<ul>
+<li><strong>配对规则</strong>：REQ ↔ REP，严格的一问一答语义</li>
+<li><strong>核心语义</strong>：REQ端（客户端）必须先发送请求，再等待应答；REP端（服务端）必须先接收请求，再发送应答，请求与应答严格成对出现；支持1个REP对应多个REQ客户端，请求自动负载均衡。</li>
+<li><strong>适用场景</strong>：简单RPC调用、客户端-服务端同步交互、命令控制类场景。</li>
+<li><strong>限制</strong>：REQ端一次只能发起一个请求，未收到应答前无法发送新请求；REP端一次只能处理一个请求，未回复前无法接收新请求。</li>
+</ul>
+<h4 id="2-发布-订阅模式pubsub">2. 发布-订阅模式（PUB/SUB）</h4>
+<ul>
+<li><strong>配对规则</strong>：PUB ↔ SUB，一对多广播语义</li>
+<li><strong>核心语义</strong>：PUB端（发布者）向所有连接的SUB端（订阅者）广播消息，消息基于<strong>前缀匹配</strong>的主题过滤；SUB端需显式订阅主题（空字符串订阅所有消息），仅接收匹配的消息；消息单向流动，PUB不关心SUB是否接收，订阅前发布的消息会直接丢弃。</li>
+<li><strong>适用场景</strong>：实时行情推送、日志分发、系统事件通知、状态同步广播。</li>
+<li><strong>扩展</strong>：支持XPUB/XSUB套接字，可实现订阅状态的反向通知，适配代理转发场景。</li>
+</ul>
+<h4 id="3-推拉模式pushpull">3. 推拉模式（PUSH/PULL）</h4>
+<ul>
+<li><strong>配对规则</strong>：PUSH ↔ PULL，单向流水线语义</li>
+<li><strong>核心语义</strong>：PUSH端发送的消息会自动负载均衡到所有连接的PULL端，每条消息仅送达一个PULL端；支持多PUSH对应多PULL，实现分布式任务分发与结果汇聚，无状态、无重复投递。</li>
+<li><strong>适用场景</strong>：分布式任务调度、并行数据处理、生产者-消费者模型、任务流水线。</li>
+</ul>
+<h4 id="4-独占结对模式pairpair">4. 独占结对模式（PAIR/PAIR）</h4>
+<ul>
+<li><strong>配对规则</strong>：PAIR ↔ PAIR，一对一专属双向通信</li>
+<li><strong>核心语义</strong>：仅允许两个PAIR套接字建立连接，双向异步通信，无负载均衡、无过滤、无状态机约束，是最接近原生TCP的模式，支持全双工数据传输。</li>
+<li><strong>适用场景</strong>：进程内多线程通信、双节点热备同步、专属双向数据通道。</li>
+</ul>
+<h3 id="32-高级扩展模式">3.2 高级扩展模式</h3>
+<p>针对复杂分布式架构，ZMQ提供了更灵活的高级套接字模式，可组合构建复杂的代理、路由、集群架构：</p>
+<ol>
+<li><strong>路由-经销商模式（ROUTER/DEALER）</strong>：ROUTER可基于节点身份（Identity）精准路由消息，DEALER可实现异步并发请求分发，二者组合可构建REQ/REP模式的代理网关，突破原生REQ/REP的同步限制，支持高并发请求处理。</li>
+<li><strong>客户端-服务端模式（CLIENT/SERVER）</strong>：线程安全的异步RPC模式，CLIENT端可并发发送请求，无需等待应答；SERVER端可并发处理请求并精准回复，适配高并发微服务RPC场景。</li>
+<li><strong>无线-接收模式（RADIO/DISH）</strong>：替代PUB/SUB的新一代组播模式，基于<strong>精确组名匹配</strong>而非前缀匹配，支持更灵活的消息分组，避免前缀匹配的误命中问题。</li>
+<li><strong>散列-聚集模式（SCATTER/GATHER）</strong>：线程安全的PUSH/PULL替代模式，优化了分布式任务分发的负载均衡策略，适配大规模并行计算场景。</li>
+</ol>
+<h2 id="四核心传输协议支持">四、核心传输协议支持</h2>
+<p>ZMQ对底层传输协议做了全场景封装，同一套API可无缝切换不同传输方式，仅需修改连接地址前缀即可：</p>
+<table>
+  <thead>
+      <tr>
+          <th>传输类型</th>
+          <th>地址前缀</th>
+          <th>适用场景</th>
+          <th>核心特点</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>线程间通信</td>
+          <td>inproc://</td>
+          <td>同一进程内多线程数据交互</td>
+          <td>零拷贝、超低延迟、无系统调用，基于内存队列实现</td>
+      </tr>
+      <tr>
+          <td>进程间通信</td>
+          <td>ipc://</td>
+          <td>同一主机内跨进程通信</td>
+          <td>基于Unix域套接字（Linux/macOS）/命名管道（Windows），性能远高于TCP</td>
+      </tr>
+      <tr>
+          <td>跨网络TCP</td>
+          <td>tcp://</td>
+          <td>跨主机、跨网络分布式通信</td>
+          <td>可靠传输、自动重连、NAT穿透支持，适配绝大多数广域网场景</td>
+      </tr>
+      <tr>
+          <td>可靠多播</td>
+          <td>pgm:///epgm://</td>
+          <td>局域网内一对多广播通信</td>
+          <td>基于PGM可靠多播协议，epgm为UDP封装的PGM，适配交换机多播环境</td>
+      </tr>
+      <tr>
+          <td>WebSocket</td>
+          <td>ws:///wss://</td>
+          <td>浏览器-服务端实时通信</td>
+          <td>兼容WebSocket标准，支持前端页面与后端ZMQ服务直接通信</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="五核心特性与可靠性机制">五、核心特性与可靠性机制</h2>
+<h3 id="51-核心性能特性">5.1 核心性能特性</h3>
+<ol>
+<li><strong>异步非阻塞IO</strong>：基于epoll/kqueue/iocp多路复用IO模型，事件驱动架构，单线程可支持数万并发连接，高并发场景下延迟可稳定在微秒级。</li>
+<li><strong>零拷贝优化</strong>：支持mmap、sendfile等零拷贝技术，大消息传输无需多次内存拷贝，大幅降低CPU占用与传输延迟。</li>
+<li><strong>智能内存管理</strong>：内置内存池与消息引用计数，避免频繁内存分配释放，小消息场景下性能优势显著。</li>
+<li><strong>高水位线（HWM）控制</strong>：为每个套接字设置发送/接收队列的最大长度，防止消息堆积导致内存溢出，超过阈值后根据模式执行丢弃或阻塞策略。</li>
+</ol>
+<h3 id="52-可靠性保障机制">5.2 可靠性保障机制</h3>
+<ol>
+<li><strong>自动重连机制</strong>：节点断开连接后，ZMQ会自动按指数退避策略尝试重连，无需开发者手动处理断连逻辑，网络恢复后自动恢复通信。</li>
+<li><strong>原子消息投递</strong>：多帧消息保证全量或零投递，不会出现消息分片送达的情况，避免业务层处理不完整消息。</li>
+<li><strong>有序传输</strong>：两个对等节点之间的消息，严格按照发送顺序投递，不会出现乱序问题。</li>
+<li><strong>心跳保活机制</strong>：ZMTP 3.1内置<code>PING/PONG</code>心跳命令，可检测僵死连接、断网故障，超时后自动关闭连接并重连，避免无效连接占用资源。</li>
+<li><strong>离线消息缓存</strong>：发送端会在内存队列中缓存未送达的消息（受HWM限制），对等节点重连后自动补发，短时间断网不会丢失消息（PUB/SUB模式默认不缓存订阅前消息）。</li>
+</ol>
+<h3 id="53-通用能力特性">5.3 通用能力特性</h3>
+<ol>
+<li><strong>跨语言/跨平台支持</strong>：核心库由C++实现，提供C、C++、Python、Java、Go、C#等数十种语言绑定，支持Windows、Linux、macOS、嵌入式系统等全平台。</li>
+<li><strong>线程安全套接字</strong>：提供CLIENT/SERVER、RADIO/DISH等线程安全套接字，可在多线程中直接调用，无需额外加锁，简化并发编程。</li>
+<li><strong>可扩展架构</strong>：支持自定义安全机制、自定义传输协议，可根据业务需求扩展核心能力。</li>
+<li><strong>向下兼容</strong>：ZMTP协议支持多版本协商，可与历史版本的ZMQ节点正常通信。</li>
+</ol>
+<h2 id="六与传统消息中间件的核心差异">六、与传统消息中间件的核心差异</h2>
+<table>
+  <thead>
+      <tr>
+          <th>对比维度</th>
+          <th>ZeroMQ</th>
+          <th>传统消息中间件（RabbitMQ/Kafka）</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>架构模式</td>
+          <td>无中心化Broker，端到端嵌入式库</td>
+          <td>中心化Broker架构，依赖独立部署的服务节点</td>
+      </tr>
+      <tr>
+          <td>部署复杂度</td>
+          <td>极低，仅需集成库，无额外服务部署</td>
+          <td>高，需部署、运维Broker集群，配置容灾、扩容</td>
+      </tr>
+      <tr>
+          <td>核心定位</td>
+          <td>通信框架，专注于消息传输与模式抽象</td>
+          <td>消息中间件，专注于消息存储、持久化、消费管控</td>
+      </tr>
+      <tr>
+          <td>延迟性能</td>
+          <td>微秒级，端到端直传，无Broker转发开销</td>
+          <td>毫秒级，需经过Broker存储转发，链路更长</td>
+      </tr>
+      <tr>
+          <td>消息持久化</td>
+          <td>仅支持基础内存队列，无内置持久化</td>
+          <td>完善的磁盘持久化、消息回溯、死信队列机制</td>
+      </tr>
+      <tr>
+          <td>集群能力</td>
+          <td>需手动组合模式构建集群，无内置集群</td>
+          <td>原生支持集群、副本、主从、分区等高可用能力</td>
+      </tr>
+      <tr>
+          <td>适用场景</td>
+          <td>低延迟分布式通信、端到端数据交互、嵌入式系统</td>
+          <td>高可靠消息投递、业务解耦、流量削峰、日志存储</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="七典型适用场景">七、典型适用场景</h2>
+<ol>
+<li><strong>高频交易系统</strong>：金融行情推送、交易指令传输，依赖ZMQ的微秒级低延迟与高吞吐能力。</li>
+<li><strong>分布式实时计算</strong>：任务并行分发、中间结果汇聚，基于PUSH/PULL模式构建数据处理流水线。</li>
+<li><strong>物联网/嵌入式系统</strong>：边缘设备与云端的低资源占用通信，适配嵌入式设备的有限算力与内存。</li>
+<li><strong>微服务RPC框架</strong>：基于REQ/REP或CLIENT/SERVER模式构建轻量级RPC通信层，替代重量级HTTP协议。</li>
+<li><strong>监控与日志系统</strong>：基于PUB/SUB模式实现日志实时分发、监控指标广播，一对多高效传输。</li>
+<li><strong>多线程/多进程通信</strong>：替代原生socket、共享内存，简化进程内/跨进程的异步通信开发。</li>
+</ol>
+<h2 id="八常见使用注意事项">八、常见使用注意事项</h2>
+<ol>
+<li><strong>套接字配对严格性</strong>：必须使用兼容的套接字类型配对，否则无法正常通信（如REQ不能直接与PULL配对）。</li>
+<li><strong>高水位线（HWM）配置</strong>：必须根据业务场景设置合理的HWM，避免大流量场景下内存溢出；PUB/SUB模式下，慢订阅者会触发HWM，导致消息丢弃，需做好消费能力匹配。</li>
+<li><strong>消息持久化限制</strong>：ZMQ无内置磁盘持久化能力，内存队列中的消息会在进程崩溃时丢失，需高可靠投递的场景需自行实现持久化与确认机制。</li>
+<li><strong>线程安全约束</strong>：传统套接字（REQ/REP/PUB/SUB等）非线程安全，禁止多线程同时操作同一个套接字，需使用线程安全套接字或通过inproc模式做线程间通信。</li>
+<li><strong>订阅时机问题</strong>：PUB/SUB模式下，SUB端晚连接会丢失订阅前的消息，需保证订阅先于发布，或通过REQ/REP模式做历史消息补全。</li>
+<li><strong>安全风险</strong>：公网环境必须使用CURVE加密机制，禁止使用NULL/PLAIN机制明文传输，避免数据泄露与身份伪造。</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-03-11</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/005_zmq%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/protocol/">协议</a>,&nbsp;<a href="/blog/tags/zmq/">ZMQ</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/004_http%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="HTTP 协议详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>HTTP 协议详细总结</a>
+            <a href="/blog/006_mqtt%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="MQTT 协议详细总结">MQTT 协议详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

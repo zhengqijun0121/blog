@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>colcon 使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/003_colcon%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="colcon 使用详细总结">
+  <meta property="og:description" content="colcon 使用详细总结 colcon 是 ROS 2 默认的元构建工具，是 catkin_make、catkin_tools、ament_tools 的迭代升级版本，用于ROS 2工作空间的包构建、测试、打包与环境管理，支持ament_cmake、ament_python、纯CMake、Python setuptools等多种构建类型，采用拓扑序并行构建，原生支持工作空间叠加（overlay/underlay）机制，是ROS 2开发的核心工具。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-04-03T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-04-03T10:00:00+08:00">
+    <meta property="article:tag" content="ROS2">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="colcon 使用详细总结">
+  <meta name="twitter:description" content="colcon 使用详细总结 colcon 是 ROS 2 默认的元构建工具，是 catkin_make、catkin_tools、ament_tools 的迭代升级版本，用于ROS 2工作空间的包构建、测试、打包与环境管理，支持ament_cmake、ament_python、纯CMake、Python setuptools等多种构建类型，采用拓扑序并行构建，原生支持工作空间叠加（overlay/underlay）机制，是ROS 2开发的核心工具。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/003_colcon%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/002_ros2%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/001_googlecpp%E7%BC%96%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "colcon 使用详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/003_colcon%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "ROS2","wordcount":  3793 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/003_colcon%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-04-03T09:00:00+08:00","dateModified": "2026-04-03T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/003_colcon%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/003_colcon%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">colcon 使用详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/ros2/"><i class="far fa-folder" aria-hidden="true"></i>ROS2</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-04-03">2026-04-03</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 3793 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 8 分钟&nbsp;<span id="/blog/003_colcon%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="colcon 使用详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一安装指南">一、安装指南</a>
+      <ul>
+        <li><a href="#1-系统级安装推荐">1. 系统级安装（推荐）</a>
+          <ul>
+            <li><a href="#debianubuntu-linuxros-2-官方源">Debian/Ubuntu Linux（ROS 2 官方源）</a></li>
+            <li><a href="#macos">macOS</a></li>
+            <li><a href="#windows">Windows</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-可选增强配置">2. 可选增强配置</a>
+          <ul>
+            <li><a href="#命令补全配置">命令补全配置</a></li>
+            <li><a href="#colcon_cd-快速跳转配置">colcon_cd 快速跳转配置</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#二工作空间核心结构与原理">二、工作空间核心结构与原理</a>
+      <ul>
+        <li><a href="#核心机制说明">核心机制说明</a></li>
+      </ul>
+    </li>
+    <li><a href="#三核心命令详解">三、核心命令详解</a>
+      <ul>
+        <li><a href="#1-基础构建命令最常用">1. 基础构建命令（最常用）</a>
+          <ul>
+            <li><a href="#高频基础参数">高频基础参数</a></li>
+            <li><a href="#日常开发标准命令">日常开发标准命令</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-选择性构建命令大型工作空间效率核心">2. 选择性构建命令（大型工作空间效率核心）</a>
+          <ul>
+            <li><a href="#示例">示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-测试相关命令">3. 测试相关命令</a>
+          <ul>
+            <li><a href="#测试优化参数">测试优化参数</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-辅助工具命令">4. 辅助工具命令</a></li>
+        <li><a href="#5-环境生效命令">5. 环境生效命令</a></li>
+      </ul>
+    </li>
+    <li><a href="#四进阶用法与效率优化">四、进阶用法与效率优化</a>
+      <ul>
+        <li><a href="#1-构建性能优化">1. 构建性能优化</a>
+          <ul>
+            <li><a href="#1ccache-编译缓存重复构建提速80">（1）CCache 编译缓存（重复构建提速80%+）</a></li>
+            <li><a href="#2跳过测试构建">（2）跳过测试构建</a></li>
+            <li><a href="#3合理控制并行度">（3）合理控制并行度</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-调试开发配置">2. 调试开发配置</a>
+          <ul>
+            <li><a href="#1debug模式编译">（1）Debug模式编译</a></li>
+            <li><a href="#2生成ide编译数据库">（2）生成IDE编译数据库</a></li>
+            <li><a href="#3详细构建日志输出">（3）详细构建日志输出</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-mixin-快捷指令配置">3. Mixin 快捷指令配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#五最佳实践">五、最佳实践</a></li>
+    <li><a href="#六常见问题排查">六、常见问题排查</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="colcon-使用详细总结">colcon 使用详细总结</h1>
+<p>colcon 是 <strong>ROS 2 默认的元构建工具</strong>，是 catkin_make、catkin_tools、ament_tools 的迭代升级版本，用于ROS 2工作空间的包构建、测试、打包与环境管理，支持ament_cmake、ament_python、纯CMake、Python setuptools等多种构建类型，采用拓扑序并行构建，原生支持工作空间叠加（overlay/underlay）机制，是ROS 2开发的核心工具。</p>
+<h2 id="一安装指南">一、安装指南</h2>
+<h3 id="1-系统级安装推荐">1. 系统级安装（推荐）</h3>
+<h4 id="debianubuntu-linuxros-2-官方源">Debian/Ubuntu Linux（ROS 2 官方源）</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt update
+</span></span><span class="line"><span class="cl">sudo apt install python3-colcon-common-extensions</span></span></code></pre></div></div>
+<h4 id="macos">macOS</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python3 -m pip install colcon-common-extensions</span></span></code></pre></div></div>
+<h4 id="windows">Windows</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-powershell">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">pip</span> <span class="n">install</span> <span class="n">-U</span> <span class="nb">colcon-common</span><span class="n">-extensions</span></span></span></code></pre></div></div>
+<h3 id="2-可选增强配置">2. 可选增强配置</h3>
+<h4 id="命令补全配置">命令补全配置</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 安装依赖</span>
+</span></span><span class="line"><span class="cl">sudo apt install python3-argcomplete
+</span></span><span class="line"><span class="cl"><span class="c1"># 永久生效（bash）</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash&#34;</span> &gt;&gt; ~/.bashrc
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> ~/.bashrc</span></span></code></pre></div></div>
+<h4 id="colcon_cd-快速跳转配置">colcon_cd 快速跳转配置</h4>
+<p>colcon_cd 可直接跳转到指定包的源码目录，无需手动输入路径</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;source /usr/share/colcon_cd/function/colcon_cd.sh&#34;</span> &gt;&gt; ~/.bashrc
+</span></span><span class="line"><span class="cl"><span class="c1"># 指定工作空间根目录（可多个路径用:分隔）</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;export _colcon_cd_root=~/ros2_ws:/opt/ros/</span><span class="nv">$ROS_DISTRO</span><span class="s2">&#34;</span> &gt;&gt; ~/.bashrc
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> ~/.bashrc
+</span></span><span class="line"><span class="cl"><span class="c1"># 使用示例：colcon_cd turtlesim</span></span></span></code></pre></div></div>
+<h2 id="二工作空间核心结构与原理">二、工作空间核心结构与原理</h2>
+<p>colcon 采用<strong>源码外构建（out-of-source build）</strong> 模式，标准ROS 2工作空间结构如下：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>ros2_ws/          # 工作空间根目录，所有colcon命令在此执行
+├── src/          # 源码目录，存放所有ROS 2功能包（唯一手动创建的目录）
+├── build/        # 中间构建目录，每个包对应独立子目录，存放CMake临时文件、编译目标文件等
+├── install/      # 安装输出目录，存放最终可执行文件、库、环境脚本等
+└── log/          # 日志目录，按每次执行时间归档，存放构建、测试的完整日志</code></pre></div>
+<h3 id="核心机制说明">核心机制说明</h3>
+<ol>
+<li><strong>无devel空间</strong>：与ROS 1的catkin不同，colcon没有devel空间，所有构建产物必须安装到install目录后才能使用。</li>
+<li><strong>工作空间叠加（Overlay/Underlay）</strong>：当前工作空间（overlay）会叠加在已source的ROS 2基础环境或其他工作空间（underlay）之上，overlay中的包会覆盖underlay中同名包，适合少量包的迭代开发。</li>
+<li><strong>包识别规则</strong>：colcon会递归扫描src目录，通过<code>package.xml</code>文件识别功能包，根据文件内的构建类型标签选择对应的构建系统；在目录中创建空文件<code>COLCON_IGNORE</code>，可让colcon跳过该目录的索引与构建。</li>
+</ol>
+<h2 id="三核心命令详解">三、核心命令详解</h2>
+<h3 id="1-基础构建命令最常用">1. 基础构建命令（最常用）</h3>
+<p><strong>核心命令</strong>：<code>colcon build</code>，必须在工作空间根目录执行。</p>
+<h4 id="高频基础参数">高频基础参数</h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">参数</th>
+          <th style="text-align: left">作用</th>
+          <th style="text-align: left">适用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>--symlink-install</code></td>
+          <td style="text-align: left">使用符号链接代替文件复制，将install目录的文件链接到src源码目录</td>
+          <td style="text-align: left">日常开发，Python脚本、launch文件、配置文件修改后无需重新编译即可生效</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>--merge-install</code></td>
+          <td style="text-align: left">将所有包的安装文件合并到install根目录，而非每个包独立子目录</td>
+          <td style="text-align: left">Windows系统（解决长路径问题）、减少环境变量层级</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>--cmake-args &lt;args&gt;</code></td>
+          <td style="text-align: left">向CMake传递参数，<code>--</code> 结束参数传递</td>
+          <td style="text-align: left">定制构建类型、开启/关闭功能等</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>--parallel-workers N</code></td>
+          <td style="text-align: left">限制并行构建的线程数为N</td>
+          <td style="text-align: left">低配置设备、避免系统资源占满</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>--executor sequential</code></td>
+          <td style="text-align: left">关闭并行，采用串行顺序构建</td>
+          <td style="text-align: left">树莓派等弱性能设备、排查构建依赖问题</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>--continue-on-error</code></td>
+          <td style="text-align: left">某个包构建失败时，继续构建其他无依赖的包</td>
+          <td style="text-align: left">大型工作空间，隔离问题包</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="日常开发标准命令">日常开发标准命令</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 最常用的开发环境构建命令</span>
+</span></span><span class="line"><span class="cl">colcon build --symlink-install</span></span></code></pre></div></div>
+<h3 id="2-选择性构建命令大型工作空间效率核心">2. 选择性构建命令（大型工作空间效率核心）</h3>
+<p>当工作空间包数量较多时，无需全量构建，通过包筛选参数精准构建目标包，大幅节省时间。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">作用</th>
+          <th style="text-align: left">适用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>colcon build --packages-select pkg1 pkg2</code></td>
+          <td style="text-align: left">仅构建指定的1个或多个包，不自动构建其依赖</td>
+          <td style="text-align: left">依赖已全部构建完成，仅修改了目标包的代码</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>colcon build --packages-up-to pkg</code></td>
+          <td style="text-align: left">构建指定包 + 它所有的依赖包</td>
+          <td style="text-align: left">首次构建目标包、依赖有修改，确保构建完整性</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>colcon build --packages-above pkg</code></td>
+          <td style="text-align: left">构建指定包 + 所有依赖它的下游包</td>
+          <td style="text-align: left">修改了底层公共包，验证所有上层调用包的兼容性</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>colcon build --packages-ignore pkg1 pkg2</code></td>
+          <td style="text-align: left">构建时排除指定的包</td>
+          <td style="text-align: left">临时跳过不相关或有问题的包</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>colcon build --packages-skip-build-finished</code></td>
+          <td style="text-align: left">跳过已构建成功且无修改的包</td>
+          <td style="text-align: left">增量构建，避免重复构建无变化的包</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="示例">示例</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 仅构建导航包及其所有依赖</span>
+</span></span><span class="line"><span class="cl">colcon build --packages-up-to nav2_navigation --symlink-install
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 构建感知包，以及所有依赖感知包的上层算法包</span>
+</span></span><span class="line"><span class="cl">colcon build --packages-above perception_module --symlink-install</span></span></code></pre></div></div>
+<h3 id="3-测试相关命令">3. 测试相关命令</h3>
+<p>colcon 原生支持包的单元测试与结果查看，对应ROS 2的ament_cmake_test、pytest等测试框架。</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 运行工作空间所有包的测试用例</span>
+</span></span><span class="line"><span class="cl">colcon <span class="nb">test</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 仅运行指定包的测试</span>
+</span></span><span class="line"><span class="cl">colcon <span class="nb">test</span> --packages-select pkg1 pkg2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 运行单个指定的测试用例</span>
+</span></span><span class="line"><span class="cl">colcon <span class="nb">test</span> --packages-select your_pkg --ctest-args -R your_test_name
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看测试结果摘要（核心，判断测试是否通过）</span>
+</span></span><span class="line"><span class="cl">colcon test-result
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看详细的测试失败日志，定位问题</span>
+</span></span><span class="line"><span class="cl">colcon test-result --verbose</span></span></code></pre></div></div>
+<h4 id="测试优化参数">测试优化参数</h4>
+<ul>
+<li><code>--packages-select-test-failures</code>：仅运行上一次测试失败的用例</li>
+<li><code>--retest-until-pass N</code>：重复运行测试最多N次，直到通过，解决偶现的不稳定测试</li>
+<li><code>--retest-until-fail N</code>：重复运行测试最多N次，直到失败，复现偶现bug</li>
+</ul>
+<h3 id="4-辅助工具命令">4. 辅助工具命令</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>colcon list</code></td>
+          <td style="text-align: left">列出工作空间中所有可识别的功能包，显示包名、路径、构建类型</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>colcon info pkg_name</code></td>
+          <td style="text-align: left">查看指定包的详细信息，包括依赖、版本、路径等</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>colcon graph</code></td>
+          <td style="text-align: left">输出工作空间的包依赖拓扑图，可配合<code>--dot</code>参数生成可视化dot文件</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>colcon clean packages -y</code></td>
+          <td style="text-align: left">删除所有包的build和install目录，保留日志</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>colcon clean all -y</code></td>
+          <td style="text-align: left">清空整个build、install、log目录，彻底重置工作空间</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="5-环境生效命令">5. 环境生效命令</h3>
+<p>构建完成后，必须source环境脚本，才能在终端中使用构建的包、节点、库文件：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># bash终端（Ubuntu默认）</span>
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> install/setup.bash
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># zsh终端</span>
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> install/setup.zsh
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Windows cmd</span>
+</span></span><span class="line"><span class="cl">call install<span class="se">\s</span>etup.bat
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Windows PowerShell</span>
+</span></span><span class="line"><span class="cl">install<span class="se">\s</span>etup.ps1</span></span></code></pre></div></div>
+<blockquote>
+<p>注意：每次新开终端，都需要重新source工作空间的setup脚本；也可将source命令写入~/.bashrc实现永久生效，但不建议多个工作空间同时写入，避免环境冲突。</p>
+</blockquote>
+<h2 id="四进阶用法与效率优化">四、进阶用法与效率优化</h2>
+<h3 id="1-构建性能优化">1. 构建性能优化</h3>
+<h4 id="1ccache-编译缓存重复构建提速80">（1）CCache 编译缓存（重复构建提速80%+）</h4>
+<p>CCache 可缓存编译中间产物，重复构建时大幅减少编译时间，尤其适合频繁修改代码的开发场景：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 安装ccache</span>
+</span></span><span class="line"><span class="cl">sudo apt install ccache
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 临时生效（当前终端）</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">CMAKE_CXX_COMPILER_LAUNCHER</span><span class="o">=</span>ccache
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">CMAKE_C_COMPILER_LAUNCHER</span><span class="o">=</span>ccache
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 永久生效（写入bashrc）</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;export CMAKE_CXX_COMPILER_LAUNCHER=ccache&#34;</span> &gt;&gt; ~/.bashrc
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;export CMAKE_C_COMPILER_LAUNCHER=ccache&#34;</span> &gt;&gt; ~/.bashrc
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 构建命令不变</span>
+</span></span><span class="line"><span class="cl">colcon build --symlink-install
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看缓存命中率</span>
+</span></span><span class="line"><span class="cl">ccache -s</span></span></code></pre></div></div>
+<h4 id="2跳过测试构建">（2）跳过测试构建</h4>
+<p>默认CMake会构建测试目标，开发阶段无需测试时，可关闭以加快构建速度：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">colcon build --symlink-install --cmake-args -DBUILD_TESTING<span class="o">=</span>OFF</span></span></code></pre></div></div>
+<h4 id="3合理控制并行度">（3）合理控制并行度</h4>
+<p>默认colcon会使用所有CPU核心，容易导致低配置设备卡死，可根据CPU核心数限制并行度：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 示例：4核CPU，使用3个线程构建</span>
+</span></span><span class="line"><span class="cl">colcon build --symlink-install --parallel-workers <span class="m">3</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 自动适配CPU核心数（使用80%的核心）</span>
+</span></span><span class="line"><span class="cl">colcon build --symlink-install --parallel-workers <span class="k">$(($(</span>nproc<span class="k">)</span><span class="o">*</span><span class="m">4</span><span class="o">/</span><span class="m">5</span><span class="k">))</span></span></span></code></pre></div></div>
+<h3 id="2-调试开发配置">2. 调试开发配置</h3>
+<h4 id="1debug模式编译">（1）Debug模式编译</h4>
+<p>生成带调试信息的可执行文件，用于GDB断点调试、段错误定位：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE<span class="o">=</span>Debug</span></span></code></pre></div></div>
+<blockquote>
+<p>可选构建类型：Debug（调试）、Release（发布）、RelWithDebInfo（带调试信息的发布版，兼顾性能与调试）、MinSizeRel（最小体积发布）</p>
+</blockquote>
+<h4 id="2生成ide编译数据库">（2）生成IDE编译数据库</h4>
+<p>为VS Code、Clion等IDE生成代码索引文件，解决代码跳转、补全失效问题：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS<span class="o">=</span>ON</span></span></code></pre></div></div>
+<p>生成的<code>compile_commands.json</code>文件位于每个包的build目录下，可在IDE中配置索引路径。</p>
+<h4 id="3详细构建日志输出">（3）详细构建日志输出</h4>
+<p>构建失败时，实时输出详细的编译日志，快速定位错误位置：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 实时打印完整构建日志到终端</span>
+</span></span><span class="line"><span class="cl">colcon build --event-handlers console_direct+
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 强制清理CMake缓存+重配置，解决缓存导致的诡异问题</span>
+</span></span><span class="line"><span class="cl">colcon build --symlink-install --force-configure --cmake-clean-cache</span></span></code></pre></div></div>
+<h3 id="3-mixin-快捷指令配置">3. Mixin 快捷指令配置</h3>
+<p>colcon mixin 可将冗长的参数组合封装为简短的别名，避免重复输入长命令：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 安装默认mixin仓库</span>
+</span></span><span class="line"><span class="cl">colcon mixin add default https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml
+</span></span><span class="line"><span class="cl">colcon mixin update default
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 使用示例：Debug模式构建，无需输入长参数</span>
+</span></span><span class="line"><span class="cl">colcon build --symlink-install --mixin debug
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看所有可用的mixin</span>
+</span></span><span class="line"><span class="cl">colcon mixin list</span></span></code></pre></div></div>
+<h2 id="五最佳实践">五、最佳实践</h2>
+<ol>
+<li><strong>日常开发固定命令</strong>：优先使用 <code>colcon build --symlink-install --packages-up-to &lt;目标包&gt;</code>，兼顾构建完整性与效率，避免全量构建。</li>
+<li><strong>依赖管理规范</strong>：所有包的依赖必须完整声明在<code>package.xml</code>中，colcon通过该文件生成依赖拓扑序，缺失依赖会导致构建顺序错误、运行时找不到包。</li>
+<li><strong>工作空间分层</strong>：不建议将所有包放在同一个工作空间，可分为基础底层包工作空间、业务算法包工作空间，通过overlay机制叠加，减少重复构建范围。</li>
+<li><strong>构建前依赖检查</strong>：每次新增包或拉取代码后，先执行rosdep安装依赖，避免构建时报错：
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rosdep install --from-paths src --ignore-src -r -y</span></span></code></pre></div></div>
+</li>
+<li><strong>日志排查优先级</strong>：构建失败时，优先查看<code>log/latest_build/</code>下对应包的<code>stderr.log</code>，而非终端的简略输出，快速定位根因。</li>
+</ol>
+<h2 id="六常见问题排查">六、常见问题排查</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">问题现象</th>
+          <th style="text-align: left">核心原因</th>
+          <th style="text-align: left">解决方案</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">修改Python脚本/launch文件后，运行无变化</td>
+          <td style="text-align: left">未使用符号链接，install目录是复制的旧文件</td>
+          <td style="text-align: left">构建时添加<code>--symlink-install</code>参数，重新source环境</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">终端提示<code>Package 'xxx' not found</code></td>
+          <td style="text-align: left">未source环境、包未构建、依赖未声明</td>
+          <td style="text-align: left">1. 确认source了install/setup.bash；2. 用<code>colcon list</code>确认包被识别；3. 检查package.xml中依赖声明完整</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">构建时报错<code>Could not find a package configuration file provided by 'xxx'</code></td>
+          <td style="text-align: left">依赖包未安装、未构建，或未source底层环境</td>
+          <td style="text-align: left">1. 执行rosdep安装系统依赖；2. source ROS 2基础环境；3. 确认依赖包已成功构建</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">构建时系统卡死、风扇狂转</td>
+          <td style="text-align: left">默认并行构建占用了所有CPU核心，内存占满</td>
+          <td style="text-align: left">1. 添加<code>--parallel-workers N</code>限制线程数；2. 弱设备使用<code>--executor sequential</code>串行构建</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">包能正常构建，但colcon list不显示</td>
+          <td style="text-align: left">包目录缺少package.xml，或目录有COLCON_IGNORE文件</td>
+          <td style="text-align: left">1. 检查包根目录是否有合规的package.xml；2. 删除目录下的COLCON_IGNORE文件</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">重复构建仍报错，清理缓存后恢复</td>
+          <td style="text-align: left">CMake缓存过期，或增量构建异常</td>
+          <td style="text-align: left">1. 删除对应包的build和install目录；2. 构建时添加<code>--force-configure --cmake-clean-cache</code>参数</td>
+      </tr>
+  </tbody>
+</table>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-04-03</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/003_colcon%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/ros2/">ROS2</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/002_ros2%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" class="prev" rel="prev" title="ROS2 源码详细分析"><i class="fas fa-angle-left" aria-hidden="true"></i>ROS2 源码详细分析</a>
+            <a href="/blog/001_googlecpp%E7%BC%96%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="Google C&#43;&#43; 编码风格详细总结">Google C++ 编码风格详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

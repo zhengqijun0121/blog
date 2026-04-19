@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>MQTT 协议详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/006_mqtt%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="MQTT 协议详细总结">
+  <meta property="og:description" content="MQTT协议详细总结 MQTT（Message Queuing Telemetry Transport，消息队列遥测传输）是一种基于发布/订阅（Pub/Sub）模式的轻量级物联网通信协议，由IBM的Andy Stanford-Clark与Arcom的Arlen Nipper于1999年为石油管道卫星监控场景开发，专为低带宽、高延迟、不稳定网络及算力/存储受限的嵌入式设备设计。目前已成为OASIS国际标准、ISO/IEC 20922标准，是物联网（IoT）、工业自动化、车联网等领域的主流通信协议。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-12T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-03-12T10:00:20+08:00">
+    <meta property="article:tag" content="协议">
+    <meta property="article:tag" content="MQTT">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="MQTT 协议详细总结">
+  <meta name="twitter:description" content="MQTT协议详细总结 MQTT（Message Queuing Telemetry Transport，消息队列遥测传输）是一种基于发布/订阅（Pub/Sub）模式的轻量级物联网通信协议，由IBM的Andy Stanford-Clark与Arcom的Arlen Nipper于1999年为石油管道卫星监控场景开发，专为低带宽、高延迟、不稳定网络及算力/存储受限的嵌入式设备设计。目前已成为OASIS国际标准、ISO/IEC 20922标准，是物联网（IoT）、工业自动化、车联网等领域的主流通信协议。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/006_mqtt%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/005_zmq%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/007_rtp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "MQTT 协议详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/006_mqtt%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "Protocol, MQTT","wordcount":  6650 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/006_mqtt%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-03-12T09:00:20+08:00","dateModified": "2026-03-12T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/006_mqtt%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/006_mqtt%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">MQTT 协议详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/protocol/"><i class="far fa-folder" aria-hidden="true"></i>协议</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-03-12">2026-03-12</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 6650 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 14 分钟&nbsp;<span id="/blog/006_mqtt%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="MQTT 协议详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一核心设计目标">一、核心设计目标</a></li>
+    <li><a href="#二核心通信架构">二、核心通信架构</a></li>
+    <li><a href="#三mqtt报文结构">三、MQTT报文结构</a>
+      <ul>
+        <li><a href="#31-整体报文结构">3.1 整体报文结构</a></li>
+        <li><a href="#32-固定报头详解">3.2 固定报头详解</a></li>
+        <li><a href="#33-核心控制报文类型">3.3 核心控制报文类型</a></li>
+      </ul>
+    </li>
+    <li><a href="#四核心机制详解">四、核心机制详解</a>
+      <ul>
+        <li><a href="#41-qos服务质量等级">4.1 QoS服务质量等级</a></li>
+        <li><a href="#42-主题与通配符">4.2 主题与通配符</a>
+          <ul>
+            <li><a href="#421-主题命名规则">4.2.1 主题命名规则</a></li>
+            <li><a href="#422-通配符规则">4.2.2 通配符规则</a></li>
+            <li><a href="#423-系统主题">4.2.3 系统主题</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-连接与会话管理">4.3 连接与会话管理</a>
+          <ul>
+            <li><a href="#431-连接流程">4.3.1 连接流程</a></li>
+            <li><a href="#432-会话管理">4.3.2 会话管理</a></li>
+            <li><a href="#433-心跳保活keep-alive">4.3.3 心跳保活（Keep Alive）</a></li>
+          </ul>
+        </li>
+        <li><a href="#44-遗嘱消息will-message">4.4 遗嘱消息（Will Message）</a></li>
+        <li><a href="#45-保留消息retained-message">4.5 保留消息（Retained Message）</a></li>
+      </ul>
+    </li>
+    <li><a href="#五主流版本差异">五、主流版本差异</a></li>
+    <li><a href="#六安全机制">六、安全机制</a>
+      <ul>
+        <li><a href="#61-标准默认端口">6.1 标准默认端口</a></li>
+      </ul>
+    </li>
+    <li><a href="#七主流broker与客户端实现">七、主流Broker与客户端实现</a>
+      <ul>
+        <li><a href="#71-主流broker实现">7.1 主流Broker实现</a></li>
+        <li><a href="#72-主流客户端sdk">7.2 主流客户端SDK</a></li>
+      </ul>
+    </li>
+    <li><a href="#八典型应用场景">八、典型应用场景</a></li>
+    <li><a href="#九协议优缺点总结">九、协议优缺点总结</a>
+      <ul>
+        <li><a href="#91-核心优势">9.1 核心优势</a></li>
+        <li><a href="#92-局限性">9.2 局限性</a></li>
+      </ul>
+    </li>
+    <li><a href="#十补充mqtt-sn协议">十、补充：MQTT-SN协议</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="mqtt协议详细总结">MQTT协议详细总结</h1>
+<p>MQTT（Message Queuing Telemetry Transport，消息队列遥测传输）是一种<strong>基于发布/订阅（Pub/Sub）模式的轻量级物联网通信协议</strong>，由IBM的Andy Stanford-Clark与Arcom的Arlen Nipper于1999年为石油管道卫星监控场景开发，专为低带宽、高延迟、不稳定网络及算力/存储受限的嵌入式设备设计。目前已成为OASIS国际标准、ISO/IEC 20922标准，是物联网（IoT）、工业自动化、车联网等领域的主流通信协议。</p>
+<h2 id="一核心设计目标">一、核心设计目标</h2>
+<p>协议的核心设计理念完全贴合物联网场景的核心痛点，核心目标如下：</p>
+<ol>
+<li><strong>极致轻量</strong>：固定报文头最小仅2字节，极低的计算和带宽开销，适配MCU、传感器等资源受限设备。</li>
+<li><strong>灵活可靠</strong>：通过3级QoS（服务质量）等级，适配不同业务对消息可靠性的需求，兼顾效率与稳定性。</li>
+<li><strong>解耦通信</strong>：基于发布/订阅模式，实现发布者与订阅者的空间、时间、同步三重解耦，无需设备间直接通信。</li>
+<li><strong>异步低耗</strong>：仅在数据变化时传输，避免HTTP类协议的频繁请求-响应开销，适配低功耗设备长连接场景。</li>
+<li><strong>易实现、高兼容</strong>：协议状态机简单，几乎所有编程语言、操作系统和硬件平台都有成熟的客户端实现。</li>
+</ol>
+<h2 id="二核心通信架构">二、核心通信架构</h2>
+<p>MQTT采用经典的<strong>发布/订阅（Pub/Sub）</strong> 架构，区别于传统客户端-服务器直连模式，核心由三个角色构成，形成“发布者→Broker→订阅者”的间接通信链路：</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">角色</th>
+          <th style="text-align: left">核心功能</th>
+          <th style="text-align: left">类比</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">发布者（Publisher）</td>
+          <td style="text-align: left">消息的发送方，负责向指定主题（Topic）发布消息，无需关注订阅者的状态和地址</td>
+          <td style="text-align: left">快递寄件人</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">订阅者（Subscriber）</td>
+          <td style="text-align: left">消息的接收方，向Broker订阅感兴趣的主题，接收该主题下的所有发布消息，无需关注发布者的信息</td>
+          <td style="text-align: left">快递收件人</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Broker（代理服务器）</td>
+          <td style="text-align: left">核心中转站，负责接收发布者的消息、管理客户端订阅关系，并将消息精准转发给所有匹配主题的订阅者</td>
+          <td style="text-align: left">快递驿站</td>
+      </tr>
+  </tbody>
+</table>
+<p>该架构实现了三重核心解耦：</p>
+<ul>
+<li><strong>空间解耦</strong>：发布者和订阅者无需知道对方的IP地址和端口，只需感知Broker。</li>
+<li><strong>时间解耦</strong>：发布者和订阅者无需同时在线，Broker可缓存消息（持久会话场景）。</li>
+<li><strong>同步解耦</strong>：发布者发布消息时无需阻塞等待订阅者的响应，异步收发。</li>
+</ul>
+<h2 id="三mqtt报文结构">三、MQTT报文结构</h2>
+<p>MQTT报文是协议通信的基本单元，所有报文均采用统一的三段式结构，最小仅2字节，最大支持256MB的消息传输。</p>
+<h3 id="31-整体报文结构">3.1 整体报文结构</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>固定报头（Fixed Header） | 可变报头（Variable Header） | 有效载荷（Payload）</code></pre></div>
+<ul>
+<li><strong>固定报头</strong>：所有报文必选，长度2~5字节，包含报文类型、标志位、剩余长度。</li>
+<li><strong>可变报头</strong>：部分报文可选，内容随报文类型变化，承载报文的核心元数据。</li>
+<li><strong>有效载荷</strong>：部分报文可选，承载业务数据，格式由应用层自定义（支持文本、JSON、二进制等）。</li>
+</ul>
+<h3 id="32-固定报头详解">3.2 固定报头详解</h3>
+<p>固定报头是所有报文的基础，结构固定，分为两个核心部分：</p>
+<ol>
+<li><strong>第一字节</strong>：高4位为<strong>报文类型</strong>，低4位为<strong>标志位</strong>。
+<ul>
+<li>报文类型：共14种，定义了报文的核心功能，如CONNECT（连接）、PUBLISH（发布消息）等。</li>
+<li>标志位：不同报文类型对应不同标志，核心用于PUBLISH报文，包含DUP（重传标志）、QoS等级、RETAIN（保留消息标志）。</li>
+</ul>
+</li>
+<li><strong>剩余长度字段</strong>：1~4字节可变长度编码，标识可变报头+有效载荷的总字节数，最大支持268435455字节（256MB）。</li>
+</ol>
+<h3 id="33-核心控制报文类型">3.3 核心控制报文类型</h3>
+<p>MQTT协议定义了14种控制报文，按功能可分为4大类，覆盖全生命周期的通信流程：</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">报文分类</th>
+          <th style="text-align: left">报文名称</th>
+          <th style="text-align: left">报文类型值</th>
+          <th style="text-align: left">核心功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">连接管理</td>
+          <td style="text-align: left">CONNECT</td>
+          <td style="text-align: left">1</td>
+          <td style="text-align: left">客户端向Broker发起连接请求</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">连接管理</td>
+          <td style="text-align: left">CONNACK</td>
+          <td style="text-align: left">2</td>
+          <td style="text-align: left">Broker对客户端连接请求的确认响应</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">连接管理</td>
+          <td style="text-align: left">DISCONNECT</td>
+          <td style="text-align: left">14</td>
+          <td style="text-align: left">客户端主动断开连接前的通知报文</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">消息发布</td>
+          <td style="text-align: left">PUBLISH</td>
+          <td style="text-align: left">3</td>
+          <td style="text-align: left">发布/转发消息，核心业务报文</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">消息发布</td>
+          <td style="text-align: left">PUBACK</td>
+          <td style="text-align: left">4</td>
+          <td style="text-align: left">QoS 1等级的发布确认报文</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">消息发布</td>
+          <td style="text-align: left">PUBREC</td>
+          <td style="text-align: left">5</td>
+          <td style="text-align: left">QoS 2等级的发布接收报文（第一步确认）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">消息发布</td>
+          <td style="text-align: left">PUBREL</td>
+          <td style="text-align: left">6</td>
+          <td style="text-align: left">QoS 2等级的发布释放报文（第二步确认）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">消息发布</td>
+          <td style="text-align: left">PUBCOMP</td>
+          <td style="text-align: left">7</td>
+          <td style="text-align: left">QoS 2等级的发布完成报文（第三步确认）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">订阅管理</td>
+          <td style="text-align: left">SUBSCRIBE</td>
+          <td style="text-align: left">8</td>
+          <td style="text-align: left">客户端向Broker发起主题订阅请求</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">订阅管理</td>
+          <td style="text-align: left">SUBACK</td>
+          <td style="text-align: left">9</td>
+          <td style="text-align: left">Broker对订阅请求的确认响应</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">订阅管理</td>
+          <td style="text-align: left">UNSUBSCRIBE</td>
+          <td style="text-align: left">10</td>
+          <td style="text-align: left">客户端向Broker发起取消主题订阅请求</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">订阅管理</td>
+          <td style="text-align: left">UNSUBACK</td>
+          <td style="text-align: left">11</td>
+          <td style="text-align: left">Broker对取消订阅请求的确认响应</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">心跳保活</td>
+          <td style="text-align: left">PINGREQ</td>
+          <td style="text-align: left">12</td>
+          <td style="text-align: left">客户端向Broker发送的心跳请求</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">心跳保活</td>
+          <td style="text-align: left">PINGRESP</td>
+          <td style="text-align: left">13</td>
+          <td style="text-align: left">Broker对心跳请求的响应</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="四核心机制详解">四、核心机制详解</h2>
+<h3 id="41-qos服务质量等级">4.1 QoS服务质量等级</h3>
+<p>QoS是MQTT协议的核心特性，定义了发布者与接收方（Broker/订阅者）之间的消息投递可靠性保障，分为3个等级，可根据业务场景灵活选择。</p>
+<p><strong>核心规则</strong>：QoS是端到端的协商结果，发布者发布消息的QoS，与订阅者订阅该主题的QoS，最终生效的是两者中的最小值。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">QoS等级</th>
+          <th style="text-align: left">名称</th>
+          <th style="text-align: left">核心保证</th>
+          <th style="text-align: left">通信流程</th>
+          <th style="text-align: left">适用场景</th>
+          <th style="text-align: left">优缺点</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">0</td>
+          <td style="text-align: left">最多一次<br>At Most Once</td>
+          <td style="text-align: left">消息最多投递1次，不确认、不重传，可能丢失</td>
+          <td style="text-align: left">发布者→PUBLISH→接收方，无后续确认流程</td>
+          <td style="text-align: left">高频传感器数据上报、非关键状态同步（如环境温湿度）</td>
+          <td style="text-align: left">优点：开销最小、延迟最低；<br>缺点：无可靠性保障</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">1</td>
+          <td style="text-align: left">至少一次<br>At Least Once</td>
+          <td style="text-align: left">消息至少投递1次，保证不丢失，可能重复</td>
+          <td style="text-align: left">1. 发布者发送PUBLISH，本地存储消息；<br>2. 接收方收到后回复PUBACK；<br>3. 发布者收到PUBACK后删除消息，超时未收到则重传（DUP标志置1）</td>
+          <td style="text-align: left">设备指令下发、告警通知、数据采集（可接受重复处理）</td>
+          <td style="text-align: left">优点：保证消息不丢失，开销适中；<br>缺点：可能出现重复消息，需业务层去重</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">2</td>
+          <td style="text-align: left">恰好一次<br>Exactly Once</td>
+          <td style="text-align: left">消息有且仅投递1次，无丢失、无重复，最高可靠性</td>
+          <td style="text-align: left">四步握手流程：<br>1. 发布者发送PUBLISH，本地存储；<br>2. 接收方回复PUBREC，本地存储消息ID；<br>3. 发布者收到PUBREC后发送PUBREL，删除本地消息；<br>4. 接收方回复PUBCOMP，完成流程，释放消息ID</td>
+          <td style="text-align: left">金融交易、计费数据、关键设备控制、医疗数据传输</td>
+          <td style="text-align: left">优点：最高可靠性，无丢失无重复；<br>缺点：开销最大、延迟最高，流程最复杂</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="42-主题与通配符">4.2 主题与通配符</h3>
+<p>主题（Topic）是MQTT消息的路由地址，是UTF-8编码的字符串，通过<code>/</code>分隔层级，实现消息的精准分类与路由。</p>
+<h4 id="421-主题命名规则">4.2.1 主题命名规则</h4>
+<ul>
+<li>区分大小写，层级间通过<code>/</code>分隔，如<code>home/room1/temp</code>、<code>device/light/livingroom</code>。</li>
+<li>发布消息的主题<strong>不能使用通配符</strong>，必须是具体的主题名；订阅的主题过滤器可使用通配符。</li>
+<li>禁止使用空主题，不建议以<code>/</code>开头或结尾，避免不必要的层级匹配错误。</li>
+</ul>
+<h4 id="422-通配符规则">4.2.2 通配符规则</h4>
+<p>通配符仅用于订阅的主题过滤器，分为两种，实现批量主题订阅：</p>
+<ol>
+<li><strong>单层通配符 <code>+</code></strong>：匹配主题中的单个完整层级，必须占据整个层级。
+<ul>
+<li>示例：<code>home/+/temp</code> 可匹配 <code>home/room1/temp</code>、<code>home/room2/temp</code>，无法匹配 <code>home/room1/bedroom/temp</code>。</li>
+</ul>
+</li>
+<li><strong>多层通配符 <code>#</code></strong>：匹配主题中<code>#</code>之后的所有层级，必须放在主题过滤器的最后一位。
+<ul>
+<li>示例：<code>home/#</code> 可匹配 <code>home/room1/temp</code>、<code>home/room2/light/status</code>、<code>home</code>，单独的<code>#</code>可匹配所有主题。</li>
+</ul>
+</li>
+</ol>
+<h4 id="423-系统主题">4.2.3 系统主题</h4>
+<p>以<code>$</code>开头的主题为Broker预留的系统主题，主要用于Broker的状态监控与统计，如<code>$SYS/broker/clients/connected</code>（当前连接客户端数）、<code>$SYS/broker/uptime</code>（Broker运行时长）。普通客户端仅可订阅，不可发布以<code>$</code>开头的主题。</p>
+<h3 id="43-连接与会话管理">4.3 连接与会话管理</h3>
+<h4 id="431-连接流程">4.3.1 连接流程</h4>
+<p>客户端与Broker的通信必须先建立TCP连接，再通过MQTT连接报文完成握手：</p>
+<ol>
+<li>客户端发送<code>CONNECT</code>报文，携带核心参数：客户端ID（唯一标识）、保活时间、Clean Session标志、用户名/密码、遗嘱消息配置。</li>
+<li>Broker返回<code>CONNACK</code>报文，携带连接确认标志、连接返回码（0为连接成功，非0为对应错误，如协议版本不支持、客户端ID无效、用户名密码错误、未授权等）。</li>
+</ol>
+<h4 id="432-会话管理">4.3.2 会话管理</h4>
+<p>会话是客户端与Broker之间的状态上下文，分为两种类型，由<code>CONNECT</code>报文中的<strong>Clean Session</strong>标志控制：</p>
+<ul>
+<li><strong>清洁会话（Clean Session = true）</strong>：客户端断开连接后，Broker立即清除该客户端的所有会话信息，包括订阅关系、未确认的QoS1/2消息，重连后需重新订阅主题。</li>
+<li><strong>持久会话（Clean Session = false）</strong>：客户端断开连接后，Broker保留会话信息，持续存储未确认的QoS1/2消息，客户端重连后，Broker会继续投递未完成的消息，无需重新订阅。MQTT 5.0支持单独设置会话过期间隔，灵活控制持久会话的生命周期。</li>
+</ul>
+<h4 id="433-心跳保活keep-alive">4.3.3 心跳保活（Keep Alive）</h4>
+<p>保活时间是客户端在<code>CONNECT</code>报文中设置的最大时间间隔（单位：秒），用于检测TCP连接的有效性：</p>
+<ul>
+<li>客户端在保活时间内，若没有发送其他报文，必须发送<code>PINGREQ</code>心跳请求。</li>
+<li>Broker在<strong>1.5倍保活时间</strong>内未收到客户端的任何报文，会判定客户端异常离线，关闭连接并触发遗嘱消息。</li>
+<li>Broker收到<code>PINGREQ</code>后，必须回复<code>PINGRESP</code>，客户端可据此判断Broker是否在线。</li>
+</ul>
+<h3 id="44-遗嘱消息will-message">4.4 遗嘱消息（Will Message）</h3>
+<p>遗嘱消息是MQTT的异常离线通知机制，客户端在<code>CONNECT</code>报文中预设遗嘱相关配置，当客户端<strong>异常离线</strong>（网络中断、设备掉电、未发送<code>DISCONNECT</code>报文直接断开）时，Broker会自动向预设的遗嘱主题发布遗嘱消息，通知所有订阅该主题的客户端。</p>
+<p>核心配置项：遗嘱主题、遗嘱QoS等级、遗嘱保留标志、遗嘱消息内容。
+典型适用场景：设备离线告警、设备在线状态监控、异常事件上报。</p>
+<h3 id="45-保留消息retained-message">4.5 保留消息（Retained Message）</h3>
+<p>保留消息是MQTT的新订阅者即时同步机制，发布者在<code>PUBLISH</code>报文中将<code>RETAIN</code>标志置为true，即可发布保留消息。</p>
+<ul>
+<li>核心特性：Broker收到保留消息后，会存储该主题的<strong>最新一条</strong>保留消息；当有新的客户端订阅匹配该主题时，Broker会立即将这条保留消息推送给订阅者，无需等待下次发布。</li>
+<li>清除规则：向主题发布一条空内容的保留消息，即可清除该主题的保留消息。</li>
+<li>典型适用场景：设备最新状态上报、业务配置同步、设备在线状态标记。</li>
+</ul>
+<h2 id="五主流版本差异">五、主流版本差异</h2>
+<p>MQTT的主流版本为<strong>3.1.1</strong>和<strong>5.0</strong>，其中3.1.1是目前兼容性最广的版本，5.0是2019年发布的最新主版本，新增了大量企业级特性。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">特性维度</th>
+          <th style="text-align: left">MQTT 3.1.1</th>
+          <th style="text-align: left">MQTT 5.0</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">协议结构</td>
+          <td style="text-align: left">固定头+可变头+负载，无原生扩展字段</td>
+          <td style="text-align: left">新增<strong>属性区</strong>，支持用户属性、元数据扩展，协议扩展性大幅提升</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">会话管理</td>
+          <td style="text-align: left">仅支持清洁/持久会话，生命周期无独立控制</td>
+          <td style="text-align: left">支持会话过期间隔，可单独设置会话保留时长，不再与保活时间绑定</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">消息能力</td>
+          <td style="text-align: left">无原生消息过期、主题别名能力</td>
+          <td style="text-align: left">支持消息过期时间、主题别名（数字替代长主题，降低开销）、请求-响应模式原生支持</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">可靠性扩展</td>
+          <td style="text-align: left">无原生负载均衡能力</td>
+          <td style="text-align: left">支持<strong>共享订阅</strong>，多个客户端订阅同一共享主题，消息仅分发给其中一个客户端，实现集群负载均衡</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">错误处理</td>
+          <td style="text-align: left">原因码极少，错误描述模糊</td>
+          <td style="text-align: left">为所有确认报文定义了详细的标准化原因码，可精准定位连接、发布、订阅失败的原因</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">流量控制</td>
+          <td style="text-align: left">无原生流量控制机制</td>
+          <td style="text-align: left">支持最大报文长度协商、接收最大消息数设置，实现端到端流量控制，避免资源耗尽</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">安全性</td>
+          <td style="text-align: left">仅支持用户名/密码、TLS认证</td>
+          <td style="text-align: left">支持增强认证（SASL）、用户属性传递认证元数据，安全性和灵活性更高</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">遗嘱增强</td>
+          <td style="text-align: left">仅支持基础遗嘱消息</td>
+          <td style="text-align: left">支持遗嘱消息延迟发布，避免网络抖动导致的误触发</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="六安全机制">六、安全机制</h2>
+<p>MQTT提供了多层级的安全防护，可根据业务安全需求灵活组合：</p>
+<ol>
+<li><strong>传输层加密</strong>：基于TLS/SSL的加密传输（MQTTS），默认端口8883，实现报文的防窃听、防篡改、防伪造，是MQTT最基础的安全保障。</li>
+<li><strong>应用层身份认证</strong>：客户端通过<code>CONNECT</code>报文的用户名、密码字段进行身份校验，Broker可对接账号体系实现权限管控。</li>
+<li><strong>双向证书认证</strong>：基于X.509证书的客户端-Broker双向认证，双方互相校验证书合法性，安全性最高，适用于金融、工业等高安全场景。</li>
+<li><strong>细粒度权限控制</strong>：Broker可基于客户端ID、用户名、主题，设置发布/订阅权限，实现最小权限管控，如限制某客户端仅可订阅指定主题，不可发布消息。</li>
+<li><strong>增强安全特性</strong>：MQTT 5.0支持增强认证、报文签名、TLS扩展，进一步提升通信安全性。</li>
+</ol>
+<h3 id="61-标准默认端口">6.1 标准默认端口</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">传输类型</th>
+          <th style="text-align: left">默认端口</th>
+          <th style="text-align: left">适用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">非加密TCP MQTT</td>
+          <td style="text-align: left">1883</td>
+          <td style="text-align: left">内网、低安全需求场景，默认标准端口</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">TLS加密MQTTS</td>
+          <td style="text-align: left">8883</td>
+          <td style="text-align: left">公网、高安全需求场景，加密传输</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">非加密WebSocket MQTT</td>
+          <td style="text-align: left">8083</td>
+          <td style="text-align: left">浏览器、Web客户端接入</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">TLS加密WebSocket MQTT</td>
+          <td style="text-align: left">8084</td>
+          <td style="text-align: left">公网Web客户端安全接入</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="七主流broker与客户端实现">七、主流Broker与客户端实现</h2>
+<h3 id="71-主流broker实现">7.1 主流Broker实现</h3>
+<p>Broker是MQTT通信的核心，分为开源和商业两大类，可根据并发量、部署环境、功能需求选型：</p>
+<ul>
+<li><strong>开源Broker</strong>：
+<ul>
+<li>EMQX：国内最主流的企业级开源MQTT Broker，支持分布式集群、高并发、MQTT 5.0全特性，适配物联网大规模设备接入场景。</li>
+<li>Eclipse Mosquitto：轻量级开源Broker，资源占用极低，适合嵌入式设备、边缘网关、小型部署场景。</li>
+<li>VerneMQ：分布式高可用开源Broker，支持水平扩展，适配中大规模集群场景。</li>
+<li>RabbitMQ/ActiveMQ：传统消息中间件，通过插件支持MQTT协议，适合已有消息队列架构的场景。</li>
+</ul>
+</li>
+<li><strong>商业云平台Broker</strong>：
+<ul>
+<li>阿里云IoT平台、腾讯云IoT Explorer、华为云IoT设备接入服务。</li>
+<li>AWS IoT Core、Azure IoT Hub、Google Cloud IoT Core。</li>
+</ul>
+</li>
+</ul>
+<h3 id="72-主流客户端sdk">7.2 主流客户端SDK</h3>
+<p>几乎所有主流编程语言都有成熟的MQTT客户端实现，常用的有：</p>
+<ul>
+<li>嵌入式/单片机：Eclipse Paho Embedded C、ESP-IDF MQTT组件、RT-Thread MQTT组件。</li>
+<li>服务端/桌面：Eclipse Paho Java/Python/C++/C#、Go MQTT客户端。</li>
+<li>移动端：Android Paho MQTT、iOS MQTT客户端。</li>
+<li>Web端：MQTT.js，基于WebSocket实现浏览器端MQTT通信。</li>
+</ul>
+<h2 id="八典型应用场景">八、典型应用场景</h2>
+<p>MQTT的轻量、可靠、低耗特性，使其成为物联网场景的首选协议，核心应用场景包括：</p>
+<ol>
+<li><strong>智能家居</strong>：智能灯、空调、门锁、传感器等设备的状态上报与指令控制，实现设备互联互通。</li>
+<li><strong>工业物联网（IIoT）</strong>：工业设备、PLC、传感器的数据采集、远程监控、指令下发，适配工业现场复杂的网络环境。</li>
+<li><strong>车联网</strong>：车载设备的位置上报、状态监控、远程控制、OTA升级，适配车辆移动中的高延迟、不稳定网络。</li>
+<li><strong>智慧农业/环境监测</strong>：土壤、气象、水质传感器的高频数据采集，低带宽、低功耗适配野外部署场景。</li>
+<li><strong>能源与公用事业</strong>：电力、水务、燃气的智能电表/水表数据远程抄读，设备状态监控。</li>
+<li><strong>移动互联网</strong>：APP消息推送、即时通信、直播弹幕、实时行情推送，低功耗长连接适配移动端场景。</li>
+</ol>
+<h2 id="九协议优缺点总结">九、协议优缺点总结</h2>
+<h3 id="91-核心优势">9.1 核心优势</h3>
+<ol>
+<li><strong>极致轻量低耗</strong>：最小报文仅2字节，带宽和算力占用极低，完美适配MCU、传感器等资源受限设备。</li>
+<li><strong>解耦灵活扩展</strong>：Pub/Sub架构实现发布者与订阅者完全解耦，支持一对多广播，架构易扩展、易维护。</li>
+<li><strong>可靠性可定制</strong>：3级QoS等级，可根据业务场景灵活选择可靠性，兼顾效率与稳定。</li>
+<li><strong>弱网适配性强</strong>：遗嘱消息、保活心跳、持久会话等机制，完美适配高延迟、不稳定的网络环境。</li>
+<li><strong>生态成熟完善</strong>：跨平台、跨语言支持，大量开源Broker和客户端SDK，开发门槛极低，兼容性好。</li>
+<li><strong>安全能力完备</strong>：支持TLS加密、双向证书认证、细粒度权限控制，满足绝大多数场景的安全需求。</li>
+</ol>
+<h3 id="92-局限性">9.2 局限性</h3>
+<ol>
+<li><strong>基于TCP协议</strong>：TCP三次握手、四次挥手有一定的开销，在NB-IoT、LoRa等极致低功耗的LPWAN场景，相比UDP协议有额外开销（可通过MQTT-SN适配）。</li>
+<li><strong>Broker单点瓶颈</strong>：单节点Broker存在性能和可用性瓶颈，大规模设备接入需依赖分布式集群架构。</li>
+<li><strong>消息顺序性限制</strong>：仅在同一个TCP连接、同一个QoS等级、同一个主题下，才能保证消息的顺序性，跨连接、跨主题、跨QoS不保证顺序。</li>
+<li><strong>无原生事务支持</strong>：无法保证多条消息发布的原子性，不支持事务回滚机制。</li>
+<li><strong>无原生消息持久化</strong>：消息持久化依赖Broker的实现，协议本身未标准化持久化策略，不同Broker的持久化能力差异较大。</li>
+</ol>
+<h2 id="十补充mqtt-sn协议">十、补充：MQTT-SN协议</h2>
+<p>MQTT-SN（MQTT for Sensor Networks）是MQTT协议的传感器网络扩展版本，专为无线传感器网络、电池供电的超低功耗设备设计，适配UDP、ZigBee、LoRa等非TCP网络，解决了标准MQTT在极致低功耗场景的局限性。核心特性包括：更短的报文头、主题ID替代长主题名、睡眠设备支持、网关代理机制，完美适配资源极度受限的终端传感器设备。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-03-12</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/006_mqtt%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/protocol/">协议</a>,&nbsp;<a href="/blog/tags/mqtt/">MQTT</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/005_zmq%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="ZMQ 协议详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>ZMQ 协议详细总结</a>
+            <a href="/blog/007_rtp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="RTP 协议详细总结">RTP 协议详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

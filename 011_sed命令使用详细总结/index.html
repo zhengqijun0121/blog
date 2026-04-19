@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>sed 命令使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/011_sed%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="sed 命令使用详细总结">
+  <meta property="og:description" content="sed 命令使用详细总结 sed（Stream Editor）是Linux/Unix生态下的非交互式流编辑器，是文本处理三剑客（grep/sed/awk）核心成员，以逐行流式处理为核心，无需打开文件即可完成批量文本修改、过滤、提取等操作，是自动化脚本、运维文本处理的核心工具。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-01-16T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-01-16T09:00:00+08:00">
+    <meta property="article:tag" content="开发工具">
+    <meta property="article:tag" content="Shell">
+    <meta property="article:tag" content="Sed">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="sed 命令使用详细总结">
+  <meta name="twitter:description" content="sed 命令使用详细总结 sed（Stream Editor）是Linux/Unix生态下的非交互式流编辑器，是文本处理三剑客（grep/sed/awk）核心成员，以逐行流式处理为核心，无需打开文件即可完成批量文本修改、过滤、提取等操作，是自动化脚本、运维文本处理的核心工具。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/011_sed%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/010_awk%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/002_java%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "sed 命令使用详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/011_sed%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "dev-tools, Shell, sed","wordcount":  4465 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/011_sed%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-01-16T09:00:00+08:00","dateModified": "2026-01-16T09:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/011_sed%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/011_sed%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">sed 命令使用详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/dev-tools/"><i class="far fa-folder" aria-hidden="true"></i>开发工具</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-16">2026-01-16</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 4465 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 9 分钟&nbsp;<span id="/blog/011_sed%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="sed 命令使用详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一核心执行原理必懂">一、核心执行原理（必懂）</a></li>
+    <li><a href="#二基础语法与命令格式">二、基础语法与命令格式</a></li>
+    <li><a href="#三高频核心选项">三、高频核心选项</a></li>
+    <li><a href="#四地址定位sed的灵魂">四、地址定位（sed的灵魂）</a>
+      <ul>
+        <li><a href="#1-单地址定位">1. 单地址定位</a></li>
+        <li><a href="#2-连续范围地址定位">2. 连续范围地址定位</a></li>
+        <li><a href="#3-步进地址定位gnu-sed特有">3. 步进地址定位（GNU sed特有）</a></li>
+        <li><a href="#4-取反地址定位">4. 取反地址定位</a></li>
+        <li><a href="#5-分组地址多命令绑定">5. 分组地址（多命令绑定）</a></li>
+      </ul>
+    </li>
+    <li><a href="#五核心编辑命令高频必背">五、核心编辑命令（高频必背）</a>
+      <ul>
+        <li><a href="#51-替换命令-s使用率70核心中的核心">5.1 替换命令 <code>s</code>（使用率70%+，核心中的核心）</a>
+          <ul>
+            <li><a href="#核心标志位flags">核心标志位flags</a></li>
+            <li><a href="#替换进阶用法">替换进阶用法</a></li>
+          </ul>
+        </li>
+        <li><a href="#52-删除命令-d">5.2 删除命令 <code>d</code></a></li>
+        <li><a href="#53-打印命令-p">5.3 打印命令 <code>p</code></a></li>
+        <li><a href="#54-追加插入整行替换命令">5.4 追加/插入/整行替换命令</a></li>
+        <li><a href="#55-其他常用基础命令">5.5 其他常用基础命令</a></li>
+      </ul>
+    </li>
+    <li><a href="#六sed正则表达式规范">六、sed正则表达式规范</a></li>
+    <li><a href="#七高级用法模式空间保持空间交互">七、高级用法：模式空间+保持空间交互</a>
+      <ul>
+        <li><a href="#经典高级用法示例">经典高级用法示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#八生产级实战案例">八、生产级实战案例</a></li>
+    <li><a href="#九避坑指南与最佳实践">九、避坑指南与最佳实践</a>
+      <ul>
+        <li><a href="#91-新手致命坑">9.1 新手致命坑</a></li>
+        <li><a href="#92-跨平台兼容性坑gnu-sed-vs-bsd-sed">9.2 跨平台兼容性坑（GNU sed vs BSD sed）</a></li>
+        <li><a href="#93-性能优化最佳实践">9.3 性能优化最佳实践</a></li>
+      </ul>
+    </li>
+    <li><a href="#十高频命令速查表">十、高频命令速查表</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="sed-命令使用详细总结">sed 命令使用详细总结</h1>
+<p>sed（Stream Editor）是Linux/Unix生态下的<strong>非交互式流编辑器</strong>，是文本处理三剑客（grep/sed/awk）核心成员，以逐行流式处理为核心，无需打开文件即可完成批量文本修改、过滤、提取等操作，是自动化脚本、运维文本处理的核心工具。</p>
+<h2 id="一核心执行原理必懂">一、核心执行原理（必懂）</h2>
+<p>sed的处理逻辑全程围绕两个核心缓冲区展开，理解这一点就能彻底搞懂sed的工作模式：</p>
+<ul>
+<li>
+<p><strong>模式空间（Pattern Space）</strong>：主处理缓冲区，逐行读取文本后载入此处，所有编辑命令默认仅作用于此，处理完一轮即清空</p>
+</li>
+<li>
+<p><strong>保持空间（Hold Space）</strong>：辅助暂存缓冲区，编辑命令无法直接作用，仅用于和模式空间交互数据，用于多行处理等高级场景</p>
+</li>
+</ul>
+<p>核心执行流程：</p>
+<ol>
+<li>
+<p>读取一行文本，去除换行符后载入模式空间</p>
+</li>
+<li>
+<p>按「地址定位规则」匹配当前行，匹配成功则执行对应的编辑命令</p>
+</li>
+<li>
+<p>命令执行完成后，默认将模式空间内容（恢复换行符）输出到标准输出</p>
+</li>
+<li>
+<p>清空模式空间，读取下一行，循环直至文件结束</p>
+</li>
+</ol>
+<p>关键提示：sed<strong>默认不修改原文件</strong>，仅输出处理结果到终端，只有加<code>-i</code>选项才会直接修改原文件（高危操作）。</p>
+<h2 id="二基础语法与命令格式">二、基础语法与命令格式</h2>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 核心语法</span>
+</span></span><span class="line"><span class="cl">sed <span class="o">[</span>选项<span class="o">]</span> <span class="s1">&#39;地址定位+编辑命令&#39;</span> 输入文件/标准输入
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 常用扩展格式</span>
+</span></span><span class="line"><span class="cl">sed <span class="o">[</span>选项<span class="o">]</span> -e <span class="s1">&#39;指令1&#39;</span> -e <span class="s1">&#39;指令2&#39;</span> 目标文件  <span class="c1"># 多命令串行执行</span>
+</span></span><span class="line"><span class="cl">sed <span class="o">[</span>选项<span class="o">]</span> -f 脚本文件 目标文件             <span class="c1"># 从脚本文件读取sed命令</span>
+</span></span><span class="line"><span class="cl">sed <span class="o">[</span>选项<span class="o">]</span> <span class="s1">&#39;地址{命令1;命令2;...}&#39;</span> 文件     <span class="c1"># 同地址多命令组合执行</span></span></span></code></pre></div></div>
+<h2 id="三高频核心选项">三、高频核心选项</h2>
+<table>
+  <thead>
+      <tr>
+          <th>选项</th>
+          <th>全称</th>
+          <th>核心作用</th>
+          <th>高频使用场景</th>
+          <th>注意事项</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>-n</code></td>
+          <td><code>--quiet/--silent</code></td>
+          <td>取消默认输出，仅打印指令主动处理的结果</td>
+          <td>精准提取指定行、仅输出替换成功的行</td>
+          <td>必须和<code>p</code>打印命令配合使用，否则无输出</td>
+      </tr>
+      <tr>
+          <td><code>-i[SUFFIX]</code></td>
+          <td><code>--in-place</code></td>
+          <td>直接修改原文件，可选备份</td>
+          <td>批量修改配置文件、文本内容</td>
+          <td>高危操作！<code>-i.bak</code>会先备份原文件为<code>file.bak</code>；macOS(BSD sed)必须指定备份后缀，无备份需写<code>-i ''</code></td>
+      </tr>
+      <tr>
+          <td><code>-e</code></td>
+          <td><code>--expression</code></td>
+          <td>指定多个编辑指令，多命令串联</td>
+          <td>同时执行替换、删除、插入等多个操作</td>
+          <td>单条命令可省略，多条命令必须每个指令前加<code>-e</code></td>
+      </tr>
+      <tr>
+          <td><code>-E/-r</code></td>
+          <td><code>--regexp-extended</code></td>
+          <td>启用扩展正则表达式(ERE)</td>
+          <td>复杂正则匹配、分组、或逻辑`</td>
+          <td>`</td>
+      </tr>
+      <tr>
+          <td><code>-f</code></td>
+          <td><code>--file</code></td>
+          <td>从指定脚本文件读取sed命令</td>
+          <td>复杂逻辑、多命令批量执行</td>
+          <td>脚本文件中每行写一条sed命令，无需加单引号</td>
+      </tr>
+      <tr>
+          <td><code>-z</code></td>
+          <td><code>--null-data</code></td>
+          <td>按NULL字符(\0)分割行，而非换行符</td>
+          <td>处理含换行符的单行文本、JSON内容</td>
+          <td>GNU sed特有扩展</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="四地址定位sed的灵魂">四、地址定位（sed的灵魂）</h2>
+<p>sed的所有编辑命令，都可通过地址定位指定作用的行，不指定则默认作用于<strong>所有行</strong>。地址定位分为6大类，覆盖全场景。</p>
+<h3 id="1-单地址定位">1. 单地址定位</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;5d&#39;</span> file.txt          <span class="c1"># 作用于第5行，删除第5行</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;$p&#39;</span> file.txt          <span class="c1"># 作用于最后一行($代表最后一行)，仅打印最后一行</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;/error/p&#39;</span> file.txt    <span class="c1"># 作用于匹配正则error的所有行，打印匹配行</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;/^#/d&#39;</span> file.txt       <span class="c1"># 作用于以#开头的行，删除注释行</span></span></span></code></pre></div></div>
+<h3 id="2-连续范围地址定位">2. 连续范围地址定位</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;2,5d&#39;</span> file.txt        <span class="c1"># 作用于第2到第5行（闭区间，包含首尾）</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;3,+4d&#39;</span> file.txt       <span class="c1"># 作用于第3行及后面4行（3-7行）</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;/start/,/end/d&#39;</span> file.txt  <span class="c1"># 作用于匹配start的行 到 匹配end的行 之间的所有行</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;5,/pattern/p&#39;</span> file.txt    <span class="c1"># 作用于第5行 到 匹配pattern的行 之间的所有行</span></span></span></code></pre></div></div>
+<h3 id="3-步进地址定位gnu-sed特有">3. 步进地址定位（GNU sed特有）</h3>
+<p>语法：<code>起始行~步长</code></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;1~2d&#39;</span> file.txt        <span class="c1"># 奇数行删除（1,3,5...）</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;2~2d&#39;</span> file.txt        <span class="c1"># 偶数行删除（2,4,6...）</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;0~3s/old/new/g&#39;</span> file.txt  <span class="c1"># 每3行执行一次替换（3,6,9...）</span></span></span></code></pre></div></div>
+<h3 id="4-取反地址定位">4. 取反地址定位</h3>
+<p>语法：<code>地址!命令</code></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;2,5!d&#39;</span> file.txt       <span class="c1"># 除了2-5行，其他行全部删除</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;/error/!d&#39;</span> file.txt   <span class="c1"># 除了匹配error的行，其他行全部删除</span></span></span></code></pre></div></div>
+<h3 id="5-分组地址多命令绑定">5. 分组地址（多命令绑定）</h3>
+<p>对同一地址执行多个命令，用<code>{}</code>包裹，命令用分号分隔</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;/error/{s/ERROR/error/g;p;w error.log}&#39;</span> file.txt
+</span></span><span class="line"><span class="cl"><span class="c1"># 匹配error的行：先替换大小写，再打印，最后写入error.log文件</span></span></span></code></pre></div></div>
+<h2 id="五核心编辑命令高频必背">五、核心编辑命令（高频必背）</h2>
+<p>按使用频率排序，覆盖99%日常场景，重点掌握替换命令。</p>
+<h3 id="51-替换命令-s使用率70核心中的核心">5.1 替换命令 <code>s</code>（使用率70%+，核心中的核心）</h3>
+<p>语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">s/正则匹配模式/替换内容/标志位</span></span></code></pre></div></div>
+<p>核心说明：</p>
+<ul>
+<li>
+<p>分隔符<code>/</code>可自定义（<code>#</code> <code>@</code> <code>|</code>等），避免路径中<code>/</code>冲突</p>
+</li>
+<li>
+<p>替换内容中可使用反向引用、特殊转义、匹配内容引用</p>
+</li>
+</ul>
+<h4 id="核心标志位flags">核心标志位flags</h4>
+<table>
+  <thead>
+      <tr>
+          <th>标志位</th>
+          <th>核心作用</th>
+          <th>示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>g</code></td>
+          <td>全局替换，默认仅替换每行第一个匹配项</td>
+          <td><code>sed 's/old/new/g' file</code> 替换每行所有old为new</td>
+      </tr>
+      <tr>
+          <td><code>数字N</code></td>
+          <td>替换每行第N个匹配项</td>
+          <td><code>sed 's/old/new/3' file</code> 替换每行第3个old</td>
+      </tr>
+      <tr>
+          <td><code>p</code></td>
+          <td>打印替换成功的行，必须配合<code>-n</code>使用</td>
+          <td><code>sed -n 's/old/new/gp' file</code> 仅输出替换后的行</td>
+      </tr>
+      <tr>
+          <td><code>i/I</code></td>
+          <td>匹配时忽略大小写</td>
+          <td><code>sed 's/old/new/gi' file</code> 全局替换，忽略大小写</td>
+      </tr>
+      <tr>
+          <td><code>w 文件名</code></td>
+          <td>将替换成功的行写入指定文件</td>
+          <td><code>sed 's/old/new/gw output.log' file</code></td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="替换进阶用法">替换进阶用法</h4>
+<ol>
+<li>自定义分隔符（处理路径/URL）</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;s#/home/user#/opt/data#g&#39;</span> file.txt  <span class="c1"># 用#替代/，避免路径转义</span></span></span></code></pre></div></div>
+<ol>
+<li><code>&amp;</code>引用匹配到的完整内容</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;s/[0-9]\+/(&amp;)/g&#39;</span> file.txt  <span class="c1"># 给所有数字加上括号，&amp;代表匹配到的数字</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;s/^.*$/【&amp;】/g&#39;</span> file.txt    <span class="c1"># 给每行内容加上【】包裹</span></span></span></code></pre></div></div>
+<ol>
+<li>分组与反向引用</li>
+</ol>
+<p>基础正则(BRE)中分组用<code>()</code>，扩展正则(ERE)用<code>()</code>，反向引用用<code>\1</code> <code>\2</code>&hellip;对应第N个分组</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 示例：将 &#34;name:张三 age:20&#34; 转为 &#34;张三:20&#34;</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;s/name:\(.*\) age:\(.*\)/\1:\2/g&#39;</span> file.txt
+</span></span><span class="line"><span class="cl"><span class="c1"># 启用扩展正则，省去转义符</span>
+</span></span><span class="line"><span class="cl">sed -E <span class="s1">&#39;s/name:(.*) age:(.*)/\1:\2/g&#39;</span> file.txt</span></span></code></pre></div></div>
+<ol>
+<li>大小写转换（GNU sed特有）</li>
+</ol>
+<table>
+  <thead>
+      <tr>
+          <th>转义符</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>\U</code></td>
+          <td>后面的字符全部转为大写，直到<code>\E</code>结束</td>
+      </tr>
+      <tr>
+          <td><code>\L</code></td>
+          <td>后面的字符全部转为小写，直到<code>\E</code>结束</td>
+      </tr>
+      <tr>
+          <td><code>\u</code></td>
+          <td>后面的第一个字符转为大写</td>
+      </tr>
+      <tr>
+          <td><code>\l</code></td>
+          <td>后面的第一个字符转为小写</td>
+      </tr>
+      <tr>
+          <td>示例：</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;s/^[a-z]/\u&amp;/g&#39;</span> file.txt  <span class="c1"># 每行首字母大写</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;s/[A-Z]/\l&amp;/g&#39;</span> file.txt   <span class="c1"># 所有大写字母转为小写</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;s/\(.*\):\(.*\)/\U\1\E:\2/g&#39;</span> file.txt  <span class="c1"># 冒号前的内容全部大写</span></span></span></code></pre></div></div>
+<h3 id="52-删除命令-d">5.2 删除命令 <code>d</code></h3>
+<p>语法：<code>地址d</code>，删除匹配地址的行</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;2d&#39;</span> file.txt              <span class="c1"># 删除第2行</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;2,5d&#39;</span> file.txt            <span class="c1"># 删除2-5行</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;/^$/d&#39;</span> file.txt           <span class="c1"># 删除纯空行</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;/^[[:space:]]*$/d&#39;</span> file.txt  <span class="c1"># 删除含空格/制表符的空行</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;/^#/d&#39;</span> file.txt           <span class="c1"># 删除#开头的注释行</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;/error/d&#39;</span> file.txt        <span class="c1"># 删除包含error的行</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;1,/^END$/!d&#39;</span> file.txt     <span class="c1"># 只保留1行到匹配END的行，其余全部删除</span></span></span></code></pre></div></div>
+<h3 id="53-打印命令-p">5.3 打印命令 <code>p</code></h3>
+<p>语法：<code>地址p</code>，打印匹配地址的行，几乎都配合<code>-n</code>使用（避免重复输出）</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sed -n <span class="s1">&#39;2p&#39;</span> file.txt           <span class="c1"># 仅打印第2行</span>
+</span></span><span class="line"><span class="cl">sed -n <span class="s1">&#39;2,5p&#39;</span> file.txt         <span class="c1"># 打印2-5行</span>
+</span></span><span class="line"><span class="cl">sed -n <span class="s1">&#39;/error/p&#39;</span> file.txt     <span class="c1"># 打印包含error的行（等效grep error）</span>
+</span></span><span class="line"><span class="cl">sed -n <span class="s1">&#39;1~2p&#39;</span> file.txt         <span class="c1"># 打印奇数行</span>
+</span></span><span class="line"><span class="cl">sed -n <span class="s1">&#39;/start/,/end/p&#39;</span> file.txt  <span class="c1"># 打印start到end之间的行</span>
+</span></span><span class="line"><span class="cl">sed -n <span class="s1">&#39;p;n&#39;</span> file.txt          <span class="c1"># 打印奇数行，n读取下一行</span>
+</span></span><span class="line"><span class="cl">sed -n <span class="s1">&#39;n;p&#39;</span> file.txt          <span class="c1"># 打印偶数行</span></span></span></code></pre></div></div>
+<h3 id="54-追加插入整行替换命令">5.4 追加/插入/整行替换命令</h3>
+<ul>
+<li>
+<p><code>a\</code>：在匹配行<strong>之后</strong>追加文本</p>
+</li>
+<li>
+<p><code>i\</code>：在匹配行<strong>之前</strong>插入文本</p>
+</li>
+<li>
+<p><code>c\</code>：将匹配行<strong>整行替换</strong>为指定文本</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 追加：第2行后追加&#34;new line&#34;</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;2a\new line&#39;</span> file.txt
+</span></span><span class="line"><span class="cl"><span class="c1"># 插入：匹配error的行前插入&#34;=====ERROR START=====&#34;</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;/error/i\=====ERROR START=====&#39;</span> file.txt
+</span></span><span class="line"><span class="cl"><span class="c1"># 整行替换：第5行替换为&#34;replaced line&#34;</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;5c\replaced line&#39;</span> file.txt
+</span></span><span class="line"><span class="cl"><span class="c1"># 范围替换：2-4行全部替换为&#34;=====CUT=====&#34;</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;2,4c\=====CUT=====&#39;</span> file.txt</span></span></code></pre></div></div>
+<h3 id="55-其他常用基础命令">5.5 其他常用基础命令</h3>
+<table>
+  <thead>
+      <tr>
+          <th>命令</th>
+          <th>核心作用</th>
+          <th>示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>y</code></td>
+          <td>按字符一一对应转换，类似tr命令</td>
+          <td><code>sed 'y/abc/ABC/' file.txt</code> 小写a/b/c转大写</td>
+      </tr>
+      <tr>
+          <td><code>r 文件名</code></td>
+          <td>读取文件内容，追加到匹配行之后</td>
+          <td><code>sed '$r footer.txt' file.txt</code> 末尾追加文件内容</td>
+      </tr>
+      <tr>
+          <td><code>w 文件名</code></td>
+          <td>将匹配行写入指定文件</td>
+          <td><code>sed -n '/error/w error.log' file.txt</code> 提取错误日志</td>
+      </tr>
+      <tr>
+          <td><code>=</code></td>
+          <td>打印匹配行的行号</td>
+          <td><code>sed -n '/error/=' file.txt</code> 打印含error行的行号</td>
+      </tr>
+      <tr>
+          <td><code>q</code></td>
+          <td>匹配到指定行后直接退出sed</td>
+          <td><code>sed '5q' file.txt</code> 打印前5行后退出（等效head -5）</td>
+      </tr>
+      <tr>
+          <td><code>n</code></td>
+          <td>读取下一行到模式空间，覆盖当前内容</td>
+          <td><code>sed '/error/{n;d}' file.txt</code> 删除匹配行的下一行</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="六sed正则表达式规范">六、sed正则表达式规范</h2>
+<p>sed默认使用<strong>基础正则表达式(BRE)</strong>，加<code>-E/-r</code>启用<strong>扩展正则表达式(ERE)</strong>，核心元字符差异如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>元字符</th>
+          <th>含义</th>
+          <th>BRE是否需要转义</th>
+          <th>ERE是否需要转义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>^</code></td>
+          <td>行开头锚点</td>
+          <td>否</td>
+          <td>否</td>
+      </tr>
+      <tr>
+          <td><code>$</code></td>
+          <td>行结尾锚点</td>
+          <td>否</td>
+          <td>否</td>
+      </tr>
+      <tr>
+          <td><code>.</code></td>
+          <td>匹配任意单个字符</td>
+          <td>否</td>
+          <td>否</td>
+      </tr>
+      <tr>
+          <td><code>*</code></td>
+          <td>匹配前一个字符0次或多次</td>
+          <td>否</td>
+          <td>否</td>
+      </tr>
+      <tr>
+          <td><code>+</code></td>
+          <td>匹配前一个字符1次或多次</td>
+          <td>是(<code>+</code>)</td>
+          <td>否</td>
+      </tr>
+      <tr>
+          <td><code>?</code></td>
+          <td>匹配前一个字符0次或1次</td>
+          <td>是(<code>?</code>)</td>
+          <td>否</td>
+      </tr>
+      <tr>
+          <td><code>{n,m}</code></td>
+          <td>匹配前一个字符n到m次</td>
+          <td>是(<code>{n,m}</code>)</td>
+          <td>否</td>
+      </tr>
+      <tr>
+          <td><code>()</code></td>
+          <td>分组，用于反向引用</td>
+          <td>是(<code>()</code>)</td>
+          <td>否</td>
+      </tr>
+      <tr>
+          <td>`</td>
+          <td>`</td>
+          <td>或逻辑匹配</td>
+          <td>是(`</td>
+      </tr>
+      <tr>
+          <td>补充跨平台兼容规范：</td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li>
+<p>POSIX预定义字符类（全平台兼容）：<code>[[:digit:]]</code>（数字）、<code>[[:alpha:]]</code>（字母）、<code>[[:space:]]</code>（空白字符）、<code>[[:lower:]]</code>（小写）、<code>[[:upper:]]</code>（大写）</p>
+</li>
+<li>
+<p>单词边界：GNU sed支持<code>\b</code>，BSD sed(macOS)需用<code>[[:&lt;:]]</code>（单词开头）和<code>[[:&gt;:]]</code>（单词结尾），跨平台优先用POSIX标准写法。</p>
+</li>
+</ul>
+<h2 id="七高级用法模式空间保持空间交互">七、高级用法：模式空间+保持空间交互</h2>
+<p>sed的高级多行处理能力，核心是模式空间与保持空间的数据交互，核心交互命令如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>命令</th>
+          <th>核心作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>h</code></td>
+          <td>把模式空间内容<strong>覆盖</strong>写入保持空间</td>
+      </tr>
+      <tr>
+          <td><code>H</code></td>
+          <td>把模式空间内容<strong>追加</strong>到保持空间（加换行符）</td>
+      </tr>
+      <tr>
+          <td><code>g</code></td>
+          <td>把保持空间内容<strong>覆盖</strong>写入模式空间</td>
+      </tr>
+      <tr>
+          <td><code>G</code></td>
+          <td>把保持空间内容<strong>追加</strong>到模式空间（加换行符）</td>
+      </tr>
+      <tr>
+          <td><code>x</code></td>
+          <td>交换模式空间和保持空间的内容</td>
+      </tr>
+      <tr>
+          <td><code>N</code></td>
+          <td>读取下一行，追加到模式空间（用换行符分隔，合并多行）</td>
+      </tr>
+      <tr>
+          <td><code>D</code></td>
+          <td>删除模式空间中第一个换行符之前的内容，剩余内容继续执行命令</td>
+      </tr>
+      <tr>
+          <td><code>P</code></td>
+          <td>打印模式空间中第一个换行符之前的内容</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="经典高级用法示例">经典高级用法示例</h3>
+<ol>
+<li>合并相邻两行（两行合并为一行，空格分隔）</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;N;s/\n/ /&#39;</span> file.txt</span></span></code></pre></div></div>
+<ol>
+<li>文本行反转（等效tac命令）</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;1!G;h;$!d&#39;</span> file.txt
+</span></span><span class="line"><span class="cl"><span class="c1"># 解析：</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 1!G：除了第一行，都把保持空间内容追加到模式空间</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># h：把模式空间内容覆盖到保持空间</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># $!d：除了最后一行，都删除模式空间内容，不输出</span></span></span></code></pre></div></div>
+<ol>
+<li>打印匹配内容的前后行</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sed -n <span class="s1">&#39;/error/{N;p}&#39;</span> file.txt   <span class="c1"># 打印匹配行和下一行</span>
+</span></span><span class="line"><span class="cl">sed -n <span class="s1">&#39;/error/{x;p;x;p}&#39;</span> file.txt  <span class="c1"># 打印匹配行和上一行</span></span></span></code></pre></div></div>
+<ol>
+<li>给所有行加上行号</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">sed</span> <span class="o">=</span> file.txt <span class="p">|</span> sed <span class="s1">&#39;N;s/\n/ /&#39;</span></span></span></code></pre></div></div>
+<h2 id="八生产级实战案例">八、生产级实战案例</h2>
+<ol>
+<li>批量修改配置文件（安全备份+替换）</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 替换配置文件中port=8080为port=9090，先备份为.ini.bak</span>
+</span></span><span class="line"><span class="cl">sed -i.bak <span class="s1">&#39;s/^port=8080$/port=9090/g&#39;</span> app.ini</span></span></code></pre></div></div>
+<ol>
+<li>清理配置文件（删除空行+注释行）</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sed -i.bak -e <span class="s1">&#39;/^#/d&#39;</span> -e <span class="s1">&#39;/^[[:space:]]*$/d&#39;</span> nginx.conf</span></span></code></pre></div></div>
+<ol>
+<li>批量重命名文件（配合xargs）</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 将所有.txt文件改为.md文件</span>
+</span></span><span class="line"><span class="cl">ls *.txt <span class="p">|</span> sed <span class="s1">&#39;s/\(.*\)\.txt/mv &amp; \1.md/&#39;</span> <span class="p">|</span> bash</span></span></code></pre></div></div>
+<ol>
+<li>提取HTML中的链接</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sed -n <span class="s1">&#39;s/.*href=&#34;\([^&#34;]*\)&#34;.*/\1/p&#39;</span> index.html</span></span></code></pre></div></div>
+<ol>
+<li>批量给行首尾加标签包裹</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 给每行内容加上&lt;p&gt;和&lt;/p&gt;包裹</span>
+</span></span><span class="line"><span class="cl">sed <span class="s1">&#39;s/^.*$/&lt;p&gt;&amp;&lt;\/p&gt;/g&#39;</span> index.html</span></span></code></pre></div></div>
+<h2 id="九避坑指南与最佳实践">九、避坑指南与最佳实践</h2>
+<h3 id="91-新手致命坑">9.1 新手致命坑</h3>
+<ol>
+<li>
+<p><code>-i</code>直接修改原文件无撤回：执行前必须先用不带<code>-i</code>的命令测试输出，确认无误再加<code>-i</code>，优先用<code>-i.bak</code>备份</p>
+</li>
+<li>
+<p>替换不加<code>g</code>只改第一个匹配：默认<code>s/old/new/</code>仅替换每行第一个匹配项，全局替换必须加<code>g</code></p>
+</li>
+<li>
+<p>正则元字符未转义：匹配<code>.</code> <code>*</code> <code>?</code> <code>^</code> <code>$</code> <code>/</code>等字面量时，必须加<code>\</code>转义，或换用自定义分隔符</p>
+</li>
+<li>
+<p>二进制文件修改：sed仅适用于纯文本文件，修改压缩包、图片、可执行文件会直接损坏文件</p>
+</li>
+</ol>
+<h3 id="92-跨平台兼容性坑gnu-sed-vs-bsd-sed">9.2 跨平台兼容性坑（GNU sed vs BSD sed）</h3>
+<table>
+  <thead>
+      <tr>
+          <th>特性</th>
+          <th>GNU sed(Linux)</th>
+          <th>BSD sed(macOS/FreeBSD)</th>
+          <th>兼容写法</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>-i</code>无备份</td>
+          <td><code>sed -i 's/old/new/g' file</code></td>
+          <td>必须指定后缀，无备份写<code>sed -i '' 's/old/new/g' file</code></td>
+          <td>用<code>-i.bak</code>生成备份，兼容所有平台</td>
+      </tr>
+      <tr>
+          <td>单词边界</td>
+          <td>支持<code>\b</code></td>
+          <td>不支持<code>\b</code>，需用<code>[[:&lt;:]]</code>和<code>[[:&gt;:]]</code></td>
+          <td>用POSIX标准<code>[[:&lt;:]]word[[:&gt;:]]</code></td>
+      </tr>
+      <tr>
+          <td>扩展正则</td>
+          <td><code>-r</code>/<code>-E</code>等效</td>
+          <td>优先用<code>-E</code></td>
+          <td>统一用<code>-E</code>启用扩展正则</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="93-性能优化最佳实践">9.3 性能优化最佳实践</h3>
+<ol>
+<li>
+<p>避免循环调用sed：批量处理多个文件，直接<code>sed '命令' *.txt</code>，不要在for循环中逐个调用sed</p>
+</li>
+<li>
+<p>合并多个命令：多个操作合并为一个sed命令，用<code>-e</code>或<code>{}</code>组合，避免多次读取文件</p>
+</li>
+<li>
+<p>提前退出：处理到指定行即可退出，比如打印前10行用<code>sed '10q' file</code>，比<code>sed -n '1,10p' file</code>效率更高</p>
+</li>
+<li>
+<p>大文件加速：用<code>LC_ALL=C sed '命令' file</code>关闭本地化校验，大幅提升正则匹配速度</p>
+</li>
+</ol>
+<h2 id="十高频命令速查表">十、高频命令速查表</h2>
+<table>
+  <thead>
+      <tr>
+          <th>场景</th>
+          <th>命令</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>全局文本替换</td>
+          <td><code>sed 's/old/new/g' file</code></td>
+      </tr>
+      <tr>
+          <td>仅打印匹配行</td>
+          <td><code>sed -n '/pattern/p' file</code></td>
+      </tr>
+      <tr>
+          <td>删除纯空行</td>
+          <td><code>sed '/^$/d' file</code></td>
+      </tr>
+      <tr>
+          <td>删除注释行+空行</td>
+          <td><code>sed -e '/^#/d' -e '/^[[:space:]]*$/d' file</code></td>
+      </tr>
+      <tr>
+          <td>打印前N行</td>
+          <td><code>sed 'Nq' file</code></td>
+      </tr>
+      <tr>
+          <td>行尾追加内容</td>
+          <td><code>sed 's/$/追加内容/g' file</code></td>
+      </tr>
+      <tr>
+          <td>行首添加内容</td>
+          <td><code>sed 's/^/添加内容/g' file</code></td>
+      </tr>
+      <tr>
+          <td>反转行顺序</td>
+          <td><code>sed '1!G;h;$!d' file</code></td>
+      </tr>
+      <tr>
+          <td>打印文件最后一行</td>
+          <td><code>sed -n '$p' file</code></td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>（注：文档部分内容可能由 AI 生成）</p>
+</blockquote>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-01-16</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/011_sed%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/dev-tools/">开发工具</a>,&nbsp;<a href="/blog/tags/shell/">Shell</a>,&nbsp;<a href="/blog/tags/sed/">Sed</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/010_awk%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="awk 命令使用详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>awk 命令使用详细总结</a>
+            <a href="/blog/002_java%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="Java 语法详细总结">Java 语法详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

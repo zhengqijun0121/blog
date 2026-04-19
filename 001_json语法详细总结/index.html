@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Json 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_json%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="Json 语法详细总结">
+  <meta property="og:description" content="JSON语法详细总结 JSON（JavaScript Object Notation）是一种轻量级、跨语言、纯文本的数据交换格式，基于ECMAScript的对象字面量语法设计，独立于编程语言，几乎所有主流语言都提供了完善的JSON解析与生成能力，是当前前后端交互、配置文件、数据存储的主流格式。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-02-11T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-02-11T10:00:20+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="JSON">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="Json 语法详细总结">
+  <meta name="twitter:description" content="JSON语法详细总结 JSON（JavaScript Object Notation）是一种轻量级、跨语言、纯文本的数据交换格式，基于ECMAScript的对象字面量语法设计，独立于编程语言，几乎所有主流语言都提供了完善的JSON解析与生成能力，是当前前后端交互、配置文件、数据存储的主流格式。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/001_json%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/001_javascript%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/001_xml%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Json 语法详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/001_json%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, JSON, json","wordcount":  4015 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/001_json%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-02-11T09:00:20+08:00","dateModified": "2026-02-11T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/001_json%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/001_json%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Json 语法详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-02-11">2026-02-11</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 4015 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 9 分钟&nbsp;<span id="/blog/001_json%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="Json 语法详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一json核心基础语法规则">一、JSON核心基础语法规则</a></li>
+    <li><a href="#二json-6种核心数据类型">二、JSON 6种核心数据类型</a>
+      <ul>
+        <li><a href="#一原始值类型简单值">（一）原始值类型（简单值）</a>
+          <ul>
+            <li><a href="#1-字符串string">1. 字符串（String）</a></li>
+            <li><a href="#2-数字number">2. 数字（Number）</a></li>
+            <li><a href="#3-布尔值boolean">3. 布尔值（Boolean）</a></li>
+            <li><a href="#4-空值null">4. 空值（Null）</a></li>
+          </ul>
+        </li>
+        <li><a href="#二复合结构类型">（二）复合结构类型</a>
+          <ul>
+            <li><a href="#5-对象object">5. 对象（Object）</a></li>
+            <li><a href="#6-数组array">6. 数组（Array）</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#三json嵌套结构">三、JSON嵌套结构</a>
+      <ul>
+        <li><a href="#完整合法的嵌套json示例">完整合法的嵌套JSON示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#四json与javascript对象的核心区别">四、JSON与JavaScript对象的核心区别</a></li>
+    <li><a href="#五json序列化与反序列化js环境">五、JSON序列化与反序列化（JS环境）</a>
+      <ul>
+        <li><a href="#1-jsonstringifyjs值--json字符串">1. JSON.stringify()：JS值 → JSON字符串</a></li>
+        <li><a href="#2-jsonparsejson字符串--js值">2. JSON.parse()：JSON字符串 → JS值</a></li>
+      </ul>
+    </li>
+    <li><a href="#六高频语法错误与避坑指南">六、高频语法错误与避坑指南</a></li>
+    <li><a href="#七最佳实践">七、最佳实践</a></li>
+    <li><a href="#补充说明">补充说明</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="json语法详细总结">JSON语法详细总结</h1>
+<p>JSON（JavaScript Object Notation）是一种<strong>轻量级、跨语言、纯文本的数据交换格式</strong>，基于ECMAScript的对象字面量语法设计，独立于编程语言，几乎所有主流语言都提供了完善的JSON解析与生成能力，是当前前后端交互、配置文件、数据存储的主流格式。</p>
+<p>当前JSON的官方标准为 <strong>RFC 8259</strong>（2017年发布，替代旧版RFC 4627），以下所有语法规则均基于该官方标准。</p>
+<hr>
+<h2 id="一json核心基础语法规则">一、JSON核心基础语法规则</h2>
+<p>这是JSON语法的硬性约束，违反则为非法JSON，严格模式下解析器会直接抛出语法错误。</p>
+<ol>
+<li><strong>文件规范</strong>：JSON文件扩展名为<code>.json</code>，标准MIME类型为<code>application/json</code>。</li>
+<li><strong>顶层值规范</strong>：RFC 8259允许顶层为任意合法的JSON值（字符串、数字、布尔、null、对象、数组）；旧标准RFC 4627强制顶层必须为对象/数组，生产环境建议优先使用对象/数组作为顶层，保证兼容性。</li>
+<li><strong>键名强制规范</strong>：对象的键名（key）<strong>必须使用双引号包裹的字符串</strong>，禁止无引号、单引号、反引号。</li>
+<li><strong>字符串规范</strong>：所有字符串值<strong>必须使用双引号包裹</strong>，单引号、反引号均为非法。</li>
+<li><strong>大小写敏感</strong>：仅支持全小写的<code>true</code>、<code>false</code>、<code>null</code>，<code>True</code>、<code>FALSE</code>、<code>NULL</code>、<code>Undefined</code>均为非法值。</li>
+<li><strong>禁止尾随逗号</strong>：对象最后一个键值对、数组最后一个元素末尾，禁止添加多余逗号。</li>
+<li><strong>禁止注释</strong>：官方标准<strong>不支持任何形式的注释</strong>（<code>//</code>单行注释、<code>/* */</code>多行注释），非标准宽松解析器的注释支持不具备跨环境兼容性，生产环境严禁使用。</li>
+<li><strong>禁止未转义控制字符</strong>：字符串中禁止直接包含ASCII 0-31的控制字符（如换行、制表符），必须通过转义符表达。</li>
+</ol>
+<hr>
+<h2 id="二json-6种核心数据类型">二、JSON 6种核心数据类型</h2>
+<p>JSON仅支持6种数据类型，分为<strong>原始值类型</strong>和<strong>复合结构类型</strong>两大类，值可以无限嵌套。</p>
+<h3 id="一原始值类型简单值">（一）原始值类型（简单值）</h3>
+<h4 id="1-字符串string">1. 字符串（String）</h4>
+<p>用于表达文本数据，是JSON中最常用的类型之一。</p>
+<ul>
+<li>核心语法：必须用双引号<code>&quot; &quot;</code>完整包裹</li>
+<li>支持的转义字符（必须转义的特殊字符）：
+<table>
+  <thead>
+      <tr>
+          <th>转义符</th>
+          <th>含义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>\&quot;</code></td>
+          <td>双引号（字符串内的双引号必须转义）</td>
+      </tr>
+      <tr>
+          <td><code>\\</code></td>
+          <td>反斜杠</td>
+      </tr>
+      <tr>
+          <td><code>\/</code></td>
+          <td>正斜杠</td>
+      </tr>
+      <tr>
+          <td><code>\b</code></td>
+          <td>退格符</td>
+      </tr>
+      <tr>
+          <td><code>\f</code></td>
+          <td>换页符</td>
+      </tr>
+      <tr>
+          <td><code>\n</code></td>
+          <td>换行符</td>
+      </tr>
+      <tr>
+          <td><code>\r</code></td>
+          <td>回车符</td>
+      </tr>
+      <tr>
+          <td><code>\t</code></td>
+          <td>水平制表符</td>
+      </tr>
+      <tr>
+          <td><code>\uXXXX</code></td>
+          <td>4位十六进制数表示的Unicode字符（如<code>\u4F60\u597D</code>对应&quot;你好&quot;）</td>
+      </tr>
+  </tbody>
+</table>
+</li>
+<li>合法示例：<code>&quot;Hello World&quot;</code>、<code>&quot;He said \&quot;Hi!\&quot;&quot;</code>、<code>&quot;2026-04-16&quot;</code>、<code>&quot;\u4F60\u597D&quot;</code></li>
+<li>非法示例：<code>'Hello'</code>（单引号）、<code>&quot;He said &quot;Hi!&quot;&quot;</code>（未转义双引号）、<code>&quot;Hello World&quot;</code>（直接换行，未用<code>\n</code>转义）</li>
+</ul>
+<h4 id="2-数字number">2. 数字（Number）</h4>
+<p>用于表达整数、浮点数，JSON不区分整型和浮点型，统一为Number类型。</p>
+<ul>
+<li>核心语法：支持整数、负数、浮点数、科学计数法</li>
+<li>强制约束：
+<ul>
+<li>禁止前导零（如<code>0123</code>非法，<code>0.123</code>合法）</li>
+<li>禁止八进制/十六进制字面量（如<code>0o77</code>、<code>0x1A</code>非法）</li>
+<li>禁止<code>NaN</code>、<code>Infinity</code>、<code>-Infinity</code>（会被转为<code>null</code>或直接报错）</li>
+</ul>
+</li>
+<li>合法示例：<code>123</code>、<code>-456</code>、<code>12.34</code>、<code>-0.56</code>、<code>1e5</code>、<code>-3.2E-4</code></li>
+<li>非法示例：<code>0123</code>、<code>0x12</code>、<code>NaN</code>、<code>Infinity</code></li>
+</ul>
+<blockquote>
+<p>补充坑点：JSON数字基于IEEE 754双精度浮点数实现，超过<code>2^53-1</code>（9007199254740991）的大整数会出现精度丢失，建议超大数字转为字符串存储。</p>
+</blockquote>
+<h4 id="3-布尔值boolean">3. 布尔值（Boolean）</h4>
+<p>用于表达真假逻辑，仅2个合法值：</p>
+<ul>
+<li>合法值：<code>true</code>（真）、<code>false</code>（假），必须全小写</li>
+<li>非法值：<code>TRUE</code>、<code>False</code>、<code>true/false</code>、<code>1/0</code>（1/0仅为数字，非布尔语义）</li>
+</ul>
+<h4 id="4-空值null">4. 空值（Null）</h4>
+<p>用于表达空、不存在的语义，仅1个合法值：</p>
+<ul>
+<li>合法值：<code>null</code>，必须全小写</li>
+<li>非法值：<code>NULL</code>、<code>Null</code>、<code>undefined</code>（JSON不支持undefined类型）</li>
+</ul>
+<h3 id="二复合结构类型">（二）复合结构类型</h3>
+<h4 id="5-对象object">5. 对象（Object）</h4>
+<p>JSON的核心结构，用于表达无序的键值对集合，是结构化数据的核心载体。</p>
+<ul>
+<li>核心语法：用大括号<code>{ }</code>包裹，内部为<code>key: value</code>格式的键值对</li>
+<li>核心规则：
+<ul>
+<li>键（key）必须是<strong>双引号包裹的字符串</strong>，是唯一标识</li>
+<li>值（value）可以是任意合法的JSON类型（6种类型均可）</li>
+<li>键与值之间用冒号<code>:</code>分隔，键值对之间用逗号<code>,</code>分隔</li>
+<li>禁止重复键名（解析器会用后出现的键值覆盖前序，标准不推荐）</li>
+<li>禁止末尾尾随逗号</li>
+</ul>
+</li>
+<li>合法示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-json">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;张三&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;age&#34;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;isStudent&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;address&#34;</span><span class="p">:</span> <span class="kc">null</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<ul>
+<li>非法示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-json">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="err">name:</span> <span class="nt">&#34;张三&#34;</span><span class="p">,</span> <span class="c1">// 键名无引号
+</span></span></span><span class="line"><span class="cl">  <span class="err">&#39;age&#39;:</span> <span class="err">25,</span> <span class="c1">// 键名用单引号
+</span></span></span><span class="line"><span class="cl">  <span class="nt">&#34;isStudent&#34;</span><span class="p">:</span> <span class="err">False</span><span class="p">,</span> <span class="c1">// 布尔值大小写错误
+</span></span></span><span class="line"><span class="cl">  <span class="nt">&#34;address&#34;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span> <span class="c1">// 尾随逗号
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h4 id="6-数组array">6. 数组（Array）</h4>
+<p>用于表达有序的值集合，支持异构元素（不同类型的元素可共存）。</p>
+<ul>
+<li>核心语法：用中括号<code>[ ]</code>包裹，内部为有序的元素列表</li>
+<li>核心规则：
+<ul>
+<li>元素可以是任意合法的JSON类型（6种类型均可）</li>
+<li>元素之间用逗号<code>,</code>分隔</li>
+<li>禁止末尾尾随逗号</li>
+<li>支持无限嵌套，可嵌套对象、数组</li>
+</ul>
+</li>
+<li>合法示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-json">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">[</span><span class="s2">&#34;苹果&#34;</span><span class="p">,</span> <span class="s2">&#34;香蕉&#34;</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="p">{</span><span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;商品&#34;</span><span class="p">}]</span></span></span></code></pre></div></div>
+<ul>
+<li>非法示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-json">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">[</span><span class="s2">&#34;苹果&#34;</span><span class="p">,</span> <span class="s2">&#34;香蕉&#34;</span><span class="p">,</span> <span class="p">]</span> <span class="err">//</span> <span class="err">尾随逗号</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="三json嵌套结构">三、JSON嵌套结构</h2>
+<p>JSON支持无限层级的嵌套，最常用的嵌套模式为：对象嵌套对象、对象嵌套数组、数组嵌套对象，是复杂结构化数据的标准写法。</p>
+<h3 id="完整合法的嵌套json示例">完整合法的嵌套JSON示例</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-json">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;userInfo&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;userId&#34;</span><span class="p">:</span> <span class="mi">1001</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;userName&#34;</span><span class="p">:</span> <span class="s2">&#34;LiMing&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;isVip&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;registerTime&#34;</span><span class="p">:</span> <span class="s2">&#34;2026-01-01T08:00:00Z&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;tags&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;student&#34;</span><span class="p">,</span> <span class="s2">&#34;developer&#34;</span><span class="p">,</span> <span class="s2">&#34;traveler&#34;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;address&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;province&#34;</span><span class="p">:</span> <span class="s2">&#34;Shanghai&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;city&#34;</span><span class="p">:</span> <span class="s2">&#34;Shanghai&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;district&#34;</span><span class="p">:</span> <span class="s2">&#34;Baoshan&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;detail&#34;</span><span class="p">:</span> <span class="kc">null</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;orderList&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;orderId&#34;</span><span class="p">:</span> <span class="s2">&#34;ORD20260401001&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;amount&#34;</span><span class="p">:</span> <span class="mf">299.99</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;payStatus&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;goodsCount&#34;</span><span class="p">:</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;orderId&#34;</span><span class="p">:</span> <span class="s2">&#34;ORD20260410002&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;amount&#34;</span><span class="p">:</span> <span class="mf">129.5</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;payStatus&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;goodsCount&#34;</span><span class="p">:</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;code&#34;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;message&#34;</span><span class="p">:</span> <span class="s2">&#34;success&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="四json与javascript对象的核心区别">四、JSON与JavaScript对象的核心区别</h2>
+<p>很多人会混淆JSON和JS对象，二者语法相似，但本质完全不同，核心区别如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">特性</th>
+          <th style="text-align: left">标准JSON</th>
+          <th style="text-align: left">JavaScript对象</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">键名规则</td>
+          <td style="text-align: left">必须双引号包裹</td>
+          <td style="text-align: left">支持无引号、单引号、双引号，支持标识符命名</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">字符串规则</td>
+          <td style="text-align: left">仅支持双引号</td>
+          <td style="text-align: left">支持单引号、双引号、反引号模板字符串</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">注释</td>
+          <td style="text-align: left">官方标准不支持</td>
+          <td style="text-align: left">支持<code>//</code>单行注释、<code>/* */</code>多行注释</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">尾随逗号</td>
+          <td style="text-align: left">严格禁止</td>
+          <td style="text-align: left">ES5+支持对象/数组的尾随逗号</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">支持的数据类型</td>
+          <td style="text-align: left">仅6种核心类型，不支持函数、undefined、Symbol、正则</td>
+          <td style="text-align: left">支持所有JS原生类型，包括函数、正则、Date、Symbol等</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">关键字规范</td>
+          <td style="text-align: left"><code>true</code>/<code>false</code>/<code>null</code>必须全小写，不支持undefined</td>
+          <td style="text-align: left">关键字大小写宽松，原生支持undefined</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">数字规范</td>
+          <td style="text-align: left">禁止前导零、十六进制、NaN、Infinity</td>
+          <td style="text-align: left">全部支持，无强制约束</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="五json序列化与反序列化js环境">五、JSON序列化与反序列化（JS环境）</h2>
+<p>JavaScript提供了原生<code>JSON</code>全局对象，用于实现JS值与JSON字符串的互转，是前端最常用的JSON操作API，严格遵循JSON语法规范。</p>
+<h3 id="1-jsonstringifyjs值--json字符串">1. JSON.stringify()：JS值 → JSON字符串</h3>
+<p>将符合规范的JS值转为标准JSON字符串，用于数据传输、存储。</p>
+<ul>
+<li>语法：<code>JSON.stringify(value, replacer, space)</code>
+<ul>
+<li><code>value</code>：必填，要转换的JS值</li>
+<li><code>replacer</code>：可选，替换函数/数组，用于过滤/转换键值对</li>
+<li><code>space</code>：可选，缩进空格数/字符串，用于格式化JSON，提升可读性</li>
+</ul>
+</li>
+<li>核心特性与坑点：
+<ul>
+<li>自动忽略值为<code>undefined</code>、函数、Symbol的属性</li>
+<li><code>Date</code>对象会自动转为ISO 8601格式字符串</li>
+<li><code>NaN</code>、<code>Infinity</code>会被转为<code>null</code></li>
+<li>循环引用的对象会直接抛出错误</li>
+</ul>
+</li>
+<li>示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-javascript">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">user</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;张三&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">age</span><span class="o">:</span> <span class="mi">25</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">isStudent</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">address</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">sayHi</span><span class="o">:</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;hi&#34;</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">registerTime</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="s2">&#34;2026-01-01&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 格式化输出，缩进2个空格
+</span></span></span><span class="line"><span class="cl"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">2</span><span class="p">));</span></span></span></code></pre></div></div>
+<p>输出结果（自动忽略undefined、函数）：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-json">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;张三&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;age&#34;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;isStudent&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;registerTime&#34;</span><span class="p">:</span> <span class="s2">&#34;2025-12-31T16:00:00.000Z&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="2-jsonparsejson字符串--js值">2. JSON.parse()：JSON字符串 → JS值</h3>
+<p>将标准JSON字符串解析为JS值，若字符串不符合JSON语法规范，会直接抛出<code>SyntaxError</code>。</p>
+<ul>
+<li>语法：<code>JSON.parse(text, reviver)</code>
+<ul>
+<li><code>text</code>：必填，标准JSON字符串</li>
+<li><code>reviver</code>：可选，还原函数，用于对解析后的键值对做二次处理</li>
+</ul>
+</li>
+<li>示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-javascript">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">jsonStr</span> <span class="o">=</span> <span class="s1">&#39;{&#34;name&#34;:&#34;张三&#34;,&#34;age&#34;:25,&#34;isStudent&#34;:false}&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">jsonStr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span> <span class="c1">// 输出：张三
+</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="六高频语法错误与避坑指南">六、高频语法错误与避坑指南</h2>
+<ol>
+<li><strong>使用单引号</strong>：键名、字符串用单引号，是新手最高频错误，必须用双引号</li>
+<li><strong>添加注释</strong>：在JSON中加<code>//</code>或<code>/* */</code>注释，标准不支持，若需备注可新增<code>&quot;_comment&quot;</code>字段</li>
+<li><strong>尾随逗号</strong>：对象/数组最后一个元素末尾加逗号，绝大多数严格解析器会直接报错</li>
+<li><strong>关键字大小写错误</strong>：<code>True</code>/<code>False</code>/<code>NULL</code>/<code>undefined</code>，均为非法值</li>
+<li><strong>数字格式错误</strong>：前导零、十六进制、<code>NaN</code>、<code>Infinity</code>，不符合数字规范</li>
+<li><strong>未转义特殊字符</strong>：字符串内的双引号、反斜杠未转义，直接换行写多行字符串</li>
+<li><strong>大整数精度丢失</strong>：超过安全整数范围的数字未转字符串，导致解析后数值错误</li>
+<li><strong>循环引用</strong>：序列化带循环引用的JS对象，直接抛出异常</li>
+</ol>
+<hr>
+<h2 id="七最佳实践">七、最佳实践</h2>
+<ol>
+<li>严格遵循RFC 8259标准，不依赖非标准的宽松解析特性，保证跨语言、跨环境兼容性</li>
+<li>键名使用有语义的英文命名，避免中文、特殊字符，提升可读性和兼容性</li>
+<li>日期统一使用ISO 8601格式（如<code>&quot;2026-04-16T00:00:00Z&quot;</code>），不使用时间戳或自定义格式</li>
+<li>超大整数、唯一ID（如雪花ID）统一转为字符串存储，避免精度丢失</li>
+<li>嵌套层级控制在3-4层以内，避免过深嵌套导致的可读性和解析性能问题</li>
+<li>布尔值使用<code>true</code>/<code>false</code>表达语义，不使用<code>1</code>/<code>0</code>替代</li>
+<li>生产环境传输时压缩JSON，调试/配置场景使用格式化缩进，提升可读性</li>
+</ol>
+<hr>
+<h2 id="补充说明">补充说明</h2>
+<p>JSON5、JSONC等是JSON的非官方扩展规范，支持注释、单引号、尾随逗号、多行字符串等特性，仅适用于特定场景（如配置文件），<strong>不具备通用兼容性</strong>，API接口、跨语言数据交互场景必须使用标准JSON。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-02-11</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/001_json%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/json/">JSON</a>,&nbsp;<a href="/blog/tags/json/">JSON</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/001_javascript%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="JavaScript 语法详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>JavaScript 语法详细总结</a>
+            <a href="/blog/001_xml%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="XML 语法详细总结">XML 语法详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

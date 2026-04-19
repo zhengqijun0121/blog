@@ -7,13 +7,11 @@
 
 如果链表中有某个节点，可以通过连续跟踪 `next` 指针再次到达，则链表中存在环。为了表示给定链表中的环，评测系统内部使用整数 `pos` 来表示链表尾连接到链表中的位置（`索引从 0 开始`）。如果 `pos` 是 `-1`，则在该链表中没有环。
 
-{{< admonition >}}
 注意：`pos` 不作为参数进行传递，仅仅是为了标识链表的实际情况。不允许修改链表。
-{{< /admonition >}}
 
 示例 1：
 
-{{< image src="../posts/01_学习/88_LeetCode/0142_环形链表/img/142-1-circularlinkedlist.png" width="531" height="171" >}}
+![](../posts/01_学习/88_LeetCode/0142_环形链表/img/142-1-circularlinkedlist.png)
 
 ```
 输入：head = [3, 2, 0, -4], pos = 1
@@ -23,7 +21,7 @@
 
 示例 2：
 
-{{< image src="../posts/01_学习/88_LeetCode/0142_环形链表/img/142-2-circularlinkedlist_test2.png" width="201" height="105" >}}
+![](../posts/01_学习/88_LeetCode/0142_环形链表/img/142-2-circularlinkedlist_test2.png)
 
 ```
 输入：head = [1, 2], pos = 0
@@ -33,7 +31,7 @@
 
 示例 3：
 
-{{< image src="../posts/01_学习/88_LeetCode/0142_环形链表/img/142-3-circularlinkedlist_test3.png" width="65" height="65" >}}
+![](../posts/01_学习/88_LeetCode/0142_环形链表/img/142-3-circularlinkedlist_test3.png)
 
 ```
 输入：head = [1], pos = -1
@@ -41,22 +39,19 @@
 解释：链表中没有环。
 ```
 
-{{< admonition >}}
 提示：
 - 链表中节点的数目范围在范围 [0, 104] 内
 - -105 <= Node.val <= 105
 - pos 的值为 -1 或者链表中的一个有效索引
-{{< /admonition >}}
+
 
 进阶：你是否可以使用 O(1) 空间解决此题？
 
-{{< admonition quote >}}
 来源：力扣（LeetCode）
 
 链接：[https://leetcode-cn.com/problems/linked-list-cycle-ii](https://leetcode-cn.com/problems/linked-list-cycle-ii)
 
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
-{{< /admonition >}}
 
 ----
 
@@ -194,7 +189,7 @@ public class Solution {
 
 如下图所示，设链表中环外部分的长度为 `a`。`slow` 指针进入环后，又走了 `b` 的距离与 `fast` 相遇。此时，`fast` 指针已经走完了环的 `n` 圈，因此它走过的总距离为 `a + n(b + c) + b = a + (n + 1)b + nc`。
 
-{{< image src="../posts/01_学习/88_LeetCode/0142_环形链表/img/142-4-fig1.png" width="608" height="342" >}}
+![](../posts/01_学习/88_LeetCode/0142_环形链表/img/142-4-fig1.png)
 
 设 `fast` 指针走过的距离都为 `slow` 指针的 `x` 倍，因此有 `a + (n + 1)b + nc = x(a + b)` ⟹  `(b + c)n = (x − 1)(a + b)`。即从相遇点到入环点的距离加上 `n` 圈的环长，恰好等于从链表头部到入环点的距离的 `x - 1` 倍。
 

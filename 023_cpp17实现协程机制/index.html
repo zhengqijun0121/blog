@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>C&#43;&#43;17 实现协程机制 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/023_cpp17%E5%AE%9E%E7%8E%B0%E5%8D%8F%E7%A8%8B%E6%9C%BA%E5%88%B6/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="C&#43;&#43;17 实现协程机制">
+  <meta property="og:description" content="前提说明 C&#43;&#43;17 标准没有内置协程语法与标准库，协程是 C&#43;&#43;20 才正式标准化的特性。C&#43;&#43;17 实现协程，主流方案是用户态有栈协程（Stackful Coroutine），基于平台上下文切换 API 实现执行流的用户态切换，完全避开内核态调度，切换开销远小于线程。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-01-09T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-01-09T09:30:00+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="Cpp17">
+    <meta property="article:tag" content="Coroutine">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="C&#43;&#43;17 实现协程机制">
+  <meta name="twitter:description" content="前提说明 C&#43;&#43;17 标准没有内置协程语法与标准库，协程是 C&#43;&#43;20 才正式标准化的特性。C&#43;&#43;17 实现协程，主流方案是用户态有栈协程（Stackful Coroutine），基于平台上下文切换 API 实现执行流的用户态切换，完全避开内核态调度，切换开销远小于线程。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/023_cpp17%E5%AE%9E%E7%8E%B0%E5%8D%8F%E7%A8%8B%E6%9C%BA%E5%88%B6/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/022_cpp17%E5%AE%9E%E7%8E%B0%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/024_cpp17%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A7%A6%E5%8F%91%E4%BB%BB%E5%8A%A1/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "C++17 实现协程机制",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/023_cpp17%E5%AE%9E%E7%8E%B0%E5%8D%8F%E7%A8%8B%E6%9C%BA%E5%88%B6\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, Cpp17, Coroutine","wordcount":  2484 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/023_cpp17%E5%AE%9E%E7%8E%B0%E5%8D%8F%E7%A8%8B%E6%9C%BA%E5%88%B6\/","datePublished": "2026-01-09T09:00:00+08:00","dateModified": "2026-01-09T09:30:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/023_cpp17%E5%AE%9E%E7%8E%B0%E5%8D%8F%E7%A8%8B%E6%9C%BA%E5%88%B6/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/023_cpp17%E5%AE%9E%E7%8E%B0%E5%8D%8F%E7%A8%8B%E6%9C%BA%E5%88%B6/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">C++17 实现协程机制</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-09">2026-01-09</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 2484 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 5 分钟&nbsp;<span id="/blog/023_cpp17%E5%AE%9E%E7%8E%B0%E5%8D%8F%E7%A8%8B%E6%9C%BA%E5%88%B6/" class="leancloud_visitors" data-flag-title="C&#43;&#43;17 实现协程机制">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#前提说明">前提说明</a></li>
+    <li><a href="#一有栈协程核心原理">一、有栈协程核心原理</a></li>
+    <li><a href="#二c17-完整实现代码">二、C++17 完整实现代码</a>
+      <ul>
+        <li><a href="#1-头文件与前置定义">1. 头文件与前置定义</a></li>
+        <li><a href="#2-协程核心类">2. 协程核心类</a></li>
+        <li><a href="#3-协程调度器类">3. 协程调度器类</a></li>
+        <li><a href="#4-核心实现逻辑">4. 核心实现逻辑</a></li>
+        <li><a href="#5-测试用例">5. 测试用例</a></li>
+        <li><a href="#6-编译与运行">6. 编译与运行</a>
+          <ul>
+            <li><a href="#运行结果">运行结果</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#三关键注意事项">三、关键注意事项</a></li>
+    <li><a href="#四c17-有栈协程-vs-c20-标准无栈协程">四、C++17 有栈协程 vs C++20 标准无栈协程</a></li>
+    <li><a href="#五进阶优化方向">五、进阶优化方向</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="前提说明">前提说明</h2>
+<p>C++17 标准<strong>没有内置协程语法与标准库</strong>，协程是 C++20 才正式标准化的特性。C++17 实现协程，主流方案是<strong>用户态有栈协程（Stackful Coroutine）</strong>，基于平台上下文切换 API 实现执行流的用户态切换，完全避开内核态调度，切换开销远小于线程。</p>
+<p>本文基于 POSIX 标准的 <code>ucontext</code> 系列 API（Linux/macOS/BSD 通用），实现一套 C++17 语法的最小可用协程库，同时补充 Windows 兼容方案、核心原理与进阶优化方向。</p>
+<hr>
+<h2 id="一有栈协程核心原理">一、有栈协程核心原理</h2>
+<ol>
+<li><strong>独立栈空间</strong>：每个协程拥有独立的固定大小栈，用于保存函数调用栈、局部变量，切换时栈数据不会被破坏。</li>
+<li><strong>上下文切换</strong>：通过 <code>ucontext</code> 系列函数，在用户态完成 CPU 寄存器上下文的保存与恢复，实现执行流的主动切换，无内核态开销。</li>
+<li><strong>协作式调度</strong>：调度器管理协程生命周期与执行队列，协程通过 <code>yield</code> 主动让出 CPU，调度器按策略恢复待执行协程。</li>
+<li><strong>线程局部存储</strong>：用 TLS 保存当前线程的调度器与运行中协程，保证单线程内协程的正确寻址，天然规避多线程竞争。</li>
+</ol>
+<hr>
+<h2 id="二c17-完整实现代码">二、C++17 完整实现代码</h2>
+<h3 id="1-头文件与前置定义">1. 头文件与前置定义</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;ucontext.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;functional&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 协程状态枚举
+</span></span></span><span class="line"><span class="cl"><span class="k">enum</span> <span class="k">class</span> <span class="nc">CoroutineState</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Ready</span><span class="p">,</span>      <span class="c1">// 就绪，可执行
+</span></span></span><span class="line"><span class="cl">    <span class="n">Running</span><span class="p">,</span>    <span class="c1">// 正在运行
+</span></span></span><span class="line"><span class="cl">    <span class="n">Suspended</span><span class="p">,</span>  <span class="c1">// 已挂起
+</span></span></span><span class="line"><span class="cl">    <span class="n">Terminated</span>  <span class="c1">// 已结束
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Scheduler</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Coroutine</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 线程局部变量（TLS）：保存当前线程的调度器与运行中协程
+</span></span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="k">thread_local</span> <span class="n">Scheduler</span><span class="o">*</span> <span class="n">t_scheduler</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="k">thread_local</span> <span class="n">Coroutine</span><span class="o">*</span> <span class="n">t_current_coro</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span></span></span></code></pre></div></div>
+<h3 id="2-协程核心类">2. 协程核心类</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 协程类，继承 enable_shared_from_this 实现安全的生命周期管理
+</span></span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Coroutine</span> <span class="o">:</span> <span class="k">public</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_shared_from_this</span><span class="o">&lt;</span><span class="n">Coroutine</span><span class="o">&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">using</span> <span class="n">CoroutineFunc</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">friend</span> <span class="k">class</span> <span class="nc">Scheduler</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Coroutine</span><span class="p">(</span><span class="n">Scheduler</span><span class="o">*</span> <span class="n">scheduler</span><span class="p">,</span> <span class="n">CoroutineFunc</span> <span class="n">func</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">Coroutine</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 禁止拷贝，允许移动
+</span></span></span><span class="line"><span class="cl">    <span class="n">Coroutine</span><span class="p">(</span><span class="k">const</span> <span class="n">Coroutine</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Coroutine</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Coroutine</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Coroutine</span><span class="p">(</span><span class="n">Coroutine</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Coroutine</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Coroutine</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 恢复协程执行
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">resume</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 挂起当前协程（静态方法，可在协程函数内直接调用）
+</span></span></span><span class="line"><span class="cl">    <span class="k">static</span> <span class="kt">void</span> <span class="nf">yield</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 获取协程状态
+</span></span></span><span class="line"><span class="cl">    <span class="n">CoroutineState</span> <span class="nf">getState</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_state</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 协程入口函数，适配 ucontext 的函数签名要求
+</span></span></span><span class="line"><span class="cl">    <span class="k">static</span> <span class="kt">void</span> <span class="n">entryPoint</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 设置协程状态
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">setState</span><span class="p">(</span><span class="n">CoroutineState</span> <span class="n">state</span><span class="p">)</span> <span class="p">{</span> <span class="n">m_state</span> <span class="o">=</span> <span class="n">state</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 获取上下文指针
+</span></span></span><span class="line"><span class="cl">    <span class="n">ucontext_t</span><span class="o">*</span> <span class="nf">getContext</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="o">&amp;</span><span class="n">m_ctx</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Scheduler</span><span class="o">*</span> <span class="n">m_scheduler</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>  <span class="c1">// 所属调度器
+</span></span></span><span class="line"><span class="cl">    <span class="n">CoroutineFunc</span> <span class="n">m_func</span><span class="p">;</span>               <span class="c1">// 协程执行函数
+</span></span></span><span class="line"><span class="cl">    <span class="n">CoroutineState</span> <span class="n">m_state</span> <span class="o">=</span> <span class="n">CoroutineState</span><span class="o">::</span><span class="n">Ready</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ucontext_t</span> <span class="n">m_ctx</span><span class="p">{};</span>                  <span class="c1">// 协程CPU上下文
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">[]</span><span class="o">&gt;</span> <span class="n">m_stack</span><span class="p">;</span>     <span class="c1">// 协程栈空间
+</span></span></span><span class="line"><span class="cl">    <span class="n">size_t</span> <span class="n">m_stackSize</span> <span class="o">=</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">;</span>   <span class="c1">// 栈大小：默认1MB
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></div></div>
+<h3 id="3-协程调度器类">3. 协程调度器类</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// 调度器类：单线程内协程的管理与调度核心
+</span></span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Scheduler</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Scheduler</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">Scheduler</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 禁止拷贝与移动
+</span></span></span><span class="line"><span class="cl">    <span class="n">Scheduler</span><span class="p">(</span><span class="k">const</span> <span class="n">Scheduler</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Scheduler</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Scheduler</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Scheduler</span><span class="p">(</span><span class="n">Scheduler</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Scheduler</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Scheduler</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 创建协程并加入调度队列
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Coroutine</span><span class="o">&gt;</span> <span class="n">createCoroutine</span><span class="p">(</span><span class="n">Coroutine</span><span class="o">::</span><span class="n">CoroutineFunc</span> <span class="n">func</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 启动调度器，执行所有协程
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">run</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 切换回主协程（挂起当前子协程）
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">switchToMain</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 切换到目标协程
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">switchToCoroutine</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Coroutine</span><span class="o">&gt;</span> <span class="n">coro</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 获取主协程指针
+</span></span></span><span class="line"><span class="cl">    <span class="n">Coroutine</span><span class="o">*</span> <span class="nf">getMainCoroutine</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="o">&amp;</span><span class="n">m_mainCoroutine</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Coroutine</span> <span class="n">m_mainCoroutine</span><span class="p">;</span>                   <span class="c1">// 主协程（调度协程）
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Coroutine</span><span class="o">&gt;</span> <span class="n">m_currentCoroutine</span><span class="p">;</span>  <span class="c1">// 当前运行的子协程
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Coroutine</span><span class="o">&gt;&gt;</span> <span class="n">m_coroutines</span><span class="p">;</span> <span class="c1">// 协程就绪队列
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></div></div>
+<h3 id="4-核心实现逻辑">4. 核心实现逻辑</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="c1">// ---------------------- 调度器实现 ----------------------
+</span></span></span><span class="line"><span class="cl"><span class="n">Scheduler</span><span class="o">::</span><span class="n">Scheduler</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m_mainCoroutine</span><span class="p">.</span><span class="n">setState</span><span class="p">(</span><span class="n">CoroutineState</span><span class="o">::</span><span class="n">Running</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m_currentCoroutine</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 初始化TLS，绑定当前线程的调度器
+</span></span></span><span class="line"><span class="cl">    <span class="n">t_scheduler</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">t_current_coro</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">m_mainCoroutine</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Coroutine</span><span class="o">&gt;</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">createCoroutine</span><span class="p">(</span><span class="n">Coroutine</span><span class="o">::</span><span class="n">CoroutineFunc</span> <span class="n">func</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">coro</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Coroutine</span><span class="o">&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">func</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m_coroutines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">coro</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">coro</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">switchToMain</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">m_currentCoroutine</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">t_current_coro</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">m_mainCoroutine</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 保存子协程上下文，切换到主协程
+</span></span></span><span class="line"><span class="cl">        <span class="n">swapcontext</span><span class="p">(</span><span class="n">m_currentCoroutine</span><span class="o">-&gt;</span><span class="n">getContext</span><span class="p">(),</span> <span class="n">m_mainCoroutine</span><span class="p">.</span><span class="n">getContext</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">switchToCoroutine</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Coroutine</span><span class="o">&gt;</span> <span class="n">coro</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">coro</span> <span class="o">||</span> <span class="n">coro</span><span class="o">-&gt;</span><span class="n">getState</span><span class="p">()</span> <span class="o">==</span> <span class="n">CoroutineState</span><span class="o">::</span><span class="n">Terminated</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m_currentCoroutine</span> <span class="o">=</span> <span class="n">coro</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">t_current_coro</span> <span class="o">=</span> <span class="n">coro</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">coro</span><span class="o">-&gt;</span><span class="n">setState</span><span class="p">(</span><span class="n">CoroutineState</span><span class="o">::</span><span class="n">Running</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 保存主协程上下文，切换到子协程
+</span></span></span><span class="line"><span class="cl">    <span class="n">swapcontext</span><span class="p">(</span><span class="n">m_mainCoroutine</span><span class="p">.</span><span class="n">getContext</span><span class="p">(),</span> <span class="n">coro</span><span class="o">-&gt;</span><span class="n">getContext</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 协程挂起/结束后切回，恢复主协程状态
+</span></span></span><span class="line"><span class="cl">    <span class="n">m_currentCoroutine</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">t_current_coro</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">m_mainCoroutine</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Scheduler</span><span class="o">::</span><span class="n">run</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 简单轮转调度：循环执行就绪队列中的协程
+</span></span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">m_coroutines</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">auto</span> <span class="n">coro</span> <span class="o">=</span> <span class="n">m_coroutines</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">m_coroutines</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">m_coroutines</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">coro</span><span class="o">-&gt;</span><span class="n">getState</span><span class="p">()</span> <span class="o">==</span> <span class="n">CoroutineState</span><span class="o">::</span><span class="n">Terminated</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 恢复协程执行
+</span></span></span><span class="line"><span class="cl">        <span class="n">coro</span><span class="o">-&gt;</span><span class="n">resume</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1">// 未结束的协程重新加入队列尾部
+</span></span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">coro</span><span class="o">-&gt;</span><span class="n">getState</span><span class="p">()</span> <span class="o">!=</span> <span class="n">CoroutineState</span><span class="o">::</span><span class="n">Terminated</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">m_coroutines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">coro</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// ---------------------- 协程类实现 ----------------------
+</span></span></span><span class="line"><span class="cl"><span class="n">Coroutine</span><span class="o">::</span><span class="n">Coroutine</span><span class="p">(</span><span class="n">Scheduler</span><span class="o">*</span> <span class="n">scheduler</span><span class="p">,</span> <span class="n">CoroutineFunc</span> <span class="n">func</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">:</span> <span class="n">m_scheduler</span><span class="p">(</span><span class="n">scheduler</span><span class="p">),</span> <span class="n">m_func</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">func</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 初始化上下文
+</span></span></span><span class="line"><span class="cl">    <span class="n">getcontext</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_ctx</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 分配独立栈空间
+</span></span></span><span class="line"><span class="cl">    <span class="n">m_stack</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">[]</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_stackSize</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 配置上下文栈信息
+</span></span></span><span class="line"><span class="cl">    <span class="n">m_ctx</span><span class="p">.</span><span class="n">uc_stack</span><span class="p">.</span><span class="n">ss_sp</span> <span class="o">=</span> <span class="n">m_stack</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m_ctx</span><span class="p">.</span><span class="n">uc_stack</span><span class="p">.</span><span class="n">ss_size</span> <span class="o">=</span> <span class="n">m_stackSize</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 协程结束后自动切回主协程
+</span></span></span><span class="line"><span class="cl">    <span class="n">m_ctx</span><span class="p">.</span><span class="n">uc_link</span> <span class="o">=</span> <span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">getMainCoroutine</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getContext</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 绑定协程入口函数
+</span></span></span><span class="line"><span class="cl">    <span class="n">makecontext</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_ctx</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Coroutine</span><span class="o">::</span><span class="n">entryPoint</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Coroutine</span><span class="o">::~</span><span class="n">Coroutine</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Coroutine</span><span class="o">::</span><span class="n">entryPoint</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Coroutine</span><span class="o">*</span> <span class="n">coro</span> <span class="o">=</span> <span class="n">t_current_coro</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">coro</span> <span class="o">&amp;&amp;</span> <span class="n">coro</span><span class="o">-&gt;</span><span class="n">m_func</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 执行协程业务函数
+</span></span></span><span class="line"><span class="cl">        <span class="n">coro</span><span class="o">-&gt;</span><span class="n">m_func</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 执行完毕，标记为终止状态
+</span></span></span><span class="line"><span class="cl">        <span class="n">coro</span><span class="o">-&gt;</span><span class="n">setState</span><span class="p">(</span><span class="n">CoroutineState</span><span class="o">::</span><span class="n">Terminated</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Coroutine</span><span class="o">::</span><span class="n">resume</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">m_state</span> <span class="o">==</span> <span class="n">CoroutineState</span><span class="o">::</span><span class="n">Terminated</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">switchToCoroutine</span><span class="p">(</span><span class="n">shared_from_this</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Coroutine</span><span class="o">::</span><span class="n">yield</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Coroutine</span><span class="o">*</span> <span class="n">coro</span> <span class="o">=</span> <span class="n">t_current_coro</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 禁止在主协程中调用yield
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">coro</span> <span class="o">==</span> <span class="n">t_scheduler</span><span class="o">-&gt;</span><span class="n">getMainCoroutine</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">coro</span> <span class="o">&amp;&amp;</span> <span class="n">coro</span><span class="o">-&gt;</span><span class="n">m_state</span> <span class="o">==</span> <span class="n">CoroutineState</span><span class="o">::</span><span class="n">Running</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">coro</span><span class="o">-&gt;</span><span class="n">setState</span><span class="p">(</span><span class="n">CoroutineState</span><span class="o">::</span><span class="n">Suspended</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">t_scheduler</span><span class="o">-&gt;</span><span class="n">switchToMain</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="5-测试用例">5. 测试用例</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Scheduler</span> <span class="n">scheduler</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 创建协程1
+</span></span></span><span class="line"><span class="cl">    <span class="n">scheduler</span><span class="p">.</span><span class="n">createCoroutine</span><span class="p">([]()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Coroutine 1: 启动&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Coroutine 1: 执行第&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;轮&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Coroutine</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span> <span class="c1">// 主动让出CPU
+</span></span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Coroutine 1: 结束&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 创建协程2
+</span></span></span><span class="line"><span class="cl">    <span class="n">scheduler</span><span class="p">.</span><span class="n">createCoroutine</span><span class="p">([]()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Coroutine 2: 启动&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Coroutine 2: 执行第&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;轮&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Coroutine</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span> <span class="c1">// 主动让出CPU
+</span></span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Coroutine 2: 结束&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 启动调度器
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;调度器启动&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">scheduler</span><span class="p">.</span><span class="n">run</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;调度器结束&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="6-编译与运行">6. 编译与运行</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Linux/macOS 下编译，指定C++17标准</span>
+</span></span><span class="line"><span class="cl">g++ -std<span class="o">=</span>c++17 coroutine.cpp -o coroutine
+</span></span><span class="line"><span class="cl"><span class="c1"># 运行</span>
+</span></span><span class="line"><span class="cl">./coroutine</span></span></code></pre></div></div>
+<h4 id="运行结果">运行结果</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>调度器启动
+Coroutine 1: 启动
+Coroutine 1: 执行第0轮
+Coroutine 2: 启动
+Coroutine 2: 执行第0轮
+Coroutine 1: 执行第1轮
+Coroutine 2: 执行第1轮
+Coroutine 1: 执行第2轮
+Coroutine 2: 结束
+Coroutine 1: 结束
+调度器结束</code></pre></div>
+<hr>
+<h2 id="三关键注意事项">三、关键注意事项</h2>
+<ol>
+<li>
+<p><strong>平台兼容性</strong></p>
+<ul>
+<li>上述代码基于 POSIX <code>ucontext</code> API，仅适用于 Linux/macOS/BSD 系统。</li>
+<li>Windows 平台需使用<strong>纤程（Fiber）API</strong> 替代：<code>ConvertThreadToFiber</code>、<code>CreateFiber</code>、<code>SwitchToFiber</code>、<code>DeleteFiber</code>，核心调度逻辑完全一致。</li>
+<li>跨平台高性能方案：基于汇编实现不同架构（x86/x64/ARM/ARM64）的寄存器上下文切换，参考 <code>boost.context</code> 实现。</li>
+</ul>
+</li>
+<li>
+<p><strong>核心风险点</strong></p>
+<ul>
+<li><strong>栈溢出</strong>：协程栈大小固定，若协程内使用大局部变量、深递归，会导致栈溢出，需根据场景调整栈大小。</li>
+<li><strong>阻塞调用</strong>：当前实现为协作式调度，协程内调用阻塞系统调用（如 <code>sleep</code>、阻塞 <code>read</code>）会阻塞整个线程，需搭配非阻塞 IO + IO 多路复用（epoll/io_uring/kqueue），或 hook 系统调用实现自动挂起。</li>
+<li><strong>线程安全</strong>：调度器与协程绑定单线程，禁止跨线程切换协程；多线程场景需为每个线程创建独立调度器，或加锁保护协程队列。</li>
+</ul>
+</li>
+<li>
+<p><strong>生命周期管理</strong></p>
+<ul>
+<li>基于 <code>std::shared_ptr</code> 管理协程对象，避免协程执行中被析构；</li>
+<li>协程内的局部变量遵循 RAII 规则，协程正常结束时会自动析构，强制终止会导致资源泄漏。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="四c17-有栈协程-vs-c20-标准无栈协程">四、C++17 有栈协程 vs C++20 标准无栈协程</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">特性</th>
+          <th style="text-align: left">C++17 有栈协程（用户实现）</th>
+          <th style="text-align: left">C++20 标准无栈协程</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">栈空间</td>
+          <td style="text-align: left">每个协程独立固定栈，内存开销大</td>
+          <td style="text-align: left">无独立栈，编译器生成状态机保存上下文，内存开销极小</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">切换开销</td>
+          <td style="text-align: left">保存/恢复全量寄存器，开销中等</td>
+          <td style="text-align: left">仅保存必要状态，切换开销极低</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">挂起能力</td>
+          <td style="text-align: left">可在任意嵌套函数内挂起</td>
+          <td style="text-align: left">仅能在协程函数内直接挂起，嵌套函数需配合 <code>co_await</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">标准支持</td>
+          <td style="text-align: left">无标准，依赖系统API/汇编</td>
+          <td style="text-align: left">C++20 标准，编译器原生支持</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">易用性</td>
+          <td style="text-align: left">接口简单，与普通函数用法一致</td>
+          <td style="text-align: left">需理解 Promise/Awaitable 机制，学习成本高</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="五进阶优化方向">五、进阶优化方向</h2>
+<ol>
+<li><strong>调度策略升级</strong>：实现优先级调度、时间片轮转、睡眠队列、IO 等待队列，适配真实业务场景。</li>
+<li><strong>异步 IO 集成</strong>：搭配 epoll/io_uring 实现异步 IO，IO 阻塞时自动挂起协程，就绪后自动恢复，参考腾讯 libco 实现。</li>
+<li><strong>协程池</strong>：预分配协程对象与栈空间，避免频繁创建/销毁的内存开销。</li>
+<li><strong>对称协程</strong>：实现协程间直接切换，无需经过主协程转发，进一步降低切换开销。</li>
+<li><strong>动态栈增长</strong>：基于 mmap 实现可增长栈，通过页错误机制动态扩容，彻底规避栈溢出风险。</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-01-09</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/023_cpp17%E5%AE%9E%E7%8E%B0%E5%8D%8F%E7%A8%8B%E6%9C%BA%E5%88%B6/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/cpp17/">Cpp17</a>,&nbsp;<a href="/blog/tags/coroutine/">Coroutine</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/022_cpp17%E5%AE%9E%E7%8E%B0%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/" class="prev" rel="prev" title="C&#43;&#43;17 实现反射机制"><i class="fas fa-angle-left" aria-hidden="true"></i>C++17 实现反射机制</a>
+            <a href="/blog/024_cpp17%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E5%99%A8%E8%A7%A6%E5%8F%91%E4%BB%BB%E5%8A%A1/" class="next" rel="next" title="C&#43;&#43;17 实现定时器触发任务">C++17 实现定时器触发任务<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

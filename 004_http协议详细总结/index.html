@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>HTTP 协议详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/004_http%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="HTTP 协议详细总结">
+  <meta property="og:description" content="HTTP协议超详细总结 HTTP（HyperText Transfer Protocol，超文本传输协议）是基于TCP/IP协议族的应用层通信协议，是万维网（WWW）数据交互的基石，定义了客户端（浏览器、App、爬虫等）与服务端之间的报文格式、交互规则与通信流程。它是一种请求-响应模式、无状态、通用可扩展的协议，默认使用80端口（HTTP）、443端口（HTTPS），核心设计理念是资源导向——互联网上所有内容都可被视为资源，通过URL（统一资源定位符）唯一标识与寻址。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-09T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-03-09T10:00:20+08:00">
+    <meta property="article:tag" content="协议">
+    <meta property="article:tag" content="HTTP">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="HTTP 协议详细总结">
+  <meta name="twitter:description" content="HTTP协议超详细总结 HTTP（HyperText Transfer Protocol，超文本传输协议）是基于TCP/IP协议族的应用层通信协议，是万维网（WWW）数据交互的基石，定义了客户端（浏览器、App、爬虫等）与服务端之间的报文格式、交互规则与通信流程。它是一种请求-响应模式、无状态、通用可扩展的协议，默认使用80端口（HTTP）、443端口（HTTPS），核心设计理念是资源导向——互联网上所有内容都可被视为资源，通过URL（统一资源定位符）唯一标识与寻址。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/004_http%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/003_arp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/005_zmq%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "HTTP 协议详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/004_http%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "Protocol, HTTP","wordcount":  7772 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/004_http%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-03-09T09:00:20+08:00","dateModified": "2026-03-09T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/004_http%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/004_http%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">HTTP 协议详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/protocol/"><i class="far fa-folder" aria-hidden="true"></i>协议</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-03-09">2026-03-09</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 7772 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 16 分钟&nbsp;<span id="/blog/004_http%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="HTTP 协议详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一http协议版本演进全历程">一、HTTP协议版本演进全历程</a></li>
+    <li><a href="#二http核心报文结构">二、HTTP核心报文结构</a>
+      <ul>
+        <li><a href="#1-请求报文结构">1. 请求报文结构</a></li>
+        <li><a href="#2-响应报文结构">2. 响应报文结构</a></li>
+      </ul>
+    </li>
+    <li><a href="#三http标准请求方法详解">三、HTTP标准请求方法详解</a></li>
+    <li><a href="#四http状态码全分类与核心场景">四、HTTP状态码全分类与核心场景</a>
+      <ul>
+        <li><a href="#1xx信息性状态码请求已接收正在处理">1xx：信息性状态码（请求已接收，正在处理）</a></li>
+        <li><a href="#2xx成功状态码请求已成功处理">2xx：成功状态码（请求已成功处理）</a></li>
+        <li><a href="#3xx重定向状态码需客户端进一步操作完成请求">3xx：重定向状态码（需客户端进一步操作完成请求）</a></li>
+        <li><a href="#4xx客户端错误状态码请求有误服务端无法拒绝处理">4xx：客户端错误状态码（请求有误，服务端无法/拒绝处理）</a></li>
+        <li><a href="#5xx服务端错误状态码服务端处理请求时发生异常">5xx：服务端错误状态码（服务端处理请求时发生异常）</a></li>
+      </ul>
+    </li>
+    <li><a href="#五核心http头部字段分类详解">五、核心HTTP头部字段分类详解</a>
+      <ul>
+        <li><a href="#1-通用头部请求响应报文均可使用">1. 通用头部（请求/响应报文均可使用）</a></li>
+        <li><a href="#2-请求头部仅请求报文使用">2. 请求头部（仅请求报文使用）</a></li>
+        <li><a href="#3-响应头部仅响应报文使用">3. 响应头部（仅响应报文使用）</a></li>
+      </ul>
+    </li>
+    <li><a href="#六http核心工作机制">六、HTTP核心工作机制</a>
+      <ul>
+        <li><a href="#1-缓存机制">1. 缓存机制</a></li>
+        <li><a href="#2-连接管理">2. 连接管理</a></li>
+        <li><a href="#3-内容协商机制">3. 内容协商机制</a></li>
+        <li><a href="#4-会话管理机制">4. 会话管理机制</a></li>
+      </ul>
+    </li>
+    <li><a href="#七https与http安全">七、HTTPS与HTTP安全</a>
+      <ul>
+        <li><a href="#1-https核心原理">1. HTTPS核心原理</a></li>
+        <li><a href="#2-http常见安全风险与防护方案">2. HTTP常见安全风险与防护方案</a></li>
+      </ul>
+    </li>
+    <li><a href="#八http请求完整生命周期">八、HTTP请求完整生命周期</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="http协议超详细总结">HTTP协议超详细总结</h1>
+<p>HTTP（HyperText Transfer Protocol，超文本传输协议）是基于TCP/IP协议族的<strong>应用层通信协议</strong>，是万维网（WWW）数据交互的基石，定义了客户端（浏览器、App、爬虫等）与服务端之间的报文格式、交互规则与通信流程。它是一种<strong>请求-响应模式、无状态、通用可扩展</strong>的协议，默认使用80端口（HTTP）、443端口（HTTPS），核心设计理念是<strong>资源导向</strong>——互联网上所有内容都可被视为资源，通过URL（统一资源定位符）唯一标识与寻址。</p>
+<h2 id="一http协议版本演进全历程">一、HTTP协议版本演进全历程</h2>
+<p>HTTP从诞生至今经历了5个核心版本迭代，核心优化方向始终围绕<strong>降低延迟、提升性能、增强安全、解决队头阻塞</strong>展开。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">版本</th>
+          <th style="text-align: left">发布时间</th>
+          <th style="text-align: left">核心规范</th>
+          <th style="text-align: left">核心特性</th>
+          <th style="text-align: left">解决的核心问题</th>
+          <th style="text-align: left">遗留缺陷</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">HTTP/0.9</td>
+          <td style="text-align: left">1991年</td>
+          <td style="text-align: left">无正式RFC</td>
+          <td style="text-align: left">仅支持GET方法；无请求头/响应头/状态码；仅支持HTML传输；短连接，请求完成立即关闭TCP连接</td>
+          <td style="text-align: left">实现实验室环境下的超文本文件传输</td>
+          <td style="text-align: left">功能极度简陋，无任何扩展性</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">HTTP/1.0</td>
+          <td style="text-align: left">1996年</td>
+          <td style="text-align: left">RFC 1945</td>
+          <td style="text-align: left">引入版本号、状态码、Header头部体系；支持图片、视频、二进制等多种数据类型；新增POST、HEAD方法；可选长连接</td>
+          <td style="text-align: left">实现标准化的Web通信，支持丰富的媒体类型</td>
+          <td style="text-align: left">默认短连接，每个请求都需新建/销毁TCP连接，握手开销极大，网络利用率极低</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">HTTP/1.1</td>
+          <td style="text-align: left">1997/1999年</td>
+          <td style="text-align: left">RFC 2616 → RFC 7230-7235</td>
+          <td style="text-align: left">默认开启持久连接（Keep-Alive）；支持管道化请求；强制Host头部（实现虚拟主机）；分块传输（Chunked）；增强缓存控制（Cache-Control/ETag）；新增PUT/DELETE/OPTIONS/CONNECT/TRACE方法</td>
+          <td style="text-align: left">解决1.0版本连接频繁创建销毁的开销，大幅提升传输效率</td>
+          <td style="text-align: left">应用层队头阻塞（HoL）：同一TCP连接中，请求必须按顺序响应，单个慢请求会阻塞后续所有请求</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">HTTP/2</td>
+          <td style="text-align: left">2015年</td>
+          <td style="text-align: left">RFC 7540</td>
+          <td style="text-align: left">二进制帧传输替代明文文本；单TCP连接多路复用；HPACK头部压缩；服务器主动推送；流优先级控制</td>
+          <td style="text-align: left">彻底解决应用层队头阻塞，大幅降低头部冗余，提升高并发场景性能</td>
+          <td style="text-align: left">底层TCP协议仍存在队头阻塞，TCP丢包会阻塞连接内所有流</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">HTTP/3</td>
+          <td style="text-align: left">2022年</td>
+          <td style="text-align: left">RFC 9114</td>
+          <td style="text-align: left">基于QUIC协议（UDP封装）；彻底解决全链路队头阻塞；0-RTT/1-RTT快速握手；内置TLS 1.3加密；支持连接迁移</td>
+          <td style="text-align: left">解决TCP层队头阻塞，大幅降低握手延迟，提升弱网/网络切换场景的稳定性</td>
+          <td style="text-align: left">部分老旧设备、网络环境对UDP的支持与优化不足</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="二http核心报文结构">二、HTTP核心报文结构</h2>
+<p>HTTP报文分为<strong>请求报文（客户端→服务端）<strong>和</strong>响应报文（服务端→客户端）</strong>，两者结构高度一致，均由4部分组成，核心差异在于首行格式与头部字段语义。</p>
+<h3 id="1-请求报文结构">1. 请求报文结构</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code># 请求行（必填，唯一一行）
+&lt;请求方法&gt; &lt;请求URI&gt; &lt;HTTP版本&gt;
+# 请求头（0个或多个，每行一个键值对）
+Header-Name1: Value1
+Header-Name2: Value2
+...
+# 空行（必填，CRLF回车换行，标识头部结束）
+# 请求体（可选，GET/HEAD方法通常无请求体）
+请求数据（JSON/表单/文件等）</code></pre></div>
+<ul>
+<li><strong>请求行</strong>：定义请求的核心意图，示例：<code>GET /api/user?id=1 HTTP/1.1</code>、<code>POST /api/login HTTP/1.1</code></li>
+<li><strong>请求头</strong>：控制请求行为、传递客户端信息、认证凭证等，是HTTP可扩展性的核心载体</li>
+<li><strong>空行</strong>：是头部与请求体的唯一分隔符，缺失会导致服务端解析失败</li>
+<li><strong>请求体</strong>：用于提交大量数据，仅POST/PUT/PATCH等方法携带，格式由<code>Content-Type</code>指定</li>
+</ul>
+<h3 id="2-响应报文结构">2. 响应报文结构</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code># 状态行（必填，唯一一行）
+&lt;HTTP版本&gt; &lt;状态码&gt; &lt;状态描述&gt;
+# 响应头（0个或多个，每行一个键值对）
+Header-Name1: Value1
+Header-Name2: Value2
+...
+# 空行（必填，CRLF回车换行，标识头部结束）
+# 响应体（可选，204/304等状态码无响应体）
+响应数据（HTML/JSON/图片/视频等）</code></pre></div>
+<ul>
+<li><strong>状态行</strong>：定义请求的处理结果，示例：<code>HTTP/1.1 200 OK</code>、<code>HTTP/1.1 404 Not Found</code></li>
+<li><strong>响应头</strong>：控制响应行为、传递服务端信息、资源元数据、缓存规则等</li>
+<li><strong>空行</strong>：分隔头部与响应体，解析规则与请求报文一致</li>
+<li><strong>响应体</strong>：服务端返回的核心资源数据，是客户端请求的最终目标</li>
+</ul>
+<h2 id="三http标准请求方法详解">三、HTTP标准请求方法详解</h2>
+<p>HTTP请求方法（也叫HTTP动词）是客户端向服务端声明的<strong>操作意图</strong>，每个方法都有严格约定的语义与使用规范，核心分为安全方法、幂等方法两大维度：</p>
+<ul>
+<li><strong>安全方法</strong>：仅获取资源，不会修改服务端状态、产生副作用，包括GET、HEAD、OPTIONS</li>
+<li><strong>幂等方法</strong>：多次执行完全相同的请求，最终结果一致，无额外副作用，包括GET、HEAD、PUT、DELETE、OPTIONS、TRACE</li>
+</ul>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">方法</th>
+          <th style="text-align: left">核心用途</th>
+          <th style="text-align: left">安全/幂等</th>
+          <th style="text-align: left">核心使用场景</th>
+          <th style="text-align: left">关键特性</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">GET</td>
+          <td style="text-align: left">从服务端获取指定资源</td>
+          <td style="text-align: left">安全/幂等</td>
+          <td style="text-align: left">页面加载、数据查询、资源获取</td>
+          <td style="text-align: left">参数拼接在URL中，无请求体；浏览器默认缓存；URL长度受浏览器/服务端限制（通常建议不超过2KB）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">HEAD</td>
+          <td style="text-align: left">与GET完全一致，但仅返回响应头，无响应体</td>
+          <td style="text-align: left">安全/幂等</td>
+          <td style="text-align: left">检查资源是否存在、校验缓存有效性、探测资源大小</td>
+          <td style="text-align: left">无需下载完整资源，可快速获取元数据</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">POST</td>
+          <td style="text-align: left">向服务端提交实体数据，通常用于创建资源</td>
+          <td style="text-align: left">非安全/非幂等</td>
+          <td style="text-align: left">用户注册、表单提交、文件上传、订单创建</td>
+          <td style="text-align: left">数据放在请求体中，无长度限制；浏览器默认不缓存；多次提交可能产生重复数据</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">PUT</td>
+          <td style="text-align: left">用请求体全量替换目标资源的所有内容</td>
+          <td style="text-align: left">非安全/幂等</td>
+          <td style="text-align: left">全量更新用户信息、替换完整文件</td>
+          <td style="text-align: left">多次执行结果完全一致，要求请求体包含资源的完整数据</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">DELETE</td>
+          <td style="text-align: left">删除指定的目标资源</td>
+          <td style="text-align: left">非安全/幂等</td>
+          <td style="text-align: left">删除用户、删除文件、注销订单</td>
+          <td style="text-align: left">多次删除同一资源，最终结果一致，服务端通常返回204无内容</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">PATCH</td>
+          <td style="text-align: left">对目标资源进行部分增量修改</td>
+          <td style="text-align: left">非安全/通常非幂等</td>
+          <td style="text-align: left">更新用户昵称、修改商品库存</td>
+          <td style="text-align: left">区别于PUT的全量替换，仅需传递要修改的字段，减少传输数据量</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">CONNECT</td>
+          <td style="text-align: left">建立到目标资源的TCP隧道</td>
+          <td style="text-align: left">非安全/非幂等</td>
+          <td style="text-align: left">HTTPS正向代理、VPN穿透</td>
+          <td style="text-align: left">让代理服务器转发客户端与目标服务器的TCP通信，实现隧道穿透</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">OPTIONS</td>
+          <td style="text-align: left">获取目标资源支持的通信选项与能力</td>
+          <td style="text-align: left">安全/幂等</td>
+          <td style="text-align: left">跨域CORS预检请求、探测服务端支持的方法</td>
+          <td style="text-align: left">服务端通过Allow头部返回支持的请求方法，无需身份认证即可发起</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">TRACE</td>
+          <td style="text-align: left">回显服务端收到的原始请求报文</td>
+          <td style="text-align: left">安全/幂等</td>
+          <td style="text-align: left">网络诊断、排查代理服务器修改请求的问题</td>
+          <td style="text-align: left">服务端将收到的请求原封不动返回，客户端可对比校验请求是否被篡改</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="四http状态码全分类与核心场景">四、HTTP状态码全分类与核心场景</h2>
+<p>HTTP状态码是3位数字，用于服务端向客户端明确告知请求的处理结果，第一位数字定义状态码的类别，共分为5大类，覆盖了从请求接收、处理成功、重定向、客户端错误到服务端错误的全场景。</p>
+<h3 id="1xx信息性状态码请求已接收正在处理">1xx：信息性状态码（请求已接收，正在处理）</h3>
+<p>用于临时响应，告知客户端请求已被服务端接收，需等待后续处理，HTTP/1.0不支持1xx状态码。</p>
+<ul>
+<li><strong>100 Continue</strong>：服务端已接收请求头，客户端应继续发送请求体，用于大文件上传场景的预检</li>
+<li><strong>101 Switching Protocols</strong>：服务端已同意客户端的协议升级请求（通过Upgrade头部），即将切换协议，常用于HTTP切换WebSocket</li>
+<li><strong>103 Early Hints</strong>：提前返回部分响应头，允许客户端预加载资源，优化页面首屏加载性能</li>
+</ul>
+<h3 id="2xx成功状态码请求已成功处理">2xx：成功状态码（请求已成功处理）</h3>
+<ul>
+<li><strong>200 OK</strong>：请求完全成功，服务端已返回对应资源，是最常用的成功状态码</li>
+<li><strong>201 Created</strong>：资源创建成功，通常对应POST/PUT请求，响应头Location会返回新资源的URI</li>
+<li><strong>204 No Content</strong>：请求成功，但无响应体，常用于删除、更新操作成功的场景</li>
+<li><strong>206 Partial Content</strong>：范围请求成功，仅返回资源的一部分，对应断点续传、视频分片加载场景</li>
+</ul>
+<h3 id="3xx重定向状态码需客户端进一步操作完成请求">3xx：重定向状态码（需客户端进一步操作完成请求）</h3>
+<ul>
+<li><strong>301 Moved Permanently</strong>：永久重定向，资源URI已永久变更，搜索引擎会更新索引，浏览器会缓存重定向结果</li>
+<li><strong>302 Found</strong>：临时重定向，资源URI临时变更，客户端应继续使用原URI访问</li>
+<li><strong>304 Not Modified</strong>：资源未修改，协商缓存命中，客户端直接使用本地缓存，无响应体</li>
+<li><strong>307 Temporary Redirect</strong>：临时重定向，严格保留原请求方法与请求体（302可能会将POST转为GET）</li>
+<li><strong>308 Permanent Redirect</strong>：永久重定向，严格保留原请求方法与请求体</li>
+</ul>
+<h3 id="4xx客户端错误状态码请求有误服务端无法拒绝处理">4xx：客户端错误状态码（请求有误，服务端无法/拒绝处理）</h3>
+<ul>
+<li><strong>400 Bad Request</strong>：请求语法错误、参数无效，服务端无法理解与处理</li>
+<li><strong>401 Unauthorized</strong>：未认证，客户端需携带有效的身份凭证（登录、Token）才能访问资源</li>
+<li><strong>403 Forbidden</strong>：服务端拒绝访问，客户端已认证，但无对应资源的操作权限</li>
+<li><strong>404 Not Found</strong>：资源不存在，请求的URI无效或资源已被删除</li>
+<li><strong>405 Method Not Allowed</strong>：请求方法不被目标资源支持，服务端会通过Allow头部返回支持的方法</li>
+<li><strong>408 Request Timeout</strong>：请求超时，服务端等待客户端发送完整请求的时间超出限制</li>
+<li><strong>409 Conflict</strong>：请求冲突，通常是资源已存在、版本冲突、数据状态不匹配</li>
+<li><strong>413 Payload Too Large</strong>：请求体过大，超出服务端处理上限，拒绝处理</li>
+<li><strong>429 Too Many Requests</strong>：客户端请求频率超限，被服务端限流拦截</li>
+</ul>
+<h3 id="5xx服务端错误状态码服务端处理请求时发生异常">5xx：服务端错误状态码（服务端处理请求时发生异常）</h3>
+<ul>
+<li><strong>500 Internal Server Error</strong>：服务端内部未知错误，是最通用的服务端错误码</li>
+<li><strong>501 Not Implemented</strong>：服务端不支持请求的方法，无法完成处理</li>
+<li><strong>502 Bad Gateway</strong>：网关/代理服务器收到上游服务端的无效响应</li>
+<li><strong>503 Service Unavailable</strong>：服务端暂时不可用，通常是服务过载、停机维护、熔断降级</li>
+<li><strong>504 Gateway Timeout</strong>：网关/代理服务器请求上游服务端超时，未在规定时间内收到响应</li>
+</ul>
+<h2 id="五核心http头部字段分类详解">五、核心HTTP头部字段分类详解</h2>
+<p>HTTP头部（Header）是键值对格式的扩展字段，是HTTP协议灵活性与可扩展性的核心，分为4大类，覆盖了连接管理、缓存控制、内容协商、身份认证、安全防护等全场景。</p>
+<h3 id="1-通用头部请求响应报文均可使用">1. 通用头部（请求/响应报文均可使用）</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">字段名</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">常见取值</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">Connection</td>
+          <td style="text-align: left">控制TCP连接的复用行为</td>
+          <td style="text-align: left">keep-alive（持久连接）、close（请求完成关闭连接）、upgrade（协议升级）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Cache-Control</td>
+          <td style="text-align: left">全局缓存策略控制，优先级最高</td>
+          <td style="text-align: left">max-age=xxx（强缓存有效期）、no-cache（强制协商缓存）、no-store（禁止缓存）、public/private（缓存范围）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Date</td>
+          <td style="text-align: left">报文创建的时间</td>
+          <td style="text-align: left">标准GMT格式，例：<code>Date: Tue, 15 Apr 2025 07:28:00 GMT</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Upgrade</td>
+          <td style="text-align: left">协议升级声明</td>
+          <td style="text-align: left">HTTP/2.0、websocket、TLS/1.3</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Via</td>
+          <td style="text-align: left">报文经过的代理/网关路径</td>
+          <td style="text-align: left">用于追踪请求转发链路，防止循环转发</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-请求头部仅请求报文使用">2. 请求头部（仅请求报文使用）</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">字段名</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">关键说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">Host</td>
+          <td style="text-align: left">目标主机域名与端口</td>
+          <td style="text-align: left">HTTP/1.1强制必填字段，实现单IP服务器托管多个域名（虚拟主机）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">User-Agent</td>
+          <td style="text-align: left">客户端标识</td>
+          <td style="text-align: left">包含浏览器、操作系统、设备信息，用于服务端适配、爬虫识别</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Accept</td>
+          <td style="text-align: left">客户端可接收的媒体类型</td>
+          <td style="text-align: left">例：<code>text/html,application/json;q=0.9</code>，q值为权重，0~1之间</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Accept-Encoding</td>
+          <td style="text-align: left">客户端支持的压缩编码</td>
+          <td style="text-align: left">例：<code>gzip, deflate, br</code>，用于减少传输数据量</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Accept-Language</td>
+          <td style="text-align: left">客户端偏好的自然语言</td>
+          <td style="text-align: left">例：<code>zh-CN,zh;q=0.9,en;q=0.8</code>，用于多语言内容协商</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Authorization</td>
+          <td style="text-align: left">身份认证凭证</td>
+          <td style="text-align: left">常用格式：<code>Bearer &lt;Token&gt;</code>、<code>Basic &lt;base64编码的账号密码&gt;</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Cookie</td>
+          <td style="text-align: left">客户端携带的会话Cookie</td>
+          <td style="text-align: left">服务端通过Set-Cookie设置，后续请求自动携带，用于维持会话状态</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Referer</td>
+          <td style="text-align: left">发起请求的源页面URI</td>
+          <td style="text-align: left">用于防盗链、访问统计、CSRF防护</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">If-Modified-Since/If-None-Match</td>
+          <td style="text-align: left">缓存协商校验字段</td>
+          <td style="text-align: left">分别对应Last-Modified和ETag，用于校验资源是否更新</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-响应头部仅响应报文使用">3. 响应头部（仅响应报文使用）</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">字段名</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">关键说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">Server</td>
+          <td style="text-align: left">服务端软件标识</td>
+          <td style="text-align: left">例：nginx、Apache、Tomcat，可自定义隐藏以提升安全性</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Content-Type</td>
+          <td style="text-align: left">响应体的媒体类型与字符集</td>
+          <td style="text-align: left">例：<code>text/html; charset=utf-8</code>、<code>application/json</code>、<code>image/png</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Content-Length</td>
+          <td style="text-align: left">响应体的字节长度</td>
+          <td style="text-align: left">用于客户端识别响应体的结束位置，分块传输时不使用该字段</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Content-Encoding</td>
+          <td style="text-align: left">响应体的压缩编码</td>
+          <td style="text-align: left">对应客户端Accept-Encoding，告知客户端解压方式</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Location</td>
+          <td style="text-align: left">重定向目标URI</td>
+          <td style="text-align: left">配合3xx状态码使用，告知客户端跳转地址</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Set-Cookie</td>
+          <td style="text-align: left">服务端向客户端设置Cookie</td>
+          <td style="text-align: left">可配置过期时间、域名、路径、HttpOnly、Secure、SameSite等属性</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">ETag</td>
+          <td style="text-align: left">资源的唯一标识</td>
+          <td style="text-align: left">用于协商缓存，优先级高于Last-Modified，解决时间精度不足的问题</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Last-Modified</td>
+          <td style="text-align: left">资源的最后修改时间</td>
+          <td style="text-align: left">用于协商缓存，基于时间判断资源是否更新</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Access-Control-Allow-*</td>
+          <td style="text-align: left">CORS跨域控制字段</td>
+          <td style="text-align: left">例：Access-Control-Allow-Origin，控制跨域请求的权限</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Content-Disposition</td>
+          <td style="text-align: left">响应体的展示方式</td>
+          <td style="text-align: left">inline（内联展示）、attachment; filename=&ldquo;xxx.zip&rdquo;（附件下载）</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="六http核心工作机制">六、HTTP核心工作机制</h2>
+<h3 id="1-缓存机制">1. 缓存机制</h3>
+<p>HTTP缓存是提升Web性能的核心机制，核心目标是<strong>减少重复网络请求、降低服务器压力、缩短页面加载时间</strong>，分为<strong>强缓存</strong>和<strong>协商缓存</strong>两级。</p>
+<ul>
+<li><strong>强缓存</strong>：客户端不发送任何请求到服务端，直接读取本地缓存资源。
+<ul>
+<li>控制字段：<code>Expires</code>（HTTP/1.0，绝对时间，易受客户端时间影响）、<code>Cache-Control: max-age=xxx</code>（HTTP/1.1，相对时间，优先级更高）</li>
+<li>命中条件：缓存未过期，直接返回200 OK (from disk cache/memory cache)</li>
+</ul>
+</li>
+<li><strong>协商缓存</strong>：强缓存失效后，客户端发送请求到服务端，校验资源是否更新。
+<ul>
+<li>校验字段：<code>Last-Modified/If-Modified-Since</code>（基于时间戳）、<code>ETag/If-None-Match</code>（基于资源哈希唯一标识，优先级更高）</li>
+<li>命中结果：资源未更新，服务端返回304 Not Modified，客户端使用本地缓存；资源已更新，服务端返回200 OK和新的资源与缓存规则</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-连接管理">2. 连接管理</h3>
+<p>HTTP连接管理的核心是<strong>减少TCP连接建立与销毁的开销，降低网络延迟</strong>，不同版本的连接模型差异巨大。</p>
+<ul>
+<li><strong>短连接</strong>：HTTP/1.0默认模式，每个请求对应一个独立的TCP连接，请求完成立即关闭连接，三次握手+四次挥手开销极大，仅适用于单次资源请求场景。</li>
+<li><strong>长连接（持久连接）</strong>：HTTP/1.1默认模式，通过<code>Connection: keep-alive</code>实现，一个TCP连接可连续传输多个请求/响应，避免重复的TCP握手与慢启动，大幅提升网络利用率。</li>
+<li><strong>管道化</strong>：HTTP/1.1可选特性，允许客户端在一个TCP连接中并行发送多个请求，无需等待前一个响应返回。但服务端必须按请求顺序返回响应，仍存在队头阻塞，实际生产环境几乎不启用。</li>
+<li><strong>多路复用</strong>：HTTP/2核心特性，将TCP连接拆分为多个独立的二进制流，每个流对应一个请求/响应，流之间并行传输、互不干扰，彻底解决应用层队头阻塞，单连接即可实现高并发请求。</li>
+<li><strong>QUIC连接</strong>：HTTP/3核心特性，基于UDP协议封装，流之间完全独立，单个流的丢包重传不会影响其他流，彻底解决传输层队头阻塞；同时支持0-RTT快速握手、连接迁移（WiFi切移动网不中断连接）。</li>
+</ul>
+<h3 id="3-内容协商机制">3. 内容协商机制</h3>
+<p>内容协商是客户端与服务端协商资源的最佳表示形式的机制，核心是通过<code>Accept*</code>请求头与<code>Content-*</code>响应头匹配，确保客户端收到最合适的资源内容。</p>
+<ul>
+<li>媒体类型协商：<code>Accept</code>请求头 ↔ <code>Content-Type</code>响应头</li>
+<li>编码协商：<code>Accept-Encoding</code>请求头 ↔ <code>Content-Encoding</code>响应头</li>
+<li>语言协商：<code>Accept-Language</code>请求头 ↔ <code>Content-Language</code>响应头</li>
+<li>优先级控制：通过<code>q</code>值（权重）指定偏好程度，取值范围0~1，值越高优先级越高，未指定则默认q=1.0。</li>
+</ul>
+<h3 id="4-会话管理机制">4. 会话管理机制</h3>
+<p>HTTP协议本身是<strong>无状态</strong>的，服务端不会存储客户端的任何历史请求信息，每个请求都是完全独立的。为了实现用户登录、购物车等有状态的交互场景，HTTP通过以下三种核心机制实现会话管理。</p>
+<ul>
+<li><strong>Cookie</strong>：服务端通过<code>Set-Cookie</code>响应头向客户端设置会话信息，客户端后续请求会自动在<code>Cookie</code>头中携带对应数据，存储在客户端本地。可通过<code>HttpOnly</code>防止XSS攻击读取、<code>Secure</code>限制仅HTTPS传输、<code>SameSite</code>防止CSRF攻击。</li>
+<li><strong>Session</strong>：基于Cookie实现的服务端会话方案，服务端存储完整的会话数据，仅向客户端下发唯一的<code>Session ID</code>，客户端后续请求携带该ID，服务端即可匹配到对应的会话信息，安全性高于纯Cookie方案。</li>
+<li><strong>Token</strong>：无状态会话方案，最常用的是JWT（JSON Web Token），服务端不存储任何会话数据，Token中携带加密的用户信息与签名，客户端将Token放在<code>Authorization</code>请求头中携带，服务端通过校验签名即可完成身份认证，适用于分布式系统、前后端分离架构。</li>
+</ul>
+<h2 id="七https与http安全">七、HTTPS与HTTP安全</h2>
+<h3 id="1-https核心原理">1. HTTPS核心原理</h3>
+<p>HTTPS = HTTP + TLS/SSL，默认端口443，RFC 2818标准定义，核心解决HTTP明文传输的三大安全风险：<strong>窃听、篡改、冒充</strong>。</p>
+<ul>
+<li><strong>加密</strong>：混合加密机制，使用非对称加密（RSA/ECC）安全交换对称密钥，使用对称加密（AES/ChaCha20）加密传输的业务数据，兼顾安全性与传输效率。</li>
+<li><strong>认证</strong>：基于CA机构颁发的数字证书，验证服务端的真实身份，防止中间人攻击伪造服务端。</li>
+<li><strong>完整性</strong>：通过MAC摘要、哈希算法校验传输数据，确保数据在传输过程中未被篡改。</li>
+<li>TLS版本演进：SSL 3.0 → TLS 1.0 → TLS 1.1 → TLS 1.2 → TLS 1.3，当前主流使用TLS 1.2，推荐使用TLS 1.3，握手更快、安全性更高。</li>
+</ul>
+<h3 id="2-http常见安全风险与防护方案">2. HTTP常见安全风险与防护方案</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">安全风险</th>
+          <th style="text-align: left">核心原理</th>
+          <th style="text-align: left">核心防护方案</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">XSS跨站脚本攻击</td>
+          <td style="text-align: left">攻击者注入恶意脚本到页面，窃取用户Cookie、伪造用户操作</td>
+          <td style="text-align: left">开启CSP内容安全策略；Cookie设置HttpOnly；输入输出内容过滤与转义</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">CSRF跨站请求伪造</td>
+          <td style="text-align: left">攻击者诱导用户在已登录状态下，发起非预期的恶意请求</td>
+          <td style="text-align: left">Cookie设置SameSite属性；使用Token替代Cookie认证；添加CSRF Token校验</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">中间人攻击</td>
+          <td style="text-align: left">攻击者拦截客户端与服务端的通信，窃听、篡改传输数据</td>
+          <td style="text-align: left">全程使用HTTPS；校验服务端证书合法性；禁用不安全的TLS版本与加密套件</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">HTTP头注入</td>
+          <td style="text-align: left">攻击者在请求头中注入恶意字符，篡改响应头、触发缓存投毒</td>
+          <td style="text-align: left">严格校验请求头参数；过滤换行符等特殊字符；禁用危险的头部配置</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">敏感信息泄露</td>
+          <td style="text-align: left">HTTP明文传输账号密码、Token、用户隐私数据</td>
+          <td style="text-align: left">全程使用HTTPS；敏感数据加密传输；禁止在URL中携带敏感信息</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="八http请求完整生命周期">八、HTTP请求完整生命周期</h2>
+<ol>
+<li><strong>域名解析</strong>：客户端通过DNS系统，将请求的域名解析为对应的IP地址与端口号，优先读取本地DNS缓存，无缓存则向上级DNS服务器发起查询。</li>
+<li><strong>连接建立</strong>：根据HTTP版本与协议类型，建立对应的传输层连接：HTTP建立TCP三次握手；HTTPS额外完成TLS 1.2/1.3加密握手，建立安全加密通道。</li>
+<li><strong>请求发送</strong>：客户端构建完整的HTTP请求报文，将其拆分为TCP数据包，通过已建立的连接发送到服务端。</li>
+<li><strong>服务端处理</strong>：服务端接收TCP数据包，重组为完整的HTTP请求报文，解析请求方法、URI、头部、请求体，路由到对应的业务处理程序，执行业务逻辑，生成响应报文。</li>
+<li><strong>响应返回</strong>：服务端将响应报文拆分为TCP数据包，通过连接发送回客户端。</li>
+<li><strong>连接管理</strong>：客户端与服务端根据<code>Connection</code>头部与协议版本，决定关闭TCP连接，还是保持连接复用后续请求。</li>
+<li><strong>客户端处理</strong>：客户端接收完整的响应报文，解析状态码、响应头、响应体，根据响应内容完成页面渲染、数据处理、资源缓存、重定向跳转等操作。</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-03-09</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/004_http%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/protocol/">协议</a>,&nbsp;<a href="/blog/tags/http/">HTTP</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/003_arp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="ARP 协议详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>ARP 协议详细总结</a>
+            <a href="/blog/005_zmq%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="ZMQ 协议详细总结">ZMQ 协议详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

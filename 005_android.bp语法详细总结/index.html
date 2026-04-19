@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Android.bp 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/005_android.bp%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="Android.bp 语法详细总结">
+  <meta property="og:description" content="Android.bp 语法详细总结 Android.bp 是 Android Soong 构建系统的核心配置文件，基于 Blueprint 语法设计，用于替代传统的 Android.mk（Make 构建体系），采用纯声明式语法，风格接近 Go/Bazel，无原生的分支/循环控制流，复杂逻辑由 Go 语言编写的构建底层处理，具备语法简洁、构建高效、可读性强的核心优势。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-02-18T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-02-18T10:00:20+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="Android">
+    <meta property="article:tag" content="Android.bp">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="Android.bp 语法详细总结">
+  <meta name="twitter:description" content="Android.bp 语法详细总结 Android.bp 是 Android Soong 构建系统的核心配置文件，基于 Blueprint 语法设计，用于替代传统的 Android.mk（Make 构建体系），采用纯声明式语法，风格接近 Go/Bazel，无原生的分支/循环控制流，复杂逻辑由 Go 语言编写的构建底层处理，具备语法简洁、构建高效、可读性强的核心优势。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/005_android.bp%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/004_android.mk%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/001_qt4%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Android.bp 语法详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/005_android.bp%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, Android, Android.bp","wordcount":  3979 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/005_android.bp%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-02-18T09:00:20+08:00","dateModified": "2026-02-18T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/005_android.bp%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/005_android.bp%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Android.bp 语法详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-02-18">2026-02-18</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 3979 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 8 分钟&nbsp;<span id="/blog/005_android.bp%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="Android.bp 语法详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一基础语法核心规则">一、基础语法核心规则</a>
+      <ul>
+        <li><a href="#1-基础语法格式">1. 基础语法格式</a></li>
+        <li><a href="#2-支持的数据类型">2. 支持的数据类型</a></li>
+        <li><a href="#3-注释语法">3. 注释语法</a></li>
+        <li><a href="#4-变量与操作符">4. 变量与操作符</a>
+          <ul>
+            <li><a href="#41-变量定义与作用域">4.1 变量定义与作用域</a></li>
+            <li><a href="#42-支持的操作符">4.2 支持的操作符</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#二模块核心定义与通用规则">二、模块核心定义与通用规则</a>
+      <ul>
+        <li><a href="#1-强制必填属性name">1. 强制必填属性：name</a></li>
+        <li><a href="#2-源文件配置srcs-与-exclude_srcs">2. 源文件配置：srcs 与 exclude_srcs</a>
+          <ul>
+            <li><a href="#21-srcs-核心用法">2.1 srcs 核心用法</a></li>
+            <li><a href="#22-exclude_srcs-排除文件">2.2 exclude_srcs 排除文件</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#三高频常用模块类型详解">三、高频常用模块类型详解</a>
+      <ul>
+        <li><a href="#1-cc-原生开发模块">1. C/C++ 原生开发模块</a></li>
+        <li><a href="#2-javakotlin-开发模块">2. Java/Kotlin 开发模块</a></li>
+        <li><a href="#3-android-应用开发模块">3. Android 应用开发模块</a></li>
+        <li><a href="#4-预编译与辅助模块">4. 预编译与辅助模块</a></li>
+      </ul>
+    </li>
+    <li><a href="#四核心属性详解">四、核心属性详解</a>
+      <ul>
+        <li><a href="#1-依赖管理属性">1. 依赖管理属性</a></li>
+        <li><a href="#2-编译选项属性">2. 编译选项属性</a></li>
+        <li><a href="#3-分区与安装属性">3. 分区与安装属性</a></li>
+        <li><a href="#4-sdk-与平台-api-属性">4. SDK 与平台 API 属性</a></li>
+      </ul>
+    </li>
+    <li><a href="#五代码复用defaults-模板继承">五、代码复用：defaults 模板继承</a>
+      <ul>
+        <li><a href="#优先级规则">优先级规则</a></li>
+      </ul>
+    </li>
+    <li><a href="#六条件控制语法">六、条件控制语法</a>
+      <ul>
+        <li><a href="#1-产品变量条件product_variables">1. 产品变量条件：product_variables</a>
+          <ul>
+            <li><a href="#基础语法示例">基础语法示例</a></li>
+            <li><a href="#优先级规则-1">优先级规则</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-架构条件控制arch">2. 架构条件控制：arch</a></li>
+        <li><a href="#3-自定义配置soong_config">3. 自定义配置：soong_config</a></li>
+      </ul>
+    </li>
+    <li><a href="#七高级特性">七、高级特性</a>
+      <ul>
+        <li><a href="#1-可见性控制visibility">1. 可见性控制：visibility</a></li>
+        <li><a href="#2-命名空间namespace">2. 命名空间：namespace</a></li>
+        <li><a href="#3-模块启用禁用enabled">3. 模块启用/禁用：enabled</a></li>
+      </ul>
+    </li>
+    <li><a href="#八配套工具">八、配套工具</a>
+      <ul>
+        <li><a href="#1-bpfmt-格式化工具">1. bpfmt 格式化工具</a></li>
+        <li><a href="#2-androidmk-转换工具">2. androidmk 转换工具</a></li>
+        <li><a href="#3-soong_docs-文档生成工具">3. soong_docs 文档生成工具</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="androidbp-语法详细总结">Android.bp 语法详细总结</h1>
+<p>Android.bp 是 Android <strong>Soong 构建系统</strong>的核心配置文件，基于 Blueprint 语法设计，用于替代传统的 Android.mk（Make 构建体系），采用纯声明式语法，风格接近 Go/Bazel，无原生的分支/循环控制流，复杂逻辑由 Go 语言编写的构建底层处理，具备语法简洁、构建高效、可读性强的核心优势。</p>
+<h2 id="一基础语法核心规则">一、基础语法核心规则</h2>
+<h3 id="1-基础语法格式">1. 基础语法格式</h3>
+<p>Android.bp 的核心是<strong>模块定义</strong>，一个模块以「模块类型」开头，后跟花括号包裹的键值对属性集，格式如下：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-bp" data-lang="bp">模块类型 {
+    属性名1: 属性值1,
+    属性名2: 属性值2,
+    // 更多属性
+}</code></pre></div>
+<ul>
+<li>键值对必须以 <code>,</code> 结尾，最后一个属性末尾也可保留逗号（语法兼容）</li>
+<li>缩进无强制语法要求，推荐使用 4 空格缩进保证可读性</li>
+<li>语法大小写敏感，所有关键字、属性名、模块名均严格区分大小写</li>
+</ul>
+<h3 id="2-支持的数据类型">2. 支持的数据类型</h3>
+<p>Android.bp 是强类型语法，变量类型由首次赋值动态推断，模块属性类型由模块类型静态定义，支持的核心类型如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>数据类型</th>
+          <th>说明</th>
+          <th>示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>布尔值</td>
+          <td>仅支持 <code>true</code>/<code>false</code></td>
+          <td><code>enabled: true</code></td>
+      </tr>
+      <tr>
+          <td>整数</td>
+          <td>整型数值，支持加减运算</td>
+          <td><code>version: 1</code></td>
+      </tr>
+      <tr>
+          <td>字符串</td>
+          <td>双引号包裹的文本，不支持单引号</td>
+          <td><code>name: &quot;my_demo&quot;</code></td>
+      </tr>
+      <tr>
+          <td>字符串列表</td>
+          <td>方括号包裹的字符串数组，最常用类型</td>
+          <td><code>srcs: [&quot;main.cpp&quot;, &quot;utils.cpp&quot;]</code></td>
+      </tr>
+      <tr>
+          <td>Map/字典</td>
+          <td>花括号包裹的嵌套键值对，支持多层嵌套</td>
+          <td><code>product_variables: { eng: { cflags: [&quot;-DDEBUG&quot;] } }</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-注释语法">3. 注释语法</h3>
+<p>与 Go 语言完全兼容，支持两种注释格式：</p>
+<ul>
+<li>单行注释：<code>// 注释内容</code>，最常用</li>
+<li>块注释：<code>/* 多行注释内容 */</code>，适合大段说明</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-bp" data-lang="bp">// 这是一个C++可执行文件模块
+cc_binary {
+    name: &#34;demo&#34;,
+    /*
+    这里是多行注释
+    用于说明源文件配置
+    */
+    srcs: [&#34;main.cpp&#34;],
+}</code></pre></div>
+<h3 id="4-变量与操作符">4. 变量与操作符</h3>
+<h4 id="41-变量定义与作用域">4.1 变量定义与作用域</h4>
+<ul>
+<li>仅支持文件顶层定义变量，作用域为当前文件剩余部分及子目录的 Blueprint 文件</li>
+<li>变量默认<strong>不可变</strong>，仅可在被引用前通过 <code>+=</code> 追加内容</li>
+</ul>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-bp" data-lang="bp">// 顶层变量定义
+common_srcs = [&#34;base.cpp&#34;, &#34;utils.cpp&#34;]
+common_cflags = [&#34;-Wall&#34;, &#34;-Wextra&#34;]
+
+// 变量追加（仅可在引用前执行）
+common_cflags += [&#34;-O2&#34;]
+
+cc_binary {
+    name: &#34;demo&#34;,
+    srcs: common_srcs + [&#34;main.cpp&#34;], // 变量直接引用
+    cflags: common_cflags,
+}</code></pre></div>
+<h4 id="42-支持的操作符">4.2 支持的操作符</h4>
+<p>Android.bp 仅支持极简操作符，无复杂逻辑运算，核心操作符如下：</p>
+<ul>
+<li>赋值：<code>=</code> 基础赋值，<code>+=</code> 追加赋值</li>
+<li>加法：<code>+</code>，支持字符串拼接、列表合并、Map 并集、整数相加
+<ul>
+<li>字符串：<code>&quot;lib&quot; + &quot;demo&quot; = &quot;libdemo&quot;</code></li>
+<li>列表：<code>[&quot;a.cpp&quot;] + [&quot;b.cpp&quot;] = [&quot;a.cpp&quot;, &quot;b.cpp&quot;]</code></li>
+<li>Map：合并两个字典，重复键的值会被覆盖</li>
+</ul>
+</li>
+</ul>
+<h2 id="二模块核心定义与通用规则">二、模块核心定义与通用规则</h2>
+<p>模块是 Android.bp 的最小构建单元，每个模块对应一个构建目标（可执行文件、库、应用等）。</p>
+<h3 id="1-强制必填属性name">1. 强制必填属性：name</h3>
+<p><strong>所有模块必须包含 <code>name</code> 属性</strong>，其值为模块的唯一标识符，规则如下：</p>
+<ul>
+<li>模块名在全源码所有 Android.bp 文件中必须唯一（命名空间、预编译模块除外）</li>
+<li>其他模块通过该名称引用、依赖当前模块</li>
+<li>命名需符合构建系统规范，禁止特殊字符，推荐使用下划线、字母、数字组合</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-bp" data-lang="bp">cc_library {
+    name: &#34;libdemo&#34;, // 全局唯一模块名
+    srcs: [&#34;demo.cpp&#34;],
+}</code></pre></div>
+<h3 id="2-源文件配置srcs-与-exclude_srcs">2. 源文件配置：srcs 与 exclude_srcs</h3>
+<h4 id="21-srcs-核心用法">2.1 srcs 核心用法</h4>
+<p><code>srcs</code> 用于指定模块的源文件，支持 3 种核心用法：</p>
+<ol>
+<li>直接指定文件路径：相对当前 Android.bp 所在目录的路径</li>
+<li>通配符匹配：支持 Unix 标准通配符，<code>*</code> 匹配任意字符，<code>**</code> 匹配多级目录</li>
+<li>模块引用：通过 <code>:模块名</code> 引用其他生成源文件的模块（如 <code>filegroup</code>、<code>genrule</code>）</li>
+</ol>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-bp" data-lang="bp">cc_binary {
+    name: &#34;demo&#34;,
+    // 1. 直接指定文件
+    // 2. 通配符匹配：src目录下所有.cpp文件
+    // 3. 引用filegroup模块的源文件
+    srcs: [
+        &#34;main.cpp&#34;,
+        &#34;src/**/*.cpp&#34;,
+        &#34;:common_filegroup&#34;,
+    ],
+}
+
+// 源文件分组模块
+filegroup {
+    name: &#34;common_filegroup&#34;,
+    srcs: [&#34;base/utils.cpp&#34;, &#34;base/log.cpp&#34;],
+}</code></pre></div>
+<h4 id="22-exclude_srcs-排除文件">2.2 exclude_srcs 排除文件</h4>
+<p>用于从 <code>srcs</code> 的匹配结果中排除指定文件，通常配合通配符使用：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-bp" data-lang="bp">cc_binary {
+    name: &#34;demo&#34;,
+    srcs: [&#34;src/**/*.cpp&#34;],
+    exclude_srcs: [
+        &#34;src/test.cpp&#34;, // 排除单文件
+        &#34;src/unused/**/*.cpp&#34;, // 排除整个目录
+    ],
+}</code></pre></div>
+<h2 id="三高频常用模块类型详解">三、高频常用模块类型详解</h2>
+<p>Android.bp 支持上百种模块类型，覆盖 Android 系统构建全场景，以下是开发中最常用的模块类型，按场景分类说明。</p>
+<h3 id="1-cc-原生开发模块">1. C/C++ 原生开发模块</h3>
+<table>
+  <thead>
+      <tr>
+          <th>模块类型</th>
+          <th>核心作用</th>
+          <th>最简示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>cc_binary</code></td>
+          <td>编译生成 C/C++ 可执行文件</td>
+          <td><code>bp cc_binary { name: &quot;my_daemon&quot;, srcs: [&quot;main.cpp&quot;], shared_libs: [&quot;liblog&quot;], } </code></td>
+      </tr>
+      <tr>
+          <td><code>cc_library</code></td>
+          <td>编译生成 C/C++ 库，可同时输出静态库+动态库</td>
+          <td><code>bp cc_library { name: &quot;libdemo&quot;, srcs: [&quot;demo.cpp&quot;], export_include_dirs: [&quot;include&quot;], } </code></td>
+      </tr>
+      <tr>
+          <td><code>cc_library_static</code></td>
+          <td>仅编译生成 C/C++ 静态库（.a）</td>
+          <td><code>bp cc_library_static { name: &quot;libdemo_static&quot;, srcs: [&quot;demo.cpp&quot;], } </code></td>
+      </tr>
+      <tr>
+          <td><code>cc_library_shared</code></td>
+          <td>仅编译生成 C/C++ 动态库（.so）</td>
+          <td><code>bp cc_library_shared { name: &quot;libdemo_shared&quot;, srcs: [&quot;demo.cpp&quot;], } </code></td>
+      </tr>
+      <tr>
+          <td><code>cc_defaults</code></td>
+          <td>C/C++ 模块的默认配置模板，用于属性复用</td>
+          <td><code>bp cc_defaults { name: &quot;common_cc_config&quot;, cflags: [&quot;-Wall&quot;, &quot;-Werror&quot;], shared_libs: [&quot;libbase&quot;], } </code></td>
+      </tr>
+      <tr>
+          <td><code>cc_benchmark</code></td>
+          <td>C/C++ 性能基准测试模块</td>
+          <td><code>bp cc_benchmark { name: &quot;demo_bench&quot;, srcs: [&quot;benchmark.cpp&quot;], } </code></td>
+      </tr>
+      <tr>
+          <td><code>cc_test</code></td>
+          <td>C/C++ 单元测试模块</td>
+          <td><code>bp cc_test { name: &quot;demo_test&quot;, srcs: [&quot;test.cpp&quot;], } </code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-javakotlin-开发模块">2. Java/Kotlin 开发模块</h3>
+<table>
+  <thead>
+      <tr>
+          <th>模块类型</th>
+          <th>核心作用</th>
+          <th>最简示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>java_library</code></td>
+          <td>编译生成 Java 库（.jar），支持 Kotlin</td>
+          <td><code>bp java_library { name: &quot;demo_java_lib&quot;, srcs: [&quot;src/**/*.java&quot;], sdk_version: &quot;current&quot;, } </code></td>
+      </tr>
+      <tr>
+          <td><code>java_library_static</code></td>
+          <td>编译生成 Java 静态库，打包进目标模块</td>
+          <td><code>bp java_library_static { name: &quot;demo_java_static&quot;, srcs: [&quot;src/**/*.java&quot;], } </code></td>
+      </tr>
+      <tr>
+          <td><code>java_defaults</code></td>
+          <td>Java 模块的默认配置模板，属性复用</td>
+          <td><code>bp java_defaults { name: &quot;common_java_config&quot;, javacflags: [&quot;-Xlint:all&quot;], sdk_version: &quot;current&quot;, } </code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-android-应用开发模块">3. Android 应用开发模块</h3>
+<table>
+  <thead>
+      <tr>
+          <th>模块类型</th>
+          <th>核心作用</th>
+          <th>最简示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>android_app</code></td>
+          <td>编译生成 Android APK 安装包</td>
+          <td><code>bp android_app { name: &quot;MyApp&quot;, srcs: [&quot;src/**/*.java&quot;], manifest: &quot;AndroidManifest.xml&quot;, resource_dirs: [&quot;res&quot;], sdk_version: &quot;current&quot;, certificate: &quot;platform&quot;, } </code></td>
+      </tr>
+      <tr>
+          <td><code>android_app_certificate</code></td>
+          <td>定义 APK 签名证书</td>
+          <td><code>bp android_app_certificate { name: &quot;my_app_cert&quot;, key: &quot;app.key&quot;, certificate: &quot;app.x509.pem&quot;, } </code></td>
+      </tr>
+      <tr>
+          <td><code>android_library</code></td>
+          <td>编译生成 Android AAR 库</td>
+          <td><code>bp android_library { name: &quot;my_aar&quot;, srcs: [&quot;src/**/*.java&quot;], resource_dirs: [&quot;res&quot;], manifest: &quot;AndroidManifest.xml&quot;, } </code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="4-预编译与辅助模块">4. 预编译与辅助模块</h3>
+<table>
+  <thead>
+      <tr>
+          <th>模块类型</th>
+          <th>核心作用</th>
+          <th>最简示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>filegroup</code></td>
+          <td>源文件分组，供其他模块引用，不参与编译</td>
+          <td><code>bp filegroup { name: &quot;common_res&quot;, srcs: [&quot;res/**/*.xml&quot;], } </code></td>
+      </tr>
+      <tr>
+          <td><code>java_import</code></td>
+          <td>导入预编译的 JAR 包</td>
+          <td><code>bp java_import { name: &quot;third_party_jar&quot;, jars: [&quot;libs/third.jar&quot;], } </code></td>
+      </tr>
+      <tr>
+          <td><code>prebuilt_etc</code></td>
+          <td>预编译配置文件，拷贝到 system/etc 分区</td>
+          <td><code>bp prebuilt_etc { name: &quot;demo.conf&quot;, src: &quot;demo.conf&quot;, } </code></td>
+      </tr>
+      <tr>
+          <td><code>prebuilt_libs</code></td>
+          <td>导入预编译的 so 动态库</td>
+          <td><code>bp prebuilt_libs { name: &quot;libprebuilt&quot;, srcs: [&quot;libs/arm64-v8a/libprebuilt.so&quot;], } </code></td>
+      </tr>
+      <tr>
+          <td><code>genrule</code></td>
+          <td>自定义生成规则，执行脚本/命令生成文件</td>
+          <td><code>bp genrule { name: &quot;gen_header&quot;, srcs: [&quot;config.json&quot;], out: [&quot;config.h&quot;], cmd: &quot;python $(location :gen_script.py) $&lt; -o $@&quot;, } </code></td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="四核心属性详解">四、核心属性详解</h2>
+<h3 id="1-依赖管理属性">1. 依赖管理属性</h3>
+<p>依赖是模块间关联的核心，Android.bp 按语言、链接类型拆分了精细化的依赖属性，核心如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>属性名</th>
+          <th>适用模块</th>
+          <th>核心作用</th>
+          <th>示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>shared_libs</code></td>
+          <td>C/C++ 模块</td>
+          <td>依赖动态链接库（.so），会传递链接关系</td>
+          <td><code>shared_libs: [&quot;liblog&quot;, &quot;libutils&quot;]</code></td>
+      </tr>
+      <tr>
+          <td><code>static_libs</code></td>
+          <td>C/C++/Java 模块</td>
+          <td>依赖静态库，编译时打包进当前模块</td>
+          <td><code>static_libs: [&quot;libbase&quot;, &quot;libdemo_static&quot;]</code></td>
+      </tr>
+      <tr>
+          <td><code>libs</code></td>
+          <td>Java/Android 模块</td>
+          <td>依赖 Java 库/JAR 包</td>
+          <td><code>libs: [&quot;framework&quot;, &quot;third_party_jar&quot;]</code></td>
+      </tr>
+      <tr>
+          <td><code>deps</code></td>
+          <td>全模块通用</td>
+          <td>通用依赖，用于非链接型依赖（如生成源文件的模块）</td>
+          <td><code>deps: [&quot;:gen_header&quot;, &quot;:common_filegroup&quot;]</code></td>
+      </tr>
+      <tr>
+          <td><code>header_libs</code></td>
+          <td>C/C++ 模块</td>
+          <td>依赖头文件-only 库，仅传递头文件路径，不参与链接</td>
+          <td><code>header_libs: [&quot;libbase_headers&quot;]</code></td>
+      </tr>
+      <tr>
+          <td><code>export_include_dirs</code></td>
+          <td>C/C++ 库模块</td>
+          <td>导出头文件目录，依赖该库的模块会自动添加该 include 路径</td>
+          <td><code>export_include_dirs: [&quot;include&quot;]</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-编译选项属性">2. 编译选项属性</h3>
+<table>
+  <thead>
+      <tr>
+          <th>属性名</th>
+          <th>适用模块</th>
+          <th>核心作用</th>
+          <th>示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>cflags</code></td>
+          <td>C/C++ 模块</td>
+          <td>C/C++ 通用编译选项，支持宏定义、警告配置等</td>
+          <td><code>cflags: [&quot;-DDEBUG&quot;, &quot;-Wall&quot;, &quot;-O2&quot;]</code></td>
+      </tr>
+      <tr>
+          <td><code>conlyflags</code></td>
+          <td>C/C++ 模块</td>
+          <td>仅对 C 语言生效的编译选项</td>
+          <td><code>conlyflags: [&quot;-std=c99&quot;]</code></td>
+      </tr>
+      <tr>
+          <td><code>cppflags</code></td>
+          <td>C/C++ 模块</td>
+          <td>仅对 C++ 语言生效的编译选项</td>
+          <td><code>cppflags: [&quot;-std=c++17&quot;, &quot;-fno-exceptions&quot;]</code></td>
+      </tr>
+      <tr>
+          <td><code>ldflags</code></td>
+          <td>C/C++ 模块</td>
+          <td>链接选项，用于配置链接器参数</td>
+          <td><code>ldflags: [&quot;-Wl,--as-needed&quot;]</code></td>
+      </tr>
+      <tr>
+          <td><code>javacflags</code></td>
+          <td>Java 模块</td>
+          <td>Java 编译选项</td>
+          <td><code>javacflags: [&quot;-Xlint:unchecked&quot;]</code></td>
+      </tr>
+      <tr>
+          <td><code>kotlincflags</code></td>
+          <td>Kotlin 模块</td>
+          <td>Kotlin 编译选项</td>
+          <td><code>kotlincflags: [&quot;-Xjvm-default=all&quot;]</code></td>
+      </tr>
+      <tr>
+          <td><code>stl</code></td>
+          <td>C/C++ 模块</td>
+          <td>指定 C++ 标准库实现</td>
+          <td><code>stl: &quot;libc++_static&quot;</code> / <code>stl: &quot;none&quot;</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-分区与安装属性">3. 分区与安装属性</h3>
+<p>用于控制模块编译后的安装分区、是否安装、权限等，核心如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>属性名</th>
+          <th>核心作用</th>
+          <th>可选值/示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>vendor: true</code></td>
+          <td>标记模块安装到 vendor 分区（厂商分区）</td>
+          <td><code>true</code>/<code>false</code></td>
+      </tr>
+      <tr>
+          <td><code>product_specific: true</code></td>
+          <td>标记模块安装到 product 分区（产品定制分区）</td>
+          <td><code>true</code>/<code>false</code></td>
+      </tr>
+      <tr>
+          <td><code>odm: true</code></td>
+          <td>标记模块安装到 odm 分区（设备定制分区）</td>
+          <td><code>true</code>/<code>false</code></td>
+      </tr>
+      <tr>
+          <td><code>system_ext_specific: true</code></td>
+          <td>标记模块安装到 system_ext 分区</td>
+          <td><code>true</code>/<code>false</code></td>
+      </tr>
+      <tr>
+          <td><code>installable</code></td>
+          <td>控制模块是否安装到镜像，默认 true</td>
+          <td><code>installable: false</code>（仅编译不安装，如测试库）</td>
+      </tr>
+      <tr>
+          <td><code>required</code></td>
+          <td>声明模块运行依赖的其他模块，系统打包时会一同包含</td>
+          <td><code>required: [&quot;demo_config.conf&quot;]</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="4-sdk-与平台-api-属性">4. SDK 与平台 API 属性</h3>
+<table>
+  <thead>
+      <tr>
+          <th>属性名</th>
+          <th>核心作用</th>
+          <th>示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>sdk_version</code></td>
+          <td>指定模块编译依赖的 Android SDK 版本</td>
+          <td><code>sdk_version: &quot;34&quot;</code> / <code>sdk_version: &quot;current&quot;</code></td>
+      </tr>
+      <tr>
+          <td><code>min_sdk_version</code></td>
+          <td>指定模块支持的最低 Android 版本</td>
+          <td><code>min_sdk_version: &quot;29&quot;</code></td>
+      </tr>
+      <tr>
+          <td><code>platform_apis</code></td>
+          <td>允许使用系统隐藏 API（平台私有API），仅系统级模块可用</td>
+          <td><code>platform_apis: true</code></td>
+      </tr>
+      <tr>
+          <td><code>privileged</code></td>
+          <td>标记应用为特权应用，安装到 priv-app 目录，可申请系统级权限</td>
+          <td><code>privileged: true</code></td>
+      </tr>
+      <tr>
+          <td><code>certificate</code></td>
+          <td>指定 APK 签名方式</td>
+          <td><code>certificate: &quot;platform&quot;</code> / <code>certificate: &quot;testkey&quot;</code> / 自定义证书模块</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="五代码复用defaults-模板继承">五、代码复用：defaults 模板继承</h2>
+<p>Android.bp 无类继承机制，通过 <code>defaults</code> 模块实现属性复用，解决多模块重复配置的问题，核心规则如下：</p>
+<ol>
+<li>先通过 <code>xx_defaults</code> 模块定义通用配置模板（如 <code>cc_defaults</code>、<code>java_defaults</code>）</li>
+<li>业务模块通过 <code>defaults: [&quot;模板名&quot;]</code> 继承模板的所有属性</li>
+<li>业务模块可重写模板中的属性，重写后以模块自身配置为准</li>
+<li>支持同时继承多个 defaults 模板，按数组顺序合并属性</li>
+</ol>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-bp" data-lang="bp">// 1. 定义C++通用配置模板
+cc_defaults {
+    name: &#34;common_cc_config&#34;,
+    cflags: [&#34;-Wall&#34;, &#34;-Werror&#34;, &#34;-O2&#34;],
+    shared_libs: [&#34;liblog&#34;, &#34;libbase&#34;, &#34;libutils&#34;],
+    stl: &#34;libc++_shared&#34;,
+}
+
+// 2. 定义调试版本专属配置
+cc_defaults {
+    name: &#34;debug_cc_config&#34;,
+    cflags: [&#34;-DDEBUG&#34;, &#34;-g&#34;],
+    optimized: false,
+}
+
+// 3. 业务模块继承模板，无需重复配置
+cc_binary {
+    name: &#34;demo&#34;,
+    // 继承多个defaults模板
+    defaults: [&#34;common_cc_config&#34;, &#34;debug_cc_config&#34;],
+    // 自身独有配置
+    srcs: [&#34;main.cpp&#34;, &#34;demo.cpp&#34;],
+    // 重写模板中的cflags，追加额外配置
+    cflags: [&#34;-DDEMO_VERSION=1.0&#34;],
+}</code></pre></div>
+<h3 id="优先级规则">优先级规则</h3>
+<p>模块最终属性的优先级：<code>模块自身配置 &gt; defaults模板配置 &gt; 系统默认值</code></p>
+<h2 id="六条件控制语法">六、条件控制语法</h2>
+<p>Android.bp 设计上无原生 <code>if-else</code> 分支语句，所有条件逻辑通过内置的条件块实现，核心分为 3 种场景。</p>
+<h3 id="1-产品变量条件product_variables">1. 产品变量条件：product_variables</h3>
+<p>用于根据产品构建类型、产品特性开关控制模块属性，是最常用的条件控制方式。内置支持 <code>eng</code>/<code>userdebug</code>/<code>user</code> 构建类型、<code>debuggable</code> 等系统变量，也支持自定义产品变量。</p>
+<h4 id="基础语法示例">基础语法示例</h4>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-bp" data-lang="bp">cc_binary {
+    name: &#34;demo&#34;,
+    srcs: [&#34;main.cpp&#34;],
+    // 产品变量条件块
+    product_variables: {
+        // 1. 根据构建类型区分
+        eng: {
+            // eng版本开启debug日志、关闭优化
+            cflags: [&#34;-DDEBUG&#34;, &#34;-DENG_BUILD&#34;],
+            optimized: false,
+            srcs: [&#34;debug_helper.cpp&#34;],
+        },
+        userdebug: {
+            cflags: [&#34;-DDEBUG&#34;],
+        },
+        user: {
+            // user版本排除调试代码
+            exclude_srcs: [&#34;debug_helper.cpp&#34;],
+            cflags: [&#34;-DRELEASE&#34;],
+        },
+        // 2. 根据自定义产品变量控制
+        nfc_support: {
+            cflags: [&#34;-DNFC_SUPPORT&#34;],
+            srcs: [&#34;nfc_adapter.cpp&#34;],
+        },
+    },
+}</code></pre></div>
+<h4 id="优先级规则-1">优先级规则</h4>
+<p><code>product_variables</code> 内的属性会覆盖模块顶层的同名属性，优先级：<code>product_variables &gt; 模块顶层属性 &gt; defaults模板</code></p>
+<h3 id="2-架构条件控制arch">2. 架构条件控制：arch</h3>
+<p>用于根据目标 CPU 架构（如 arm64、x86_64）配置差异化属性，语法如下：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-bp" data-lang="bp">cc_library {
+    name: &#34;libdemo&#34;,
+    srcs: [&#34;common.cpp&#34;],
+    // 按CPU架构区分配置
+    arch: {
+        arm64: {
+            srcs: [&#34;arm64/asm_helper.S&#34;],
+            cflags: [&#34;-DARM64_ARCH&#34;],
+        },
+        arm: {
+            srcs: [&#34;arm/asm_helper.S&#34;],
+            cflags: [&#34;-DARM_ARCH&#34;],
+        },
+        x86_64: {
+            srcs: [&#34;x86_64/asm_helper.S&#34;],
+            cflags: [&#34;-DX86_64_ARCH&#34;],
+        },
+        x86: {
+            srcs: [&#34;x86/asm_helper.S&#34;],
+            cflags: [&#34;-DX86_ARCH&#34;],
+        },
+    },
+}</code></pre></div>
+<h3 id="3-自定义配置soong_config">3. 自定义配置：soong_config</h3>
+<p>用于自定义全局配置开关，适合跨模块的统一条件控制，需要先定义配置命名空间，再在模块中使用，适合大型项目的定制化构建。</p>
+<h2 id="七高级特性">七、高级特性</h2>
+<h3 id="1-可见性控制visibility">1. 可见性控制：visibility</h3>
+<p>用于限制模块可被哪些其他模块引用，避免模块被意外依赖，默认情况下模块对所有其他模块可见。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-bp" data-lang="bp">cc_library {
+    name: &#34;libdemo_internal&#34;,
+    srcs: [&#34;internal.cpp&#34;],
+    // 仅允许同目录及子目录的模块引用
+    visibility: [&#34;:__subpackages__&#34;],
+    // 也可指定具体模块/目录
+    // visibility: [&#34;//vendor/demo:__subpackages__&#34;, &#34;//system/core/libdemo&#34;]
+}</code></pre></div>
+<h3 id="2-命名空间namespace">2. 命名空间：namespace</h3>
+<p>用于解决模块名冲突问题，不同命名空间内的模块名可重复，通常用于厂商定制、第三方代码隔离。</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-bp" data-lang="bp">// 定义命名空间
+namespace {
+    name: &#34;vendor_demo&#34;,
+    // 声明可见的其他命名空间
+    imports: [&#34;*&#34;],
+}
+
+// 该模块属于vendor_demo命名空间，模块名可与全局空间重复
+cc_binary {
+    name: &#34;demo&#34;,
+    namespace: &#34;vendor_demo&#34;,
+    srcs: [&#34;main.cpp&#34;],
+}</code></pre></div>
+<h3 id="3-模块启用禁用enabled">3. 模块启用/禁用：enabled</h3>
+<p>通过 <code>enabled</code> 属性控制模块是否参与编译，配合条件块可实现灵活的编译开关。</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-bp" data-lang="bp">cc_binary {
+    name: &#34;demo_tool&#34;,
+    srcs: [&#34;tool.cpp&#34;],
+    // 仅在eng版本编译该模块
+    product_variables: {
+        eng: {
+            enabled: true,
+        },
+        user: {
+            enabled: false,
+        },
+    },
+}</code></pre></div>
+<h2 id="八配套工具">八、配套工具</h2>
+<h3 id="1-bpfmt-格式化工具">1. bpfmt 格式化工具</h3>
+<p>Android 源码内置的 Android.bp 格式化工具，统一代码风格，用法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 格式化单个文件</span>
+</span></span><span class="line"><span class="cl">bpfmt -w Android.bp
+</span></span><span class="line"><span class="cl"><span class="c1"># 递归格式化目录下所有bp文件</span>
+</span></span><span class="line"><span class="cl">bpfmt -w ./</span></span></code></pre></div></div>
+<h3 id="2-androidmk-转换工具">2. androidmk 转换工具</h3>
+<p>用于将传统的 Android.mk 文件自动转换为 Android.bp 文件，大幅降低迁移成本。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 转换Android.mk为Android.bp</span>
+</span></span><span class="line"><span class="cl">androidmk Android.mk &gt; Android.bp</span></span></code></pre></div></div>
+<blockquote>
+<p>注意：复杂的条件逻辑、自定义 Make 函数无法自动转换，需要手动适配为 Soong 支持的语法。</p>
+</blockquote>
+<h3 id="3-soong_docs-文档生成工具">3. soong_docs 文档生成工具</h3>
+<p>用于生成当前 Soong 版本支持的所有模块类型、属性的参考文档，解决语法查询问题。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 在AOSP根目录执行，生成模块参考文档</span>
+</span></span><span class="line"><span class="cl">m soong_docs
+</span></span><span class="line"><span class="cl"><span class="c1"># 生成的文档路径：out/soong/docs/soong_build.html</span></span></span></code></pre></div></div>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-02-18</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/005_android.bp%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/android/">Android</a>,&nbsp;<a href="/blog/tags/android.bp/">Android.bp</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/004_android.mk%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="Android.mk 语法详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>Android.mk 语法详细总结</a>
+            <a href="/blog/001_qt4%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="Qt4 语法详细总结">Qt4 语法详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

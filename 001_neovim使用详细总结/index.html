@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Neovim 使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_neovim%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="Neovim 使用详细总结">
+  <meta property="og:description" content="Neovim 详细使用总结 Neovim 是 Vim 的社区驱动现代化分支，100%兼容Vim核心模态编辑逻辑与绝大多数Vimscript配置/插件，同时从底层重构了异步非阻塞架构，原生支持Lua脚本、内置LSP客户端、Tree-sitter语法解析、终端模拟器等现代IDE核心能力，兼顾了模态编辑的极致效率与现代开发的全场景需求，是当前终端编辑器的主流选择之一。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-02-02T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-02-02T10:00:20+08:00">
+    <meta property="article:tag" content="编辑器">
+    <meta property="article:tag" content="Neovim">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="Neovim 使用详细总结">
+  <meta name="twitter:description" content="Neovim 详细使用总结 Neovim 是 Vim 的社区驱动现代化分支，100%兼容Vim核心模态编辑逻辑与绝大多数Vimscript配置/插件，同时从底层重构了异步非阻塞架构，原生支持Lua脚本、内置LSP客户端、Tree-sitter语法解析、终端模拟器等现代IDE核心能力，兼顾了模态编辑的极致效率与现代开发的全场景需求，是当前终端编辑器的主流选择之一。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/001_neovim%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/001_excel%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/010_vscode%E6%8F%92%E4%BB%B6%E5%88%B6%E4%BD%9C%E8%BF%87%E7%A8%8B%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Neovim 使用详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/001_neovim%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "Editor, Neovim","wordcount":  7738 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/001_neovim%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-02-02T09:00:20+08:00","dateModified": "2026-02-02T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/001_neovim%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/001_neovim%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Neovim 使用详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/editor/"><i class="far fa-folder" aria-hidden="true"></i>编辑器</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-02-02">2026-02-02</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 7738 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 16 分钟&nbsp;<span id="/blog/001_neovim%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="Neovim 使用详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一核心特性与vim的核心差异">一、核心特性与Vim的核心差异</a>
+      <ul>
+        <li><a href="#核心杀手锏特性">核心杀手锏特性</a></li>
+      </ul>
+    </li>
+    <li><a href="#二安装与快速入门">二、安装与快速入门</a>
+      <ul>
+        <li><a href="#1-全平台安装">1. 全平台安装</a>
+          <ul>
+            <li><a href="#linux">Linux</a></li>
+            <li><a href="#macos">macOS</a></li>
+            <li><a href="#windows">Windows</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-极简入门操作">2. 极简入门操作</a>
+          <ul>
+            <li><a href="#新手必记基础命令">新手必记基础命令</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#三核心基础操作模态编辑核心">三、核心基础操作（模态编辑核心）</a>
+      <ul>
+        <li><a href="#1-光标移动普通模式">1. 光标移动（普通模式）</a></li>
+        <li><a href="#2-文本编辑普通模式">2. 文本编辑（普通模式）</a>
+          <ul>
+            <li><a href="#基础编辑操作">基础编辑操作</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-搜索与替换">3. 搜索与替换</a></li>
+        <li><a href="#4-窗口缓冲区与标签页管理">4. 窗口、缓冲区与标签页管理</a>
+          <ul>
+            <li><a href="#窗口分屏">窗口分屏</a></li>
+            <li><a href="#缓冲区管理">缓冲区管理</a></li>
+            <li><a href="#标签页管理">标签页管理</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#四配置体系initlua-从0到1">四、配置体系（init.lua 从0到1）</a>
+      <ul>
+        <li><a href="#1-配置文件目录结构最佳实践">1. 配置文件目录结构（最佳实践）</a></li>
+        <li><a href="#2-基础选项配置optionslua">2. 基础选项配置（options.lua）</a></li>
+        <li><a href="#3-快捷键映射keymapslua">3. 快捷键映射（keymaps.lua）</a></li>
+        <li><a href="#4-自动命令autocmdlua">4. 自动命令（autocmd.lua）</a></li>
+      </ul>
+    </li>
+    <li><a href="#五内置核心功能详解">五、内置核心功能详解</a>
+      <ul>
+        <li><a href="#1-内置lsp客户端">1. 内置LSP客户端</a>
+          <ul>
+            <li><a href="#快速配置社区标准方案">快速配置（社区标准方案）</a></li>
+            <li><a href="#核心lsp命令">核心LSP命令</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-tree-sitter">2. Tree-sitter</a>
+          <ul>
+            <li><a href="#安装与配置">安装与配置</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-内置终端模拟器">3. 内置终端模拟器</a>
+          <ul>
+            <li><a href="#核心使用方式">核心使用方式</a></li>
+            <li><a href="#常用配置">常用配置</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#六插件生态与管理">六、插件生态与管理</a>
+      <ul>
+        <li><a href="#1-主流插件管理器">1. 主流插件管理器</a>
+          <ul>
+            <li><a href="#lazynvim-安装与基础配置">lazy.nvim 安装与基础配置</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-核心必备插件推荐">2. 核心必备插件推荐</a></li>
+      </ul>
+    </li>
+    <li><a href="#七进阶使用技巧">七、进阶使用技巧</a>
+      <ul>
+        <li><a href="#1-启动性能优化">1. 启动性能优化</a></li>
+        <li><a href="#2-大文件编辑优化">2. 大文件编辑优化</a></li>
+        <li><a href="#3-调试集成dap">3. 调试集成（DAP）</a></li>
+        <li><a href="#4-宏录制与批量操作">4. 宏录制与批量操作</a></li>
+      </ul>
+    </li>
+    <li><a href="#八常见问题与排查">八、常见问题与排查</a></li>
+    <li><a href="#九学习路径与权威资源">九、学习路径与权威资源</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="neovim-详细使用总结">Neovim 详细使用总结</h1>
+<p>Neovim 是 Vim 的社区驱动现代化分支，<strong>100%兼容Vim核心模态编辑逻辑与绝大多数Vimscript配置/插件</strong>，同时从底层重构了异步非阻塞架构，原生支持Lua脚本、内置LSP客户端、Tree-sitter语法解析、终端模拟器等现代IDE核心能力，兼顾了模态编辑的极致效率与现代开发的全场景需求，是当前终端编辑器的主流选择之一。</p>
+<h2 id="一核心特性与vim的核心差异">一、核心特性与Vim的核心差异</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">特性维度</th>
+          <th style="text-align: left">Neovim</th>
+          <th style="text-align: left">Vim</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">核心架构</td>
+          <td style="text-align: left">原生异步非阻塞，耗时任务（LSP、格式化、搜索）完全不阻塞主界面</td>
+          <td style="text-align: left">同步阻塞为主，Vim8后仅支持有限异步能力，体验割裂</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">脚本支持</td>
+          <td style="text-align: left">Lua为一等公民，执行效率高、语法简洁、生态繁荣，同时兼容Vimscript</td>
+          <td style="text-align: left">原生仅支持Vimscript，Lua支持为第三方扩展，能力受限</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">开发模式</td>
+          <td style="text-align: left">社区驱动，迭代快，持续拥抱现代开发标准</td>
+          <td style="text-align: left">原作者主导，更新保守，优先保证向下兼容</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">内置能力</td>
+          <td style="text-align: left">原生内置LSP客户端、Tree-sitter、终端模拟器、浮动窗口</td>
+          <td style="text-align: left">无原生LSP/Tree-sitter，终端能力弱，UI扩展受限</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">配置规范</td>
+          <td style="text-align: left">遵循XDG基础目录规范，配置文件管理更清晰规范</td>
+          <td style="text-align: left">传统vimrc路径，无统一目录规范</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="核心杀手锏特性">核心杀手锏特性</h3>
+<ol>
+<li><strong>异步IO架构</strong>：彻底解决Vim时代插件/外部命令导致的编辑器卡顿问题，是流畅支持LSP、代码格式化等现代功能的核心基础。</li>
+<li><strong>原生Lua支持</strong>：替代晦涩的Vimscript，配置更易读、易维护、执行更快，整个社区生态已全面转向Lua开发。</li>
+<li><strong>内置LSP客户端</strong>：原生支持语言服务器协议，无需第三方插件即可实现代码补全、跳转定义、悬停文档、重构、诊断等IDE级能力。</li>
+<li><strong>Tree-sitter集成</strong>：基于AST抽象语法树实现精准的语法高亮、增量选择、代码折叠、智能缩进，远优于传统正则匹配的语法解析。</li>
+<li><strong>内置终端模拟器</strong>：无需离开编辑器即可打开终端，支持分屏、浮动窗口，完全兼容Neovim的按键映射与模式。</li>
+</ol>
+<h2 id="二安装与快速入门">二、安装与快速入门</h2>
+<h3 id="1-全平台安装">1. 全平台安装</h3>
+<h4 id="linux">Linux</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Ubuntu/Debian</span>
+</span></span><span class="line"><span class="cl">sudo apt install neovim
+</span></span><span class="line"><span class="cl"><span class="c1"># Fedora/RHEL</span>
+</span></span><span class="line"><span class="cl">sudo dnf install neovim
+</span></span><span class="line"><span class="cl"><span class="c1"># Arch Linux</span>
+</span></span><span class="line"><span class="cl">sudo pacman -S neovim</span></span></code></pre></div></div>
+<h4 id="macos">macOS</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Homebrew</span>
+</span></span><span class="line"><span class="cl">brew install neovim</span></span></code></pre></div></div>
+<h4 id="windows">Windows</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-powershell">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="c"># Scoop</span>
+</span></span><span class="line"><span class="cl"><span class="n">scoop</span> <span class="n">install</span> <span class="n">neovim</span>
+</span></span><span class="line"><span class="cl"><span class="c"># Chocolatey</span>
+</span></span><span class="line"><span class="cl"><span class="n">choco</span> <span class="n">install</span> <span class="n">neovim</span>
+</span></span><span class="line"><span class="cl"><span class="c"># Winget</span>
+</span></span><span class="line"><span class="cl"><span class="n">winget</span> <span class="n">install</span> <span class="n">Neovim</span><span class="p">.</span><span class="n">Neovim</span></span></span></code></pre></div></div>
+<p>安装完成后，执行 <code>nvim --version</code> 验证安装成功，执行 <code>nvim</code> 即可启动编辑器。</p>
+<h3 id="2-极简入门操作">2. 极简入门操作</h3>
+<p>Neovim完全兼容Vim的模态编辑逻辑，核心6种模式，新手只需先掌握3种核心模式：</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">模式</th>
+          <th style="text-align: left">进入方式</th>
+          <th style="text-align: left">核心用途</th>
+          <th style="text-align: left">退出方式</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">普通模式(Normal)</td>
+          <td style="text-align: left">启动默认进入，其他模式按<code>Esc</code>返回</td>
+          <td style="text-align: left">光标移动、文本操作、命令执行</td>
+          <td style="text-align: left">无需退出，基础模式</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">插入模式(Insert)</td>
+          <td style="text-align: left">普通模式按<code>i</code>/<code>a</code>/<code>o</code>等</td>
+          <td style="text-align: left">文本输入、编辑</td>
+          <td style="text-align: left">按<code>Esc</code>返回普通模式</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">命令模式(Command)</td>
+          <td style="text-align: left">普通模式按<code>:</code></td>
+          <td style="text-align: left">执行保存、退出、搜索、设置等命令</td>
+          <td style="text-align: left">执行完命令自动返回，或按<code>Esc</code>取消</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="新手必记基础命令">新手必记基础命令</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-vim">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-vim" data-lang="vim"><span class="line"><span class="cl"><span class="c">&#34; 命令模式核心</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span><span class="nx">w</span>  <span class="nx">保存文件</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span><span class="nx">q</span>  <span class="nx">退出编辑器</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span><span class="nx">wq</span> <span class="nx">保存并退出</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span><span class="nx">q</span><span class="p">!</span> <span class="nx">强制退出不保存</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span><span class="nx">help</span> <span class="nx">打开内置帮助文档</span>（<span class="nx">学习Neovim最权威的资源</span>）
+</span></span><span class="line"><span class="cl"><span class="c">
+</span></span></span><span class="line"><span class="cl"><span class="c">&#34; 普通模式高频操作</span>
+</span></span><span class="line"><span class="cl"><span class="nx">i</span>  <span class="nx">在光标前进入插入模式</span>
+</span></span><span class="line"><span class="cl"><span class="nx">a</span>  <span class="nx">在光标后进入插入模式</span>
+</span></span><span class="line"><span class="cl"><span class="nx">o</span>  <span class="nx">在当前行下方新建行并进入插入模式</span>
+</span></span><span class="line"><span class="cl"><span class="nx">dd</span> <span class="nx">删除当前行</span>
+</span></span><span class="line"><span class="cl"><span class="nx">yy</span> <span class="nx">复制当前行</span>
+</span></span><span class="line"><span class="cl"><span class="nx">p</span>  <span class="nx">粘贴复制</span>/<span class="nx">删除的内容</span>
+</span></span><span class="line"><span class="cl"><span class="nx">u</span>  <span class="nx">撤销上一步操作</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Ctrl</span><span class="p">+</span><span class="nx">r</span> <span class="nx">重做撤销的操作</span></span></span></code></pre></div></div>
+<h2 id="三核心基础操作模态编辑核心">三、核心基础操作（模态编辑核心）</h2>
+<p>Neovim完全兼容Vim的操作逻辑，这里提炼高频核心操作，覆盖90%日常使用场景。</p>
+<h3 id="1-光标移动普通模式">1. 光标移动（普通模式）</h3>
+<p>高效移动是模态编辑的核心，告别纯方向键移动，掌握以下高频操作：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-vim">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-vim" data-lang="vim"><span class="line"><span class="cl"><span class="c">&#34; 基础移动</span>
+</span></span><span class="line"><span class="cl"><span class="nx">h</span> <span class="nx">左</span>  <span class="nx">j</span> <span class="nx">下</span>  <span class="nx">k</span> <span class="nx">上</span>  <span class="nx">l</span> <span class="nx">右</span>
+</span></span><span class="line"><span class="cl"><span class="c">
+</span></span></span><span class="line"><span class="cl"><span class="c">&#34; 单词级移动</span>
+</span></span><span class="line"><span class="cl"><span class="nx">w</span>  <span class="nx">跳到下一个单词开头</span>
+</span></span><span class="line"><span class="cl"><span class="nx">e</span>  <span class="nx">跳到当前</span>/<span class="nx">下一个单词结尾</span>
+</span></span><span class="line"><span class="cl"><span class="nx">b</span>  <span class="nx">跳到当前</span>/<span class="nx">上一个单词开头</span>
+</span></span><span class="line"><span class="cl"><span class="c">
+</span></span></span><span class="line"><span class="cl"><span class="c">&#34; 行级移动</span>
+</span></span><span class="line"><span class="cl"><span class="m">0</span>  <span class="nx">跳到行首</span>
+</span></span><span class="line"><span class="cl">^  <span class="nx">跳到行首第一个非空字符</span>
+</span></span><span class="line"><span class="cl">$  <span class="nx">跳到行尾</span>
+</span></span><span class="line"><span class="cl"><span class="nx">gg</span> <span class="nx">跳到文件开头</span>
+</span></span><span class="line"><span class="cl"><span class="nx">G</span>  <span class="nx">跳到文件结尾</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span><span class="nx">n</span> <span class="nx">跳到第n行</span>（<span class="nx">如</span>:<span class="m">10</span>跳到第<span class="m">10</span>行）
+</span></span><span class="line"><span class="cl"><span class="c">
+</span></span></span><span class="line"><span class="cl"><span class="c">&#34; 段落/屏幕级移动</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Ctrl</span><span class="p">+</span><span class="nx">f</span> <span class="nx">向下翻一屏</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Ctrl</span><span class="p">+</span><span class="nx">b</span> <span class="nx">向上翻一屏</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Ctrl</span><span class="p">+</span><span class="nx">d</span> <span class="nx">向下翻半屏</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Ctrl</span><span class="p">+</span><span class="nx">u</span> <span class="nx">向上翻半屏</span>
+</span></span><span class="line"><span class="cl"><span class="nx">zz</span> <span class="nx">将当前行置于屏幕中央</span></span></span></code></pre></div></div>
+<h3 id="2-文本编辑普通模式">2. 文本编辑（普通模式）</h3>
+<p>Neovim的编辑逻辑是「操作符+范围+对象」，掌握后可实现精准高效的文本处理。</p>
+<h4 id="基础编辑操作">基础编辑操作</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-vim">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-vim" data-lang="vim"><span class="line"><span class="cl"><span class="c">&#34; 基础删除</span>
+</span></span><span class="line"><span class="cl"><span class="nx">x</span>  <span class="nx">删除光标所在字符</span>
+</span></span><span class="line"><span class="cl"><span class="nx">dd</span> <span class="nx">删除当前行</span>
+</span></span><span class="line"><span class="cl"><span class="nx">d</span>$ <span class="nx">删除光标到行尾的内容</span>
+</span></span><span class="line"><span class="cl"><span class="nx">d0</span> <span class="nx">删除光标到行首的内容</span>
+</span></span><span class="line"><span class="cl"><span class="c">
+</span></span></span><span class="line"><span class="cl"><span class="c">&#34; 基础复制粘贴</span>
+</span></span><span class="line"><span class="cl"><span class="nx">yy</span> <span class="nx">复制当前行</span>
+</span></span><span class="line"><span class="cl"><span class="nx">yw</span> <span class="nx">复制当前光标到单词结尾的内容</span>
+</span></span><span class="line"><span class="cl"><span class="nx">p</span>  <span class="nx">粘贴到光标后</span>
+</span></span><span class="line"><span class="cl"><span class="nx">P</span>  <span class="nx">粘贴到光标前</span>
+</span></span><span class="line"><span class="cl"><span class="c">
+</span></span></span><span class="line"><span class="cl"><span class="c">&#34; 高级编辑（操作符+文本对象）</span>
+</span></span><span class="line"><span class="cl"><span class="nx">dw</span> <span class="nx">删除一个单词</span>
+</span></span><span class="line"><span class="cl"><span class="nx">diw</span> <span class="nx">删除光标所在的整个单词</span>（<span class="nx">不包含空格</span>）
+</span></span><span class="line"><span class="cl"><span class="nx">daw</span> <span class="nx">删除光标所在的单词</span>（<span class="nx">包含空格</span>）
+</span></span><span class="line"><span class="cl"><span class="nx">di</span><span class="p">(</span> <span class="nx">删除括号内的内容</span>（<span class="nx">不包含括号</span>）
+</span></span><span class="line"><span class="cl"><span class="nx">da</span><span class="p">(</span> <span class="nx">删除括号及括号内的所有内容</span>
+</span></span><span class="line"><span class="cl"><span class="c">&#34; 同理：ci( 替换括号内内容，yi( 复制括号内内容，支持()、[]、{}、&#39;&#39;、&#34;&#34;、&lt;&gt;等</span></span></span></code></pre></div></div>
+<h3 id="3-搜索与替换">3. 搜索与替换</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-vim">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-vim" data-lang="vim"><span class="line"><span class="cl"><span class="c">&#34; 基础搜索</span>
+</span></span><span class="line"><span class="cl">/<span class="nx">关键词</span>  <span class="nx">向下搜索关键词</span>
+</span></span><span class="line"><span class="cl">?<span class="nx">关键词</span>  <span class="nx">向上搜索关键词</span>
+</span></span><span class="line"><span class="cl"><span class="nx">n</span>  <span class="nx">跳到下一个匹配结果</span>
+</span></span><span class="line"><span class="cl"><span class="nx">N</span>  <span class="nx">跳到上一个匹配结果</span>
+</span></span><span class="line"><span class="cl">*  <span class="nx">向下搜索光标所在的单词</span>
+</span></span><span class="line"><span class="cl">#  <span class="nx">向上搜索光标所在的单词</span>
+</span></span><span class="line"><span class="cl"><span class="c">
+</span></span></span><span class="line"><span class="cl"><span class="c">&#34; 全局替换（命令模式）</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span>%<span class="nx">s</span><span class="sr">/旧内容/</span><span class="nx">新内容</span>/<span class="nx">g</span>  <span class="nx">全局替换所有匹配项</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span>%<span class="nx">s</span><span class="sr">/旧内容/</span><span class="nx">新内容</span>/<span class="nx">gc</span> <span class="nx">全局替换</span>，<span class="nx">每次替换前确认</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span><span class="m">10</span><span class="p">,</span><span class="m">20</span>s<span class="sr">/旧内容/</span><span class="nx">新内容</span>/<span class="nx">g</span>  <span class="nx">替换10</span><span class="m">-20</span>行内的匹配项</span></span></code></pre></div></div>
+<h3 id="4-窗口缓冲区与标签页管理">4. 窗口、缓冲区与标签页管理</h3>
+<h4 id="窗口分屏">窗口分屏</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-vim">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-vim" data-lang="vim"><span class="line"><span class="cl"><span class="p">:</span><span class="nx">sp</span> <span class="nx">文件名</span>  <span class="nx">水平分屏打开文件</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span><span class="nx">vs</span> <span class="nx">文件名</span>  <span class="nx">垂直分屏打开文件</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Ctrl</span><span class="p">+</span><span class="nx">w</span> <span class="p">+</span> <span class="nx">h</span><span class="sr">/j/</span><span class="nx">k</span><span class="sr">/l  切换左/</span><span class="nx">下</span><span class="sr">/上/</span><span class="nx">右的窗口</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Ctrl</span><span class="p">+</span><span class="nx">w</span> <span class="p">+</span> <span class="p">=</span>  <span class="nx">所有窗口等宽等高</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Ctrl</span><span class="p">+</span><span class="nx">w</span> <span class="p">+</span> <span class="nx">q</span>  <span class="nx">关闭当前窗口</span></span></span></code></pre></div></div>
+<h4 id="缓冲区管理">缓冲区管理</h4>
+<p>缓冲区是Neovim打开的文件内存对象，分屏只是窗口展示，核心是缓冲区操作：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-vim">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-vim" data-lang="vim"><span class="line"><span class="cl"><span class="p">:</span><span class="nx">ls</span>  <span class="nx">列出所有打开的缓冲区</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span><span class="nx">b</span> <span class="nx">缓冲区编号</span>/<span class="nx">文件名</span>  <span class="nx">切换到指定缓冲区</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span><span class="nx">bd</span> <span class="nx">关闭当前缓冲区</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span><span class="nx">bn</span> <span class="nx">切换到下一个缓冲区</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span><span class="nx">bp</span> <span class="nx">切换到上一个缓冲区</span></span></span></code></pre></div></div>
+<h4 id="标签页管理">标签页管理</h4>
+<p>每个标签页可包含多个窗口，用于区分不同工作场景：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-vim">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-vim" data-lang="vim"><span class="line"><span class="cl"><span class="p">:</span><span class="nx">tabe</span> <span class="nx">文件名</span>  <span class="nx">新建标签页打开文件</span>
+</span></span><span class="line"><span class="cl"><span class="nx">gt</span>  <span class="nx">切换到下一个标签页</span>
+</span></span><span class="line"><span class="cl"><span class="nx">gT</span>  <span class="nx">切换到上一个标签页</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span><span class="nx">tabclose</span> <span class="nx">关闭当前标签页</span></span></span></code></pre></div></div>
+<h2 id="四配置体系initlua-从0到1">四、配置体系（init.lua 从0到1）</h2>
+<p>Neovim的现代配置完全基于Lua，<strong>配置入口文件为 <code>~/.config/nvim/init.lua</code></strong>（Linux/macOS），Windows对应路径为 <code>%LOCALAPPDATA%\nvim\init.lua</code>，完全替代传统的 <code>init.vim</code>。</p>
+<h3 id="1-配置文件目录结构最佳实践">1. 配置文件目录结构（最佳实践）</h3>
+<p>模块化配置是长期维护的核心，推荐目录结构如下：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>~/.config/nvim/
+├── init.lua          # 配置入口，负责加载所有模块
+├── lua/              # Lua模块目录，所有子配置都放在这里
+│   ├── core/         # 核心配置
+│   │   ├── options.lua  # 基础选项设置
+│   │   ├── keymaps.lua  # 快捷键映射
+│   │   └── autocmd.lua  # 自动命令
+│   └── plugins/      # 插件配置
+│       ├── init.lua  # 插件管理器与插件列表
+│       ├── lsp.lua   # LSP相关配置
+│       └── treesitter.lua # Tree-sitter配置
+└── after/            # 延迟加载的配置（可选）</code></pre></div>
+<p>入口文件 <code>init.lua</code> 最简示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-lua">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="c1">-- 加载核心配置</span>
+</span></span><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s2">&#34;core.options&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s2">&#34;core.keymaps&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s2">&#34;core.autocmd&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 加载插件配置</span>
+</span></span><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s2">&#34;plugins.init&#34;</span><span class="p">)</span></span></span></code></pre></div></div>
+<h3 id="2-基础选项配置optionslua">2. 基础选项配置（options.lua）</h3>
+<p>通过Lua的vim API设置编辑器行为，替代传统的 <code>set</code> 命令，核心API分为三类：</p>
+<ul>
+<li><code>vim.o</code>：全局选项</li>
+<li><code>vim.wo</code>：窗口局部选项</li>
+<li><code>vim.bo</code>：缓冲区局部选项</li>
+</ul>
+<p>核心配置示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-lua">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">opt</span> <span class="o">=</span> <span class="n">vim.opt</span>
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">g</span> <span class="o">=</span> <span class="n">vim.g</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 编码设置</span>
+</span></span><span class="line"><span class="cl"><span class="n">g.encoding</span> <span class="o">=</span> <span class="s2">&#34;UTF-8&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.fileencoding</span> <span class="o">=</span> <span class="s2">&#34;utf-8&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 行号设置</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.number</span> <span class="o">=</span> <span class="kc">true</span>         <span class="c1">-- 显示行号</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.relativenumber</span> <span class="o">=</span> <span class="kc">true</span> <span class="c1">-- 显示相对行号（配合j/k移动更高效）</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.cursorline</span> <span class="o">=</span> <span class="kc">true</span>     <span class="c1">-- 高亮当前行</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.scrolloff</span> <span class="o">=</span> <span class="mi">8</span>         <span class="c1">-- 光标上下保留8行，避免滚动到屏幕边缘</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.sidescrolloff</span> <span class="o">=</span> <span class="mi">8</span>     <span class="c1">-- 光标左右保留8列</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 缩进与Tab设置</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.tabstop</span> <span class="o">=</span> <span class="mi">4</span>           <span class="c1">-- Tab显示为4个空格</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.shiftwidth</span> <span class="o">=</span> <span class="mi">4</span>        <span class="c1">-- 自动缩进的宽度</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.expandtab</span> <span class="o">=</span> <span class="kc">true</span>      <span class="c1">-- 将Tab转换为空格</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.smartindent</span> <span class="o">=</span> <span class="kc">true</span>    <span class="c1">-- 智能缩进</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.shiftround</span> <span class="o">=</span> <span class="kc">true</span>     <span class="c1">-- 缩进对齐到shiftwidth的整数倍</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 搜索设置</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.ignorecase</span> <span class="o">=</span> <span class="kc">true</span>     <span class="c1">-- 搜索忽略大小写</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.smartcase</span> <span class="o">=</span> <span class="kc">true</span>      <span class="c1">-- 搜索含大写字母时，自动切换为大小写敏感</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.hlsearch</span> <span class="o">=</span> <span class="kc">true</span>       <span class="c1">-- 高亮搜索结果</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.incsearch</span> <span class="o">=</span> <span class="kc">true</span>      <span class="c1">-- 增量搜索</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- UI与体验设置</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.signcolumn</span> <span class="o">=</span> <span class="s2">&#34;yes&#34;</span>    <span class="c1">-- 始终显示左侧图标列（避免LSP诊断时屏幕抖动）</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.colorcolumn</span> <span class="o">=</span> <span class="s2">&#34;120&#34;</span>   <span class="c1">-- 右侧参考线，提示代码长度</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.termguicolors</span> <span class="o">=</span> <span class="kc">true</span>  <span class="c1">-- 启用24位真彩色（必备，美化UI的基础）</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.mouse</span> <span class="o">=</span> <span class="s2">&#34;a&#34;</span>           <span class="c1">-- 全模式启用鼠标支持</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.clipboard</span> <span class="o">=</span> <span class="s2">&#34;unnamedplus&#34;</span> <span class="c1">-- 同步系统剪贴板</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.updatetime</span> <span class="o">=</span> <span class="mi">300</span>      <span class="c1">-- 自动更新的延迟时间（单位ms）</span>
+</span></span><span class="line"><span class="cl"><span class="n">opt.timeoutlen</span> <span class="o">=</span> <span class="mi">500</span>      <span class="c1">-- 快捷键组合的超时时间</span></span></span></code></pre></div></div>
+<h3 id="3-快捷键映射keymapslua">3. 快捷键映射（keymaps.lua）</h3>
+<p>通过 <code>vim.keymap.set</code> 定义快捷键，替代传统的 <code>map</code> 命令，语法格式：
+<code>vim.keymap.set(模式, 触发键, 执行命令/函数, 配置项)</code></p>
+<p>模式简写：<code>n</code>普通模式，<code>i</code>插入模式，<code>v</code>可视模式，<code>t</code>终端模式，<code>o</code>操作符等待模式。</p>
+<p>核心映射示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-lua">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">map</span> <span class="o">=</span> <span class="n">vim.keymap</span><span class="p">.</span><span class="n">set</span>
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">opt</span> <span class="o">=</span> <span class="p">{</span> <span class="n">noremap</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="n">silent</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">}</span> <span class="c1">-- noremap: 非递归映射，silent: 不显示命令行提示</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 基础优化：取消方向键，强制使用hjkl（新手练习可选）</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;Up&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;Nop&gt;&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;Down&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;Nop&gt;&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;Left&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;Nop&gt;&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;Right&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;Nop&gt;&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- Leader键设置（Neovim快捷键的核心前缀，推荐设置为空格）</span>
+</span></span><span class="line"><span class="cl"><span class="n">vim.g</span><span class="p">.</span><span class="n">mapleader</span> <span class="o">=</span> <span class="s2">&#34; &#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">vim.g</span><span class="p">.</span><span class="n">maplocalleader</span> <span class="o">=</span> <span class="s2">&#34; &#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 窗口切换优化：Ctrl+hjkl直接切换窗口，无需先按Ctrl+w</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-h&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-w&gt;h&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-j&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-w&gt;j&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-k&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-w&gt;k&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-l&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-w&gt;l&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 分屏快捷键</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;leader&gt;sv&#34;</span><span class="p">,</span> <span class="s2">&#34;:vs&lt;CR&gt;&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span> <span class="c1">-- 垂直分屏</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;leader&gt;sh&#34;</span><span class="p">,</span> <span class="s2">&#34;:sp&lt;CR&gt;&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span> <span class="c1">-- 水平分屏</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;leader&gt;sq&#34;</span><span class="p">,</span> <span class="s2">&#34;:q&lt;CR&gt;&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>  <span class="c1">-- 关闭当前窗口</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 缓冲区切换</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;leader&gt;bn&#34;</span><span class="p">,</span> <span class="s2">&#34;:bn&lt;CR&gt;&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span> <span class="c1">-- 下一个缓冲区</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;leader&gt;bp&#34;</span><span class="p">,</span> <span class="s2">&#34;:bp&lt;CR&gt;&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span> <span class="c1">-- 上一个缓冲区</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;leader&gt;bd&#34;</span><span class="p">,</span> <span class="s2">&#34;:bd&lt;CR&gt;&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span> <span class="c1">-- 关闭当前缓冲区</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 终端模式优化：Esc退出终端插入模式</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;t&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;Esc&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-</span><span class="se">\\</span><span class="s2">&gt;&lt;C-n&gt;&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span></span></span></code></pre></div></div>
+<h3 id="4-自动命令autocmdlua">4. 自动命令（autocmd.lua）</h3>
+<p>自动命令用于在特定事件触发时自动执行操作，比如文件保存时自动格式化、打开特定文件时设置缩进等。</p>
+<p>核心示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-lua">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">autocmd</span> <span class="o">=</span> <span class="n">vim.api</span><span class="p">.</span><span class="n">nvim_create_autocmd</span>
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">augroup</span> <span class="o">=</span> <span class="n">vim.api</span><span class="p">.</span><span class="n">nvim_create_augroup</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 自定义自动命令组，避免重复定义</span>
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">core_group</span> <span class="o">=</span> <span class="n">augroup</span><span class="p">(</span><span class="s2">&#34;CoreAutoCmd&#34;</span><span class="p">,</span> <span class="p">{</span> <span class="n">clear</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 1. 保存文件时自动去除行尾空格</span>
+</span></span><span class="line"><span class="cl"><span class="n">autocmd</span><span class="p">(</span><span class="s2">&#34;BufWritePre&#34;</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">group</span> <span class="o">=</span> <span class="n">core_group</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pattern</span> <span class="o">=</span> <span class="s2">&#34;*&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">command</span> <span class="o">=</span> <span class="s2">&#34;%s/</span><span class="se">\\</span><span class="s2">s</span><span class="se">\\</span><span class="s2">+$//e&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 2. 打开Python文件时，设置缩进为4个空格</span>
+</span></span><span class="line"><span class="cl"><span class="n">autocmd</span><span class="p">(</span><span class="s2">&#34;FileType&#34;</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">group</span> <span class="o">=</span> <span class="n">core_group</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pattern</span> <span class="o">=</span> <span class="s2">&#34;python&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">callback</span> <span class="o">=</span> <span class="kr">function</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vim.opt_local</span><span class="p">.</span><span class="n">tabstop</span> <span class="o">=</span> <span class="mi">4</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vim.opt_local</span><span class="p">.</span><span class="n">shiftwidth</span> <span class="o">=</span> <span class="mi">4</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">end</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 3. 打开前端文件时，设置缩进为2个空格</span>
+</span></span><span class="line"><span class="cl"><span class="n">autocmd</span><span class="p">(</span><span class="s2">&#34;FileType&#34;</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">group</span> <span class="o">=</span> <span class="n">core_group</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pattern</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&#34;javascript&#34;</span><span class="p">,</span> <span class="s2">&#34;typescript&#34;</span><span class="p">,</span> <span class="s2">&#34;html&#34;</span><span class="p">,</span> <span class="s2">&#34;css&#34;</span><span class="p">,</span> <span class="s2">&#34;vue&#34;</span><span class="p">,</span> <span class="s2">&#34;react&#34;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="n">callback</span> <span class="o">=</span> <span class="kr">function</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vim.opt_local</span><span class="p">.</span><span class="n">tabstop</span> <span class="o">=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vim.opt_local</span><span class="p">.</span><span class="n">shiftwidth</span> <span class="o">=</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">end</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 4. 打开终端时，自动进入插入模式</span>
+</span></span><span class="line"><span class="cl"><span class="n">autocmd</span><span class="p">(</span><span class="s2">&#34;TermOpen&#34;</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">group</span> <span class="o">=</span> <span class="n">core_group</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pattern</span> <span class="o">=</span> <span class="s2">&#34;*&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">command</span> <span class="o">=</span> <span class="s2">&#34;startinsert&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span></span></span></code></pre></div></div>
+<h2 id="五内置核心功能详解">五、内置核心功能详解</h2>
+<h3 id="1-内置lsp客户端">1. 内置LSP客户端</h3>
+<p>LSP（Language Server Protocol）是现代编辑器智能补全、代码导航的核心，Neovim原生内置LSP客户端，无需第三方插件即可实现IDE级代码能力。</p>
+<h4 id="快速配置社区标准方案">快速配置（社区标准方案）</h4>
+<p>社区主流使用 <code>mason.nvim</code> + <code>mason-lspconfig.nvim</code> + <code>nvim-lspconfig</code> 三件套实现LSP的一键安装、管理与配置，无需手动编译安装语言服务器。</p>
+<ol>
+<li>安装插件（以lazy.nvim为例）</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-lua">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="c1">-- plugins/init.lua</span>
+</span></span><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s2">&#34;lazy&#34;</span><span class="p">).</span><span class="n">setup</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">-- LSP核心三件套</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;williamboman/mason.nvim&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;williamboman/mason-lspconfig.nvim&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;neovim/nvim-lspconfig&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span></span></span></code></pre></div></div>
+<ol start="2">
+<li>基础配置</li>
+</ol>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-lua">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="c1">-- plugins/lsp.lua</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 1. 初始化mason</span>
+</span></span><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s2">&#34;mason&#34;</span><span class="p">).</span><span class="n">setup</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s2">&#34;mason-lspconfig&#34;</span><span class="p">).</span><span class="n">setup</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">-- 自动安装的语言服务器</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ensure_installed</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;lua_ls&#34;</span><span class="p">,</span>    <span class="c1">-- Lua</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;pyright&#34;</span><span class="p">,</span>   <span class="c1">-- Python</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;ts_ls&#34;</span><span class="p">,</span>     <span class="c1">-- TypeScript/JavaScript</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;gopls&#34;</span><span class="p">,</span>     <span class="c1">-- Go</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;rust_analyzer&#34;</span><span class="p">,</span> <span class="c1">-- Rust</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 2. 配置LSP能力</span>
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">lspconfig</span> <span class="o">=</span> <span class="n">require</span><span class="p">(</span><span class="s2">&#34;lspconfig&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">capabilities</span> <span class="o">=</span> <span class="n">require</span><span class="p">(</span><span class="s2">&#34;cmp_nvim_lsp&#34;</span><span class="p">).</span><span class="n">default_capabilities</span><span class="p">()</span> <span class="c1">-- 配合nvim-cmp补全</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 3. 批量配置语言服务器</span>
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">servers</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&#34;lua_ls&#34;</span><span class="p">,</span> <span class="s2">&#34;pyright&#34;</span><span class="p">,</span> <span class="s2">&#34;ts_ls&#34;</span><span class="p">,</span> <span class="s2">&#34;gopls&#34;</span><span class="p">,</span> <span class="s2">&#34;rust_analyzer&#34;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kr">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">server</span> <span class="kr">in</span> <span class="n">ipairs</span><span class="p">(</span><span class="n">servers</span><span class="p">)</span> <span class="kr">do</span>
+</span></span><span class="line"><span class="cl">  <span class="n">lspconfig</span><span class="p">[</span><span class="n">server</span><span class="p">].</span><span class="n">setup</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">    <span class="n">capabilities</span> <span class="o">=</span> <span class="n">capabilities</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">-- LSP附加配置，绑定快捷键</span>
+</span></span><span class="line"><span class="cl">    <span class="n">on_attach</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">bufnr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">local</span> <span class="n">map</span> <span class="o">=</span> <span class="n">vim.keymap</span><span class="p">.</span><span class="n">set</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">local</span> <span class="n">opt</span> <span class="o">=</span> <span class="p">{</span> <span class="n">noremap</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="n">silent</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="n">buffer</span> <span class="o">=</span> <span class="n">bufnr</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">-- 核心LSP快捷键</span>
+</span></span><span class="line"><span class="cl">      <span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;gD&#34;</span><span class="p">,</span> <span class="n">vim.lsp</span><span class="p">.</span><span class="n">buf.declaration</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>          <span class="c1">-- 跳转到声明</span>
+</span></span><span class="line"><span class="cl">      <span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;gd&#34;</span><span class="p">,</span> <span class="n">vim.lsp</span><span class="p">.</span><span class="n">buf.definition</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>           <span class="c1">-- 跳转到定义</span>
+</span></span><span class="line"><span class="cl">      <span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;gr&#34;</span><span class="p">,</span> <span class="n">vim.lsp</span><span class="p">.</span><span class="n">buf.references</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>           <span class="c1">-- 查看所有引用</span>
+</span></span><span class="line"><span class="cl">      <span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;K&#34;</span><span class="p">,</span> <span class="n">vim.lsp</span><span class="p">.</span><span class="n">buf.hover</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>                 <span class="c1">-- 悬停查看文档</span>
+</span></span><span class="line"><span class="cl">      <span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;leader&gt;rn&#34;</span><span class="p">,</span> <span class="n">vim.lsp</span><span class="p">.</span><span class="n">buf.rename</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>       <span class="c1">-- 变量重命名</span>
+</span></span><span class="line"><span class="cl">      <span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;leader&gt;ca&#34;</span><span class="p">,</span> <span class="n">vim.lsp</span><span class="p">.</span><span class="n">buf.code_action</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>  <span class="c1">-- 代码修复/重构</span>
+</span></span><span class="line"><span class="cl">      <span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;leader&gt;f&#34;</span><span class="p">,</span> <span class="kr">function</span><span class="p">()</span>                       <span class="c1">-- 代码格式化</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vim.lsp</span><span class="p">.</span><span class="n">buf.format</span><span class="p">({</span> <span class="n">async</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">      <span class="kr">end</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">-- 诊断跳转</span>
+</span></span><span class="line"><span class="cl">      <span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;[d&#34;</span><span class="p">,</span> <span class="n">vim.diagnostic</span><span class="p">.</span><span class="n">goto_prev</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>         <span class="c1">-- 上一个诊断错误</span>
+</span></span><span class="line"><span class="cl">      <span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;]d&#34;</span><span class="p">,</span> <span class="n">vim.diagnostic</span><span class="p">.</span><span class="n">goto_next</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>         <span class="c1">-- 下一个诊断错误</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">end</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="kr">end</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- Lua专属配置（针对Neovim配置开发）</span>
+</span></span><span class="line"><span class="cl"><span class="n">lspconfig.lua_ls</span><span class="p">.</span><span class="n">setup</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">  <span class="n">settings</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Lua</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">runtime</span> <span class="o">=</span> <span class="p">{</span> <span class="n">version</span> <span class="o">=</span> <span class="s2">&#34;LuaJIT&#34;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="n">diagnostics</span> <span class="o">=</span> <span class="p">{</span> <span class="n">globals</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&#34;vim&#34;</span> <span class="p">}</span> <span class="p">},</span> <span class="c1">-- 识别vim全局变量</span>
+</span></span><span class="line"><span class="cl">      <span class="n">workspace</span> <span class="o">=</span> <span class="p">{</span> <span class="n">library</span> <span class="o">=</span> <span class="n">vim.api</span><span class="p">.</span><span class="n">nvim_get_runtime_file</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="n">telemetry</span> <span class="o">=</span> <span class="p">{</span> <span class="n">enable</span> <span class="o">=</span> <span class="kc">false</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span></span></span></code></pre></div></div>
+<h4 id="核心lsp命令">核心LSP命令</h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>:LspInfo</code></td>
+          <td style="text-align: left">查看当前缓冲区LSP服务器运行状态</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>:LspInstall</code></td>
+          <td style="text-align: left">安装语言服务器</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>:LspUninstall</code></td>
+          <td style="text-align: left">卸载语言服务器</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>:Mason</code></td>
+          <td style="text-align: left">打开Mason图形界面，管理LSP/DAP/Linter/Formatter</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>:lua vim.diagnostic.setloclist()</code></td>
+          <td style="text-align: left">打开诊断列表，查看所有文件错误</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-tree-sitter">2. Tree-sitter</h3>
+<p>Tree-sitter是一个增量语法解析器，基于AST抽象语法树实现精准的代码解析，远优于传统正则匹配的语法高亮，同时提供增量选择、代码折叠、智能缩进等能力。</p>
+<h4 id="安装与配置">安装与配置</h4>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-lua">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="c1">-- 插件安装</span>
+</span></span><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s2">&#34;lazy&#34;</span><span class="p">).</span><span class="n">setup</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;nvim-treesitter/nvim-treesitter&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">build</span> <span class="o">=</span> <span class="s2">&#34;:TSUpdate&#34;</span><span class="p">,</span> <span class="c1">-- 安装后自动更新解析器</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 基础配置（plugins/treesitter.lua）</span>
+</span></span><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s2">&#34;nvim-treesitter.configs&#34;</span><span class="p">).</span><span class="n">setup</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">-- 自动安装的语法解析器，&#34;all&#34;安装所有，推荐按需安装</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ensure_installed</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;lua&#34;</span><span class="p">,</span> <span class="s2">&#34;python&#34;</span><span class="p">,</span> <span class="s2">&#34;go&#34;</span><span class="p">,</span> <span class="s2">&#34;rust&#34;</span><span class="p">,</span> <span class="s2">&#34;javascript&#34;</span><span class="p">,</span> <span class="s2">&#34;typescript&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;html&#34;</span><span class="p">,</span> <span class="s2">&#34;css&#34;</span><span class="p">,</span> <span class="s2">&#34;json&#34;</span><span class="p">,</span> <span class="s2">&#34;yaml&#34;</span><span class="p">,</span> <span class="s2">&#34;markdown&#34;</span><span class="p">,</span> <span class="s2">&#34;bash&#34;</span><span class="p">,</span> <span class="s2">&#34;c&#34;</span><span class="p">,</span> <span class="s2">&#34;cpp&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="n">auto_install</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">-- 打开未知文件类型时，自动安装对应解析器</span>
+</span></span><span class="line"><span class="cl">  <span class="n">highlight</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">enable</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">-- 启用基于Tree-sitter的语法高亮</span>
+</span></span><span class="line"><span class="cl">    <span class="n">additional_vim_regex_highlighting</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">-- 关闭传统正则高亮</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="n">incremental_selection</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">enable</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">-- 启用增量选择（按语法节点扩大选择范围）</span>
+</span></span><span class="line"><span class="cl">    <span class="n">keymaps</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">init_selection</span> <span class="o">=</span> <span class="s2">&#34;&lt;CR&gt;&#34;</span><span class="p">,</span> <span class="c1">-- 回车开始选择</span>
+</span></span><span class="line"><span class="cl">      <span class="n">node_incremental</span> <span class="o">=</span> <span class="s2">&#34;&lt;CR&gt;&#34;</span><span class="p">,</span> <span class="c1">-- 回车扩大选择范围</span>
+</span></span><span class="line"><span class="cl">      <span class="n">node_decremental</span> <span class="o">=</span> <span class="s2">&#34;&lt;BS&gt;&#34;</span><span class="p">,</span> <span class="c1">-- 退格缩小选择范围</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="n">indent</span> <span class="o">=</span> <span class="p">{</span> <span class="n">enable</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">},</span> <span class="c1">-- 启用智能缩进</span>
+</span></span><span class="line"><span class="cl">  <span class="n">fold</span> <span class="o">=</span> <span class="p">{</span> <span class="n">enable</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">},</span>   <span class="c1">-- 启用代码折叠</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 开启基于Tree-sitter的代码折叠</span>
+</span></span><span class="line"><span class="cl"><span class="n">vim.opt</span><span class="p">.</span><span class="n">foldmethod</span> <span class="o">=</span> <span class="s2">&#34;expr&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">vim.opt</span><span class="p">.</span><span class="n">foldexpr</span> <span class="o">=</span> <span class="s2">&#34;nvim_treesitter#foldexpr()&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">vim.opt</span><span class="p">.</span><span class="n">foldenable</span> <span class="o">=</span> <span class="kc">false</span> <span class="c1">-- 默认不折叠</span></span></span></code></pre></div></div>
+<h3 id="3-内置终端模拟器">3. 内置终端模拟器</h3>
+<p>Neovim原生内置基于libvterm的终端模拟器，无需离开编辑器即可执行shell命令、运行程序，完全兼容Neovim的按键映射与模式。</p>
+<h4 id="核心使用方式">核心使用方式</h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令/操作</th>
+          <th style="text-align: left">功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>:terminal</code> / <code>:term</code></td>
+          <td style="text-align: left">新建缓冲区打开终端</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>:vs term://bash</code></td>
+          <td style="text-align: left">垂直分屏打开终端</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>:sp term://zsh</code></td>
+          <td style="text-align: left">水平分屏打开终端</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>i</code> / <code>a</code></td>
+          <td style="text-align: left">终端缓冲区进入终端插入模式（可输入shell命令）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>Esc</code></td>
+          <td style="text-align: left">终端插入模式返回普通模式（可执行复制、滚动、切换窗口等操作）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>Ctrl+\ Ctrl+n</code></td>
+          <td style="text-align: left">强制退出终端插入模式（Esc映射失效时使用）</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="常用配置">常用配置</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-lua">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="c1">-- 快捷键映射：&lt;leader&gt;tt 浮动终端</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;n&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;leader&gt;tt&#34;</span><span class="p">,</span> <span class="s2">&#34;:ToggleTerm&lt;CR&gt;&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span> <span class="c1">-- 需配合toggleterm.nvim插件，原生可自定义浮动终端</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 终端模式下，Esc退出插入模式</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;t&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;Esc&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-</span><span class="se">\\</span><span class="s2">&gt;&lt;C-n&gt;&#34;</span><span class="p">,</span> <span class="p">{</span> <span class="n">noremap</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="n">silent</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 终端模式下，Ctrl+hjkl切换窗口</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;t&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-h&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-</span><span class="se">\\</span><span class="s2">&gt;&lt;C-n&gt;&lt;C-w&gt;h&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;t&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-j&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-</span><span class="se">\\</span><span class="s2">&gt;&lt;C-n&gt;&lt;C-w&gt;j&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;t&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-k&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-</span><span class="se">\\</span><span class="s2">&gt;&lt;C-n&gt;&lt;C-w&gt;k&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">map</span><span class="p">(</span><span class="s2">&#34;t&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-l&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;C-</span><span class="se">\\</span><span class="s2">&gt;&lt;C-n&gt;&lt;C-w&gt;l&#34;</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span></span></span></code></pre></div></div>
+<h2 id="六插件生态与管理">六、插件生态与管理</h2>
+<p>Neovim的强大之处在于繁荣的插件生态，社区已全面转向Lua原生插件，功能覆盖从UI美化到全栈IDE能力的所有场景。</p>
+<h3 id="1-主流插件管理器">1. 主流插件管理器</h3>
+<p>当前社区首选 <strong>lazy.nvim</strong>，它是现代Neovim插件管理器的标杆，支持异步安装、懒加载、锁文件、图形化管理界面，极致优化启动速度，上百个插件也可实现100ms内启动。</p>
+<h4 id="lazynvim-安装与基础配置">lazy.nvim 安装与基础配置</h4>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-lua">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="c1">-- init.lua 开头添加，自动安装lazy.nvim</span>
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">lazypath</span> <span class="o">=</span> <span class="n">vim.fn</span><span class="p">.</span><span class="n">stdpath</span><span class="p">(</span><span class="s2">&#34;data&#34;</span><span class="p">)</span> <span class="o">..</span> <span class="s2">&#34;/lazy/lazy.nvim&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">if</span> <span class="ow">not</span> <span class="n">vim.loop</span><span class="p">.</span><span class="n">fs_stat</span><span class="p">(</span><span class="n">lazypath</span><span class="p">)</span> <span class="kr">then</span>
+</span></span><span class="line"><span class="cl">  <span class="n">vim.fn</span><span class="p">.</span><span class="n">system</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;git&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;clone&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;--filter=blob:none&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://github.com/folke/lazy.nvim.git&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;--branch=stable&#34;</span><span class="p">,</span> <span class="c1">-- 稳定分支</span>
+</span></span><span class="line"><span class="cl">    <span class="n">lazypath</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="kr">end</span>
+</span></span><span class="line"><span class="cl"><span class="n">vim.opt</span><span class="p">.</span><span class="n">rtp</span><span class="p">:</span><span class="n">prepend</span><span class="p">(</span><span class="n">lazypath</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">-- 加载lazy.nvim，配置插件列表</span>
+</span></span><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s2">&#34;lazy&#34;</span><span class="p">).</span><span class="n">setup</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">-- 插件列表，直接写插件GitHub地址简写</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;folke/which-key.nvim&#34;</span><span class="p">,</span> <span class="c1">-- 快捷键提示</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;nvim-tree/nvim-tree.lua&#34;</span><span class="p">,</span> <span class="c1">-- 文件树</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">-- 带配置的插件</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;nvim-telescope/telescope.nvim&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dependencies</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&#34;nvim-lua/plenary.nvim&#34;</span> <span class="p">},</span> <span class="c1">-- 依赖插件</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">-- 更多插件...</span>
+</span></span><span class="line"><span class="cl"><span class="p">},</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">-- lazy.nvim 全局配置</span>
+</span></span><span class="line"><span class="cl">  <span class="n">install</span> <span class="o">=</span> <span class="p">{</span> <span class="n">colorscheme</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&#34;tokyonight&#34;</span> <span class="p">}</span> <span class="p">},</span> <span class="c1">-- 安装缺失插件时使用的配色</span>
+</span></span><span class="line"><span class="cl">  <span class="n">checker</span> <span class="o">=</span> <span class="p">{</span> <span class="n">enabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="n">notify</span> <span class="o">=</span> <span class="kc">false</span> <span class="p">},</span> <span class="c1">-- 自动检查插件更新</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span></span></span></code></pre></div></div>
+<p>核心命令：</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>:Lazy</code></td>
+          <td style="text-align: left">打开lazy.nvim图形管理界面</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>:Lazy install</code></td>
+          <td style="text-align: left">安装所有缺失插件</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>:Lazy update</code></td>
+          <td style="text-align: left">更新所有插件</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>:Lazy clean</code></td>
+          <td style="text-align: left">清理未使用的插件</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>:Lazy sync</code></td>
+          <td style="text-align: left">同步插件（install+update+clean）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>:Lazy check</code></td>
+          <td style="text-align: left">检查插件更新</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-核心必备插件推荐">2. 核心必备插件推荐</h3>
+<p>按功能分类，推荐社区主流、稳定维护的Lua原生插件，覆盖绝大多数开发场景：</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">分类</th>
+          <th style="text-align: left">插件</th>
+          <th style="text-align: left">核心功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>插件管理</strong></td>
+          <td style="text-align: left">folke/lazy.nvim</td>
+          <td style="text-align: left">现代插件管理器，异步、懒加载、图形化界面，社区首选</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>配色与UI</strong></td>
+          <td style="text-align: left">folke/tokyonight.nvim</td>
+          <td style="text-align: left">主流配色方案，支持真彩色，护眼且辨识度高</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">catppuccin/nvim</td>
+          <td style="text-align: left">低对比度柔和配色，多风格可选，适配绝大多数插件</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">nvim-lualine/lualine.nvim</td>
+          <td style="text-align: left">高颜值状态栏，自定义程度高，轻量高效</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">folke/noice.nvim</td>
+          <td style="text-align: left">重构命令行、通知、消息系统，现代化UI体验</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>文件管理</strong></td>
+          <td style="text-align: left">nvim-tree/nvim-tree.lua</td>
+          <td style="text-align: left">侧边栏文件树，功能全面，轻量稳定</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">nvim-neo-tree/neo-tree.nvim</td>
+          <td style="text-align: left">功能更强大的文件管理器，支持缓冲区、Git、远程文件</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>模糊搜索</strong></td>
+          <td style="text-align: left">nvim-telescope/telescope.nvim</td>
+          <td style="text-align: left">万能模糊搜索神器，支持文件、文本、符号、Git、缓冲区等全场景搜索</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>代码补全</strong></td>
+          <td style="text-align: left">hrsh7th/nvim-cmp</td>
+          <td style="text-align: left">社区最强补全引擎，全模块化设计，支持LSP、路径、片段、缓冲区等多种补全源</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">L3MON4D3/LuaSnip</td>
+          <td style="text-align: left">代码片段引擎，配合nvim-cmp实现自定义代码片段</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>LSP增强</strong></td>
+          <td style="text-align: left">williamboman/mason.nvim</td>
+          <td style="text-align: left">LSP/DAP/Linter/Formatter一键安装管理，内置App Store</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">neovim/nvim-lspconfig</td>
+          <td style="text-align: left">官方LSP配置合集，提供绝大多数语言服务器的开箱即用配置</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">nvimdev/lspsaga.nvim</td>
+          <td style="text-align: left">LSP功能增强，提供更美观的UI、跳转、诊断、代码动作体验</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>Git集成</strong></td>
+          <td style="text-align: left">lewis6991/gitsigns.nvim</td>
+          <td style="text-align: left">行级Git状态提示，支持 blame、diff、撤销修改等操作</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">tpope/vim-fugitive</td>
+          <td style="text-align: left">全能Git插件，支持所有Git命令，与Neovim深度集成</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>终端增强</strong></td>
+          <td style="text-align: left">akinsho/toggleterm.nvim</td>
+          <td style="text-align: left">浮动终端、分屏终端管理，支持多终端切换、自定义快捷键</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>效率工具</strong></td>
+          <td style="text-align: left">folke/which-key.nvim</td>
+          <td style="text-align: left">快捷键实时提示，按下前缀键自动弹出后续按键说明，解决记不住快捷键的痛点</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">windwp/nvim-autopairs</td>
+          <td style="text-align: left">自动补全括号、引号、标签，支持嵌套、多行匹配</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">numToStr/Comment.nvim</td>
+          <td style="text-align: left">极速代码注释，支持单行/多行注释，适配绝大多数语言</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>AI辅助</strong></td>
+          <td style="text-align: left">github/copilot.vim</td>
+          <td style="text-align: left">GitHub Copilot官方插件，AI代码补全</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">yetone/avante.nvim</td>
+          <td style="text-align: left">开源AI编程助手，支持多模型，类似Cursor的对话式编程体验</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="七进阶使用技巧">七、进阶使用技巧</h2>
+<h3 id="1-启动性能优化">1. 启动性能优化</h3>
+<ol>
+<li><strong>懒加载插件</strong>：lazy.nvim原生支持懒加载，通过 <code>event</code>、<code>ft</code>、<code>cmd</code>、<code>keys</code> 配置插件触发时机，避免启动时加载所有插件。
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-lua">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="c1">-- 示例：仅在打开Python文件时加载插件</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;linux-cultist/venv-selector.nvim&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ft</span> <span class="o">=</span> <span class="s2">&#34;python&#34;</span><span class="p">,</span> <span class="c1">-- 仅Python文件类型触发加载</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 示例：仅执行命令时加载</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;akinsho/toggleterm.nvim&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&#34;ToggleTerm&#34;</span><span class="p">,</span> <span class="c1">-- 执行:ToggleTerm时才加载</span>
+</span></span><span class="line"><span class="cl">  <span class="n">config</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+</li>
+<li><strong>禁用不必要的内置插件</strong>：Neovim内置了很多兼容Vim的插件，不用的可以禁用，加快启动速度。
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-lua">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="c1">-- init.lua 开头添加</span>
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">builtins</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;gzip&#34;</span><span class="p">,</span> <span class="s2">&#34;zip&#34;</span><span class="p">,</span> <span class="s2">&#34;zipPlugin&#34;</span><span class="p">,</span> <span class="s2">&#34;tar&#34;</span><span class="p">,</span> <span class="s2">&#34;tarPlugin&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;getscript&#34;</span><span class="p">,</span> <span class="s2">&#34;getscriptPlugin&#34;</span><span class="p">,</span> <span class="s2">&#34;vimball&#34;</span><span class="p">,</span> <span class="s2">&#34;vimballPlugin&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;2html_plugin&#34;</span><span class="p">,</span> <span class="s2">&#34;logipat&#34;</span><span class="p">,</span> <span class="s2">&#34;rrhelper&#34;</span><span class="p">,</span> <span class="s2">&#34;spellfile_plugin&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;matchit&#34;</span><span class="p">,</span> <span class="s2">&#34;matchparen&#34;</span><span class="p">,</span> <span class="s2">&#34;netrw&#34;</span><span class="p">,</span> <span class="s2">&#34;netrwPlugin&#34;</span><span class="p">,</span> <span class="s2">&#34;netrwSettings&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kr">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">plugin</span> <span class="kr">in</span> <span class="n">pairs</span><span class="p">(</span><span class="n">builtins</span><span class="p">)</span> <span class="kr">do</span>
+</span></span><span class="line"><span class="cl">  <span class="n">vim.g</span><span class="p">[</span><span class="s2">&#34;loaded_&#34;</span> <span class="o">..</span> <span class="n">plugin</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="kr">end</span></span></span></code></pre></div></div>
+</li>
+<li><strong>延迟加载非核心配置</strong>：将非启动必需的配置放到 <code>VimEnter</code> 自动命令中，延迟执行。</li>
+</ol>
+<h3 id="2-大文件编辑优化">2. 大文件编辑优化</h3>
+<p>编辑GB级大文件时，禁用重型功能避免卡顿：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-lua">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="c1">-- 自动命令：大于10MB的文件，禁用Tree-sitter、LSP、语法高亮等</span>
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">large_file_group</span> <span class="o">=</span> <span class="n">augroup</span><span class="p">(</span><span class="s2">&#34;LargeFileOpt&#34;</span><span class="p">,</span> <span class="p">{</span> <span class="n">clear</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="n">autocmd</span><span class="p">(</span><span class="s2">&#34;BufReadPre&#34;</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">group</span> <span class="o">=</span> <span class="n">large_file_group</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">pattern</span> <span class="o">=</span> <span class="s2">&#34;*&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="n">callback</span> <span class="o">=</span> <span class="kr">function</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">local</span> <span class="n">file_size</span> <span class="o">=</span> <span class="n">vim.fn</span><span class="p">.</span><span class="n">getfsize</span><span class="p">(</span><span class="n">vim.fn</span><span class="p">.</span><span class="n">expand</span><span class="p">(</span><span class="s2">&#34;%&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">if</span> <span class="n">file_size</span> <span class="o">&gt;</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="kr">then</span> <span class="c1">-- 大于10MB</span>
+</span></span><span class="line"><span class="cl">      <span class="n">vim.opt_local</span><span class="p">.</span><span class="n">bufhidden</span> <span class="o">=</span> <span class="s2">&#34;unload&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">vim.opt_local</span><span class="p">.</span><span class="n">buftype</span> <span class="o">=</span> <span class="s2">&#34;nowrite&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">vim.opt_local</span><span class="p">.</span><span class="n">undolevels</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="c1">-- 禁用撤销</span>
+</span></span><span class="line"><span class="cl">      <span class="n">vim.opt_local</span><span class="p">.</span><span class="n">swapfile</span> <span class="o">=</span> <span class="kc">false</span> <span class="c1">-- 禁用交换文件</span>
+</span></span><span class="line"><span class="cl">      <span class="n">vim.opt_local</span><span class="p">.</span><span class="n">syntax</span> <span class="o">=</span> <span class="s2">&#34;off&#34;</span> <span class="c1">-- 禁用语法高亮</span>
+</span></span><span class="line"><span class="cl">      <span class="n">vim.cmd</span><span class="p">(</span><span class="s2">&#34;TSBufDisable highlight&#34;</span><span class="p">)</span> <span class="c1">-- 禁用Tree-sitter</span>
+</span></span><span class="line"><span class="cl">      <span class="n">vim.diagnostic</span><span class="p">.</span><span class="n">disable</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">-- 禁用LSP诊断</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">end</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">end</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span></span></span></code></pre></div></div>
+<h3 id="3-调试集成dap">3. 调试集成（DAP）</h3>
+<p>Neovim通过 <code>nvim-dap</code> 实现原生调试能力，支持断点、步进、变量查看、调用栈等全功能调试，兼容VS Code的调试适配器。核心插件：</p>
+<ul>
+<li>mfussenegger/nvim-dap：DAP客户端核心</li>
+<li>rcarriga/nvim-dap-ui：调试UI界面</li>
+<li>theHamsta/nvim-dap-virtual-text：调试变量虚拟文本显示</li>
+<li>jay-babu/mason-nvim-dap.nvim：配合Mason一键安装调试适配器</li>
+</ul>
+<h3 id="4-宏录制与批量操作">4. 宏录制与批量操作</h3>
+<p>宏是Neovim的高效批量操作神器，核心用法：</p>
+<ol>
+<li>普通模式按 <code>q+字母</code> 开始录制宏（如 <code>qa</code> 录制到寄存器a）</li>
+<li>执行需要重复的操作</li>
+<li>按 <code>q</code> 结束录制</li>
+<li>按 <code>@+字母</code> 执行宏（如 <code>@a</code> 执行寄存器a的宏），<code>@@</code> 重复执行上一次宏</li>
+<li>批量执行：<code>数字+@+字母</code>，如 <code>100@a</code> 执行100次宏</li>
+</ol>
+<h2 id="八常见问题与排查">八、常见问题与排查</h2>
+<ol>
+<li>
+<p><strong>Neovim启动慢</strong></p>
+<ul>
+<li>执行 <code>:checkhealth</code> 检查健康状态，定位报错</li>
+<li>执行 <code>:Lazy profile</code> 查看插件启动耗时，对耗时高的插件开启懒加载</li>
+<li>禁用不必要的内置插件和自动命令</li>
+</ul>
+</li>
+<li>
+<p><strong>LSP不生效/不附着</strong></p>
+<ul>
+<li>执行 <code>:LspInfo</code> 查看LSP服务器状态，确认是否安装成功</li>
+<li>检查文件类型是否匹配LSP配置的 <code>filetypes</code></li>
+<li>执行 <code>:checkhealth lspconfig</code> 检查LSP配置是否正常</li>
+<li>确认语言服务器可在终端正常执行，无环境依赖缺失</li>
+</ul>
+</li>
+<li>
+<p><strong>中文乱码</strong></p>
+<ul>
+<li>确认系统终端编码为UTF-8</li>
+<li>配置中添加 <code>vim.o.encoding = &quot;UTF-8&quot;</code> 和 <code>vim.o.fileencoding = &quot;utf-8&quot;</code></li>
+<li>终端字体设置为支持中文的等宽字体（如JetBrains Mono、思源黑体等）</li>
+</ul>
+</li>
+<li>
+<p><strong>Tree-sitter高亮不生效</strong></p>
+<ul>
+<li>执行 <code>:checkhealth nvim-treesitter</code> 检查解析器是否安装成功</li>
+<li>执行 <code>:TSInstall 语言名</code> 手动安装对应语言的解析器</li>
+<li>确认 <code>highlight.enable = true</code> 已开启，且关闭了传统正则高亮</li>
+</ul>
+</li>
+<li>
+<p><strong>从Vim迁移到Neovim</strong></p>
+<ul>
+<li>Neovim完全兼容Vimscript，可直接将 <code>.vimrc</code> 内容复制到 <code>init.vim</code> 中使用</li>
+<li>建议逐步将Vimscript配置迁移到Lua，享受更好的性能和生态</li>
+<li>注意路径变化：Neovim配置目录为 <code>~/.config/nvim/</code>，而非 <code>~/.vim/</code></li>
+</ul>
+</li>
+</ol>
+<h2 id="九学习路径与权威资源">九、学习路径与权威资源</h2>
+<ol>
+<li><strong>内置帮助文档</strong>：<code>:help</code> 是学习Neovim最权威、最全面的资源，任何命令、API、配置都可通过 <code>:help 关键词</code> 查看官方文档。</li>
+<li><strong>入门学习</strong>：
+<ul>
+<li><code>vimtutor</code>：终端执行 <code>vimtutor</code>，30分钟掌握Vim/Neovim基础操作</li>
+<li>Neovim官方文档：https://neovim.io/doc/</li>
+</ul>
+</li>
+<li><strong>配置参考</strong>：
+<ul>
+<li>NvChad/LazyVim：开箱即用的Neovim发行版，适合新手直接使用，也可参考其配置结构</li>
+<li>GitHub上的awesome-neovim：https://github.com/rockerBOO/awesome-neovim，最全的Neovim插件合集</li>
+</ul>
+</li>
+<li><strong>进阶学习</strong>：
+<ul>
+<li>Lua官方文档：https://www.lua.org/manual/5.1/ （Neovim使用LuaJIT，兼容Lua 5.1）</li>
+<li>Neovim Lua API文档：https://neovim.io/doc/user/lua.html</li>
+<li>各插件的官方GitHub仓库，查看详细配置与用法示例</li>
+</ul>
+</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-02-02</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/001_neovim%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/editor/">编辑器</a>,&nbsp;<a href="/blog/tags/neovim/">Neovim</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/001_excel%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="Excel 使用详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>Excel 使用详细总结</a>
+            <a href="/blog/010_vscode%E6%8F%92%E4%BB%B6%E5%88%B6%E4%BD%9C%E8%BF%87%E7%A8%8B%E6%80%BB%E7%BB%93/" class="next" rel="next" title="VSCode 插件制作过程总结">VSCode 插件制作过程总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

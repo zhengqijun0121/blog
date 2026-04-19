@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>adb 命令使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/005_adb%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="adb 命令使用详细总结">
+  <meta property="og:description" content="ADB 命令使用详细总结 ADB（Android Debug Bridge，安卓调试桥）是 Android SDK 提供的客户端-服务端架构调试工具，可实现 PC 与 Android 设备/模拟器的全场景通信，是开发、测试、玩机的核心工具。其架构分为三部分：">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-24T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-03-24T10:00:00+08:00">
+    <meta property="article:tag" content="Android">
+    <meta property="article:tag" content="Adb">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="adb 命令使用详细总结">
+  <meta name="twitter:description" content="ADB 命令使用详细总结 ADB（Android Debug Bridge，安卓调试桥）是 Android SDK 提供的客户端-服务端架构调试工具，可实现 PC 与 Android 设备/模拟器的全场景通信，是开发、测试、玩机的核心工具。其架构分为三部分：">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/005_adb%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/020_tmux%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/001_autosar_ara_com%E6%8E%A5%E5%8F%A3%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "adb 命令使用详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/005_adb%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "Android, adb","wordcount":  5384 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/005_adb%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-03-24T09:00:00+08:00","dateModified": "2026-03-24T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/005_adb%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/005_adb%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">adb 命令使用详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/android/"><i class="far fa-folder" aria-hidden="true"></i>Android</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-03-24">2026-03-24</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 5384 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 11 分钟&nbsp;<span id="/blog/005_adb%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="adb 命令使用详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一环境配置与基础验证">一、环境配置与基础验证</a>
+      <ul>
+        <li><a href="#1-环境安装">1. 环境安装</a></li>
+        <li><a href="#2-基础验证命令">2. 基础验证命令</a></li>
+      </ul>
+    </li>
+    <li><a href="#二设备连接与管理">二、设备连接与管理</a>
+      <ul>
+        <li><a href="#1-基础连接方式">1. 基础连接方式</a>
+          <ul>
+            <li><a href="#1usb-连接最稳定">（1）USB 连接（最稳定）</a></li>
+            <li><a href="#2无线连接同局域网">（2）无线连接（同局域网）</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-核心设备管理命令">2. 核心设备管理命令</a></li>
+        <li><a href="#3-设备权限与重启命令">3. 设备权限与重启命令</a></li>
+      </ul>
+    </li>
+    <li><a href="#三高频核心命令分类详解">三、高频核心命令分类详解</a>
+      <ul>
+        <li><a href="#1-应用管理命令开发测试高频">1. 应用管理命令（开发/测试高频）</a>
+          <ul>
+            <li><a href="#1安装与卸载">（1）安装与卸载</a></li>
+            <li><a href="#2应用信息查询">（2）应用信息查询</a></li>
+            <li><a href="#3应用状态与权限管理">（3）应用状态与权限管理</a></li>
+            <li><a href="#4应用进程与组件控制">（4）应用进程与组件控制</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-文件传输命令">2. 文件传输命令</a></li>
+        <li><a href="#3-日志与调试命令">3. 日志与调试命令</a>
+          <ul>
+            <li><a href="#1logcat-日志抓取崩溃异常排查核心">（1）logcat 日志抓取（崩溃/异常排查核心）</a></li>
+            <li><a href="#2其他调试命令">（2）其他调试命令</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-系统控制与模拟输入命令">4. 系统控制与模拟输入命令</a>
+          <ul>
+            <li><a href="#1模拟输入自动化核心">（1）模拟输入（自动化核心）</a></li>
+            <li><a href="#2系统属性与设置控制">（2）系统属性与设置控制</a></li>
+          </ul>
+        </li>
+        <li><a href="#5-性能与状态监控命令">5. 性能与状态监控命令</a></li>
+      </ul>
+    </li>
+    <li><a href="#四adb-shell-基础-linux-命令">四、ADB Shell 基础 Linux 命令</a></li>
+    <li><a href="#五进阶用法">五、进阶用法</a>
+      <ul>
+        <li><a href="#1-应用备份与恢复">1. 应用备份与恢复</a></li>
+        <li><a href="#2-刷机相关命令">2. 刷机相关命令</a></li>
+        <li><a href="#3-自动化脚本">3. 自动化脚本</a></li>
+      </ul>
+    </li>
+    <li><a href="#六常见问题排查">六、常见问题排查</a>
+      <ul>
+        <li><a href="#1-adb-devices-找不到设备显示-unauthorized">1. adb devices 找不到设备/显示 unauthorized</a></li>
+        <li><a href="#2-无线连接失败">2. 无线连接失败</a></li>
+        <li><a href="#3-apk-安装失败">3. APK 安装失败</a></li>
+        <li><a href="#4-命令执行提示-permission-denied">4. 命令执行提示 Permission denied</a></li>
+        <li><a href="#5-5037-端口被占用">5. 5037 端口被占用</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="adb-命令使用详细总结">ADB 命令使用详细总结</h1>
+<p>ADB（Android Debug Bridge，安卓调试桥）是 Android SDK 提供的<strong>客户端-服务端架构</strong>调试工具，可实现 PC 与 Android 设备/模拟器的全场景通信，是开发、测试、玩机的核心工具。其架构分为三部分：</p>
+<ul>
+<li><strong>Client（客户端）</strong>：运行在 PC 端，用于发送命令</li>
+<li><strong>Daemon（adbd 守护进程）</strong>：运行在设备端后台，执行接收的命令</li>
+<li><strong>Server（服务端）</strong>：运行在 PC 端后台，管理客户端与守护进程的通信，默认占用 5037 端口</li>
+</ul>
+<h2 id="一环境配置与基础验证">一、环境配置与基础验证</h2>
+<h3 id="1-环境安装">1. 环境安装</h3>
+<p>无需安装完整 Android Studio，直接下载官方精简包：</p>
+<ol>
+<li>下载 <a href="https://developer.android.com/studio/releases/platform-tools" target="_blank" rel="noopener noreffer ">Android SDK Platform Tools</a>，解压到本地任意目录</li>
+<li>配置环境变量：将解压后的目录路径添加到系统环境变量 <code>Path</code> 中</li>
+<li>重启终端，执行验证命令</li>
+</ol>
+<h3 id="2-基础验证命令">2. 基础验证命令</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">核心作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>adb version</code></td>
+          <td style="text-align: left">查看 ADB 版本，验证环境配置是否成功</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb help</code></td>
+          <td style="text-align: left">查看 ADB 所有命令帮助文档</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="二设备连接与管理">二、设备连接与管理</h2>
+<h3 id="1-基础连接方式">1. 基础连接方式</h3>
+<h4 id="1usb-连接最稳定">（1）USB 连接（最稳定）</h4>
+<ol>
+<li>设备开启「开发者选项」，开启「USB 调试」</li>
+<li>设备连接 PC，在弹窗中勾选「始终允许此计算机调试」并确认</li>
+<li>执行 <code>adb devices</code> 验证连接状态</li>
+</ol>
+<h4 id="2无线连接同局域网">（2）无线连接（同局域网）</h4>
+<p><strong>安卓 10 及以下</strong>：</p>
+<ol>
+<li>先通过 USB 连接设备，确保连接正常</li>
+<li>执行 <code>adb tcpip 5555</code>，开启设备 TCP 监听端口</li>
+<li>断开 USB，查看设备局域网 IP（设置-关于手机-状态信息）</li>
+<li>执行 <code>adb connect 设备IP:5555</code> 完成连接</li>
+</ol>
+<p><strong>安卓 11 及以上（官方推荐，无需 USB）</strong>：</p>
+<ol>
+<li>开发者选项中开启「无线调试」，进入查看配对码、IP 与端口</li>
+<li>执行 <code>adb pair 设备IP:配对端口 配对码</code> 完成配对</li>
+<li>执行 <code>adb connect 设备IP:连接端口</code> 完成连接</li>
+</ol>
+<h3 id="2-核心设备管理命令">2. 核心设备管理命令</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">示例与注意事项</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>adb devices</code></td>
+          <td style="text-align: left">列出所有已连接设备及状态</td>
+          <td style="text-align: left">状态说明：<code>device</code>（正常连接）、<code>unauthorized</code>（未授权）、<code>offline</code>（设备无响应）；加 <code>-l</code> 显示设备详细信息（型号等）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb -s &lt;设备序列号&gt; &lt;命令&gt;</code></td>
+          <td style="text-align: left">多设备连接时，指定目标设备执行命令</td>
+          <td style="text-align: left">示例：<code>adb -s RZCT809FTQM shell wm size</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb -d &lt;命令&gt;</code></td>
+          <td style="text-align: left">指定当前唯一通过 USB 连接的设备为目标</td>
+          <td style="text-align: left">多设备场景快速指定，无需输入序列号</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb -e &lt;命令&gt;</code></td>
+          <td style="text-align: left">指定当前唯一运行的模拟器为目标</td>
+          <td style="text-align: left">同上，模拟器专属</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb kill-server</code></td>
+          <td style="text-align: left">终止 ADB 服务端进程</td>
+          <td style="text-align: left">解决连接异常、端口占用等问题，常与 start-server 配对使用</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb start-server</code></td>
+          <td style="text-align: left">启动 ADB 服务端进程</td>
+          <td style="text-align: left">服务未启动时自动执行，无需手动调用</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb connect &lt;ip:port&gt;</code></td>
+          <td style="text-align: left">无线连接设备</td>
+          <td style="text-align: left">示例：<code>adb connect 192.168.1.100:5555</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb disconnect &lt;ip:port&gt;</code></td>
+          <td style="text-align: left">断开指定无线设备</td>
+          <td style="text-align: left">不加参数时，断开所有无线连接</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb get-serialno</code></td>
+          <td style="text-align: left">获取设备序列号</td>
+          <td style="text-align: left">快速查看设备唯一标识</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb get-state</code></td>
+          <td style="text-align: left">获取设备连接状态</td>
+          <td style="text-align: left">输出：device/offline/unknown</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-设备权限与重启命令">3. 设备权限与重启命令</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">注意事项</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>adb root</code></td>
+          <td style="text-align: left">以 root 权限重启设备端 adbd 进程</td>
+          <td style="text-align: left">仅已 root 设备支持，安卓高版本需关闭 AVB 校验</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb remount</code></td>
+          <td style="text-align: left">重新挂载 /system 等系统分区为可读写</td>
+          <td style="text-align: left">需先执行 adb root，安卓 10+ 需先执行 adb disable-verity</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb reboot</code></td>
+          <td style="text-align: left">正常重启设备</td>
+          <td style="text-align: left">无参数直接重启到系统</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb reboot bootloader</code></td>
+          <td style="text-align: left">重启进入 Fastboot 模式（线刷模式）</td>
+          <td style="text-align: left">刷机、解锁 Bootloader 常用</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb reboot recovery</code></td>
+          <td style="text-align: left">重启进入 Recovery 模式（卡刷模式）</td>
+          <td style="text-align: left">卡刷 OTA、双清常用</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb reboot edl</code></td>
+          <td style="text-align: left">重启进入 9008 深度刷机模式</td>
+          <td style="text-align: left">仅高通芯片设备支持</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="三高频核心命令分类详解">三、高频核心命令分类详解</h2>
+<h3 id="1-应用管理命令开发测试高频">1. 应用管理命令（开发/测试高频）</h3>
+<p>核心通过 <code>pm</code>（Package Manager，包管理器）和 <code>am</code>（Activity Manager，活动管理器）实现，所有命令均需指定<strong>应用包名</strong>（非 APK 文件名）。</p>
+<h4 id="1安装与卸载">（1）安装与卸载</h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">常用参数与示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>adb install &lt;本地APK路径&gt;</code></td>
+          <td style="text-align: left">安装 APK 到设备</td>
+          <td style="text-align: left">核心参数：<br>- <code>-r</code>：覆盖安装，保留应用数据<br>- <code>-d</code>：允许降级覆盖安装<br>- <code>-s</code>：安装到 SD 卡<br>- <code>-g</code>：安装时授予所有运行时权限<br>示例：<code>adb install -r -g D:\test.apk</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb uninstall &lt;包名&gt;</code></td>
+          <td style="text-align: left">卸载指定应用</td>
+          <td style="text-align: left">参数 <code>-k</code>：卸载应用但保留数据和缓存<br>示例：<code>adb uninstall -k com.example.app</code></td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="2应用信息查询">（2）应用信息查询</h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">示例与过滤技巧</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>adb shell pm list packages</code></td>
+          <td style="text-align: left">列出设备所有已安装应用的包名</td>
+          <td style="text-align: left">核心过滤参数：<br>- <code>-s</code>：仅列出系统应用<br>- <code>-3</code>：仅列出第三方应用<br>- <code>-f</code>：显示 APK 安装路径<br>- <code>-i</code>：显示应用安装来源<br>过滤示例：`adb shell pm list packages</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell pm path &lt;包名&gt;</code></td>
+          <td style="text-align: left">查看指定应用 APK 的安装路径</td>
+          <td style="text-align: left">示例：<code>adb shell pm path com.tencent.mm</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell pm dump &lt;包名&gt;</code></td>
+          <td style="text-align: left">查看应用全量详细信息</td>
+          <td style="text-align: left">包含版本号、权限、组件、安装时间、签名信息等，可配合 grep 过滤指定字段</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell dumpsys package &lt;包名&gt;</code></td>
+          <td style="text-align: left">同 pm dump，查看应用包详细信息</td>
+          <td style="text-align: left">示例：`adb shell dumpsys package com.example.app</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="3应用状态与权限管理">（3）应用状态与权限管理</h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">注意事项</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>adb shell pm clear &lt;包名&gt;</code></td>
+          <td style="text-align: left">清除应用的所有数据与缓存</td>
+          <td style="text-align: left">等同于应用的「清除数据」，执行后应用恢复到首次安装状态</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell pm disable-user &lt;包名&gt;</code></td>
+          <td style="text-align: left">禁用指定应用（含系统应用）</td>
+          <td style="text-align: left">免 root 即可禁用系统预装应用，无卸载风险</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell pm enable &lt;包名&gt;</code></td>
+          <td style="text-align: left">启用已禁用的应用</td>
+          <td style="text-align: left">与 disable-user 配对使用</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell pm grant &lt;包名&gt; &lt;权限名&gt;</code></td>
+          <td style="text-align: left">给应用授予运行时权限</td>
+          <td style="text-align: left">示例：<code>adb shell pm grant com.example.app android.permission.CAMERA</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell pm revoke &lt;包名&gt; &lt;权限名&gt;</code></td>
+          <td style="text-align: left">撤销应用的运行时权限</td>
+          <td style="text-align: left">同上，反向操作</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="4应用进程与组件控制">（4）应用进程与组件控制</h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>adb shell am start -n &lt;包名/Activity全路径&gt;</code></td>
+          <td style="text-align: left">启动指定应用的 Activity</td>
+          <td style="text-align: left">示例：<code>adb shell am start -n com.example.app/.MainActivity</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell am force-stop &lt;包名&gt;</code></td>
+          <td style="text-align: left">强制停止应用，杀死所有相关进程</td>
+          <td style="text-align: left">完全终止应用运行，后台服务也会停止</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell am kill &lt;包名&gt;</code></td>
+          <td style="text-align: left">杀死应用后台进程，不影响前台使用</td>
+          <td style="text-align: left">仅杀后台，不会强制关闭应用，与 force-stop 有本质区别</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell am startservice -n &lt;包名/Service全路径&gt;</code></td>
+          <td style="text-align: left">启动指定服务</td>
+          <td style="text-align: left">示例：<code>adb shell am startservice -n com.example.app/.TestService</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell am broadcast -a &lt;广播动作&gt;</code></td>
+          <td style="text-align: left">发送自定义广播</td>
+          <td style="text-align: left">示例：<code>adb shell am broadcast -a com.example.app.TEST_ACTION</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-文件传输命令">2. 文件传输命令</h3>
+<p>实现 PC 与 Android 设备的双向文件/文件夹传输，注意安卓 10+ 引入分区存储，访问 <code>/sdcard/Android/data</code> 等目录需特殊权限。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">示例与注意事项</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>adb push &lt;本地路径&gt; &lt;设备路径&gt;</code></td>
+          <td style="text-align: left">将本地文件/文件夹推送到设备</td>
+          <td style="text-align: left">示例：<code>adb push D:\test\ /sdcard/Download/</code> <br>注意：目标路径需有写入权限，失败可先执行 adb root</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb pull &lt;设备路径&gt; &lt;本地路径&gt;</code></td>
+          <td style="text-align: left">将设备文件/文件夹拉取到本地</td>
+          <td style="text-align: left">示例：<code>adb pull /sdcard/Download/test.apk D:\</code> <br>本地路径省略时，默认拉取到终端当前目录</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-日志与调试命令">3. 日志与调试命令</h3>
+<h4 id="1logcat-日志抓取崩溃异常排查核心">（1）logcat 日志抓取（崩溃/异常排查核心）</h4>
+<p><code>adb logcat</code> 是抓取设备系统与应用日志的核心命令，支持多维度过滤、格式化输出、持久化存储。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>adb logcat</code></td>
+          <td style="text-align: left">实时输出设备全量日志</td>
+          <td style="text-align: left">终端持续滚动，Ctrl+C 终止输出</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb logcat -c</code></td>
+          <td style="text-align: left">清空设备现有日志缓存</td>
+          <td style="text-align: left">排查新问题前执行，避免旧日志干扰</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb logcat &gt; log.txt</code></td>
+          <td style="text-align: left">将日志输出保存到本地文件</td>
+          <td style="text-align: left">示例：<code>adb logcat -v time &gt; app_log.txt</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb logcat -v time</code></td>
+          <td style="text-align: left">带时间戳格式化输出日志</td>
+          <td style="text-align: left">最常用的格式化参数，精准定位日志发生时间</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb logcat *:&lt;级别&gt;</code></td>
+          <td style="text-align: left">按日志级别过滤</td>
+          <td style="text-align: left">级别优先级：V(Verbose)&lt;D(Debug)&lt;I(Info)&lt;W(Warn)&lt;E(Error)&lt;F(Fatal)&lt;S(静默) <br>示例：<code>adb logcat *:E</code> 仅输出错误及以上级别日志</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb logcat &lt;标签&gt;:&lt;级别&gt; *:S</code></td>
+          <td style="text-align: left">按日志标签过滤</td>
+          <td style="text-align: left">示例：<code>adb logcat MyApp:D *:S</code> 仅输出 MyApp 标签的 Debug 及以上日志</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb logcat --pid=$(adb shell pidof -s &lt;包名&gt;)</code></td>
+          <td style="text-align: left">仅输出指定应用的日志</td>
+          <td style="text-align: left">精准过滤单个应用，排查专属问题</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="2其他调试命令">（2）其他调试命令</h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>adb bugreport &gt; bugreport.zip</code></td>
+          <td style="text-align: left">生成系统全量 bug 报告</td>
+          <td style="text-align: left">包含系统状态、进程信息、历史日志、崩溃记录等，安卓 7.0+ 输出 zip 压缩包</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb jdwp</code></td>
+          <td style="text-align: left">列出设备上可调试的 Java 进程 PID</td>
+          <td style="text-align: left">用于远程调试、端口映射</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb forward &lt;本地端口&gt; &lt;设备端口&gt;</code></td>
+          <td style="text-align: left">端口正向转发</td>
+          <td style="text-align: left">将 PC 端端口映射到设备端，示例：<code>adb forward tcp:8080 tcp:8080</code>，PC 访问 8080 端口即可访问设备 8080 端口</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb reverse &lt;设备端口&gt; &lt;本地端口&gt;</code></td>
+          <td style="text-align: left">端口反向转发</td>
+          <td style="text-align: left">安卓 5.0+ 支持，将设备端端口映射到 PC 端，示例：<code>adb reverse tcp:8080 tcp:8080</code>，设备访问 8080 端口即可访问 PC 8080 端口</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="4-系统控制与模拟输入命令">4. 系统控制与模拟输入命令</h3>
+<h4 id="1模拟输入自动化核心">（1）模拟输入（自动化核心）</h4>
+<p>通过 <code>input</code> 命令模拟用户触摸、按键、文本输入等操作，无需 root 即可执行。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>adb shell input tap &lt;x&gt; &lt;y&gt;</code></td>
+          <td style="text-align: left">模拟点击屏幕指定坐标</td>
+          <td style="text-align: left">示例：<code>adb shell input tap 500 1000</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell input swipe &lt;x1&gt; &lt;y1&gt; &lt;x2&gt; &lt;y2&gt; &lt;时长(ms)&gt;</code></td>
+          <td style="text-align: left">模拟滑动操作</td>
+          <td style="text-align: left">示例：<code>adb shell input swipe 300 1000 300 500 300</code>（向上滑动解锁）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell input text &lt;内容&gt;</code></td>
+          <td style="text-align: left">输入文本内容</td>
+          <td style="text-align: left">仅支持英文、数字和符号，不支持中文，示例：<code>adb shell input text &quot;hello123&quot;</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell input keyevent &lt;键值&gt;</code></td>
+          <td style="text-align: left">模拟系统按键操作</td>
+          <td style="text-align: left">高频键值示例：<br>- 4：返回键<br>- 3：主页键<br>- 26：电源键（亮屏/熄屏）<br>- 224：点亮屏幕<br>- 223：熄灭屏幕<br>- 85：播放/暂停<br>- 87：下一首<br>- 88：上一首</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="2系统属性与设置控制">（2）系统属性与设置控制</h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>adb shell getprop &lt;属性名&gt;</code></td>
+          <td style="text-align: left">查看系统属性</td>
+          <td style="text-align: left">高频示例：<br><code>adb shell getprop ro.build.version.release</code>（查看安卓系统版本）<br><code>adb shell getprop ro.product.model</code>（查看设备型号）<br>不加属性名时，输出所有系统属性</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell setprop &lt;属性名&gt; &lt;值&gt;</code></td>
+          <td style="text-align: left">修改系统属性</td>
+          <td style="text-align: left">部分属性需 root 权限，示例：<code>adb shell setprop service.adb.tcp.port 5555</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell wm size</code></td>
+          <td style="text-align: left">查看屏幕分辨率</td>
+          <td style="text-align: left">加参数可修改：<code>adb shell wm size 1080x1920</code>，<code>adb shell wm size reset</code> 恢复默认</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell wm density</code></td>
+          <td style="text-align: left">查看屏幕密度（DPI）</td>
+          <td style="text-align: left">加参数可修改：<code>adb shell wm density 480</code>，<code>adb shell wm density reset</code> 恢复默认</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell svc wifi enable/disable</code></td>
+          <td style="text-align: left">开启/关闭 WiFi</td>
+          <td style="text-align: left">免 root 执行，同理 <code>svc data enable</code> 控制移动数据，<code>svc bluetooth enable</code> 控制蓝牙</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell svc power stayon true</code></td>
+          <td style="text-align: left">设置充电时屏幕保持常亮</td>
+          <td style="text-align: left">参数：true/false/usb/ac，分别对应所有场景/仅USB充电/仅AC充电</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell settings put global http_proxy &lt;IP:端口&gt;</code></td>
+          <td style="text-align: left">设置系统全局 HTTP 代理</td>
+          <td style="text-align: left">抓包场景高频使用，清空代理：<code>adb shell settings put global http_proxy :0</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="5-性能与状态监控命令">5. 性能与状态监控命令</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>adb shell dumpsys activity activities</code></td>
+          <td style="text-align: left">查看当前应用 Activity 栈</td>
+          <td style="text-align: left">快速定位当前前台界面的 Activity</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">`adb shell dumpsys window</td>
+          <td style="text-align: left">grep mCurrentFocus`</td>
+          <td style="text-align: left">查看当前前台界面的 Activity 完整路径</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell dumpsys meminfo &lt;包名&gt;</code></td>
+          <td style="text-align: left">查看应用内存使用详情</td>
+          <td style="text-align: left">排查内存泄漏、内存占用过高问题</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell dumpsys cpuinfo</code></td>
+          <td style="text-align: left">查看系统 CPU 使用率</td>
+          <td style="text-align: left">全局 CPU 占用统计</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell dumpsys gfxinfo &lt;包名&gt;</code></td>
+          <td style="text-align: left">查看应用渲染帧率、丢帧数据</td>
+          <td style="text-align: left">分析界面卡顿、渲染性能问题</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell dumpsys battery</code></td>
+          <td style="text-align: left">查看电池详细状态</td>
+          <td style="text-align: left">包含电量、充电状态、温度、电压等</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell top</code></td>
+          <td style="text-align: left">实时查看进程资源占用</td>
+          <td style="text-align: left">高频参数：<code>-m 5</code> 仅显示占用最高的5个进程，<code>-d 1</code> 1秒刷新一次</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell ps -A</code></td>
+          <td style="text-align: left">列出系统所有进程</td>
+          <td style="text-align: left">过滤示例：`adb shell ps</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell cat /proc/cpuinfo</code></td>
+          <td style="text-align: left">查看设备 CPU 详细信息</td>
+          <td style="text-align: left">核心数、架构、主频等</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell cat /proc/meminfo</code></td>
+          <td style="text-align: left">查看设备内存硬件信息</td>
+          <td style="text-align: left">总内存、可用内存等</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell screencap -p &lt;设备保存路径&gt;</code></td>
+          <td style="text-align: left">屏幕截图</td>
+          <td style="text-align: left">示例：<code>adb shell screencap -p /sdcard/screen.png</code>，执行后可通过 adb pull 拉取到本地</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>adb shell screenrecord &lt;设备保存路径&gt;</code></td>
+          <td style="text-align: left">屏幕录屏</td>
+          <td style="text-align: left">安卓 4.4+ 支持，默认最长录制 180 秒，高频参数：<br><code>--time-limit 60</code> 设置录制时长60秒<br><code>--bit-rate 5000000</code> 设置码率5Mbps<br>Ctrl+C 终止录制</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="四adb-shell-基础-linux-命令">四、ADB Shell 基础 Linux 命令</h2>
+<p>Android 基于 Linux 内核，adb shell 内支持大部分精简版 Linux 命令，无需 root 即可执行基础操作：</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">命令</th>
+          <th style="text-align: left">核心作用</th>
+          <th style="text-align: left">示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>ls</code></td>
+          <td style="text-align: left">列出当前目录内容</td>
+          <td style="text-align: left"><code>ls -l</code> 显示详细权限与大小，<code>ls -a</code> 显示隐藏文件</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>cd &lt;目录路径&gt;</code></td>
+          <td style="text-align: left">切换工作目录</td>
+          <td style="text-align: left"><code>cd /sdcard/Download/</code> 切换到下载目录</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>cat &lt;文件路径&gt;</code></td>
+          <td style="text-align: left">查看文件内容</td>
+          <td style="text-align: left"><code>cat /sdcard/test.txt</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>rm &lt;文件路径&gt;</code></td>
+          <td style="text-align: left">删除文件</td>
+          <td style="text-align: left"><code>rm -r &lt;目录路径&gt;</code> 删除文件夹及所有内容</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>mkdir &lt;目录名&gt;</code></td>
+          <td style="text-align: left">创建文件夹</td>
+          <td style="text-align: left"><code>mkdir -p test/a/b</code> 递归创建多级目录</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>cp &lt;源路径&gt; &lt;目标路径&gt;</code></td>
+          <td style="text-align: left">复制文件/文件夹</td>
+          <td style="text-align: left"><code>cp -r test/ /sdcard/</code> 递归复制文件夹</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>mv &lt;源路径&gt; &lt;目标路径&gt;</code></td>
+          <td style="text-align: left">移动/重命名文件</td>
+          <td style="text-align: left"><code>mv old.txt new.txt</code> 重命名</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>chmod &lt;权限&gt; &lt;文件路径&gt;</code></td>
+          <td style="text-align: left">修改文件权限</td>
+          <td style="text-align: left">需 root 权限，示例：<code>chmod 755 test.sh</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>ping &lt;IP/域名&gt;</code></td>
+          <td style="text-align: left">测试网络连通性</td>
+          <td style="text-align: left"><code>ping www.baidu.com</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>ifconfig</code></td>
+          <td style="text-align: left">查看网络接口信息</td>
+          <td style="text-align: left">查看设备 IP、MAC 地址等</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>df -h</code></td>
+          <td style="text-align: left">查看磁盘分区使用情况</td>
+          <td style="text-align: left">查看存储空间占用</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>du -sh &lt;目录路径&gt;</code></td>
+          <td style="text-align: left">查看目录占用空间大小</td>
+          <td style="text-align: left"><code>du -sh /sdcard/</code></td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="五进阶用法">五、进阶用法</h2>
+<h3 id="1-应用备份与恢复">1. 应用备份与恢复</h3>
+<p>免 root 实现应用数据备份与恢复，部分系统应用/加密应用不支持：</p>
+<ul>
+<li>全量备份：<code>adb backup -all -f full_backup.ab -apk</code>（-apk 包含安装包，不加仅备份数据）</li>
+<li>单个应用备份：<code>adb backup -f app_backup.ab -apk com.example.app</code></li>
+<li>恢复备份：<code>adb restore backup.ab</code></li>
+</ul>
+<h3 id="2-刷机相关命令">2. 刷机相关命令</h3>
+<ul>
+<li>卡刷 OTA 包：<code>adb sideload &lt;OTA包路径&gt;</code>（需设备进入 Recovery 模式的 sideload 功能）</li>
+<li>关闭系统分区校验：<code>adb disable-verity</code>（需 root，安卓 8.0+，修改系统分区前执行）</li>
+<li>开启系统分区校验：<code>adb enable-verity</code></li>
+</ul>
+<h3 id="3-自动化脚本">3. 自动化脚本</h3>
+<p>可将 ADB 命令写入脚本文件，实现批量操作：</p>
+<ul>
+<li>Windows：编写 <code>.bat</code> 批处理文件，示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bat">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat"><span class="line"><span class="cl"><span class="p">@</span><span class="k">echo</span> off
+</span></span><span class="line"><span class="cl">adb devices
+</span></span><span class="line"><span class="cl">adb logcat -c
+</span></span><span class="line"><span class="cl">adb logcat -v time <span class="p">&gt;</span> app_log.txt
+</span></span><span class="line"><span class="cl">pause</span></span></code></pre></div></div>
+<ul>
+<li>macOS/Linux：编写 <code>.sh</code> Shell 脚本，添加执行权限后运行。</li>
+</ul>
+<h2 id="六常见问题排查">六、常见问题排查</h2>
+<h3 id="1-adb-devices-找不到设备显示-unauthorized">1. adb devices 找不到设备/显示 unauthorized</h3>
+<ol>
+<li>确认设备已开启开发者选项和 USB 调试，重新插拔 USB 线</li>
+<li>确认 USB 线为<strong>数据线</strong>（非仅充电线），更换 USB 口/线材</li>
+<li>设备端取消原有授权，重新勾选「始终允许」并确认</li>
+<li>Windows 需安装对应设备的官方 USB 驱动</li>
+<li>重启 ADB 服务：<code>adb kill-server &amp;&amp; adb start-server</code></li>
+</ol>
+<h3 id="2-无线连接失败">2. 无线连接失败</h3>
+<ol>
+<li>确认 PC 与设备在<strong>同一局域网</strong>，可互相 ping 通</li>
+<li>确认设备端口未被占用，防火墙未拦截 ADB 通信</li>
+<li>安卓 11+ 确认配对码正确，无线调试开关已开启，配对端口与连接端口为两个不同端口</li>
+<li>部分设备需关闭 VPN/代理，避免局域网通信被拦截</li>
+</ol>
+<h3 id="3-apk-安装失败">3. APK 安装失败</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">常见报错</th>
+          <th style="text-align: left">解决方案</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">签名不一致</td>
+          <td style="text-align: left">先卸载设备上的旧版本，再执行安装；或加 <code>-r</code> 参数覆盖安装</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">安装包解析失败</td>
+          <td style="text-align: left">确认 APK 完整未损坏，适配设备 CPU 架构与系统版本</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">降级安装失败</td>
+          <td style="text-align: left">加 <code>-d</code> 参数允许降级覆盖安装</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">权限被拒</td>
+          <td style="text-align: left">开启设备「未知来源应用安装」权限，安卓 13+ 需开启「USB 安装应用」权限</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">存储空间不足</td>
+          <td style="text-align: left">清理设备存储空间</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="4-命令执行提示-permission-denied">4. 命令执行提示 Permission denied</h3>
+<ol>
+<li>执行 <code>adb root</code> 获取 root 权限（仅 root 设备支持）</li>
+<li>系统分区读写失败，先执行 <code>adb disable-verity</code> 关闭校验，再执行 <code>adb root</code> + <code>adb remount</code></li>
+<li>安卓 10+ 分区存储限制，避免直接访问 <code>/sdcard/Android/data</code> 等受限目录</li>
+</ol>
+<h3 id="5-5037-端口被占用">5. 5037 端口被占用</h3>
+<ol>
+<li>查看占用进程：Windows 执行 <code>netstat -ano | findstr 5037</code>，macOS/Linux 执行 <code>lsof -i:5037</code></li>
+<li>结束占用进程，或重启 ADB 服务</li>
+<li>可通过环境变量 <code>ANDROID_ADB_SERVER_PORT</code> 自定义 ADB 服务端口</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-03-24</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/005_adb%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/android/">Android</a>,&nbsp;<a href="/blog/tags/adb/">Adb</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/020_tmux%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="tmux 命令使用详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>tmux 命令使用详细总结</a>
+            <a href="/blog/001_autosar_ara_com%E6%8E%A5%E5%8F%A3%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="AUTOSAR ara::com 接口使用详细总结">AUTOSAR ara::com 接口使用详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>tcpdump 命令使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/012_tcpdump%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="tcpdump 命令使用详细总结">
+  <meta property="og:description" content="tcpdump 命令使用详细总结 tcpdump 是类Unix/Linux系统下开源、轻量、高性能的命令行网络数据包捕获与分析工具，基于libpcap库实现，是网络故障排查、协议分析、安全审计、流量监控的核心工具。必须以root/sudo权限运行才能操作网卡捕获流量，抓包结果可直接在终端分析，也可保存为pcap文件供Wireshark等工具深度解析。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-01-20T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-01-20T09:00:00+08:00">
+    <meta property="article:tag" content="开发工具">
+    <meta property="article:tag" content="Shell">
+    <meta property="article:tag" content="Tcpdump">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="tcpdump 命令使用详细总结">
+  <meta name="twitter:description" content="tcpdump 命令使用详细总结 tcpdump 是类Unix/Linux系统下开源、轻量、高性能的命令行网络数据包捕获与分析工具，基于libpcap库实现，是网络故障排查、协议分析、安全审计、流量监控的核心工具。必须以root/sudo权限运行才能操作网卡捕获流量，抓包结果可直接在终端分析，也可保存为pcap文件供Wireshark等工具深度解析。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/012_tcpdump%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/007_top%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/001_python%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "tcpdump 命令使用详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/012_tcpdump%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "dev-tools, Shell, tcpdump","wordcount":  4004 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/012_tcpdump%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-01-20T09:00:00+08:00","dateModified": "2026-01-20T09:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/012_tcpdump%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/012_tcpdump%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">tcpdump 命令使用详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/dev-tools/"><i class="far fa-folder" aria-hidden="true"></i>开发工具</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-20">2026-01-20</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 4004 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 8 分钟&nbsp;<span id="/blog/012_tcpdump%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="tcpdump 命令使用详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一基础语法">一、基础语法</a></li>
+    <li><a href="#二高频核心选项">二、高频核心选项</a>
+      <ul>
+        <li><a href="#21-捕获控制选项核心必用">2.1 捕获控制选项（核心必用）</a></li>
+        <li><a href="#22-输出格式选项">2.2 输出格式选项</a></li>
+        <li><a href="#23-文件读写选项">2.3 文件读写选项</a></li>
+        <li><a href="#24-时间戳控制选项">2.4 时间戳控制选项</a></li>
+      </ul>
+    </li>
+    <li><a href="#三bpf过滤规则核心能力">三、BPF过滤规则（核心能力）</a>
+      <ul>
+        <li><a href="#31-基础过滤规则">3.1 基础过滤规则</a>
+          <ul>
+            <li><a href="#1-主机网络过滤二层三层地址过滤">1. 主机/网络过滤（二层/三层地址过滤）</a></li>
+            <li><a href="#2-端口过滤四层端口过滤">2. 端口过滤（四层端口过滤）</a></li>
+            <li><a href="#3-协议过滤按网络协议分层过滤">3. 协议过滤（按网络协议分层过滤）</a></li>
+            <li><a href="#4-逻辑运算符多条件组合过滤">4. 逻辑运算符（多条件组合过滤）</a></li>
+          </ul>
+        </li>
+        <li><a href="#32-高级过滤规则基于包内容字段偏移">3.2 高级过滤规则（基于包内容/字段偏移）</a>
+          <ul>
+            <li><a href="#1-tcp标志位过滤">1. TCP标志位过滤</a></li>
+            <li><a href="#2-应用层内容过滤">2. 应用层内容过滤</a></li>
+            <li><a href="#3-其他高级过滤">3. 其他高级过滤</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#四tcpdump-输出内容完整解读">四、tcpdump 输出内容完整解读</a>
+      <ul>
+        <li><a href="#常用tcp标志位速记">常用TCP标志位速记</a></li>
+      </ul>
+    </li>
+    <li><a href="#五高频实战场景案例">五、高频实战场景案例</a>
+      <ul>
+        <li><a href="#51-基础抓包场景">5.1 基础抓包场景</a></li>
+        <li><a href="#52-进阶分析场景">5.2 进阶分析场景</a></li>
+      </ul>
+    </li>
+    <li><a href="#六进阶用法与优化技巧">六、进阶用法与优化技巧</a></li>
+    <li><a href="#七常见坑与注意事项">七、常见坑与注意事项</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="tcpdump-命令使用详细总结">tcpdump 命令使用详细总结</h1>
+<p><code>tcpdump</code> 是类Unix/Linux系统下<strong>开源、轻量、高性能的命令行网络数据包捕获与分析工具</strong>，基于libpcap库实现，是网络故障排查、协议分析、安全审计、流量监控的核心工具。<strong>必须以root/sudo权限运行</strong>才能操作网卡捕获流量，抓包结果可直接在终端分析，也可保存为pcap文件供Wireshark等工具深度解析。</p>
+<h2 id="一基础语法">一、基础语法</h2>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">tcpdump <span class="o">[</span>通用选项<span class="o">]</span> <span class="o">[</span>BPF过滤表达式<span class="o">]</span></span></span></code></pre></div></div>
+<ul>
+<li><strong>通用选项</strong>：控制抓包行为、输出格式、文件读写等核心动作</li>
+<li><strong>BPF过滤表达式</strong>：伯克利包过滤语法，用于精准筛选目标流量，是tcpdump的核心能力</li>
+</ul>
+<h2 id="二高频核心选项">二、高频核心选项</h2>
+<p>按功能分类整理，标注高频必用选项，覆盖99%日常使用场景。</p>
+<h3 id="21-捕获控制选项核心必用">2.1 捕获控制选项（核心必用）</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">选项</th>
+          <th style="text-align: left">功能说明</th>
+          <th style="text-align: left">高频使用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>-i &lt;接口&gt;</code></td>
+          <td style="text-align: left">指定监听的网络接口，<code>any</code> 表示监听所有可用网卡</td>
+          <td style="text-align: left">必用，<code>-i eth0</code> 抓指定网卡，<code>-i any</code> 全网卡抓包</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-c &lt;数量&gt;</code></td>
+          <td style="text-align: left">捕获指定数量的数据包后自动退出</td>
+          <td style="text-align: left">避免无限抓包，精准控制抓包规模</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-s &lt;长度&gt;</code></td>
+          <td style="text-align: left">设置每个数据包的抓取长度（snaplen），<code>-s 0</code> 表示完整抓取整个数据包</td>
+          <td style="text-align: left">解决默认长度导致的包内容截断问题，<code>-s 128</code> 仅抓头部减少性能损耗</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-Q &lt;方向&gt;</code></td>
+          <td style="text-align: left">指定抓包流量方向，可选 <code>in/out/inout</code>，默认 <code>inout</code></td>
+          <td style="text-align: left">仅抓入方向/出方向流量，精准过滤</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-p</code></td>
+          <td style="text-align: left">关闭网卡混杂模式</td>
+          <td style="text-align: left">普通环境下仅需抓取本机流量，避免不必要的权限开销</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-n</code></td>
+          <td style="text-align: left">不解析主机名，直接显示IP地址，避免DNS反向解析导致的输出卡顿</td>
+          <td style="text-align: left">必用，大幅提升抓包响应速度</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-nn</code></td>
+          <td style="text-align: left">不解析主机名、端口号、协议名，完全以数字形式显示</td>
+          <td style="text-align: left">最高频选项，比<code>-n</code>更彻底，无任何解析开销</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="22-输出格式选项">2.2 输出格式选项</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">选项</th>
+          <th style="text-align: left">功能说明</th>
+          <th style="text-align: left">使用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>-v/-vv/-vvv</code></td>
+          <td style="text-align: left">逐级增加输出详细程度，<code>-vvv</code> 为最详细模式</td>
+          <td style="text-align: left">深度分析协议字段、包细节</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-e</code></td>
+          <td style="text-align: left">输出数据链路层（二层）头部信息，包括源MAC、目的MAC、VLAN标签、以太网协议类型</td>
+          <td style="text-align: left">排查二层网络问题、MAC地址过滤、VLAN流量分析</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-A</code></td>
+          <td style="text-align: left">仅以ASCII格式打印数据包载荷内容</td>
+          <td style="text-align: left">分析HTTP、SMTP等文本类应用层协议</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-X</code></td>
+          <td style="text-align: left">同时以十六进制+ASCII格式打印数据包载荷</td>
+          <td style="text-align: left">二进制协议分析、深度排查包内容</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-XX</code></td>
+          <td style="text-align: left">同<code>-X</code>，额外打印数据链路层头部的十六进制+ASCII内容</td>
+          <td style="text-align: left">二层+三层+四层全内容分析</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-S</code></td>
+          <td style="text-align: left">打印TCP绝对序列号，而非默认的相对序列号</td>
+          <td style="text-align: left">精准排查TCP序列号异常、丢包重传问题</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-l</code></td>
+          <td style="text-align: left">开启行缓冲模式</td>
+          <td style="text-align: left">抓包同时通过管道`</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="23-文件读写选项">2.3 文件读写选项</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">选项</th>
+          <th style="text-align: left">功能说明</th>
+          <th style="text-align: left">使用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>-w &lt;文件名.pcap&gt;</code></td>
+          <td style="text-align: left">将捕获的原始数据包写入文件，而非输出到终端</td>
+          <td style="text-align: left">长期抓包、后续离线分析、导出到Wireshark</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-r &lt;文件名.pcap&gt;</code></td>
+          <td style="text-align: left">从已保存的pcap文件中读取数据包，配合过滤表达式做离线分析</td>
+          <td style="text-align: left">历史流量回溯、二次筛选分析</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-C &lt;文件大小(MB)&gt;</code></td>
+          <td style="text-align: left">自动切割抓包文件，单个文件达到指定大小时，生成新文件（后缀自增.pcap1、.pcap2）</td>
+          <td style="text-align: left">高流量场景长期抓包，避免单个文件过大</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-G &lt;秒数&gt;</code></td>
+          <td style="text-align: left">按时间周期自动切割抓包文件，常用<code>-G 3600</code>（每小时1个文件）</td>
+          <td style="text-align: left">定时归档流量，配合时间命名<code>%Y%m%d_%H%M%S</code>区分文件</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="24-时间戳控制选项">2.4 时间戳控制选项</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">选项</th>
+          <th style="text-align: left">功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>-t</code></td>
+          <td style="text-align: left">不打印时间戳</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-tt</code></td>
+          <td style="text-align: left">打印秒级时间戳（从1970年至今的秒数）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-ttt</code></td>
+          <td style="text-align: left">打印当前包与上一个包的时间间隔</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>-tttt</code></td>
+          <td style="text-align: left">打印完整的日期+时间戳，可读性最高</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="三bpf过滤规则核心能力">三、BPF过滤规则（核心能力）</h2>
+<p>tcpdump的过滤能力基于BPF语法，可通过<strong>类型、方向、协议、逻辑组合</strong>实现精准流量筛选，避免捕获无关流量，提升抓包效率与分析效率。</p>
+<h3 id="31-基础过滤规则">3.1 基础过滤规则</h3>
+<h4 id="1-主机网络过滤二层三层地址过滤">1. 主机/网络过滤（二层/三层地址过滤）</h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">表达式</th>
+          <th style="text-align: left">功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>host 192.168.1.100</code></td>
+          <td style="text-align: left">捕获源或目的IP为192.168.1.100的所有流量</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>src host 10.0.0.5</code></td>
+          <td style="text-align: left">仅捕获源IP为10.0.0.5的流量</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>dst host 172.16.0.10</code></td>
+          <td style="text-align: left">仅捕获目的IP为172.16.0.10的流量</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>net 192.168.1.0/24</code></td>
+          <td style="text-align: left">捕获192.168.1.0/24网段的所有流量</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>src net 10.0.0.0/8</code></td>
+          <td style="text-align: left">仅捕获源地址属于10.0.0.0/8网段的流量</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>ether host 00:11:22:33:44:55</code></td>
+          <td style="text-align: left">基于MAC地址过滤流量</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>broadcast</code></td>
+          <td style="text-align: left">捕获广播包</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>multicast</code></td>
+          <td style="text-align: left">捕获组播包</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="2-端口过滤四层端口过滤">2. 端口过滤（四层端口过滤）</h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">表达式</th>
+          <th style="text-align: left">功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>port 80</code></td>
+          <td style="text-align: left">捕获源或目的端口为80的流量</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>src port 53</code></td>
+          <td style="text-align: left">仅捕获源端口为53的流量（DNS响应）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>dst port 22</code></td>
+          <td style="text-align: left">仅捕获目的端口为22的流量（SSH请求）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>portrange 1000-2000</code></td>
+          <td style="text-align: left">捕获端口在1000-2000范围内的流量</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>src portrange 5000-6000</code></td>
+          <td style="text-align: left">仅捕获源端口在指定范围的流量</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="3-协议过滤按网络协议分层过滤">3. 协议过滤（按网络协议分层过滤）</h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">表达式</th>
+          <th style="text-align: left">功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>ether</code></td>
+          <td style="text-align: left">以太网二层协议过滤，如<code>ether arp</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>arp</code> / <code>rarp</code></td>
+          <td style="text-align: left">捕获ARP/RARP协议包（地址解析）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>ip</code> / <code>ip6</code></td>
+          <td style="text-align: left">捕获IPv4/IPv6协议包</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>icmp</code> / <code>icmp6</code></td>
+          <td style="text-align: left">捕获ICMP/ICMPv6包（ping/tracert流量）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>tcp</code></td>
+          <td style="text-align: left">仅捕获TCP协议包</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>udp</code></td>
+          <td style="text-align: left">仅捕获UDP协议包</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>sctp</code></td>
+          <td style="text-align: left">捕获SCTP协议包</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="4-逻辑运算符多条件组合过滤">4. 逻辑运算符（多条件组合过滤）</h4>
+<p>通过逻辑运算符实现多条件精准筛选，<strong>复杂表达式建议用单引号包裹，避免shell解析特殊字符</strong>。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">运算符</th>
+          <th style="text-align: left">功能说明</th>
+          <th style="text-align: left">示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>and</code> / <code>&amp;&amp;</code></td>
+          <td style="text-align: left">逻辑与，多个条件同时满足</td>
+          <td style="text-align: left"><code>host 192.168.1.100 and port 80</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>or</code> / `</td>
+          <td style="text-align: left"></td>
+          <td style="text-align: left">`</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>not</code> / <code>!</code></td>
+          <td style="text-align: left">逻辑非，排除指定条件</td>
+          <td style="text-align: left"><code>not port 22</code>（排除SSH流量）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>()</code></td>
+          <td style="text-align: left">括号，改变运算优先级</td>
+          <td style="text-align: left"><code>src net 192.168.1.0/24 and (dst port 80 or dst port 443)</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="32-高级过滤规则基于包内容字段偏移">3.2 高级过滤规则（基于包内容/字段偏移）</h3>
+<p>针对协议头部字段、载荷内容进行精准匹配，适用于深度协议分析、异常流量排查。</p>
+<h4 id="1-tcp标志位过滤">1. TCP标志位过滤</h4>
+<p>TCP头部的标志位是连接状态诊断的核心，常用过滤规则如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">表达式</th>
+          <th style="text-align: left">功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>'tcp[tcpflags] &amp; tcp-syn != 0'</code></td>
+          <td style="text-align: left">捕获TCP SYN包（TCP连接发起请求）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>'tcp[tcpflags] &amp; tcp-fin != 0'</code></td>
+          <td style="text-align: left">捕获TCP FIN包（TCP连接关闭请求）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>'tcp[tcpflags] &amp; tcp-rst != 0'</code></td>
+          <td style="text-align: left">捕获TCP RST包（TCP连接强制重置）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">`&lsquo;tcp[tcpflags] &amp; (tcp-syn</td>
+          <td style="text-align: left">tcp-ack) == (tcp-syn</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">`&lsquo;tcp[tcpflags] &amp; (tcp-syn</td>
+          <td style="text-align: left">tcp-fin</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="2-应用层内容过滤">2. 应用层内容过滤</h4>
+<p>基于数据包载荷的偏移量匹配关键词，精准捕获应用层请求：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 捕获HTTP GET请求（GET 对应的十六进制为0x47455420）</span>
+</span></span><span class="line"><span class="cl">tcpdump -nn -A <span class="s1">&#39;tcp port 80 and tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x47455420&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 捕获HTTP POST请求</span>
+</span></span><span class="line"><span class="cl">tcpdump -nn -A <span class="s1">&#39;tcp port 80 and tcp[((tcp[12:1] &amp; 0xf0) &gt;&gt; 2):4] = 0x504F5354&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 捕获包含指定关键词的DNS查询</span>
+</span></span><span class="line"><span class="cl">tcpdump -nn <span class="s1">&#39;udp port 53 and udp[10] &amp; 0x80 = 0&#39;</span></span></span></code></pre></div></div>
+<h4 id="3-其他高级过滤">3. 其他高级过滤</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 捕获IP分片包</span>
+</span></span><span class="line"><span class="cl">tcpdump -nn <span class="s1">&#39;ip[6:2] &amp; 0x1fff != 0&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 捕获VLAN标签的流量</span>
+</span></span><span class="line"><span class="cl">tcpdump -nn -e vlan
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 捕获TCP窗口为0的包（流量控制异常、零窗口）</span>
+</span></span><span class="line"><span class="cl">tcpdump -nn <span class="s1">&#39;tcp[14:2] = 0&#39;</span></span></span></code></pre></div></div>
+<h2 id="四tcpdump-输出内容完整解读">四、tcpdump 输出内容完整解读</h2>
+<p>掌握输出字段的含义，才能快速分析抓包结果。以下是典型的TCP包输出示例，逐字段拆解：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>14:35:22.123456 IP 192.168.1.100.54321 &gt; 192.168.1.200.80: Flags [S], seq 123456789, win 65535, length 0</code></pre></div>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">字段</th>
+          <th style="text-align: left">含义说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>14:35:22.123456</code></td>
+          <td style="text-align: left">数据包捕获时间戳（时:分:秒.微秒），可通过<code>-tttt</code>显示完整日期</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>IP</code></td>
+          <td style="text-align: left">网络层协议，此处为IPv4，IPv6会显示<code>IP6</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>192.168.1.100.54321</code></td>
+          <td style="text-align: left">源IP地址.源端口号，<code>-nn</code>选项下直接显示数字，无解析</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>&gt;</code></td>
+          <td style="text-align: left">数据包传输方向，从左侧源地址发往右侧目的地址</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>192.168.1.200.80</code></td>
+          <td style="text-align: left">目的IP地址.目的端口号</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>Flags [S]</code></td>
+          <td style="text-align: left">TCP标志位，核心字段，标识TCP包的类型</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>seq 123456789</code></td>
+          <td style="text-align: left">TCP序列号，<code>-S</code>选项显示绝对序列号，默认显示相对序列号</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>win 65535</code></td>
+          <td style="text-align: left">TCP窗口大小，标识接收端的缓冲区大小</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>length 0</code></td>
+          <td style="text-align: left">TCP载荷长度，0表示无应用层数据（仅控制包）</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="常用tcp标志位速记">常用TCP标志位速记</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">标志缩写</th>
+          <th style="text-align: left">全称</th>
+          <th style="text-align: left">核心含义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>[S]</code></td>
+          <td style="text-align: left">SYN</td>
+          <td style="text-align: left">连接发起请求</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>[S.]</code></td>
+          <td style="text-align: left">SYN+ACK</td>
+          <td style="text-align: left">连接请求响应</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>[.]</code></td>
+          <td style="text-align: left">ACK</td>
+          <td style="text-align: left">数据确认包</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>[P]</code></td>
+          <td style="text-align: left">PSH</td>
+          <td style="text-align: left">推送数据，立即交给应用层</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>[F]</code></td>
+          <td style="text-align: left">FIN</td>
+          <td style="text-align: left">连接正常关闭请求</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>[R]</code></td>
+          <td style="text-align: left">RST</td>
+          <td style="text-align: left">连接强制重置</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>[U]</code></td>
+          <td style="text-align: left">URG</td>
+          <td style="text-align: left">紧急指针生效</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="五高频实战场景案例">五、高频实战场景案例</h2>
+<p>覆盖日常网络排查90%的使用场景，直接复制可用。</p>
+<h3 id="51-基础抓包场景">5.1 基础抓包场景</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 1. 查看所有可用网卡</span>
+</span></span><span class="line"><span class="cl">tcpdump -D
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. 全网卡抓包，不解析域名/端口，基础通用命令</span>
+</span></span><span class="line"><span class="cl">sudo tcpdump -i any -nn
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 3. 抓指定主机的所有流量，排除SSH干扰</span>
+</span></span><span class="line"><span class="cl">sudo tcpdump -i eth0 -nn host 192.168.1.100 and not port <span class="m">22</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 4. 抓ping包（ICMP流量），排查网络连通性</span>
+</span></span><span class="line"><span class="cl">sudo tcpdump -i any -nn icmp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 5. 抓指定端口的TCP/UDP流量，如HTTP/HTTPS/SSH/DNS</span>
+</span></span><span class="line"><span class="cl">sudo tcpdump -i any -nn tcp port <span class="m">80</span>
+</span></span><span class="line"><span class="cl">sudo tcpdump -i any -nn port <span class="m">443</span>
+</span></span><span class="line"><span class="cl">sudo tcpdump -i any -nn udp port <span class="m">53</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 6. 抓指定网段到指定端口的流量</span>
+</span></span><span class="line"><span class="cl">sudo tcpdump -i eth0 -nn src net 192.168.1.0/24 and dst port <span class="m">8080</span></span></span></code></pre></div></div>
+<h3 id="52-进阶分析场景">5.2 进阶分析场景</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 1. 抓TCP异常连接包（SYN/FIN/RST），排查连接超时/重置问题</span>
+</span></span><span class="line"><span class="cl">sudo tcpdump -i any -nn <span class="s1">&#39;tcp[tcpflags] &amp; (tcp-syn|tcp-fin|tcp-rst) != 0&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. 抓HTTP请求内容，ASCII格式显示，快速查看请求头/响应</span>
+</span></span><span class="line"><span class="cl">sudo tcpdump -i any -nn -A port <span class="m">80</span> <span class="p">|</span> grep -E <span class="s2">&#34;GET|POST|Host|HTTP/1.1&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 3. 抓包并保存到文件，抓满1000个包自动停止</span>
+</span></span><span class="line"><span class="cl">sudo tcpdump -i eth0 -nn -c <span class="m">1000</span> -w traffic_capture.pcap
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 4. 按时间切割抓包文件，每1小时生成一个新文件，带时间戳命名</span>
+</span></span><span class="line"><span class="cl">sudo tcpdump -i eth0 -nn -G <span class="m">3600</span> -w capture_%Y%m%d_%H%M%S.pcap
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 5. 按大小切割抓包文件，单个文件最大100MB，自动归档</span>
+</span></span><span class="line"><span class="cl">sudo tcpdump -i eth0 -nn -C <span class="m">100</span> -w traffic_capture.pcap
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 6. 离线分析pcap文件，筛选指定主机/端口的流量</span>
+</span></span><span class="line"><span class="cl">tcpdump -nn -r traffic_capture.pcap host 192.168.1.100 and port <span class="m">443</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 7. 查看二层MAC地址，排查ARP/交换机转发问题</span>
+</span></span><span class="line"><span class="cl">sudo tcpdump -i eth0 -nn -e arp</span></span></code></pre></div></div>
+<h2 id="六进阶用法与优化技巧">六、进阶用法与优化技巧</h2>
+<ol>
+<li>
+<p><strong>高流量场景抓包优化</strong></p>
+<ul>
+<li>优先使用精准的过滤表达式，减少内核捕获的无关流量，降低性能损耗</li>
+<li>避免终端实时输出，直接用<code>-w</code>写入文件，终端打印会大幅降低抓包性能</li>
+<li>按需设置<code>-s</code>抓取长度，仅分析头部时设置<code>-s 128</code>，减少内存/磁盘开销</li>
+</ul>
+</li>
+<li>
+<p><strong>实时流量过滤与监控</strong></p>
+<ul>
+<li>结合<code>-l</code>行缓冲模式，实时匹配关键词，快速定位异常：
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo tcpdump -i any -nn -A -l port <span class="m">80</span> <span class="p">|</span> grep <span class="s2">&#34;HTTP/1.1 500&#34;</span></span></span></code></pre></div></div>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>容器/虚拟机流量抓取</strong></p>
+<ul>
+<li>容器流量：指定docker网桥<code>-i docker0</code>，或进入容器命名空间抓包</li>
+<li>虚拟机流量：指定虚拟网卡<code>-i virbr0</code>，或对应veth虚拟接口</li>
+</ul>
+</li>
+<li>
+<p><strong>跨平台分析</strong></p>
+<ul>
+<li>tcpdump抓取的<code>pcap</code>文件可直接导入Wireshark、科来等图形化工具，进行可视化协议分析、流重组、故障定位</li>
+</ul>
+</li>
+</ol>
+<h2 id="七常见坑与注意事项">七、常见坑与注意事项</h2>
+<ol>
+<li><strong>权限问题</strong>：tcpdump必须使用<code>sudo</code>或root用户运行，普通用户无权限操作网卡捕获流量</li>
+<li><strong>混杂模式限制</strong>：现代交换机环境下，混杂模式仅能捕获本机的单播包、广播/组播包，无法捕获同网段其他主机的单播流量，需配置交换机端口镜像（SPAN）才能实现全网抓包</li>
+<li><strong>包截断问题</strong>：默认抓取长度可能不足，导致应用层内容被截断，深度分析时必须加<code>-s 0</code>完整抓取</li>
+<li><strong>DNS解析卡顿</strong>：必须加<code>-n</code>/<code>-nn</code>选项，否则tcpdump会对每个IP进行反向DNS解析，导致输出严重卡顿，甚至丢包</li>
+<li><strong>shell转义问题</strong>：包含括号、&amp;、|等特殊字符的过滤表达式，必须用单引号<code>''</code>包裹，否则会被shell解析执行，导致命令报错</li>
+<li><strong>丢包问题</strong>：高流量场景下，若内核缓冲区不足，会出现丢包。可通过增大缓冲区<code>-B 4096</code>（单位KB）缓解，同时优化过滤表达式减少无关流量</li>
+<li><strong>IPv6过滤</strong>：IPv6流量需使用<code>ip6</code>关键字过滤，如<code>tcpdump -nn ip6 host 2409:8a1e::1</code>，默认<code>ip</code>仅匹配IPv4流量</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-01-20</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/012_tcpdump%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/dev-tools/">开发工具</a>,&nbsp;<a href="/blog/tags/shell/">Shell</a>,&nbsp;<a href="/blog/tags/tcpdump/">Tcpdump</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/007_top%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="top 命令使用详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>top 命令使用详细总结</a>
+            <a href="/blog/001_python%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="Python 语法详细总结">Python 语法详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

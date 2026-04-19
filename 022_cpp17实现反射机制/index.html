@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>C&#43;&#43;17 实现反射机制 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/022_cpp17%E5%AE%9E%E7%8E%B0%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="C&#43;&#43;17 实现反射机制">
+  <meta property="og:description" content="C&#43;&#43;17 反射机制完整实现 C&#43;&#43; 本身没有原生反射机制，但可以通过 C&#43;&#43;17 的 constexpr、if constexpr、折叠表达式、std::tuple、std::string_view 等核心特性，实现一套类型安全、零运行时开销的静态反射系统，同时兼顾运行期的访问能力。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-01-08T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-01-08T09:30:00+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="Cpp17">
+    <meta property="article:tag" content="Reflect">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="C&#43;&#43;17 实现反射机制">
+  <meta name="twitter:description" content="C&#43;&#43;17 反射机制完整实现 C&#43;&#43; 本身没有原生反射机制，但可以通过 C&#43;&#43;17 的 constexpr、if constexpr、折叠表达式、std::tuple、std::string_view 等核心特性，实现一套类型安全、零运行时开销的静态反射系统，同时兼顾运行期的访问能力。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/022_cpp17%E5%AE%9E%E7%8E%B0%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/021_cpp17%E5%AE%9E%E7%8E%B0%E5%86%85%E5%AD%98%E6%B1%A0/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/023_cpp17%E5%AE%9E%E7%8E%B0%E5%8D%8F%E7%A8%8B%E6%9C%BA%E5%88%B6/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "C++17 实现反射机制",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/022_cpp17%E5%AE%9E%E7%8E%B0%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, Cpp17, Reflect","wordcount":  2385 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/022_cpp17%E5%AE%9E%E7%8E%B0%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6\/","datePublished": "2026-01-08T09:00:00+08:00","dateModified": "2026-01-08T09:30:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/022_cpp17%E5%AE%9E%E7%8E%B0%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/022_cpp17%E5%AE%9E%E7%8E%B0%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">C++17 实现反射机制</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-08">2026-01-08</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 2385 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 5 分钟&nbsp;<span id="/blog/022_cpp17%E5%AE%9E%E7%8E%B0%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/" class="leancloud_visitors" data-flag-title="C&#43;&#43;17 实现反射机制">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#核心设计原理">核心设计原理</a></li>
+    <li><a href="#完整实现代码">完整实现代码</a>
+      <ul>
+        <li><a href="#1-核心反射头文件-reflecthpp">1. 核心反射头文件 <code>reflect.hpp</code></a></li>
+        <li><a href="#2-使用示例">2. 使用示例</a></li>
+        <li><a href="#3-编译与运行">3. 编译与运行</a></li>
+      </ul>
+    </li>
+    <li><a href="#核心特性说明">核心特性说明</a></li>
+    <li><a href="#局限性与扩展方向">局限性与扩展方向</a>
+      <ul>
+        <li><a href="#现有局限性">现有局限性</a></li>
+        <li><a href="#扩展方向">扩展方向</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="c17-反射机制完整实现">C++17 反射机制完整实现</h1>
+<p>C++ 本身没有原生反射机制，但可以通过 C++17 的 <strong>constexpr、if constexpr、折叠表达式、std::tuple、std::string_view</strong> 等核心特性，实现一套类型安全、零运行时开销的静态反射系统，同时兼顾运行期的访问能力。</p>
+<h2 id="核心设计原理">核心设计原理</h2>
+<ol>
+<li><strong>编译期类型信息提取</strong>：利用编译器内置的函数签名宏，在编译期获取类型名、成员类型等信息，替代运行期 RTTI 的性能损耗</li>
+<li><strong>元数据固化</strong>：通过模板特化和宏，将类名、成员变量的名称、指针、类型信息等元数据，在编译期固化为 constexpr 常量</li>
+<li><strong>编译期遍历与访问</strong>：通过 std::apply + 折叠表达式实现元组的编译期遍历，配合 if constexpr 做类型分支判断，替代复杂的 SFINAE 写法</li>
+<li><strong>类型安全</strong>：所有类型检查均在编译期完成，类型不匹配直接编译报错，避免运行期异常</li>
+</ol>
+<h2 id="完整实现代码">完整实现代码</h2>
+<h3 id="1-核心反射头文件-reflecthpp">1. 核心反射头文件 <code>reflect.hpp</code></h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#pragma once
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string_view&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;tuple&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;type_traits&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;optional&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdexcept&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;utility&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// ==================== 编译期类型名获取（兼容GCC/Clang/MSVC） ====================
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">type_name</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#if defined(__GNUC__) || defined(__clang__)
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span> <span class="o">=</span> <span class="n">__PRETTY_FUNCTION__</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">prefix</span> <span class="o">=</span> <span class="s">&#34;constexpr std::string_view type_name() [with T = &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">suffix</span> <span class="o">=</span> <span class="s">&#34;]&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#elif defined(_MSC_VER)
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span> <span class="o">=</span> <span class="n">__FUNCSIG__</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">prefix</span> <span class="o">=</span> <span class="s">&#34;constexpr std::string_view __cdecl type_name&lt;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">suffix</span> <span class="o">=</span> <span class="s">&#34;&gt;(void) noexcept&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="cl">    <span class="cp">#error &#34;Unsupported compiler, only GCC/Clang/MSVC are supported&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl">    <span class="c1">// 裁剪前后缀，提取干净的类型名
+</span></span></span><span class="line"><span class="cl">    <span class="n">name</span><span class="p">.</span><span class="n">remove_prefix</span><span class="p">(</span><span class="n">prefix</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="n">name</span><span class="p">.</span><span class="n">remove_suffix</span><span class="p">(</span><span class="n">suffix</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// ==================== 反射元数据结构定义 ====================
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 字段元数据：存储字段名、成员指针、类型信息
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">ClassType</span><span class="p">,</span> <span class="k">typename</span> <span class="n">FieldType</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">FieldInfo</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">FieldType</span> <span class="n">ClassType</span><span class="o">::*</span> <span class="n">ptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">constexpr</span> <span class="nf">FieldInfo</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">n</span><span class="p">,</span> <span class="n">FieldType</span> <span class="n">ClassType</span><span class="o">::*</span> <span class="n">p</span><span class="p">)</span> <span class="k">noexcept</span>
+</span></span><span class="line"><span class="cl">        <span class="o">:</span> <span class="n">name</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">ptr</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">using</span> <span class="n">class_type</span> <span class="o">=</span> <span class="n">ClassType</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">using</span> <span class="n">field_type</span> <span class="o">=</span> <span class="n">FieldType</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 成员函数元数据：存储函数名、函数指针、参数/返回值类型信息
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">ClassType</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Ret</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">MethodInfo</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Ret</span> <span class="p">(</span><span class="n">ClassType</span><span class="o">::*</span> <span class="n">ptr</span><span class="p">)(</span><span class="n">Args</span><span class="p">...);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">constexpr</span> <span class="nf">MethodInfo</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">n</span><span class="p">,</span> <span class="n">Ret</span> <span class="p">(</span><span class="n">ClassType</span><span class="o">::*</span> <span class="n">p</span><span class="p">)(</span><span class="n">Args</span><span class="p">...))</span> <span class="k">noexcept</span>
+</span></span><span class="line"><span class="cl">        <span class="o">:</span> <span class="n">name</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">ptr</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">using</span> <span class="n">class_type</span> <span class="o">=</span> <span class="n">ClassType</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">using</span> <span class="n">return_type</span> <span class="o">=</span> <span class="n">Ret</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">using</span> <span class="n">args_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 类型安全的函数调用
+</span></span></span><span class="line"><span class="cl">    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span> <span class="n">CallArgs</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">constexpr</span> <span class="n">Ret</span> <span class="n">invoke</span><span class="p">(</span><span class="n">ClassType</span><span class="o">&amp;</span> <span class="n">obj</span><span class="p">,</span> <span class="n">CallArgs</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_invocable_r_v</span><span class="o">&lt;</span><span class="n">Ret</span><span class="p">,</span> <span class="k">decltype</span><span class="p">(</span><span class="n">ptr</span><span class="p">),</span> <span class="n">ClassType</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">CallArgs</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;Arguments type mismatch with method signature&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_void_v</span><span class="o">&lt;</span><span class="n">Ret</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="o">*</span><span class="n">ptr</span><span class="p">)(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">CallArgs</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="o">*</span><span class="n">ptr</span><span class="p">)(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">CallArgs</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// ==================== 反射特性模板（核心存储） ====================
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 主模板，需要反射的类通过宏进行特化
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="kt">void</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">ReflectTraits</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">bool</span> <span class="n">is_reflectable</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 类型是否可反射的编译期判断
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">constexpr</span> <span class="kt">bool</span> <span class="n">is_reflectable_v</span> <span class="o">=</span> <span class="n">ReflectTraits</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">is_reflectable</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 获取类名的编译期接口
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">class_name</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">static_assert</span><span class="p">(</span><span class="n">is_reflectable_v</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="s">&#34;Type is not reflectable!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">ReflectTraits</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">class_name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// ==================== 核心遍历接口 ====================
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 编译期遍历所有字段元数据
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Func</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">constexpr</span> <span class="kt">void</span> <span class="n">for_each_field_meta</span><span class="p">(</span><span class="n">Func</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">static_assert</span><span class="p">(</span><span class="n">is_reflectable_v</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="s">&#34;Type is not reflectable!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">constexpr</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">fields</span> <span class="o">=</span> <span class="n">ReflectTraits</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">fields</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">apply</span><span class="p">([</span><span class="o">&amp;</span><span class="n">func</span><span class="p">](</span><span class="k">auto</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">field</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="o">&gt;</span><span class="p">(</span><span class="n">field</span><span class="p">)),</span> <span class="p">...);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span> <span class="n">fields</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 运行期遍历对象的所有字段（名称、值、元数据）
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Func</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">for_each_field</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">obj</span><span class="p">,</span> <span class="n">Func</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">for_each_field_meta</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">([</span><span class="o">&amp;</span><span class="n">obj</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">func</span><span class="p">](</span><span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="n">field</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">func</span><span class="p">(</span><span class="n">field</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">.</span><span class="o">*</span><span class="p">(</span><span class="n">field</span><span class="p">.</span><span class="n">ptr</span><span class="p">),</span> <span class="n">field</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// const 版本遍历
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Func</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">for_each_field</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">obj</span><span class="p">,</span> <span class="n">Func</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">for_each_field_meta</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">([</span><span class="o">&amp;</span><span class="n">obj</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">func</span><span class="p">](</span><span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="n">field</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">func</span><span class="p">(</span><span class="n">field</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">.</span><span class="o">*</span><span class="p">(</span><span class="n">field</span><span class="p">.</span><span class="n">ptr</span><span class="p">),</span> <span class="n">field</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 编译期遍历所有成员函数元数据
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Func</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">constexpr</span> <span class="kt">void</span> <span class="n">for_each_method_meta</span><span class="p">(</span><span class="n">Func</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">static_assert</span><span class="p">(</span><span class="n">is_reflectable_v</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="s">&#34;Type is not reflectable!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">constexpr</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">methods</span> <span class="o">=</span> <span class="n">ReflectTraits</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">methods</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">apply</span><span class="p">([</span><span class="o">&amp;</span><span class="n">func</span><span class="p">](</span><span class="k">auto</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">method</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">&gt;</span><span class="p">(</span><span class="n">method</span><span class="p">)),</span> <span class="p">...);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span> <span class="n">methods</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// ==================== 按名访问接口 ====================
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 按名获取字段指针（类型安全，类型不匹配编译报错）
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">FieldType</span><span class="p">,</span> <span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">FieldType</span><span class="o">*</span> <span class="n">get_field</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">obj</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">static_assert</span><span class="p">(</span><span class="n">is_reflectable_v</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="s">&#34;Type is not reflectable!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">FieldType</span><span class="o">*</span> <span class="n">ret</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">for_each_field_meta</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](</span><span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="n">field</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">using</span> <span class="n">F</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">field_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span> <span class="n">FieldType</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">field</span><span class="p">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ret</span> <span class="o">=</span> <span class="o">&amp;</span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="o">*</span><span class="p">(</span><span class="n">field</span><span class="p">.</span><span class="n">ptr</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// const 版本获取
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">FieldType</span><span class="p">,</span> <span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="n">FieldType</span><span class="o">*</span> <span class="n">get_field</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">obj</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">static_assert</span><span class="p">(</span><span class="n">is_reflectable_v</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="s">&#34;Type is not reflectable!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">FieldType</span><span class="o">*</span> <span class="n">ret</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">for_each_field_meta</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](</span><span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="n">field</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">using</span> <span class="n">F</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">field_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span> <span class="n">FieldType</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">field</span><span class="p">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ret</span> <span class="o">=</span> <span class="o">&amp;</span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="o">*</span><span class="p">(</span><span class="n">field</span><span class="p">.</span><span class="n">ptr</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 按名设置字段值（自动类型检查，返回是否设置成功）
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">ValueType</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">set_field</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">obj</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">,</span> <span class="n">ValueType</span><span class="o">&amp;&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">static_assert</span><span class="p">(</span><span class="n">is_reflectable_v</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="s">&#34;Type is not reflectable!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">success</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">for_each_field_meta</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](</span><span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="n">field</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">using</span> <span class="n">F</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">field_type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_assignable_v</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">ValueType</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">field</span><span class="p">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">obj</span><span class="p">.</span><span class="o">*</span><span class="p">(</span><span class="n">field</span><span class="p">.</span><span class="n">ptr</span><span class="p">)</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">ValueType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">success</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 按名调用成员函数（类型安全，参数不匹配编译报错）
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Ret</span><span class="p">,</span> <span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Ret</span><span class="o">&gt;</span> <span class="n">invoke_method</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">obj</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">static_assert</span><span class="p">(</span><span class="n">is_reflectable_v</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="s">&#34;Type is not reflectable!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Ret</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">for_each_method_meta</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](</span><span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="n">method</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">using</span> <span class="n">M</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">method</span><span class="p">)</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_invocable_r_v</span><span class="o">&lt;</span><span class="n">Ret</span><span class="p">,</span> <span class="k">decltype</span><span class="p">(</span><span class="n">method</span><span class="p">.</span><span class="n">ptr</span><span class="p">),</span> <span class="n">T</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">method</span><span class="p">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="k">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_void_v</span><span class="o">&lt;</span><span class="n">Ret</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">method</span><span class="p">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">result</span><span class="p">.</span><span class="n">emplace</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">result</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">method</span><span class="p">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...));</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// ==================== 反射注册宏（极简侵入式） ====================
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 类内声明：必须放在类中，支持私有成员反射，声明友元权限
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define REFLECT_DECLARE(cls) \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    friend struct ReflectTraits&lt;cls&gt;;
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 字段注册宏：类外使用，自动生成反射特性特化代码
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define REFLECT_FIELDS(cls, ...) \
+</span></span></span><span class="line"><span class="cl"><span class="cp">template &lt;&gt; \
+</span></span></span><span class="line"><span class="cl"><span class="cp">struct ReflectTraits&lt;cls&gt; { \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    static constexpr bool is_reflectable = true; \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    static constexpr std::string_view class_name = #cls; \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    static constexpr auto fields = std::make_tuple( \
+</span></span></span><span class="line"><span class="cl"><span class="cp">        FieldInfo&lt;cls, decltype(std::declval&lt;cls&gt;().*(&amp;cls::__VA_ARGS__))&gt;(#__VA_ARGS__, &amp;cls::__VA_ARGS__)... \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    ); \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    static constexpr auto methods = std::make_tuple(); \
+</span></span></span><span class="line"><span class="cl"><span class="cp">};
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 字段+成员函数联合注册宏
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define REFLECT_FULL(cls, fields_args, methods_args) \
+</span></span></span><span class="line"><span class="cl"><span class="cp">template &lt;&gt; \
+</span></span></span><span class="line"><span class="cl"><span class="cp">struct ReflectTraits&lt;cls&gt; { \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    static constexpr bool is_reflectable = true; \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    static constexpr std::string_view class_name = #cls; \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    static constexpr auto fields = std::make_tuple( \
+</span></span></span><span class="line"><span class="cl"><span class="cp">        FieldInfo&lt;cls, decltype(std::declval&lt;cls&gt;().*(&amp;cls::fields_args))&gt;(#fields_args, &amp;cls::fields_args)... \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    ); \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    static constexpr auto methods = std::make_tuple( \
+</span></span></span><span class="line"><span class="cl"><span class="cp">        MethodInfo(#methods_args, &amp;cls::methods_args)... \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    ); \
+</span></span></span><span class="line"><span class="cl"><span class="cp">};</span></span></span></code></pre></div></div>
+<h3 id="2-使用示例">2. 使用示例</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;reflect.hpp&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 测试类
+</span></span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Person</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 反射声明（必须放在类内，支持私有成员）
+</span></span></span><span class="line"><span class="cl">    <span class="n">REFLECT_DECLARE</span><span class="p">(</span><span class="n">Person</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Person</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Person</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="o">:</span> <span class="n">name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">n</span><span class="p">)),</span> <span class="n">age</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 测试成员函数
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">say_hello</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Hello, I&#39;m &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;, &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">age</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; years old</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">get_age</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">age</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 注册反射信息（类外使用）
+</span></span></span><span class="line"><span class="cl"><span class="n">REFLECT_FIELDS</span><span class="p">(</span><span class="n">Person</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Person</span> <span class="nf">p</span><span class="p">(</span><span class="s">&#34;Zhang San&#34;</span><span class="p">,</span> <span class="mi">25</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// ========== 1. 编译期获取类名 ==========
+</span></span></span><span class="line"><span class="cl">    <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">cls_name</span> <span class="o">=</span> <span class="n">class_name</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Class name: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">cls_name</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// ========== 2. 遍历所有字段 ==========
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;=== Traverse all fields ===</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">for_each_field</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="p">[](</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">,</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">,</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">field</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Field name: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">name</span>
+</span></span><span class="line"><span class="cl">                  <span class="o">&lt;&lt;</span> <span class="s">&#34;, Field type: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">type_name</span><span class="o">&lt;</span><span class="k">typename</span> <span class="k">decltype</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="o">::</span><span class="n">field_type</span><span class="o">&gt;</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                  <span class="o">&lt;&lt;</span> <span class="s">&#34;, Value: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">value</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// ========== 3. 按名读写字段 ==========
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;=== Read/Write field by name ===</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 读字段
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="k">auto</span><span class="o">*</span> <span class="n">name_ptr</span> <span class="o">=</span> <span class="n">get_field</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="s">&#34;name&#34;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Original name: &#34;</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">name_ptr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 写字段
+</span></span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">set_success</span> <span class="o">=</span> <span class="n">set_field</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="s">&#34;age&#34;</span><span class="p">,</span> <span class="mi">30</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Set age success: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span> <span class="o">&lt;&lt;</span> <span class="n">set_success</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="k">auto</span><span class="o">*</span> <span class="n">age_ptr</span> <span class="o">=</span> <span class="n">get_field</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="s">&#34;age&#34;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;New age: &#34;</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">age_ptr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// ========== 4. 实用场景：自动序列化 ==========
+</span></span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;=== Auto serialize to JSON ===</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">json</span> <span class="o">=</span> <span class="s">&#34;{&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">first</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">for_each_field</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">,</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">,</span> <span class="k">auto</span><span class="o">&amp;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">first</span><span class="p">)</span> <span class="n">json</span> <span class="o">+=</span> <span class="s">&#34;, &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">first</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">json</span> <span class="o">+=</span> <span class="s">&#34;</span><span class="se">\&#34;</span><span class="s">&#34;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#34;</span><span class="se">\&#34;</span><span class="s">: &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 类型分支处理（编译期生成，无运行时开销）
+</span></span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">json</span> <span class="o">+=</span> <span class="s">&#34;</span><span class="se">\&#34;</span><span class="s">&#34;</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s">&#34;</span><span class="se">\&#34;</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_arithmetic_v</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">json</span> <span class="o">+=</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="n">json</span> <span class="o">+=</span> <span class="s">&#34;}&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">json</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="3-编译与运行">3. 编译与运行</h3>
+<p>编译时需指定 C++17 标准：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># GCC/Clang</span>
+</span></span><span class="line"><span class="cl">g++ -std<span class="o">=</span>c++17 main.cpp -o reflect_demo
+</span></span><span class="line"><span class="cl">./reflect_demo
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># MSVC</span>
+</span></span><span class="line"><span class="cl">cl /std:c++17 main.cpp /Fe:reflect_demo.exe
+</span></span><span class="line"><span class="cl">reflect_demo.exe</span></span></code></pre></div></div>
+<p>运行输出：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Class name: Person
+
+=== Traverse all fields ===
+Field name: name, Field type: std::__cxx11::basic_string&lt;char&gt;, Value: Zhang San
+Field name: age, Field type: int, Value: 25
+
+=== Read/Write field by name ===
+Original name: Zhang San
+Set age success: true
+New age: 30
+
+=== Auto serialize to JSON ===
+{&#34;name&#34;: &#34;Zhang San&#34;, &#34;age&#34;: 30}</code></pre></div>
+<h2 id="核心特性说明">核心特性说明</h2>
+<ol>
+<li><strong>零运行时开销</strong>：所有元数据均为 constexpr 编译期常量，未使用的反射代码会被编译器优化掉，完全符合 C++ 零成本抽象原则</li>
+<li><strong>类型安全</strong>：字段读写、函数调用均在编译期做类型检查，类型不匹配直接编译报错，避免运行期类型转换异常</li>
+<li><strong>私有成员支持</strong>：通过类内的 <code>REFLECT_DECLARE</code> 宏声明友元，完美支持私有成员的反射</li>
+<li><strong>编译器兼容</strong>：适配 GCC、Clang、MSVC 三大主流编译器，无平台依赖</li>
+<li><strong>极简语法</strong>：仅需 2 行宏即可完成类的反射注册，无侵入式代码修改</li>
+</ol>
+<h2 id="局限性与扩展方向">局限性与扩展方向</h2>
+<h3 id="现有局限性">现有局限性</h3>
+<ol>
+<li><strong>手动注册</strong>：C++17 无法自动提取类的成员列表，仍需手动通过宏注册成员（C++26 原生反射提案将解决此问题）</li>
+<li><strong>重载函数支持有限</strong>：当前实现对重载成员函数的支持较弱，需手动指定函数签名</li>
+<li><strong>继承关系不支持</strong>：无法自动继承父类的反射信息，需手动合并父类元数据</li>
+<li><strong>非标准特性依赖</strong>：类型名提取依赖编译器内置的 <code>__PRETTY_FUNCTION__</code>/<code>__FUNCSIG__</code> 宏，非 C++ 标准语法，但主流编译器均支持</li>
+</ol>
+<h3 id="扩展方向">扩展方向</h3>
+<ol>
+<li><strong>枚举反射</strong>：扩展 constexpr 枚举值与名称的映射，实现枚举的自动序列化</li>
+<li><strong>继承支持</strong>：通过模板递归合并父类与子类的反射元数据，实现继承体系的完整反射</li>
+<li><strong>构造函数反射</strong>：扩展元数据支持构造函数的注册与动态创建对象</li>
+<li><strong>ORM/序列化框架</strong>：基于反射实现通用的 JSON/XML 序列化、数据库 ORM 映射</li>
+<li><strong>无宏方案</strong>：结合 Boost.PFR 库，实现聚合体的免宏反射（仅支持 POD/聚合类型）</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-01-08</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/022_cpp17%E5%AE%9E%E7%8E%B0%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/cpp17/">Cpp17</a>,&nbsp;<a href="/blog/tags/reflect/">Reflect</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/021_cpp17%E5%AE%9E%E7%8E%B0%E5%86%85%E5%AD%98%E6%B1%A0/" class="prev" rel="prev" title="C&#43;&#43;17 实现内存池"><i class="fas fa-angle-left" aria-hidden="true"></i>C++17 实现内存池</a>
+            <a href="/blog/023_cpp17%E5%AE%9E%E7%8E%B0%E5%8D%8F%E7%A8%8B%E6%9C%BA%E5%88%B6/" class="next" rel="next" title="C&#43;&#43;17 实现协程机制">C++17 实现协程机制<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>DDS 协议详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/003_dds%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="DDS 协议详细总结">
+  <meta property="og:description" content="DDS协议 全面详细总结 DDS（Data Distribution Service，数据分发服务）是由OMG（对象管理组织） 标准化的、以数据为中心的发布-订阅（DCPS） 分布式实时通信中间件协议，专为高可靠、低延迟、高可用的分布式硬实时系统设计，是自动驾驶、工业4.0、航空航天、机器人等领域的核心通信标准。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-27T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-03-27T10:00:00+08:00">
+    <meta property="article:tag" content="AUTOSAR">
+    <meta property="article:tag" content="AUTOSAR AP">
+    <meta property="article:tag" content="DDS">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="DDS 协议详细总结">
+  <meta name="twitter:description" content="DDS协议 全面详细总结 DDS（Data Distribution Service，数据分发服务）是由OMG（对象管理组织） 标准化的、以数据为中心的发布-订阅（DCPS） 分布式实时通信中间件协议，专为高可靠、低延迟、高可用的分布式硬实时系统设计，是自动驾驶、工业4.0、航空航天、机器人等领域的核心通信标准。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/003_dds%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/002_someip%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/001_ros2%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "DDS 协议详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/003_dds%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "AUTOSAR, AUTOSAR AP, DDS","wordcount":  5967 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/003_dds%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-03-27T09:00:00+08:00","dateModified": "2026-03-27T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/003_dds%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/003_dds%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">DDS 协议详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/autosar/"><i class="far fa-folder" aria-hidden="true"></i>AUTOSAR</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-03-27">2026-03-27</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 5967 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 12 分钟&nbsp;<span id="/blog/003_dds%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="DDS 协议详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一标准体系与发展历程">一、标准体系与发展历程</a>
+      <ul>
+        <li><a href="#1-核心标准分层">1. 核心标准分层</a></li>
+        <li><a href="#2-关键配套规范">2. 关键配套规范</a></li>
+        <li><a href="#3-版本演进">3. 版本演进</a></li>
+      </ul>
+    </li>
+    <li><a href="#二核心架构与实体模型">二、核心架构与实体模型</a>
+      <ul>
+        <li><a href="#1-顶层隔离单元域domain">1. 顶层隔离单元：域（Domain）</a></li>
+        <li><a href="#2-核心实体层级">2. 核心实体层级</a>
+          <ul>
+            <li><a href="#1domainparticipant域参与者">（1）DomainParticipant（域参与者）</a></li>
+            <li><a href="#2topic主题">（2）Topic（主题）</a></li>
+            <li><a href="#3publisher--datawriter">（3）Publisher &amp; DataWriter</a></li>
+            <li><a href="#4subscriber--datareader">（4）Subscriber &amp; DataReader</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-全局数据空间gds">3. 全局数据空间（GDS）</a></li>
+      </ul>
+    </li>
+    <li><a href="#三灵魂核心qos服务质量策略">三、灵魂核心：QoS（服务质量）策略</a>
+      <ul>
+        <li><a href="#核心qos策略分类与说明">核心QoS策略分类与说明</a></li>
+      </ul>
+    </li>
+    <li><a href="#四底层核心rtps协议">四、底层核心：RTPS协议</a>
+      <ul>
+        <li><a href="#1-核心特性">1. 核心特性</a></li>
+        <li><a href="#2-协议报文类型">2. 协议报文类型</a></li>
+      </ul>
+    </li>
+    <li><a href="#五dds核心特性">五、DDS核心特性</a></li>
+    <li><a href="#六主流dds实现">六、主流DDS实现</a>
+      <ul>
+        <li><a href="#开源实现">开源实现</a></li>
+        <li><a href="#商业实现">商业实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#七典型应用场景">七、典型应用场景</a></li>
+    <li><a href="#八dds与主流通信协议对比">八、DDS与主流通信协议对比</a></li>
+    <li><a href="#九优势与局限性">九、优势与局限性</a>
+      <ul>
+        <li><a href="#核心优势">核心优势</a></li>
+        <li><a href="#局限性">局限性</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="dds协议-全面详细总结">DDS协议 全面详细总结</h1>
+<p>DDS（Data Distribution Service，数据分发服务）是由<strong>OMG（对象管理组织）</strong> 标准化的、<strong>以数据为中心的发布-订阅（DCPS）</strong> 分布式实时通信中间件协议，专为高可靠、低延迟、高可用的分布式硬实时系统设计，是自动驾驶、工业4.0、航空航天、机器人等领域的核心通信标准。</p>
+<h2 id="一标准体系与发展历程">一、标准体系与发展历程</h2>
+<h3 id="1-核心标准分层">1. 核心标准分层</h3>
+<p>DDS协议体系分为两大核心层，配套十余项专项规范，形成完整的标准化体系：</p>
+<table>
+  <thead>
+      <tr>
+          <th>层级</th>
+          <th>全称</th>
+          <th>核心作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>DCPS层</td>
+          <td>Data-Centric Publish-Subscribe（以数据为中心的发布订阅层）</td>
+          <td>DDS的核心顶层规范，定义了实体模型、API接口、以数据为中心的通信范式、QoS策略框架，是应用层直接交互的部分</td>
+      </tr>
+      <tr>
+          <td>RTPS层</td>
+          <td>Real-Time Publish-Subscribe Protocol（实时发布订阅协议）</td>
+          <td>DDS的底层线速协议（Wire Protocol），定义了网络传输格式、自动发现机制、可靠传输算法、互操作规范，是不同厂商DDS实现互联互通的基础</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-关键配套规范">2. 关键配套规范</h3>
+<ul>
+<li><strong>DDS-XTypes</strong>：动态数据类型规范，支持运行时动态定义/修改数据结构，无需预编译IDL，提升系统灵活性</li>
+<li><strong>DDS-Security</strong>：端到端安全规范，覆盖身份认证、访问控制、数据加密、消息完整性校验、防重放攻击</li>
+<li><strong>DDS-RPC</strong>：远程服务调用规范，在发布订阅模型基础上补充同步/异步RPC能力，适配请求-响应场景</li>
+<li><strong>DDS-WebSocket</strong>：WebSocket传输绑定规范，支持浏览器端与DDS网络直接通信</li>
+<li><strong>DDS for AUTOSAR Adaptive</strong>：车载自适应平台适配规范，满足ISO 26262功能安全要求</li>
+<li><strong>OPC UA over DDS</strong>：工业自动化融合规范，打通工业互联网端到端实时通信链路</li>
+</ul>
+<h3 id="3-版本演进">3. 版本演进</h3>
+<ul>
+<li>2004年：OMG发布DDS 1.0核心标准，正式确立DCPS+RTPS架构</li>
+<li>2015年：DDS 1.4版本成为行业主流稳定版本，完善QoS与RTPS互操作性</li>
+<li>2021年：发布DDS 1.5最新版本，优化动态类型、安全机制与边缘计算场景适配</li>
+</ul>
+<h2 id="二核心架构与实体模型">二、核心架构与实体模型</h2>
+<p>DDS采用面向对象的分层实体架构，所有实体均绑定独立的QoS策略，通过QoS匹配实现发布-订阅的互联互通。</p>
+<h3 id="1-顶层隔离单元域domain">1. 顶层隔离单元：域（Domain）</h3>
+<ul>
+<li>Domain是DDS网络的顶层隔离边界，通过唯一的<strong>Domain ID</strong>标识</li>
+<li>只有处于同一个Domain的节点才能通信，不同Domain之间完全隔离，可实现多业务网络的物理/逻辑复用</li>
+<li>一个应用可同时加入多个Domain，适配多业务并行场景</li>
+</ul>
+<h3 id="2-核心实体层级">2. 核心实体层级</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>Domain（域）
+└── DomainParticipant（域参与者）
+    ├── Publisher（发布者）
+    │   └── DataWriter（数据写入者）→ 绑定Topic（主题）
+    ├── Subscriber（订阅者）
+    │   └── DataReader（数据读取者）→ 绑定Topic（主题）
+    └── Topic（主题）</code></pre></div>
+<h4 id="1domainparticipant域参与者">（1）DomainParticipant（域参与者）</h4>
+<ul>
+<li>应用程序接入DDS域的唯一入口，是所有其他实体的容器</li>
+<li>管理节点的全局配置、资源分配、自动发现流程，负责与其他节点的Participant建立通信</li>
+<li>一个应用在单个Domain中通常仅需一个Participant实例</li>
+</ul>
+<h4 id="2topic主题">（2）Topic（主题）</h4>
+<ul>
+<li>DDS数据分发的核心载体，是发布与订阅的锚点，由<strong>主题名称+数据类型</strong>唯一标识</li>
+<li>只有名称、数据类型完全匹配，且QoS兼容的DataWriter与DataReader才能建立通信链路</li>
+<li>支持<strong>实例（Instance）</strong> 细分：通过数据结构中的key字段，将一个Topic划分为多个独立实例（如“温度传感器”Topic下，每个传感器ID对应一个实例），实现实例级的生命周期、QoS与历史数据管理</li>
+</ul>
+<h4 id="3publisher--datawriter">（3）Publisher &amp; DataWriter</h4>
+<ul>
+<li>Publisher：发布行为的管理容器，统一管理旗下所有DataWriter的发布策略、流量控制</li>
+<li>DataWriter：数据发布的执行实体，绑定特定Topic，负责数据的序列化、发布、缓存与重传，是应用写入数据的直接接口</li>
+</ul>
+<h4 id="4subscriber--datareader">（4）Subscriber &amp; DataReader</h4>
+<ul>
+<li>Subscriber：订阅行为的管理容器，统一管理旗下所有DataReader的接收策略、事件回调</li>
+<li>DataReader：数据接收的执行实体，绑定特定Topic，负责数据的接收、反序列化、缓存与事件通知，是应用读取数据的直接接口</li>
+</ul>
+<h3 id="3-全局数据空间gds">3. 全局数据空间（GDS）</h3>
+<p>DDS的核心设计理念是构建一个<strong>逻辑上的全局共享数据空间</strong>：</p>
+<ul>
+<li>所有发布者将数据写入GDS，所有订阅者从GDS中读取自己需要的数据</li>
+<li>应用无需关注数据的来源、数量、网络地址，仅需关注“需要什么数据”，实现极致的三方解耦：
+<ul>
+<li>时间解耦：发布者与订阅者无需同时在线，可通过持久化机制实现离线数据同步</li>
+<li>空间解耦：无需知晓对方的IP、端口，通过自动发现实现即插即用</li>
+<li>流量解耦：异步非阻塞通信，发布与订阅互不阻塞</li>
+</ul>
+</li>
+</ul>
+<h2 id="三灵魂核心qos服务质量策略">三、灵魂核心：QoS（服务质量）策略</h2>
+<p>QoS是DDS区别于其他通信协议的核心能力，通过20+可组合的细粒度策略，精准控制数据的可靠性、实时性、生命周期、资源占用等行为，实现“一套协议覆盖从硬实时控制到非实时数据传输的全场景需求”。</p>
+<p>QoS遵循<strong>请求-提供（Request-Offer）</strong> 匹配原则：订阅端的QoS需求不能超出发布端的提供能力，否则两端无法建立通信。</p>
+<h3 id="核心qos策略分类与说明">核心QoS策略分类与说明</h3>
+<table>
+  <thead>
+      <tr>
+          <th>策略类别</th>
+          <th>核心策略</th>
+          <th>取值与作用</th>
+          <th>典型场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>可靠性控制</td>
+          <td>Reliability</td>
+          <td>1. BEST_EFFORT：尽力而为，无重传，极致低延迟<br>2. RELIABLE：可靠传输，内置重传与确认机制，保证数据不丢不重</td>
+          <td>控制指令用RELIABLE，视频/点云流用BEST_EFFORT</td>
+      </tr>
+      <tr>
+          <td>数据持久化</td>
+          <td>Durability</td>
+          <td>1. VOLATILE：默认，仅发送给当前在线的订阅者<br>2. TRANSIENT_LOCAL：DataWriter缓存数据，新订阅者上线自动推送最新数据<br>3. TRANSIENT：数据缓存在节点内存，节点重启失效<br>4. PERSISTENT：数据持久化到磁盘，节点重启仍可提供</td>
+          <td>设备状态数据用TRANSIENT_LOCAL，关键配置用PERSISTENT</td>
+      </tr>
+      <tr>
+          <td>历史数据管理</td>
+          <td>History</td>
+          <td>1. KEEP_LAST：仅保留最新N个样本（默认N=1）<br>2. KEEP_ALL：保留所有未被处理的样本，受资源限制</td>
+          <td>高频传感器数据用KEEP_LAST，关键事件用KEEP_ALL</td>
+      </tr>
+      <tr>
+          <td>实时性与生命周期</td>
+          <td>Deadline</td>
+          <td>发布端承诺数据发布的最大周期，订阅端要求数据接收的最大周期，超时触发离线/故障事件</td>
+          <td>心跳检测、设备在线状态监控</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>Lifespan</td>
+          <td>定义数据样本的过期时间，超时样本自动丢弃，避免旧脏数据影响系统</td>
+          <td>实时控制指令、临时状态数据</td>
+      </tr>
+      <tr>
+          <td>资源管控</td>
+          <td>Resource Limits</td>
+          <td>限制最大样本数、最大实例数、最大缓存内存，防止内存溢出</td>
+          <td>嵌入式MCU、资源受限设备</td>
+      </tr>
+      <tr>
+          <td>高可用控制</td>
+          <td>Liveliness</td>
+          <td>定义发布端的活跃度检测机制，通过心跳确认发布端是否在线，离线自动通知订阅端</td>
+          <td>冗余备份、故障快速切换</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>Ownership</td>
+          <td>1. EXCLUSIVE：排他所有权，仅最高优先级的DataWriter可发布该Topic，实现主备冗余<br>2. SHARED：共享所有权，多个发布者可同时发布</td>
+          <td>高可靠控制系统、主备冗余架构</td>
+      </tr>
+      <tr>
+          <td>流量与隔离控制</td>
+          <td>Partition</td>
+          <td>在Domain内实现二次逻辑隔离，仅同分区的发布/订阅端可匹配</td>
+          <td>多业务系统的同域隔离</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>TimeBasedFilter</td>
+          <td>订阅端设置最小数据接收间隔，自动过滤高频冗余数据，降低CPU/带宽占用</td>
+          <td>高频传感器数据降频、低算力设备适配</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="四底层核心rtps协议">四、底层核心：RTPS协议</h2>
+<p>RTPS是DDS的底层传输标准，是DDS实现无中心、低延迟、高可靠、互操作性的核心基石，原生基于UDP/IP设计，同时兼容TCP、共享内存、WebSocket、5G等多种传输层。</p>
+<h3 id="1-核心特性">1. 核心特性</h3>
+<ul>
+<li><strong>完全分布式无中心</strong>：无broker节点，所有节点完全对等，无单点故障，系统可线性扩展</li>
+<li><strong>原生自动发现机制</strong>：内置两大发现协议，实现节点即插即用，无需手动配置任何IP/端口：
+<ul>
+<li>PDP（Participant Discovery Protocol）：域参与者发现协议，自动发现同Domain内的所有节点</li>
+<li>EDP（Endpoint Discovery Protocol）：端点发现协议，自动发现节点内的DataWriter/DataReader，完成QoS匹配与链路建立</li>
+</ul>
+</li>
+<li><strong>UDP可靠传输增强</strong>：在无连接的UDP之上，实现了比TCP更适合实时场景的可靠传输机制，包括选择性重传、负确认（NACK）、拥塞控制，避免TCP的队头阻塞问题，实现亚毫秒级端到端延迟</li>
+<li><strong>原生多播支持</strong>：默认采用多播实现发现与数据分发，一个发布者对应N个订阅者时，仅需发送一次数据包，大幅降低网络带宽占用，完美适配大规模分布式节点场景</li>
+<li><strong>强互操作性</strong>：所有兼容OMG RTPS标准的DDS实现，均可直接互联互通，无厂商锁定</li>
+</ul>
+<h3 id="2-协议报文类型">2. 协议报文类型</h3>
+<p>RTPS定义了四大类核心报文，覆盖全通信流程：</p>
+<ol>
+<li><strong>信息报文（Info）</strong>：用于节点发现、握手与元数据交换</li>
+<li><strong>数据报文（Data）</strong>：用于传输业务数据样本，支持带内/带外元数据</li>
+<li><strong>确认报文（AckNack）</strong>：用于数据接收确认与重传请求，实现可靠传输</li>
+<li><strong>心跳报文（Heartbeat）</strong>：用于发布端活跃度检测与数据完整性校验</li>
+</ol>
+<h2 id="五dds核心特性">五、DDS核心特性</h2>
+<ol>
+<li><strong>无中心高可用架构</strong>：无broker节点，所有节点对等，彻底消除单点故障，支持节点动态上下线，系统可用性与扩展性极强</li>
+<li><strong>以数据为中心的通信范式</strong>：区别于MQTT/Kafka的“以消息为中心”，DDS关注数据本身的状态、生命周期与缓存，应用直接获取数据的当前有效状态，无需自行实现数据缓存、过期、同步逻辑</li>
+<li><strong>细粒度可组合QoS控制</strong>：20+QoS策略可灵活组合，精准匹配不同业务的可靠性、实时性、资源占用需求，一套协议覆盖硬实时控制、高速数据分发、离线数据同步等全场景</li>
+<li><strong>原生即插即用能力</strong>：内置自动发现机制，无需手动配置节点地址，节点上线自动完成发现、匹配与链路建立，完美适配动态拓扑的分布式系统</li>
+<li><strong>极致实时性能</strong>：RTPS协议针对实时场景深度优化，亚毫秒级端到端延迟，微秒级抖动，高吞吐量，满足自动驾驶、运动控制等硬实时场景要求</li>
+<li><strong>端到端安全防护</strong>：DDS-Security标准提供全链路安全能力，支持国密算法，符合工业、车载、军工等领域的安全合规要求</li>
+<li><strong>全平台全场景适配</strong>：主流实现支持C/C++、Java、Python、Rust、C#等十余种开发语言，兼容Linux、Windows、VxWorks、QNX、Android、MCU等全平台，覆盖从边缘嵌入式设备到云端服务器的全链路通信</li>
+<li><strong>标准化生态完善</strong>：OMG标准化维护，跨厂商互操作，已成为AUTOSAR Adaptive、ROS2、OPC UA FX、美军NCES等主流体系的标准通信协议</li>
+</ol>
+<h2 id="六主流dds实现">六、主流DDS实现</h2>
+<h3 id="开源实现">开源实现</h3>
+<table>
+  <thead>
+      <tr>
+          <th>实现方案</th>
+          <th>开源协议</th>
+          <th>核心特点</th>
+          <th>典型应用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Eclipse Cyclone DDS</td>
+          <td>Apache 2.0</td>
+          <td>轻量级、低内存占用、高性能，ROS2 Humble+默认实现，社区活跃，适配嵌入式与机器人场景</td>
+          <td>ROS2机器人、工业IoT、边缘计算</td>
+      </tr>
+      <tr>
+          <td>eProsima Fast DDS</td>
+          <td>Apache 2.0</td>
+          <td>全功能兼容DDS标准，支持共享内存、安全机制、多平台，ROS2 Foxy及之前默认实现，工具链完善</td>
+          <td>自动驾驶、工业自动化、机器人</td>
+      </tr>
+      <tr>
+          <td>OpenDDS</td>
+          <td>MPL 2.0</td>
+          <td>全标准兼容，稳定性强，适配航空航天、国防场景，支持多种传输层</td>
+          <td>军工、航空航天、工业控制</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="商业实现">商业实现</h3>
+<table>
+  <thead>
+      <tr>
+          <th>实现方案</th>
+          <th>核心特点</th>
+          <th>典型应用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>RTI Connext DDS</td>
+          <td>行业标杆，全功能全场景覆盖，性能最强，通过DO-178C、ISO 26262、IEC 61508等安全认证，配套完善的调试监控工具链</td>
+          <td>航空航天、国防军工、自动驾驶、医疗设备</td>
+      </tr>
+      <tr>
+          <td>ADLINK OpenSplice DDS</td>
+          <td>高可用、大规模分布式场景优化，支持超大规模节点部署，适配工业、轨道交通、电信场景</td>
+          <td>智能工厂、轨道交通、电信核心网</td>
+      </tr>
+      <tr>
+          <td>CoreDX DDS</td>
+          <td>超轻量级，极致裁剪，适配资源极度受限的MCU，通过多项工业安全认证</td>
+          <td>嵌入式终端、工业传感器、车载MCU</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="七典型应用场景">七、典型应用场景</h2>
+<ol>
+<li><strong>自动驾驶与车载电子</strong>：是AUTOSAR Adaptive平台的标准通信协议，用于车内域控制器通信、传感器（激光雷达/摄像头/毫米波雷达）数据分发、车控指令传输，满足低延迟、高可靠、功能安全要求，已被国内外主流车企与自动驾驶方案商大规模采用</li>
+<li><strong>机器人与ROS2</strong>：ROS2的底层通信完全基于DDS，解决了ROS1中心化架构的实时性差、单点故障问题，DDS的自动发现、低延迟、可靠传输完美适配工业机器人、服务机器人、移动机器人的分布式控制需求</li>
+<li><strong>工业4.0与智能制造</strong>：是OPC UA FX的核心传输协议，用于PLC、SCADA、MES系统之间的实时通信，适配智能工厂、产线控制、设备状态监控场景，无中心架构避免单点故障，满足工业现场的硬实时控制要求</li>
+<li><strong>航空航天与国防</strong>：美军NCES网络中心体系、F-35战斗机航电系统、卫星地面站、雷达系统均采用DDS，其高可靠、抗毁性、低延迟、安全机制完全匹配军工场景的严苛要求</li>
+<li><strong>医疗设备</strong>：用于手术机器人、医疗影像设备、生命支持系统的通信，符合IEC 60601医疗安全认证，满足高可靠、低延迟的医疗场景需求</li>
+<li><strong>能源与轨道交通</strong>：用于智能电网、变电站自动化、轨道交通信号系统、车载控制系统，适配长距离、高可用、强实时的工业场景</li>
+</ol>
+<h2 id="八dds与主流通信协议对比">八、DDS与主流通信协议对比</h2>
+<table>
+  <thead>
+      <tr>
+          <th>对比维度</th>
+          <th>DDS</th>
+          <th>MQTT 3.1.1/5.0</th>
+          <th>Kafka</th>
+          <th>gRPC</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>核心架构</td>
+          <td>无中心分布式发布订阅</td>
+          <td>中心化broker发布订阅</td>
+          <td>中心化broker发布订阅</td>
+          <td>客户端-服务器RPC</td>
+      </tr>
+      <tr>
+          <td>核心范式</td>
+          <td>以数据为中心</td>
+          <td>以消息为中心</td>
+          <td>以消息为中心</td>
+          <td>以服务为中心</td>
+      </tr>
+      <tr>
+          <td>实时性能</td>
+          <td>亚毫秒级硬实时，微秒级抖动</td>
+          <td>毫秒级软实时</td>
+          <td>百毫秒级非实时</td>
+          <td>毫秒级</td>
+      </tr>
+      <tr>
+          <td>单点故障</td>
+          <td>无，全节点对等</td>
+          <td>broker单点（集群可缓解）</td>
+          <td>依赖broker集群</td>
+          <td>服务端单点</td>
+      </tr>
+      <tr>
+          <td>自动发现</td>
+          <td>原生内置，即插即用</td>
+          <td>不支持，需手动配置</td>
+          <td>不支持</td>
+          <td>不支持</td>
+      </tr>
+      <tr>
+          <td>QoS能力</td>
+          <td>20+细粒度可组合策略</td>
+          <td>3级基础QoS</td>
+          <td>基于offset的可靠性，无细粒度控制</td>
+          <td>无内置QoS，依赖TCP</td>
+      </tr>
+      <tr>
+          <td>多播支持</td>
+          <td>原生深度优化</td>
+          <td>不支持</td>
+          <td>不支持</td>
+          <td>不支持</td>
+      </tr>
+      <tr>
+          <td>资源占用</td>
+          <td>可裁剪，适配MCU到服务器</td>
+          <td>极轻量级，适配低带宽IoT</td>
+          <td>重量级，依赖服务器集群</td>
+          <td>轻量级，点对点适配</td>
+      </tr>
+      <tr>
+          <td>核心适用场景</td>
+          <td>硬实时分布式系统、自动驾驶、工业控制、机器人</td>
+          <td>低带宽广域网IoT、智能家居、设备遥测</td>
+          <td>大数据日志采集、离线处理、高吞吐消息队列</td>
+          <td>微服务API调用、点对点服务通信</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="九优势与局限性">九、优势与局限性</h2>
+<h3 id="核心优势">核心优势</h3>
+<ul>
+<li>无中心架构天生高可用，无单点故障，系统扩展能力极强</li>
+<li>以数据为中心的设计，大幅简化分布式系统的应用开发，无需自行实现数据管理、状态同步、节点发现等基础能力</li>
+<li>细粒度QoS策略，一套协议覆盖从硬实时控制到非实时数据传输的全场景需求</li>
+<li>原生多播支持，大规模节点部署下带宽占用远低于TCP-based协议</li>
+<li>标准化程度高，跨厂商互操作，无厂商锁定，生态成熟完善</li>
+<li>内置端到端安全机制，符合工业、车载、军工等领域的安全合规要求</li>
+</ul>
+<h3 id="局限性">局限性</h3>
+<ul>
+<li>学习曲线陡峭：DDS的实体模型、QoS策略、配置项远复杂于MQTT等协议，入门门槛高，需要较深的技术积累</li>
+<li>资源占用：全功能DDS实现的内存占用高于轻量级MQTT客户端，超低成本MCU场景需使用裁剪版实现</li>
+<li>多播网络依赖：核心性能优势依赖二层多播支持，部分广域网、云环境不支持多播，需配置隧道或单播，优势大幅下降</li>
+<li>广域网优化不足：原生设计偏向局域网实时系统，弱网、高延迟广域网场景需额外做传输优化</li>
+<li>开源工具链薄弱：商业版配套完善的调试、监控、可视化工具，开源版本的工具链能力相对有限</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-03-27</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/003_dds%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/autosar/">AUTOSAR</a>,&nbsp;<a href="/blog/tags/autosar-ap/">AUTOSAR AP</a>,&nbsp;<a href="/blog/tags/dds/">DDS</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/002_someip%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="SOME/IP 协议详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>SOME/IP 协议详细总结</a>
+            <a href="/blog/001_ros2%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="ROS2 使用详细总结">ROS2 使用详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

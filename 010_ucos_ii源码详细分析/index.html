@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>uCOS-II 源码详细分析 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/010_ucos_ii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="uCOS-II 源码详细分析">
+  <meta property="og:description" content="uC/OS-II 源码详细分析（基于V2.92经典稳定版） uC/OS-II 是由Jean J. Labrosse开发的可剥夺型硬实时多任务RTOS内核，专为资源受限的嵌入式系统设计，全部源码遵循ANSI C标准编写，仅少量CPU架构相关代码用汇编实现，具备可裁剪、可移植、可固化、调度时间恒定、实时性强的核心特点，广泛应用于工业控制、医疗设备、汽车电子等对确定性和可靠性有严苛要求的领域。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-03T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-03-03T10:00:20+08:00">
+    <meta property="article:tag" content="OS">
+    <meta property="article:tag" content="UCOS-II">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="uCOS-II 源码详细分析">
+  <meta name="twitter:description" content="uC/OS-II 源码详细分析（基于V2.92经典稳定版） uC/OS-II 是由Jean J. Labrosse开发的可剥夺型硬实时多任务RTOS内核，专为资源受限的嵌入式系统设计，全部源码遵循ANSI C标准编写，仅少量CPU架构相关代码用汇编实现，具备可裁剪、可移植、可固化、调度时间恒定、实时性强的核心特点，广泛应用于工业控制、医疗设备、汽车电子等对确定性和可靠性有严苛要求的领域。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/010_ucos_ii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/002_googlemock%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/011_ucos_iii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "uCOS-II 源码详细分析",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/010_ucos_ii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "OS, uCOS-II","wordcount":  9336 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/010_ucos_ii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90\/","datePublished": "2026-03-03T09:00:20+08:00","dateModified": "2026-03-03T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/010_ucos_ii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/010_ucos_ii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">uCOS-II 源码详细分析</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/os/"><i class="far fa-folder" aria-hidden="true"></i>OS</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-03-03">2026-03-03</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 9336 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 19 分钟&nbsp;<span id="/blog/010_ucos_ii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" class="leancloud_visitors" data-flag-title="uCOS-II 源码详细分析">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一源码整体分层架构">一、源码整体分层架构</a>
+      <ul>
+        <li><a href="#1-硬件无关层内核通用核心无需修改">1. 硬件无关层（内核通用核心，无需修改）</a></li>
+        <li><a href="#2-硬件相关层移植层需根据cpu编译器修改">2. 硬件相关层（移植层，需根据CPU/编译器修改）</a></li>
+        <li><a href="#3-用户配置层可裁剪定制按需修改">3. 用户配置层（可裁剪定制，按需修改）</a></li>
+      </ul>
+    </li>
+    <li><a href="#二核心数据结构详解">二、核心数据结构详解</a>
+      <ul>
+        <li><a href="#1-任务控制块-os_tcbtask-control-block">1. 任务控制块 OS_TCB（Task Control Block）</a></li>
+        <li><a href="#2-就绪表与优先级位图算法">2. 就绪表与优先级位图算法</a></li>
+        <li><a href="#3-事件控制块-os_eventevent-control-block">3. 事件控制块 OS_EVENT（Event Control Block）</a></li>
+      </ul>
+    </li>
+    <li><a href="#三内核核心流程源码分析">三、内核核心流程源码分析</a>
+      <ul>
+        <li><a href="#1-内核初始化-osinit">1. 内核初始化 OSInit()</a></li>
+        <li><a href="#2-内核启动-osstart">2. 内核启动 OSStart()</a></li>
+        <li><a href="#3-任务级调度器-ossched">3. 任务级调度器 OSSched()</a></li>
+        <li><a href="#4-任务上下文切换">4. 任务上下文切换</a>
+          <ul>
+            <li><a href="#41-任务级切换-osctxsw">4.1 任务级切换 OSCtxSw()</a></li>
+            <li><a href="#42-中断级切换-osintctxsw">4.2 中断级切换 OSIntCtxSw()</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#四核心功能模块源码详解">四、核心功能模块源码详解</a>
+      <ul>
+        <li><a href="#1-任务管理模块os_taskc">1. 任务管理模块（os_task.c）</a>
+          <ul>
+            <li><a href="#11-任务创建-ostaskcreate">1.1 任务创建 OSTaskCreate()</a></li>
+            <li><a href="#12-核心任务管理api">1.2 核心任务管理API</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-时间管理模块os_timec">2. 时间管理模块（os_time.c）</a>
+          <ul>
+            <li><a href="#21-时钟节拍处理-ostimetick">2.1 时钟节拍处理 OSTimeTick()</a></li>
+            <li><a href="#22-任务延时-ostimedly">2.2 任务延时 OSTimeDly()</a></li>
+            <li><a href="#23-核心时间管理api">2.3 核心时间管理API</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-内存管理模块os_memc">3. 内存管理模块（os_mem.c）</a>
+          <ul>
+            <li><a href="#31-内存控制块-os_mem">3.1 内存控制块 OS_MEM</a></li>
+            <li><a href="#32-核心内存管理api源码逻辑">3.2 核心内存管理API源码逻辑</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-同步与通信模块">4. 同步与通信模块</a>
+          <ul>
+            <li><a href="#41-信号量os_semc">4.1 信号量（os_sem.c）</a></li>
+            <li><a href="#42-互斥信号量os_mutexc">4.2 互斥信号量（os_mutex.c）</a></li>
+            <li><a href="#43-消息邮箱与消息队列">4.3 消息邮箱与消息队列</a></li>
+          </ul>
+        </li>
+        <li><a href="#5-中断管理">5. 中断管理</a>
+          <ul>
+            <li><a href="#51-核心中断管理api">5.1 核心中断管理API</a></li>
+            <li><a href="#52-中断服务函数标准模板">5.2 中断服务函数标准模板</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#五临界区保护机制">五、临界区保护机制</a></li>
+    <li><a href="#六源码设计核心亮点与局限">六、源码设计核心亮点与局限</a>
+      <ul>
+        <li><a href="#1-核心设计亮点">1. 核心设计亮点</a></li>
+        <li><a href="#2-核心局限">2. 核心局限</a></li>
+      </ul>
+    </li>
+    <li><a href="#七源码学习建议">七、源码学习建议</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="ucos-ii-源码详细分析基于v292经典稳定版">uC/OS-II 源码详细分析（基于V2.92经典稳定版）</h1>
+<p>uC/OS-II 是由Jean J. Labrosse开发的<strong>可剥夺型硬实时多任务RTOS内核</strong>，专为资源受限的嵌入式系统设计，全部源码遵循ANSI C标准编写，仅少量CPU架构相关代码用汇编实现，具备可裁剪、可移植、可固化、调度时间恒定、实时性强的核心特点，广泛应用于工业控制、医疗设备、汽车电子等对确定性和可靠性有严苛要求的领域。</p>
+<h2 id="一源码整体分层架构">一、源码整体分层架构</h2>
+<p>uC/OS-II 采用严格的分层模块化设计，彻底解耦硬件相关逻辑与内核通用逻辑，极大提升了可移植性，源码整体分为三大核心层级：</p>
+<h3 id="1-硬件无关层内核通用核心无需修改">1. 硬件无关层（内核通用核心，无需修改）</h3>
+<p>该层是uC/OS-II的核心主体，与CPU/硬件平台完全无关，跨平台通用，每个模块对应独立的C文件，职责清晰：</p>
+<table>
+  <thead>
+      <tr>
+          <th>源文件</th>
+          <th>核心功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>os_core.c</td>
+          <td>内核中枢，实现初始化、任务调度、中断管理、临界区、TCB/ECB链表管理等核心逻辑</td>
+      </tr>
+      <tr>
+          <td>os_task.c</td>
+          <td>任务管理，实现任务创建/删除/挂起/恢复/优先级修改等专属API</td>
+      </tr>
+      <tr>
+          <td>os_time.c</td>
+          <td>时间管理，实现时钟节拍处理、任务延时、延时恢复等时间相关功能</td>
+      </tr>
+      <tr>
+          <td>os_mem.c</td>
+          <td>内存管理，实现固定大小内存分区管理，解决内存碎片问题</td>
+      </tr>
+      <tr>
+          <td>os_sem.c</td>
+          <td>计数型/二值信号量，实现任务同步与资源互斥访问</td>
+      </tr>
+      <tr>
+          <td>os_mutex.c</td>
+          <td>互斥信号量，基于优先级继承协议解决优先级反转问题</td>
+      </tr>
+      <tr>
+          <td>os_mbox.c</td>
+          <td>消息邮箱，实现单指针消息的任务间通信</td>
+      </tr>
+      <tr>
+          <td>os_q.c</td>
+          <td>消息队列，邮箱的增强版，支持多消息FIFO异步通信</td>
+      </tr>
+      <tr>
+          <td>os_flag.c</td>
+          <td>事件标志组，支持多事件的逻辑与/或组合等待</td>
+      </tr>
+      <tr>
+          <td>ucos_ii.h</td>
+          <td>内核总头文件，定义所有数据结构、宏、枚举、函数声明</td>
+      </tr>
+      <tr>
+          <td>ucos_ii.c</td>
+          <td>内核入口，统一包含所有核心源文件，方便工程管理</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-硬件相关层移植层需根据cpu编译器修改">2. 硬件相关层（移植层，需根据CPU/编译器修改）</h3>
+<p>该层是内核与硬件之间的抽象层，所有与CPU架构、编译器相关的代码均集中在此，是移植的核心修改对象：</p>
+<table>
+  <thead>
+      <tr>
+          <th>源文件</th>
+          <th>核心功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>os_cpu.h</td>
+          <td>CPU相关宏定义、基本数据类型、编译器配置、关/开中断宏、任务切换宏</td>
+      </tr>
+      <tr>
+          <td>os_cpu_c.c</td>
+          <td>C语言实现的移植函数，核心是<strong>任务栈初始化函数OSTaskStkInit()</strong>，以及各类钩子函数</td>
+      </tr>
+      <tr>
+          <td>os_cpu_a.asm</td>
+          <td>汇编实现的底层核心函数，包括任务启动OSStartHighRdy()、任务级切换OSCtxSw()、中断级切换OSIntCtxSw()</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-用户配置层可裁剪定制按需修改">3. 用户配置层（可裁剪定制，按需修改）</h3>
+<p>通过宏开关实现内核功能的精细化裁剪与配置，无需修改内核源码，适配不同资源的硬件平台：</p>
+<table>
+  <thead>
+      <tr>
+          <th>源文件</th>
+          <th>核心功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>os_cfg.h</td>
+          <td>内核配置文件，通过宏定义配置最大任务数、最大事件数、是否启用统计任务/模块裁剪、时钟节拍频率等核心参数</td>
+      </tr>
+      <tr>
+          <td>includes.h</td>
+          <td>工程总头文件，统一包含内核头文件、硬件驱动头文件、用户代码头文件，集中管理工程依赖</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="二核心数据结构详解">二、核心数据结构详解</h2>
+<p>理解uC/OS-II源码的核心是吃透三大基础数据结构，它们是整个内核运行的基石。</p>
+<h3 id="1-任务控制块-os_tcbtask-control-block">1. 任务控制块 OS_TCB（Task Control Block）</h3>
+<p>每个任务唯一对应一个OS_TCB结构体，是任务的“身份证”，内核通过TCB管理任务的全部状态与属性，所有TCB通过双向链表串联管理。核心源码定义如下：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">os_tcb</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OS_STK</span>          <span class="o">*</span><span class="n">OSTCBStkPtr</span><span class="p">;</span>           <span class="cm">/* 栈顶指针，结构体第一个成员，汇编无需偏移即可访问，提升切换效率 */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">os_tcb</span>   <span class="o">*</span><span class="n">OSTCBNext</span><span class="p">;</span>             <span class="cm">/* TCB双向链表后向指针 */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">os_tcb</span>   <span class="o">*</span><span class="n">OSTCBPrev</span><span class="p">;</span>             <span class="cm">/* TCB双向链表前向指针 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OS_EVENT</span>        <span class="o">*</span><span class="n">OSTCBEventPtr</span><span class="p">;</span>         <span class="cm">/* 指向任务等待的事件控制块ECB */</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span>            <span class="o">*</span><span class="n">OSTCBMsg</span><span class="p">;</span>              <span class="cm">/* 任务接收的消息指针，邮箱/队列专用 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INT16U</span>          <span class="n">OSTCBDly</span><span class="p">;</span>               <span class="cm">/* 任务延时节拍数/事件等待超时计数 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INT8U</span>           <span class="n">OSTCBStat</span><span class="p">;</span>               <span class="cm">/* 任务状态：就绪/等待/挂起/休眠 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INT8U</span>           <span class="n">OSTCBPrio</span><span class="p">;</span>               <span class="cm">/* 任务唯一优先级，0最高，OS_LOWEST_PRIO最低 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INT8U</span>           <span class="n">OSTCBX</span><span class="p">;</span>                  <span class="cm">/* 就绪表辅助：优先级低3位，对应OSRdyTbl的位 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INT8U</span>           <span class="n">OSTCBY</span><span class="p">;</span>                  <span class="cm">/* 就绪表辅助：优先级高3位，对应OSRdyTbl的行 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INT8U</span>           <span class="n">OSTCBBitX</span><span class="p">;</span>               <span class="cm">/* 就绪表位掩码：1&lt;&lt;OSTCBX，预计算加速调度 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INT8U</span>           <span class="n">OSTCBBitY</span><span class="p">;</span>               <span class="cm">/* 就绪表位掩码：1&lt;&lt;OSTCBY，预计算加速调度 */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#if OS_TASK_DEL_EN &gt; 0
+</span></span></span><span class="line"><span class="cl">    <span class="n">INT8U</span>           <span class="n">OSTCBDelReq</span><span class="p">;</span>             <span class="cm">/* 任务删除请求标记，支持安全删除 */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp">#if OS_TASK_SUSPEND_EN &gt; 0
+</span></span></span><span class="line"><span class="cl">    <span class="n">INT8U</span>           <span class="n">OSTCBSuspendCtr</span><span class="p">;</span>         <span class="cm">/* 任务挂起计数，支持嵌套挂起 */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl">    <span class="cm">/* 其他裁剪相关可选成员，如事件标志组指针、任务名、栈检测参数等 */</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">OS_TCB</span><span class="p">;</span></span></span></code></pre></div></div>
+<p><strong>核心设计细节</strong>：</p>
+<ul>
+<li>栈顶指针<code>OSTCBStkPtr</code>放在结构体首个地址，汇编语言访问时无需计算结构体偏移，大幅提升任务上下文切换的效率。</li>
+<li><code>OSTCBX/Y/BitX/BitY</code>在任务创建时预计算完成，避免调度时重复运算，是实现O(1)调度的关键优化之一。</li>
+<li>内核维护两个核心TCB链表：<code>OSTCBFreeList</code>（空闲TCB单向链表，创建任务时分配）、<code>OSTCBList</code>（已创建任务TCB双向链表，内核遍历管理）。</li>
+</ul>
+<h3 id="2-就绪表与优先级位图算法">2. 就绪表与优先级位图算法</h3>
+<p>就绪表是uC/OS-II实现<strong>O(1)级抢占式调度</strong>的核心，无论系统中有多少任务，找到最高优先级就绪任务的时间恒定，完全满足硬实时系统的确定性要求。</p>
+<p>就绪表由两个核心全局变量组成，定义在os_core.c中：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">INT8U</span>  <span class="n">OSRdyGrp</span><span class="p">;</span>                         <span class="cm">/* 就绪组：8位，每一位对应OSRdyTbl的一行，该行有任务就绪则对应位为1 */</span>
+</span></span><span class="line"><span class="cl"><span class="n">INT8U</span>  <span class="n">OSRdyTbl</span><span class="p">[</span><span class="n">OS_RDY_TBL_SIZE</span><span class="p">];</span>        <span class="cm">/* 就绪表：8个8位元素，每一位对应一个优先级的就绪状态 */</span></span></span></code></pre></div></div>
+<p><strong>设计原理</strong>：</p>
+<ul>
+<li>uC/OS-II默认支持64个优先级（0<del>63），用6位二进制即可表示一个优先级，高3位为Y（0</del>7），对应<code>OSRdyGrp</code>的位号和<code>OSRdyTbl</code>的行号；低3位为X（0~7），对应<code>OSRdyTbl[Y]</code>的位号。</li>
+<li>优先级与位图的映射关系（任务创建时预计算）：
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">OSTCBY</span>    <span class="o">=</span> <span class="n">prio</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">;</span>    <span class="c1">// 等价于 prio / 8，取高3位
+</span></span></span><span class="line"><span class="cl"><span class="n">OSTCBX</span>    <span class="o">=</span> <span class="n">prio</span> <span class="o">&amp;</span> <span class="mh">0x07</span><span class="p">;</span>  <span class="c1">// 等价于 prio % 8，取低3位
+</span></span></span><span class="line"><span class="cl"><span class="n">OSTCBBitY</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">OSTCBY</span><span class="p">;</span>  <span class="c1">// 行掩码
+</span></span></span><span class="line"><span class="cl"><span class="n">OSTCBBitX</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">OSTCBX</span><span class="p">;</span>  <span class="c1">// 位掩码
+</span></span></span></code></pre></div></div>
+</li>
+<li>任务就绪操作（写入就绪表）：
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">OSRdyGrp</span> <span class="o">|=</span> <span class="n">OSTCBBitY</span><span class="p">;</span>               <span class="c1">// 标记该行有任务就绪
+</span></span></span><span class="line"><span class="cl"><span class="n">OSRdyTbl</span><span class="p">[</span><span class="n">OSTCBY</span><span class="p">]</span> <span class="o">|=</span> <span class="n">OSTCBBitX</span><span class="p">;</span>       <span class="c1">// 标记该优先级任务就绪
+</span></span></span></code></pre></div></div>
+</li>
+<li>任务取消就绪（从就绪表移除）：
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">((</span><span class="n">OSRdyTbl</span><span class="p">[</span><span class="n">OSTCBY</span><span class="p">]</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">OSTCBBitX</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OSRdyGrp</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">OSTCBBitY</span><span class="p">;</span>  <span class="c1">// 该行无就绪任务，清除组标记
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+</li>
+</ul>
+<p><strong>最高优先级就绪任务快速查找</strong>：
+通过预定义的<code>OSUnMapTbl</code>映射表，仅需两次查表即可定位最高优先级，彻底避免遍历，实现O(1)调度。</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// 256字节映射表，预定义8位数值中最低位为1的位置，例如0x04(00000100)返回2
+</span></span></span><span class="line"><span class="cl"><span class="n">INT8U</span>  <span class="k">const</span>  <span class="n">OSUnMapTbl</span><span class="p">[</span><span class="mi">256</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 核心查找逻辑，调度器核心
+</span></span></span><span class="line"><span class="cl"><span class="n">Y</span> <span class="o">=</span> <span class="n">OSUnMapTbl</span><span class="p">[</span><span class="n">OSRdyGrp</span><span class="p">];</span>                  <span class="c1">// 找到有就绪任务的最低行号
+</span></span></span><span class="line"><span class="cl"><span class="n">X</span> <span class="o">=</span> <span class="n">OSUnMapTbl</span><span class="p">[</span><span class="n">OSRdyTbl</span><span class="p">[</span><span class="n">Y</span><span class="p">]];</span>               <span class="c1">// 找到该行中就绪的最低位号
+</span></span></span><span class="line"><span class="cl"><span class="n">OSPrioHighRdy</span> <span class="o">=</span> <span class="p">(</span><span class="n">INT8U</span><span class="p">)((</span><span class="n">Y</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">X</span><span class="p">);</span>     <span class="c1">// 拼接得到最高优先级
+</span></span></span></code></pre></div></div>
+<h3 id="3-事件控制块-os_eventevent-control-block">3. 事件控制块 OS_EVENT（Event Control Block）</h3>
+<p>uC/OS-II的信号量、互斥锁、邮箱、消息队列<strong>全部基于ECB统一管理</strong>，实现了内核对象的复用，所有等待事件的任务通过ECB的等待表统一管理，设计逻辑与就绪表完全一致。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">os_event</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INT8U</span>   <span class="n">OSEventType</span><span class="p">;</span>                    <span class="cm">/* 事件类型：信号量/互斥锁/邮箱/消息队列 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INT16U</span>  <span class="n">OSEventCnt</span><span class="p">;</span>                     <span class="cm">/* 信号量计数器，互斥锁/邮箱/队列不使用 */</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span>    <span class="o">*</span><span class="n">OSEventPtr</span><span class="p">;</span>                    <span class="cm">/* 邮箱消息指针/队列控制块指针 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INT8U</span>   <span class="n">OSEventGrp</span><span class="p">;</span>                     <span class="cm">/* 事件等待组，与就绪表OSRdyGrp逻辑一致 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INT8U</span>   <span class="n">OSEventTbl</span><span class="p">[</span><span class="n">OS_EVENT_TBL_SIZE</span><span class="p">];</span>  <span class="cm">/* 事件等待表，管理等待该事件的任务 */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#if OS_EVENT_NAME_EN &gt; 0
+</span></span></span><span class="line"><span class="cl">    <span class="n">INT8U</span>   <span class="o">*</span><span class="n">OSEventName</span><span class="p">;</span>                   <span class="cm">/* 事件名，调试用 */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">OS_EVENT</span><span class="p">;</span></span></span></code></pre></div></div>
+<p><strong>核心设计细节</strong>：</p>
+<ul>
+<li>内核维护<code>OSEventFreeList</code>空闲ECB单向链表，创建内核对象时分配，删除时归还，无动态内存分配，规避内存碎片风险。</li>
+<li>事件等待表的操作逻辑与就绪表完全一致，事件发生时，通过<code>OSUnMapTbl</code>快速找到等待该事件的最高优先级任务，将其唤醒并放入就绪表，触发调度。</li>
+</ul>
+<h2 id="三内核核心流程源码分析">三、内核核心流程源码分析</h2>
+<h3 id="1-内核初始化-osinit">1. 内核初始化 OSInit()</h3>
+<p>源码位于os_core.c，是uC/OS-II运行的第一步，<strong>必须在OSStart()之前调用</strong>，完成所有内核全局变量、数据结构、空闲链表的初始化，创建系统必备任务。</p>
+<p><strong>核心执行流程</strong>：</p>
+<ol>
+<li>初始化就绪表：<code>OSRdyGrp = 0</code>，<code>OSRdyTbl</code>数组全部清零，无任何任务就绪。</li>
+<li>初始化TCB空闲链表：根据<code>OS_MAX_TASKS</code>配置，创建对应数量的TCB，串联成单向空闲链表<code>OSTCBFreeList</code>。</li>
+<li>初始化ECB空闲链表：根据<code>OS_MAX_EVENTS</code>配置，创建对应数量的ECB，串联成单向空闲链表<code>OSEventFreeList</code>。</li>
+<li>初始化各模块空闲链表：内存管理、事件标志组、定时器等模块的空闲控制块链表（根据裁剪配置执行）。</li>
+<li>创建系统核心任务：
+<ul>
+<li><strong>空闲任务OS_TaskIdle()</strong>：优先级固定为最低<code>OS_LOWEST_PRIO</code>，必须创建，当无其他就绪任务时运行，死循环执行，可通过钩子函数实现低功耗控制。</li>
+<li><strong>统计任务OS_TaskStat()</strong>：可选，通过<code>OS_TASK_STAT_EN</code>宏开启，优先级固定为<code>OS_LOWEST_PRIO-1</code>，用于统计CPU使用率、任务运行时间等系统状态。</li>
+</ul>
+</li>
+<li>初始化全局变量：<code>OSRunning = OS_FALSE</code>（标记内核未启动）、中断嵌套计数器<code>OSIntNesting = 0</code>、调度器锁计数器<code>OSLockNesting = 0</code>等。</li>
+<li>初始化钩子函数：用户可自定义的任务切换、时钟节拍、任务创建/删除等钩子函数。</li>
+</ol>
+<h3 id="2-内核启动-osstart">2. 内核启动 OSStart()</h3>
+<p>源码位于os_core.c，在<code>OSInit()</code>执行完成，且至少创建1个用户任务后调用，作用是启动多任务调度，正式将CPU控制权交给uC/OS-II内核，<strong>该函数只会执行一次，且不会返回</strong>。</p>
+<p><strong>核心执行流程</strong>：</p>
+<ol>
+<li>遍历就绪表，通过<code>OSUnMapTbl</code>找到当前就绪的最高优先级任务，赋值给<code>OSPrioHighRdy</code>和<code>OSPrioCur</code>。</li>
+<li>获取该最高优先级任务的TCB，赋值给<code>OSTCBHighRdy</code>和<code>OSTCBCur</code>。</li>
+<li>调用汇编函数<code>OSStartHighRdy()</code>，执行第一个任务的上下文切换：
+<ul>
+<li>初始化系统时钟节拍定时器。</li>
+<li>从最高优先级任务的栈中恢复CPU寄存器上下文。</li>
+<li>跳转到任务函数入口，开始执行第一个任务。</li>
+</ul>
+</li>
+<li>设置<code>OSRunning = OS_TRUE</code>，标记内核正式运行，调度器生效。</li>
+</ol>
+<h3 id="3-任务级调度器-ossched">3. 任务级调度器 OSSched()</h3>
+<p>源码位于os_core.c，是uC/OS-II任务切换的核心入口，<strong>仅用于任务级调度</strong>，在任务主动放弃CPU时调用（如任务延时、等待事件、释放信号量、修改优先级等场景），核心职责是找到最高优先级就绪任务，并触发任务切换。</p>
+<p><strong>核心执行流程</strong>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span>  <span class="nf">OSSched</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INT8U</span>  <span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">OS_ENTER_CRITICAL</span><span class="p">();</span>  <span class="c1">// 进入临界区，关中断保护
+</span></span></span><span class="line"><span class="cl">    <span class="c1">// 合法性检查：中断中不调度、调度器锁定时不调度
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">((</span><span class="n">OSIntNesting</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">OSLockNesting</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">y</span> <span class="o">=</span> <span class="n">OSUnMapTbl</span><span class="p">[</span><span class="n">OSRdyGrp</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="n">OSPrioHighRdy</span> <span class="o">=</span> <span class="p">(</span><span class="n">INT8U</span><span class="p">)((</span><span class="n">y</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">OSUnMapTbl</span><span class="p">[</span><span class="n">OSRdyTbl</span><span class="p">[</span><span class="n">y</span><span class="p">]]);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 最高优先级任务不是当前任务，才需要切换
+</span></span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">OSPrioHighRdy</span> <span class="o">!=</span> <span class="n">OSPrioCur</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">OSTCBHighRdy</span> <span class="o">=</span> <span class="n">OSTCBPrioTbl</span><span class="p">[</span><span class="n">OSPrioHighRdy</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="n">OSCtxSwCtr</span><span class="o">++</span><span class="p">;</span>  <span class="c1">// 任务切换计数，统计用
+</span></span></span><span class="line"><span class="cl">            <span class="nf">OSCtxSw</span><span class="p">();</span>      <span class="c1">// 调用汇编函数，执行任务级上下文切换
+</span></span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">OS_EXIT_CRITICAL</span><span class="p">();</span>  <span class="c1">// 退出临界区，开中断
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<p><strong>核心规则</strong>：</p>
+<ul>
+<li>调度器执行全程必须在临界区中，避免中断打断调度过程，导致就绪表、TCB等共享数据竞争。</li>
+<li>中断上下文、调度器锁定状态下，禁止执行任务切换，保证系统稳定性。</li>
+<li>仅当最高优先级就绪任务与当前任务不同时，才会触发上下文切换，避免无意义的性能损耗。</li>
+</ul>
+<h3 id="4-任务上下文切换">4. 任务上下文切换</h3>
+<p>任务切换的本质是<strong>保存当前任务的CPU寄存器上下文到自身任务栈，再从新任务的任务栈中恢复寄存器上下文到CPU</strong>，实现CPU使用权的转移，全部由汇编代码实现，位于os_cpu_a.asm中，分为两种场景。</p>
+<h4 id="41-任务级切换-osctxsw">4.1 任务级切换 OSCtxSw()</h4>
+<p>由<code>OSSched()</code>调用，用于正常任务间的切换，以ARM Cortex-M架构为例，核心执行流程：</p>
+<ol>
+<li>触发PendSV异常（Cortex-M架构专用，可在中断末尾低优先级执行，避免打断其他中断，保证实时性）。</li>
+<li>PendSV异常处理中，CPU自动保存xPSR、PC、LR、R12、R3-R0寄存器到当前任务栈。</li>
+<li>手动保存R4-R11通用寄存器到当前任务栈，完成完整上下文保存。</li>
+<li>将当前任务的栈顶指针SP，保存到当前任务TCB的<code>OSTCBStkPtr</code>成员。</li>
+<li>更新全局变量：<code>OSTCBCur = OSTCBHighRdy</code>，<code>OSPrioCur = OSPrioHighRdy</code>。</li>
+<li>从新任务TCB的<code>OSTCBStkPtr</code>中加载栈顶指针到SP。</li>
+<li>从新任务栈中恢复R4-R11通用寄存器。</li>
+<li>执行异常返回，CPU自动从新任务栈中恢复xPSR、PC等寄存器，新任务正式开始运行。</li>
+</ol>
+<h4 id="42-中断级切换-osintctxsw">4.2 中断级切换 OSIntCtxSw()</h4>
+<p>由<code>OSIntExit()</code>调用，用于中断服务结束后触发的任务切换，与任务级切换的核心区别是：
+中断发生时，CPU已经自动保存了当前任务的完整/部分上下文到任务栈，因此<code>OSIntCtxSw()</code>无需重复保存上下文，仅需完成后续的TCB更新、新任务上下文恢复流程，大幅减少中断处理的性能开销，提升中断响应速度。</p>
+<h2 id="四核心功能模块源码详解">四、核心功能模块源码详解</h2>
+<h3 id="1-任务管理模块os_taskc">1. 任务管理模块（os_task.c）</h3>
+<p>任务是uC/OS-II的最小调度单位，每个任务是一个无限循环的函数，具备<strong>唯一的静态优先级</strong>，内核通过TCB对任务进行全生命周期管理。</p>
+<h4 id="11-任务创建-ostaskcreate">1.1 任务创建 OSTaskCreate()</h4>
+<p>基础任务创建函数，是任务生命周期的起点，核心源码执行流程：</p>
+<ol>
+<li>合法性校验：优先级是否超出范围、是否已被占用、栈指针是否合法、是否在内核运行后创建空闲任务。</li>
+<li>调用<code>OSTaskStkInit()</code>，初始化任务栈，模拟任务被中断后的栈结构，填充PC（任务函数入口地址）、LR（任务退出钩子函数）、寄存器初始值，返回初始化后的栈顶指针。</li>
+<li>从<code>OSTCBFreeList</code>中分配一个空闲TCB，若分配失败，返回错误码。</li>
+<li>初始化TCB的所有成员，包括栈顶指针、优先级、预计算的<code>OSTCBX/Y/BitX/BitY</code>、任务状态等。</li>
+<li>将新任务的TCB插入到<code>OSTCBList</code>双向链表的头部，同时将TCB地址存入<code>OSTCBPrioTbl[prio]</code>数组，通过优先级快速索引TCB。</li>
+<li>将新任务设置为就绪态，写入就绪表。</li>
+<li>若内核已运行（<code>OSRunning == OS_TRUE</code>），立即调用<code>OSSched()</code>触发调度，若新任务优先级更高，会立即抢占CPU运行。</li>
+<li>退出临界区，返回创建结果。</li>
+</ol>
+<h4 id="12-核心任务管理api">1.2 核心任务管理API</h4>
+<table>
+  <thead>
+      <tr>
+          <th>API函数</th>
+          <th>核心功能</th>
+          <th>调用限制</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>OSTaskCreateExt()</td>
+          <td>扩展任务创建，支持栈检测、任务名、用户数据等扩展功能</td>
+          <td>任务级/启动前</td>
+      </tr>
+      <tr>
+          <td>OSTaskDel()</td>
+          <td>删除任务，将任务从就绪表/等待表移除，TCB归还空闲链表</td>
+          <td>仅任务级，禁止删除空闲任务</td>
+      </tr>
+      <tr>
+          <td>OSTaskSuspend()</td>
+          <td>强制挂起任务，任务进入挂起态，即使就绪也无法被调度</td>
+          <td>任务级，支持嵌套挂起</td>
+      </tr>
+      <tr>
+          <td>OSTaskResume()</td>
+          <td>恢复被挂起的任务，解除挂起态，就绪则写入就绪表</td>
+          <td>任务级</td>
+      </tr>
+      <tr>
+          <td>OSTaskChangePrio()</td>
+          <td>动态修改任务的优先级，同步更新就绪表和TCB预计算参数</td>
+          <td>任务级，禁止修改空闲任务优先级</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-时间管理模块os_timec">2. 时间管理模块（os_time.c）</h3>
+<p>uC/OS-II的时间管理完全基于<strong>时钟节拍（SysTick）</strong>，时钟节拍是固定频率的硬件定时器中断，是系统的“心跳”，默认频率10~1000Hz，频率越高实时性越好，但系统开销越大。</p>
+<h4 id="21-时钟节拍处理-ostimetick">2.1 时钟节拍处理 OSTimeTick()</h4>
+<p>必须在时钟节拍中断服务函数中调用，是系统时间驱动的核心，源码执行流程：</p>
+<ol>
+<li>检查内核是否已运行（<code>OSRunning == OS_TRUE</code>），未运行则直接返回。</li>
+<li>调用<code>OSIntEnter()</code>，中断嵌套计数器<code>OSIntNesting</code>加1，标记进入中断上下文。</li>
+<li>遍历<code>OSTCBList</code>双向链表中的所有任务TCB：
+<ul>
+<li>若任务的<code>OSTCBDly</code>（延时/超时计数）大于0，将其减1。</li>
+<li>若减1后<code>OSTCBDly == 0</code>，且任务无挂起、无等待事件，将该任务从等待态转为就绪态，写入就绪表。</li>
+</ul>
+</li>
+<li>调用<code>OSTimeTickHook()</code>时钟节拍钩子函数，用户可自定义周期执行的逻辑。</li>
+<li>调用<code>OSIntExit()</code>，中断嵌套计数器减1，若所有中断处理完毕且有更高优先级任务就绪，触发中断级任务切换。</li>
+</ol>
+<h4 id="22-任务延时-ostimedly">2.2 任务延时 OSTimeDly()</h4>
+<p>任务主动放弃CPU的核心方式，将任务从就绪表移除，进入延时等待态，直到延时计数归零，源码执行流程：</p>
+<ol>
+<li>合法性校验：禁止在中断中调用、禁止延时空闲任务、延时节拍数不能为0。</li>
+<li>进入临界区，设置当前任务TCB的<code>OSTCBDly = ticks</code>（延时节拍数）。</li>
+<li>将当前任务从就绪表中清除，转为等待态。</li>
+<li>退出临界区，调用<code>OSSched()</code>触发调度，CPU切换到其他最高优先级就绪任务。</li>
+<li>延时结束后，任务被<code>OSTimeTick()</code>置为就绪态，重新获得CPU使用权，函数返回。</li>
+</ol>
+<h4 id="23-核心时间管理api">2.3 核心时间管理API</h4>
+<table>
+  <thead>
+      <tr>
+          <th>API函数</th>
+          <th>核心功能</th>
+          <th>调用限制</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>OSTimeDlyHMSM()</td>
+          <td>按小时/分钟/秒/毫秒延时，内部转换为节拍数调用OSTimeDly()</td>
+          <td>仅任务级</td>
+      </tr>
+      <tr>
+          <td>OSTimeDlyResume()</td>
+          <td>强制结束任务的延时，提前将其置为就绪态</td>
+          <td>仅任务级</td>
+      </tr>
+      <tr>
+          <td>OSTimeGet()/OSTimeSet()</td>
+          <td>获取/设置系统时钟节拍计数器，用于计时</td>
+          <td>无限制</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-内存管理模块os_memc">3. 内存管理模块（os_mem.c）</h3>
+<p>uC/OS-II采用<strong>固定大小内存分区管理</strong>机制，彻底解决了嵌入式系统中标准malloc/free带来的内存碎片、分配时间不确定的问题，实现了O(1)级别的内存分配与释放。</p>
+<h4 id="31-内存控制块-os_mem">3.1 内存控制块 OS_MEM</h4>
+<p>每个内存分区对应一个OS_MEM结构体，管理一块连续的内存区域，划分为多个固定大小的内存块：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">os_mem</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span>    <span class="o">*</span><span class="n">OSMemAddr</span><span class="p">;</span>         <span class="cm">/* 内存分区的起始地址 */</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span>    <span class="o">*</span><span class="n">OSMemFreeList</span><span class="p">;</span>     <span class="cm">/* 空闲内存块单向链表头指针 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INT32U</span>  <span class="n">OSMemBlkSize</span><span class="p">;</span>       <span class="cm">/* 每个内存块的字节大小 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INT32U</span>  <span class="n">OSMemNBlks</span><span class="p">;</span>         <span class="cm">/* 分区内总内存块数量 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">INT32U</span>  <span class="n">OSMemNFree</span><span class="p">;</span>         <span class="cm">/* 分区内当前空闲内存块数量 */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#if OS_MEM_NAME_EN &gt; 0
+</span></span></span><span class="line"><span class="cl">    <span class="n">INT8U</span>   <span class="o">*</span><span class="n">OSMemName</span><span class="p">;</span>         <span class="cm">/* 内存分区名，调试用 */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">OS_MEM</span><span class="p">;</span></span></span></code></pre></div></div>
+<h4 id="32-核心内存管理api源码逻辑">3.2 核心内存管理API源码逻辑</h4>
+<table>
+  <thead>
+      <tr>
+          <th>API函数</th>
+          <th>核心功能</th>
+          <th>执行核心流程</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>OSMemCreate()</td>
+          <td>创建内存分区，将连续内存划分为固定大小的内存块</td>
+          <td>1. 校验内存地址、块大小、块数量合法性；2. 从OSMemFreeList分配空闲OS_MEM；3. 将内存划分为多个块，串联成空闲链表；4. 初始化OS_MEM所有成员，返回分区指针</td>
+      </tr>
+      <tr>
+          <td>OSMemGet()</td>
+          <td>从分区申请一个内存块，O(1)复杂度</td>
+          <td>1. 校验分区指针和空闲块数量；2. 关中断，从空闲链表头部取出第一个空闲块；3. 更新空闲链表头指针，空闲计数减1；4. 开中断，返回内存块指针</td>
+      </tr>
+      <tr>
+          <td>OSMemPut()</td>
+          <td>释放内存块到对应分区，O(1)复杂度</td>
+          <td>1. 校验分区和内存块指针合法性；2. 关中断，将内存块插入空闲链表头部；3. 空闲计数加1；4. 开中断，返回执行结果</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="4-同步与通信模块">4. 同步与通信模块</h3>
+<p>uC/OS-II提供了完整的任务间同步与通信机制，全部基于ECB统一管理，覆盖信号量、互斥锁、邮箱、消息队列、事件标志组。</p>
+<h4 id="41-信号量os_semc">4.1 信号量（os_sem.c）</h4>
+<p>用于任务间同步、共享资源互斥访问、中断与任务同步，核心是计数器机制，核心API：</p>
+<ul>
+<li><code>OSSemCreate()</code>：创建信号量，初始化计数器，返回ECB指针。</li>
+<li><code>OSSemPend()</code>：P操作，等待信号量，计数器&gt;0则减1成功返回；否则任务进入等待态，加入事件等待表，设置超时时间。</li>
+<li><code>OSSemPost()</code>：V操作，释放信号量，有等待任务则唤醒最高优先级任务，无等待任务则计数器加1。</li>
+<li><code>OSSemDel()</code>：删除信号量，归还ECB到空闲链表。</li>
+</ul>
+<h4 id="42-互斥信号量os_mutexc">4.2 互斥信号量（os_mutex.c）</h4>
+<p>专为共享资源互斥访问设计，基于<strong>优先级继承协议</strong>，彻底解决普通信号量的优先级反转问题：当低优先级任务持有互斥锁，被高优先级任务等待时，临时将低优先级任务的优先级提升到等待该锁的最高优先级，避免中间优先级任务抢占。核心API：<code>OSMutexCreate()</code>、<code>OSMutexPend()</code>、<code>OSMutexPost()</code>。</p>
+<h4 id="43-消息邮箱与消息队列">4.3 消息邮箱与消息队列</h4>
+<ul>
+<li><strong>消息邮箱（os_mbox.c）</strong>：实现单指针消息的传递，<code>OSEventPtr</code>指向消息内容，支持一对一/一对多通信，核心API：<code>OSMboxCreate()</code>、<code>OSMboxPend()</code>、<code>OSMboxPost()</code>。</li>
+<li><strong>消息队列（os_q.c）</strong>：邮箱的增强版，支持多消息FIFO异步通信，基于环形缓冲区实现，支持多生产者-多消费者模型，核心API：<code>OSQCreate()</code>、<code>OSQPend()</code>、<code>OSQPost()</code>、<code>OSQPostFront()</code>。</li>
+</ul>
+<h3 id="5-中断管理">5. 中断管理</h3>
+<p>uC/OS-II支持中断嵌套，最高嵌套层数由<code>OS_MAX_INT_NESTING</code>定义（默认255层），中断可抢占任务执行，中断服务结束后可触发任务切换，保证高优先级任务的实时响应。</p>
+<h4 id="51-核心中断管理api">5.1 核心中断管理API</h4>
+<ul>
+<li><code>OSIntEnter()</code>：必须在中断服务函数开头调用，将中断嵌套计数器<code>OSIntNesting</code>加1，标记进入中断上下文，禁止任务级调度。</li>
+<li><code>OSIntExit()</code>：必须在中断服务函数末尾调用，将<code>OSIntNesting</code>减1，当计数器归零（所有中断处理完毕）时，检查是否有更高优先级任务被唤醒，若有则调用<code>OSIntCtxSw()</code>执行中断级任务切换。</li>
+</ul>
+<h4 id="52-中断服务函数标准模板">5.2 中断服务函数标准模板</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span>  <span class="nf">XXX_IRQHandler</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">OSIntEnter</span><span class="p">();</span>  <span class="c1">// 进入中断，标记嵌套层数
+</span></span></span><span class="line"><span class="cl">    <span class="cm">/* 中断核心业务处理 */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1. 清除中断标志位，避免重复触发
+</span></span></span><span class="line"><span class="cl">    <span class="c1">// 2. 读取硬件数据、执行最小化的硬件操作
+</span></span></span><span class="line"><span class="cl">    <span class="c1">// 3. 可调用OSSemPost()/OSQPost()唤醒任务，禁止调用Pend类阻塞函数
+</span></span></span><span class="line"><span class="cl">    <span class="nf">OSIntExit</span><span class="p">();</span>   <span class="c1">// 退出中断，检查并触发任务切换
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<p><strong>核心规则</strong>：</p>
+<ul>
+<li>中断服务函数中<strong>绝对禁止调用阻塞类函数</strong>（如OSTimeDly()、OSSemPend()），中断上下文无法被挂起。</li>
+<li>中断服务函数应尽可能精简，耗时操作放到任务中执行，中断仅负责唤醒任务，保证中断响应延迟最小化。</li>
+</ul>
+<h2 id="五临界区保护机制">五、临界区保护机制</h2>
+<p>uC/OS-II对就绪表、TCB、ECB等内核共享资源的访问，通过临界区保护，核心是关/开中断，避免多任务/中断并发访问导致的数据竞争与错乱。</p>
+<p>核心宏定义在os_cpu.h中：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#define  OS_ENTER_CRITICAL()  </span><span class="c1">// 进入临界区，关中断
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define  OS_EXIT_CRITICAL()   </span><span class="c1">// 退出临界区，开中断
+</span></span></span></code></pre></div></div>
+<p>提供三种可配置的实现方式，通过<code>OS_CRITICAL_METHOD</code>宏选择：</p>
+<ol>
+<li><strong>方式1</strong>：直接关中断/开中断，实现最简单，但会破坏中断原有状态，不推荐使用。</li>
+<li><strong>方式2</strong>：进入临界区前，将中断状态保存到局部变量，关中断；退出时从局部变量恢复中断状态，不会破坏原有中断状态，最常用。</li>
+<li><strong>方式3</strong>：通过栈保存中断状态，进入前压栈保存中断状态，关中断；退出时出栈恢复，适用于编译器不支持局部变量保存状态寄存器的场景。</li>
+</ol>
+<h2 id="六源码设计核心亮点与局限">六、源码设计核心亮点与局限</h2>
+<h3 id="1-核心设计亮点">1. 核心设计亮点</h3>
+<ul>
+<li><strong>硬实时确定性</strong>：基于位图的O(1)调度算法，调度时间恒定，与任务数量无关，完全满足硬实时系统要求。</li>
+<li><strong>极致可移植性</strong>：严格的分层设计，硬件相关代码集中在3个文件，适配几乎所有8/16/32位MCU/MPU，移植门槛极低。</li>
+<li><strong>极简高可靠</strong>：遵循“简洁即可靠”的设计理念，无动态内存分配，所有内核对象均为静态管理，彻底规避内存碎片、堆分配失败等非确定性风险。</li>
+<li><strong>强可裁剪性</strong>：通过os_cfg.h的宏开关，可精细化裁剪不需要的模块，最小内核ROM占用可低至几KB，RAM占用几百字节，完美适配资源极度受限的嵌入式平台。</li>
+<li><strong>代码规范性极强</strong>：命名规范统一（所有API以OS开头），注释详尽，结构清晰，是嵌入式RTOS入门与学习的最佳范本。</li>
+</ul>
+<h3 id="2-核心局限">2. 核心局限</h3>
+<ul>
+<li><strong>优先级唯一</strong>：不支持同优先级多任务，一个优先级只能对应一个任务，无时间片轮转调度机制（该特性在uC/OS-III中支持）。</li>
+<li><strong>任务数量受限</strong>：默认最多支持64个任务，最高可扩展至255个，不适合超大规模多任务场景。</li>
+<li><strong>无多核支持</strong>：仅支持单核处理器，无法适配多核异构平台。</li>
+<li><strong>功能相对精简</strong>：无进程、虚拟内存、文件系统、网络协议栈等高级组件，需额外搭配第三方组件实现。</li>
+</ul>
+<h2 id="七源码学习建议">七、源码学习建议</h2>
+<ol>
+<li><strong>先搭环境跑通demo</strong>：先在STM32等主流MCU上完成uC/OS-II的移植，创建2个基础任务，验证任务切换、延时等基础功能，建立感性认知。</li>
+<li><strong>吃透核心数据结构</strong>：先深入理解OS_TCB、就绪表、OS_EVENT三大核心数据结构，这是读懂所有源码的基础。</li>
+<li><strong>抓住核心主线</strong>：重点攻克“任务创建-调度器-任务切换-时钟节拍”这一核心主线，理解RTOS多任务运行的本质。</li>
+<li><strong>分模块逐个突破</strong>：主线打通后，再分模块学习时间管理、内存管理、同步通信机制，逐个拆解源码逻辑。</li>
+<li><strong>结合调试跟踪执行</strong>：使用仿真器单步调试，跟踪任务创建、调度、切换的完整执行流程，直观理解内核运行机制。</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-03-03</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/010_ucos_ii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/os/">OS</a>,&nbsp;<a href="/blog/tags/ucos-ii/">UCOS-II</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/002_googlemock%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="GoogleMock 使用详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>GoogleMock 使用详细总结</a>
+            <a href="/blog/011_ucos_iii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" class="next" rel="next" title="uCOS-III 源码详细分析">uCOS-III 源码详细分析<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Zsh 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/003_zsh%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="Zsh 语法详细总结">
+  <meta property="og:description" content="Zsh 语法详细总结 Zsh（Z Shell）是一款兼容POSIX标准的Unix Shell，完全兼容Bash基础语法，同时提供了更强大的扩展特性、更灵活的编程能力和更友好的交互体验，是目前主流的交互式Shell和脚本开发环境。本文档系统梳理Zsh核心语法、独有特性及与Bash的关键差异，兼顾入门使用和高级脚本开发。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-01-14T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-01-14T09:00:00+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="Shell">
+    <meta property="article:tag" content="Zsh">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="Zsh 语法详细总结">
+  <meta name="twitter:description" content="Zsh 语法详细总结 Zsh（Z Shell）是一款兼容POSIX标准的Unix Shell，完全兼容Bash基础语法，同时提供了更强大的扩展特性、更灵活的编程能力和更友好的交互体验，是目前主流的交互式Shell和脚本开发环境。本文档系统梳理Zsh核心语法、独有特性及与Bash的关键差异，兼顾入门使用和高级脚本开发。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/003_zsh%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/001_bash%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/010_awk%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Zsh 语法详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/003_zsh%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, Shell, Zsh","wordcount":  8566 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/003_zsh%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-01-14T09:00:00+08:00","dateModified": "2026-01-14T09:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/003_zsh%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/003_zsh%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Zsh 语法详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-14">2026-01-14</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 8566 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 18 分钟&nbsp;<span id="/blog/003_zsh%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="Zsh 语法详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一脚本基础与执行规范">一、脚本基础与执行规范</a>
+      <ul>
+        <li><a href="#1-脚本声明">1. 脚本声明</a></li>
+        <li><a href="#2-执行方式与核心区别">2. 执行方式与核心区别</a></li>
+        <li><a href="#3-注释语法">3. 注释语法</a></li>
+        <li><a href="#4-引号与转义规则">4. 引号与转义规则</a></li>
+        <li><a href="#5-命令替换">5. 命令替换</a></li>
+      </ul>
+    </li>
+    <li><a href="#二变量与数据类型">二、变量与数据类型</a>
+      <ul>
+        <li><a href="#1-变量定义与基础操作">1. 变量定义与基础操作</a></li>
+        <li><a href="#2-字符串处理zsh核心扩展">2. 字符串处理（Zsh核心扩展）</a></li>
+        <li><a href="#3-数值运算">3. 数值运算</a></li>
+        <li><a href="#4-特殊变量与内置变量">4. 特殊变量与内置变量</a></li>
+        <li><a href="#5-变量修饰符与作用域">5. 变量修饰符与作用域</a></li>
+      </ul>
+    </li>
+    <li><a href="#三索引数组array核心语法">三、索引数组（Array）核心语法</a>
+      <ul>
+        <li><a href="#1-数组定义与初始化">1. 数组定义与初始化</a></li>
+        <li><a href="#2-数组访问与切片">2. 数组访问与切片</a></li>
+        <li><a href="#3-数组增删改操作">3. 数组增删改操作</a></li>
+        <li><a href="#4-数组遍历与合并">4. 数组遍历与合并</a></li>
+      </ul>
+    </li>
+    <li><a href="#四关联数组哈希字典语法">四、关联数组（哈希/字典）语法</a>
+      <ul>
+        <li><a href="#1-声明与初始化">1. 声明与初始化</a></li>
+        <li><a href="#2-访问与遍历">2. 访问与遍历</a></li>
+        <li><a href="#3-增删改与存在性判断">3. 增删改与存在性判断</a></li>
+      </ul>
+    </li>
+    <li><a href="#五流程控制语句">五、流程控制语句</a>
+      <ul>
+        <li><a href="#1-条件判断ifelifelse">1. 条件判断：if/elif/else</a>
+          <ul>
+            <li><a href="#基础语法">基础语法</a></li>
+            <li><a href="#核心条件表达式">核心条件表达式</a></li>
+            <li><a href="#常用判断符">常用判断符</a></li>
+            <li><a href="#示例">示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-循环语句">2. 循环语句</a>
+          <ul>
+            <li><a href="#for循环最常用">for循环（最常用）</a></li>
+            <li><a href="#while循环">while循环</a></li>
+            <li><a href="#until循环">until循环</a></li>
+            <li><a href="#repeat循环zsh独有">repeat循环（Zsh独有）</a></li>
+            <li><a href="#循环控制符">循环控制符</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-case分支语句">3. case分支语句</a></li>
+      </ul>
+    </li>
+    <li><a href="#六函数定义与使用">六、函数定义与使用</a>
+      <ul>
+        <li><a href="#1-函数定义语法">1. 函数定义语法</a></li>
+        <li><a href="#2-参数传递与接收">2. 参数传递与接收</a></li>
+        <li><a href="#3-返回值与结果接收">3. 返回值与结果接收</a></li>
+        <li><a href="#4-变量作用域">4. 变量作用域</a></li>
+        <li><a href="#5-高级特性">5. 高级特性</a></li>
+      </ul>
+    </li>
+    <li><a href="#七重定向与管道">七、重定向与管道</a>
+      <ul>
+        <li><a href="#1-标准io重定向">1. 标准IO重定向</a></li>
+        <li><a href="#2-管道与扩展管道">2. 管道与扩展管道</a></li>
+        <li><a href="#3-进程替换">3. 进程替换</a></li>
+        <li><a href="#4-多行输入">4. 多行输入</a></li>
+      </ul>
+    </li>
+    <li><a href="#八zsh核心利器通配符与扩展globbing">八、Zsh核心利器：通配符与扩展（Globbing）</a>
+      <ul>
+        <li><a href="#1-基础通配符">1. 基础通配符</a></li>
+        <li><a href="#2-扩展通配符默认开启">2. 扩展通配符（默认开启）</a></li>
+        <li><a href="#3-全局限定符glob-qualifierszsh独有">3. 全局限定符（Glob Qualifiers，Zsh独有）</a>
+          <ul>
+            <li><a href="#常用限定符速览">常用限定符速览</a></li>
+            <li><a href="#实用示例">实用示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-模式修饰符">4. 模式修饰符</a></li>
+      </ul>
+    </li>
+    <li><a href="#九别名与快捷键">九、别名与快捷键</a>
+      <ul>
+        <li><a href="#1-别名分类与定义">1. 别名分类与定义</a>
+          <ul>
+            <li><a href="#普通别名">普通别名</a></li>
+            <li><a href="#全局别名zsh独有">全局别名（Zsh独有）</a></li>
+            <li><a href="#后缀别名zsh独有">后缀别名（Zsh独有）</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-常用内置快捷键">2. 常用内置快捷键</a></li>
+      </ul>
+    </li>
+    <li><a href="#十正则表达式与模式匹配">十、正则表达式与模式匹配</a>
+      <ul>
+        <li><a href="#1-基础正则匹配">1. 基础正则匹配</a></li>
+        <li><a href="#2-匹配结果捕获">2. 匹配结果捕获</a></li>
+        <li><a href="#3-扩展正则配置">3. 扩展正则配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#十一脚本选项与调试">十一、脚本选项与调试</a>
+      <ul>
+        <li><a href="#1-核心脚本选项">1. 核心脚本选项</a></li>
+        <li><a href="#2-脚本调试方法">2. 脚本调试方法</a></li>
+        <li><a href="#3-退出码与错误处理">3. 退出码与错误处理</a></li>
+      </ul>
+    </li>
+    <li><a href="#十二环境配置文件加载规则">十二、环境配置文件加载规则</a>
+      <ul>
+        <li><a href="#1-配置文件加载顺序">1. 配置文件加载顺序</a></li>
+        <li><a href="#2-核心配置文件适用场景">2. 核心配置文件适用场景</a></li>
+      </ul>
+    </li>
+    <li><a href="#十三zsh与bash核心语法差异对照表">十三、Zsh与Bash核心语法差异对照表</a></li>
+    <li><a href="#十四常用参数扩展修饰符速览">十四、常用参数扩展修饰符速览</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="zsh-语法详细总结">Zsh 语法详细总结</h1>
+<p>Zsh（Z Shell）是一款兼容POSIX标准的Unix Shell，完全兼容Bash基础语法，同时提供了更强大的扩展特性、更灵活的编程能力和更友好的交互体验，是目前主流的交互式Shell和脚本开发环境。本文档系统梳理Zsh核心语法、独有特性及与Bash的关键差异，兼顾入门使用和高级脚本开发。</p>
+<h2 id="一脚本基础与执行规范">一、脚本基础与执行规范</h2>
+<h3 id="1-脚本声明">1. 脚本声明</h3>
+<p>脚本首行需指定解释器，推荐两种写法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env zsh  # 推荐，自动适配zsh路径
+</span></span></span><span class="line"><span class="cl"><span class="c1">#!/bin/zsh          # 固定路径写法</span></span></span></code></pre></div></div>
+<h3 id="2-执行方式与核心区别">2. 执行方式与核心区别</h3>
+<table>
+  <thead>
+      <tr>
+          <th>执行方式</th>
+          <th>执行环境</th>
+          <th>特点</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>chmod +x script.zsh &amp;&amp; ./script.zsh</code></td>
+          <td>子Shell</td>
+          <td>独立进程，变量不污染当前Shell，脚本需执行权限</td>
+      </tr>
+      <tr>
+          <td><code>zsh script.zsh</code></td>
+          <td>子Shell</td>
+          <td>无需执行权限，直接通过zsh解释器执行</td>
+      </tr>
+      <tr>
+          <td><code>source script.zsh</code> / <code>. script.zsh</code></td>
+          <td>当前Shell</td>
+          <td>在当前Shell中执行，变量/函数会保留，常用于配置加载</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-注释语法">3. 注释语法</h3>
+<ul>
+<li>单行注释：以<code>#</code>开头，行内<code>#</code>后内容均为注释
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 这是单行注释</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;hello&#34;</span> <span class="c1"># 这是行尾注释</span></span></span></code></pre></div></div>
+</li>
+<li>多行注释：两种常用写法
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 写法1：单引号包裹（推荐）</span>
+</span></span><span class="line"><span class="cl">: <span class="s1">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">这是多行注释
+</span></span></span><span class="line"><span class="cl"><span class="s1">第二行注释
+</span></span></span><span class="line"><span class="cl"><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 写法2：Here Document</span>
+</span></span><span class="line"><span class="cl"><span class="s">&lt;&lt;&#39;COMMENT&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s">这是多行注释
+</span></span></span><span class="line"><span class="cl"><span class="s">第二行注释
+</span></span></span><span class="line"><span class="cl"><span class="s">COMMENT</span></span></span></code></pre></div></div>
+</li>
+</ul>
+<h3 id="4-引号与转义规则">4. 引号与转义规则</h3>
+<table>
+  <thead>
+      <tr>
+          <th>引号类型</th>
+          <th>特性</th>
+          <th>适用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>单引号 <code>' '</code></td>
+          <td>强引用，所有字符均作为普通字符，不解析变量、命令、转义（仅单引号本身需转义）</td>
+          <td>固定字符串、正则表达式、避免意外解析</td>
+      </tr>
+      <tr>
+          <td>双引号 <code>&quot; &quot;</code></td>
+          <td>弱引用，解析<code>$</code>变量、命令替换、转义字符，不解析通配符</td>
+          <td>包含变量的字符串、保留空格的场景</td>
+      </tr>
+      <tr>
+          <td>反斜杠 <code>\</code></td>
+          <td>转义特殊字符（<code>$</code>、```、<code>&quot;</code>、<code>'</code>、<code>*</code>等），<code>\n</code>换行、<code>\t</code>制表符</td>
+          <td>单个特殊字符转义</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>核心差异：Zsh中未加引号的变量<strong>默认不进行IFS单词分割</strong>，Bash会默认分割，这是最常见的踩坑点。
+示例：<code>var=&quot;a b c&quot;; echo $var</code> 在Zsh中视为单个参数，Bash中会拆分为3个参数。</p>
+</blockquote>
+<h3 id="5-命令替换">5. 命令替换</h3>
+<p>将命令的输出赋值给变量或嵌入字符串，推荐使用<code>$()</code>写法，支持嵌套：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 推荐写法</span>
+</span></span><span class="line"><span class="cl"><span class="nv">now</span><span class="o">=</span><span class="k">$(</span>date +%Y-%m-%d<span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">file_count</span><span class="o">=</span><span class="k">$(</span>ls *.txt <span class="p">|</span> wc -l<span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 兼容写法（反引号，嵌套需转义）</span>
+</span></span><span class="line"><span class="cl"><span class="nv">now</span><span class="o">=</span><span class="sb">`</span>date +%Y-%m-%d<span class="sb">`</span></span></span></code></pre></div></div>
+<h2 id="二变量与数据类型">二、变量与数据类型</h2>
+<p>Zsh支持字符串、整数、浮点数、数组、关联数组等数据类型，提供丰富的变量操作能力。</p>
+<h3 id="1-变量定义与基础操作">1. 变量定义与基础操作</h3>
+<ul>
+<li>基础赋值：<strong>等号两侧不能有空格</strong>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 普通赋值</span>
+</span></span><span class="line"><span class="cl"><span class="nv">name</span><span class="o">=</span><span class="s2">&#34;zsh&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">version</span><span class="o">=</span>5.9
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 只读变量（不可修改）</span>
+</span></span><span class="line"><span class="cl"><span class="nb">readonly</span> <span class="nv">ROOT_UID</span><span class="o">=</span><span class="m">0</span>
+</span></span><span class="line"><span class="cl"><span class="nb">typeset</span> -r <span class="nv">ROOT_PATH</span><span class="o">=</span><span class="s2">&#34;/root&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 导出为环境变量（子进程可访问）</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$HOME</span><span class="s2">/bin:</span><span class="nv">$PATH</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">typeset</span> -x <span class="nv">JAVA_HOME</span><span class="o">=</span><span class="s2">&#34;/usr/lib/jvm/default-java&#34;</span></span></span></code></pre></div></div>
+</li>
+<li>变量引用：<code>$var</code> 或 <code>${var}</code>，复杂场景必须用花括号包裹
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Hello </span><span class="nv">$name</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Version </span><span class="si">${</span><span class="nv">version</span><span class="si">}</span><span class="s2">_release&#34;</span> <span class="c1"># 花括号避免歧义</span></span></span></code></pre></div></div>
+</li>
+</ul>
+<h3 id="2-字符串处理zsh核心扩展">2. 字符串处理（Zsh核心扩展）</h3>
+<p>Zsh内置丰富的字符串操作，无需依赖<code>sed</code>/<code>awk</code>/<code>tr</code>等外部命令。</p>
+<table>
+  <thead>
+      <tr>
+          <th>操作</th>
+          <th>语法</th>
+          <th>示例与说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>字符串拼接</td>
+          <td>直接拼接</td>
+          <td><code>str1=&quot;hello&quot;; str2=&quot;$str1 world&quot;</code> → <code>hello world</code></td>
+      </tr>
+      <tr>
+          <td>长度获取</td>
+          <td><code>${#str}</code></td>
+          <td><code>${#&quot;hello zsh&quot;}</code> → 9</td>
+      </tr>
+      <tr>
+          <td>切片截取</td>
+          <td><code>${str:start:length}</code></td>
+          <td><strong>索引默认从1开始</strong>，<code>str=&quot;abcdef&quot;; ${str:2:3}</code> → <code>bcd</code>；<code>${str:-3}</code> 取最后3个字符</td>
+      </tr>
+      <tr>
+          <td>前缀删除</td>
+          <td><code>${str#pattern}</code>（最短匹配）<br><code>${str##pattern}</code>（最长匹配）</td>
+          <td><code>str=&quot;/home/user/file.txt&quot;; ${str##*/}</code> → <code>file.txt</code></td>
+      </tr>
+      <tr>
+          <td>后缀删除</td>
+          <td><code>${str%pattern}</code>（最短匹配）<br><code>${str%%pattern}</code>（最长匹配）</td>
+          <td><code>str=&quot;file.tar.gz&quot;; ${str%%.*}</code> → <code>file</code></td>
+      </tr>
+      <tr>
+          <td>内容替换</td>
+          <td><code>${str/old/new}</code>（替换首个）<br><code>${str//old/new}</code>（全局替换）</td>
+          <td><code>str=&quot;a b c a&quot;; ${str//a/x}</code> → <code>x b c x</code></td>
+      </tr>
+      <tr>
+          <td>首尾替换</td>
+          <td><code>${str/#old/new}</code>（行首替换）<br><code>${str/%old/new}</code>（行尾替换）</td>
+          <td><code>str=&quot;hello.txt&quot;; ${str/%.txt/.md}</code> → <code>hello.md</code></td>
+      </tr>
+      <tr>
+          <td>大小写转换</td>
+          <td><code>${str:l}</code> 全小写<br><code>${str:u}</code> 全大写<br><code>${str:c}</code> 首字母大写</td>
+          <td><code>str=&quot;Hello Zsh&quot;; ${str:u}</code> → <code>HELLO ZSH</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-数值运算">3. 数值运算</h3>
+<p>Zsh<strong>原生支持整数和浮点数运算</strong>，这是与Bash的核心差异（Bash仅支持整数，浮点需依赖<code>bc</code>/<code>awk</code>）。</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 整数运算</span>
+</span></span><span class="line"><span class="cl"><span class="o">((</span> <span class="nv">a</span> <span class="o">=</span> <span class="m">1</span> + <span class="m">2</span> * <span class="m">3</span> <span class="o">))</span>  <span class="c1"># a=7</span>
+</span></span><span class="line"><span class="cl"><span class="o">((</span> a++ <span class="o">))</span>             <span class="c1"># 自增，a=8</span>
+</span></span><span class="line"><span class="cl"><span class="o">((</span> a-- <span class="o">))</span>             <span class="c1"># 自减，a=7</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="k">$((</span> <span class="m">10</span> <span class="o">/</span> <span class="m">3</span> <span class="k">))</span>   <span class="c1"># 整数除法，输出3</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 浮点数运算（Zsh独有）</span>
+</span></span><span class="line"><span class="cl"><span class="o">((</span> <span class="nv">f</span> <span class="o">=</span> 1.5 + 2.5 <span class="o">))</span>  <span class="c1"># f=4.0</span>
+</span></span><span class="line"><span class="cl"><span class="o">((</span> <span class="nv">pi</span> <span class="o">=</span> 3.1415926 * <span class="m">2</span> <span class="o">))</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="k">$((</span> <span class="m">10</span>.0 <span class="o">/</span> <span class="m">3</span> <span class="k">))</span> <span class="c1"># 浮点除法，输出3.3333333333333335</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 显式声明数值类型</span>
+</span></span><span class="line"><span class="cl"><span class="nb">typeset</span> -i <span class="nv">int_var</span><span class="o">=</span><span class="m">10</span>    <span class="c1"># 声明整数</span>
+</span></span><span class="line"><span class="cl"><span class="nb">typeset</span> -F <span class="nv">float_var</span><span class="o">=</span>3.14 <span class="c1"># 声明浮点数</span></span></span></code></pre></div></div>
+<h3 id="4-特殊变量与内置变量">4. 特殊变量与内置变量</h3>
+<table>
+  <thead>
+      <tr>
+          <th>变量</th>
+          <th>含义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>$0</code></td>
+          <td>脚本/函数名称</td>
+      </tr>
+      <tr>
+          <td><code>$1~$n</code></td>
+          <td>第n个位置参数</td>
+      </tr>
+      <tr>
+          <td><code>$#</code></td>
+          <td>传入的参数个数</td>
+      </tr>
+      <tr>
+          <td><code>$@</code></td>
+          <td>所有参数（数组形式，保留参数边界）</td>
+      </tr>
+      <tr>
+          <td><code>$*</code></td>
+          <td>所有参数（单个字符串形式）</td>
+      </tr>
+      <tr>
+          <td><code>$$</code></td>
+          <td>当前Shell进程PID</td>
+      </tr>
+      <tr>
+          <td><code>$?</code></td>
+          <td>上一条命令的退出码（0=成功，非0=失败）</td>
+      </tr>
+      <tr>
+          <td><code>$!</code></td>
+          <td>最后一个后台进程的PID</td>
+      </tr>
+      <tr>
+          <td><code>$PWD</code></td>
+          <td>当前工作目录</td>
+      </tr>
+      <tr>
+          <td><code>$HOME</code></td>
+          <td>当前用户家目录</td>
+      </tr>
+      <tr>
+          <td><code>$PATH</code></td>
+          <td>可执行文件查找路径</td>
+      </tr>
+      <tr>
+          <td><code>$ZSH_VERSION</code></td>
+          <td>Zsh版本号</td>
+      </tr>
+      <tr>
+          <td><code>$RANDOM</code></td>
+          <td>0~32767的随机整数</td>
+      </tr>
+      <tr>
+          <td><code>$SECONDS</code></td>
+          <td>脚本/Shell启动后的运行秒数</td>
+      </tr>
+      <tr>
+          <td><code>$LINENO</code></td>
+          <td>当前执行的行号</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="5-变量修饰符与作用域">5. 变量修饰符与作用域</h3>
+<p>通过<code>typeset</code>（别名<code>declare</code>）声明变量属性，控制作用域和类型：</p>
+<table>
+  <thead>
+      <tr>
+          <th>修饰符</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>-i</code></td>
+          <td>声明为整数类型</td>
+      </tr>
+      <tr>
+          <td><code>-F</code></td>
+          <td>声明为浮点数类型</td>
+      </tr>
+      <tr>
+          <td><code>-a</code></td>
+          <td>声明为索引数组</td>
+      </tr>
+      <tr>
+          <td><code>-A</code></td>
+          <td>声明为关联数组</td>
+      </tr>
+      <tr>
+          <td><code>-r</code></td>
+          <td>声明为只读变量</td>
+      </tr>
+      <tr>
+          <td><code>-x</code></td>
+          <td>导出为环境变量</td>
+      </tr>
+      <tr>
+          <td><code>-l</code></td>
+          <td>赋值时自动转为小写</td>
+      </tr>
+      <tr>
+          <td><code>-u</code></td>
+          <td>赋值时自动转为大写</td>
+      </tr>
+      <tr>
+          <td><code>-U</code></td>
+          <td>数组自动去重</td>
+      </tr>
+      <tr>
+          <td><code>-g</code></td>
+          <td>函数内声明全局变量（默认函数内为局部变量）</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="三索引数组array核心语法">三、索引数组（Array）核心语法</h2>
+<p>Zsh的数组功能远强于Bash，默认索引从1开始（Bash从0开始），支持负索引、灵活切片、自动去重等特性。</p>
+<h3 id="1-数组定义与初始化">1. 数组定义与初始化</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 基础定义（空格分隔元素）</span>
+</span></span><span class="line"><span class="cl"><span class="nv">arr</span><span class="o">=(</span>apple banana cherry<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 空数组</span>
+</span></span><span class="line"><span class="cl"><span class="nv">empty_arr</span><span class="o">=()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 带索引赋值</span>
+</span></span><span class="line"><span class="cl">arr<span class="o">[</span>1<span class="o">]=</span><span class="s2">&#34;apple&#34;</span>
+</span></span><span class="line"><span class="cl">arr<span class="o">[</span>2<span class="o">]=</span><span class="s2">&#34;banana&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 范围创建</span>
+</span></span><span class="line"><span class="cl"><span class="nv">num_arr</span><span class="o">=(</span> <span class="o">{</span>1..10<span class="o">}</span> <span class="o">)</span>       <span class="c1"># 1~10的整数数组</span>
+</span></span><span class="line"><span class="cl"><span class="nv">char_arr</span><span class="o">=(</span> <span class="o">{</span>a..z<span class="o">}</span> <span class="o">)</span>        <span class="c1"># a~z的字母数组</span>
+</span></span><span class="line"><span class="cl"><span class="nv">seq_arr</span><span class="o">=(</span> <span class="o">{</span>0..10..2<span class="o">}</span> <span class="o">)</span>     <span class="c1"># 步长2，0 2 4 6 8 10</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 声明数组并自动去重</span>
+</span></span><span class="line"><span class="cl"><span class="nb">typeset</span> -U <span class="nv">unique_arr</span><span class="o">=(</span>a b a c b<span class="o">)</span> <span class="c1"># 最终为(a b c)</span></span></span></code></pre></div></div>
+<h3 id="2-数组访问与切片">2. 数组访问与切片</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="nv">arr</span><span class="o">=(</span>apple banana cherry date<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 单个元素访问（索引从1开始）</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${</span><span class="nv">arr</span><span class="p">[1]</span><span class="si">}</span>  <span class="c1"># apple</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${</span><span class="nv">arr</span><span class="p">[-1]</span><span class="si">}</span> <span class="c1"># date（负索引，最后一个元素）</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 所有元素访问</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${</span><span class="nv">arr</span><span class="p">[@]</span><span class="si">}</span>  <span class="c1"># 所有元素（数组形式，推荐）</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${</span><span class="nv">arr</span><span class="p">[*]</span><span class="si">}</span>  <span class="c1"># 所有元素（单个字符串）</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 切片：${arr[@]:起始位置:长度}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${</span><span class="nv">arr</span><span class="p">[@]:</span><span class="nv">2</span><span class="p">:</span><span class="nv">2</span><span class="si">}</span> <span class="c1"># banana cherry（从第2个开始，取2个）</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${</span><span class="nv">arr</span><span class="p">[@]:</span><span class="nv">2</span><span class="si">}</span>    <span class="c1"># 从第2个取到末尾</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 数组长度</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${#</span><span class="nv">arr</span><span class="p">[@]</span><span class="si">}</span> <span class="c1"># 4</span></span></span></code></pre></div></div>
+<h3 id="3-数组增删改操作">3. 数组增删改操作</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="nv">arr</span><span class="o">=(</span>a b c<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 追加元素（Zsh独有简洁写法）</span>
+</span></span><span class="line"><span class="cl"><span class="nv">arr</span><span class="o">+=(</span>d e<span class="o">)</span> <span class="c1"># 最终为(a b c d e)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 修改元素</span>
+</span></span><span class="line"><span class="cl">arr<span class="o">[</span>2<span class="o">]=</span><span class="s2">&#34;x&#34;</span> <span class="c1"># 最终为(a x c d e)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 删除元素</span>
+</span></span><span class="line"><span class="cl"><span class="nb">unset</span> arr<span class="o">[</span>3<span class="o">]</span> <span class="c1"># 删除第3个元素，最终为(a x d e)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">arr</span><span class="o">=(</span><span class="si">${</span><span class="nv">arr</span><span class="p">:#x</span><span class="si">}</span><span class="o">)</span> <span class="c1"># 删除匹配&#34;x&#34;的元素，最终为(a d e)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 清空数组</span>
+</span></span><span class="line"><span class="cl"><span class="nv">arr</span><span class="o">=()</span></span></span></code></pre></div></div>
+<h3 id="4-数组遍历与合并">4. 数组遍历与合并</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 数组合并</span>
+</span></span><span class="line"><span class="cl"><span class="nv">arr1</span><span class="o">=(</span>a b c<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">arr2</span><span class="o">=(</span>d e f<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">arr3</span><span class="o">=(</span><span class="si">${</span><span class="nv">arr1</span><span class="p">[@]</span><span class="si">}</span> <span class="si">${</span><span class="nv">arr2</span><span class="p">[@]</span><span class="si">}</span><span class="o">)</span> <span class="c1"># (a b c d e f)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 遍历数组（推荐，保留带空格的元素）</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> val in <span class="s2">&#34;</span><span class="si">${</span><span class="nv">arr</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;元素：</span><span class="nv">$val</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 带索引遍历</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> i in <span class="o">{</span>1..<span class="si">${#</span><span class="nv">arr</span><span class="p">[@]</span><span class="si">}</span><span class="o">}</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;索引</span><span class="nv">$i</span><span class="s2">：</span><span class="si">${</span><span class="nv">arr</span><span class="p">[</span><span class="nv">$i</span><span class="p">]</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span></span></span></code></pre></div></div>
+<h2 id="四关联数组哈希字典语法">四、关联数组（哈希/字典）语法</h2>
+<p>Zsh原生支持键值对形式的关联数组，提供比Bash更便捷的遍历和操作能力。</p>
+<h3 id="1-声明与初始化">1. 声明与初始化</h3>
+<p><strong>必须先通过<code>typeset -A</code>/<code>declare -A</code>声明</strong>，再进行赋值：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 声明空关联数组</span>
+</span></span><span class="line"><span class="cl"><span class="nb">typeset</span> -A user_map
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 批量赋值（key1 value1 key2 value2）</span>
+</span></span><span class="line"><span class="cl"><span class="nv">user_map</span><span class="o">=(</span>
+</span></span><span class="line"><span class="cl">  name <span class="s2">&#34;zhangsan&#34;</span>
+</span></span><span class="line"><span class="cl">  age <span class="m">20</span>
+</span></span><span class="line"><span class="cl">  shell <span class="s2">&#34;zsh&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 单个键值赋值</span>
+</span></span><span class="line"><span class="cl">user_map<span class="o">[</span>email<span class="o">]=</span><span class="s2">&#34;zhangsan@example.com&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 键值对完整写法</span>
+</span></span><span class="line"><span class="cl"><span class="nv">user_map</span><span class="o">=(</span> <span class="o">[</span>name<span class="o">]=</span><span class="s2">&#34;lisi&#34;</span> <span class="o">[</span>age<span class="o">]=</span><span class="m">25</span> <span class="o">[</span>shell<span class="o">]=</span><span class="s2">&#34;bash&#34;</span> <span class="o">)</span></span></span></code></pre></div></div>
+<h3 id="2-访问与遍历">2. 访问与遍历</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="nb">typeset</span> -A <span class="nv">user_map</span><span class="o">=(</span>name <span class="s2">&#34;zhangsan&#34;</span> age <span class="m">20</span> shell <span class="s2">&#34;zsh&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 单个值访问</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${</span><span class="nv">user_map</span><span class="p">[name]</span><span class="si">}</span> <span class="c1"># zhangsan</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 获取所有key</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${</span><span class="p">(k)user_map[@]</span><span class="si">}</span>  <span class="c1"># Zsh原生写法</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${</span><span class="p">!user_map[@]</span><span class="si">}</span>     <span class="c1"># Bash兼容写法</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 获取所有value</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${</span><span class="p">(v)user_map[@]</span><span class="si">}</span>  <span class="c1"># Zsh原生写法</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${</span><span class="nv">user_map</span><span class="p">[@]</span><span class="si">}</span>      <span class="c1"># 简写</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 元素个数</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="si">${#</span><span class="nv">user_map</span><span class="p">[@]</span><span class="si">}</span> <span class="c1"># 3</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 遍历key（通用写法）</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> key in <span class="s2">&#34;</span><span class="si">${</span><span class="p">(k)user_map[@]</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$key</span><span class="s2"> : </span><span class="si">${</span><span class="nv">user_map</span><span class="p">[</span><span class="nv">$key</span><span class="p">]</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Zsh独有：直接遍历键值对（无需二次取值）</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> key value in <span class="s2">&#34;</span><span class="si">${</span><span class="p">(@kv)user_map</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$key</span><span class="s2"> -&gt; </span><span class="nv">$value</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span></span></span></code></pre></div></div>
+<h3 id="3-增删改与存在性判断">3. 增删改与存在性判断</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="nb">typeset</span> -A <span class="nv">user_map</span><span class="o">=(</span>name <span class="s2">&#34;zhangsan&#34;</span> age 20<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 修改值</span>
+</span></span><span class="line"><span class="cl">user_map<span class="o">[</span>age<span class="o">]=</span><span class="m">21</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 删除键值对</span>
+</span></span><span class="line"><span class="cl"><span class="nb">unset</span> user_map<span class="o">[</span>age<span class="o">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 判断key是否存在</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> -n <span class="si">${</span><span class="nv">user_map</span><span class="p">[name]+x</span><span class="si">}</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;key存在&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">else</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;key不存在&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span></span></span></code></pre></div></div>
+<h2 id="五流程控制语句">五、流程控制语句</h2>
+<p>Zsh完全兼容Bash的流程控制语法，同时提供<code>repeat</code>等扩展循环，推荐使用<code>[[ ]]</code>进行条件判断，避免单中括号的语法陷阱。</p>
+<h3 id="1-条件判断ifelifelse">1. 条件判断：if/elif/else</h3>
+<h4 id="基础语法">基础语法</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="k">if</span> 条件表达式<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># 条件成立执行</span>
+</span></span><span class="line"><span class="cl"><span class="k">elif</span> 条件表达式2<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># 条件2成立执行</span>
+</span></span><span class="line"><span class="cl"><span class="k">else</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># 所有条件不成立执行</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span></span></span></code></pre></div></div>
+<h4 id="核心条件表达式">核心条件表达式</h4>
+<ul>
+<li><strong>双中括号 <code>[[ ]]</code></strong>：Zsh推荐用法，支持通配符、正则匹配，无单词分割问题</li>
+<li><strong>双括号 <code>(( ))</code></strong>：专用数值比较，支持<code>&gt; &lt; &gt;= &lt;= == != &amp;&amp; ||</code>运算符</li>
+</ul>
+<h4 id="常用判断符">常用判断符</h4>
+<table>
+  <thead>
+      <tr>
+          <th>分类</th>
+          <th>判断符</th>
+          <th>含义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>文件判断</td>
+          <td><code>-f</code></td>
+          <td>存在且为普通文件</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>-d</code></td>
+          <td>存在且为目录</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>-e</code></td>
+          <td>文件/目录存在</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>-r/-w/-x</code></td>
+          <td>可读/可写/可执行</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>-s</code></td>
+          <td>存在且非空</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>-L</code></td>
+          <td>存在且为符号链接</td>
+      </tr>
+      <tr>
+          <td>字符串判断</td>
+          <td><code>==</code></td>
+          <td>相等（支持通配符匹配）</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>!=</code></td>
+          <td>不相等</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>=~</code></td>
+          <td>正则匹配</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>-z</code></td>
+          <td>字符串为空</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>-n</code></td>
+          <td>字符串非空</td>
+      </tr>
+      <tr>
+          <td>数值判断（(( ))）</td>
+          <td><code>&gt; &lt; &gt;= &lt;= == !=</code></td>
+          <td>大于/小于/大于等于/小于等于/等于/不等于</td>
+      </tr>
+      <tr>
+          <td>数值判断（[[ ]]）</td>
+          <td><code>-gt/-lt/-ge/-le/-eq/-ne</code></td>
+          <td>对应上述数值比较</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="示例">示例</h4>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 数值判断</span>
+</span></span><span class="line"><span class="cl"><span class="nv">num</span><span class="o">=</span><span class="m">10</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">((</span> num &gt; <span class="m">5</span> <span class="o">))</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;num大于5&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 字符串匹配</span>
+</span></span><span class="line"><span class="cl"><span class="nv">filename</span><span class="o">=</span><span class="s2">&#34;test.txt&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> <span class="nv">$filename</span> <span class="o">==</span> *.txt <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;是txt文件&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 正则匹配</span>
+</span></span><span class="line"><span class="cl"><span class="nv">str</span><span class="o">=</span><span class="s2">&#34;abc123&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> <span class="nv">$str</span> <span class="o">=</span>~ ^<span class="o">[</span>a-z<span class="o">]</span>+<span class="o">[</span>0-9<span class="o">]</span>+$ <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;格式匹配&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 文件判断</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> -f ~/.zshrc <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;zsh配置文件存在&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span></span></span></code></pre></div></div>
+<h3 id="2-循环语句">2. 循环语句</h3>
+<h4 id="for循环最常用">for循环（最常用）</h4>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 写法1：遍历列表</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> i in <span class="o">{</span>1..5<span class="o">}</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;数字：</span><span class="nv">$i</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 写法2：C语言风格</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="o">((</span> <span class="nv">i</span><span class="o">=</span>0<span class="p">;</span> i&lt;5<span class="p">;</span> i++ <span class="o">))</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;数字：</span><span class="nv">$i</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 写法3：遍历文件</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> file in *.txt<span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;处理文件：</span><span class="nv">$file</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span></span></span></code></pre></div></div>
+<h4 id="while循环">while循环</h4>
+<p>条件为真时循环执行：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="nv">i</span><span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="o">((</span> i &lt;<span class="o">=</span> <span class="m">5</span> <span class="o">))</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;数字：</span><span class="nv">$i</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">((</span>i++<span class="o">))</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 逐行读取文件</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="nb">read</span> -r line<span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;行内容：</span><span class="nv">$line</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span> &lt; file.txt</span></span></code></pre></div></div>
+<h4 id="until循环">until循环</h4>
+<p>条件为假时循环执行（与while相反）：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="nv">i</span><span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="k">until</span> <span class="o">((</span> i &gt; <span class="m">5</span> <span class="o">))</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;数字：</span><span class="nv">$i</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">((</span>i++<span class="o">))</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span></span></span></code></pre></div></div>
+<h4 id="repeat循环zsh独有">repeat循环（Zsh独有）</h4>
+<p>固定循环次数，语法更简洁：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 重复执行5次</span>
+</span></span><span class="line"><span class="cl">repeat 5<span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;hello zsh&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span></span></span></code></pre></div></div>
+<h4 id="循环控制符">循环控制符</h4>
+<ul>
+<li><code>break</code>：跳出当前整个循环</li>
+<li><code>continue</code>：跳过本次循环，进入下一次循环</li>
+<li><code>return</code>：函数内返回</li>
+<li><code>exit</code>：退出整个脚本</li>
+</ul>
+<h3 id="3-case分支语句">3. case分支语句</h3>
+<p>支持多模式匹配、通配符，Zsh扩展支持分支穿透：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="k">case</span> <span class="nv">$var</span> in
+</span></span><span class="line"><span class="cl">  pattern1<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 匹配pattern1执行</span>
+</span></span><span class="line"><span class="cl">    <span class="p">;;</span> <span class="c1"># 终止分支</span>
+</span></span><span class="line"><span class="cl">  pattern2<span class="p">|</span>pattern3<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 匹配pattern2或pattern3执行</span>
+</span></span><span class="line"><span class="cl">    <span class="p">;&amp;</span> <span class="c1"># 穿透：继续执行下一个分支的代码（不判断匹配）</span>
+</span></span><span class="line"><span class="cl">  pattern4<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 上一个分支使用;&amp;，会执行到这里</span>
+</span></span><span class="line"><span class="cl">    <span class="p">;|</span> <span class="c1"># 继续匹配下一个模式</span>
+</span></span><span class="line"><span class="cl">  *<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 默认分支，所有模式不匹配时执行</span>
+</span></span><span class="line"><span class="cl">    <span class="p">;;</span>
+</span></span><span class="line"><span class="cl"><span class="k">esac</span></span></span></code></pre></div></div>
+<p>示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="nb">read</span> -r -p <span class="s2">&#34;输入一个字母：&#34;</span> char
+</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="nv">$char</span> in
+</span></span><span class="line"><span class="cl">  <span class="o">[</span>a-z<span class="o">])</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;小写字母&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">[</span>A-Z<span class="o">])</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;大写字母&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">[</span>0-9<span class="o">])</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;数字&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">  *<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;其他字符&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">;;</span>
+</span></span><span class="line"><span class="cl"><span class="k">esac</span></span></span></code></pre></div></div>
+<h2 id="六函数定义与使用">六、函数定义与使用</h2>
+<p>Zsh支持多种函数定义语法，提供灵活的参数传递、作用域控制和返回值机制。</p>
+<h3 id="1-函数定义语法">1. 函数定义语法</h3>
+<p>支持3种兼容写法，功能完全一致：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 写法1：推荐，兼容Bash</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> func_name<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1"># 函数体</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;hello function&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 写法2：Zsh简洁写法</span>
+</span></span><span class="line"><span class="cl">func_name<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;hello function&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 写法3：无括号写法</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> func_name <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;hello function&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span></span></span></code></pre></div></div>
+<h3 id="2-参数传递与接收">2. 参数传递与接收</h3>
+<p>函数内的位置参数与脚本一致，调用时直接在函数名后加参数：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 定义加法函数</span>
+</span></span><span class="line"><span class="cl">add<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;参数个数：</span><span class="nv">$#</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;第一个参数：</span><span class="nv">$1</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;第二个参数：</span><span class="nv">$2</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">((</span> <span class="nv">sum</span> <span class="o">=</span> <span class="nv">$1</span> + <span class="nv">$2</span> <span class="o">))</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;和：</span><span class="nv">$sum</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 调用函数</span>
+</span></span><span class="line"><span class="cl">add <span class="m">1</span> <span class="m">2</span></span></span></code></pre></div></div>
+<h3 id="3-返回值与结果接收">3. 返回值与结果接收</h3>
+<ul>
+<li><code>return</code>：只能返回0~255的整数退出码，0代表成功，非0代表失败</li>
+<li>字符串/数值结果：通过<code>echo</code>输出，用<code>$()</code>接收返回值</li>
+</ul>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 退出码返回</span>
+</span></span><span class="line"><span class="cl">is_even<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="o">((</span> <span class="nv">$1</span> % <span class="nv">2</span> <span class="o">==</span> <span class="m">0</span> <span class="o">))</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nv">$?</span> <span class="c1"># 返回判断结果的退出码</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> is_even 4<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;是偶数&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 通用结果返回</span>
+</span></span><span class="line"><span class="cl">get_greeting<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">local</span> <span class="nv">name</span><span class="o">=</span><span class="nv">$1</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;Hello, </span><span class="nv">$name</span><span class="s2">&#34;</span> <span class="c1"># 输出结果</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 接收返回值</span>
+</span></span><span class="line"><span class="cl"><span class="nv">greeting</span><span class="o">=</span><span class="k">$(</span>get_greeting <span class="s2">&#34;zsh&#34;</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="nv">$greeting</span> <span class="c1"># 输出 Hello, zsh</span></span></span></code></pre></div></div>
+<h3 id="4-变量作用域">4. 变量作用域</h3>
+<ul>
+<li>全局变量：函数外定义的变量，函数内可直接访问和修改</li>
+<li>局部变量：函数内用<code>local</code>/<code>typeset</code>声明，仅在函数内生效，避免污染全局</li>
+<li>全局声明：函数内用<code>typeset -g</code>声明全局变量</li>
+</ul>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="nv">global_var</span><span class="o">=</span><span class="s2">&#34;全局变量&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">test_scope<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">local</span> <span class="nv">local_var</span><span class="o">=</span><span class="s2">&#34;局部变量&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">typeset</span> -g <span class="nv">new_global</span><span class="o">=</span><span class="s2">&#34;函数内声明的全局变量&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nv">global_var</span><span class="o">=</span><span class="s2">&#34;修改后的全局变量&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="nv">$local_var</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">test_scope
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="nv">$global_var</span>  <span class="c1"># 正常输出</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="nv">$new_global</span>   <span class="c1"># 正常输出</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="nv">$local_var</span>    <span class="c1"># 空，局部变量外部无法访问</span></span></span></code></pre></div></div>
+<h3 id="5-高级特性">5. 高级特性</h3>
+<ul>
+<li>匿名函数：Zsh支持直接执行匿名函数
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;匿名函数执行&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">local</span> <span class="nv">temp</span><span class="o">=</span><span class="s2">&#34;临时变量&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span></span></span></code></pre></div></div>
+</li>
+<li>递归调用：函数支持递归
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 阶乘函数</span>
+</span></span><span class="line"><span class="cl">factorial<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="o">((</span> <span class="nv">$1</span> &lt;<span class="o">=</span> <span class="m">1</span> <span class="o">))</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="k">return</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="k">$((</span> <span class="nv">$1</span> <span class="o">*</span> <span class="k">$(</span>factorial <span class="k">$((</span> <span class="nv">$1</span> <span class="o">-</span> <span class="m">1</span> <span class="k">)))</span> <span class="k">))</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">factorial <span class="m">5</span> <span class="c1"># 输出120</span></span></span></code></pre></div></div>
+</li>
+</ul>
+<h2 id="七重定向与管道">七、重定向与管道</h2>
+<p>Zsh完全兼容Bash的重定向语法，同时提供扩展管道、进程替换等高级特性。</p>
+<h3 id="1-标准io重定向">1. 标准IO重定向</h3>
+<p>Linux系统默认3个IO流：<code>stdin(0，标准输入)</code>、<code>stdout(1，标准输出)</code>、<code>stderr(2，标准错误)</code>。</p>
+<table>
+  <thead>
+      <tr>
+          <th>语法</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>command &gt; file</code></td>
+          <td>覆盖stdout到file</td>
+      </tr>
+      <tr>
+          <td><code>command &gt;&gt; file</code></td>
+          <td>追加stdout到file</td>
+      </tr>
+      <tr>
+          <td><code>command 2&gt; file</code></td>
+          <td>覆盖stderr到file</td>
+      </tr>
+      <tr>
+          <td><code>command 2&gt;&gt; file</code></td>
+          <td>追加stderr到file</td>
+      </tr>
+      <tr>
+          <td><code>command &amp;&gt; file</code></td>
+          <td>覆盖stdout+stderr到file（推荐）</td>
+      </tr>
+      <tr>
+          <td><code>command &amp;&gt;&gt; file</code></td>
+          <td>追加stdout+stderr到file</td>
+      </tr>
+      <tr>
+          <td><code>command &gt; file 2&gt;&amp;1</code></td>
+          <td>兼容写法，覆盖stdout+stderr到file</td>
+      </tr>
+      <tr>
+          <td><code>command &lt; file</code></td>
+          <td>从file读取stdin</td>
+      </tr>
+      <tr>
+          <td><code>command &gt; /dev/null</code></td>
+          <td>丢弃stdout</td>
+      </tr>
+      <tr>
+          <td><code>command 2&gt; /dev/null</code></td>
+          <td>丢弃stderr</td>
+      </tr>
+      <tr>
+          <td><code>command &amp;&gt; /dev/null</code></td>
+          <td>丢弃所有输出</td>
+      </tr>
+  </tbody>
+</table>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 正常输出写入文件，错误输出打印到终端</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;hello&#34;</span> &gt; output.log
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 错误输出写入文件，正常输出打印到终端</span>
+</span></span><span class="line"><span class="cl">ls non_exist_file 2&gt; error.log
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 所有输出都写入文件</span>
+</span></span><span class="line"><span class="cl">ls <span class="p">&amp;</span>&gt; all_output.log</span></span></code></pre></div></div>
+<h3 id="2-管道与扩展管道">2. 管道与扩展管道</h3>
+<ul>
+<li>基础管道：<code>command1 | command2</code>，将command1的stdout传递给command2的stdin
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 统计txt文件数量</span>
+</span></span><span class="line"><span class="cl">ls *.txt <span class="p">|</span> wc -l
+</span></span><span class="line"><span class="cl"><span class="c1"># 筛选包含zsh的进程</span>
+</span></span><span class="line"><span class="cl">ps aux <span class="p">|</span> grep zsh</span></span></code></pre></div></div>
+</li>
+<li>扩展管道（Zsh独有）：<code>command1 |&amp; command2</code>，将stdout+stderr同时传递给command2，等同于Bash的<code>2&gt;&amp;1 |</code>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 同时筛选正常输出和错误输出</span>
+</span></span><span class="line"><span class="cl">ls non_exist_file <span class="p">|&amp;</span> grep <span class="s2">&#34;No such&#34;</span></span></span></code></pre></div></div>
+</li>
+</ul>
+<h3 id="3-进程替换">3. 进程替换</h3>
+<p>将命令的输入/输出模拟为临时文件，解决管道无法传递多文件的问题：</p>
+<ul>
+<li><code>&lt;(command)</code>：将command的输出作为可读文件</li>
+<li><code>&gt;(command)</code>：将command的输入作为可写文件</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 对比两个目录的文件列表</span>
+</span></span><span class="line"><span class="cl">diff &lt;<span class="o">(</span>ls dir1<span class="o">)</span> &lt;<span class="o">(</span>ls dir2<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 将输出同时传递给多个命令</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;hello world&#34;</span> &gt; &gt;<span class="o">(</span>grep hello<span class="o">)</span> &gt; &gt;<span class="o">(</span>wc -l<span class="o">)</span></span></span></code></pre></div></div>
+<h3 id="4-多行输入">4. 多行输入</h3>
+<ul>
+<li>Here Document：多行文本输入，常用于脚本中生成配置文件
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># EOF为结束符，单引号包裹EOF会禁用变量解析</span>
+</span></span><span class="line"><span class="cl">cat &gt; test.txt <span class="s">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s">第一行内容
+</span></span></span><span class="line"><span class="cl"><span class="s">第二行内容，$var不会被解析
+</span></span></span><span class="line"><span class="cl"><span class="s">第三行内容
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span></span></span></code></pre></div></div>
+</li>
+<li>Here String：单行字符串输入，将字符串作为stdin传递给命令
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 等同于 echo &#34;hello zsh&#34; | grep zsh</span>
+</span></span><span class="line"><span class="cl">grep zsh <span class="o">&lt;&lt;&lt;</span> <span class="s2">&#34;hello zsh&#34;</span></span></span></code></pre></div></div>
+</li>
+</ul>
+<h2 id="八zsh核心利器通配符与扩展globbing">八、Zsh核心利器：通配符与扩展（Globbing）</h2>
+<p>通配符是Zsh最强大的特性之一，默认开启扩展通配符，支持递归匹配、排除匹配、文件属性过滤等，远超Bash的能力。</p>
+<h3 id="1-基础通配符">1. 基础通配符</h3>
+<table>
+  <thead>
+      <tr>
+          <th>通配符</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>*</code></td>
+          <td>匹配任意长度的任意字符（包括空）</td>
+      </tr>
+      <tr>
+          <td><code>?</code></td>
+          <td>匹配单个任意字符</td>
+      </tr>
+      <tr>
+          <td><code>[abc]</code></td>
+          <td>匹配括号内的任意单个字符</td>
+      </tr>
+      <tr>
+          <td><code>[a-z0-9]</code></td>
+          <td>匹配范围内的任意单个字符</td>
+      </tr>
+      <tr>
+          <td><code>[^abc]</code>/<code>[!abc]</code></td>
+          <td>匹配非括号内的任意单个字符</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-扩展通配符默认开启">2. 扩展通配符（默认开启）</h3>
+<table>
+  <thead>
+      <tr>
+          <th>语法</th>
+          <th>作用</th>
+          <th>示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>**</code></td>
+          <td>递归匹配所有子目录（Bash需手动开启globstar）</td>
+          <td><code>ls **/*.txt</code> 递归查找所有txt文件</td>
+      </tr>
+      <tr>
+          <td><code>^pattern</code></td>
+          <td>否定匹配，匹配不符合pattern的内容</td>
+          <td><code>ls ^*.txt</code> 匹配所有非txt文件</td>
+      </tr>
+      <tr>
+          <td><code>pattern1~pattern2</code></td>
+          <td>排除匹配，匹配pattern1但排除pattern2</td>
+          <td><code>ls *.c~test.c</code> 匹配所有c文件，排除test.c</td>
+      </tr>
+      <tr>
+          <td>`(pat1</td>
+          <td>pat2)`</td>
+          <td>分组或匹配，匹配pat1或pat2</td>
+      </tr>
+      <tr>
+          <td><code>pattern#</code></td>
+          <td>匹配pattern零次或多次</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>pattern##</code></td>
+          <td>匹配pattern一次或多次</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-全局限定符glob-qualifierszsh独有">3. 全局限定符（Glob Qualifiers，Zsh独有）</h3>
+<p>Zsh独有的语法，在通配符后加<code>(限定符)</code>，可按文件类型、大小、时间、权限等精准过滤，无需结合<code>find</code>命令。</p>
+<h4 id="常用限定符速览">常用限定符速览</h4>
+<table>
+  <thead>
+      <tr>
+          <th>分类</th>
+          <th>限定符</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>文件类型</td>
+          <td><code>.</code></td>
+          <td>普通文件</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>/</code></td>
+          <td>目录</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>@</code></td>
+          <td>符号链接</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>*</code></td>
+          <td>可执行文件</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>p</code></td>
+          <td>管道文件</td>
+      </tr>
+      <tr>
+          <td>大小过滤</td>
+          <td><code>Lk+N</code></td>
+          <td>大于N KB的文件</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>Lm-N</code></td>
+          <td>小于N MB的文件</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>L0</code></td>
+          <td>空文件</td>
+      </tr>
+      <tr>
+          <td>时间过滤</td>
+          <td><code>mmin-N</code></td>
+          <td>N分钟内修改过的文件</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>mtime-N</code></td>
+          <td>N天内修改过的文件</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>amin-N</code></td>
+          <td>N分钟内访问过的文件</td>
+      </tr>
+      <tr>
+          <td>排序</td>
+          <td><code>on</code></td>
+          <td>按文件名升序</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>On</code></td>
+          <td>按文件名降序</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>om</code></td>
+          <td>按修改时间降序（最新在前）</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>oL</code></td>
+          <td>按文件大小升序</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>OL</code></td>
+          <td>按文件大小降序</td>
+      </tr>
+      <tr>
+          <td>权限</td>
+          <td><code>r/w/x</code></td>
+          <td>可读/可写/可执行（当前用户）</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>W</code></td>
+          <td>全局可写文件</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>U</code></td>
+          <td>当前用户拥有的文件</td>
+      </tr>
+      <tr>
+          <td>其他</td>
+          <td><code>D</code></td>
+          <td>匹配隐藏文件（.开头）</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>F</code></td>
+          <td>非空目录</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td><code>[1,N]</code></td>
+          <td>取前N个匹配结果</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="实用示例">实用示例</h4>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 递归查找所有普通txt文件</span>
+</span></span><span class="line"><span class="cl">ls **/*.txt<span class="o">(</span>.<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查找当前目录大于100MB的文件</span>
+</span></span><span class="line"><span class="cl">ls *<span class="o">(</span>Lm+100<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查找最近7天内修改过的php文件</span>
+</span></span><span class="line"><span class="cl">ls **/*.php<span class="o">(</span>mtime-7<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查找最近修改的5个文件</span>
+</span></span><span class="line"><span class="cl">ls *<span class="o">(</span>om<span class="o">[</span>1,5<span class="o">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 只列出当前目录的子目录</span>
+</span></span><span class="line"><span class="cl">ls -d *<span class="o">(</span>/<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 递归查找所有隐藏文件</span>
+</span></span><span class="line"><span class="cl">ls **/*<span class="o">(</span>D<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查找当前目录所有空文件并删除</span>
+</span></span><span class="line"><span class="cl">rm *<span class="o">(</span>L0<span class="o">)</span></span></span></code></pre></div></div>
+<h3 id="4-模式修饰符">4. 模式修饰符</h3>
+<p>用于调整匹配规则，常用：</p>
+<ul>
+<li><code>(#i)</code>：不区分大小写匹配
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 匹配hello.txt、HELLO.TXT、Hello.Txt等</span>
+</span></span><span class="line"><span class="cl"><span class="o">[[</span> <span class="s2">&#34;Hello.txt&#34;</span> <span class="o">==</span> <span class="o">(</span><span class="c1">#i)hello.txt ]]</span>
+</span></span><span class="line"><span class="cl">ls <span class="o">(</span><span class="c1">#i)*.txt</span></span></span></code></pre></div></div>
+</li>
+<li><code>(#b)</code>：开启分组捕获，配合正则使用
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="o">[[</span> <span class="s2">&#34;abc123&#34;</span> <span class="o">==</span> <span class="o">(</span><span class="c1">#b)([a-z]*)([0-9]*) ]]</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="nv">$match</span><span class="o">[</span>1<span class="o">]</span> <span class="c1"># abc</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="nv">$match</span><span class="o">[</span>2<span class="o">]</span> <span class="c1"># 123</span></span></span></code></pre></div></div>
+</li>
+</ul>
+<h2 id="九别名与快捷键">九、别名与快捷键</h2>
+<p>Zsh提供3种别名类型，远超Bash的普通别名，同时支持丰富的快捷键自定义。</p>
+<h3 id="1-别名分类与定义">1. 别名分类与定义</h3>
+<h4 id="普通别名">普通别名</h4>
+<p>与Bash完全兼容，仅在命令开头生效，常用于简化长命令：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 定义别名</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">ll</span><span class="o">=</span><span class="s1">&#39;ls -lAh&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">gs</span><span class="o">=</span><span class="s1">&#39;git status&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">grep</span><span class="o">=</span><span class="s1">&#39;grep --color=auto&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 取消别名</span>
+</span></span><span class="line"><span class="cl"><span class="nb">unalias</span> ll
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看所有别名</span>
+</span></span><span class="line"><span class="cl">alias</span></span></code></pre></div></div>
+<h4 id="全局别名zsh独有">全局别名（Zsh独有）</h4>
+<p>用<code>alias -g</code>定义，在命令行任意位置都生效，常用于简化管道、重定向等固定片段：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 定义全局别名</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> -g <span class="nv">G</span><span class="o">=</span><span class="s1">&#39;| grep&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> -g <span class="nv">L</span><span class="o">=</span><span class="s1">&#39;| less&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> -g <span class="nv">H</span><span class="o">=</span><span class="s1">&#39;--help&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> -g <span class="nv">N</span><span class="o">=</span><span class="s1">&#39;&amp;&gt; /dev/null&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 使用示例</span>
+</span></span><span class="line"><span class="cl">ps aux G zsh <span class="c1"># 等同于 ps aux | grep zsh</span>
+</span></span><span class="line"><span class="cl">cat file.log L <span class="c1"># 等同于 cat file.log | less</span>
+</span></span><span class="line"><span class="cl">ls non_exist N <span class="c1"># 等同于 ls non_exist &amp;&gt; /dev/null</span></span></span></code></pre></div></div>
+<h4 id="后缀别名zsh独有">后缀别名（Zsh独有）</h4>
+<p>用<code>alias -s</code>定义，绑定文件后缀与打开程序，输入文件名直接用指定程序打开：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 定义后缀别名</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> -s <span class="nv">txt</span><span class="o">=</span><span class="s1">&#39;vim&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> -s <span class="nv">md</span><span class="o">=</span><span class="s1">&#39;typora&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> -s <span class="nv">py</span><span class="o">=</span><span class="s1">&#39;python3&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> -s <span class="nv">zip</span><span class="o">=</span><span class="s1">&#39;unzip -l&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 使用示例</span>
+</span></span><span class="line"><span class="cl">test.txt   <span class="c1"># 直接用vim打开test.txt</span>
+</span></span><span class="line"><span class="cl">script.py  <span class="c1"># 直接用python3执行script.py</span></span></span></code></pre></div></div>
+<h3 id="2-常用内置快捷键">2. 常用内置快捷键</h3>
+<p>Zsh默认使用Emacs按键模式，可通过<code>bindkey -v</code>切换为Vi模式，<code>bindkey -e</code>切回Emacs模式。</p>
+<table>
+  <thead>
+      <tr>
+          <th>快捷键</th>
+          <th>功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>Ctrl+A</code></td>
+          <td>跳到行首</td>
+      </tr>
+      <tr>
+          <td><code>Ctrl+E</code></td>
+          <td>跳到行尾</td>
+      </tr>
+      <tr>
+          <td><code>Ctrl+U</code></td>
+          <td>删除光标到行首的内容</td>
+      </tr>
+      <tr>
+          <td><code>Ctrl+K</code></td>
+          <td>删除光标到行尾的内容</td>
+      </tr>
+      <tr>
+          <td><code>Ctrl+W</code></td>
+          <td>删除光标前一个单词</td>
+      </tr>
+      <tr>
+          <td><code>Alt+D</code></td>
+          <td>删除光标后一个单词</td>
+      </tr>
+      <tr>
+          <td><code>Ctrl+R</code></td>
+          <td>反向搜索历史命令</td>
+      </tr>
+      <tr>
+          <td><code>Ctrl+L</code></td>
+          <td>清屏，等同于clear命令</td>
+      </tr>
+      <tr>
+          <td><code>!!</code></td>
+          <td>执行上一条命令</td>
+      </tr>
+      <tr>
+          <td><code>!$</code></td>
+          <td>引用上一条命令的最后一个参数</td>
+      </tr>
+      <tr>
+          <td><code>!n</code></td>
+          <td>执行历史中第n条命令</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="十正则表达式与模式匹配">十、正则表达式与模式匹配</h2>
+<p>Zsh内置正则匹配能力，无需依赖外部命令，支持扩展正则语法和分组捕获。</p>
+<h3 id="1-基础正则匹配">1. 基础正则匹配</h3>
+<p>使用<code>[[ str =~ regex ]]</code>语法进行正则匹配，匹配成功返回0，失败返回非0：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 匹配手机号</span>
+</span></span><span class="line"><span class="cl"><span class="nv">phone</span><span class="o">=</span><span class="s2">&#34;13812345678&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> <span class="nv">$phone</span> <span class="o">=</span>~ ^1<span class="o">[</span>3-9<span class="o">][</span>0-9<span class="o">]{</span>9<span class="o">}</span>$ <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;手机号格式正确&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 匹配邮箱</span>
+</span></span><span class="line"><span class="cl"><span class="nv">email</span><span class="o">=</span><span class="s2">&#34;test@example.com&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> <span class="nv">$email</span> <span class="o">=</span>~ ^<span class="o">[</span>a-zA-Z0-9._%+-<span class="o">]</span>+@<span class="o">[</span>a-zA-Z0-9.-<span class="o">]</span>+<span class="se">\.</span><span class="o">[</span>a-zA-Z<span class="o">]{</span>2,<span class="o">}</span>$ <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;邮箱格式正确&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span></span></span></code></pre></div></div>
+<h3 id="2-匹配结果捕获">2. 匹配结果捕获</h3>
+<p>Zsh会自动将匹配结果存入内置变量：</p>
+<ul>
+<li><code>$MATCH</code>：匹配到的完整字符串</li>
+<li><code>$match</code>：数组，存储分组捕获的内容</li>
+<li><code>$MBEGIN</code>/<code>$MEND</code>：匹配内容的起始/结束位置</li>
+</ul>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="nv">str</span><span class="o">=</span><span class="s2">&#34;name:zhangsan,age:20&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> <span class="nv">$str</span> <span class="o">=</span>~ name:<span class="o">([</span>a-z<span class="o">]</span>+<span class="o">)</span>,age:<span class="o">([</span>0-9<span class="o">]</span>+<span class="o">)</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;完整匹配：</span><span class="nv">$MATCH</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;姓名：</span><span class="nv">$match</span><span class="s2">[1]&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">echo</span> <span class="s2">&#34;年龄：</span><span class="nv">$match</span><span class="s2">[2]&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span></span></span></code></pre></div></div>
+<h3 id="3-扩展正则配置">3. 扩展正则配置</h3>
+<ul>
+<li>开启扩展正则：<code>setopt EXTENDED_REGEX</code></li>
+<li>关闭大小写敏感：<code>setopt NO_CASE_GLOB</code></li>
+</ul>
+<h2 id="十一脚本选项与调试">十一、脚本选项与调试</h2>
+<p>Zsh通过<code>setopt</code>/<code>unsetopt</code>开启/关闭选项，对应Bash的<code>set</code>/<code>shopt</code>，用于控制脚本行为、错误处理和调试。</p>
+<h3 id="1-核心脚本选项">1. 核心脚本选项</h3>
+<p>脚本开头推荐配置，提升脚本健壮性：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env zsh
+</span></span></span><span class="line"><span class="cl"><span class="c1"># 推荐生产环境配置</span>
+</span></span><span class="line"><span class="cl">setopt ERR_EXIT       <span class="c1"># 命令执行失败时立即退出脚本（等同于set -e）</span>
+</span></span><span class="line"><span class="cl">setopt NO_UNSET       <span class="c1"># 使用未定义变量时报错（等同于set -u）</span>
+</span></span><span class="line"><span class="cl">setopt PIPE_FAIL      <span class="c1"># 管道中任意命令失败，整个管道退出码为失败</span>
+</span></span><span class="line"><span class="cl">setopt NO_NOMATCH     <span class="c1"># 通配符匹配不到文件时，保留原字符串，不报错</span></span></span></code></pre></div></div>
+<table>
+  <thead>
+      <tr>
+          <th>选项</th>
+          <th>简写</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>ERR_EXIT</code></td>
+          <td><code>set -e</code></td>
+          <td>命令非0退出时，立即终止脚本</td>
+      </tr>
+      <tr>
+          <td><code>NO_UNSET</code></td>
+          <td><code>set -u</code></td>
+          <td>使用未定义变量时报错</td>
+      </tr>
+      <tr>
+          <td><code>PIPE_FAIL</code></td>
+          <td>-</td>
+          <td>管道失败判断，默认仅看最后一条命令</td>
+      </tr>
+      <tr>
+          <td><code>XTRACE</code></td>
+          <td><code>set -x</code></td>
+          <td>调试模式，打印执行的每一条命令</td>
+      </tr>
+      <tr>
+          <td><code>NO_NOMATCH</code></td>
+          <td>-</td>
+          <td>通配符无匹配时不报错，避免脚本中断</td>
+      </tr>
+      <tr>
+          <td><code>EXTENDED_GLOB</code></td>
+          <td>-</td>
+          <td>开启扩展通配符（默认开启）</td>
+      </tr>
+      <tr>
+          <td><code>NO_CASE_GLOB</code></td>
+          <td>-</td>
+          <td>通配符不区分大小写</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-脚本调试方法">2. 脚本调试方法</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 方式1：命令行直接调试执行</span>
+</span></span><span class="line"><span class="cl">zsh -x script.zsh
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 方式2：脚本内开启/关闭调试</span>
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> -x <span class="c1"># 开启调试</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 要调试的代码段</span>
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> +x <span class="c1"># 关闭调试</span></span></span></code></pre></div></div>
+<h3 id="3-退出码与错误处理">3. 退出码与错误处理</h3>
+<ul>
+<li>脚本退出：<code>exit N</code>，N为退出码（0=成功，1~255=错误）</li>
+<li>错误捕获：使用<code>||</code>处理命令失败场景
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-zsh">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-zsh" data-lang="zsh"><span class="line"><span class="cl"><span class="c1"># 命令失败时执行兜底逻辑</span>
+</span></span><span class="line"><span class="cl">ls non_exist_file <span class="o">||</span> <span class="nb">echo</span> <span class="s2">&#34;文件不存在&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 命令失败时直接退出</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /data <span class="o">||</span> <span class="nb">exit</span> <span class="m">1</span></span></span></code></pre></div></div>
+</li>
+</ul>
+<h2 id="十二环境配置文件加载规则">十二、环境配置文件加载规则</h2>
+<p>Zsh的配置文件分全局配置（/etc下）和用户配置（~下），按Shell类型不同，加载顺序不同。</p>
+<h3 id="1-配置文件加载顺序">1. 配置文件加载顺序</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Shell类型</th>
+          <th>加载顺序</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>登录Shell</td>
+          <td><code>/etc/zshenv</code> → <code>~/.zshenv</code> → <code>/etc/zprofile</code> → <code>~/.zprofile</code> → <code>/etc/zshrc</code> → <code>~/.zshrc</code> → <code>/etc/zlogin</code> → <code>~/.zlogin</code></td>
+      </tr>
+      <tr>
+          <td>非登录交互式Shell</td>
+          <td><code>/etc/zshenv</code> → <code>~/.zshenv</code> → <code>/etc/zshrc</code> → <code>~/.zshrc</code></td>
+      </tr>
+      <tr>
+          <td>非交互式Shell（脚本执行）</td>
+          <td>仅加载 <code>/etc/zshenv</code> → <code>~/.zshenv</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-核心配置文件适用场景">2. 核心配置文件适用场景</h3>
+<table>
+  <thead>
+      <tr>
+          <th>配置文件</th>
+          <th>适用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>~/.zshenv</code></td>
+          <td>总是加载，用于设置全局环境变量（如<code>PATH</code>），无论是否交互式</td>
+      </tr>
+      <tr>
+          <td><code>~/.zshrc</code></td>
+          <td>交互式Shell加载，最常用的配置文件，用于定义别名、函数、快捷键、补全、主题等</td>
+      </tr>
+      <tr>
+          <td><code>~/.zprofile</code></td>
+          <td>登录Shell加载，用于登录时执行一次的命令（如启动服务、环境初始化）</td>
+      </tr>
+      <tr>
+          <td><code>~/.zlogout</code></td>
+          <td>退出登录Shell时执行，用于清理操作（如清除临时文件、打印退出提示）</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="十三zsh与bash核心语法差异对照表">十三、Zsh与Bash核心语法差异对照表</h2>
+<table>
+  <thead>
+      <tr>
+          <th>特性</th>
+          <th>Zsh</th>
+          <th>Bash</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>数组索引</td>
+          <td>默认从1开始，支持负索引</td>
+          <td>默认从0开始，4.0+版本支持负索引</td>
+      </tr>
+      <tr>
+          <td>单词分割</td>
+          <td>变量默认不进行IFS单词分割</td>
+          <td>变量默认会进行IFS单词分割，需加双引号避免</td>
+      </tr>
+      <tr>
+          <td>浮点数运算</td>
+          <td>原生支持<code>(( 1.5+2.5 ))</code></td>
+          <td>不原生支持，需依赖<code>bc</code>/<code>awk</code>等外部工具</td>
+      </tr>
+      <tr>
+          <td>递归通配符</td>
+          <td><code>**</code>默认开启，直接使用</td>
+          <td>需手动执行<code>shopt -s globstar</code>开启</td>
+      </tr>
+      <tr>
+          <td>通配符限定符</td>
+          <td>原生支持<code>(.)</code> <code>(/)</code>等强大的文件过滤限定符</td>
+          <td>不支持，需结合<code>find</code>命令</td>
+      </tr>
+      <tr>
+          <td>别名类型</td>
+          <td>支持普通别名、全局别名、后缀别名</td>
+          <td>仅支持普通别名</td>
+      </tr>
+      <tr>
+          <td>字符串大小写转换</td>
+          <td>内置<code>${str:l}</code> <code>${str:u}</code>，简洁高效</td>
+          <td>4.0+版本支持<code>${str,,}</code> <code>${str^^}</code>，语法更繁琐</td>
+      </tr>
+      <tr>
+          <td>数组去重</td>
+          <td><code>typeset -U arr</code> 声明后自动去重</td>
+          <td>不原生支持，需额外代码处理</td>
+      </tr>
+      <tr>
+          <td>关联数组遍历</td>
+          <td>支持<code>for k v in &quot;${(@kv)hash}&quot;</code>直接遍历键值对</td>
+          <td>只能先遍历key，再通过key取value</td>
+      </tr>
+      <tr>
+          <td>循环扩展</td>
+          <td>支持<code>repeat N</code>固定次数循环</td>
+          <td>无此语法，需用for/while实现</td>
+      </tr>
+      <tr>
+          <td>管道扩展</td>
+          <td>支持`</td>
+          <td>&amp;`同时传递stdout和stderr</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="十四常用参数扩展修饰符速览">十四、常用参数扩展修饰符速览</h2>
+<p>Zsh提供丰富的参数扩展修饰符，用于快速处理变量内容，无需外部命令：</p>
+<table>
+  <thead>
+      <tr>
+          <th>修饰符</th>
+          <th>作用</th>
+          <th>示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>${(j:,:)arr}</code></td>
+          <td>用逗号拼接数组元素为字符串</td>
+          <td><code>arr=(a b c); ${(j:,:)arr}</code> → <code>a,b,c</code></td>
+      </tr>
+      <tr>
+          <td><code>${(s:,:)str}</code></td>
+          <td>用逗号分割字符串为数组</td>
+          <td><code>str=&quot;a,b,c&quot;; ${(s:,:)str}</code> → <code>(a b c)</code></td>
+      </tr>
+      <tr>
+          <td><code>${(t)var}</code></td>
+          <td>显示变量的类型和属性</td>
+          <td><code>${(t)user_map}</code> → <code>association</code></td>
+      </tr>
+      <tr>
+          <td><code>${(r)arr}</code></td>
+          <td>反转数组顺序</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>${(o)arr}</code></td>
+          <td>对数组进行升序排序</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>${(O)arr}</code></td>
+          <td>对数组进行降序排序</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>${(n)arr}</code></td>
+          <td>按数字自然排序</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-01-14</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/003_zsh%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/shell/">Shell</a>,&nbsp;<a href="/blog/tags/zsh/">Zsh</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/001_bash%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="Bash 语法详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>Bash 语法详细总结</a>
+            <a href="/blog/010_awk%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="awk 命令使用详细总结">awk 命令使用详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

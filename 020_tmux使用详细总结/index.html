@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>tmux 命令使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/020_tmux%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="tmux 命令使用详细总结">
+  <meta property="og:description" content="tmux 使用完全总结 tmux 是一款经典的终端复用器（Terminal Multiplexer），核心能力是在单个终端窗口中创建、管理多个独立的终端会话，同时实现会话后台保活、窗口分屏、多任务并行处理，是远程SSH运维、服务器开发、多任务命令行操作的必备工具。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-22T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-03-22T10:00:20+08:00">
+    <meta property="article:tag" content="开发工具">
+    <meta property="article:tag" content="Shell">
+    <meta property="article:tag" content="Tmux">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="tmux 命令使用详细总结">
+  <meta name="twitter:description" content="tmux 使用完全总结 tmux 是一款经典的终端复用器（Terminal Multiplexer），核心能力是在单个终端窗口中创建、管理多个独立的终端会话，同时实现会话后台保活、窗口分屏、多任务并行处理，是远程SSH运维、服务器开发、多任务命令行操作的必备工具。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/020_tmux%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/014_repo%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/005_adb%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "tmux 命令使用详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/020_tmux%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "dev-tools, Shell, tmux","wordcount":  4609 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/020_tmux%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-03-22T09:00:20+08:00","dateModified": "2026-03-22T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/020_tmux%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/020_tmux%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">tmux 命令使用详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/dev-tools/"><i class="far fa-folder" aria-hidden="true"></i>开发工具</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-03-22">2026-03-22</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 4609 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 10 分钟&nbsp;<span id="/blog/020_tmux%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="tmux 命令使用详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一核心概念与架构">一、核心概念与架构</a>
+      <ul>
+        <li><a href="#核心优势">核心优势</a></li>
+      </ul>
+    </li>
+    <li><a href="#二安装教程">二、安装教程</a></li>
+    <li><a href="#三基础核心操作">三、基础核心操作</a>
+      <ul>
+        <li><a href="#31-会话管理最核心持久化能力的核心">3.1 会话管理（最核心，持久化能力的核心）</a></li>
+        <li><a href="#32-窗口管理标签页式管理">3.2 窗口管理（标签页式管理）</a></li>
+        <li><a href="#33-窗格管理分屏核心">3.3 窗格管理（分屏核心）</a></li>
+        <li><a href="#34-复制粘贴与历史查看">3.4 复制粘贴与历史查看</a></li>
+      </ul>
+    </li>
+    <li><a href="#四进阶用法与配置优化">四、进阶用法与配置优化</a>
+      <ul>
+        <li><a href="#41-核心配置文件">4.1 核心配置文件</a></li>
+        <li><a href="#42-插件管理与常用插件">4.2 插件管理与常用插件</a>
+          <ul>
+            <li><a href="#高频实用插件">高频实用插件</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-其他进阶技巧">4.3 其他进阶技巧</a>
+          <ul>
+            <li><a href="#1-多窗格同步操作">1. 多窗格同步操作</a></li>
+            <li><a href="#2-会话共享多人协作">2. 会话共享（多人协作）</a></li>
+            <li><a href="#3-自动化会话脚本">3. 自动化会话脚本</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#五常见问题与解决方案">五、常见问题与解决方案</a>
+      <ul>
+        <li><a href="#1-ssh断开后重连找不到会话">1. SSH断开后，重连找不到会话</a></li>
+        <li><a href="#2-无法用鼠标滚轮滚动查看历史输出">2. 无法用鼠标滚轮滚动查看历史输出</a></li>
+        <li><a href="#3-配置文件修改后不生效">3. 配置文件修改后不生效</a></li>
+        <li><a href="#4-终端内颜色显示异常vim主题错乱">4. 终端内颜色显示异常、vim主题错乱</a></li>
+        <li><a href="#5-中文显示乱码">5. 中文显示乱码</a></li>
+      </ul>
+    </li>
+    <li><a href="#六常用快捷键速查表">六、常用快捷键速查表</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="tmux-使用完全总结">tmux 使用完全总结</h1>
+<p>tmux 是一款经典的<strong>终端复用器（Terminal Multiplexer）</strong>，核心能力是在单个终端窗口中创建、管理多个独立的终端会话，同时实现会话后台保活、窗口分屏、多任务并行处理，是远程SSH运维、服务器开发、多任务命令行操作的必备工具。</p>
+<h2 id="一核心概念与架构">一、核心概念与架构</h2>
+<p>tmux 采用三级层级设计，所有操作都围绕这三个核心单元展开，理解层级关系是上手的关键：</p>
+<table>
+  <thead>
+      <tr>
+          <th>层级</th>
+          <th>全称</th>
+          <th>核心说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>会话</td>
+          <td>Session</td>
+          <td>tmux 的最高层级，对应一个独立的任务集，<strong>关闭终端/SSH断连后会话仍在后台运行</strong>，可随时重连恢复。一个会话可包含多个窗口</td>
+      </tr>
+      <tr>
+          <td>窗口</td>
+          <td>Window</td>
+          <td>对应终端的一个全屏页面，类似浏览器的标签页，底部状态栏会显示窗口编号与名称。一个窗口可包含多个窗格</td>
+      </tr>
+      <tr>
+          <td>窗格</td>
+          <td>Pane</td>
+          <td>窗口内分割出的最小终端单元，可上下/左右拆分，实现单屏同时显示多个终端界面</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="核心优势">核心优势</h3>
+<ol>
+<li><strong>会话持久化</strong>：SSH远程操作时，网络断开、终端关闭不会中断正在运行的程序，重连即可恢复</li>
+<li><strong>多屏分栏</strong>：单窗口拆分多个窗格，无需打开多个终端，同时执行监控、编辑、运行等多任务</li>
+<li><strong>多会话管理</strong>：按项目/场景创建独立会话，快速切换不同的工作环境</li>
+<li><strong>协作与共享</strong>：支持多人同时接入同一个会话，实现结对编程、远程协助</li>
+<li><strong>高度可定制</strong>：支持快捷键、状态栏、功能插件的深度自定义，适配个人工作流</li>
+</ol>
+<h2 id="二安装教程">二、安装教程</h2>
+<p>主流操作系统均已内置 tmux 软件源，直接通过包管理器安装即可：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Ubuntu/Debian 系列</span>
+</span></span><span class="line"><span class="cl">sudo apt update <span class="o">&amp;&amp;</span> sudo apt install -y tmux
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># CentOS/RHEL/Rocky Linux 系列</span>
+</span></span><span class="line"><span class="cl">sudo yum install -y tmux
+</span></span><span class="line"><span class="cl"><span class="c1"># 或 dnf 版本</span>
+</span></span><span class="line"><span class="cl">sudo dnf install -y tmux
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># macOS（需先安装 Homebrew）</span>
+</span></span><span class="line"><span class="cl">brew install tmux
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Arch Linux 系列</span>
+</span></span><span class="line"><span class="cl">sudo pacman -S tmux</span></span></code></pre></div></div>
+<p>安装完成后，终端输入 <code>tmux -V</code> 可查看版本，确认安装成功。</p>
+<h2 id="三基础核心操作">三、基础核心操作</h2>
+<p>tmux 所有快捷键都基于<strong>前缀键</strong>触发，默认前缀键为 <code>Ctrl+b</code>。</p>
+<blockquote>
+<p>关键操作规范：先同时按下 <code>Ctrl</code> 和 <code>b</code>，<strong>完全松开两个按键</strong>，再按下对应的功能键，不要同时按住前缀和功能键。</p>
+</blockquote>
+<h3 id="31-会话管理最核心持久化能力的核心">3.1 会话管理（最核心，持久化能力的核心）</h3>
+<p>会话操作分为「终端外命令行操作」和「tmux内快捷键操作」两类，前者用于未进入tmux时管理会话，后者用于tmux内快速操作。</p>
+<table>
+  <thead>
+      <tr>
+          <th>操作场景</th>
+          <th>命令行操作（终端外执行）</th>
+          <th>快捷键操作（前缀+按键）</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>新建会话</td>
+          <td><code>tmux</code> / <code>tmux new</code></td>
+          <td>-</td>
+          <td>创建无名称的新会话，自动按数字编号</td>
+      </tr>
+      <tr>
+          <td>新建命名会话</td>
+          <td><code>tmux new -s 会话名</code></td>
+          <td>-</td>
+          <td>创建带自定义名称的会话，便于识别和管理</td>
+      </tr>
+      <tr>
+          <td>后台新建会话</td>
+          <td><code>tmux new -s 会话名 -d</code></td>
+          <td>-</td>
+          <td>创建会话并直接放在后台运行，不立即进入</td>
+      </tr>
+      <tr>
+          <td>查看所有会话</td>
+          <td><code>tmux ls</code> / <code>tmux list-sessions</code></td>
+          <td><code>Ctrl+b s</code></td>
+          <td>列出所有运行中的会话，快捷键可交互式选择切换</td>
+      </tr>
+      <tr>
+          <td>接入/重连会话</td>
+          <td><code>tmux a -t 会话名/编号</code> / <code>tmux attach -t 会话名</code></td>
+          <td>-</td>
+          <td>进入指定的后台会话，恢复操作界面</td>
+      </tr>
+      <tr>
+          <td>分离会话（后台保活）</td>
+          <td><code>tmux detach</code></td>
+          <td><code>Ctrl+b d</code></td>
+          <td>退出当前会话，会话和其中运行的程序继续在后台运行</td>
+      </tr>
+      <tr>
+          <td>重命名当前会话</td>
+          <td><code>tmux rename-session -t 旧名 新名</code></td>
+          <td><code>Ctrl+b $</code></td>
+          <td>修改会话名称，便于区分不同任务</td>
+      </tr>
+      <tr>
+          <td>切换会话</td>
+          <td><code>tmux switch -t 会话名</code></td>
+          <td><code>Ctrl+b ( / )</code></td>
+          <td>切换到上一个/下一个会话</td>
+      </tr>
+      <tr>
+          <td>关闭指定会话</td>
+          <td><code>tmux kill-session -t 会话名</code></td>
+          <td>-</td>
+          <td>彻底关闭指定会话，其中所有窗口/窗格和程序都会终止</td>
+      </tr>
+      <tr>
+          <td>关闭所有会话</td>
+          <td><code>tmux kill-server</code></td>
+          <td>-</td>
+          <td>彻底关闭tmux服务，所有会话全部终止</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="32-窗口管理标签页式管理">3.2 窗口管理（标签页式管理）</h3>
+<p>一个会话可创建多个窗口，每个窗口都是一个独立的全屏终端，底部状态栏会显示窗口列表。</p>
+<table>
+  <thead>
+      <tr>
+          <th>操作场景</th>
+          <th>快捷键操作</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>新建窗口</td>
+          <td><code>Ctrl+b c</code></td>
+          <td>创建新窗口，自动按数字编号，状态栏会新增标签</td>
+      </tr>
+      <tr>
+          <td>重命名当前窗口</td>
+          <td><code>Ctrl+b ,</code></td>
+          <td>修改窗口名称，便于区分用途（如代码、日志、监控）</td>
+      </tr>
+      <tr>
+          <td>切换到上一个窗口</td>
+          <td><code>Ctrl+b p</code></td>
+          <td>切换到编号更小的上一个窗口</td>
+      </tr>
+      <tr>
+          <td>切换到下一个窗口</td>
+          <td><code>Ctrl+b n</code></td>
+          <td>切换到编号更大的下一个窗口</td>
+      </tr>
+      <tr>
+          <td>切换到指定编号窗口</td>
+          <td><code>Ctrl+b 0-9</code></td>
+          <td>直接跳转到对应数字编号的窗口</td>
+      </tr>
+      <tr>
+          <td>切换到上一个活跃窗口</td>
+          <td><code>Ctrl+b Tab</code></td>
+          <td>快速在最近两个窗口之间来回切换</td>
+      </tr>
+      <tr>
+          <td>可视化选择窗口</td>
+          <td><code>Ctrl+b w</code></td>
+          <td>打开会话/窗口树状列表，方向键选择回车进入</td>
+      </tr>
+      <tr>
+          <td>关闭当前窗口</td>
+          <td><code>Ctrl+b &amp;</code></td>
+          <td>关闭当前窗口，需输入 <code>y</code> 确认，窗口内所有窗格一并关闭</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="33-窗格管理分屏核心">3.3 窗格管理（分屏核心）</h3>
+<p>将单个窗口拆分为多个独立的终端窗格，实现单屏多任务并行，是tmux最常用的功能之一。</p>
+<table>
+  <thead>
+      <tr>
+          <th>操作场景</th>
+          <th>快捷键操作</th>
+          <th>功能说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>上下水平分屏</td>
+          <td><code>Ctrl+b &quot;</code></td>
+          <td>将当前窗格上下拆分为两个，新窗格在下方</td>
+      </tr>
+      <tr>
+          <td>左右垂直分屏</td>
+          <td><code>Ctrl+b %</code></td>
+          <td>将当前窗格左右拆分为两个，新窗格在右侧</td>
+      </tr>
+      <tr>
+          <td>切换窗格</td>
+          <td><code>Ctrl+b 方向键</code> / <code>Ctrl+b hjkl</code></td>
+          <td>按方向键切换到对应相邻窗格，hjkl为vi风格方向键（h左、j下、k上、l右）</td>
+      </tr>
+      <tr>
+          <td>顺时针切换窗格</td>
+          <td><code>Ctrl+b o</code></td>
+          <td>按顺时针顺序循环切换当前窗口内的所有窗格</td>
+      </tr>
+      <tr>
+          <td>窗格全屏/还原</td>
+          <td><code>Ctrl+b z</code></td>
+          <td>将当前窗格临时全屏显示，再次按下恢复原布局</td>
+      </tr>
+      <tr>
+          <td>关闭当前窗格</td>
+          <td><code>Ctrl+b x</code></td>
+          <td>关闭当前选中的窗格，需输入 <code>y</code> 确认；窗格内无程序时也可直接 <code>Ctrl+d</code> 关闭</td>
+      </tr>
+      <tr>
+          <td>调整窗格大小</td>
+          <td><code>Ctrl+b Ctrl+方向键</code></td>
+          <td>按方向键微调窗格大小，长按可连续调整</td>
+      </tr>
+      <tr>
+          <td>循环切换布局</td>
+          <td><code>Ctrl+b 空格键</code></td>
+          <td>自动切换预设的窗格布局（平铺、主从、均等分等）</td>
+      </tr>
+      <tr>
+          <td>显示窗格编号</td>
+          <td><code>Ctrl+b q</code></td>
+          <td>显示所有窗格的编号，按下对应数字可直接跳转到该窗格</td>
+      </tr>
+      <tr>
+          <td>交换窗格位置</td>
+          <td><code>Ctrl+b {</code> / <code>Ctrl+b }</code></td>
+          <td>将当前窗格与上一个/下一个窗格交换位置</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="34-复制粘贴与历史查看">3.4 复制粘贴与历史查看</h3>
+<p>tmux 有独立的复制模式，用于查看终端历史输出、复制文本，解决默认无法滚动查看历史的问题。</p>
+<ol>
+<li><strong>进入复制模式</strong>：按下 <code>Ctrl+b [</code> 进入复制模式，此时可通过方向键、PageUp/PageDown 滚动查看终端历史输出。</li>
+<li><strong>复制操作（默认emacs模式）</strong>：
+<ul>
+<li>光标移动到复制起始位置，按下 <code>Ctrl+空格</code> 开始选中</li>
+<li>移动光标到结束位置，按下 <code>Alt+w</code> 复制选中内容到tmux缓冲区，自动退出复制模式</li>
+</ul>
+</li>
+<li><strong>粘贴操作</strong>：按下 <code>Ctrl+b ]</code>，将缓冲区中最新复制的内容粘贴到当前光标位置。</li>
+<li><strong>vi模式复制</strong>：若配置了vi模式，进入复制模式后，按 <code>空格</code> 开始选中，按 <code>Enter</code> 完成复制，粘贴操作不变。</li>
+</ol>
+<h2 id="四进阶用法与配置优化">四、进阶用法与配置优化</h2>
+<h3 id="41-核心配置文件">4.1 核心配置文件</h3>
+<p>tmux 的所有配置都通过 <code>~/.tmux.conf</code> 文件实现，该文件不存在时可手动创建，修改配置后，需重启tmux服务，或在tmux内执行 <code>Ctrl+b :</code> 输入 <code>source-file ~/.tmux.conf</code> 重载配置生效。</p>
+<p>以下是生产级常用优化配置，可直接复制使用：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-conf">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-conf" data-lang="conf"># ==============================================
+# 基础环境配置
+# ==============================================
+# 设置终端为256色，解决颜色显示异常
+set -g default-terminal &#34;screen-256color&#34;
+# 增大历史缓冲区行数，默认2000行，改为5万行，方便查看历史输出
+set -g history-limit 50000
+# 窗口/窗格编号从1开始，默认从0开始，更符合键盘操作直觉
+set -g base-index 1
+setw -g pane-base-index 1
+# 关闭窗口自动重命名，避免自定义的窗口名被程序覆盖
+setw -g automatic-rename off
+# 新建窗格时继承当前窗格的工作路径，无需重复cd
+bind _ split-window -v -c &#34;#{pane_current_path}&#34;
+bind - split-window -h -c &#34;#{pane_current_path}&#34;
+
+# ==============================================
+# 快捷键优化
+# ==============================================
+# 可选：将前缀键改为 Ctrl+a，比 Ctrl+b 更符合左手操作习惯，与screen兼容
+# unbind C-b
+# set -g prefix C-a
+# bind C-a send-prefix
+
+# 优化分屏快捷键，替换默认的&#34;和%，更直观
+unbind &#39;&#34;&#39;
+unbind %
+bind - split-window -v   # 按前缀+- 上下水平分屏
+bind | split-window -h   # 按前缀+| 左右垂直分屏
+
+# 快速重载配置，按前缀+r 直接重载配置文件，无需手动source
+bind r source-file ~/.tmux.conf \; display &#34;配置重载成功！&#34;
+
+# ==============================================
+# 鼠标支持（tmux 2.1+ 版本）
+# ==============================================
+# 开启鼠标全功能支持：点击切换窗格、拖动调整窗格大小、滚轮滚动历史、拖选复制
+set-option -g mouse on
+# 解决macOS终端复制选中内容自动退出复制模式的问题
+set -g mouse-copy-command &#34;pbcopy&#34;
+# 复制时不自动跳转到终端末尾
+set -g mouse-wheel-scrolls-in-copy-mode on
+
+# ==============================================
+# 状态栏美化与信息定制
+# ==============================================
+# 状态栏主题样式
+set -g status-style bg=black,fg=white
+# 左侧显示：会话名 + 窗口列表
+set -g status-left &#34;#[fg=green,bold] #S #[default]&#34;
+set -g status-left-length 20
+# 右侧显示：主机名 + 时间
+set -g status-right &#34;#[fg=yellow] #H #[fg=cyan] %Y-%m-%d %H:%M:%S #[default]&#34;
+set -g status-right-length 60
+# 窗口标签样式：当前窗口高亮
+setw -g window-status-current-style fg=brightred,bold
+# 窗格边框样式：当前激活窗格高亮
+set -g pane-border-style fg=green
+set -g pane-active-border-style fg=brightred,bold
+
+# ==============================================
+# 插件管理器 TPM 配置（必须放在配置文件最底部）
+# ==============================================
+set -g @plugin &#39;tmux-plugins/tpm&#39;
+# 常用插件，按需添加
+set -g @plugin &#39;tmux-plugins/tmux-resurrect&#39;  # 会话保存与恢复，重启服务器也能恢复
+set -g @plugin &#39;tmux-plugins/tmux-continuum&#39;  # 自动定时保存会话，搭配resurrect使用
+set -g @plugin &#39;tmux-plugins/tmux-yank&#39;        # 优化复制粘贴，支持系统剪贴板
+
+# 初始化 TPM 插件管理器
+run &#39;~/.tmux/plugins/tpm/tpm&#39;</code></pre></div>
+<h3 id="42-插件管理与常用插件">4.2 插件管理与常用插件</h3>
+<p>tmux 可通过 TPM（Tmux Plugin Manager）插件管理器快速扩展功能，安装与使用步骤如下：</p>
+<ol>
+<li><strong>安装 TPM</strong></li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm</span></span></code></pre></div></div>
+<ol start="2">
+<li>
+<p><strong>配置插件</strong>：在 <code>~/.tmux.conf</code> 中添加插件配置（如上文中的配置示例），保存后重载配置。</p>
+</li>
+<li>
+<p><strong>插件操作</strong></p>
+<ul>
+<li>安装插件：在tmux内按下 <code>Ctrl+b I</code>（大写i），TPM会自动下载安装配置中添加的所有插件</li>
+<li>更新插件：按下 <code>Ctrl+b U</code>，自动更新所有已安装插件</li>
+<li>卸载插件：删除配置文件中对应的插件行，重载配置后按下 <code>Ctrl+b Alt+u</code>，自动卸载未配置的插件</li>
+</ul>
+</li>
+</ol>
+<h4 id="高频实用插件">高频实用插件</h4>
+<table>
+  <thead>
+      <tr>
+          <th>插件名</th>
+          <th>核心功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>tmux-resurrect</td>
+          <td>手动保存/恢复会话布局和运行状态，服务器重启、tmux服务关闭后仍可恢复</td>
+      </tr>
+      <tr>
+          <td>tmux-continuum</td>
+          <td>搭配resurrect使用，自动定时保存会话，开机自动恢复，无需手动操作</td>
+      </tr>
+      <tr>
+          <td>tmux-yank</td>
+          <td>优化复制粘贴，支持将tmux缓冲区内容同步到系统剪贴板，跨终端复制</td>
+      </tr>
+      <tr>
+          <td>tmux-sensible</td>
+          <td>tmux 基础通用优化配置，兼容不同版本，解决各类默认配置的坑</td>
+      </tr>
+      <tr>
+          <td>tmux-power</td>
+          <td>美化状态栏，提供更丰富的系统信息显示（CPU、内存、网速等）</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="43-其他进阶技巧">4.3 其他进阶技巧</h3>
+<h4 id="1-多窗格同步操作">1. 多窗格同步操作</h4>
+<p>需要在多个窗格中执行相同命令时（如批量操作多台服务器），可开启同步输入：</p>
+<ol>
+<li>按下 <code>Ctrl+b :</code> 进入命令模式</li>
+<li>输入 <code>setw synchronize-panes on</code> 回车，开启同步，当前窗口所有窗格会同步接收键盘输入</li>
+<li>关闭同步：命令模式输入 <code>setw synchronize-panes off</code></li>
+</ol>
+<h4 id="2-会话共享多人协作">2. 会话共享（多人协作）</h4>
+<p>tmux 支持多个用户同时接入同一个会话，实现结对编程、远程协助，核心步骤如下：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 1. 会话创建者，新建一个共享会话</span>
+</span></span><span class="line"><span class="cl">tmux new -s shared_session
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. 其他用户在同一台服务器上，直接接入该会话</span>
+</span></span><span class="line"><span class="cl">tmux attach -t shared_session</span></span></code></pre></div></div>
+<blockquote>
+<p>注意：所有接入用户拥有完全相同的操作权限，可同时输入和操作。</p>
+</blockquote>
+<h4 id="3-自动化会话脚本">3. 自动化会话脚本</h4>
+<p>可通过shell脚本一键创建预设好窗口、窗格、命令的会话，无需每次手动配置，示例如下：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="c1"># 文件名：dev_env.sh，一键创建开发环境会话</span>
+</span></span><span class="line"><span class="cl"><span class="nv">SESSION_NAME</span><span class="o">=</span><span class="s2">&#34;dev_env&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 检查会话是否已存在，不存在则创建</span>
+</span></span><span class="line"><span class="cl">tmux has-session -t <span class="nv">$SESSION_NAME</span> 2&gt;/dev/null
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> !<span class="o">=</span> <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 新建会话，后台运行，第一个窗口命名为code</span>
+</span></span><span class="line"><span class="cl">    tmux new-session -d -s <span class="nv">$SESSION_NAME</span> -n code
+</span></span><span class="line"><span class="cl">    <span class="c1"># 第一个窗口执行进入项目目录，打开vim</span>
+</span></span><span class="line"><span class="cl">    tmux send-keys -t <span class="nv">$SESSION_NAME</span>:1 <span class="s2">&#34;cd ~/project &amp;&amp; vim&#34;</span> C-m
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 新建第二个窗口，命名为server，启动开发服务</span>
+</span></span><span class="line"><span class="cl">    tmux new-window -t <span class="nv">$SESSION_NAME</span>:2 -n server
+</span></span><span class="line"><span class="cl">    tmux send-keys -t <span class="nv">$SESSION_NAME</span>:2 <span class="s2">&#34;cd ~/project &amp;&amp; npm run dev&#34;</span> C-m
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 新建第三个窗口，命名为logs，实时查看日志</span>
+</span></span><span class="line"><span class="cl">    tmux new-window -t <span class="nv">$SESSION_NAME</span>:3 -n logs
+</span></span><span class="line"><span class="cl">    tmux send-keys -t <span class="nv">$SESSION_NAME</span>:3 <span class="s2">&#34;tail -f ~/project/logs/app.log&#34;</span> C-m
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 新建第四个窗口，命名为monitor，打开系统监控</span>
+</span></span><span class="line"><span class="cl">    tmux new-window -t <span class="nv">$SESSION_NAME</span>:4 -n monitor
+</span></span><span class="line"><span class="cl">    tmux send-keys -t <span class="nv">$SESSION_NAME</span>:4 <span class="s2">&#34;htop&#34;</span> C-m
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 默认选中第一个窗口</span>
+</span></span><span class="line"><span class="cl">    tmux <span class="k">select</span>-window -t <span class="nv">$SESSION_NAME</span>:1
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 接入会话</span>
+</span></span><span class="line"><span class="cl">tmux attach -t <span class="nv">$SESSION_NAME</span></span></span></code></pre></div></div>
+<p>使用方式：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">chmod +x dev_env.sh
+</span></span><span class="line"><span class="cl">./dev_env.sh</span></span></code></pre></div></div>
+<p>执行后会自动创建预设好的4个窗口，直接进入开发环境。</p>
+<h2 id="五常见问题与解决方案">五、常见问题与解决方案</h2>
+<h3 id="1-ssh断开后重连找不到会话">1. SSH断开后，重连找不到会话</h3>
+<ul>
+<li>原因：重连时使用了不同的用户，或tmux服务被终止</li>
+<li>解决方案：
+<ol>
+<li>用创建会话时的相同用户登录服务器，执行 <code>tmux ls</code> 查看会话</li>
+<li>若提示 <code>no server running on /tmp/tmux-xxx/default</code>，说明会话已被关闭，无法恢复</li>
+<li>避免会话被关闭：不要用 <code>exit</code> 退出tmux，要用 <code>Ctrl+b d</code> 分离会话后台保活</li>
+</ol>
+</li>
+</ul>
+<h3 id="2-无法用鼠标滚轮滚动查看历史输出">2. 无法用鼠标滚轮滚动查看历史输出</h3>
+<ul>
+<li>原因：默认未开启鼠标支持，滚轮事件被tmux拦截</li>
+<li>解决方案：
+<ol>
+<li>临时解决：按下 <code>Ctrl+b [</code> 进入复制模式，即可用滚轮/方向键滚动</li>
+<li>永久解决：在 <code>~/.tmux.conf</code> 中添加 <code>set -g mouse on</code>，重载配置后生效</li>
+</ol>
+</li>
+</ul>
+<h3 id="3-配置文件修改后不生效">3. 配置文件修改后不生效</h3>
+<ul>
+<li>解决方案：
+<ol>
+<li>进入tmux后，按下 <code>Ctrl+b :</code>，输入 <code>source-file ~/.tmux.conf</code> 回车，手动重载配置</li>
+<li>若仍不生效，检查配置文件语法是否正确，或关闭所有会话 <code>tmux kill-server</code> 后重启tmux</li>
+<li>确保配置文件路径为 <code>~/.tmux.conf</code>，而非其他目录</li>
+</ol>
+</li>
+</ul>
+<h3 id="4-终端内颜色显示异常vim主题错乱">4. 终端内颜色显示异常、vim主题错乱</h3>
+<ul>
+<li>原因：终端类型配置错误，未开启256色支持</li>
+<li>解决方案：在 <code>~/.tmux.conf</code> 中添加 <code>set -g default-terminal &quot;screen-256color&quot;</code>，重载配置后生效</li>
+</ul>
+<h3 id="5-中文显示乱码">5. 中文显示乱码</h3>
+<ul>
+<li>解决方案：
+<ol>
+<li>确保系统locale配置为UTF-8，执行 <code>export LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8</code></li>
+<li>在 <code>~/.tmux.conf</code> 中添加：</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-conf">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-conf" data-lang="conf">set -g utf8 on
+set-window-option -g utf8 on</code></pre></div>
+</li>
+</ul>
+<h2 id="六常用快捷键速查表">六、常用快捷键速查表</h2>
+<table>
+  <thead>
+      <tr>
+          <th>分类</th>
+          <th>快捷键</th>
+          <th>核心功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>前缀键</td>
+          <td><code>Ctrl+b</code></td>
+          <td>所有快捷键的触发前缀</td>
+      </tr>
+      <tr>
+          <td>会话</td>
+          <td><code>Ctrl+b d</code></td>
+          <td>分离会话，后台保活</td>
+      </tr>
+      <tr>
+          <td>会话</td>
+          <td><code>Ctrl+b s</code></td>
+          <td>可视化查看/切换所有会话</td>
+      </tr>
+      <tr>
+          <td>会话</td>
+          <td><code>Ctrl+b $</code></td>
+          <td>重命名当前会话</td>
+      </tr>
+      <tr>
+          <td>窗口</td>
+          <td><code>Ctrl+b c</code></td>
+          <td>新建窗口</td>
+      </tr>
+      <tr>
+          <td>窗口</td>
+          <td><code>Ctrl+b ,</code></td>
+          <td>重命名当前窗口</td>
+      </tr>
+      <tr>
+          <td>窗口</td>
+          <td><code>Ctrl+b n/p</code></td>
+          <td>切换到下一个/上一个窗口</td>
+      </tr>
+      <tr>
+          <td>窗口</td>
+          <td><code>Ctrl+b 0-9</code></td>
+          <td>跳转到指定编号窗口</td>
+      </tr>
+      <tr>
+          <td>窗口</td>
+          <td><code>Ctrl+b &amp;</code></td>
+          <td>关闭当前窗口</td>
+      </tr>
+      <tr>
+          <td>窗格</td>
+          <td><code>Ctrl+b &quot;</code></td>
+          <td>上下水平分屏</td>
+      </tr>
+      <tr>
+          <td>窗格</td>
+          <td><code>Ctrl+b %</code></td>
+          <td>左右垂直分屏</td>
+      </tr>
+      <tr>
+          <td>窗格</td>
+          <td><code>Ctrl+b 方向键/hjkl</code></td>
+          <td>切换窗格</td>
+      </tr>
+      <tr>
+          <td>窗格</td>
+          <td><code>Ctrl+b z</code></td>
+          <td>窗格全屏/还原</td>
+      </tr>
+      <tr>
+          <td>窗格</td>
+          <td><code>Ctrl+b x</code></td>
+          <td>关闭当前窗格</td>
+      </tr>
+      <tr>
+          <td>窗格</td>
+          <td><code>Ctrl+b 空格键</code></td>
+          <td>循环切换窗格布局</td>
+      </tr>
+      <tr>
+          <td>复制粘贴</td>
+          <td><code>Ctrl+b [</code></td>
+          <td>进入复制模式/滚动历史</td>
+      </tr>
+      <tr>
+          <td>复制粘贴</td>
+          <td><code>Ctrl+b ]</code></td>
+          <td>粘贴缓冲区内容</td>
+      </tr>
+      <tr>
+          <td>配置</td>
+          <td><code>Ctrl+b :</code></td>
+          <td>进入tmux命令模式</td>
+      </tr>
+      <tr>
+          <td>插件</td>
+          <td><code>Ctrl+b I</code></td>
+          <td>安装TPM插件</td>
+      </tr>
+  </tbody>
+</table>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-03-22</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/020_tmux%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/dev-tools/">开发工具</a>,&nbsp;<a href="/blog/tags/shell/">Shell</a>,&nbsp;<a href="/blog/tags/tmux/">Tmux</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/014_repo%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="Repo 命令使用详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>Repo 命令使用详细总结</a>
+            <a href="/blog/005_adb%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="adb 命令使用详细总结">adb 命令使用详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

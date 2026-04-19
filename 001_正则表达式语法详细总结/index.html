@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>正则表达式语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="正则表达式语法详细总结">
+  <meta property="og:description" content="正则表达式（Regex/RegExp）语法详细总结 正则表达式是一套用于匹配、查找、替换、校验字符串的规则语法，被绝大多数编程语言、文本编辑器、数据库原生支持，核心是通过元字符定义匹配模式，实现精准高效的文本处理。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-02-25T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-02-25T10:00:20+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="Regex">
+    <meta property="article:tag" content="RegExp">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="正则表达式语法详细总结">
+  <meta name="twitter:description" content="正则表达式（Regex/RegExp）语法详细总结 正则表达式是一套用于匹配、查找、替换、校验字符串的规则语法，被绝大多数编程语言、文本编辑器、数据库原生支持，核心是通过元字符定义匹配模式，实现精准高效的文本处理。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/001_%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/002_mysql%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/001_cuda%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "正则表达式语法详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/001_%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, Regex, RegExp","wordcount":  4878 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/001_%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-02-25T09:00:20+08:00","dateModified": "2026-02-25T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/001_%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/001_%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">正则表达式语法详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-02-25">2026-02-25</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 4878 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 10 分钟&nbsp;<span id="/blog/001_%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="正则表达式语法详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一基础规则与必转义元字符">一、基础规则与必转义元字符</a>
+      <ul>
+        <li><a href="#1-普通字符">1. 普通字符</a></li>
+        <li><a href="#2-特殊元字符必须转义">2. 特殊元字符（必须转义）</a></li>
+      </ul>
+    </li>
+    <li><a href="#二字符类方括号表达式">二、字符类（方括号表达式）</a>
+      <ul>
+        <li><a href="#预定义字符类简写">预定义字符类（简写）</a></li>
+      </ul>
+    </li>
+    <li><a href="#三量词重复匹配">三、量词（重复匹配）</a>
+      <ul>
+        <li><a href="#1-基础量词语法">1. 基础量词语法</a></li>
+        <li><a href="#2-贪婪-vs-非贪婪懒惰模式">2. 贪婪 vs 非贪婪（懒惰）模式</a></li>
+        <li><a href="#3-占有模式">3. 占有模式</a></li>
+      </ul>
+    </li>
+    <li><a href="#四锚点与边界匹配零宽匹配">四、锚点与边界匹配（零宽匹配）</a></li>
+    <li><a href="#五分组与捕获">五、分组与捕获</a>
+      <ul>
+        <li><a href="#1-捕获分组">1. 捕获分组</a></li>
+        <li><a href="#2-非捕获分组">2. 非捕获分组</a></li>
+        <li><a href="#3-分支结构或">3. 分支结构（或）</a></li>
+      </ul>
+    </li>
+    <li><a href="#六反向引用">六、反向引用</a>
+      <ul>
+        <li><a href="#1-编号反向引用">1. 编号反向引用</a></li>
+        <li><a href="#2-命名反向引用">2. 命名反向引用</a></li>
+      </ul>
+    </li>
+    <li><a href="#七零宽断言环视lookaround">七、零宽断言（环视/Lookaround）</a>
+      <ul>
+        <li><a href="#核心示例">核心示例</a></li>
+        <li><a href="#高频实战场景">高频实战场景</a></li>
+        <li><a href="#兼容性说明">兼容性说明</a></li>
+      </ul>
+    </li>
+    <li><a href="#八修饰符标志位">八、修饰符（标志位）</a></li>
+    <li><a href="#九特殊转义字符">九、特殊转义字符</a></li>
+    <li><a href="#十高级语法与特殊构造">十、高级语法与特殊构造</a>
+      <ul>
+        <li><a href="#1-条件匹配">1. 条件匹配</a></li>
+        <li><a href="#2-原子组固化分组">2. 原子组（固化分组）</a></li>
+        <li><a href="#3-正则注释">3. 正则注释</a></li>
+        <li><a href="#4-递归匹配">4. 递归匹配</a></li>
+      </ul>
+    </li>
+    <li><a href="#十一正则运算符优先级从高到低">十一、正则运算符优先级（从高到低）</a></li>
+    <li><a href="#十二高频常用正则示例">十二、高频常用正则示例</a></li>
+    <li><a href="#十三常见误区与避坑指南">十三、常见误区与避坑指南</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="正则表达式regexregexp语法详细总结">正则表达式（Regex/RegExp）语法详细总结</h1>
+<p>正则表达式是一套用于<strong>匹配、查找、替换、校验字符串</strong>的规则语法，被绝大多数编程语言、文本编辑器、数据库原生支持，核心是通过元字符定义匹配模式，实现精准高效的文本处理。</p>
+<hr>
+<h2 id="一基础规则与必转义元字符">一、基础规则与必转义元字符</h2>
+<h3 id="1-普通字符">1. 普通字符</h3>
+<p>字母、数字、中文、下划线<code>_</code>等无特殊含义的字符，<strong>直接匹配自身</strong>，例如正则<code>abc</code>仅匹配字符串中的连续字符<code>abc</code>。</p>
+<h3 id="2-特殊元字符必须转义">2. 特殊元字符（必须转义）</h3>
+<p>以下字符在正则中拥有专属语法含义，若要匹配字符本身，必须加反斜杠<code>\</code>转义：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>. * + ? ^ $ | ( ) [ ] { } \</code></pre></div>
+<p>示例：要匹配字符串中的<code>.</code>，正则需写为<code>\.</code>，而非<code>.</code>。</p>
+<hr>
+<h2 id="二字符类方括号表达式">二、字符类（方括号表达式）</h2>
+<p>匹配<strong>方括号内的任意一个字符</strong>，单次匹配仅命中一个字符，是正则的基础匹配单元。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">语法</th>
+          <th style="text-align: left">说明</th>
+          <th style="text-align: left">匹配示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>[abc]</code></td>
+          <td style="text-align: left">普通字符类，匹配a/b/c中的任意一个</td>
+          <td style="text-align: left"><code>[abc]at</code> 匹配<code>aat</code>/<code>bat</code>/<code>cat</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>[^abc]</code></td>
+          <td style="text-align: left">否定字符类，匹配<strong>除了</strong>a/b/c之外的任意字符</td>
+          <td style="text-align: left"><code>[^abc]at</code> 匹配<code>dat</code>/<code>eat</code>，不匹配<code>aat</code>/<code>bat</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>[a-z]</code></td>
+          <td style="text-align: left">范围字符类，匹配指定区间内的字符</td>
+          <td style="text-align: left"><code>[0-9a-fA-F]</code> 匹配16进制字符</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>.</code></td>
+          <td style="text-align: left">通配符，匹配<strong>除换行符<code>\n</code>外</strong>的任意单个字符（单行模式下可匹配换行）</td>
+          <td style="text-align: left"><code>h.t</code> 匹配<code>hat</code>/<code>hot</code>/<code>h t</code>，不匹配<code>heet</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="预定义字符类简写">预定义字符类（简写）</h3>
+<p>系统预设的高频字符类，简化书写，所有预定义类均为<strong>单个字符匹配</strong>：</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">简写</th>
+          <th style="text-align: left">等价写法</th>
+          <th style="text-align: left">核心说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>\d</code></td>
+          <td style="text-align: left"><code>[0-9]</code></td>
+          <td style="text-align: left">匹配任意数字</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\D</code></td>
+          <td style="text-align: left"><code>[^0-9]</code></td>
+          <td style="text-align: left">匹配任意非数字</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\w</code></td>
+          <td style="text-align: left"><code>[a-zA-Z0-9_]</code></td>
+          <td style="text-align: left">匹配任意单词字符（字母、数字、下划线）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\W</code></td>
+          <td style="text-align: left"><code>[^a-zA-Z0-9_]</code></td>
+          <td style="text-align: left">匹配任意非单词字符</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\s</code></td>
+          <td style="text-align: left"><code>[ \t\n\r\f\v]</code></td>
+          <td style="text-align: left">匹配任意空白字符（空格、制表符、换行等）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\S</code></td>
+          <td style="text-align: left"><code>[^ \t\n\r\f\v]</code></td>
+          <td style="text-align: left">匹配任意非空白字符</td>
+      </tr>
+  </tbody>
+</table>
+<blockquote>
+<p>关键注意：方括号内的特殊元字符，除<code>^</code>(开头否定)、<code>-</code>(区间)、<code>\</code>(转义)、<code>]</code>(闭合)外，其余均无需转义，例如<code>[.]</code>仅匹配<code>.</code>本身，而非任意字符。</p>
+</blockquote>
+<hr>
+<h2 id="三量词重复匹配">三、量词（重复匹配）</h2>
+<p>控制<strong>前面的单个字符/分组</strong>的重复出现次数，是实现批量匹配的核心，分为3种匹配模式。</p>
+<h3 id="1-基础量词语法">1. 基础量词语法</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">语法</th>
+          <th style="text-align: left">匹配规则</th>
+          <th style="text-align: left">典型场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>{n}</code></td>
+          <td style="text-align: left">前面的单元<strong>必须恰好出现n次</strong></td>
+          <td style="text-align: left">固定长度校验，如<code>\d{6}</code>匹配6位验证码</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>{n,}</code></td>
+          <td style="text-align: left">前面的单元<strong>至少出现n次</strong>，无上限</td>
+          <td style="text-align: left">最小长度限制，如<code>\w{6,}</code>匹配至少6位单词字符</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>{n,m}</code></td>
+          <td style="text-align: left">前面的单元<strong>出现n~m次</strong>，包含n和m</td>
+          <td style="text-align: left">区间长度限制，如<code>\d{8,16}</code>匹配8-16位数字</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>*</code></td>
+          <td style="text-align: left">零次或多次，等价于<code>{0,}</code></td>
+          <td style="text-align: left">可选重复内容，如<code>a.*b</code>匹配a开头、b结尾的任意字符串</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>+</code></td>
+          <td style="text-align: left">一次或多次，等价于<code>{1,}</code></td>
+          <td style="text-align: left">必选重复内容，如<code>\d+</code>匹配连续数字</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>?</code></td>
+          <td style="text-align: left">零次或一次，等价于<code>{0,1}</code></td>
+          <td style="text-align: left">可选内容，如<code>colou?r</code>匹配<code>color</code>和<code>colour</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-贪婪-vs-非贪婪懒惰模式">2. 贪婪 vs 非贪婪（懒惰）模式</h3>
+<p>正则默认是<strong>贪婪模式</strong>：尽可能匹配最长的符合规则的字符串；
+在量词后加<code>?</code>，切换为<strong>非贪婪模式</strong>：尽可能匹配最短的符合规则的字符串。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">模式</th>
+          <th style="text-align: left">语法</th>
+          <th style="text-align: left">示例</th>
+          <th style="text-align: left">匹配字符串<code>a123b456b</code>的结果</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">贪婪模式</td>
+          <td style="text-align: left">量词默认</td>
+          <td style="text-align: left"><code>a.*b</code></td>
+          <td style="text-align: left">匹配整个字符串<code>a123b456b</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">非贪婪模式</td>
+          <td style="text-align: left">量词+<code>?</code></td>
+          <td style="text-align: left"><code>a.*?b</code></td>
+          <td style="text-align: left">仅匹配最短片段<code>a123b</code></td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-占有模式">3. 占有模式</h3>
+<p>在量词后加<code>+</code>，语法如<code>*+</code>/<code>++</code>/<code>{n,m}+</code>，匹配时<strong>一次性吞入所有符合规则的字符，匹配失败不回溯</strong>，性能更高，仅PCRE、Java等引擎支持，JS原生不支持。</p>
+<hr>
+<h2 id="四锚点与边界匹配零宽匹配">四、锚点与边界匹配（零宽匹配）</h2>
+<p><strong>零宽度核心特性</strong>：仅匹配字符串中的<strong>位置</strong>，不匹配任何字符，不消耗字符串长度，核心用于限定匹配内容的位置。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">语法</th>
+          <th style="text-align: left">名称</th>
+          <th style="text-align: left">匹配规则</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>^</code></td>
+          <td style="text-align: left">行开头锚点</td>
+          <td style="text-align: left">匹配字符串的开头；多行模式<code>m</code>下，匹配每一行的开头</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>$</code></td>
+          <td style="text-align: left">行结尾锚点</td>
+          <td style="text-align: left">匹配字符串的结尾；多行模式<code>m</code>下，匹配每一行的结尾</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\b</code></td>
+          <td style="text-align: left">单词边界</td>
+          <td style="text-align: left">匹配单词字符(<code>\w</code>)和非单词字符(<code>\W</code>)之间的位置</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\B</code></td>
+          <td style="text-align: left">非单词边界</td>
+          <td style="text-align: left">匹配两个单词字符/两个非单词字符之间的位置，与<code>\b</code>相反</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\A</code></td>
+          <td style="text-align: left">字符串绝对开头</td>
+          <td style="text-align: left">仅匹配整个字符串的开头，不受多行模式<code>m</code>影响</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\Z</code></td>
+          <td style="text-align: left">字符串结尾</td>
+          <td style="text-align: left">仅匹配整个字符串的结尾，或结尾换行符前的位置，不受多行模式影响</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\z</code></td>
+          <td style="text-align: left">字符串绝对结尾</td>
+          <td style="text-align: left">仅匹配整个字符串的最末尾，忽略结尾换行符</td>
+      </tr>
+  </tbody>
+</table>
+<p>核心示例：</p>
+<ul>
+<li><code>^\d{6}$</code>：匹配整个字符串恰好是6位数字，用于表单验证码校验</li>
+<li><code>\bhello\b</code>：匹配独立单词<code>hello</code>，不匹配<code>helloworld</code>中的<code>hello</code></li>
+<li><code>hello$</code>：仅匹配一行末尾的<code>hello</code></li>
+</ul>
+<hr>
+<h2 id="五分组与捕获">五、分组与捕获</h2>
+<p>用圆括号<code>()</code>将多个字符/规则打包为一个整体，可对整个分组施加量词、分支，同时可捕获分组匹配的内容供后续使用。</p>
+<h3 id="1-捕获分组">1. 捕获分组</h3>
+<p>普通括号<code>()</code>会将分组内匹配的内容<strong>捕获并存储</strong>，系统自动按左括号的顺序从<code>1</code>开始编号，<code>0</code>固定为整个正则匹配的完整内容。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">语法</th>
+          <th style="text-align: left">说明</th>
+          <th style="text-align: left">示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>(pattern)</code></td>
+          <td style="text-align: left">普通捕获分组，自动编号</td>
+          <td style="text-align: left"><code>(\d{4})-(\d{2})-(\d{2})</code>：匹配日期，分组1=年，分组2=月，分组3=日</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>(?&lt;name&gt;pattern)</code></td>
+          <td style="text-align: left">命名捕获分组，自定义分组名</td>
+          <td style="text-align: left"><code>(?&lt;year&gt;\d{4})-(?&lt;month&gt;\d{2})</code>：给年、月分组命名，JS/Java/.NET支持</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>(?P&lt;name&gt;pattern)</code></td>
+          <td style="text-align: left">Python专属命名捕获分组</td>
+          <td style="text-align: left">Python中通过<code>group('name')</code>获取对应匹配内容</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-非捕获分组">2. 非捕获分组</h3>
+<p>语法<code>(?:pattern)</code>，仅用于<strong>分组打包，不捕获内容，不占用分组编号</strong>，适合仅需分组控制量词/分支、无需后续引用的场景，可节省内存、提升匹配效率。</p>
+<p>示例：</p>
+<ul>
+<li><code>(?:ab)+</code>：匹配<code>ab</code>重复1次或多次（如<code>ababab</code>），但不捕获<code>ab</code>的内容</li>
+<li><code>http(?:s)?://</code>：匹配<code>http://</code>和<code>https://</code>，<code>s</code>可选，无需捕获</li>
+</ul>
+<h3 id="3-分支结构或">3. 分支结构（或）</h3>
+<p>语法<code>|</code>，匹配<code>|</code>左右任意一个模式，<strong>优先级极低</strong>，低于量词和锚点，通常需配合分组使用。</p>
+<p>示例：</p>
+<ul>
+<li>正确写法：<code>gr(a|e)y</code>，匹配<code>gray</code>和<code>grey</code>，精准限定分支范围</li>
+<li>错误写法：<code>gra|ey</code>，匹配<code>gra</code>或<code>ey</code>，而非预期的两个单词</li>
+</ul>
+<hr>
+<h2 id="六反向引用">六、反向引用</h2>
+<p>引用<strong>前面捕获分组匹配到的内容（而非模式本身）</strong>，实现重复内容的精准匹配，是正则的核心进阶能力。</p>
+<h3 id="1-编号反向引用">1. 编号反向引用</h3>
+<p>语法<code>\数字</code>，数字对应捕获分组的编号，例如<code>\1</code>引用第1个捕获组，<code>\2</code>引用第2个。</p>
+<p>核心示例：</p>
+<ul>
+<li><code>(\w+)\s+\1</code>：匹配连续重复的单词，如<code>hello hello</code>、<code>test test</code>，<code>\1</code>严格匹配前面<code>(\w+)</code>捕获到的内容</li>
+<li><code>&lt;(\w+)&gt;.*?&lt;/\1&gt;</code>：匹配闭合HTML标签，如<code>&lt;div&gt;123&lt;/div&gt;</code>，<code>\1</code>引用前面的标签名<code>div</code></li>
+</ul>
+<h3 id="2-命名反向引用">2. 命名反向引用</h3>
+<p>对应命名捕获组，不同引擎语法不同：</p>
+<ul>
+<li>JS/Java/.NET：<code>\k&lt;name&gt;</code>，示例<code>(?&lt;tag&gt;\w+).*?\k&lt;tag&gt;</code></li>
+<li>Python：<code>(?P=name)</code>，示例<code>(?P&lt;tag&gt;\w+).*?(?P=tag)</code></li>
+</ul>
+<blockquote>
+<p>关键提醒：反向引用的是<strong>分组匹配到的具体内容</strong>，而非分组的规则。例如<code>(\d)\1</code>匹配<code>11</code>、<code>22</code>，但不匹配<code>12</code>，因为<code>\1</code>必须和第一个分组的内容完全一致。</p>
+</blockquote>
+<hr>
+<h2 id="七零宽断言环视lookaround">七、零宽断言（环视/Lookaround）</h2>
+<p>进阶零宽匹配，<strong>仅匹配位置，不消耗字符</strong>，核心是判断「当前位置的前后」是否符合指定模式，是实现精准条件匹配的核心能力。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">断言类型</th>
+          <th style="text-align: left">语法</th>
+          <th style="text-align: left">匹配规则</th>
+          <th style="text-align: left">核心说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">正向先行断言</td>
+          <td style="text-align: left"><code>(?=pattern)</code></td>
+          <td style="text-align: left">匹配<strong>后面紧跟</strong>pattern的位置</td>
+          <td style="text-align: left">向右看，符合条件才匹配</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">负向先行断言</td>
+          <td style="text-align: left"><code>(?!pattern)</code></td>
+          <td style="text-align: left">匹配<strong>后面不紧跟</strong>pattern的位置</td>
+          <td style="text-align: left">向右看，不符合条件才匹配</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">正向后行断言</td>
+          <td style="text-align: left"><code>(?&lt;=pattern)</code></td>
+          <td style="text-align: left">匹配<strong>前面紧跟</strong>pattern的位置</td>
+          <td style="text-align: left">向左看，符合条件才匹配</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">负向后行断言</td>
+          <td style="text-align: left"><code>(?&lt;!pattern)</code></td>
+          <td style="text-align: left">匹配<strong>前面不紧跟</strong>pattern的位置</td>
+          <td style="text-align: left">向左看，不符合条件才匹配</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="核心示例">核心示例</h3>
+<ol>
+<li>正向先行断言：<code>\d+(?=元)</code>，匹配<code>100元</code>中的<code>100</code>，不匹配<code>100块</code>中的<code>100</code></li>
+<li>负向先行断言：<code>\d+(?!元)</code>，匹配<code>100块</code>中的<code>100</code>，不匹配<code>100元</code>中的<code>100</code></li>
+<li>正向后行断言：<code>(?&lt;=￥)\d+</code>，匹配<code>￥100</code>中的<code>100</code>，不匹配<code>$100</code>中的<code>100</code></li>
+<li>负向后行断言：<code>(?&lt;!￥)\d+</code>，匹配<code>$100</code>中的<code>100</code>，不匹配<code>￥100</code>中的<code>100</code></li>
+</ol>
+<h3 id="高频实战场景">高频实战场景</h3>
+<p>密码强度校验：必须同时包含大小写字母、数字，长度8-16位</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-regex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-regex" data-lang="regex">^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z0-9]{8,16}$</code></pre></div>
+<ul>
+<li>多个先行断言叠加，分别校验必须包含小写、大写、数字，再匹配主体规则</li>
+</ul>
+<h3 id="兼容性说明">兼容性说明</h3>
+<ul>
+<li>先行断言：所有主流引擎均支持</li>
+<li>后行断言：JS ES2018+、Python 3.10+、Java、.NET支持；低版本JS/Python仅支持固定长度的后行断言，不支持<code>*</code>/<code>+</code>等不定长规则</li>
+</ul>
+<hr>
+<h2 id="八修饰符标志位">八、修饰符（标志位）</h2>
+<p>写在正则表达式的末尾，用于<strong>全局控制匹配模式</strong>，不同语言的写法略有差异（JS：<code>/pattern/flags</code>；Python：<code>re.compile(pattern, flags)</code>）。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">修饰符</th>
+          <th style="text-align: left">全称</th>
+          <th style="text-align: left">核心作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>i</code></td>
+          <td style="text-align: left">Ignore Case</td>
+          <td style="text-align: left">忽略大小写，匹配时不区分字母大小写</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>g</code></td>
+          <td style="text-align: left">Global</td>
+          <td style="text-align: left">全局匹配，找到所有符合规则的匹配项，而非仅第一个</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>m</code></td>
+          <td style="text-align: left">Multiline</td>
+          <td style="text-align: left">多行模式，<code>^</code>和<code>$</code>匹配每一行的开头和结尾，而非整个字符串</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>s</code></td>
+          <td style="text-align: left">Dot All / Singleline</td>
+          <td style="text-align: left">单行模式，通配符<code>.</code>可以匹配换行符<code>\n</code>，默认不匹配</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>u</code></td>
+          <td style="text-align: left">Unicode</td>
+          <td style="text-align: left">Unicode模式，支持匹配4字节的Unicode字符（如emoji、生僻字）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>x</code></td>
+          <td style="text-align: left">Extended</td>
+          <td style="text-align: left">扩展模式，忽略正则中的空白字符，支持行内注释，提升可读性</td>
+      </tr>
+  </tbody>
+</table>
+<p>示例：</p>
+<ul>
+<li><code>/hello/i</code>：匹配<code>Hello</code>、<code>HELLO</code>、<code>hello</code></li>
+<li><code>/\d+/g</code>：匹配字符串中所有的数字序列，而非仅第一个</li>
+</ul>
+<hr>
+<h2 id="九特殊转义字符">九、特殊转义字符</h2>
+<p>用于匹配不可见字符、特殊编码字符，常用如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">语法</th>
+          <th style="text-align: left">匹配内容</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>\t</code></td>
+          <td style="text-align: left">水平制表符（Tab键）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\n</code></td>
+          <td style="text-align: left">换行符</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\r</code></td>
+          <td style="text-align: left">回车符</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\f</code></td>
+          <td style="text-align: left">换页符</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\v</code></td>
+          <td style="text-align: left">垂直制表符</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\0</code></td>
+          <td style="text-align: left">空字符（NULL）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\xhh</code></td>
+          <td style="text-align: left">两位十六进制ASCII字符，如<code>\x41</code>匹配<code>A</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\uhhhh</code></td>
+          <td style="text-align: left">四位十六进制Unicode字符，如<code>\u4e2d</code>匹配中文<code>中</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>\cX</code></td>
+          <td style="text-align: left">控制字符，X为A-Z，如<code>\cM</code>匹配Ctrl+M（回车符）</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="十高级语法与特殊构造">十、高级语法与特殊构造</h2>
+<p>以下为进阶语法，不同正则引擎的支持度差异较大，主流PCRE、Java、.NET支持，部分JS低版本不支持。</p>
+<h3 id="1-条件匹配">1. 条件匹配</h3>
+<p>语法：<code>(?(id/name)yes-pattern|no-pattern)</code>
+含义：如果指定编号/名称的捕获组匹配成功，则匹配<code>yes-pattern</code>，否则匹配<code>no-pattern</code>，<code>|no-pattern</code>可选。</p>
+<p>示例：<code>(&lt;)?a.*?(?(1)&gt;)</code>：匹配<code>&lt;a href=&quot;xxx&quot;&gt;</code>或<code>a href=&quot;xxx&quot;</code>，如果开头有<code>&lt;</code>，结尾必须有<code>&gt;</code>。</p>
+<h3 id="2-原子组固化分组">2. 原子组（固化分组）</h3>
+<p>语法：<code>(?&gt;pattern)</code>
+含义：一次性吞入匹配的内容，<strong>匹配失败时不回溯</strong>，大幅提升正则性能，避免灾难性回溯。</p>
+<p>示例：<code>(?&gt;a+)ab</code>匹配<code>aaaab</code>时，先吞入所有<code>a</code>，发现后续无法匹配<code>ab</code>，直接失败，不回溯释放<code>a</code>。</p>
+<h3 id="3-正则注释">3. 正则注释</h3>
+<p>语法：<code>(?#注释内容)</code>
+含义：正则内的注释，不参与匹配，配合<code>x</code>修饰符可实现多行注释，提升复杂正则的可读性。</p>
+<p>示例：<code>\d{4}(?#年)-\d{2}(?#月)-\d{2}(?#日)</code></p>
+<h3 id="4-递归匹配">4. 递归匹配</h3>
+<p>语法：<code>(?R)</code>/<code>(?0)</code>
+含义：递归引用整个正则表达式本身，用于匹配嵌套结构（如嵌套括号、嵌套HTML标签）。</p>
+<p>示例：<code>\(([^()]+|(?R))*\)</code>：匹配任意深度的嵌套括号，如<code>(a(b(c)d)e)</code>。</p>
+<hr>
+<h2 id="十一正则运算符优先级从高到低">十一、正则运算符优先级（从高到低）</h2>
+<p>正则的匹配顺序由优先级决定，优先级从高到低排序如下，避免书写时出现逻辑错误：</p>
+<ol>
+<li>转义符：<code>\</code></li>
+<li>括号类：<code>()</code>、<code>(?:)</code>、<code>(?=)</code>、<code>[]</code>（方括号字符类）</li>
+<li>量词：<code>*</code>、<code>+</code>、<code>?</code>、<code>{n}</code>、<code>{n,}</code>、<code>{n,m}</code></li>
+<li>锚点与字符序列：<code>^</code>、<code>$</code>、<code>\b</code>、普通字符、预定义字符类</li>
+<li>分支结构：<code>|</code>（或）</li>
+</ol>
+<blockquote>
+<p>核心提醒：<code>|</code>的优先级最低，若要限定分支范围，必须用括号包裹，否则会作用于整个正则的左右两侧。</p>
+</blockquote>
+<hr>
+<h2 id="十二高频常用正则示例">十二、高频常用正则示例</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">场景</th>
+          <th style="text-align: left">正则表达式</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">手机号（中国大陆）</td>
+          <td style="text-align: left"><code>^1[3-9]\d{9}$</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">邮箱地址</td>
+          <td style="text-align: left"><code>^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">身份证号（18位）</td>
+          <td style="text-align: left">`^[1-9]\d{5}(19</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">中文匹配</td>
+          <td style="text-align: left"><code>^[\u4e00-\u9fa5]+$</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">URL地址</td>
+          <td style="text-align: left"><code>^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&amp;//=]*)$</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">强密码（8-20位，含大小写+数字+特殊字符）</td>
+          <td style="text-align: left"><code>^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&amp;*])[a-zA-Z0-9!@#$%^&amp;*]{8,20}$</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="十三常见误区与避坑指南">十三、常见误区与避坑指南</h2>
+<ol>
+<li><strong>方括号内的通配符失效</strong>：<code>[.]</code>仅匹配<code>.</code>本身，而非任意字符，方括号内绝大多数元字符无需转义。</li>
+<li><strong>贪婪与非贪婪混淆</strong>：默认贪婪模式会匹配最长结果，提取内容时需用非贪婪模式<code>.*?</code>避免越界。</li>
+<li><strong>反向引用规则误解</strong>：反向引用的是分组匹配到的<strong>内容</strong>，而非分组的正则规则。</li>
+<li><strong>锚点缺失导致校验失效</strong>：表单校验时必须加<code>^</code>和<code>$</code>，否则只要字符串中包含符合规则的片段就会匹配成功，例如<code>\d{6}</code>会匹配<code>abc123456def</code>，而<code>^\d{6}$</code>仅匹配纯6位数字。</li>
+<li><strong>分支优先级错误</strong>：<code>ab|cd</code>匹配<code>ab</code>或<code>cd</code>，而非<code>a(b|c)d</code>，需用括号限定分支范围。</li>
+<li><strong>灾难性回溯</strong>：嵌套的贪婪量词（如<code>(a+)*</code>）会导致匹配失败时出现指数级回溯，造成程序卡死，需用原子组、非贪婪模式优化。</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-02-25</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/001_%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/regex/">Regex</a>,&nbsp;<a href="/blog/tags/regexp/">RegExp</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/002_mysql%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="MySQL 语法详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>MySQL 语法详细总结</a>
+            <a href="/blog/001_cuda%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="CUDA 语法详细总结">CUDA 语法详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

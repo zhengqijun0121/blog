@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>YAML 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_yaml%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="YAML 语法详细总结">
+  <meta property="og:description" content="YAML 语法详细总结（基于 YAML 1.2 官方规范） YAML 是 YAML Ain’t Markup Language 的递归缩写，是一种人类优先、可读性极强的数据序列化格式，完全兼容 JSON 语法，广泛用于配置文件、数据交换、自动化编排等场景，主流稳定版本为 YAML 1.2（修复了1.1版本的诸多歧义问题）。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-02-13T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-02-13T10:00:20+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="YAML">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="YAML 语法详细总结">
+  <meta name="twitter:description" content="YAML 语法详细总结（基于 YAML 1.2 官方规范） YAML 是 YAML Ain’t Markup Language 的递归缩写，是一种人类优先、可读性极强的数据序列化格式，完全兼容 JSON 语法，广泛用于配置文件、数据交换、自动化编排等场景，主流稳定版本为 YAML 1.2（修复了1.1版本的诸多歧义问题）。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/001_yaml%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/001_xml%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/001_jni%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "YAML 语法详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/001_yaml%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, YAML, yaml","wordcount":  2283 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/001_yaml%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-02-13T09:00:20+08:00","dateModified": "2026-02-13T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/001_yaml%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/001_yaml%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">YAML 语法详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-02-13">2026-02-13</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 2283 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 5 分钟&nbsp;<span id="/blog/001_yaml%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="YAML 语法详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一核心基础语法规则">一、核心基础语法规则</a>
+      <ul>
+        <li><a href="#1-大小写敏感">1. 大小写敏感</a></li>
+        <li><a href="#2-缩进表示层级关系">2. 缩进表示层级关系</a></li>
+        <li><a href="#3-键值对基础格式">3. 键值对基础格式</a></li>
+        <li><a href="#4-注释规则">4. 注释规则</a></li>
+        <li><a href="#5-多文档分隔符">5. 多文档分隔符</a></li>
+      </ul>
+    </li>
+    <li><a href="#二核心数据类型">二、核心数据类型</a>
+      <ul>
+        <li><a href="#1-标量类型单个不可拆分的值">1. 标量类型（单个不可拆分的值）</a>
+          <ul>
+            <li><a href="#字符串的三种写法与核心区别">字符串的三种写法与核心区别</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-序列类型数组列表">2. 序列类型（数组/列表）</a>
+          <ul>
+            <li><a href="#块式写法推荐可读性强">块式写法（推荐，可读性强）</a></li>
+            <li><a href="#流式写法行内写法">流式写法（行内写法）</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-映射类型字典对象">3. 映射类型（字典/对象）</a>
+          <ul>
+            <li><a href="#块式写法推荐可读性强-1">块式写法（推荐，可读性强）</a></li>
+            <li><a href="#流式写法行内写法-1">流式写法（行内写法）</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#三进阶高级语法">三、进阶高级语法</a>
+      <ul>
+        <li><a href="#1-多行字符串处理">1. 多行字符串处理</a>
+          <ul>
+            <li><a href="#保留换行符-块字面量">保留换行符 <code>|</code>（块字面量）</a></li>
+            <li><a href="#折叠换行符-块折叠">折叠换行符 <code>&gt;</code>（块折叠）</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="yaml-语法详细总结基于-yaml-12-官方规范">YAML 语法详细总结（基于 YAML 1.2 官方规范）</h1>
+<p>YAML 是 <strong>YAML Ain&rsquo;t Markup Language</strong> 的递归缩写，是一种人类优先、可读性极强的数据序列化格式，完全兼容 JSON 语法，广泛用于配置文件、数据交换、自动化编排等场景，主流稳定版本为 <strong>YAML 1.2</strong>（修复了1.1版本的诸多歧义问题）。</p>
+<h2 id="一核心基础语法规则">一、核心基础语法规则</h2>
+<p>这是YAML的语法基石，违反以下规则会直接导致解析失败。</p>
+<h3 id="1-大小写敏感">1. 大小写敏感</h3>
+<p>YAML 对键名、值的大小写严格区分，<code>name</code> 和 <code>Name</code>、<code>port</code> 和 <code>Port</code> 是完全不同的两个键。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">Name</span><span class="p">:</span><span class="w"> </span><span class="l">Alice </span><span class="w"> </span><span class="c"># 键1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Bob   </span><span class="w"> </span><span class="c"># 键2，与上面互不影响</span></span></span></code></pre></div></div>
+<h3 id="2-缩进表示层级关系">2. 缩进表示层级关系</h3>
+<p>YAML 完全依靠<strong>空格缩进</strong>定义数据层级，无大括号、中括号等强制包裹，核心规则：</p>
+<ul>
+<li>绝对禁止使用 Tab 制表符缩进，必须使用纯空格；</li>
+<li>缩进空格数不强制（推荐2个空格，云原生场景通用），<strong>同一层级的元素必须保持完全一致的缩进</strong>；</li>
+<li>子层级的缩进必须比父层级多至少1个空格。</li>
+</ul>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># 正确示例</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">person</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Tom</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">age</span><span class="p">:</span><span class="w"> </span><span class="m">20</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">address</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">city</span><span class="p">:</span><span class="w"> </span><span class="l">Shanghai</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">street</span><span class="p">:</span><span class="w"> </span><span class="l">XX Road</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 错误示例（同级缩进不一致、Tab混用）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">person</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Tom </span><span class="w"> </span><span class="c"># 缩进缺失</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">age</span><span class="p">:</span><span class="w"> </span><span class="m">20</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">address</span><span class="p">:</span><span class="w">  </span><span class="c"># 缩进层级错误</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">city</span><span class="p">:</span><span class="w"> </span><span class="l">Beijing</span></span></span></code></pre></div></div>
+<h3 id="3-键值对基础格式">3. 键值对基础格式</h3>
+<p>YAML 核心结构是 <code>key: value</code> 键值对，强制规则：<strong>冒号后面必须跟一个空格</strong>，否则会被解析为一个完整的字符串键。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># 正确</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">my-demo</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="m">1.0.0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 错误（冒号后无空格，解析失败）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">app:my-demo</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="l">version:1.0.0</span></span></span></code></pre></div></div>
+<h3 id="4-注释规则">4. 注释规则</h3>
+<ul>
+<li>仅支持单行注释，使用 <code>#</code> 开头，<code>#</code> 后建议加空格提升可读性；</li>
+<li>注释可放在行首，也可放在代码行的末尾；</li>
+<li>无多行注释，多行注释需每行都加 <code>#</code>；</li>
+<li>单引号/双引号内的 <code>#</code> 会被视为普通字符，不会解析为注释。</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># 这是全局注释</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">app_name</span><span class="p">:</span><span class="w"> </span><span class="l">demo-app </span><span class="w"> </span><span class="c"># 这是行尾注释</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 多行注释</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 第二行注释</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;这是带#号的字符串，不会被注释&#34;</span></span></span></code></pre></div></div>
+<h3 id="5-多文档分隔符">5. 多文档分隔符</h3>
+<p>一个YAML文件中可包含多个独立的YAML文档，通过分隔符区分：</p>
+<ul>
+<li><code>---</code>：表示一个文档的开始，单文档场景可省略，多文档必须用其分隔；</li>
+<li><code>...</code>：表示一个文档的结束，非必需，仅用于明确终止文档，多用于网络传输场景。</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 第一个文档：开发环境配置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l">dev</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 第二个文档：生产环境配置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span></span></span></code></pre></div></div>
+<h2 id="二核心数据类型">二、核心数据类型</h2>
+<p>YAML 数据结构由三种核心类型组成：<strong>标量（Scalar）</strong>、<strong>序列（Sequence）</strong>、<strong>映射（Mapping）</strong>，支持无限嵌套组合。</p>
+<h3 id="1-标量类型单个不可拆分的值">1. 标量类型（单个不可拆分的值）</h3>
+<p>标量是YAML中最基础的数据单元，对应编程语言中的基础数据类型。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">类型</th>
+          <th style="text-align: left">规范说明</th>
+          <th style="text-align: left">示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">字符串</td>
+          <td style="text-align: left">最常用类型，支持无引号、单引号、双引号三种写法</td>
+          <td style="text-align: left">见下方详细说明</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">整数</td>
+          <td style="text-align: left">支持十进制、二进制（0b前缀）、八进制（0o前缀）、十六进制（0x前缀）</td>
+          <td style="text-align: left"><code>num: 123</code> <code>hex: 0x1F</code> <code>bin: 0b1010</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">浮点数</td>
+          <td style="text-align: left">支持小数、科学计数法</td>
+          <td style="text-align: left"><code>pi: 3.1415</code> <code>sci: 1.2e+5</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">布尔值</td>
+          <td style="text-align: left">1.2规范仅支持 <code>true</code>/<code>false</code>（小写），废弃1.1的yes/no/on/off，避免歧义</td>
+          <td style="text-align: left"><code>is_enable: true</code> <code>is_delete: false</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">空值</td>
+          <td style="text-align: left">支持 <code>null</code>、<code>~</code>、纯空三种写法，三者等价</td>
+          <td style="text-align: left"><code>empty1: null</code> <code>empty2: ~</code> <code>empty3: </code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">时间日期</td>
+          <td style="text-align: left">遵循ISO 8601标准，自动解析为时间类型</td>
+          <td style="text-align: left"><code>date: 2026-04-16</code> <code>datetime: 2026-04-16T10:00:00+08:00</code></td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="字符串的三种写法与核心区别">字符串的三种写法与核心区别</h4>
+<p>字符串是YAML中最易踩坑的类型，三种写法有明确的语义差异：</p>
+<ol>
+<li>
+<p><strong>无引号写法</strong>：最简洁，适合纯文本、无特殊字符的字符串，自动识别类型；</p>
+<blockquote>
+<p>注意：包含 <code>:</code>+空格、<code>#</code>、<code>&amp;</code>、<code>*</code>、<code>{}</code>、<code>[]</code> 等特殊字符时，不能用无引号写法，否则会被解析为语法结构。</p>
+</blockquote>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># 正确</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="l">这是一段普通的无引号字符串</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 错误（:后有空格，会被解析为键值对）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">error_desc: 错误示例</span><span class="p">:</span><span class="w"> </span><span class="l">包含冒号加空格</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>单引号写法</strong>：强字面量，内部的转义字符（如 <code>\n</code>）不会被解析，仅会把两个连续单引号转义为一个单引号，适合包含特殊字符、但不需要转义的场景。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># \n 会被当作普通字符，不会换行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">single_quote</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;第一行\n第二行，不会换行&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 两个单引号转义为一个</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">quote_test</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;他说：&#39;&#39;你好&#39;&#39;&#39;</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>双引号写法</strong>：唯一支持转义字符的写法，内部的 <code>\n</code>、<code>\t</code> 等转义符会被正常解析，适合需要换行、特殊符号的复杂字符串。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># \n 会被解析为换行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">double_quote</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;第一行\n第二行，正常换行&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">special_char</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;包含双引号\&#34;和转义字符的字符串&#34;</span></span></span></code></pre></div></div>
+</li>
+</ol>
+<h3 id="2-序列类型数组列表">2. 序列类型（数组/列表）</h3>
+<p>用于表示有序的一组数据，对应编程语言中的数组，支持两种写法：</p>
+<h4 id="块式写法推荐可读性强">块式写法（推荐，可读性强）</h4>
+<p>以 <code>- </code>（短横线+空格）开头，每个元素占一行，同层级元素缩进一致，支持嵌套。</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># 基础序列</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">fruits</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">Apple</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">Banana</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">Orange</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 嵌套序列（二维数组）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">matrix</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="p">[</span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="m">6</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>-<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="m">7</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="m">8</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="m">9</span></span></span></code></pre></div></div>
+<h4 id="流式写法行内写法">流式写法（行内写法）</h4>
+<p>用方括号 <code>[]</code> 包裹，元素之间用 <code>, </code>（逗号+空格）分隔，适合简短的列表。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># 行内序列</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">nums</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="m">5</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 混合嵌套</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">person</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Jack</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hobbies</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="l">reading, running, coding]</span></span></span></code></pre></div></div>
+<h3 id="3-映射类型字典对象">3. 映射类型（字典/对象）</h3>
+<p>用于表示无序的键值对集合，对应编程语言中的字典/对象，支持两种写法：</p>
+<h4 id="块式写法推荐可读性强-1">块式写法（推荐，可读性强）</h4>
+<p>每行一个键值对，通过缩进表示嵌套层级，是最常用的写法。</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># 基础映射</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">server</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l">localhost</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l">30s</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 嵌套映射</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">user</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Lucy</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">age</span><span class="p">:</span><span class="w"> </span><span class="m">22</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">contact</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">email</span><span class="p">:</span><span class="w"> </span><span class="l">lucy@example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">phone</span><span class="p">:</span><span class="w"> </span><span class="l">138XXXX1234</span></span></span></code></pre></div></div>
+<h4 id="流式写法行内写法-1">流式写法（行内写法）</h4>
+<p>用大括号 <code>{}</code> 包裹，键值对之间用 <code>, </code>（逗号+空格）分隔，适合简短的对象。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># 行内映射</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">database</span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">driver: mysql, host: 127.0.0.1, port</span><span class="p">:</span><span class="w"> </span><span class="m">3306</span><span class="w"> </span>}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 混合嵌套</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">app</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">demo</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span>{<span class="w"> </span><span class="nt">env: dev, debug</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span>}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">white_list</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="m">127.0.0.1</span><span class="p">,</span><span class="w"> </span><span class="m">192.168.1.1</span><span class="p">]</span></span></span></code></pre></div></div>
+<h2 id="三进阶高级语法">三、进阶高级语法</h2>
+<h3 id="1-多行字符串处理">1. 多行字符串处理</h3>
+<p>YAML 提供了专门的符号处理多行文本，避免大量转义字符，核心分为两种模式：</p>
+<h4 id="保留换行符-块字面量">保留换行符 <code>|</code>（块字面量）</h4>
+<p>保留文本中所有的换行符和缩进，最终输出的文本会保留多行格式，适合脚本、配置文本、长文案等场景。</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># | 保留所有换行，末尾自动加一个换行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">  #!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="sd">  echo &#34;Hello YAML&#34;
+</span></span></span><span class="line"><span class="cl"><span class="sd">  cd /opt/app
+</span></span></span><span class="line"><span class="cl"><span class="sd">  npm run start</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># |+ 保留末尾所有换行（默认只保留1个，+ 保留全部）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">text_plus</span><span class="p">:</span><span class="w"> </span><span class="p">|+</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">  第一行
+</span></span></span><span class="line"><span class="cl"><span class="sd">  第二行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># |- 删除末尾所有换行（默认的末尾换行也会删掉）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">text_minus</span><span class="p">:</span><span class="w"> </span><span class="p">|-</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">  第一行
+</span></span></span><span class="line"><span class="cl"><span class="sd">  第二行</span></span></span></code></pre></div></div>
+<h4 id="折叠换行符-块折叠">折叠换行符 <code>&gt;</code>（块折叠）</h4>
+<p>将文本中的换行符折叠为<strong>一个空格</strong>，最终输出为单行文本，仅保留空行对应的换行，适合超长的单行文案、说明文本。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-yaml">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># &gt; 把换行折叠为空格，最终输出为一行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="p">&gt;</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">  这是一段超长的说明文本，
+</span></span></span><span class="line"><span class="cl"><span class="sd">  我不想在一行里写满，
+</span></span></span><span class="line"><span class="cl"><span class="sd">  用换行拆分，但最终解析后会合并为一行，
+</span></span></span><span class="line"><span class="cl"><span class="sd">  换行符会变成空格。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 空行会被保留为换行</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">desc</span><span class="p">:</span><span class="w"> </span><span class="l">&gt;</span></span></span></code></pre></div></div>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-02-13</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/001_yaml%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/yaml/">YAML</a>,&nbsp;<a href="/blog/tags/yaml/">YAML</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/001_xml%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="XML 语法详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>XML 语法详细总结</a>
+            <a href="/blog/001_jni%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="JNI 语法详细总结">JNI 语法详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

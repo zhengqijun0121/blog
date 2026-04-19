@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>uCOS-III 源码详细分析 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/011_ucos_iii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="uCOS-III 源码详细分析">
+  <meta property="og:description" content="μC/OS-III 源码详细分析 μC/OS-III 是由Jean J. Labrosse于2009年发布的可剥夺型、硬实时、可裁剪、可固化的嵌入式多任务RTOS，专为资源受限的MCU/MPU设计，源码采用ANSI C编写，仅需少量汇编完成硬件相关适配，具备完全确定的执行时序，广泛应用于工业控制、汽车电子、医疗设备等硬实时场景。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-04T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-03-04T10:00:20+08:00">
+    <meta property="article:tag" content="OS">
+    <meta property="article:tag" content="UCOS-III">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="uCOS-III 源码详细分析">
+  <meta name="twitter:description" content="μC/OS-III 源码详细分析 μC/OS-III 是由Jean J. Labrosse于2009年发布的可剥夺型、硬实时、可裁剪、可固化的嵌入式多任务RTOS，专为资源受限的MCU/MPU设计，源码采用ANSI C编写，仅需少量汇编完成硬件相关适配，具备完全确定的执行时序，广泛应用于工业控制、汽车电子、医疗设备等硬实时场景。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/011_ucos_iii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/010_ucos_ii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/003_linux%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "uCOS-III 源码详细分析",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/011_ucos_iii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "OS, uCOS-III","wordcount":  9146 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/011_ucos_iii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90\/","datePublished": "2026-03-04T09:00:20+08:00","dateModified": "2026-03-04T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/011_ucos_iii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/011_ucos_iii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">uCOS-III 源码详细分析</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/os/"><i class="far fa-folder" aria-hidden="true"></i>OS</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-03-04">2026-03-04</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 9146 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 19 分钟&nbsp;<span id="/blog/011_ucos_iii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" class="leancloud_visitors" data-flag-title="uCOS-III 源码详细分析">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一源码整体架构与文件体系">一、源码整体架构与文件体系</a>
+      <ul>
+        <li><a href="#11-分层架构">1.1 分层架构</a></li>
+        <li><a href="#12-核心源码文件清单">1.2 核心源码文件清单</a></li>
+        <li><a href="#13-核心配置文件-os_cfgh">1.3 核心配置文件 os_cfg.h</a></li>
+      </ul>
+    </li>
+    <li><a href="#二内核核心数据结构详解">二、内核核心数据结构详解</a>
+      <ul>
+        <li><a href="#21-任务控制块-os_tcb">2.1 任务控制块 OS_TCB</a></li>
+        <li><a href="#22-就绪列表与优先级位图">2.2 就绪列表与优先级位图</a>
+          <ul>
+            <li><a href="#221-就绪列表-os_rdy_list">2.2.1 就绪列表 OS_RDY_LIST</a></li>
+            <li><a href="#222-优先级位图-os_prio_bitmap">2.2.2 优先级位图 OS_PRIO_BITMAP</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-时钟节拍轮-os_tick_spoke">2.3 时钟节拍轮 OS_TICK_SPOKE</a></li>
+        <li><a href="#24-内核全局运行数据-os_running_data">2.4 内核全局运行数据 OS_RUNNING_DATA</a></li>
+      </ul>
+    </li>
+    <li><a href="#三内核启动流程源码分析">三、内核启动流程源码分析</a>
+      <ul>
+        <li><a href="#31-内核初始化-osinit">3.1 内核初始化 OSInit()</a></li>
+        <li><a href="#32-内核启动-osstart">3.2 内核启动 OSStart()</a></li>
+      </ul>
+    </li>
+    <li><a href="#四核心调度机制源码分析">四、核心调度机制源码分析</a>
+      <ul>
+        <li><a href="#41-任务级调度-ossched">4.1 任务级调度 OSSched()</a></li>
+        <li><a href="#42-上下文切换-osctxswarm-cortex-m架构为例">4.2 上下文切换 OSCtxSw()（ARM Cortex-M架构为例）</a></li>
+        <li><a href="#43-中断级调度-osintexit">4.3 中断级调度 OSIntExit()</a></li>
+        <li><a href="#44-时间片轮转调度机制">4.4 时间片轮转调度机制</a></li>
+      </ul>
+    </li>
+    <li><a href="#五核心功能模块源码分析">五、核心功能模块源码分析</a>
+      <ul>
+        <li><a href="#51-任务管理模块os_taskc">5.1 任务管理模块（os_task.c）</a>
+          <ul>
+            <li><a href="#511-任务创建-ostaskcreate">5.1.1 任务创建 OSTaskCreate()</a></li>
+            <li><a href="#512-其他核心任务管理函数">5.1.2 其他核心任务管理函数</a></li>
+          </ul>
+        </li>
+        <li><a href="#52-时间管理模块os_timecos_tickc">5.2 时间管理模块（os_time.c/os_tick.c）</a>
+          <ul>
+            <li><a href="#521-时钟节拍核心机制">5.2.1 时钟节拍核心机制</a></li>
+            <li><a href="#522-任务延时核心函数">5.2.2 任务延时核心函数</a></li>
+          </ul>
+        </li>
+        <li><a href="#53-同步与通信机制">5.3 同步与通信机制</a>
+          <ul>
+            <li><a href="#531-信号量os_semc">5.3.1 信号量（os_sem.c）</a></li>
+            <li><a href="#532-互斥锁os_mutexc">5.3.2 互斥锁（os_mutex.c）</a></li>
+            <li><a href="#533-消息队列os_qc">5.3.3 消息队列（os_q.c）</a></li>
+          </ul>
+        </li>
+        <li><a href="#54-内存管理模块os_memc">5.4 内存管理模块（os_mem.c）</a></li>
+      </ul>
+    </li>
+    <li><a href="#六中断管理与临界区机制">六、中断管理与临界区机制</a>
+      <ul>
+        <li><a href="#61-中断管理">6.1 中断管理</a></li>
+        <li><a href="#62-临界区保护机制">6.2 临界区保护机制</a></li>
+      </ul>
+    </li>
+    <li><a href="#七ucos-iii-核心特色与最佳实践">七、uC/OS-III 核心特色与最佳实践</a>
+      <ul>
+        <li><a href="#71-与ucos-ii的核心区别">7.1 与uC/OS-II的核心区别</a></li>
+        <li><a href="#72-工程最佳实践">7.2 工程最佳实践</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="μcos-iii-源码详细分析">μC/OS-III 源码详细分析</h1>
+<p>μC/OS-III 是由Jean J. Labrosse于2009年发布的<strong>可剥夺型、硬实时、可裁剪、可固化</strong>的嵌入式多任务RTOS，专为资源受限的MCU/MPU设计，源码采用ANSI C编写，仅需少量汇编完成硬件相关适配，具备完全确定的执行时序，广泛应用于工业控制、汽车电子、医疗设备等硬实时场景。</p>
+<h2 id="一源码整体架构与文件体系">一、源码整体架构与文件体系</h2>
+<p>μC/OS-III 采用<strong>分层解耦的模块化设计</strong>，将硬件相关与硬件无关代码完全分离，核心源码结构清晰、注释详尽，可移植性极强。</p>
+<h3 id="11-分层架构">1.1 分层架构</h3>
+<table>
+  <thead>
+      <tr>
+          <th>层级</th>
+          <th>核心作用</th>
+          <th>与硬件耦合度</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>应用层</td>
+          <td>用户任务、业务逻辑，调用内核标准API实现业务功能</td>
+          <td>无耦合</td>
+      </tr>
+      <tr>
+          <td>API接口层</td>
+          <td>os.h 封装所有内核API声明、数据类型定义，屏蔽内核实现细节</td>
+          <td>无耦合</td>
+      </tr>
+      <tr>
+          <td>内核核心层</td>
+          <td>纯C实现的RTOS核心功能，与硬件无关，是源码分析的核心</td>
+          <td>无耦合</td>
+      </tr>
+      <tr>
+          <td>CPU架构适配层</td>
+          <td>与CPU指令集强相关，实现上下文切换、临界区、中断控制等</td>
+          <td>强耦合</td>
+      </tr>
+      <tr>
+          <td>BSP板级支持包</td>
+          <td>与硬件板卡相关，实现时钟节拍、外设驱动、中断控制器配置</td>
+          <td>强耦合</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="12-核心源码文件清单">1.2 核心源码文件清单</h3>
+<p>源码按功能模块独立拆分，每个模块对应一对.c/.h文件，便于裁剪和维护，核心文件如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>文件分类</th>
+          <th>核心文件</th>
+          <th>核心功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>内核核心头文件</td>
+          <td>os.h</td>
+          <td>内核总头文件，包含所有数据结构、宏定义、API函数声明</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>os_cfg.h</td>
+          <td>内核功能裁剪、参数配置文件，用户可按需修改宏定义开关功能</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>os_type.h</td>
+          <td>内核通用数据类型定义，实现跨平台兼容</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>os_cpu.h</td>
+          <td>CPU架构相关的宏、函数声明，与汇编适配文件配套</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>os_app_hooks.h</td>
+          <td>内核钩子函数声明，用于用户功能扩展</td>
+      </tr>
+      <tr>
+          <td>内核核心源文件</td>
+          <td>os_core.c</td>
+          <td>内核核心初始化、调度器、临界区、中断管理、全局状态管理</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>os_task.c</td>
+          <td>任务全生命周期管理：创建、删除、挂起、恢复、优先级修改</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>os_time.c/os_tick.c</td>
+          <td>时间管理：时钟节拍、任务延时、超时管理、时间片轮转</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>os_sem.c</td>
+          <td>计数型/二进制信号量的创建、等待、释放、删除</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>os_mutex.c</td>
+          <td>支持优先级继承的互斥锁，解决优先级反转问题</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>os_q.c</td>
+          <td>消息队列管理，实现任务间异步数据通信</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>os_flag.c</td>
+          <td>事件标志组管理，支持多事件的组合等待与触发</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>os_mem.c</td>
+          <td>固定分区内存管理，无碎片、O(1)时间复杂度的内存分配/释放</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>os_hooks.c</td>
+          <td>内核钩子函数的默认空实现</td>
+      </tr>
+      <tr>
+          <td>CPU架构适配文件</td>
+          <td>os_cpu_a.asm</td>
+          <td>汇编实现：任务启动、上下文切换、关/开中断底层指令</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td>os_cpu_c.c</td>
+          <td>C语言实现：任务堆栈初始化、CPU架构相关初始化</td>
+      </tr>
+      <tr>
+          <td>BSP板级文件</td>
+          <td>bsp.c/bsp.h</td>
+          <td>板级硬件初始化、系统时钟配置、时钟节拍中断实现、外设驱动</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="13-核心配置文件-os_cfgh">1.3 核心配置文件 os_cfg.h</h3>
+<p>该文件是内核裁剪的核心，通过宏定义实现功能开关和参数配置，核心配置项如下：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// 功能开关类
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define OS_CFG_TASK_EN                1u   </span><span class="c1">// 任务管理功能使能
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define OS_CFG_SEM_EN                 1u   </span><span class="c1">// 信号量功能使能
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define OS_CFG_MUTEX_EN               1u   </span><span class="c1">// 互斥锁功能使能
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define OS_CFG_Q_EN                   1u   </span><span class="c1">// 消息队列功能使能
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define OS_CFG_MEM_EN                 1u   </span><span class="c1">// 内存管理功能使能
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define OS_CFG_FLAG_EN                1u   </span><span class="c1">// 事件标志组使能
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define OS_CFG_SCHED_ROUND_ROBIN_EN   1u   </span><span class="c1">// 同优先级时间片轮转使能
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define OS_CFG_STAT_TASK_EN           1u   </span><span class="c1">// CPU使用率统计任务使能
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 核心参数配置
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define OS_CFG_PRIO_MAX               64u  </span><span class="c1">// 最大支持优先级数（数值越小优先级越高）
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define OS_CFG_TICK_RATE_HZ           1000u</span><span class="c1">// 系统时钟节拍频率，通常100~1000Hz
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define OS_CFG_TICK_WHEEL_SIZE        17u  </span><span class="c1">// 时钟节拍轮辐条数量，推荐素数
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define OS_CFG_MSG_POOL_SIZE          100u </span><span class="c1">// 全局消息池最大消息数量
+</span></span></span></code></pre></div></div>
+<h2 id="二内核核心数据结构详解">二、内核核心数据结构详解</h2>
+<p>μC/OS-III 的所有功能都围绕核心数据结构实现，理解这些结构体是读懂源码的关键。</p>
+<h3 id="21-任务控制块-os_tcb">2.1 任务控制块 OS_TCB</h3>
+<p>任务是RTOS的最小调度单元，每个任务对应唯一的OS_TCB结构体，保存任务的全部运行信息，相当于任务的&quot;身份证&quot;，核心成员如下（精简核心部分）：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">os_tcb</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CPU_STK</span>         <span class="o">*</span><span class="n">StkPtr</span><span class="p">;</span>        <span class="c1">// 任务堆栈栈顶指针，必须放在结构体最前（汇编固定偏移访问）
+</span></span></span><span class="line"><span class="cl">    <span class="n">CPU_STK</span>         <span class="o">*</span><span class="n">StkLimitPtr</span><span class="p">;</span>   <span class="c1">// 堆栈溢出限制指针，用于堆栈使用检测
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_TCB</span>          <span class="o">*</span><span class="n">NextPtr</span><span class="p">;</span>       <span class="c1">// 双向链表后继指针，用于就绪/阻塞/节拍列表挂载
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_TCB</span>          <span class="o">*</span><span class="n">PrevPtr</span><span class="p">;</span>       <span class="c1">// 双向链表前驱指针
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_TCB</span>          <span class="o">*</span><span class="n">TickNextPtr</span><span class="p">;</span>   <span class="c1">// 时钟节拍链表后继指针
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_TCB</span>          <span class="o">*</span><span class="n">TickPrevPtr</span><span class="p">;</span>   <span class="c1">// 时钟节拍链表前驱指针
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_TICK_SPOKE</span>   <span class="o">*</span><span class="n">TickSpokePtr</span><span class="p">;</span>  <span class="c1">// 指向所属的时钟节拍轮辐条
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">CPU_CHAR</span>        <span class="o">*</span><span class="n">NamePtr</span><span class="p">;</span>        <span class="c1">// 任务名称，用于调试
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_PRIO</span>          <span class="n">Prio</span><span class="p">;</span>           <span class="c1">// 任务优先级
+</span></span></span><span class="line"><span class="cl">    <span class="n">CPU_STK_SIZE</span>     <span class="n">StkSize</span><span class="p">;</span>        <span class="c1">// 任务堆栈总大小
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_STATE</span>         <span class="n">TaskState</span><span class="p">;</span>      <span class="c1">// 任务状态机（就绪/运行/阻塞/延时/挂起）
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 时间片轮转相关
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_TICK</span>          <span class="n">TimeQuanta</span><span class="p">;</span>     <span class="c1">// 任务时间片总节拍数
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_TICK</span>          <span class="n">TimeQuantaCtr</span><span class="p">;</span>  <span class="c1">// 剩余时间片节拍数
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 任务内置信号量与消息队列（uC/OS-III特色，无需单独创建内核对象）
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_SEM_CTR</span>       <span class="n">SemCtr</span><span class="p">;</span>         <span class="c1">// 任务内置信号量计数值
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_MSG_Q</span>         <span class="n">MsgQ</span><span class="p">;</span>           <span class="c1">// 任务内置消息队列
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 等待对象相关
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span>            <span class="o">*</span><span class="n">PendObjPtr</span><span class="p">;</span>     <span class="c1">// 指向当前等待的内核对象（信号量/互斥锁/队列等）
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_TICK</span>          <span class="n">TickRemain</span><span class="p">;</span>     <span class="c1">// 等待超时剩余节拍数
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 任务入口与用户数据
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span>            <span class="o">*</span><span class="n">TaskEntryPtr</span><span class="p">;</span>   <span class="c1">// 任务入口函数地址
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span>            <span class="o">*</span><span class="n">TaskDataPtr</span><span class="p">;</span>    <span class="c1">// 任务用户自定义数据指针
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">OS_TCB</span><span class="p">;</span></span></span></code></pre></div></div>
+<p><strong>核心要点</strong>：</p>
+<ol>
+<li><code>StkPtr</code> 必须放在结构体最开头，汇编上下文切换代码通过结构体首地址+0偏移直接访问栈顶指针，保证跨编译器兼容。</li>
+<li>任务状态机支持组合状态，例如 <code>PEND + SUSPENDED</code>，任务同时处于等待和挂起状态，需同时解除两个状态才能回到就绪态。</li>
+<li>内置信号量/消息队列是uC/OS-III的核心特色，无需单独创建OS_SEM/OS_Q对象，简化一对一任务间同步/通信，降低RAM占用。</li>
+</ol>
+<h3 id="22-就绪列表与优先级位图">2.2 就绪列表与优先级位图</h3>
+<p>uC/OS-III 采用<strong>优先级位图+就绪链表</strong>的双层结构，实现O(1)时间复杂度的最高优先级任务查找，与任务总数无关，是硬实时调度的核心。</p>
+<h4 id="221-就绪列表-os_rdy_list">2.2.1 就绪列表 OS_RDY_LIST</h4>
+<p>每个优先级对应一个独立的就绪链表，管理该优先级下的所有就绪任务：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">os_rdy_list</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OS_TCB</span>          <span class="o">*</span><span class="n">HeadPtr</span><span class="p">;</span>       <span class="c1">// 链表头指针
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_TCB</span>          <span class="o">*</span><span class="n">TailPtr</span><span class="p">;</span>       <span class="c1">// 链表尾指针
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_OBJ_QTY</span>       <span class="n">NbrEntries</span><span class="p">;</span>    <span class="c1">// 该优先级下的就绪任务数量
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">OS_RDY_LIST</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 全局就绪列表数组，每个优先级对应一个元素
+</span></span></span><span class="line"><span class="cl"><span class="n">OS_RDY_LIST</span>  <span class="n">OSRdyList</span><span class="p">[</span><span class="n">OS_CFG_PRIO_MAX</span><span class="p">];</span></span></span></code></pre></div></div>
+<ul>
+<li>同优先级的多个任务挂载到同一个链表中，支持时间片轮转调度。</li>
+<li>调度器直接通过优先级编号索引对应链表，无需遍历，效率极高。</li>
+</ul>
+<h4 id="222-优先级位图-os_prio_bitmap">2.2.2 优先级位图 OS_PRIO_BITMAP</h4>
+<p>通过位图快速标记哪些优先级存在就绪任务，实现最高优先级的极速定位：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">os_prio_bitmap</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">CPU_DATA</span>         <span class="n">Table</span><span class="p">[</span><span class="n">OS_PRIO_TBL_SIZE</span><span class="p">];</span> <span class="c1">// 优先级位图表，每1bit代表一个优先级是否就绪
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_PRIO</span>          <span class="n">HighestPrio</span><span class="p">;</span>              <span class="c1">// 缓存当前最高就绪优先级
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">OS_PRIO_BITMAP</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 全局优先级位图
+</span></span></span><span class="line"><span class="cl"><span class="n">OS_PRIO_BITMAP</span>  <span class="n">OSPrioBitmap</span><span class="p">;</span></span></span></code></pre></div></div>
+<p><strong>核心原理</strong>：</p>
+<ul>
+<li>每个优先级对应位图中的1个Bit，该优先级有就绪任务时Bit置1，无就绪任务时置0。</li>
+<li>查找最高优先级时，通过CPU内置的前导零指令（CLZ）或查表法，快速找到位图中最高位的1对应的优先级，时间复杂度恒定为O(1)。</li>
+</ul>
+<h3 id="23-时钟节拍轮-os_tick_spoke">2.3 时钟节拍轮 OS_TICK_SPOKE</h3>
+<p>uC/OS-III 采用<strong>时钟节拍轮（Tick Wheel）</strong> 管理延时和超时任务，替代uC/OS-II的链表遍历方案，将时钟节拍处理的时间复杂度从O(n)降为O(1)，大幅降低系统开销。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">os_tick_spoke</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OS_TCB</span>          <span class="o">*</span><span class="n">FirstPtr</span><span class="p">;</span>      <span class="c1">// 该辐条下的任务链表头指针
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_OBJ_QTY</span>       <span class="n">NbrEntries</span><span class="p">;</span>    <span class="c1">// 该辐条下的任务数量
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">OS_TICK_SPOKE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 全局时钟节拍轮
+</span></span></span><span class="line"><span class="cl"><span class="n">OS_TICK_SPOKE</span>  <span class="n">OSTickWheel</span><span class="p">[</span><span class="n">OS_CFG_TICK_WHEEL_SIZE</span><span class="p">];</span></span></span></code></pre></div></div>
+<p><strong>核心原理</strong>：</p>
+<ul>
+<li>节拍轮类似钟表表盘，每个辐条对应一个节拍刻度，任务延时到期时间通过哈希映射到对应辐条。</li>
+<li>每个时钟节拍到来时，仅需处理当前辐条下的任务，无需遍历所有延时任务，大幅降低中断处理耗时。</li>
+<li>辐条数量推荐配置为素数，减少哈希冲突，提升管理效率。</li>
+</ul>
+<h3 id="24-内核全局运行数据-os_running_data">2.4 内核全局运行数据 OS_RUNNING_DATA</h3>
+<p>内核全局状态的核心管理结构体，保存当前运行任务、中断嵌套、调度锁等核心信息，是调度器的核心全局变量：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">os_running_data</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OS_TCB</span>          <span class="o">*</span><span class="n">TCBCurPtr</span><span class="p">;</span>     <span class="c1">// 当前正在运行的任务TCB指针
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_TCB</span>          <span class="o">*</span><span class="n">TCBHighRdyPtr</span><span class="p">;</span> <span class="c1">// 即将被调度的最高优先级就绪任务TCB指针
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_NESTING_CTR</span>   <span class="n">IntNestingCtr</span><span class="p">;</span> <span class="c1">// 中断嵌套计数器，0代表非中断上下文
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_NESTING_CTR</span>   <span class="n">LockNestingCtr</span><span class="p">;</span><span class="c1">// 调度锁嵌套计数器，&gt;0时锁定调度器
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_STATE</span>         <span class="n">Running</span><span class="p">;</span>        <span class="c1">// 内核运行状态（停止/运行）
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">OS_RUNNING_DATA</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 全局内核运行数据
+</span></span></span><span class="line"><span class="cl"><span class="n">OS_RUNNING_DATA</span>  <span class="n">OSRunning</span><span class="p">;</span></span></span></code></pre></div></div>
+<h2 id="三内核启动流程源码分析">三、内核启动流程源码分析</h2>
+<p>μC/OS-III 的启动分为<strong>内核初始化 OSInit()</strong> 和 <strong>内核启动 OSStart()</strong> 两个核心步骤，必须严格按照该顺序执行。</p>
+<h3 id="31-内核初始化-osinit">3.1 内核初始化 OSInit()</h3>
+<p>OSInit() 必须在main函数最开始调用，完成内核所有模块、全局变量、默认任务的初始化，执行流程如下：</p>
+<ol>
+<li>
+<p><strong>全局状态初始化</strong></p>
+<ul>
+<li>清零OSRunning结构体，设置内核状态为停止态，初始化中断嵌套计数器、调度锁计数器为0。</li>
+<li>初始化CPU架构相关模块，关中断时间统计、临界区机制验证。</li>
+</ul>
+</li>
+<li>
+<p><strong>核心管理结构初始化</strong></p>
+<ul>
+<li>优先级位图初始化：清零位图表，所有优先级标记为无就绪任务。</li>
+<li>就绪列表初始化：遍历所有优先级的就绪链表，清零头尾指针和任务计数。</li>
+<li>时钟节拍轮初始化：清零所有辐条的任务链表，初始化节拍管理结构。</li>
+<li>内核对象管理链表初始化：为信号量、互斥锁、消息队列等对象创建全局追踪链表。</li>
+</ul>
+</li>
+<li>
+<p><strong>默认系统任务创建</strong></p>
+<ul>
+<li><strong>空闲任务 OS_IdleTask()</strong>：强制创建，优先级固定为最低（OS_CFG_PRIO_MAX-1），无其他就绪任务时运行，死循环执行，可通过空闲钩子扩展低优先级逻辑。</li>
+<li><strong>时钟节拍任务 OS_TickTask()</strong>：强制创建，通常配置为高优先级，处理所有延时、超时任务，将节拍处理逻辑从中断中剥离，降低中断延迟。</li>
+<li><strong>可选任务</strong>：统计任务（CPU使用率统计）、中断延迟发布任务（优化中断响应），通过os_cfg.h宏开关控制是否创建。</li>
+</ul>
+</li>
+<li>
+<p><strong>钩子函数初始化</strong></p>
+<ul>
+<li>初始化所有内核钩子函数为默认空实现，用户可通过os_app_hooks.c重写钩子函数，扩展内核功能。</li>
+</ul>
+</li>
+</ol>
+<p>OSInit() 执行完成后，内核所有模块初始化完毕，系统任务已加入就绪列表，等待用户创建任务后启动。</p>
+<h3 id="32-内核启动-osstart">3.2 内核启动 OSStart()</h3>
+<p>OSStart() 是内核启动的最终函数，调用后内核接管CPU控制权，开始多任务调度，永远不会返回。执行流程如下：</p>
+<ol>
+<li>
+<p><strong>合法性校验</strong></p>
+<ul>
+<li>检查内核是否处于停止态，仅初始化完成后可启动；检查是否存在用户创建的就绪任务，必须至少有一个用户任务就绪才能启动。</li>
+</ul>
+</li>
+<li>
+<p><strong>查找最高优先级就绪任务</strong></p>
+<ul>
+<li>调用OS_PrioGetHighest()获取最高就绪优先级，从OSRdyList中获取对应任务TCB，赋值给OSRunning.TCBHighRdyPtr。</li>
+</ul>
+</li>
+<li>
+<p><strong>启动最高优先级任务</strong></p>
+<ul>
+<li>调用汇编实现的OSStartHighRdy()，完成内核从初始化态到多任务态的切换：
+<ol>
+<li>设置内核状态为运行态。</li>
+<li>将最高优先级任务的栈顶指针加载到CPU的SP栈寄存器。</li>
+<li>从任务堆栈中恢复所有CPU寄存器。</li>
+<li>执行中断返回指令，切换到用户任务入口函数执行。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>关键注意事项</strong>：用户必须在OSInit()和OSStart()之间，至少创建一个用户任务，否则内核无法正常启动。</p>
+<h2 id="四核心调度机制源码分析">四、核心调度机制源码分析</h2>
+<p>μC/OS-III 的核心是<strong>基于优先级的抢占式调度器</strong>，支持同优先级任务的时间片轮转调度，核心目标是：永远让最高优先级的就绪任务获得CPU使用权。</p>
+<h3 id="41-任务级调度-ossched">4.1 任务级调度 OSSched()</h3>
+<p>OSSched() 是任务级调度的核心函数，在任务上下文（非中断）中触发，例如任务主动释放CPU、内核对象发布、任务状态变化等场景，源码核心逻辑如下：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span>  <span class="nf">OSSched</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">CPU_SR_ALLOC</span><span class="p">();</span> <span class="c1">// 临界区状态保存变量
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1. 调度合法性校验
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">OSRunning</span><span class="p">.</span><span class="n">LockNestingCtr</span> <span class="o">&gt;</span> <span class="mi">0u</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// 调度器被锁定，禁止调度
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">OSRunning</span><span class="p">.</span><span class="n">IntNestingCtr</span> <span class="o">&gt;</span> <span class="mi">0u</span><span class="p">)</span>  <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// 中断上下文，禁止任务级调度
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">OSRunning</span><span class="p">.</span><span class="n">Running</span> <span class="o">!=</span> <span class="n">OS_STATE_RUNNING</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// 内核未运行
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">CPU_CRITICAL_ENTER</span><span class="p">();</span> <span class="c1">// 进入临界区，关中断
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 2. 查找当前最高优先级的就绪任务
+</span></span></span><span class="line"><span class="cl">    <span class="nf">OS_PrioGetHighest</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OSRunning</span><span class="p">.</span><span class="n">TCBHighRdyPtr</span> <span class="o">=</span> <span class="n">OSRdyList</span><span class="p">[</span><span class="n">OSPrioBitmap</span><span class="p">.</span><span class="n">HighestPrio</span><span class="p">].</span><span class="n">HeadPtr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 3. 判定是否需要切换任务
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">OSRunning</span><span class="p">.</span><span class="n">TCBHighRdyPtr</span> <span class="o">==</span> <span class="n">OSRunning</span><span class="p">.</span><span class="n">TCBCurPtr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">CPU_CRITICAL_EXIT</span><span class="p">();</span> <span class="c1">// 无需切换，退出临界区
+</span></span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 4. 执行上下文切换
+</span></span></span><span class="line"><span class="cl">    <span class="nf">OSSchedRoundRobinYield</span><span class="p">(</span><span class="o">&amp;</span><span class="n">OSRdyList</span><span class="p">[</span><span class="n">OSPrioBitmap</span><span class="p">.</span><span class="n">HighestPrio</span><span class="p">]);</span> <span class="c1">// 同优先级时间片处理
+</span></span></span><span class="line"><span class="cl">    <span class="nf">OS_TASK_SW</span><span class="p">();</span> <span class="c1">// 触发PendSV异常，调用汇编实现的OSCtxSw()完成上下文切换
+</span></span></span><span class="line"><span class="cl">    <span class="nf">CPU_CRITICAL_EXIT</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="42-上下文切换-osctxswarm-cortex-m架构为例">4.2 上下文切换 OSCtxSw()（ARM Cortex-M架构为例）</h3>
+<p>上下文切换是RTOS的核心底层能力，纯汇编实现，完成<strong>当前任务上下文保存</strong>和<strong>新任务上下文恢复</strong>，实现任务的&quot;断点续跑&quot;。</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-asm">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">OSCtxSw</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">; 1. 保存当前任务的CPU寄存器到任务堆栈
+</span></span></span><span class="line"><span class="cl">    <span class="nf">PUSH</span>    <span class="err">{</span><span class="no">R4-R11</span><span class="err">}</span>        <span class="c1">; 保存R4-R11通用寄存器（R0-R3等由硬件自动保存）
+</span></span></span><span class="line"><span class="cl">    <span class="nf">LDR</span>     <span class="no">R0</span><span class="p">,</span> <span class="err">=</span><span class="no">OSRunning</span>  <span class="c1">; 获取OSRunning结构体地址
+</span></span></span><span class="line"><span class="cl">    <span class="nf">LDR</span>     <span class="no">R1</span><span class="p">,</span> <span class="p">[</span><span class="no">R0</span><span class="p">]</span>        <span class="c1">; 获取当前任务TCB指针 TCBCurPtr
+</span></span></span><span class="line"><span class="cl">    <span class="nf">STR</span>     <span class="no">SP</span><span class="p">,</span> <span class="p">[</span><span class="no">R1</span><span class="p">]</span>        <span class="c1">; 将当前栈指针SP保存到TCB的StkPtr中
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">; 2. 加载新任务的栈指针SP
+</span></span></span><span class="line"><span class="cl">    <span class="nf">LDR</span>     <span class="no">R1</span><span class="p">,</span> <span class="p">[</span><span class="no">R0</span><span class="p">,</span> <span class="c1">#4]    ; 获取新任务TCB指针 TCBHighRdyPtr
+</span></span></span><span class="line"><span class="cl">    <span class="nf">LDR</span>     <span class="no">SP</span><span class="p">,</span> <span class="p">[</span><span class="no">R1</span><span class="p">]</span>        <span class="c1">; 从新任务TCB的StkPtr加载栈指针到SP
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">; 3. 更新当前运行任务TCB指针
+</span></span></span><span class="line"><span class="cl">    <span class="nf">STR</span>     <span class="no">R1</span><span class="p">,</span> <span class="p">[</span><span class="no">R0</span><span class="p">]</span>        <span class="c1">; TCBCurPtr = TCBHighRdyPtr
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">; 4. 恢复新任务的CPU寄存器
+</span></span></span><span class="line"><span class="cl">    <span class="nf">POP</span>     <span class="err">{</span><span class="no">R4-R11</span><span class="err">}</span>        <span class="c1">; 从新任务堆栈恢复R4-R11通用寄存器
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">; 5. 中断返回，硬件自动恢复剩余寄存器，切换到新任务执行
+</span></span></span><span class="line"><span class="cl">    <span class="nf">BX</span>      <span class="no">LR</span></span></span></code></pre></div></div>
+<p><strong>核心原理</strong>：</p>
+<ul>
+<li>Cortex-M架构进入异常时，硬件自动保存R0-R3、R12、LR、PC、xPSR寄存器，退出异常时自动恢复，软件仅需保存R4-R11，大幅简化切换逻辑。</li>
+<li>任务的上下文全部保存在私有堆栈中，切换任务仅需切换栈指针SP，即可完成任务运行环境的完整切换，任务无感知。</li>
+</ul>
+<h3 id="43-中断级调度-osintexit">4.3 中断级调度 OSIntExit()</h3>
+<p>OSIntExit() 在中断服务程序(ISR)末尾调用，中断处理完成后，检查是否需要执行任务调度，实现中断对任务的抢占。
+<strong>核心执行流程</strong>：</p>
+<ol>
+<li>关中断进入临界区，检查中断嵌套计数器，若不为0，说明还有嵌套中断未处理，直接返回。</li>
+<li>中断嵌套计数器减1，若仍大于0，直接返回，不执行调度。</li>
+<li>查找当前最高优先级就绪任务，若与当前运行任务不同，执行中断级上下文切换OSIntCtxSw()。</li>
+<li>退出临界区，开中断。</li>
+</ol>
+<p><strong>中断级上下文切换</strong>：与任务级切换的区别是，中断发生时硬件已自动保存当前任务的上下文，软件无需重复保存，仅需完成新任务上下文的恢复，执行效率更高。</p>
+<h3 id="44-时间片轮转调度机制">4.4 时间片轮转调度机制</h3>
+<p>uC/OS-III 支持同优先级多任务的时间片轮转调度，核心原理：</p>
+<ol>
+<li>每个任务可配置独立的时间片长度，即单次占用CPU的最大节拍数。</li>
+<li>每个时钟节拍到来时，当前运行任务的时间片计数器减1，计数到0时时间片耗尽。</li>
+<li>调度器将当前任务放到同优先级就绪链表的尾部，切换到链表头部的下一个任务执行。</li>
+<li>若同优先级只有一个任务，时间片耗尽后不会切换，继续执行。</li>
+<li>时间片轮转仅在同优先级生效，高优先级任务永远抢占低优先级任务。</li>
+</ol>
+<h2 id="五核心功能模块源码分析">五、核心功能模块源码分析</h2>
+<h3 id="51-任务管理模块os_taskc">5.1 任务管理模块（os_task.c）</h3>
+<p>任务管理是内核的核心，os_task.c实现了任务的全生命周期管理，核心函数如下。</p>
+<h4 id="511-任务创建-ostaskcreate">5.1.1 任务创建 OSTaskCreate()</h4>
+<p>OSTaskCreate() 是用户最常用的API，用于初始化任务TCB、堆栈，将任务加入就绪列表，是任务运行的前提，核心执行流程：</p>
+<ol>
+<li><strong>参数合法性校验</strong>：校验TCB指针、堆栈指针、优先级、入口函数等参数是否合法，禁止使用空闲任务优先级。</li>
+<li><strong>TCB初始化</strong>：清零TCB结构体，初始化任务名称、优先级、入口函数、用户参数、堆栈信息、时间片参数。</li>
+<li><strong>任务堆栈初始化 OSTaskStkInit()</strong>：CPU架构相关函数，按照上下文切换规则初始化任务堆栈，模拟任务被中断后的堆栈布局，将PC寄存器设置为任务入口函数地址，R0设置为用户参数，LR设置为任务退出钩子地址，最终计算出栈顶指针保存到TCB的StkPtr。</li>
+<li><strong>内置信号量/消息队列初始化</strong>：初始化任务内置的信号量计数值和消息队列结构。</li>
+<li><strong>加入就绪列表</strong>：将任务TCB插入对应优先级的就绪列表，优先级位图对应Bit置1。</li>
+<li><strong>触发调度</strong>：若内核已处于运行态，调用OSSched()触发调度，若新任务优先级高于当前运行任务，立即抢占CPU执行。</li>
+</ol>
+<h4 id="512-其他核心任务管理函数">5.1.2 其他核心任务管理函数</h4>
+<table>
+  <thead>
+      <tr>
+          <th>函数名</th>
+          <th>核心功能</th>
+          <th>关键注意事项</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>OSTaskDel()</td>
+          <td>删除任务，从所有内核链表中移除，任务无法被调度</td>
+          <td>任务可删除自身，删除后触发调度；禁止删除空闲任务</td>
+      </tr>
+      <tr>
+          <td>OSTaskSuspend()</td>
+          <td>挂起任务，任务进入挂起态，即使就绪也无法被调度</td>
+          <td>支持嵌套挂起，需对应次数的恢复才能解除挂起</td>
+      </tr>
+      <tr>
+          <td>OSTaskResume()</td>
+          <td>恢复被挂起的任务，解除挂起态，就绪后加入调度</td>
+          <td>仅能恢复被OSTaskSuspend()挂起的任务</td>
+      </tr>
+      <tr>
+          <td>OSTaskChangePrio()</td>
+          <td>动态修改任务优先级</td>
+          <td>互斥锁的优先级继承机制基于该函数实现</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="52-时间管理模块os_timecos_tickc">5.2 时间管理模块（os_time.c/os_tick.c）</h3>
+<p>时间管理是RTOS的基础，基于硬件时钟节拍实现，提供任务延时、超时管理、时间戳等核心功能。</p>
+<h4 id="521-时钟节拍核心机制">5.2.1 时钟节拍核心机制</h4>
+<ul>
+<li>时钟节拍由MCU硬件定时器产生周期性中断，是内核的&quot;心跳&quot;，通常配置为100~1000Hz。</li>
+<li>uC/OS-III 对uC/OS-II做了核心优化：将节拍处理逻辑从中断服务程序中剥离，仅在中断中唤醒时钟节拍任务，大幅缩短中断关闭时间，降低中断延迟。</li>
+<li>时钟节拍中断服务程序核心逻辑：
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">SysTick_Handler</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">OSIntEnter</span><span class="p">();</span> <span class="c1">// 进入中断，中断嵌套计数器+1
+</span></span></span><span class="line"><span class="cl">    <span class="nf">OSTimeTick</span><span class="p">();</span> <span class="c1">// 向时钟节拍任务发送信号量，唤醒节拍任务
+</span></span></span><span class="line"><span class="cl">    <span class="nf">OSIntExit</span><span class="p">();</span>  <span class="c1">// 退出中断，触发中断级调度
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+</li>
+</ul>
+<h4 id="522-任务延时核心函数">5.2.2 任务延时核心函数</h4>
+<ol>
+<li>
+<p><strong>OSTimeDly()</strong>：按时钟节拍数延时，支持3种延时模式：</p>
+<ul>
+<li>相对延时（OS_OPT_TIME_DLY）：从当前时刻开始延时指定节拍数，受任务执行时间、中断抢占影响，会出现周期漂移。</li>
+<li>周期延时（OS_OPT_TIME_PERIODIC）：基于上一次唤醒的绝对时间延时，保证任务执行周期的精准性，无周期漂移，适合周期性控制任务。</li>
+<li>绝对延时（OS_OPT_TIME_MATCH）：延时到系统节拍计数器匹配指定值，适合精准时序控制。</li>
+</ul>
+</li>
+<li>
+<p><strong>OSTimeDlyHMSM()</strong>：按时/分/秒/毫秒延时，将用户输入的时间转换为时钟节拍数，内部调用OSTimeDly()实现，易用性更强。</p>
+</li>
+</ol>
+<p><strong>核心注意事项</strong>：任务延时是主动放弃CPU的唯一正确方式，禁止使用空循环死等，会浪费CPU资源，导致低优先级任务无法执行。</p>
+<h3 id="53-同步与通信机制">5.3 同步与通信机制</h3>
+<p>μC/OS-III 提供丰富的任务间同步与通信原语，满足不同嵌入式场景需求。</p>
+<h4 id="531-信号量os_semc">5.3.1 信号量（os_sem.c）</h4>
+<p>信号量是最基础的同步机制，分为计数型和二进制信号量，用于任务间同步、中断与任务同步、共享资源保护。</p>
+<p><strong>核心数据结构 OS_SEM</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">os_sem</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OS_OBJ_TYPE</span>      <span class="n">Type</span><span class="p">;</span>           <span class="c1">// 内核对象类型，固定为信号量
+</span></span></span><span class="line"><span class="cl">    <span class="n">CPU_CHAR</span>        <span class="o">*</span><span class="n">NamePtr</span><span class="p">;</span>        <span class="c1">// 信号量名称
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_SEM_CTR</span>       <span class="n">Ctr</span><span class="p">;</span>            <span class="c1">// 信号量计数值（核心成员）
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_PEND_LIST</span>     <span class="n">PendList</span><span class="p">;</span>       <span class="c1">// 等待该信号量的任务阻塞链表
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_TS</span>            <span class="n">TS</span><span class="p">;</span>             <span class="c1">// 最后一次发布的时间戳
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">OS_SEM</span><span class="p">;</span></span></span></code></pre></div></div>
+<p><strong>核心函数</strong>：</p>
+<ol>
+<li><strong>OSSemCreate()</strong>：创建信号量，设置初始计数值。同步场景初始值设为0，资源保护场景初始值设为资源数量。</li>
+<li><strong>OSSemPend()</strong>：等待信号量，计数值&gt;0则计数值减1，获取成功；否则阻塞任务，加入等待列表，支持超时机制。</li>
+<li><strong>OSSemPost()</strong>：释放信号量，若有任务等待则唤醒最高优先级任务，否则计数值加1；支持在中断中调用，是中断与任务同步的核心方式。</li>
+</ol>
+<p><strong>注意</strong>：信号量不支持优先级继承，用于共享资源保护时会出现优先级反转，共享资源互斥场景优先使用互斥锁。</p>
+<h4 id="532-互斥锁os_mutexc">5.3.2 互斥锁（os_mutex.c）</h4>
+<p>互斥锁是专门用于共享资源互斥访问的内核对象，内置<strong>优先级继承机制</strong>，从根本上解决优先级反转问题。</p>
+<p><strong>核心数据结构 OS_MUTEX</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">os_mutex</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OS_OBJ_TYPE</span>      <span class="n">Type</span><span class="p">;</span>               <span class="c1">// 内核对象类型，固定为互斥锁
+</span></span></span><span class="line"><span class="cl">    <span class="n">CPU_CHAR</span>        <span class="o">*</span><span class="n">NamePtr</span><span class="p">;</span>            <span class="c1">// 互斥锁名称
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_TCB</span>          <span class="o">*</span><span class="n">OwnerTCBPtr</span><span class="p">;</span>        <span class="c1">// 持有互斥锁的任务TCB指针
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_PRIO</span>          <span class="n">OwnerOriginalPrio</span><span class="p">;</span>  <span class="c1">// 持有任务的原始优先级
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_NESTING_CTR</span>   <span class="n">NestingCtr</span><span class="p">;</span>         <span class="c1">// 嵌套持有计数器，支持递归获取
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_PEND_LIST</span>     <span class="n">PendList</span><span class="p">;</span>           <span class="c1">// 等待该互斥锁的任务阻塞链表
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">OS_MUTEX</span><span class="p">;</span></span></span></code></pre></div></div>
+<p><strong>优先级继承机制实现原理</strong>：
+当高优先级任务等待低优先级任务持有的互斥锁时，临时将低优先级任务的优先级提升到高优先级任务的优先级，避免中优先级任务抢占低优先级任务，让低优先级任务尽快执行完成并释放锁，释放后恢复原始优先级。</p>
+<p><strong>核心函数</strong>：</p>
+<ol>
+<li><strong>OSMutexPend()</strong>：获取互斥锁，未被持有时直接获取成功；被当前任务持有时嵌套计数器加1；被其他任务持有时，触发优先级继承，阻塞当前任务。</li>
+<li><strong>OSMutexPost()</strong>：释放互斥锁，嵌套计数器减1，计数为0时真正释放锁，恢复任务原始优先级，唤醒等待列表中最高优先级任务。</li>
+</ol>
+<p><strong>注意</strong>：互斥锁必须在任务上下文使用，禁止在中断中调用；必须由持有者释放，支持递归持有。</p>
+<h4 id="533-消息队列os_qc">5.3.3 消息队列（os_q.c）</h4>
+<p>消息队列用于任务间异步数据通信，uC/OS-III 采用<strong>零拷贝</strong>机制，仅传递消息指针，而非拷贝消息内容，效率极高。</p>
+<p><strong>核心原理</strong>：</p>
+<ol>
+<li>消息队列通过OS_Q结构体管理消息链表和等待任务列表。</li>
+<li>发布消息时，若有任务等待，直接将消息传递给最高优先级等待任务，无需放入队列；无等待任务时，将消息放入队列。</li>
+<li>等待消息时，若队列中有消息，直接取出消息；否则阻塞任务，加入等待列表，支持超时机制。</li>
+<li>支持FIFO（先进先出）和LIFO（后进先出）模式，LIFO适合紧急消息场景。</li>
+</ol>
+<p><strong>特色功能</strong>：每个任务自带内置消息队列，无需单独创建OS_Q对象，简化一对一任务间通信。</p>
+<h3 id="54-内存管理模块os_memc">5.4 内存管理模块（os_mem.c）</h3>
+<p>μC/OS-III 提供<strong>固定分区内存管理</strong>机制，专为嵌入式场景设计，完全避免内存碎片，保证内存分配/释放的时间恒定为O(1)，满足硬实时需求。</p>
+<p><strong>核心原理</strong>：</p>
+<ol>
+<li>将一块连续的大内存划分为多个固定大小的内存块，所有内存块组成空闲单向链表。</li>
+<li>分配内存时，直接从空闲链表头部取出一个内存块，无需遍历，时间恒定。</li>
+<li>释放内存时，将内存块放回空闲链表头部，无内存合并开销，不会产生碎片。</li>
+<li>支持多个内存分区，每个分区的内存块大小可不同，适配不同的内存需求。</li>
+</ol>
+<p><strong>核心数据结构 OS_MEM</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-c">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">os_mem</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OS_OBJ_TYPE</span>      <span class="n">Type</span><span class="p">;</span>           <span class="c1">// 内核对象类型，固定为内存分区
+</span></span></span><span class="line"><span class="cl">    <span class="n">CPU_CHAR</span>        <span class="o">*</span><span class="n">NamePtr</span><span class="p">;</span>        <span class="c1">// 分区名称
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span>            <span class="o">*</span><span class="n">AddrPtr</span><span class="p">;</span>        <span class="c1">// 内存分区起始地址
+</span></span></span><span class="line"><span class="cl">    <span class="kt">void</span>            <span class="o">*</span><span class="n">FreeListPtr</span><span class="p">;</span>    <span class="c1">// 空闲内存块链表头指针
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_MEM_SIZE</span>      <span class="n">BlkSize</span><span class="p">;</span>        <span class="c1">// 每个内存块的大小
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_MEM_QTY</span>       <span class="n">NbrMax</span><span class="p">;</span>         <span class="c1">// 总内存块数量
+</span></span></span><span class="line"><span class="cl">    <span class="n">OS_MEM_QTY</span>       <span class="n">NbrFree</span><span class="p">;</span>        <span class="c1">// 当前空闲内存块数量
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">OS_MEM</span><span class="p">;</span></span></span></code></pre></div></div>
+<p><strong>核心函数</strong>：</p>
+<ol>
+<li><strong>OSMemCreate()</strong>：创建内存分区，将连续内存划分为固定大小的内存块，构建空闲链表。</li>
+<li><strong>OSMemGet()</strong>：分配内存块，从空闲链表取出一个块，返回地址，无空闲块时返回NULL。</li>
+<li><strong>OSMemPut()</strong>：释放内存块，将块放回空闲链表。</li>
+</ol>
+<p><strong>注意</strong>：内存分区的内存空间必须由用户提前分配（通常为全局数组）；内存块大小固定，分配时不能超出块大小；禁止使用C标准库的malloc/free，避免内存碎片和不确定的执行时间。</p>
+<h2 id="六中断管理与临界区机制">六、中断管理与临界区机制</h2>
+<h3 id="61-中断管理">6.1 中断管理</h3>
+<p>μC/OS-III 支持中断嵌套，通过两个核心函数管理中断上下文：</p>
+<ol>
+<li><strong>OSIntEnter()</strong>：中断进入时调用，中断嵌套计数器加1，标记进入中断上下文，必须在ISR最开始调用。</li>
+<li><strong>OSIntExit()</strong>：中断退出时调用，中断嵌套计数器减1，嵌套计数器为0时，执行中断级调度，必须在ISR末尾调用。</li>
+</ol>
+<p><strong>ISR编写规范</strong>：</p>
+<ul>
+<li>ISR必须以OSIntEnter()开头，以OSIntExit()结尾。</li>
+<li>ISR必须尽可能短，仅做最紧急的硬件处理，耗时操作通过信号量/消息队列交给任务处理。</li>
+<li>中断中禁止调用阻塞类函数（如Pend类、延时函数），仅能调用Post类发布函数。</li>
+</ul>
+<h3 id="62-临界区保护机制">6.2 临界区保护机制</h3>
+<p>临界区是必须原子执行的代码段，不能被中断或任务调度打断，μC/OS-III提供两种临界区保护方案：</p>
+<table>
+  <thead>
+      <tr>
+          <th>保护方式</th>
+          <th>实现原理</th>
+          <th>适用场景</th>
+          <th>优缺点</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>关中断保护<br>CPU_CRITICAL_ENTER/EXIT</td>
+          <td>进入临界区关中断，退出时恢复中断状态</td>
+          <td>被中断和任务同时访问的共享资源</td>
+          <td>优点：保护粒度最细，完全保证原子性；<br>缺点：临界区代码必须极短，避免影响中断响应</td>
+      </tr>
+      <tr>
+          <td>调度锁保护<br>OSSchedLock/Unlock</td>
+          <td>进入临界区锁定调度器，禁止任务切换，允许中断响应</td>
+          <td>仅被任务访问的共享资源，临界区较长</td>
+          <td>优点：不影响中断响应；<br>缺点：锁定期间高优先级任务无法调度，影响实时性，禁止调用阻塞函数</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="七ucos-iii-核心特色与最佳实践">七、uC/OS-III 核心特色与最佳实践</h2>
+<h3 id="71-与ucos-ii的核心区别">7.1 与uC/OS-II的核心区别</h3>
+<ol>
+<li>支持同优先级多任务与时间片轮转调度，uC/OS-II每个优先级仅支持一个任务。</li>
+<li>任务内置信号量与消息队列，无需单独创建内核对象，简化代码，降低资源占用。</li>
+<li>时钟节拍轮+节拍任务设计，将节拍处理逻辑从中断剥离，大幅降低中断延迟，处理效率从O(n)提升到O(1)。</li>
+<li>支持无限任务数与优先级数（仅受内存限制），uC/OS-II最大支持64个优先级。</li>
+<li>更完善的调试与统计功能，内置关中断时间、调度锁时间、CPU使用率、堆栈使用统计。</li>
+</ol>
+<h3 id="72-工程最佳实践">7.2 工程最佳实践</h3>
+<ol>
+<li><strong>优先级分配</strong>：遵循RM调度算法，周期越短的任务优先级越高，保证硬实时任务的响应时间。</li>
+<li><strong>任务设计</strong>：任务主体必须是无限循环，主动通过延时或等待内核对象放弃CPU，禁止空循环死等。</li>
+<li><strong>共享资源保护</strong>：多任务共享资源优先使用互斥锁，中断与任务共享资源使用关中断临界区保护。</li>
+<li><strong>中断设计</strong>：中断处理越短越好，耗时操作交给任务处理，中断中仅做硬件操作和信号量/消息发布。</li>
+<li><strong>内存管理</strong>：优先使用内核固定分区内存管理，禁止使用malloc/free，避免内存碎片。</li>
+<li><strong>可裁剪性</strong>：通过os_cfg.h关闭不需要的功能，最小化内核Flash和RAM占用，适配资源受限的MCU。</li>
+<li><strong>堆栈设计</strong>：合理分配任务堆栈大小，开启堆栈检测功能，预留足够的堆栈余量，避免堆栈溢出。</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-03-04</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/011_ucos_iii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/os/">OS</a>,&nbsp;<a href="/blog/tags/ucos-iii/">UCOS-III</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/010_ucos_ii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" class="prev" rel="prev" title="uCOS-II 源码详细分析"><i class="fas fa-angle-left" aria-hidden="true"></i>uCOS-II 源码详细分析</a>
+            <a href="/blog/003_linux%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="Linux 进程调度策略详细总结">Linux 进程调度策略详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

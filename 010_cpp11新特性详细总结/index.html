@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>C&#43;&#43;11 新特性详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/010_cpp11%E6%96%B0%E7%89%B9%E6%80%A7%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="C&#43;&#43;11 新特性详细总结">
+  <meta property="og:description" content="C&#43;&#43;11 新特性全面梳理与总结 用户需详细了解C&#43;&#43;11新特性，我会先梳理C&#43;&#43;11核心模块，避免内容零散，按类别清晰总结，讲清各特性核心作用、用法及关键点。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-01-01T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-01-01T09:30:00+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="Cpp">
+    <meta property="article:tag" content="Cpp11">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="C&#43;&#43;11 新特性详细总结">
+  <meta name="twitter:description" content="C&#43;&#43;11 新特性全面梳理与总结 用户需详细了解C&#43;&#43;11新特性，我会先梳理C&#43;&#43;11核心模块，避免内容零散，按类别清晰总结，讲清各特性核心作用、用法及关键点。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/010_cpp11%E6%96%B0%E7%89%B9%E6%80%A7%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/001_archlinux%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/011_cpp14%E6%96%B0%E7%89%B9%E6%80%A7%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "C++11 新特性详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/010_cpp11%E6%96%B0%E7%89%B9%E6%80%A7%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, Cpp, Cpp11","wordcount":  17920 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/010_cpp11%E6%96%B0%E7%89%B9%E6%80%A7%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-01-01T09:00:00+08:00","dateModified": "2026-01-01T09:30:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/010_cpp11%E6%96%B0%E7%89%B9%E6%80%A7%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/010_cpp11%E6%96%B0%E7%89%B9%E6%80%A7%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">C++11 新特性详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-01">2026-01-01</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 17920 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 36 分钟&nbsp;<span id="/blog/010_cpp11%E6%96%B0%E7%89%B9%E6%80%A7%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="C&#43;&#43;11 新特性详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一核心语言特性">一、核心语言特性</a>
+      <ul>
+        <li><a href="#1-类型推导体系">1. 类型推导体系</a>
+          <ul>
+            <li><a href="#11-auto-关键字">1.1 auto 关键字</a></li>
+            <li><a href="#12-decltype-关键字">1.2 decltype 关键字</a></li>
+            <li><a href="#13-尾置返回类型追踪返回类型">1.3 尾置返回类型（追踪返回类型）</a></li>
+            <li><a href="#14-类型别名与模板别名using-关键字">1.4 类型别名与模板别名（using 关键字）</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-右值引用与移动语义">2. 右值引用与移动语义</a>
+          <ul>
+            <li><a href="#21-左值与右值">2.1 左值与右值</a></li>
+            <li><a href="#22-右值引用">2.2 右值引用</a></li>
+            <li><a href="#23-移动构造与移动赋值">2.3 移动构造与移动赋值</a></li>
+            <li><a href="#24-stdmove-类型转换">2.4 std::move 类型转换</a></li>
+            <li><a href="#25-完美转发与stdforward">2.5 完美转发与std::forward</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-lambda-表达式">3. Lambda 表达式</a>
+          <ul>
+            <li><a href="#31-完整语法">3.1 完整语法</a></li>
+            <li><a href="#32-核心组成">3.2 核心组成</a></li>
+            <li><a href="#33-示例">3.3 示例</a></li>
+            <li><a href="#34-核心特性">3.4 核心特性</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-统一初始化与初始化列表">4. 统一初始化与初始化列表</a>
+          <ul>
+            <li><a href="#41-统一初始化列表初始化">4.1 统一初始化（列表初始化）</a></li>
+            <li><a href="#42-stdinitializer_list">4.2 std::initializer_list</a></li>
+          </ul>
+        </li>
+        <li><a href="#5-类功能全面增强">5. 类功能全面增强</a>
+          <ul>
+            <li><a href="#51-default-与-delete">5.1 =default 与 =delete</a></li>
+            <li><a href="#52-override-与-final">5.2 override 与 final</a></li>
+            <li><a href="#53-委托构造函数">5.3 委托构造函数</a></li>
+            <li><a href="#54-继承构造函数">5.4 继承构造函数</a></li>
+          </ul>
+        </li>
+        <li><a href="#6-编译期增强特性">6. 编译期增强特性</a>
+          <ul>
+            <li><a href="#61-constexpr-编译期常量与计算">6.1 constexpr 编译期常量与计算</a></li>
+            <li><a href="#62-static_assert-静态断言">6.2 static_assert 静态断言</a></li>
+          </ul>
+        </li>
+        <li><a href="#7-核心语法与关键字增强">7. 核心语法与关键字增强</a>
+          <ul>
+            <li><a href="#71-nullptr-空指针关键字">7.1 nullptr 空指针关键字</a></li>
+            <li><a href="#72-强类型枚举-enum-class--enum-struct">7.2 强类型枚举 enum class / enum struct</a></li>
+            <li><a href="#73-范围for循环range-based-for-loop">7.3 范围for循环（Range-based for loop）</a></li>
+            <li><a href="#74-原始字符串字面量">7.4 原始字符串字面量</a></li>
+            <li><a href="#75-noexcept-异常说明符">7.5 noexcept 异常说明符</a></li>
+            <li><a href="#76-thread_local-线程本地存储">7.6 thread_local 线程本地存储</a></li>
+          </ul>
+        </li>
+        <li><a href="#8-其他核心语言特性">8. 其他核心语言特性</a></li>
+      </ul>
+    </li>
+    <li><a href="#二标准库新增与增强">二、标准库新增与增强</a>
+      <ul>
+        <li><a href="#1-智能指针头文件">1. 智能指针（头文件）</a>
+          <ul>
+            <li><a href="#11-stdunique_ptr-独占式智能指针">1.1 std::unique_ptr 独占式智能指针</a></li>
+            <li><a href="#12-stdshared_ptr-共享式智能指针">1.2 std::shared_ptr 共享式智能指针</a></li>
+            <li><a href="#13-stdweak_ptr-弱引用智能指针">1.3 std::weak_ptr 弱引用智能指针</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-容器新增与增强">2. 容器新增与增强</a>
+          <ul>
+            <li><a href="#21-新增容器">2.1 新增容器</a></li>
+            <li><a href="#22-容器通用增强">2.2 容器通用增强</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-并发编程标准库首次加入标准">3. 并发编程标准库（首次加入标准）</a>
+          <ul>
+            <li><a href="#31-stdthread-线程类">3.1 std::thread 线程类</a></li>
+            <li><a href="#32-互斥量与锁头文件">3.2 互斥量与锁（头文件）</a></li>
+            <li><a href="#33-条件变量-stdcondition_variable">3.3 条件变量 std::condition_variable</a></li>
+            <li><a href="#34-异步编程支持头文件">3.4 异步编程支持（头文件）</a></li>
+            <li><a href="#35-原子操作库">3.5 原子操作库</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-函数式编程增强">4. 函数式编程增强</a>
+          <ul>
+            <li><a href="#41-stdfunction-函数包装器头文件">4.1 std::function 函数包装器（头文件）</a></li>
+            <li><a href="#42-stdbind-函数绑定器头文件">4.2 std::bind 函数绑定器（头文件）</a></li>
+            <li><a href="#43-stdrefstdcref-引用包装器">4.3 std::ref/std::cref 引用包装器</a></li>
+          </ul>
+        </li>
+        <li><a href="#5-其他重要标准库特性">5. 其他重要标准库特性</a></li>
+      </ul>
+    </li>
+    <li><a href="#三c11的核心意义">三、C++11的核心意义</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="c11-新特性全面梳理与总结">C++11 新特性全面梳理与总结</h1>
+<p>用户需详细了解C++11新特性，我会先梳理C++11核心模块，避免内容零散，按类别清晰总结，讲清各特性核心作用、用法及关键点。</p>
+<p>我会先回忆C++11全称及重要地位，接着分模块梳理。语言核心层面，从类型推导、右值引用等14个方面展开，如auto、decltype用于类型推导，右值引用实现移动语义，lambda表达式有特定语法和捕获列表等。</p>
+<p>我会继续梳理C++11新特性，语言核心方面，有noexcept异常说明符、追踪返回类型等，还需注意auto和decltype的规则。标准库新增特性分类梳理，包括智能指针、容器相关、并发编程相关、函数对象与回调、元编程相关及其他工具。</p>
+<p>我会补充std::begin/std::end、std::ref/std::cref等特性。计划分两大块梳理，先搭建整体结构，再纠正常见误区，如明确auto、lambda等特性的适用标准。随后，按小节逐个梳理C++11核心语言特性，如类型推导机制中的auto关键字，阐述其作用、语法等。</p>
+<p>我会阐述auto与decltype关键字的规则及示例。auto必须初始化，推导时会忽略顶层const、volatile等，不能用于函数形参等推导。示例有auto i = 42等。注意auto不会推导为右值引用，除非用decltype(auto)或显式&amp;&amp;配合std::move。decltype作用是推导表达式精确类型，不依赖初始化，常用于泛型编程。其规则为，若表达式是标识符等，推导为该实体声明类型；若是左值表达式，推导为T&amp;，纯右值推导为T，将亡值推导为T&amp;&amp;。示例有decltype(x) a = 10等。</p>
+<p>我会通过示例阐述decltype，如decltype(x + 1) c = 20推导为int。其典型场景是配合auto实现尾置返回类型，解决模板函数返回值依赖参数问题。接着介绍尾置返回类型，它能解决函数返回值类型依赖参数无法提前声明的问题，语法为auto 函数名(参数列表) -&gt; decltype(表达式) { 函数体 } ，示例展示了在泛型编程中无需提前知类型即可推导返回值类型的优势。最后说明右值引用与移动语义，C++98临时对象拷贝有开销，移动语义转移资源所有权提升性能，右值引用用&amp;&amp;标记，绑定到右值延长其生命周期，还介绍了左值与右值的核心区别。</p>
+<p>通过示例展示右值引用，如int&amp;&amp; rref = 10，10是纯右值，rref绑定后生命周期延长，而具名右值引用本身是左值。介绍移动构造函数与移动赋值运算符，作用是接管源对象资源，避免资源重复申请释放，语法如示例代码。核心要点为移动函数加noexcept保证异常安全，编译器会自动生成默认移动构造/赋值函数。</p>
+<p>我会阐述移动对不同对象的性能影响，移动仅对持有堆资源对象有收益。介绍std::move函数，它将左值转为右值引用触发移动语义，原对象状态未定义。还会说明完美转发std::forward，在模板函数中保持参数值类别不变，解决右值引用引用折叠问题，通过示例展示其在工厂函数等场景的应用。</p>
+<p>Lambda表达式作用为创建匿名函数对象，简化回调等参数传递，捕获上下文变量。完整语法含捕获列表、参数列表等部分。捕获列表有多种方式，如值捕获、引用捕获等。参数列表与普通函数一致，C++11不支持auto参数，C++14泛型lambda支持。mutable可修改值捕获变量副本，异常说明用于指定函数是否抛出异常，返回类型可省略。示例展示简单加法lambda。</p>
+<p>通过add函数调用示例，展示Lambda表达式创建匿名函数对象及捕获列表、参数列表等语法。如值捕获加mutable修改副本示例，配合STL算法对容器元素操作示例。核心要点为每个Lambda生成唯一匿名类实例，引用捕获需保证外部变量生命周期长于闭包，无捕获lambda可隐式转函数指针。还介绍统一初始化，用{}统一初始化方式，防止窄化转换，示例有基本类型、数组、容器及关联容器初始化。</p>
+<p>我会介绍C++11的统一初始化、std::initializer_list及范围for循环。统一初始化用{}初始化，禁止窄化转换，解决“最令人头疼的语法解析”问题。std::initializer_list让自定义类型支持列表初始化，是轻量级代理对象，指向数组首地址和长度，示例展示其用法及注意事项。范围for循环简化容器/数组遍历语法，无需手动管理迭代器，代码更简洁安全，语法为for (元素声明 : 可迭代对象) { 循环体 } 。</p>
+<p>通过vector和数组遍历示例，阐述范围for循环规则，即可迭代对象包括数组、STL容器等，循环中修改容器可能致迭代器失效，auto推导默认值拷贝，改元素需加&amp;。还介绍nullptr关键字，为解决C++98中NULL宏二义性，它是std::nullptr_t类型空指针常量，可隐式转指针类型，不可转整数类型（除bool） 。</p>
+<p>我会通过示例阐述nullptr，它可隐式转指针类型，不能转整数类型（除bool），建议用于所有空指针场景替代NULL。还会介绍强类型枚举，解决C++98枚举缺陷，语法为enum class 枚举名 : 底层类型 { 枚举项 }，有强作用域、禁止隐式转换、可指定底层类型等特性，示例展示其用法及与C++98枚举对比。</p>
+<p>我会阐述C++11类功能增强特性，其中 =default 用于显式要求编译器生成默认特殊成员函数，即便用户自定义构造函数，也能生成默认版本，示例展示了其用法。 =delete 则用于显式禁用函数，禁止编译器生成或用户调用，典型场景包括禁用拷贝构造/赋值实现不可拷贝类，以及禁用特定重载函数防止隐式转换，示例也进行了说明。</p>
+<p>我会阐述C++11的override、final关键字及委托构造函数。override显式声明重写基类虚函数，编译器检查基类对应虚函数，避免笔误。final有修饰类和虚函数两种作用，修饰类则该类不可继承，修饰虚函数则该虚函数不可被子类重写。委托构造函数允许一个构造函数调用同一类其他构造函数，减少代码冗余，简化初始化逻辑，语法是在构造函数初始化列表调用其他构造函数。</p>
+<p>我会阐述C++11的委托构造和继承构造函数。委托构造允许一个构造函数调用同一类其他构造函数，需注意不能同时初始化成员变量且不能形成委托循环。继承构造函数让子类继承基类构造函数，简化代码，但要留意子类新增成员变量及参数相同构造函数的覆盖问题。此外，还会介绍变长模板参数包，它实现泛型编程高度灵活性，是元编程核心特性。</p>
+<p>我会阐述变参模板与constexpr特性。变参模板用&hellip;表示参数包，分模板和函数参数包，核心操作是展开。通过递归展开示例，实现任意参数打印，还展示模板类变长参数包用法，其典型场景在标准库相关函数实现中。constexpr作用是将计算移至编译期，提升性能，替代旧方案。其变量需用编译期常量初始化，函数体只能有return语句（C++11限制，C++14放宽），传入编译期常量时在编译期计算结果。</p>
+<p>通过示例阐述constexpr特性，其变量需编译期常量初始化，函数体只能有return语句（C++11限制，C++14放宽），传入运行期变量会退化为普通函数，类构造函数也可声明为constexpr。还介绍static_assert，它是编译期断言，语法为static_assert(常量表达式, &ldquo;错误提示字符串&rdquo;)，用于检查条件，若不满足在编译阶段输出错误信息，提升调试效率，断言条件必须是编译期可计算的常量表达式。</p>
+<p>我会阐述C++11的noexcept、thread_local、alignas/alignof等特性。noexcept声明函数不抛异常，配合移动语义优化并保证异常安全，可带常量表达式，如移动构造函数常加noexcept。thread_local声明变量线程级生命周期，每个线程有独立副本，跨平台替代C++98平台相关方案。alignof获取类型对齐字节数，alignas指定变量/类型对齐字节数，覆盖默认规则，如示例中按16字节对齐结构体。</p>
+<p>我会阐述C++11的alignof、explicit等特性。alignof用于获取类型对齐字节数，如示例中获取自定义结构体对齐字节数为16。explicit禁止隐式类型转换，示例中通过将类型转换操作符声明为explicit，实现对隐式转换的限制。还会介绍C++11标准库新增的智能指针，基于RAII机制，自动管理堆内存。其中std::unique_ptr独占对象所有权，不支持拷贝构造和赋值，仅支持移动语义，替代auto_ptr。</p>
+<p>我会介绍std::unique_ptr和std::shared_ptr。std::unique_ptr开销小，通过std::move转移所有权，调用reset手动释放对象，get获取原始指针。std::shared_ptr基于引用计数，多个可指向同一对象，引用计数增减原子操作，线程安全，但对象读写需手动加锁。示例展示了两者创建、引用计数变化及释放等操作。</p>
+<p>注意到循环引用会致内存泄漏，如两对象互持shared_ptr，引用计数永不为0。我会介绍std::weak_ptr，它辅助shared_ptr，不增引用计数，不控对象生命周期，用于观察shared_ptr状态。其常用方法有expired()检查对象是否释放、lock()获取shared_ptr、use_count()获取引用计数。通过示例，展示如何用weak_ptr解决循环引用，使对象离开作用域时能正确析构。</p>
+<p>我会梳理C++11容器新增与增强特性。新增容器方面，std::array是固定大小数组，封装原生数组并提供STL接口，比原生数组安全且无堆内存开销；std::forward_list是单向链表，节省内存，插入删除效率高但不支持反向迭代器和size()方法；无序关联容器基于哈希表实现，查找、插入、删除平均时间复杂度为O(1)，元素无序。容器通用增强方面，emplace系列函数直接在容器内存中构造对象，减少一次拷贝/移动开销，提升性能。</p>
+<p>我会梳理C++11容器及并发特性。容器方面，cbegin()/cend()提供const迭代器，shrink_to_fit()可释放多余容量。并发编程支持上，C++11引入std::thread创建管理线程，可绑定多种函数，需在对象销毁前调用join()或detach()；还提供std::mutex互斥量和std::lock_guard锁守卫，后者RAII风格，构造加锁、析构解锁，简单安全。</p>
+<p>我会梳理C++11并发相关特性。std::unique_lock是更灵活的锁守卫，支持手动加锁等操作，常配合条件变量使用。条件变量std::condition_variable实现线程同步，避免轮询，需配合std::unique_lock，核心方法有wait()等。异步编程支持方面，std::future/promise实现线程间结果传递，std::async简化异步任务创建，返回future对象，可获取任务返回值。</p>
+<p>我会阐述C++11函数对象与回调增强特性。先介绍std::function，它能统一包装各类可调用对象，实现类型擦除，简化回调实现，语法为std::function&lt;返回值类型(参数类型列表)&gt; ，并通过包装普通函数、lambda展示用法，典型场景有回调函数等。还会介绍std::bind，它可绑定可调用对象与参数，生成新可调用对象，支持参数重排等，用占位符表示调用时传入参数，通过示例展示绑定固定参数的用法。</p>
+<p>我会通过示例阐述std::bind的用法，如创建add10函数对象，实现参数重排。还会介绍std::tuple元组，它是变长模板参数应用，可存储任意数量、类型元素，常用操作有创建、获取、解包，典型场景是函数返回多值。此外，介绍std::chrono时间库，它跨平台，有时长、时间点、时钟三部分，用于高精度时间计量。</p>
+<p>我会介绍C++11的计时示例，通过获取起始和结束时间，计算耗时并输出。还会阐述正则表达式库，它实现字符串匹配等操作，核心类有std::regex等，示例展示了邮箱格式匹配。另外，介绍类型萃取库，它是元编程核心工具，可在编译期获取或修改类型属性，常用类型有类型判断和修改相关。</p>
+<p>我会补充C++11的static_assert、random、ref等特性示例。static_assert用于编译期断言，如示例中确保模板参数为算术类型。random库替代rand()，示例展示用mt19937引擎和uniform_int_distribution分布器生成随机数。ref包装引用，解决模板传参引用退化问题，示例用于std::thread传递引用。最后总结C++11是里程碑，修复缺陷并引入现代特性，提升开发效率，奠定后续发展基础。</p>
+<p>我需要将已总结的C++11特性内容进行组织，确保结构清晰、准确详细。同时，要严格审核，避免混入后续标准内容，保证每个特性都属于C++11。</p>
+<p>我计划补充C++11遗漏特性，将内容分为核心语言特性与标准库新增及增强两部分。核心语言特性需补充类型别名、原始字符串字面量等8项；标准库部分补充std::atomic等4项。完善结构，修正遗漏，补充准确规则与示例。</p>
+<p>我计划将异常处理及新增算法等内容，整合进已梳理的C++11新特性结构中。需确保结构清晰，每个特性讲清作用、语法等，且准确无误，不混入后续标准内容。</p>
+<p>我会梳理auto与decltype关键字规则及示例。auto必须在声明时初始化，推导依赖初始值表达式，推导默认忽略顶层const/volatile和引用，不可用于函数形参等推导，示例展示了其用法。decltype用于精确推导表达式类型，不依赖变量初始化，核心用于泛型编程，推导规则为若表达式是标识符等，推导为该实体声明类型，若是左值表达式，推导为T&amp;，纯右值推导为T，将亡值推导为T&amp;&amp; 。</p>
+<p>通过示例阐述decltype，如decltype(x) a = 10推导为int，decltype((x)) b = x推导为int&amp; ，decltype(x + 1) c = 20推导为int 。还介绍尾置返回类型，配合auto和decltype解决模板函数返回值依赖参数问题，语法为auto 函数名(参数列表) -&gt; decltype(表达式) { 函数体 } 。另外，介绍using关键字，它扩展了类型别名能力，支持模板别名，比typedef更直观强大。</p>
+<p>我会介绍using关键字，它扩展了类型别名能力，支持模板别名，如<code>template&lt;typename T&gt; using Vec = std::vector&lt;T, std::allocator&lt;T&gt;&gt;;</code>。还会阐述右值引用与移动语义，右值引用用<code>&amp;&amp;</code>标记，仅能绑定到右值，可延长其生命周期，允许修改右值，具名右值引用本身是左值。通过示例展示其用法，如<code>int&amp;&amp; rref = 10;</code>绑定纯右值10并可修改。</p>
+<p>我会阐述类的移动构造与移动赋值函数，它们用于接管源对象资源，避免资源重复申请释放。核心规则为移动函数常声明<code>noexcept</code>，编译器仅在特定条件下自动生成默认移动函数。还给出<code>MyString</code>类的移动构造与赋值运算符示例，展示资源转移及源对象置空操作。</p>
+<p>我会介绍std::move，它将左值转为右值引用以触发移动语义，自身不做移动操作，示例展示了其用法。还会阐述完美转发与std::forward，在模板函数中保持参数原始值类别，解决右值引用引用折叠问题，通过引用折叠规则、语法及示例说明其应用。</p>
+<p>C++11引入匿名函数，支持函数式编程。其完整语法为<code>[捕获列表](参数列表) mutable 异常说明 -&gt; 返回类型 { 函数体 }</code>。核心组成包括：捕获列表，定义闭包可访问变量及捕获方式，如<code>[]</code>空捕获、<code>[=]</code>值捕获等；参数列表与普通函数一致，C++11不支持auto参数（C++14泛型Lambda支持）；mutable，值捕获变量默认const，加此关键字可修改副本；返回类型，尾置返回类型，函数体仅含return语句或无返回值时，编译器可自动推导，可省略。</p>
+<p>通过简单加法、值捕获加mutable及配合STL算法等Lambda示例，展示其用法。介绍Lambda核心特性，如生成唯一匿名闭包类型，无捕获Lambda可隐式转函数指针。还阐述统一初始化，用<code>{}</code>解决C++98初始化混乱问题，禁止窄化转换，有解决语法解析及禁止窄化转换等核心优势。</p>
+<p>给出基本类型、数组、容器等多种初始化示例。介绍std::initializer_list，它让自定义类型支持列表初始化，是轻量级代理对象，示例展示其用法。还阐述类功能增强，=default显式要求编译器生成默认特殊成员函数，即便用户自定义构造函数，也能生成默认版本。</p>
+<ul>
+<li>
+<p><strong>=delete</strong>：显式禁用函数，替代C++98“私有声明不实现”方案，如示例中禁用拷贝构造和赋值，允许移动。</p>
+</li>
+<li>
+<p><strong>override</strong>：显式声明重写基类虚函数，编译器检查基类匹配虚函数，避免笔误。</p>
+</li>
+<li>
+<p><strong>final</strong>：修饰类不可继承，修饰虚函数不可被子类重写，示例展示了正确和错误使用override的情况。</p>
+</li>
+</ul>
+<p>我会阐述C++11的委托构造和继承构造函数。委托构造允许一个构造函数调用同一类其他构造函数，需注意不能同时初始化成员变量且不能形成委托循环，示例展示了其用法。继承构造函数让子类继承基类构造函数，简化代码，语法为<code>using 基类名::基类名;</code> ，示例也进行了说明。</p>
+<p>我会阐述C++11的编译期增强特性，包括constexpr和static_assert。constexpr将变量、函数计算移至编译期，提升性能，替代旧方案，其变量需编译期常量初始化，函数体仅含return语句。static_assert是编译期断言，语法为<code>static_assert(常量表达式, &quot;错误提示字符串&quot;)</code>，不满足条件编译即终止并输出错误信息，无运行时开销。</p>
+<p>通过两个示例展示编译期检查，一是检查平台int大小，二是模板类型检查，static_assert用于确保条件为真，否则编译失败并输出提示。</p>
+<p>强枚举有三核心特性：强作用域，枚举项需加作用域访问；禁止隐式类型转换，需显式<code>static_cast</code>；可指定底层类型，默认int，可自定义。示例展示了其用法。范围for循环简化容器/数组遍历，语法为<code>for (元素声明 : 可迭代对象) { 循环体 }</code>，示例演示了只读和修改元素的方式，核心规则是可迭代对象包括数组、STL容器及实现<code>begin()/end()</code>的自定义类型。</p>
+<p>我会介绍C++11的原始字符串字面量、noexcept异常说明符等特性。原始字符串字面量解决字符串中转义符冗余问题，提升代码可读性，语法为<code>R&quot;xxx(原始字符串内容)xxx&quot;</code>，xxx为可选自定义分隔符，示例展示了普通字符串与原始字符串及多行字符串的不同。noexcept声明函数不抛异常，编译器可优化，配合移动语义保证异常安全，有两种语法，典型场景是移动构造/赋值函数常声明为noexcept。</p>
+<p>我会介绍thread_local变量，其生命周期为线程级，各线程有独立副本，替代平台相关方案，示例展示了其用法。还会阐述其他核心语言特性，包括变长模板参数包，允许模板接收任意数量、类型参数，支撑std::tuple等实现；alignas/alignof用于获取和指定内存对齐规则；explicit转换操作符禁止意外隐式类型转换；重新定义POD类型为平凡和标准布局类型，保证与C语言内存兼容性；首次在语言层面定义多线程内存模型，为无锁编程等提供标准语义基础。</p>
+<p>我会介绍用户自定义字面量，允许自定义字面量后缀，提升代码可读性。还会阐述智能指针，基于RAII机制自动管理堆内存，解决内存相关问题，替代auto_ptr。其中std::unique_ptr独占对象所有权，不支持拷贝仅支持移动，开销小；std::shared_ptr基于原子引用计数，多个可指向同一对象，引用计数为0时释放对象。</p>
+<p>我会推荐使用<code>std::make_shared</code>创建智能指针，因其内存分配更高效安全。同时提醒，循环引用会致内存泄漏，需配合<code>weak_ptr</code>解决。还给出<code>std::shared_ptr</code>使用示例，展示引用计数变化。对于<code>std::weak_ptr</code>，阐述其辅助<code>shared_ptr</code>、不增计数、用于观察对象状态及解决循环引用的特性，给出解决循环引用的类定义示例。</p>
+<p>给出解决循环引用的示例代码，通过智能指针实现，离开作用域时引用计数归零，对象正确析构。还介绍容器新增与增强特性，新增std::array等容器，emplace系列函数可直接在容器内存构造对象，提升性能。</p>
+<p>我会梳理C++11容器与并发编程特性。容器方面，<code>emplace_back</code>直接在内存构造对象，无临时对象；新增<code>cbegin()</code>等获取const迭代器，<code>shrink_to_fit()</code>释放多余容量，所有容器支持<code>{}</code>列表初始化。并发编程上，C++11首次在标准层面实现跨平台多线程支持，<code>std::thread</code>用于创建管理线程，可绑定多种函数，核心规则是对象销毁前需调用<code>join()</code>或<code>detach()</code>，示例展示了创建线程执行函数的用法。</p>
+<p>我会先介绍线程等待执行完成的方法<code>t.join()</code>。接着阐述互斥量相关类，如<code>std::mutex</code>等，其中<code>std::lock_guard</code>是RAII风格锁守卫，<code>std::unique_lock</code>更灵活。还会介绍条件变量<code>std::condition_variable</code>，它实现线程同步，需配合<code>std::unique_lock</code>使用，有<code>wait()</code>等核心方法。</p>
+<p>我会梳理C++11异步编程支持，<future>头文件中的std::promise/std::future实现线程间结果传递，std::async简化异步任务创建。还会介绍<atomic>原子操作库，提供线程安全的无锁原子操作。此外，阐述<functional>头文件中std::function函数包装器，统一包装可调用对象，实现类型擦除。</p>
+<p>std::function是函数包装器，语法为<code>std::function&lt;返回值类型(参数类型列表)&gt;</code>，可包装普通函数、lambda等，示例展示了其用法。std::bind是函数绑定器，可绑定可调用对象与参数，生成新可调用对象，支持参数重排、固定参数等，占位符<code>std::placeholders::_1/_2/...</code>表示调用时传入参数，示例也进行了说明。</p>
+<p>介绍swap_add函数，其效果等价于add(20,10)。接着介绍std::ref/std::cref，将引用包装为可拷贝对象，解决模板传参引用退化问题，常用于std::bind等。还介绍std::tuple，固定大小异构集合，可存储任意数量任意类型元素，支持创建、获取、解包，常用于函数返回多值。最后介绍std::chrono，跨平台高精度时间处理库，分时长、时间点、时钟三部分，替代平台相关时间API。</p>
+<p>我会介绍C++11新增的正则表达式库、类型萃取库、随机数库，以及全局迭代器获取函数和新增STL算法，如<code>std::all_of</code>等。同时，阐述C++11让C++从“带类的C”转变为现代多范式语言，其移动语义等特性大幅提升性能。</p>
+<h1 id="c11-新特性详细总结">C++11 新特性详细总结</h1>
+<p>C++11（ISO/IEC 14882:2011）是C++发展史上里程碑式的标准，被称为<strong>现代C++的开端</strong>。它修复了C++98的诸多缺陷，引入了超过140项新特性，让代码更简洁、更安全、性能更高，同时支持多范式编程，大幅提升了开发效率，也为后续C++14/17/20标准奠定了基础。</p>
+<p>整体分为<strong>核心语言特性</strong>和<strong>标准库新增与增强</strong>两大模块，以下是详细梳理：</p>
+<hr>
+<h2 id="一核心语言特性">一、核心语言特性</h2>
+<h3 id="1-类型推导体系">1. 类型推导体系</h3>
+<h4 id="11-auto-关键字">1.1 auto 关键字</h4>
+<p>C++11彻底重构了auto的语义（C++98中auto为存储类型说明符，几乎无实际用途），实现<strong>编译期自动类型推导</strong>，大幅简化复杂类型的声明。</p>
+<ul>
+<li>
+<p><strong>核心规则</strong>：</p>
+<ol>
+<li>
+<p>必须在声明时初始化，推导依赖初始值表达式；</p>
+</li>
+<li>
+<p>推导默认忽略顶层<code>const/volatile</code>和引用，如需保留需显式声明；</p>
+</li>
+<li>
+<p>不可用于函数形参类型推导（C++14才支持）、非静态成员变量的类内初始化、数组类型推导（除非声明为引用）。</p>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>                  <span class="c1">// int
+</span></span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">;</span>                  <span class="c1">// int*
+</span></span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">ri</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>           <span class="c1">// const int&amp;，保留const和引用
+</span></span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">vec</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>        <span class="c1">// std::vector&lt;int&gt;::iterator，简化冗长迭代器声明
+</span></span></span></code></pre></div></div>
+<h4 id="12-decltype-关键字">1.2 decltype 关键字</h4>
+<p>用于<strong>精确推导表达式的类型</strong>（包括值类别、const/volatile、引用属性），不依赖变量初始化，核心用于泛型编程。</p>
+<ul>
+<li>
+<p><strong>核心推导规则</strong>：</p>
+<ol>
+<li>
+<p>若表达式是标识符/类成员访问，直接推导为该实体的声明类型；</p>
+</li>
+<li>
+<p>若表达式是左值表达式，推导为<code>T&amp;</code>；若为纯右值，推导为<code>T</code>；若为将亡值，推导为<code>T&amp;&amp;</code>。</p>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">decltype</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>          <span class="c1">// int，标识符直接匹配类型
+</span></span></span><span class="line"><span class="cl"><span class="k">decltype</span><span class="p">((</span><span class="n">x</span><span class="p">))</span> <span class="n">b</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>          <span class="c1">// int&amp;，(x)是左值表达式，推导为左值引用
+</span></span></span><span class="line"><span class="cl"><span class="k">decltype</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>         <span class="c1">// int，x+1是纯右值，推导为值类型
+</span></span></span></code></pre></div></div>
+<h4 id="13-尾置返回类型追踪返回类型">1.3 尾置返回类型（追踪返回类型）</h4>
+<p>配合<code>auto</code>和<code>decltype</code>解决模板函数返回值类型依赖参数的问题，让返回值类型声明在参数列表之后，可直接使用函数参数。</p>
+<ul>
+<li>
+<p><strong>语法</strong>：<code>auto 函数名(参数列表) -&gt; decltype(表达式) { 函数体 }</code></p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 模板函数返回值类型依赖参数t和u的运算结果
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">U</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">add</span><span class="p">(</span><span class="n">T</span> <span class="n">t</span><span class="p">,</span> <span class="n">U</span> <span class="n">u</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">decltype</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">u</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">t</span> <span class="o">+</span> <span class="n">u</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h4 id="14-类型别名与模板别名using-关键字">1.4 类型别名与模板别名（using 关键字）</h4>
+<p>C++11扩展了<code>using</code>的用法，提供比<code>typedef</code>更直观、更强大的类型别名能力，<strong>支持模板别名</strong>（typedef无法实现）。</p>
+<ul>
+<li><strong>示例</strong>：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 普通类型别名，等价于typedef unsigned int uint;
+</span></span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="n">uint</span> <span class="o">=</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 模板别名，typedef无法实现
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="n">Vec</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">Vec</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec</span><span class="p">;</span> <span class="c1">// 等价于std::vector&lt;int, std::allocator&lt;int&gt;&gt; vec;
+</span></span></span></code></pre></div></div>
+<h3 id="2-右值引用与移动语义">2. 右值引用与移动语义</h3>
+<p>这是C++11最核心的性能优化特性，通过<strong>转移资源所有权</strong>替代深拷贝，彻底解决临时对象带来的不必要性能开销。</p>
+<h4 id="21-左值与右值">2.1 左值与右值</h4>
+<ul>
+<li>
+<p><strong>左值</strong>：可以取地址、拥有持久生命周期的对象，如变量、解引用的指针；</p>
+</li>
+<li>
+<p><strong>右值</strong>：临时的、无法取地址的对象，分为纯右值（字面量、表达式运算结果）和将亡值（生命周期即将结束的对象，如函数返回的临时对象）。</p>
+</li>
+</ul>
+<h4 id="22-右值引用">2.2 右值引用</h4>
+<p>用<code>&amp;&amp;</code>标记，仅能绑定到右值，可延长右值的生命周期，允许修改右值，为移动语义提供语法基础。</p>
+<ul>
+<li>
+<p><strong>核心特性</strong>：具名的右值引用本身是左值（可被取地址）。</p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span><span class="o">&amp;&amp;</span> <span class="n">rref</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c1">// 绑定到纯右值10，延长其生命周期
+</span></span></span><span class="line"><span class="cl"><span class="n">rref</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>        <span class="c1">// 可修改右值
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// int&amp;&amp; rref2 = a; // 编译错误，无法将左值绑定到右值引用
+</span></span></span></code></pre></div></div>
+<h4 id="23-移动构造与移动赋值">2.3 移动构造与移动赋值</h4>
+<p>类的特殊成员函数，用于接管源对象的资源，而非拷贝，源对象最终处于<strong>有效但未定义</strong>的状态，避免资源重复申请与释放。</p>
+<ul>
+<li>
+<p><strong>核心规则</strong>：</p>
+<ol>
+<li>
+<p>移动函数通常声明为<code>noexcept</code>，保证异常安全，让容器优先选择移动而非拷贝；</p>
+</li>
+<li>
+<p>编译器仅在用户未自定义拷贝构造/赋值、析构函数时，自动生成默认移动函数。</p>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MyString</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span><span class="o">*</span> <span class="n">data</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size_t</span> <span class="n">len</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 移动构造函数
+</span></span></span><span class="line"><span class="cl">    <span class="n">MyString</span><span class="p">(</span><span class="n">MyString</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">:</span> <span class="n">data</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">data</span><span class="p">),</span> <span class="n">len</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">len</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">other</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span> <span class="c1">// 源对象置空，避免析构时释放资源
+</span></span></span><span class="line"><span class="cl">        <span class="n">other</span><span class="p">.</span><span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 移动赋值运算符
+</span></span></span><span class="line"><span class="cl">    <span class="n">MyString</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">MyString</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">!=</span> <span class="o">&amp;</span><span class="n">other</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">delete</span><span class="p">[]</span> <span class="n">data</span><span class="p">;</span> <span class="c1">// 释放当前对象资源
+</span></span></span><span class="line"><span class="cl">            <span class="c1">// 转移资源所有权
+</span></span></span><span class="line"><span class="cl">            <span class="n">data</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">len</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">other</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">other</span><span class="p">.</span><span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">MyString</span><span class="p">()</span> <span class="p">{</span> <span class="k">delete</span><span class="p">[]</span> <span class="n">data</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></div></div>
+<h4 id="24-stdmove-类型转换">2.4 std::move 类型转换</h4>
+<p>无条件将左值转换为右值引用，使其可触发移动语义。<strong>注意：std::move本身不做任何移动操作，仅做类型转换</strong>。</p>
+<ul>
+<li><strong>示例</strong>：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">MyString</span> <span class="nf">a</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">MyString</span> <span class="n">b</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">a</span><span class="p">);</span> <span class="c1">// 触发移动构造，a的资源被转移到b
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 移动后，a除了析构和赋值，不建议进行其他操作
+</span></span></span></code></pre></div></div>
+<h4 id="25-完美转发与stdforward">2.5 完美转发与std::forward</h4>
+<p>在模板函数中保持参数的原始值类别（左值/右值、const/volatile）不变，转发给其他函数，解决右值引用在模板中的引用折叠问题。</p>
+<ul>
+<li>
+<p><strong>引用折叠规则</strong>：模板中<code>T&amp;&amp;</code>作为万能引用时，传入左值则<code>T</code>推导为<code>T&amp;</code>，最终类型为<code>T&amp; &amp;&amp; → T&amp;</code>；传入右值则<code>T</code>推导为<code>T</code>，最终类型为<code>T&amp;&amp;</code>。</p>
+</li>
+<li>
+<p><strong>语法</strong>：<code>std::forward&lt;T&gt;(参数)</code></p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 工厂函数，完美转发参数到构造函数
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">T</span> <span class="n">create</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nf">T</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span> <span class="c1">// 保持参数原始值类别
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="3-lambda-表达式">3. Lambda 表达式</h3>
+<p>C++11首次引入匿名函数（闭包），支持函数式编程，简化回调函数、STL算法的参数传递，可捕获上下文变量。</p>
+<h4 id="31-完整语法">3.1 完整语法</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="err">捕获列表</span><span class="p">](</span><span class="nl">sslocal</span><span class="p">:</span><span class="c1">//flow/file_open?url=%E5%8F%82%E6%95%B0%E5%88%97%E8%A1%A8&amp;flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=) mutable 异常说明 -&gt; 返回类型 { 函数体 }
+</span></span></span></code></pre></div></div>
+<h4 id="32-核心组成">3.2 核心组成</h4>
+<ol>
+<li>
+<p><strong>捕获列表</strong>：定义闭包可访问的外部变量及捕获方式</p>
+<ul>
+<li>
+<p><code>[]</code>：空捕获，不访问任何外部变量；</p>
+</li>
+<li>
+<p><code>[=]</code>：值捕获，拷贝所有用到的外部变量，默认不可修改；</p>
+</li>
+<li>
+<p><code>[&amp;]</code>：引用捕获，按引用访问所有用到的外部变量，需注意生命周期；</p>
+</li>
+<li>
+<p><code>[a, &amp;b]</code>：混合捕获，a值捕获，b引用捕获；</p>
+</li>
+<li>
+<p><code>[this]</code>：捕获this指针，访问类的成员。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>参数列表</strong>：与普通函数一致，C++11不支持auto作为参数类型（C++14泛型Lambda支持）。</p>
+</li>
+<li>
+<p><strong>mutable</strong>：值捕获的变量默认是const的，加mutable可修改拷贝的副本。</p>
+</li>
+<li>
+<p><strong>返回类型</strong>：尾置返回类型，若函数体仅含return语句或无返回值，编译器可自动推导，可省略。</p>
+</li>
+</ol>
+<h4 id="33-示例">3.3 示例</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 简单加法Lambda
+</span></span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">add</span> <span class="o">=</span> <span class="p">[](</span><span class="nl">sslocal</span><span class="p">:</span><span class="c1">//flow/file_open?url=int+a%2C+int+b&amp;flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=) { return a + b; };
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span> <span class="c1">// 3
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 值捕获+mutable
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">modify</span> <span class="o">=</span>  <span class="k">mutable</span> <span class="p">{</span> <span class="n">x</span><span class="o">++</span><span class="p">;</span> <span class="k">return</span> <span class="n">x</span><span class="p">;</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">modify</span><span class="p">();</span> <span class="c1">// 11，修改的是副本，原x仍为10
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 配合STL算法
+</span></span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">for_each</span><span class="p">(</span><span class="n">vec</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">vec</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[](</span><span class="nl">sslocal</span><span class="p">:</span><span class="c1">//flow/file_open?url=int%26+n&amp;flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=){ n *= 2; });
+</span></span></span></code></pre></div></div>
+<h4 id="34-核心特性">3.4 核心特性</h4>
+<ul>
+<li>
+<p>每个Lambda表达式会生成唯一的匿名闭包类型，运行时创建该类型的实例；</p>
+</li>
+<li>
+<p>无捕获的Lambda可隐式转换为普通函数指针。</p>
+</li>
+</ul>
+<h3 id="4-统一初始化与初始化列表">4. 统一初始化与初始化列表</h3>
+<h4 id="41-统一初始化列表初始化">4.1 统一初始化（列表初始化）</h4>
+<p>用<code>{}</code>统一所有类型的初始化方式，解决C++98初始化方式混乱的问题，同时禁止窄化转换。</p>
+<ul>
+<li>
+<p><strong>核心优势</strong>：</p>
+<ol>
+<li>
+<p>解决C++&ldquo;最令人头疼的语法解析&rdquo;：<code>MyClass obj();</code>会被解析为函数声明，<code>MyClass obj{};</code>可正确调用默认构造；</p>
+</li>
+<li>
+<p>禁止窄化转换：<code>int a{3.14};</code>会编译报错，而<code>int a(3.14)</code>只会静默截断。</p>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">a</span><span class="p">{</span><span class="mi">10</span><span class="p">};</span>                         <span class="c1">// 基本类型
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">arr</span><span class="p">[]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">};</span>                <span class="c1">// 数组
+</span></span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">};</span>     <span class="c1">// 容器
+</span></span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">map</span><span class="p">{{</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#34;one&#34;</span><span class="p">},</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#34;two&#34;</span><span class="p">}};</span> <span class="c1">// 关联容器
+</span></span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">Point</span> <span class="p">{</span> <span class="kt">int</span> <span class="n">x</span><span class="p">;</span> <span class="kt">int</span> <span class="n">y</span><span class="p">;</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">Point</span> <span class="n">p</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">};</span>                    <span class="c1">// 自定义结构体
+</span></span></span></code></pre></div></div>
+<h4 id="42-stdinitializer_list">4.2 std::initializer_list</h4>
+<p>让自定义类型支持列表初始化，可接收任意长度的同类型初始化列表。本质是轻量级代理对象，仅引用数组元素，不持有数据。</p>
+<ul>
+<li><strong>示例</strong>：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MyVector</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MyVector</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">list</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">list</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">it</span> <span class="o">!=</span> <span class="n">list</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">it</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">data</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">*</span><span class="n">it</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">MyVector</span> <span class="n">vec</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">};</span> <span class="c1">// 支持列表初始化
+</span></span></span></code></pre></div></div>
+<h3 id="5-类功能全面增强">5. 类功能全面增强</h3>
+<h4 id="51-default-与-delete">5.1 =default 与 =delete</h4>
+<ul>
+<li>
+<p><strong>=default</strong>：显式要求编译器生成默认的特殊成员函数（默认构造、拷贝/移动构造、析构、拷贝/移动赋值），即使用户自定义了其他构造函数，也能生成默认版本。</p>
+</li>
+<li>
+<p><strong>=delete</strong>：显式禁用函数，禁止编译器生成或用户调用，替代C++98&quot;私有声明不实现&quot;的方案。</p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">NonCopyable</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">NonCopyable</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 禁用拷贝构造和赋值
+</span></span></span><span class="line"><span class="cl">    <span class="n">NonCopyable</span><span class="p">(</span><span class="k">const</span> <span class="n">NonCopyable</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">NonCopyable</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">NonCopyable</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 允许移动
+</span></span></span><span class="line"><span class="cl">    <span class="n">NonCopyable</span><span class="p">(</span><span class="n">NonCopyable</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">NonCopyable</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">NonCopyable</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 禁用特定重载，防止隐式转换
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">double</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">func</span><span class="p">(</span><span class="mf">3.14</span><span class="p">);</span> <span class="c1">// 编译报错
+</span></span></span></code></pre></div></div>
+<h4 id="52-override-与-final">5.2 override 与 final</h4>
+<ul>
+<li>
+<p><strong>override</strong>：显式声明该函数重写基类虚函数，编译器会强制检查基类是否存在签名完全匹配的虚函数，避免笔误导致的函数隐藏。</p>
+</li>
+<li>
+<p><strong>final</strong>：两个核心作用</p>
+<ol>
+<li>
+<p>修饰类：该类不可被继承；</p>
+</li>
+<li>
+<p>修饰虚函数：该虚函数不可被子类重写。</p>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Base</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">show</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="k">const</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">func</span><span class="p">()</span> <span class="k">final</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Derived</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Base</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">show</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span> <span class="p">{}</span> <span class="c1">// 正确，匹配基类虚函数
+</span></span></span><span class="line"><span class="cl">    <span class="c1">// void show(double a) const override {} // 编译报错，签名不匹配
+</span></span></span><span class="line"><span class="cl">    <span class="c1">// void func() override {} // 编译报错，基类func被final修饰
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">FinalClass</span> <span class="k">final</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// class Derived2 : public FinalClass {}; // 编译报错，类不可被继承
+</span></span></span></code></pre></div></div>
+<h4 id="53-委托构造函数">5.3 委托构造函数</h4>
+<p>允许一个构造函数调用同一个类中的其他构造函数，减少代码冗余，简化初始化逻辑。</p>
+<ul>
+<li><strong>示例</strong>：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Person</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 全参数构造
+</span></span></span><span class="line"><span class="cl">    <span class="n">Person</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="o">:</span> <span class="n">name</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">age</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 委托构造
+</span></span></span><span class="line"><span class="cl">    <span class="n">Person</span><span class="p">()</span> <span class="o">:</span> <span class="n">Person</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Person</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">n</span><span class="p">)</span> <span class="o">:</span> <span class="n">Person</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></div></div>
+<ul>
+<li><strong>注意</strong>：委托构造不能在初始化列表中同时初始化成员变量，且不能形成委托循环。</li>
+</ul>
+<h4 id="54-继承构造函数">5.4 继承构造函数</h4>
+<p>允许子类继承基类的构造函数，无需手动转发参数，简化子类构造函数编写。</p>
+<ul>
+<li>
+<p><strong>语法</strong>：<code>using 基类名::基类名;</code></p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Base</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Base</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="o">:</span> <span class="n">num</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Base</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="o">:</span> <span class="n">str</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">num</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Derived</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Base</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">using</span> <span class="n">Base</span><span class="o">::</span><span class="n">Base</span><span class="p">;</span> <span class="c1">// 继承基类所有构造函数
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Derived</span> <span class="nf">d1</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span> <span class="c1">// 调用Base(int)
+</span></span></span><span class="line"><span class="cl"><span class="n">Derived</span> <span class="nf">d2</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span> <span class="c1">// 调用Base(std::string, int)
+</span></span></span></code></pre></div></div>
+<h3 id="6-编译期增强特性">6. 编译期增强特性</h3>
+<h4 id="61-constexpr-编译期常量与计算">6.1 constexpr 编译期常量与计算</h4>
+<p>将变量、函数的计算放到编译期，提升运行时性能，替代C++98中宏和enum的编译期常量方案，类型更安全。</p>
+<ul>
+<li>
+<p><strong>核心规则</strong>：</p>
+<ol>
+<li>
+<p>constexpr变量必须用编译期常量初始化，本身也是编译期常量；</p>
+</li>
+<li>
+<p>C++11中constexpr函数只能包含一条return语句，传入编译期常量时，在编译期计算结果。</p>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 编译期常量
+</span></span></span><span class="line"><span class="cl"><span class="k">constexpr</span> <span class="kt">int</span> <span class="n">arr_size</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="n">arr_size</span><span class="p">];</span> <span class="c1">// 合法，编译期确定数组大小
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 编译期函数
+</span></span></span><span class="line"><span class="cl"><span class="k">constexpr</span> <span class="kt">int</span> <span class="nf">factorial</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="n">n</span> <span class="o">*</span> <span class="n">factorial</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">constexpr</span> <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">factorial</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="c1">// 编译期计算出120
+</span></span></span></code></pre></div></div>
+<h4 id="62-static_assert-静态断言">6.2 static_assert 静态断言</h4>
+<p>编译期断言，在编译阶段检查条件，不满足则直接终止编译并输出错误信息，无任何运行时开销。</p>
+<ul>
+<li>
+<p><strong>语法</strong>：<code>static_assert(常量表达式, &quot;错误提示字符串&quot;);</code></p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 检查平台int大小
+</span></span></span><span class="line"><span class="cl"><span class="k">static_assert</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">,</span> <span class="s">&#34;int must be 4 bytes&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 模板类型检查
+</span></span></span><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">func</span><span class="p">(</span><span class="n">T</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_integral</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&#34;T must be integer type&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="7-核心语法与关键字增强">7. 核心语法与关键字增强</h3>
+<h4 id="71-nullptr-空指针关键字">7.1 nullptr 空指针关键字</h4>
+<p>替代C++98的NULL宏，彻底解决NULL的二义性问题（NULL被定义为0，函数重载时会匹配int而非指针）。</p>
+<ul>
+<li>
+<p><strong>核心特性</strong>：</p>
+<ol>
+<li>
+<p>nullptr是关键字，类型为<code>std::nullptr_t</code>，是空指针常量；</p>
+</li>
+<li>
+<p>可隐式转换为任意指针/成员指针类型，无法隐式转换为整数类型（除了bool）。</p>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">func</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>    <span class="c1">// 调用func(int)，不符合预期
+</span></span></span><span class="line"><span class="cl"><span class="n">func</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span> <span class="c1">// 正确调用func(int*)
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">b</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span> <span class="c1">// 转换为false，合法
+</span></span></span><span class="line"><span class="cl"><span class="c1">// int a = nullptr; // 编译错误
+</span></span></span></code></pre></div></div>
+<h4 id="72-强类型枚举-enum-class--enum-struct">7.2 强类型枚举 enum class / enum struct</h4>
+<p>解决C++98枚举的三大缺陷：作用域污染、隐式类型转换、底层类型不固定。</p>
+<ul>
+<li>
+<p><strong>核心特性</strong>：</p>
+<ol>
+<li>
+<p>强作用域：枚举项必须通过<code>枚举名::枚举项</code>访问，不污染外层作用域；</p>
+</li>
+<li>
+<p>禁止隐式类型转换：无法隐式转换为整数，必须显式<code>static_cast</code>；</p>
+</li>
+<li>
+<p>可指定底层类型：默认是int，可自定义为char、long等整数类型。</p>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">enum</span> <span class="k">class</span> <span class="nc">Color</span> <span class="o">:</span> <span class="kt">char</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Red</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Green</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Blue</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Color</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Color</span><span class="o">::</span><span class="n">Red</span><span class="p">;</span> <span class="c1">// 必须加作用域
+</span></span></span><span class="line"><span class="cl"><span class="c1">// int a = Color::Green; // 编译错误，禁止隐式转换
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Color</span><span class="o">::</span><span class="n">Green</span><span class="p">);</span> <span class="c1">// 正确，显式转换
+</span></span></span></code></pre></div></div>
+<h4 id="73-范围for循环range-based-for-loop">7.3 范围for循环（Range-based for loop）</h4>
+<p>简化容器/数组的遍历语法，无需手动管理迭代器，代码更简洁安全。</p>
+<ul>
+<li>
+<p><strong>语法</strong>：<code>for (元素声明 : 可迭代对象) { 循环体 }</code></p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 只读遍历
+</span></span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">n</span> <span class="p">:</span> <span class="n">vec</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 修改元素，必须用引用
+</span></span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span> <span class="nl">n</span> <span class="p">:</span> <span class="n">vec</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">n</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<ul>
+<li><strong>核心规则</strong>：可迭代对象包括数组、STL容器、实现了<code>begin()/end()</code>的自定义类型。</li>
+</ul>
+<h4 id="74-原始字符串字面量">7.4 原始字符串字面量</h4>
+<p>解决字符串中转义符冗余的问题，无需对反斜杠、引号进行转义，提升代码可读性。</p>
+<ul>
+<li>
+<p><strong>语法</strong>：<code>R&quot;xxx(原始字符串内容)xxx&quot;</code>，其中xxx是可选的自定义分隔符。</p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 普通字符串需要双重转义
+</span></span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">regex_str</span> <span class="o">=</span> <span class="s">&#34;</span><span class="se">\\</span><span class="s">d+</span><span class="se">\\</span><span class="s">.</span><span class="se">\\</span><span class="s">d*&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 原始字符串无需转义
+</span></span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">raw_regex</span> <span class="o">=</span> <span class="n">R</span><span class="s">&#34;(\d+\.\d*)&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 多行字符串
+</span></span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">multi_line</span> <span class="o">=</span> <span class="n">R</span><span class="s">&#34;(</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">hello</span> <span class="n">world</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span><span class="s">&#34;;</span></span></span></code></pre></div></div>
+<h4 id="75-noexcept-异常说明符">7.5 noexcept 异常说明符</h4>
+<p>声明函数不会抛出异常，编译器可进行针对性优化，同时配合移动语义保证异常安全。</p>
+<ul>
+<li>
+<p><strong>语法</strong>：</p>
+<ol>
+<li>
+<p><code>void func() noexcept;</code> 声明函数不会抛出异常；</p>
+</li>
+<li>
+<p><code>void func() noexcept(常量表达式);</code> 表达式为true时声明不抛异常。</p>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>典型场景</strong>：移动构造/移动赋值函数通常声明为noexcept，容器扩容时会优先选择noexcept的移动构造，否则会使用拷贝构造保证异常安全。</p>
+</li>
+</ul>
+<h4 id="76-thread_local-线程本地存储">7.6 thread_local 线程本地存储</h4>
+<p>声明变量的生命周期是线程级的，每个线程拥有独立的变量副本，线程启动时创建，结束时销毁，替代平台相关的线程本地存储方案。</p>
+<ul>
+<li><strong>示例</strong>：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">thread_local</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 每个线程有独立的count副本
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">count</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="8-其他核心语言特性">8. 其他核心语言特性</h3>
+<ol>
+<li>
+<p><strong>变长模板参数包</strong>：允许模板接收任意数量、任意类型的参数，是C++元编程的核心，支撑了std::tuple、emplace系列函数的实现；</p>
+</li>
+<li>
+<p><strong>对齐支持alignas/alignof</strong>：alignof获取类型的内存对齐字节数，alignas指定变量/类型的对齐规则；</p>
+</li>
+<li>
+<p><strong>显式转换操作符</strong>：允许将类型转换操作符声明为explicit，禁止意外的隐式类型转换；</p>
+</li>
+<li>
+<p><strong>标准布局与平凡类型</strong>：重新定义了POD类型，分为平凡类型和标准布局类型，保证与C语言的内存兼容性；</p>
+</li>
+<li>
+<p><strong>多线程内存模型</strong>：首次在语言层面定义了多线程内存模型，为无锁编程、原子操作提供了标准语义基础；</p>
+</li>
+<li>
+<p><strong>用户自定义字面量</strong>：允许自定义字面量后缀，扩展字面量的能力，提升代码可读性。</p>
+</li>
+</ol>
+<hr>
+<h2 id="二标准库新增与增强">二、标准库新增与增强</h2>
+<h3 id="1-智能指针头文件">1. 智能指针（<memory>头文件）</h3>
+<p>基于RAII机制自动管理堆内存，彻底解决内存泄漏、野指针问题，替代C++98有缺陷的auto_ptr。</p>
+<h4 id="11-stdunique_ptr-独占式智能指针">1.1 std::unique_ptr 独占式智能指针</h4>
+<ul>
+<li>
+<p><strong>核心特性</strong>：独占对象所有权，同一时间仅能有一个unique_ptr指向同一个对象，不支持拷贝，仅支持移动语义，离开作用域时自动释放对象。</p>
+</li>
+<li>
+<p><strong>性能</strong>：开销极小，与原始指针几乎无差别，是C++11最常用的智能指针。</p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p1</span><span class="p">(</span><span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// std::unique_ptr&lt;int&gt; p2 = p1; // 编译错误，禁止拷贝
+</span></span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">p1</span><span class="p">);</span> <span class="c1">// 转移所有权，p1变为空
+</span></span></span><span class="line"><span class="cl"><span class="n">p2</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span> <span class="c1">// 手动释放对象
+</span></span></span></code></pre></div></div>
+<h4 id="12-stdshared_ptr-共享式智能指针">1.2 std::shared_ptr 共享式智能指针</h4>
+<ul>
+<li>
+<p><strong>核心特性</strong>：基于线程安全的原子引用计数，多个shared_ptr可指向同一个对象，引用计数为0时自动释放对象。</p>
+</li>
+<li>
+<p><strong>推荐用法</strong>：使用<code>std::make_shared</code>创建，内存分配更高效、更安全。</p>
+</li>
+<li>
+<p><strong>注意</strong>：循环引用会导致内存泄漏，需配合weak_ptr解决。</p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span> <span class="c1">// 推荐用法
+</span></span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">p1</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="c1">// 1
+</span></span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span> <span class="c1">// 引用计数+1
+</span></span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">p1</span><span class="p">.</span><span class="n">use_count</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="c1">// 2
+</span></span></span><span class="line"><span class="cl"><span class="n">p2</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span> <span class="c1">// 引用计数-1，变为1
+</span></span></span></code></pre></div></div>
+<h4 id="13-stdweak_ptr-弱引用智能指针">1.3 std::weak_ptr 弱引用智能指针</h4>
+<ul>
+<li>
+<p><strong>核心特性</strong>：辅助shared_ptr，不增加引用计数，不控制对象生命周期，用于观察对象状态、解决循环引用问题。</p>
+</li>
+<li>
+<p><strong>核心方法</strong>：<code>expired()</code>检查对象是否已释放，<code>lock()</code>获取对应的shared_ptr。</p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 解决循环引用
+</span></span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">B</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">A</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">B</span><span class="o">&gt;</span> <span class="n">b_ptr</span><span class="p">;</span> <span class="c1">// 弱引用，不增加计数
+</span></span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">A</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;A destructed&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">B</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span> <span class="n">a_ptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">B</span><span class="p">()</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;B destructed&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">a</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">b</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">B</span><span class="o">&gt;</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">a</span><span class="o">-&gt;</span><span class="n">b_ptr</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">b</span><span class="o">-&gt;</span><span class="n">a_ptr</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 离开作用域时，引用计数正常归零，对象正确析构
+</span></span></span></code></pre></div></div>
+<h3 id="2-容器新增与增强">2. 容器新增与增强</h3>
+<h4 id="21-新增容器">2.1 新增容器</h4>
+<table>
+  <thead>
+      <tr>
+          <th>容器</th>
+          <th>核心特性</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>std::array&lt;T, N&gt;</td>
+          <td>固定大小数组，封装原生数组，提供STL容器接口，无堆开销，性能与原生数组一致，更安全</td>
+      </tr>
+      <tr>
+          <td>std::forward_list<T></td>
+          <td>单向链表，比std::list更省内存，仅支持单向遍历，插入删除效率高</td>
+      </tr>
+      <tr>
+          <td>std::unordered_map/unordered_multimap</td>
+          <td>基于哈希表的关联容器，平均查找/插入/删除复杂度O(1)，元素无序</td>
+      </tr>
+      <tr>
+          <td>std::unordered_set/unordered_multiset</td>
+          <td>基于哈希表的集合，平均查找/插入/删除复杂度O(1)，元素无序</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="22-容器通用增强">2.2 容器通用增强</h4>
+<ol>
+<li>
+<p><strong>emplace系列函数</strong>：<code>emplace_back</code>、<code>emplace_front</code>、<code>emplace</code>等，直接在容器内存中构造对象，避免临时对象的拷贝/移动，大幅提升性能。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">vec</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">vec</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="s">&#34;hello world&#34;</span><span class="p">);</span> <span class="c1">// 直接在容器内存中构造string，无临时对象
+</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>const迭代器</strong>：新增<code>cbegin()/cend()/crbegin()/crend()</code>，直接获取const迭代器，类型更安全；</p>
+</li>
+<li>
+<p><strong>shrink_to_fit()</strong>：释放容器多余的容量，减少内存占用，适用于vector、string、deque；</p>
+</li>
+<li>
+<p><strong>列表初始化支持</strong>：所有容器均支持<code>{}</code>列表初始化。</p>
+</li>
+</ol>
+<h3 id="3-并发编程标准库首次加入标准">3. 并发编程标准库（首次加入标准）</h3>
+<p>C++11首次在标准层面实现了跨平台的多线程支持，替代平台相关的线程API。</p>
+<h4 id="31-stdthread-线程类">3.1 std::thread 线程类</h4>
+<p>用于创建和管理线程，可绑定普通函数、lambda、类成员函数、函数对象。</p>
+<ul>
+<li>
+<p><strong>核心规则</strong>：线程对象销毁前，必须调用<code>join()</code>（等待线程结束）或<code>detach()</code>（分离线程，后台执行），否则会触发程序终止。</p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;thread: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span> <span class="c1">// 创建线程，执行func
+</span></span></span><span class="line"><span class="cl">    <span class="n">t</span><span class="p">.</span><span class="n">join</span><span class="p">();</span> <span class="c1">// 等待线程执行完成
+</span></span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h4 id="32-互斥量与锁头文件">3.2 互斥量与锁（<mutex>头文件）</h4>
+<table>
+  <thead>
+      <tr>
+          <th>类</th>
+          <th>核心特性</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>std::mutex</td>
+          <td>基础互斥锁，保护共享资源，避免多线程数据竞争</td>
+      </tr>
+      <tr>
+          <td>std::recursive_mutex</td>
+          <td>递归互斥锁，允许同一线程多次加锁</td>
+      </tr>
+      <tr>
+          <td>std::timed_mutex</td>
+          <td>带超时的互斥锁，支持超时等待加锁</td>
+      </tr>
+      <tr>
+          <td>std::lock_guard</td>
+          <td>RAII风格的锁守卫，构造时加锁，析构时自动解锁，无法手动控制，最简单安全</td>
+      </tr>
+      <tr>
+          <td>std::unique_lock</td>
+          <td>灵活的锁守卫，支持手动加锁/解锁、延迟加锁、超时锁、所有权转移，配合条件变量使用</td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li><strong>示例</strong>：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">mtx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">add</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">(</span><span class="n">mtx</span><span class="p">);</span> <span class="c1">// 构造加锁，离开作用域自动解锁
+</span></span></span><span class="line"><span class="cl">    <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h4 id="33-条件变量-stdcondition_variable">3.3 条件变量 std::condition_variable</h4>
+<p>实现线程间的同步，一个线程等待条件满足，另一个线程通知条件，避免轮询等待，是生产者消费者模型的核心同步机制。</p>
+<ul>
+<li><strong>必须配合std::unique_lock使用</strong>，核心方法：<code>wait()</code>、<code>notify_one()</code>、<code>notify_all()</code>。</li>
+</ul>
+<h4 id="34-异步编程支持头文件">3.4 异步编程支持（<future>头文件）</h4>
+<ul>
+<li>
+<p><strong>std::promise/std::future</strong>：实现线程间的结果传递，promise用于设置结果，future用于获取结果；</p>
+</li>
+<li>
+<p><strong>std::async</strong>：简化异步任务创建，自动启动线程执行任务，返回future对象，可获取任务返回值。</p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 异步执行任务
+</span></span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">fut</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">async</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">launch</span><span class="o">::</span><span class="n">async</span><span class="p">,</span> <span class="p">[](</span><span class="nl">sslocal</span><span class="p">:</span><span class="c1">//flow/file_open?url=int+a%2C+int+b&amp;flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=) {
+</span></span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">},</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">fut</span><span class="p">.</span><span class="n">get</span><span class="p">();</span> <span class="c1">// 阻塞等待结果，返回30
+</span></span></span></code></pre></div></div>
+<h4 id="35-原子操作库">3.5 原子操作库 <atomic></h4>
+<p>提供线程安全的无锁原子操作，支持整数、指针等类型的原子读写、加减、交换、比较交换等操作，是无锁编程的基础。</p>
+<ul>
+<li><strong>示例</strong>：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// 原子计数器
+</span></span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">add</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">count</span><span class="o">++</span><span class="p">;</span> <span class="c1">// 原子自增，无需加锁，线程安全
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="4-函数式编程增强">4. 函数式编程增强</h3>
+<h4 id="41-stdfunction-函数包装器头文件">4.1 std::function 函数包装器（<functional>头文件）</h4>
+<p>统一包装任意可调用对象（普通函数、lambda、函数对象、类成员函数），实现类型擦除，定义统一的函数类型，是回调函数、策略模式的核心工具。</p>
+<ul>
+<li>
+<p><strong>语法</strong>：<code>std::function&lt;返回值类型(参数类型列表)&gt;</code></p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 包装普通函数
+</span></span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">func</span> <span class="o">=</span> <span class="n">add</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">func</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span> <span class="c1">// 3
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 包装lambda
+</span></span></span><span class="line"><span class="cl"><span class="n">func</span> <span class="o">=</span> <span class="p">[](</span><span class="nl">sslocal</span><span class="p">:</span><span class="c1">//flow/file_open?url=int+a%2C+int+b&amp;flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=) { return a * b; };
+</span></span></span><span class="line"><span class="cl"><span class="n">func</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span> <span class="c1">// 12
+</span></span></span></code></pre></div></div>
+<h4 id="42-stdbind-函数绑定器头文件">4.2 std::bind 函数绑定器（<functional>头文件）</h4>
+<p>绑定可调用对象与参数，生成新的可调用对象，支持参数重排、固定参数、占位符，替代C++98的bind1st/bind2nd。</p>
+<ul>
+<li>
+<p><strong>占位符</strong>：<code>std::placeholders::_1/_2/...</code> 表示调用时传入的第1/2&hellip;个参数。</p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 固定第一个参数为10，生成单参数函数
+</span></span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">add10</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="n">add</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::</span><span class="n">_1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">add10</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span> <span class="c1">// 30，等价于add(10,20)
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 参数重排
+</span></span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">swap_add</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="n">add</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::</span><span class="n">_2</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::</span><span class="n">_1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">swap_add</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span> <span class="c1">// 30，等价于add(20,10)
+</span></span></span></code></pre></div></div>
+<h4 id="43-stdrefstdcref-引用包装器">4.3 std::ref/std::cref 引用包装器</h4>
+<p>将引用包装为可拷贝的对象，解决模板传参时引用被退化的问题，常用于std::bind、std::thread、std::function中传递引用。</p>
+<ul>
+<li><strong>示例</strong>：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">func</span> <span class="o">=</span> <span class="p">[](</span><span class="nl">sslocal</span><span class="p">:</span><span class="c1">//flow/file_open?url=int%26+a&amp;flow_extra=eyJsaW5rX3R5cGUiOiJjb2RlX2ludGVycHJldGVyIn0=) { a++; };
+</span></span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="kr">thread</span> <span class="n">t</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">x</span><span class="p">));</span> <span class="c1">// 传递引用，否则x会被拷贝
+</span></span></span><span class="line"><span class="cl"><span class="n">t</span><span class="p">.</span><span class="n">join</span><span class="p">();</span></span></span></code></pre></div></div>
+<h3 id="5-其他重要标准库特性">5. 其他重要标准库特性</h3>
+<ol>
+<li>
+<p><strong>std::tuple 元组</strong>：固定大小的异构集合，可存储任意数量、任意类型的元素，支持<code>std::make_tuple</code>创建、<code>std::get</code>获取元素、<code>std::tie</code>解包，常用于函数返回多个值。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s">&#34;hello&#34;</span><span class="p">,</span> <span class="mf">3.14</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">);</span> <span class="c1">// 10
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 解包
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">x</span><span class="p">;</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">y</span><span class="p">;</span> <span class="kt">double</span> <span class="n">z</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">std</span><span class="o">::</span><span class="n">tie</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>std::chrono 时间库</strong>：跨平台的高精度时间处理库，分为时长duration、时间点time_point、时钟clock三部分，用于计时、时间戳处理，替代平台相关的时间API。</p>
+</li>
+<li>
+<p><strong>std::regex 正则表达式库</strong>：C++标准首次加入正则支持，实现字符串的匹配、搜索、替换、分割等操作。</p>
+</li>
+<li>
+<p><strong>&lt;type_traits&gt; 类型萃取库</strong>：编译期获取/修改类型属性，是C++元编程的核心工具，配合static_assert、SFINAE使用。</p>
+</li>
+<li>
+<p><strong><random> 随机数库</strong>：替代C++98的rand()函数，提供高质量的随机数引擎和多种分布器（均匀分布、正态分布等）。</p>
+</li>
+<li>
+<p><strong>全局std::begin/std::end</strong>：通用的迭代器获取函数，支持数组和所有STL容器，提升代码通用性。</p>
+</li>
+<li>
+<p><strong>新增STL算法</strong>：<code>std::all_of</code>、<code>std::any_of</code>、<code>std::none_of</code>、<code>std::copy_if</code>、<code>std::find_if_not</code>等。</p>
+</li>
+</ol>
+<hr>
+<h2 id="三c11的核心意义">三、C++11的核心意义</h2>
+<p>C++11彻底重构了C++的编程范式，让C++从&quot;带类的C&quot;转变为真正的现代多范式语言。它的核心价值体现在三个方面：</p>
+<ol>
+<li>
+<p><strong>性能飞跃</strong>：移动语义、完美转发、emplace系列函数等特性，大幅减少了不必要的拷贝，让C++的性能优势进一步放大；</p>
+</li>
+<li>
+<p><strong>开发效率提升</strong>：auto、Lambda、范围for、智能指针等特性，简化了代码编写，降低了开发门槛，减少了样板代码；</p>
+</li>
+<li>
+<p><strong>安全性与可维护性增强</strong>：nullptr、强类型枚举、override/final、static_assert等特性，在编译期捕获更多错误，减少了运行时bug，让代码更健壮。</p>
+</li>
+</ol>
+<p>C++11是现代C++的起点，后续的C++14/17/20标准均是在C++11的基础上进行的扩展和优化，掌握C++11是掌握现代C++的核心基础。</p>
+<blockquote>
+<p>（注：文档部分内容可能由 AI 生成）</p>
+</blockquote>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-01-01</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/010_cpp11%E6%96%B0%E7%89%B9%E6%80%A7%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/cpp/">Cpp</a>,&nbsp;<a href="/blog/tags/cpp11/">Cpp11</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/001_archlinux%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85/" class="prev" rel="prev" title="ArchLinux 系统安装"><i class="fas fa-angle-left" aria-hidden="true"></i>ArchLinux 系统安装</a>
+            <a href="/blog/011_cpp14%E6%96%B0%E7%89%B9%E6%80%A7%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="C&#43;&#43;14 新特性详细总结">C++14 新特性详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>TCP 协议详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_tcp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="TCP 协议详细总结">
+  <meta property="og:description" content="TCP协议详细总结 TCP（Transmission Control Protocol，传输控制协议）是OSI七层模型中传输层的核心协议，由RFC 793定义核心规范，后续通过多个RFC补充优化。它是面向连接、可靠交付、基于字节流、全双工的传输层协议，核心目标是在不可靠的IP网络之上，为应用层提供稳定、有序、无差错的端到端数据传输服务。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-06T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-03-06T10:00:20+08:00">
+    <meta property="article:tag" content="协议">
+    <meta property="article:tag" content="TCP">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="TCP 协议详细总结">
+  <meta name="twitter:description" content="TCP协议详细总结 TCP（Transmission Control Protocol，传输控制协议）是OSI七层模型中传输层的核心协议，由RFC 793定义核心规范，后续通过多个RFC补充优化。它是面向连接、可靠交付、基于字节流、全双工的传输层协议，核心目标是在不可靠的IP网络之上，为应用层提供稳定、有序、无差错的端到端数据传输服务。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/001_tcp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/003_linux%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/002_udp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "TCP 协议详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/001_tcp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "Protocol, TCP","wordcount":  7156 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/001_tcp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-03-06T09:00:20+08:00","dateModified": "2026-03-06T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/001_tcp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/001_tcp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">TCP 协议详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/protocol/"><i class="far fa-folder" aria-hidden="true"></i>协议</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-03-06">2026-03-06</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 7156 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 15 分钟&nbsp;<span id="/blog/001_tcp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="TCP 协议详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一tcp核心基础特性">一、TCP核心基础特性</a></li>
+    <li><a href="#二tcp报文段segment结构">二、TCP报文段（Segment）结构</a>
+      <ul>
+        <li><a href="#核心tcp选项">核心TCP选项</a></li>
+      </ul>
+    </li>
+    <li><a href="#三tcp连接管理">三、TCP连接管理</a>
+      <ul>
+        <li><a href="#31-连接建立三次握手">3.1 连接建立：三次握手</a>
+          <ul>
+            <li><a href="#高频核心问题为什么是三次握手不是两次">高频核心问题：为什么是三次握手，不是两次？</a></li>
+          </ul>
+        </li>
+        <li><a href="#32-连接释放四次挥手">3.2 连接释放：四次挥手</a>
+          <ul>
+            <li><a href="#高频核心问题">高频核心问题</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#四tcp可靠传输核心机制">四、TCP可靠传输核心机制</a>
+      <ul>
+        <li><a href="#41-序号与累计确认">4.1 序号与累计确认</a></li>
+        <li><a href="#42-超时重传与rto计算">4.2 超时重传与RTO计算</a></li>
+        <li><a href="#43-快速重传fast-retransmit">4.3 快速重传（Fast Retransmit）</a></li>
+      </ul>
+    </li>
+    <li><a href="#五tcp流量控制">五、TCP流量控制</a>
+      <ul>
+        <li><a href="#51-滑动窗口核心原理">5.1 滑动窗口核心原理</a></li>
+        <li><a href="#52-关键补充机制">5.2 关键补充机制</a></li>
+      </ul>
+    </li>
+    <li><a href="#六tcp拥塞控制">六、TCP拥塞控制</a>
+      <ul>
+        <li><a href="#61-传统拥塞控制四大核心阶段reno算法">6.1 传统拥塞控制四大核心阶段（Reno算法）</a></li>
+        <li><a href="#62-主流拥塞控制算法演进">6.2 主流拥塞控制算法演进</a></li>
+      </ul>
+    </li>
+    <li><a href="#七tcp核心扩展与优化">七、TCP核心扩展与优化</a></li>
+    <li><a href="#八tcp-vs-udp-核心对比">八、TCP vs UDP 核心对比</a></li>
+    <li><a href="#九tcp常见问题与排查方向">九、TCP常见问题与排查方向</a></li>
+    <li><a href="#核心参考rfc文档">核心参考RFC文档</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="tcp协议详细总结">TCP协议详细总结</h1>
+<p>TCP（Transmission Control Protocol，传输控制协议）是<strong>OSI七层模型中传输层的核心协议</strong>，由RFC 793定义核心规范，后续通过多个RFC补充优化。它是<strong>面向连接、可靠交付、基于字节流、全双工</strong>的传输层协议，核心目标是在不可靠的IP网络之上，为应用层提供稳定、有序、无差错的端到端数据传输服务。</p>
+<hr>
+<h2 id="一tcp核心基础特性">一、TCP核心基础特性</h2>
+<ol>
+<li><strong>面向连接</strong>：通信前必须通过三次握手建立端到端的连接，通信结束后通过四次挥手释放连接，仅支持点对点单播，不支持广播/多播。</li>
+<li><strong>可靠交付</strong>：保证数据无差错、不丢失、不重复、按序到达接收方，通过序号、确认、重传等机制实现。</li>
+<li><strong>面向字节流</strong>：将应用层数据视为无结构的连续字节流，不保留报文边界，自动完成分片与重组，应用层无需关心底层传输细节。</li>
+<li><strong>全双工通信</strong>：连接建立后，双方可同时在两个方向上独立发送和接收数据，各自维护发送缓冲区与接收缓冲区。</li>
+<li><strong>流量控制</strong>：端到端的速率匹配，防止发送方发送过快导致接收方缓冲区溢出。</li>
+<li><strong>拥塞控制</strong>：全局网络适配，防止发送方发送过载导致网络中间节点拥塞崩溃。</li>
+</ol>
+<hr>
+<h2 id="二tcp报文段segment结构">二、TCP报文段（Segment）结构</h2>
+<p>TCP报文封装在IP数据报中，分为<strong>固定头部（20字节）<strong>和</strong>可选选项（最长40字节）</strong>，因此TCP头部总长度最大为60字节。</p>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">字段</th>
+          <th style="text-align: left">长度</th>
+          <th style="text-align: left">核心作用与说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">源端口/目的端口</td>
+          <td style="text-align: left">各16位</td>
+          <td style="text-align: left">唯一标识通信两端的应用进程，端口范围0-65535；0-1023为熟知端口，1024-49151为注册端口，49152-65535为动态私有端口</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">序号（SEQ）</td>
+          <td style="text-align: left">32位</td>
+          <td style="text-align: left">本报文段所携带数据的<strong>第一个字节的编号</strong>；SYN报文的序号为初始序号ISN，TCP字节流中每个字节都有唯一的32位循环序号</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">确认号（ACK）</td>
+          <td style="text-align: left">32位</td>
+          <td style="text-align: left">期望接收的下一个字节的序号，<strong>仅当ACK标志位为1时有效</strong>；采用累计确认机制，代表该序号之前的所有字节已全部正确接收</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">数据偏移</td>
+          <td style="text-align: left">4位</td>
+          <td style="text-align: left">标识TCP头部长度，单位为4字节；最小值为5（对应20字节固定头部），最大值为15（对应60字节最大头部）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">保留位</td>
+          <td style="text-align: left">6位</td>
+          <td style="text-align: left">预留字段，必须全部置0</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">控制标志位（Flags）</td>
+          <td style="text-align: left">6位</td>
+          <td style="text-align: left">核心控制位，每个位独立生效：<br>• <strong>URG</strong>：紧急指针有效，标识紧急数据<br>• <strong>ACK</strong>：确认号有效，除初始SYN包外，所有报文必须置1<br>• <strong>PSH</strong>：推送标志，要求接收方立即将数据上交应用层，不等待缓冲区填满<br>• <strong>RST</strong>：重置连接，强制关闭异常连接，拒绝非法报文<br>• <strong>SYN</strong>：同步序号，用于连接建立<br>• <strong>FIN</strong>：结束标志，用于关闭连接，标识本方无数据再发送</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">窗口大小</td>
+          <td style="text-align: left">16位</td>
+          <td style="text-align: left">接收方通告的接收窗口rwnd，标识本方当前接收缓冲区的剩余可用空间，是TCP流量控制的核心；最大值为65535字节，可通过窗口扩大选项扩展</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">校验和</td>
+          <td style="text-align: left">16位</td>
+          <td style="text-align: left">强制校验，覆盖TCP头部、数据段和伪首部（含源IP、目的IP、协议号、TCP长度），用于检测报文传输过程中的差错，校验失败的报文会被直接丢弃</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">紧急指针</td>
+          <td style="text-align: left">16位</td>
+          <td style="text-align: left">URG=1时有效，指向紧急数据的最后一个字节的序号，紧急数据会被优先传输，无需等待缓冲区排队</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">选项</td>
+          <td style="text-align: left">可变长度</td>
+          <td style="text-align: left">4字节对齐，最长40字节，用于TCP功能扩展，核心常用选项见下文</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="核心tcp选项">核心TCP选项</h3>
+<ol>
+<li><strong>MSS（最大报文段长度）</strong>：TCP单报文段能承载的最大数据长度（不含TCP/IP头部），通常为以太网MTU(1500字节)-IP头(20字节)-TCP头(20字节)=1460字节，连接建立时协商，避免IP层分片。</li>
+<li><strong>窗口扩大因子（Window Scale）</strong>：RFC 1323定义，解决16位窗口最大65535字节的限制，将窗口大小左移扩大因子位（最大14位），最大可支持1GB的窗口，适配高带宽长距离网络。</li>
+<li><strong>SACK（选择确认）</strong>：RFC 2018定义，弥补累计确认的缺陷，接收方可告知发送方已收到的不连续字节块，发送方仅重传真正丢失的报文段，大幅提升重传效率；D-SACK（重复SACK）扩展可告知发送方重复接收的报文段，优化乱序/丢包判断。</li>
+<li><strong>时间戳（Timestamps）</strong>：RFC 1323定义，两个核心作用：① 精准计算RTT，避免重传确认二义性；② PAWS机制，防止32位序号回绕导致的新旧报文混淆。</li>
+<li><strong>NOP</strong>：无操作，用于填充选项，保证4字节对齐。</li>
+</ol>
+<hr>
+<h2 id="三tcp连接管理">三、TCP连接管理</h2>
+<p>TCP连接的唯一标识是<strong>四元组（源IP、源端口、目的IP、目的端口）</strong>，完整生命周期分为<strong>连接建立、数据传输、连接释放</strong>三个阶段，基于有限状态机实现。</p>
+<h3 id="31-连接建立三次握手">3.1 连接建立：三次握手</h3>
+<p>默认客户端为主动打开方，服务端为被动打开方，核心目标是双向同步初始序号ISN，验证双方收发能力正常，避免无效连接。</p>
+<ol>
+<li><strong>第一次握手</strong>：客户端发送SYN报文（SYN=1，ACK=0，seq=ISN(c)），客户端进入<code>SYN_SENT</code>状态。
+作用：向服务端发起连接请求，同步客户端的初始序号。</li>
+<li><strong>第二次握手</strong>：服务端收到SYN报文后，回复SYN+ACK报文（SYN=1，ACK=1，ack=ISN(c)+1，seq=ISN(s)），服务端进入<code>SYN_RCVD</code>状态。
+作用：确认客户端的连接请求，同时同步服务端的初始序号。</li>
+<li><strong>第三次握手</strong>：客户端收到SYN+ACK报文后，回复ACK报文（ACK=1，ack=ISN(s)+1，seq=ISN(c)+1），客户端进入<code>ESTABLISHED</code>状态；服务端收到该ACK后，也进入<code>ESTABLISHED</code>状态。
+作用：确认服务端的初始序号，连接正式建立，可开始双向数据传输。</li>
+</ol>
+<h4 id="高频核心问题为什么是三次握手不是两次">高频核心问题：为什么是三次握手，不是两次？</h4>
+<ol>
+<li><strong>防止失效的连接请求导致资源浪费</strong>：若客户端发送的SYN报文在网络中滞留，超时后重发SYN并建立连接，后续滞留的SYN到达服务端，两次握手会让服务端直接建立连接，等待客户端数据，浪费服务端资源；三次握手可通过客户端的最终确认，过滤无效SYN。</li>
+<li><strong>确保双向收发能力正常，同步双方ISN</strong>：TCP是全双工协议，需要双方都确认对方的发送/接收能力正常，且双向的初始序号都得到对方确认。两次握手仅能完成客户端到服务端的单向序号同步和能力验证，无法确认服务端到客户端的发送能力和序号有效性。</li>
+</ol>
+<h3 id="32-连接释放四次挥手">3.2 连接释放：四次挥手</h3>
+<p>TCP全双工的特性决定了双方的发送通道需要独立关闭，FIN报文仅能关闭本方的发送方向，因此需要四次交互完成双向关闭。默认客户端为主动关闭方，服务端为被动关闭方。</p>
+<ol>
+<li><strong>第一次挥手</strong>：客户端发送FIN报文（FIN=1，ACK=1，seq=u），客户端进入<code>FIN_WAIT_1</code>状态。
+作用：告知服务端，客户端已无数据发送，请求关闭客户端到服务端的发送通道。</li>
+<li><strong>第二次挥手</strong>：服务端收到FIN后，回复ACK报文（ACK=1，ack=u+1，seq=v），服务端进入<code>CLOSE_WAIT</code>状态；客户端收到该ACK后，进入<code>FIN_WAIT_2</code>状态。
+作用：确认客户端的关闭请求，告知客户端已收到关闭指令，但服务端可能还有数据未发送完成，需等待数据传输完毕再关闭。此时客户端→服务端的发送通道关闭，服务端→客户端的通道仍正常，进入半关闭状态。</li>
+<li><strong>第三次挥手</strong>：服务端数据传输完成后，发送FIN报文（FIN=1，ACK=1，seq=w，ack=u+1），服务端进入<code>LAST_ACK</code>状态。
+作用：告知客户端，服务端已无数据发送，请求关闭服务端到客户端的发送通道。</li>
+<li><strong>第四次挥手</strong>：客户端收到FIN后，回复ACK报文（ACK=1，ack=w+1，seq=u+1），客户端进入<code>TIME_WAIT</code>状态；服务端收到该ACK后，立即进入<code>CLOSED</code>状态。客户端等待**2MSL（最长报文段寿命）**后，无重传报文到达，也进入<code>CLOSED</code>状态，连接完全释放。</li>
+</ol>
+<h4 id="高频核心问题">高频核心问题</h4>
+<ol>
+<li>
+<p><strong>为什么是四次挥手，不是三次？</strong>
+全双工模式下，被动关闭方收到FIN时，可能还有未传输完成的数据，无法将ACK确认和FIN关闭报文合并发送，必须先回复ACK确认关闭请求，待数据传输完成后，再发送FIN关闭本方通道，因此需要四次交互。而三次握手时，服务端无数据传输，可将SYN和ACK合并发送。</p>
+</li>
+<li>
+<p><strong>TIME_WAIT状态的作用，为什么要等待2MSL？</strong>
+MSL是IP报文在网络中的最长存活时间，RFC建议为2分钟，实际系统通常设置为30s-2分钟。</p>
+<ul>
+<li>确保最后一个ACK报文能被对方接收：若服务端未收到第四次挥手的ACK，会重传FIN报文，TIME_WAIT状态可让客户端接收重传的FIN并重新发送ACK，避免服务端一直处于<code>LAST_ACK</code>状态无法关闭。</li>
+<li>防止本次连接的滞留报文污染下一个同四元组的连接：2MSL的时间足以让本次连接的所有报文从网络中彻底消失，避免旧连接的报文被新连接误接收，导致序号混淆和数据错乱。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="四tcp可靠传输核心机制">四、TCP可靠传输核心机制</h2>
+<p>TCP的可靠传输，本质是通过<strong>序号与确认机制</strong>做基础，<strong>超时重传、快速重传</strong>做兜底，<strong>SACK</strong>做优化，最终实现字节流的有序、无差错交付。</p>
+<h3 id="41-序号与累计确认">4.1 序号与累计确认</h3>
+<ul>
+<li>TCP为字节流中的每个字节分配唯一的32位序号，报文段的seq为该段第一个数据字节的序号。</li>
+<li>接收方通过ACK报文的确认号，告知发送方已成功接收的最后一个字节的序号+1，代表该确认号之前的所有字节已全部正确接收，这就是<strong>累计确认</strong>。</li>
+<li>累计确认的优势是实现简单，抗ACK丢包能力强；缺陷是无法告知发送方中间不连续的已接收数据，丢包时会导致不必要的重传，由SACK选项弥补。</li>
+</ul>
+<h3 id="42-超时重传与rto计算">4.2 超时重传与RTO计算</h3>
+<p>TCP发送一个报文段后，会启动重传定时器，若在**RTO（重传超时时间）**内未收到对应的ACK，就会重传该报文段。</p>
+<ol>
+<li><strong>RTO计算标准（RFC 6298）</strong>：
+RTO基于RTT（报文往返时间）动态计算，避免固定超时时间导致的性能问题：
+<ul>
+<li>平滑RTT：<code>SRTT = (1-α)×SRTT + α×RTT采样值</code>，α默认取1/8</li>
+<li>RTT偏差：<code>RTTVAR = (1-β)×RTTVAR + β×|SRTT - RTT采样值|</code>，β默认取1/4</li>
+<li>最终RTO：<code>RTO = SRTT + 4×RTTVAR</code>，系统通常设置最小RTO为1s，最大为60s</li>
+</ul>
+</li>
+<li><strong>Karn算法</strong>：重传的报文段的RTT采样值不参与SRTT计算，解决“确认二义性”问题——无法判断收到的ACK是原报文的响应，还是重传报文的响应，避免RTO计算失真。</li>
+<li><strong>超时处理</strong>：发生RTO超时后，TCP判断网络发生严重拥塞，会执行：慢启动阈值ssthresh置为当前cwnd的1/2，cwnd重置为初始值，重新进入慢启动阶段，同时执行指数退避，下一次超时的RTO翻倍。</li>
+</ol>
+<h3 id="43-快速重传fast-retransmit">4.3 快速重传（Fast Retransmit）</h3>
+<p>RFC 5681定义，无需等待RTO超时，当发送方连续收到<strong>3个重复的ACK</strong>时，立即重传对应的丢失报文段，大幅降低丢包后的传输延迟。</p>
+<ul>
+<li>触发逻辑：发送方发送1、2、3、4、5号报文，2号报文丢失，接收方收到1号后回复ack=2，后续收到3、4、5号报文时，仍持续回复ack=2，形成3个重复ACK。</li>
+<li>核心优势：避免等待超时时间，将丢包重传的延迟从秒级降到毫秒级，提升传输效率。</li>
+</ul>
+<hr>
+<h2 id="五tcp流量控制">五、TCP流量控制</h2>
+<p>流量控制是<strong>端到端的速率匹配机制</strong>，核心解决“发送方发送过快，接收方缓冲区溢出导致丢包”的问题，基于滑动窗口协议实现。</p>
+<h3 id="51-滑动窗口核心原理">5.1 滑动窗口核心原理</h3>
+<ul>
+<li>接收方在每个ACK报文的窗口字段中，通告本方当前的接收窗口<code>rwnd</code>（接收缓冲区剩余可用空间）。</li>
+<li>发送方的发送窗口上限为<code>swnd = min(拥塞窗口cwnd, 接收窗口rwnd)</code>，确保发送的数据不会超过接收方的处理能力。</li>
+<li>发送窗口内的字节分为4类：① 已发送并收到ACK；② 已发送未收到ACK；③ 未发送但允许发送；④ 未发送且不允许发送。收到新的ACK后，发送窗口向右滑动，将新的字节纳入允许发送范围。</li>
+</ul>
+<h3 id="52-关键补充机制">5.2 关键补充机制</h3>
+<ol>
+<li>
+<p><strong>持续计时器（Persist Timer）</strong>
+解决零窗口死锁问题：若接收方通告rwnd=0，发送方停止发送；若后续接收方更新rwnd&gt;0的ACK报文丢失，发送方会一直等待，形成死锁。
+解决方案：发送方收到零窗口通知后，启动持续计时器，超时后发送1字节的窗口探测报文，接收方回复当前窗口大小；若窗口仍为0，重置计时器继续探测，直到窗口恢复非零。</p>
+</li>
+<li>
+<p><strong>糊涂窗口综合征（Silly Window Syndrome）</strong>
+问题场景：接收方缓冲区满，应用程序每次仅读取1字节，接收方通告rwnd=1，发送方就发送1字节的报文段，导致TCP头部20字节+数据1字节，网络效率极低。
+解决方案：</p>
+<ul>
+<li>接收方策略：不通告小于MSS或缓冲区一半的窗口，仅当可用空间达到阈值时，才通告非零窗口。</li>
+<li>发送方策略：通过Nagle算法避免发送小报文段。</li>
+</ul>
+</li>
+<li>
+<p><strong>Nagle算法（RFC 896）</strong>
+解决大量小报文段导致的网络带宽浪费问题，核心规则：</p>
+<ul>
+<li>若发送窗口内的数据长度≥MSS，立即发送；</li>
+<li>若当前没有已发送未确认的报文段，立即发送；</li>
+<li>否则，将数据放入缓冲区，直到收到ACK或缓冲区数据达到MSS，再统一发送。
+注意：Nagle算法与延迟ACK配合时，可能导致交互式应用（SSH、Telnet）出现额外延迟，可通过<code>TCP_NODELAY</code>选项关闭。</li>
+</ul>
+</li>
+<li>
+<p><strong>延迟ACK（Delayed ACK）</strong>
+减少ACK报文的数量，降低网络开销，核心规则：</p>
+<ul>
+<li>不对每个报文段立即回复ACK，延迟最大200ms（Linux默认40ms），若延迟期间有数据要发送，将ACK与数据捎带发送；</li>
+<li>最多每2个连续的报文段，必须回复一个ACK。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="六tcp拥塞控制">六、TCP拥塞控制</h2>
+<p>拥塞控制是<strong>全局网络适配机制</strong>，核心解决“发送方发送过快，导致网络中间路由器过载、缓存溢出、丢包”的问题，避免网络拥塞崩溃。核心标准为RFC 5681，后续演进了多个优化算法。</p>
+<p>TCP发送方维护一个<strong>拥塞窗口cwnd</strong>，代表在未收到ACK的情况下，最多可发送的字节数，最终发送窗口<code>swnd = min(cwnd, rwnd)</code>，拥塞控制的核心就是根据网络拥塞状态，动态调整cwnd的大小。</p>
+<h3 id="61-传统拥塞控制四大核心阶段reno算法">6.1 传统拥塞控制四大核心阶段（Reno算法）</h3>
+<ol>
+<li>
+<p><strong>慢启动（Slow Start）</strong></p>
+<ul>
+<li>连接建立初始，cwnd设置为较小的初始值（RFC 5681建议10个MSS），每收到一个ACK，cwnd增加1个MSS，每经过一个RTT，cwnd指数翻倍。</li>
+<li>核心目标：快速探测网络可用带宽，“慢启动”指初始值小，而非增长速度慢。</li>
+<li>退出条件：当cwnd≥慢启动阈值ssthresh时，进入拥塞避免阶段。</li>
+</ul>
+</li>
+<li>
+<p><strong>拥塞避免（Congestion Avoidance）</strong></p>
+<ul>
+<li>cwnd从指数增长转为线性增长，每经过一个完整的RTT，cwnd仅增加1个MSS，无论收到多少个ACK。</li>
+<li>核心目标：缓慢逼近网络最大带宽，避免快速增长导致网络拥塞。</li>
+</ul>
+</li>
+<li>
+<p><strong>快速重传</strong>
+收到3个重复ACK时，立即重传丢失的报文段，无需等待RTO超时，判断网络为轻微拥塞，不进入慢启动，直接进入快速恢复阶段。</p>
+</li>
+<li>
+<p><strong>快速恢复（Fast Recovery）</strong></p>
+<ul>
+<li>触发快速重传后，将ssthresh置为当前cwnd的1/2，cwnd置为ssthresh + 3×MSS；</li>
+<li>每收到一个重复ACK，cwnd增加1个MSS，继续发送允许的报文段；</li>
+<li>收到确认丢失报文的新ACK后，将cwnd重置为ssthresh，进入拥塞避免阶段。</li>
+<li>核心目标：避免轻微拥塞时直接进入慢启动导致的带宽利用率骤降。</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>若发生RTO超时，判断为网络严重拥塞，执行：ssthresh = cwnd/2，cwnd重置为初始值，重新进入慢启动。</p>
+</blockquote>
+<h3 id="62-主流拥塞控制算法演进">6.2 主流拥塞控制算法演进</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">算法</th>
+          <th style="text-align: left">核心特点</th>
+          <th style="text-align: left">适用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">Reno</td>
+          <td style="text-align: left">传统标准算法，基于丢包判断拥塞，四大阶段实现</td>
+          <td style="text-align: left">传统低带宽、低延迟网络</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">NewReno</td>
+          <td style="text-align: left">优化Reno，支持一个窗口内多个丢包的处理，减少不必要的慢启动</td>
+          <td style="text-align: left">通用网络，替代Reno</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">CUBIC</td>
+          <td style="text-align: left">Linux默认算法，基于三次函数的增长曲线，高带宽下增长更平稳，抗震荡能力强</td>
+          <td style="text-align: left">高带宽延迟积的有线网络、数据中心</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">BBR</td>
+          <td style="text-align: left">Google研发，基于瓶颈带宽和最小RTT的拥塞控制，不依赖丢包判断拥塞，最大化带宽利用率，最小化延迟</td>
+          <td style="text-align: left">高带宽长距离网络、无线网络（抗随机丢包）、CDN/云服务</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="七tcp核心扩展与优化">七、TCP核心扩展与优化</h2>
+<ol>
+<li><strong>TCP Fast Open（TFO，RFC 7413）</strong>：允许在三次握手的SYN报文中携带应用数据，实现0RTT数据传输，大幅缩短HTTP等短连接的建立延迟。</li>
+<li><strong>MP-TCP（MultiPath TCP，RFC 6824）</strong>：支持一个TCP连接同时使用多个网络接口（如WiFi+5G），实现带宽叠加、网络无缝切换，提升传输可靠性和吞吐量。</li>
+<li><strong>TCP头部压缩（TCP HC）</strong>：针对无线网络优化，压缩TCP/IP头部，降低小包传输的开销，提升无线链路的带宽利用率。</li>
+</ol>
+<hr>
+<h2 id="八tcp-vs-udp-核心对比">八、TCP vs UDP 核心对比</h2>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">特性</th>
+          <th style="text-align: left">TCP</th>
+          <th style="text-align: left">UDP</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">连接性</td>
+          <td style="text-align: left">面向连接，需三次握手建立、四次挥手释放</td>
+          <td style="text-align: left">无连接，无需预建立，直接发送报文</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">可靠性</td>
+          <td style="text-align: left">可靠，保证数据无丢失、无重复、按序到达</td>
+          <td style="text-align: left">不可靠，不保证交付、不保证顺序，无重传</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">传输模式</td>
+          <td style="text-align: left">面向字节流，无报文边界，自动分片重组</td>
+          <td style="text-align: left">面向数据报，有严格边界，不合并不拆分</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">控制机制</td>
+          <td style="text-align: left">流量控制、拥塞控制、超时重传、SACK等全套机制</td>
+          <td style="text-align: left">仅支持基础校验和，所有可靠性逻辑由上层应用实现</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">头部开销</td>
+          <td style="text-align: left">固定20字节，最大60字节</td>
+          <td style="text-align: left">固定8字节，开销极低</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">双工性</td>
+          <td style="text-align: left">全双工</td>
+          <td style="text-align: left">全双工</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">核心场景</td>
+          <td style="text-align: left">HTTP/HTTPS、FTP、SMTP、SSH、WebSocket等需可靠传输的场景</td>
+          <td style="text-align: left">直播、音视频通话、实时游戏、DNS、NTP、广播多播等低延迟优先场景</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="九tcp常见问题与排查方向">九、TCP常见问题与排查方向</h2>
+<ol>
+<li><strong>三次握手失败</strong>：防火墙拦截、服务端未监听对应端口、SYN半连接队列溢出（SYN洪水攻击）。</li>
+<li><strong>CLOSE_WAIT状态过多</strong>：应用层代码缺陷，被动关闭方未调用<code>close()</code>释放文件描述符。</li>
+<li><strong>TIME_WAIT状态过多</strong>：短连接场景下主动关闭方频繁创建/释放连接，占用端口资源，可通过调整<code>tcp_tw_reuse</code>等内核参数优化。</li>
+<li><strong>吞吐量低</strong>：MSS设置过小、未开启窗口扩大选项、拥塞控制算法不匹配、链路丢包导致频繁重传。</li>
+<li><strong>传输延迟高</strong>：Nagle算法与延迟ACK叠加、RTT过大、频繁重传、拥塞控制降速。</li>
+</ol>
+<hr>
+<h2 id="核心参考rfc文档">核心参考RFC文档</h2>
+<ul>
+<li>RFC 793：TCP核心协议规范</li>
+<li>RFC 5681：TCP拥塞控制标准</li>
+<li>RFC 6298：TCP RTO计算标准</li>
+<li>RFC 2018：TCP SACK选择确认</li>
+<li>RFC 1323：TCP高带宽扩展（窗口扩大、时间戳）</li>
+<li>RFC 8312：BBR拥塞控制算法</li>
+<li>RFC 7413：TCP Fast Open快速打开</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-03-06</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/001_tcp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/protocol/">协议</a>,&nbsp;<a href="/blog/tags/tcp/">TCP</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/003_linux%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="Linux 进程调度策略详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>Linux 进程调度策略详细总结</a>
+            <a href="/blog/002_udp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="UDP 协议详细总结">UDP 协议详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

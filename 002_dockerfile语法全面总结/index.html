@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Dockerfile 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/002_dockerfile%E8%AF%AD%E6%B3%95%E5%85%A8%E9%9D%A2%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="Dockerfile 语法详细总结">
+  <meta property="og:description" content="Dockerfile 语法详细总结 Dockerfile 是用于构建 Docker 镜像的文本配置文件，由一系列指令和参数组成，遵循分层构建原则（每条指令生成一个独立镜像层），是 Docker 镜像构建的核心标准。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-02-06T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-02-06T10:00:20+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="Dockerfile">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="Dockerfile 语法详细总结">
+  <meta name="twitter:description" content="Dockerfile 语法详细总结 Dockerfile 是用于构建 Docker 镜像的文本配置文件，由一系列指令和参数组成，遵循分层构建原则（每条指令生成一个独立镜像层），是 Docker 镜像构建的核心标准。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/002_dockerfile%E8%AF%AD%E6%B3%95%E5%85%A8%E9%9D%A2%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/001_go%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/001_lua%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Dockerfile 语法详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/002_dockerfile%E8%AF%AD%E6%B3%95%E5%85%A8%E9%9D%A2%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, Dockerfile","wordcount":  6273 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/002_dockerfile%E8%AF%AD%E6%B3%95%E5%85%A8%E9%9D%A2%E6%80%BB%E7%BB%93\/","datePublished": "2026-02-06T09:00:20+08:00","dateModified": "2026-02-06T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/002_dockerfile%E8%AF%AD%E6%B3%95%E5%85%A8%E9%9D%A2%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/002_dockerfile%E8%AF%AD%E6%B3%95%E5%85%A8%E9%9D%A2%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Dockerfile 语法详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-02-06">2026-02-06</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 6273 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 13 分钟&nbsp;<span id="/blog/002_dockerfile%E8%AF%AD%E6%B3%95%E5%85%A8%E9%9D%A2%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="Dockerfile 语法详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一基础规则与前置约定">一、基础规则与前置约定</a></li>
+    <li><a href="#二核心指令全详解">二、核心指令全详解</a>
+      <ul>
+        <li><a href="#一解析器指令parser-directives">（一）解析器指令（Parser Directives）</a></li>
+        <li><a href="#二基础镜像与元数据指令">（二）基础镜像与元数据指令</a>
+          <ul>
+            <li><a href="#1-from必选核心指令">1. <code>FROM</code>（必选，核心指令）</a></li>
+            <li><a href="#2-arg构建参数">2. <code>ARG</code>（构建参数）</a></li>
+            <li><a href="#3-label镜像元数据标签">3. <code>LABEL</code>（镜像元数据标签）</a></li>
+          </ul>
+        </li>
+        <li><a href="#三内容操作指令">（三）内容操作指令</a>
+          <ul>
+            <li><a href="#1-run构建时执行命令">1. <code>RUN</code>（构建时执行命令）</a></li>
+            <li><a href="#2-copy文件复制">2. <code>COPY</code>（文件复制）</a></li>
+            <li><a href="#3-add高级文件复制">3. <code>ADD</code>（高级文件复制）</a></li>
+          </ul>
+        </li>
+        <li><a href="#四环境与运行配置指令">（四）环境与运行配置指令</a>
+          <ul>
+            <li><a href="#1-env环境变量">1. <code>ENV</code>（环境变量）</a></li>
+            <li><a href="#2-workdir工作目录">2. <code>WORKDIR</code>（工作目录）</a></li>
+            <li><a href="#3-user运行用户">3. <code>USER</code>（运行用户）</a></li>
+            <li><a href="#4-shell默认shell配置">4. <code>SHELL</code>（默认Shell配置）</a></li>
+          </ul>
+        </li>
+        <li><a href="#五容器启动与生命周期指令">（五）容器启动与生命周期指令</a>
+          <ul>
+            <li><a href="#1-cmd容器启动默认命令">1. <code>CMD</code>（容器启动默认命令）</a></li>
+            <li><a href="#2-entrypoint容器入口点">2. <code>ENTRYPOINT</code>（容器入口点）</a></li>
+            <li><a href="#3-healthcheck健康检查">3. <code>HEALTHCHECK</code>（健康检查）</a></li>
+            <li><a href="#4-stopsignal容器停止信号">4. <code>STOPSIGNAL</code>（容器停止信号）</a></li>
+            <li><a href="#5-onbuild触发器指令">5. <code>ONBUILD</code>（触发器指令）</a></li>
+          </ul>
+        </li>
+        <li><a href="#六网络与存储指令">（六）网络与存储指令</a>
+          <ul>
+            <li><a href="#1-expose端口声明">1. <code>EXPOSE</code>（端口声明）</a></li>
+            <li><a href="#2-volume匿名卷声明">2. <code>VOLUME</code>（匿名卷声明）</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#三多阶段构建核心用法">三、多阶段构建核心用法</a>
+      <ul>
+        <li><a href="#核心示例">核心示例</a></li>
+        <li><a href="#核心优势">核心优势</a></li>
+      </ul>
+    </li>
+    <li><a href="#四镜像缓存机制与优化规则">四、镜像缓存机制与优化规则</a>
+      <ul>
+        <li><a href="#核心缓存规则">核心缓存规则</a></li>
+        <li><a href="#缓存优化技巧">缓存优化技巧</a></li>
+      </ul>
+    </li>
+    <li><a href="#五生产环境最佳实践">五、生产环境最佳实践</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="dockerfile-语法详细总结">Dockerfile 语法详细总结</h1>
+<p>Dockerfile 是用于构建 Docker 镜像的文本配置文件，由一系列指令和参数组成，遵循<strong>分层构建</strong>原则（每条指令生成一个独立镜像层），是 Docker 镜像构建的核心标准。</p>
+<h2 id="一基础规则与前置约定">一、基础规则与前置约定</h2>
+<ol>
+<li>
+<p><strong>指令大小写</strong>：指令本身不区分大小写，行业惯例使用<strong>大写</strong>，便于和参数区分。</p>
+</li>
+<li>
+<p><strong>执行顺序</strong>：指令从上到下依次执行，Dockerfile 必须以 <code>FROM</code> 指令开头（解析器指令、前置 <code>ARG</code> 除外）。</p>
+</li>
+<li>
+<p><strong>注释规则</strong>：行首以 <code>#</code> 开头为注释，不支持行内注释（<code>#</code> 必须在行首，转义参数场景除外）。</p>
+</li>
+<li>
+<p><strong>转义符</strong>：默认转义符为 <code>\</code>，可通过解析器指令 <code># escape=</code> 修改（常用于 Windows 容器路径适配）。</p>
+</li>
+<li>
+<p><strong>环境变量引用</strong>：通过 <code>$VAR</code> 或 <code>${VAR}</code> 引用，支持 Shell 风格的变量替换：</p>
+<ul>
+<li>
+<p><code>${VAR:-default}</code>：变量未定义时使用默认值</p>
+</li>
+<li>
+<p><code>${VAR:+alt}</code>：变量已定义时使用替代值，否则为空</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>.dockerignore 文件</strong>：与 Dockerfile 同级，用于排除构建上下文中的文件（如源码、缓存、敏感信息），减少镜像体积、避免缓存失效、防止信息泄露，语法与 <code>.gitignore</code> 一致。</p>
+</li>
+</ol>
+<h2 id="二核心指令全详解">二、核心指令全详解</h2>
+<h3 id="一解析器指令parser-directives">（一）解析器指令（Parser Directives）</h3>
+<p>必须放在 Dockerfile 最顶部，仅能出现一次，用于配置 Dockerfile 解析器的行为，换行符、注释之外不能有其他内容。</p>
+<ol>
+<li>
+<p><strong><code>escape</code></strong> ** 指令**</p>
+<ul>
+<li>
+<p>语法：<code># escape=\</code> 或 <code># escape=</code> ```</p>
+</li>
+<li>
+<p>作用：修改默认转义符，Windows 容器中常用反引号避免与路径反斜杠冲突。</p>
+</li>
+<li>
+<p>示例：<code># escape=</code> ```</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>syntax</code></strong> ** 指令**</p>
+<ul>
+<li>
+<p>语法：<code># syntax=docker/dockerfile:1.7-labs</code></p>
+</li>
+<li>
+<p>作用：指定 Dockerfile 语法版本，启用 BuildKit 新特性（如多平台构建、缓存挂载、机密挂载等），推荐始终指定官方稳定版本。</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="二基础镜像与元数据指令">（二）基础镜像与元数据指令</h3>
+<h4 id="1-from必选核心指令">1. <code>FROM</code>（必选，核心指令）</h4>
+<p>指定构建的基础镜像，是 Dockerfile 的第一条有效指令（解析器指令、前置 <code>ARG</code> 除外），支持多阶段构建。</p>
+<ul>
+<li>
+<p>语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="s">[--platform=&lt;platform</span>&gt;<span class="o">]</span> &lt;image&gt;<span class="o">[</span>:&lt;tag&gt;<span class="o">]</span> <span class="o">[</span>AS &lt;stage_name&gt;<span class="o">]</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>参数说明：</p>
+<ul>
+<li>
+<p><code>--platform</code>：指定镜像平台，如 <code>linux/amd64</code>、<code>linux/arm64</code>、<code>windows/amd64</code>，用于跨平台构建。</p>
+</li>
+<li>
+<p><code>image:tag</code>：基础镜像名称与标签，标签默认 <code>latest</code>，推荐固定版本号保证构建一致性。</p>
+</li>
+<li>
+<p><code>AS &lt;stage_name&gt;</code>：为当前构建阶段命名，多阶段构建中用于后续引用。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 单阶段构建</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:22.04</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 多阶段构建</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="s">golang:1.22</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="s">builder</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>一个 Dockerfile 可包含多个 <code>FROM</code>，实现多阶段构建，最终镜像仅保留最后一个阶段的内容。</p>
+</li>
+<li>
+<p>前置 <code>ARG</code> 仅在 <code>FROM</code> 行中有效，阶段内使用需重新声明。</p>
+</li>
+<li>
+<p>优先使用官方轻量镜像（alpine、slim 系列），减少镜像体积与攻击面。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-arg构建参数">2. <code>ARG</code>（构建参数）</h4>
+<p>定义<strong>仅在构建过程中生效</strong>的变量，容器运行时不会保留，可通过构建命令覆盖默认值。</p>
+<ul>
+<li>
+<p>语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">ARG</span> &lt;name&gt;<span class="o">[=</span>&lt;default_value&gt;<span class="o">]</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>作用域：</p>
+<ul>
+<li>
+<p><strong>前置 ARG</strong>（<code>FROM</code> 之前定义）：仅在 <code>FROM</code> 行中生效，每个 <code>FROM</code> 阶段需重新声明才能复用。</p>
+</li>
+<li>
+<p><strong>阶段内 ARG</strong>（<code>FROM</code> 之后定义）：从声明处到当前阶段结束有效，跨阶段需重新声明。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 前置ARG，用于指定基础镜像版本</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">ARG</span> <span class="nv">UBUNTU_VERSION</span><span class="o">=</span><span class="m">22</span>.04<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:${UBUNTU_VERSION</span><span class="o">}</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 阶段内ARG</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">ARG</span> <span class="nv">APP_VERSION</span><span class="o">=</span><span class="m">1</span>.0.0<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">RUN</span> <span class="nb">echo</span> <span class="s2">&#34;App version: </span><span class="si">${</span><span class="nv">APP_VERSION</span><span class="si">}</span><span class="s2">&#34;</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>与 <code>ENV</code> 核心区别：<code>ARG</code> 仅构建时有效，<code>ENV</code> 构建+运行时均有效。</p>
+</li>
+<li>
+<p>敏感信息（密钥、密码）禁止使用 <code>ARG</code>，<code>docker history</code> 可查看所有构建参数。</p>
+</li>
+<li>
+<p>可通过 <code>docker build --build-arg &lt;key&gt;=&lt;value&gt;</code> 覆盖默认值。</p>
+</li>
+<li>
+<p>Docker 预定义 ARG（如 <code>HTTP_PROXY</code>、<code>TARGETARCH</code>）无需在 Dockerfile 中声明即可使用。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-label镜像元数据标签">3. <code>LABEL</code>（镜像元数据标签）</h4>
+<p>为镜像添加键值对形式的元数据，替代已废弃的 <code>MAINTAINER</code> 指令。</p>
+<ul>
+<li>
+<p>语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">LABEL</span> &lt;key1&gt;<span class="o">=</span>&lt;value1&gt; &lt;key2&gt;<span class="o">=</span>&lt;value2&gt; ...</span></span></code></pre></div></div>
+</li>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">LABEL</span> <span class="nv">maintainer</span><span class="o">=</span><span class="s2">&#34;dev@example.com&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">      <span class="nv">version</span><span class="o">=</span><span class="s2">&#34;1.0.0&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">      <span class="nv">description</span><span class="o">=</span><span class="s2">&#34;Production image for backend service&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">      org.opencontainers.image.authors<span class="o">=</span><span class="s2">&#34;Dev Team&#34;</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>多个标签可合并为一个 <code>LABEL</code> 指令，减少镜像层数。</p>
+</li>
+<li>
+<p>可通过 <code>docker inspect &lt;image&gt;</code> 查看镜像的所有标签。</p>
+</li>
+<li>
+<p>推荐遵循 OCI 镜像规范定义标准化标签。</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="三内容操作指令">（三）内容操作指令</h3>
+<h4 id="1-run构建时执行命令">1. <code>RUN</code>（构建时执行命令）</h4>
+<p>在当前镜像层之上执行命令并提交结果，是安装软件、编译代码、修改配置的核心指令。</p>
+<ul>
+<li>
+<p>两种语法格式：</p>
+<ol>
+<li>
+<p><strong>Shell 格式</strong>（默认）：<code>RUN &lt;command&gt;</code></p>
+<ul>
+<li>底层通过 <code>/bin/sh -c</code> 执行，支持管道、通配符、环境变量等 Shell 特性。</li>
+</ul>
+</li>
+<li>
+<p><strong>Exec 格式</strong>（推荐）：<code>RUN [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]</code></p>
+<ul>
+<li>
+<p>直接执行可执行文件，不启动 Shell 进程，避免 PID1 进程异常、信号传递问题。</p>
+</li>
+<li>
+<p>必须使用<strong>双引号</strong>，符合 JSON 数组格式。</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># Shell格式：合并命令+清理缓存，减少镜像层</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">RUN</span> apt-get update <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    apt-get install -y nginx curl <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    rm -rf /var/lib/apt/lists/*<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># Exec格式</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">RUN</span> <span class="o">[</span><span class="s2">&#34;apt-get&#34;</span>, <span class="s2">&#34;install&#34;</span>, <span class="s2">&#34;-y&#34;</span>, <span class="s2">&#34;nginx&#34;</span><span class="o">]</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>高级特性（BuildKit）：<code>RUN --mount</code> 挂载增强</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 缓存挂载：复用npm缓存，不写入镜像层，提升构建速度</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">RUN</span> --mount<span class="o">=</span><span class="nv">type</span><span class="o">=</span>cache,target<span class="o">=</span>/root/.npm npm install<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 机密挂载：读取构建时的密钥，不写入镜像历史</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">RUN</span> --mount<span class="o">=</span><span class="nv">type</span><span class="o">=</span>secret,id<span class="o">=</span>npm_token,target<span class="o">=</span>/root/.npmrc npm install<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># SSH挂载：复用宿主机SSH代理，拉取私有Git仓库，无需复制私钥</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">RUN</span> --mount<span class="o">=</span><span class="nv">type</span><span class="o">=</span>ssh git clone git@github.com:private/repo.git</span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>多条关联命令用 <code>&amp;&amp;</code> 合并为一个 <code>RUN</code>，减少镜像层数，同时避免缓存异常（如 <code>apt-get update</code> 与 <code>install</code> 必须同一条指令）。</p>
+</li>
+<li>
+<p>命令执行后必须清理缓存（如 apt、yum、npm 缓存），减小镜像体积。</p>
+</li>
+<li>
+<p>Exec 格式不会进行环境变量替换，如需使用需手动指定 Shell：<code>RUN [&quot;sh&quot;, &quot;-c&quot;, &quot;echo $HOME&quot;]</code>。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-copy文件复制">2. <code>COPY</code>（文件复制）</h4>
+<p>将构建上下文中的文件/目录，复制到镜像内的目标路径，语义清晰、缓存可控，是文件复制的首选指令。</p>
+<ul>
+<li>
+<p>语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 常规格式</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> <span class="o">[</span>--chown<span class="o">=</span>&lt;user&gt;:&lt;group&gt;<span class="o">]</span> <span class="o">[</span>--chmod<span class="o">=</span>&lt;mode&gt;<span class="o">]</span> <span class="o">[</span>--from<span class="o">=</span>&lt;stage<span class="p">|</span>image&gt;<span class="o">]</span> &lt;src&gt;... &lt;dest&gt;<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 路径含空格的格式</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> <span class="o">[</span>--chown<span class="o">=</span>&lt;user&gt;:&lt;group&gt;<span class="o">]</span> <span class="o">[</span>--chmod<span class="o">=</span>&lt;mode&gt;<span class="o">]</span> <span class="o">[</span>--from<span class="o">=</span>&lt;stage<span class="p">|</span>image&gt;<span class="o">]</span> <span class="o">[</span><span class="s2">&#34;&lt;src&gt;&#34;</span>,... <span class="s2">&#34;&lt;dest&gt;&#34;</span><span class="o">]</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>核心参数：</p>
+<ul>
+<li>
+<p><code>--chown</code>：指定复制后文件的所属用户与组，仅 Linux 容器有效。</p>
+</li>
+<li>
+<p><code>--chmod</code>：指定文件权限，如 <code>0755</code>、<code>0644</code>。</p>
+</li>
+<li>
+<p><code>--from</code>：从指定构建阶段（<code>AS</code> 命名的阶段）或外部镜像中复制文件，多阶段构建核心用法。</p>
+</li>
+<li>
+<p><code>src</code>：源路径，相对于构建上下文，支持通配符（<code>*</code>、<code>?</code>），<strong>禁止使用 ** <strong><code>../</code></strong> ** 跳出上下文目录</strong>。</p>
+</li>
+<li>
+<p><code>dest</code>：目标路径，镜像内的绝对路径，或相对于 <code>WORKDIR</code> 的相对路径。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 复制当前目录所有文件到镜像/app目录</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> . /app<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 带权限配置复制</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> --chown<span class="o">=</span>nginx:nginx --chmod<span class="o">=</span><span class="m">0644</span> ./nginx.conf /etc/nginx/nginx.conf<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 多阶段构建：从builder阶段复制编译产物</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> --from<span class="o">=</span>builder /app/build /app</span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>源路径为目录时，仅复制目录内的所有内容，而非目录本身。</p>
+</li>
+<li>
+<p>多个源路径时，目标路径必须以 <code>/</code> 结尾。</p>
+</li>
+<li>
+<p>源文件内容发生变化时，会触发该层及后续所有层缓存失效，因此推荐先复制依赖文件（如 <code>package.json</code>），再复制完整源码。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-add高级文件复制">3. <code>ADD</code>（高级文件复制）</h4>
+<p>功能与 <code>COPY</code> 基本一致，额外支持两个特性：<strong>本地压缩包自动解压</strong>、<strong>远程 URL 下载</strong>。</p>
+<ul>
+<li>
+<p>语法与 <code>COPY</code> 完全一致。</p>
+</li>
+<li>
+<p>核心特性：</p>
+<ol>
+<li>
+<p>本地 tar/gzip/bzip2/xz 压缩包会自动解压到目标路径（远程 URL 下载的压缩包不会解压）。</p>
+</li>
+<li>
+<p>支持 HTTP/HTTPS 远程 URL 作为源路径，自动下载到目标路径。</p>
+</li>
+</ol>
+</li>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 本地压缩包自动解压</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">ADD</span> ./package.tar.gz /app<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 远程文件下载</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">ADD</span> https://example.com/binary /usr/local/bin/</span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>**非必要不使用 ** <strong><code>ADD</code></strong>，常规文件复制优先用 <code>COPY</code>，语义更清晰、缓存行为更可控。</p>
+</li>
+<li>
+<p>不推荐用 <code>ADD</code> 下载远程文件，应使用 <code>RUN curl/wget</code> 下载+执行+清理，合并为一层减少镜像体积。</p>
+</li>
+<li>
+<p>仅当需要自动解压本地压缩包时，使用 <code>ADD</code> 指令。</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="四环境与运行配置指令">（四）环境与运行配置指令</h3>
+<h4 id="1-env环境变量">1. <code>ENV</code>（环境变量）</h4>
+<p>设置环境变量，<strong>构建过程中后续指令与容器运行时均有效</strong>，是配置应用运行环境的核心指令。</p>
+<ul>
+<li>
+<p>语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 单变量格式</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">ENV</span> &lt;key&gt; &lt;value&gt;<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 多变量格式（推荐）</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">ENV</span> &lt;key1&gt;<span class="o">=</span>&lt;value1&gt; &lt;key2&gt;<span class="o">=</span>&lt;value2&gt; ...</span></span></code></pre></div></div>
+</li>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">ENV</span> <span class="nv">JAVA_HOME</span><span class="o">=</span>/usr/lib/jvm/java-11-openjdk-amd64 <span class="se">\
+</span></span></span><span class="line"><span class="cl">    <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:<span class="nv">$JAVA_HOME</span>/bin <span class="se">\
+</span></span></span><span class="line"><span class="cl">    <span class="nv">APP_ENV</span><span class="o">=</span>production <span class="se">\
+</span></span></span><span class="line"><span class="cl">    <span class="nv">LOG_LEVEL</span><span class="o">=</span>info</span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>环境变量会永久保留在镜像中，容器运行时可通过 <code>docker run -e &lt;key&gt;=&lt;value&gt;</code> 覆盖。</p>
+</li>
+<li>
+<p>敏感信息（密钥、密码）禁止使用 <code>ENV</code>，会通过 <code>docker history</code> 泄露。</p>
+</li>
+<li>
+<p>多变量合并为一个 <code>ENV</code> 指令，减少镜像层数。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-workdir工作目录">2. <code>WORKDIR</code>（工作目录）</h4>
+<p>为后续的 <code>RUN</code>/<code>CMD</code>/<code>ENTRYPOINT</code>/<code>COPY</code>/<code>ADD</code> 指令设置工作目录，目录不存在时会自动创建。</p>
+<ul>
+<li>
+<p>语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/path/to/workdir</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> . .<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">RUN</span> npm install<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 相对路径，基于上一个WORKDIR，最终路径为/app/logs</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">WORKDIR</span><span class="w"> </span><span class="s">logs</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>禁止使用 <code>RUN cd xxx &amp;&amp; command</code> 切换目录，<code>cd</code> 仅在当前 <code>RUN</code> 指令有效，后续指令会恢复默认目录。</p>
+</li>
+<li>
+<p>推荐使用绝对路径，避免路径混乱。</p>
+</li>
+<li>
+<p>容器启动后的默认工作目录，为最后一个 <code>WORKDIR</code> 指定的路径。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-user运行用户">3. <code>USER</code>（运行用户）</h4>
+<p>为后续的 <code>RUN</code>/<code>CMD</code>/<code>ENTRYPOINT</code> 指令指定运行用户与用户组，同时设置容器启动时的默认用户。</p>
+<ul>
+<li>
+<p>语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">USER</span><span class="w"> </span><span class="s">&lt;user&gt;[:&lt;group</span>&gt;<span class="o">]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">USER</span><span class="w"> </span><span class="s">&lt;UID&gt;[:&lt;GID</span>&gt;<span class="o">]</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 提前创建非root用户</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">RUN</span> groupadd -r appgroup <span class="o">&amp;&amp;</span> useradd -r -g appgroup appuser<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 切换用户</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">USER</span><span class="w"> </span><span class="s">appuser</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>用户/用户组必须提前创建，否则会报错。</p>
+</li>
+<li>
+<p>生产环境推荐使用非 root 用户运行容器，提升安全性，减少攻击面。</p>
+</li>
+<li>
+<p>容器运行时可通过 <code>docker run --user</code> 覆盖默认用户。</p>
+</li>
+<li>
+<p>切换用户后，需确保工作目录、文件的权限与用户匹配，可通过 <code>COPY --chown</code> 提前设置。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-shell默认shell配置">4. <code>SHELL</code>（默认Shell配置）</h4>
+<p>修改 Shell 格式指令（<code>RUN</code>/<code>CMD</code>/<code>ENTRYPOINT</code>）的默认 Shell 解释器。</p>
+<ul>
+<li>
+<p>语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">SHELL</span> <span class="p">[</span><span class="s2">&#34;executable&#34;</span><span class="p">,</span> <span class="s2">&#34;parameters&#34;</span><span class="p">]</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># Linux切换默认Shell为bash</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">SHELL</span> <span class="p">[</span><span class="s2">&#34;/bin/bash&#34;</span><span class="p">,</span> <span class="s2">&#34;-c&#34;</span><span class="p">]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">RUN</span> <span class="nb">echo</span> <span class="nv">$BASH_VERSION</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># Windows切换为PowerShell</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">SHELL</span> <span class="p">[</span><span class="s2">&#34;powershell&#34;</span><span class="p">,</span> <span class="s2">&#34;-Command&#34;</span><span class="p">]</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>必须使用 Exec 格式（JSON 数组、双引号）。</p>
+</li>
+<li>
+<p>Linux 默认值为 <code>[&quot;/bin/sh&quot;, &quot;-c&quot;]</code>，Windows 默认值为 <code>[&quot;cmd&quot;, &quot;/S&quot;, &quot;/C&quot;]</code>。</p>
+</li>
+<li>
+<p>可多次使用，每次修改仅对后续指令生效。</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="五容器启动与生命周期指令">（五）容器启动与生命周期指令</h3>
+<h4 id="1-cmd容器启动默认命令">1. <code>CMD</code>（容器启动默认命令）</h4>
+<p>指定容器启动时<strong>默认执行的命令与参数</strong>，<code>docker run</code> 时若指定了启动命令，会完全覆盖 <code>CMD</code> 内容。</p>
+<ul>
+<li>
+<p>三种语法格式：</p>
+<ol>
+<li>
+<p><strong>Exec 格式（推荐）</strong>：<code>CMD [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]</code></p>
+<ul>
+<li>直接执行可执行文件，不启动 Shell，PID1 为目标进程，可正常接收系统信号，实现优雅退出。</li>
+</ul>
+</li>
+<li>
+<p><strong>默认参数格式</strong>：<code>CMD [&quot;param1&quot;, &quot;param2&quot;]</code></p>
+<ul>
+<li>必须与 Exec 格式的 <code>ENTRYPOINT</code> 配合使用，为 <code>ENTRYPOINT</code> 提供默认参数。</li>
+</ul>
+</li>
+<li>
+<p><strong>Shell 格式</strong>：<code>CMD command param1 param2</code></p>
+<ul>
+<li>底层通过 <code>/bin/sh -c</code> 执行，PID1 为 sh 进程，无法正常接收停止信号，不推荐使用。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># Exec格式（推荐）</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">CMD</span> <span class="p">[</span><span class="s2">&#34;nginx&#34;</span><span class="p">,</span> <span class="s2">&#34;-g&#34;</span><span class="p">,</span> <span class="s2">&#34;daemon off;&#34;</span><span class="p">]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 为ENTRYPOINT提供默认参数</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&#34;nginx&#34;</span><span class="p">,</span> <span class="s2">&#34;-g&#34;</span><span class="p">]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">CMD</span> <span class="p">[</span><span class="s2">&#34;daemon off;&#34;</span><span class="p">]</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>一个 Dockerfile 中只能有一个 <code>CMD</code>，多个 <code>CMD</code> 仅最后一个生效。</p>
+</li>
+<li>
+<p><code>docker run &lt;image&gt; [command]</code> 会完全覆盖 <code>CMD</code> 的内容，不会追加参数。</p>
+</li>
+<li>
+<p>Shell 格式的 <code>CMD</code> 会忽略所有 <code>ENTRYPOINT</code> 指令。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-entrypoint容器入口点">2. <code>ENTRYPOINT</code>（容器入口点）</h4>
+<p>指定容器启动时执行的入口命令，<strong>不会被 ** <strong><code>docker run</code></strong> ** 的命令行参数覆盖</strong>，而是将参数传递给 <code>ENTRYPOINT</code>，仅可通过 <code>--entrypoint</code> 强制覆盖。</p>
+<ul>
+<li>
+<p>两种语法格式：</p>
+<ol>
+<li>
+<p><strong>Exec 格式（推荐）</strong>：<code>ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]</code></p>
+<ul>
+<li>生产环境首选，PID1 为目标进程，可正常接收系统信号，支持与 <code>CMD</code> 配合实现默认参数+自定义参数。</li>
+</ul>
+</li>
+<li>
+<p><strong>Shell 格式</strong>：<code>ENTRYPOINT command param1 param2</code></p>
+<ul>
+<li>底层通过 <code>/bin/sh -c</code> 执行，PID1 为 sh 进程，无法接收停止信号，且会忽略 <code>CMD</code> 和 <code>docker run</code> 的参数，强烈不推荐。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>核心用法（Exec 格式 + CMD 组合）：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 固定入口命令</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">ENTRYPOINT</span> <span class="p">[</span><span class="s2">&#34;echo&#34;</span><span class="p">,</span> <span class="s2">&#34;Hello&#34;</span><span class="p">]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 提供默认参数，可被docker run的参数覆盖</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">CMD</span> <span class="p">[</span><span class="s2">&#34;World&#34;</span><span class="p">]</span></span></span></code></pre></div></div>
+<ul>
+<li>
+<p>执行 <code>docker run &lt;image&gt;</code>：输出 <code>Hello World</code></p>
+</li>
+<li>
+<p>执行 <code>docker run &lt;image&gt; Docker</code>：输出 <code>Hello Docker</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>一个 Dockerfile 中只能有一个 <code>ENTRYPOINT</code>，多个仅最后一个生效。</p>
+</li>
+<li>
+<p>常用于制作可执行镜像（如命令行工具），固定入口命令，仅允许传递参数。</p>
+</li>
+<li>
+<p>可通过 <code>docker run --entrypoint &lt;command&gt; &lt;image&gt;</code> 强制覆盖入口点。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-healthcheck健康检查">3. <code>HEALTHCHECK</code>（健康检查）</h4>
+<p>设置容器的健康检查命令，Docker 会定期执行命令判断容器是否健康，用于服务可用性检测。</p>
+<ul>
+<li>
+<p>语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 设置健康检查</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">HEALTHCHECK</span> <span class="o">[</span>OPTIONS<span class="o">]</span> CMD &lt;command&gt;<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 禁用基础镜像继承的健康检查</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">HEALTHCHECK</span> NONE</span></span></code></pre></div></div>
+</li>
+<li>
+<p>可选参数：</p>
+</li>
+</ul>
+<table>
+  <thead>
+      <tr>
+          <th>参数</th>
+          <th>作用</th>
+          <th>默认值</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>--interval=&lt;duration&gt;</code></td>
+          <td>两次健康检查的间隔时间</td>
+          <td>30s</td>
+      </tr>
+      <tr>
+          <td><code>--timeout=&lt;duration&gt;</code></td>
+          <td>单次检查的超时时间，超时视为检查失败</td>
+          <td>30s</td>
+      </tr>
+      <tr>
+          <td><code>--start-period=&lt;duration&gt;</code></td>
+          <td>容器启动初始化时间，此期间的失败不计入重试次数</td>
+          <td>0s</td>
+      </tr>
+      <tr>
+          <td><code>--retries=&lt;number&gt;</code></td>
+          <td>连续失败多少次后，标记容器为不健康</td>
+          <td>3次</td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">HEALTHCHECK</span> --interval<span class="o">=</span>30s --timeout<span class="o">=</span>3s --start-period<span class="o">=</span>60s --retries<span class="o">=</span><span class="m">3</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  CMD curl -f http://localhost:8080/health <span class="o">||</span> <span class="nb">exit</span> <span class="m">1</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>一个 Dockerfile 中只能有一个 <code>HEALTHCHECK</code>，多个仅最后一个生效。</p>
+</li>
+<li>
+<p>命令退出码决定健康状态：<code>0=健康</code>，<code>1=不健康</code>，<code>2=保留值（禁止使用）</code>。</p>
+</li>
+<li>
+<p>健康状态可通过 <code>docker ps</code> 查看，<code>docker inspect</code> 可查看详细检查历史。</p>
+</li>
+<li>
+<p>检查命令必须是执行后立即退出的一次性命令，禁止使用持续运行的进程。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-stopsignal容器停止信号">4. <code>STOPSIGNAL</code>（容器停止信号）</h4>
+<p>设置容器停止时，Docker 发送给 PID1 进程的系统信号，默认值为 <code>SIGTERM</code>（15）。</p>
+<ul>
+<li>
+<p>语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">STOPSIGNAL</span><span class="w"> </span><span class="s">&lt;signal</span>&gt;</span></span></code></pre></div></div>
+</li>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">STOPSIGNAL</span><span class="w"> </span><span class="s">SIGINT</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">STOPSIGNAL</span><span class="w"> </span><span class="s">9</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>信号可使用名称（如 <code>SIGTERM</code>）或数字（如 <code>15</code>）。</p>
+</li>
+<li>
+<p>用于适配需要自定义信号才能优雅退出的应用。</p>
+</li>
+<li>
+<p><code>docker stop</code> 会先发送该信号，等待超时时间（默认10s）后，发送 <code>SIGKILL</code> 强制终止容器。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-onbuild触发器指令">5. <code>ONBUILD</code>（触发器指令）</h4>
+<p>设置构建触发器，当当前镜像被用作其他 Dockerfile 的基础镜像时，会在 <code>FROM</code> 执行后、其他指令执行前，触发执行 <code>ONBUILD</code> 绑定的指令。</p>
+<ul>
+<li>
+<p>语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">ONBUILD</span> &lt;INSTRUCTION&gt;</span></span></code></pre></div></div>
+</li>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 基础镜像Dockerfile</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="s">node:18</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">ONBUILD</span> <span class="k">COPY</span> package*.json ./<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">ONBUILD</span> <span class="k">RUN</span> npm install<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">ONBUILD</span> <span class="k">COPY</span> . .<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">CMD</span> <span class="p">[</span><span class="s2">&#34;npm&#34;</span><span class="p">,</span> <span class="s2">&#34;start&#34;</span><span class="p">]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 子镜像Dockerfile，无需重复编写构建逻辑</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="s">上述基础镜像</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 构建时会自动执行3条ONBUILD指令</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p><code>ONBUILD</code> 仅在子镜像构建时触发一次，孙子镜像不会继承触发。</p>
+</li>
+<li>
+<p>不支持嵌套 <code>ONBUILD ONBUILD</code>，也不能绑定 <code>FROM</code>、<code>MAINTAINER</code> 指令。</p>
+</li>
+<li>
+<p>适合制作通用构建基础镜像，简化子镜像的 Dockerfile 编写。</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="六网络与存储指令">（六）网络与存储指令</h3>
+<h4 id="1-expose端口声明">1. <code>EXPOSE</code>（端口声明）</h4>
+<p>声明容器运行时监听的端口与协议，仅作为镜像的文档说明，<strong>不会自动发布端口</strong>。</p>
+<ul>
+<li>
+<p>语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">EXPOSE</span><span class="w"> </span><span class="s">&lt;port</span>&gt; <span class="o">[</span>&lt;port&gt;/&lt;protocol&gt;...<span class="o">]</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">EXPOSE</span><span class="w"> </span><span class="s">80/tcp</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">EXPOSE</span><span class="w"> </span><span class="s">443/tcp</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">EXPOSE</span><span class="w"> </span><span class="s">53/udp</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>默认协议为 TCP，可指定 UDP。</p>
+</li>
+<li>
+<p>端口发布需通过 <code>docker run -p</code>（指定端口映射）或 <code>-P</code>（自动映射所有声明端口）实现。</p>
+</li>
+<li>
+<p>即使不写 <code>EXPOSE</code>，容器内服务也可监听端口，该指令仅为元数据，不影响功能。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-volume匿名卷声明">2. <code>VOLUME</code>（匿名卷声明）</h4>
+<p>声明容器内的目录为匿名卷，容器运行时自动挂载，避免数据写入容器可写层，防止容器删除时数据丢失。</p>
+<ul>
+<li>
+<p>语法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">VOLUME</span> <span class="p">[</span><span class="s2">&#34;&lt;path1&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;&lt;path2&gt;&#34;</span><span class="p">]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">VOLUME</span><span class="w"> </span><span class="s">&lt;path1</span>&gt; &lt;path2&gt;</span></span></code></pre></div></div>
+</li>
+<li>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">VOLUME</span> <span class="p">[</span><span class="s2">&#34;/var/lib/mysql&#34;</span><span class="p">,</span> <span class="s2">&#34;/var/log/nginx&#34;</span><span class="p">]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">VOLUME</span><span class="w"> </span><span class="s">/data</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>注意事项：</p>
+<ul>
+<li>
+<p>声明后，该目录的所有写入都会进入卷，而非容器可写层。</p>
+</li>
+<li>
+<p><code>VOLUME</code> 指令之后的 <code>RUN</code> 指令，若修改该目录的内容，会完全无效（卷在容器运行时才挂载）。</p>
+</li>
+<li>
+<p>容器运行时可通过 <code>docker run -v</code> 覆盖挂载的目录与卷类型。</p>
+</li>
+<li>
+<p>禁止对配置文件目录使用 <code>VOLUME</code>，会导致用户无法修改配置。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="三多阶段构建核心用法">三、多阶段构建核心用法</h2>
+<p>多阶段构建是 Dockerfile 17.05+ 支持的核心特性，通过多个 <code>FROM</code> 指令划分构建阶段，最终镜像仅保留最后一个阶段的内容，彻底解决「构建依赖冗余、镜像体积过大」的问题。</p>
+<h3 id="核心示例">核心示例</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-Dockerfile">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 阶段1：构建阶段，包含完整编译环境</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="s">golang:1.22</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="s">builder</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> go.mod go.sum ./<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">RUN</span> go mod download<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> . .<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">RUN</span> <span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span> <span class="nv">GOOS</span><span class="o">=</span>linux go build -o myapp main.go<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 阶段2：运行阶段，极简基础镜像，仅保留编译产物</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">FROM</span><span class="w"> </span><span class="s">alpine:3.19</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 从builder阶段复制编译好的二进制文件</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">COPY</span> --from<span class="o">=</span>builder /app/myapp .<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">EXPOSE</span><span class="w"> </span><span class="s">8080</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">CMD</span> <span class="p">[</span><span class="s2">&#34;./myapp&#34;</span><span class="p">]</span></span></span></code></pre></div></div>
+<h3 id="核心优势">核心优势</h3>
+<ol>
+<li>
+<p>极致减小镜像体积，剔除编译工具、源码、中间文件、依赖缓存。</p>
+</li>
+<li>
+<p>提升镜像安全性，减少攻击面，运行镜像仅包含业务运行必需的文件。</p>
+</li>
+<li>
+<p>分离构建与运行环境，构建阶段使用完整工具链，运行阶段使用轻量基础镜像。</p>
+</li>
+<li>
+<p>优化构建缓存，依赖下载、编译步骤分层缓存，大幅提升重复构建速度。</p>
+</li>
+</ol>
+<h2 id="四镜像缓存机制与优化规则">四、镜像缓存机制与优化规则</h2>
+<p>Docker 构建时会为每条指令生成缓存层，指令与上下文无变化时直接复用缓存，大幅提升构建速度。</p>
+<h3 id="核心缓存规则">核心缓存规则</h3>
+<ol>
+<li>
+<p>从基础镜像开始，自上而下比对每条指令，指令字符串与对应上下文无变化则复用缓存。</p>
+</li>
+<li>
+<p><code>COPY</code>/<code>ADD</code> 指令会比对文件的校验和（checksum），校验和变化则缓存失效，后续所有层全部重新构建。</p>
+</li>
+<li>
+<p><code>RUN</code> 等其他指令仅比对指令字符串，指令不变则复用缓存，不关心执行结果是否变化。</p>
+</li>
+<li>
+<p>某一层缓存失效后，后续所有层的缓存全部失效。</p>
+</li>
+</ol>
+<h3 id="缓存优化技巧">缓存优化技巧</h3>
+<ul>
+<li>
+<p>不变指令前置，易变指令后置：先复制依赖文件、安装依赖，最后复制业务源码，避免源码变化导致依赖层缓存失效。</p>
+</li>
+<li>
+<p>合并关联的 <code>RUN</code> 指令，减少镜像层数，同时避免缓存异常（如 <code>apt-get update</code> 与 <code>install</code> 必须合并）。</p>
+</li>
+<li>
+<p>合理使用 <code>.dockerignore</code>，排除无关文件，避免上下文变化导致缓存意外失效。</p>
+</li>
+<li>
+<p>使用 BuildKit 缓存挂载（<code>RUN --mount=type=cache</code>），复用依赖缓存，不写入镜像层。</p>
+</li>
+</ul>
+<h2 id="五生产环境最佳实践">五、生产环境最佳实践</h2>
+<ol>
+<li>
+<p>优先使用官方轻量基础镜像（alpine、slim 系列），固定镜像版本，避免 <code>latest</code> 标签导致构建不一致。</p>
+</li>
+<li>
+<p>一个容器仅运行一个进程，保持容器的单一职责，便于日志收集、故障排查与水平扩展。</p>
+</li>
+<li>
+<p>合并 <code>RUN</code> 指令，命令执行后必须清理缓存，最小化镜像层数与体积。</p>
+</li>
+<li>
+<p>常规文件复制优先使用 <code>COPY</code>，仅自动解压场景使用 <code>ADD</code>，禁止用 <code>ADD</code> 下载远程文件。</p>
+</li>
+<li>
+<p>严格区分 <code>ARG</code> 与 <code>ENV</code>，构建时变量用 <code>ARG</code>，运行时环境用 <code>ENV</code>，敏感信息禁止写入 Dockerfile。</p>
+</li>
+<li>
+<p>生产环境使用非 root 用户运行容器，提前配置用户权限与文件归属。</p>
+</li>
+<li>
+<p>始终使用 Exec 格式编写 <code>ENTRYPOINT</code> 与 <code>CMD</code>，保证进程 PID1 正常接收系统信号，实现优雅退出。</p>
+</li>
+<li>
+<p>强制使用多阶段构建，分离构建与运行环境，最小化最终镜像内容。</p>
+</li>
+<li>
+<p>始终编写 <code>.dockerignore</code> 文件，排除源码、缓存、敏感文件、本地构建产物。</p>
+</li>
+<li>
+<p>为有状态服务添加 <code>HEALTHCHECK</code> 健康检查，标注 <code>LABEL</code> 元数据，声明 <code>EXPOSE</code> 端口，提升镜像可维护性。</p>
+</li>
+<li>
+<p>禁止在 Dockerfile 中硬编码密钥、密码、证书等敏感信息，通过构建机密、运行时环境变量或挂载配置注入。</p>
+</li>
+<li>
+<p>避免在 <code>VOLUME</code> 之后修改目录内容，禁止对配置目录使用 <code>VOLUME</code>。</p>
+</li>
+</ol>
+<blockquote>
+<p>（注：文档部分内容可能由 AI 生成）</p>
+</blockquote>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-02-06</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/002_dockerfile%E8%AF%AD%E6%B3%95%E5%85%A8%E9%9D%A2%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/dockerfile/">Dockerfile</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/001_go%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="Go 语法详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>Go 语法详细总结</a>
+            <a href="/blog/001_lua%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="Lua 语法详细总结">Lua 语法详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

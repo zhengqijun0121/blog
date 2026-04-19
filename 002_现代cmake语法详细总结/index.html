@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>现代 CMake 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/002_%E7%8E%B0%E4%BB%A3cmake%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="现代 CMake 语法详细总结">
+  <meta property="og:description" content="Modern CMake 语法详细总结 Modern CMake 特指 CMake 3.0&#43;（工业级项目推荐最低 3.15&#43;）的构建范式，核心设计哲学是面向目标（Target）编程、属性作用域隔离、依赖可传递，彻底摒弃传统 CMake 全局变量污染的写法，实现「声明式描述构建需求，而非硬编码编译步骤」，是跨平台 C/C&#43;&#43; 项目的事实标准构建方案。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-01-23T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-01-23T09:00:00+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="CMake">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="现代 CMake 语法详细总结">
+  <meta name="twitter:description" content="Modern CMake 语法详细总结 Modern CMake 特指 CMake 3.0&#43;（工业级项目推荐最低 3.15&#43;）的构建范式，核心设计哲学是面向目标（Target）编程、属性作用域隔离、依赖可传递，彻底摒弃传统 CMake 全局变量污染的写法，实现「声明式描述构建需求，而非硬编码编译步骤」，是跨平台 C/C&#43;&#43; 项目的事实标准构建方案。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/002_%E7%8E%B0%E4%BB%A3cmake%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/001_cmake%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/003_cmake%E5%A4%9A%E5%B9%B3%E5%8F%B0toolchain%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "现代 CMake 语法详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/002_%E7%8E%B0%E4%BB%A3cmake%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, CMake","wordcount":  6540 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/002_%E7%8E%B0%E4%BB%A3cmake%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-01-23T09:00:00+08:00","dateModified": "2026-01-23T09:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/002_%E7%8E%B0%E4%BB%A3cmake%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/002_%E7%8E%B0%E4%BB%A3cmake%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">现代 CMake 语法详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-23">2026-01-23</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 6540 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 14 分钟&nbsp;<span id="/blog/002_%E7%8E%B0%E4%BB%A3cmake%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="现代 CMake 语法详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一核心基础概念">一、核心基础概念</a>
+      <ul>
+        <li><a href="#11-核心范式一切皆目标">1.1 核心范式：一切皆目标</a></li>
+        <li><a href="#12-核心传递性关键字privatepublicinterface">1.2 核心传递性关键字（PRIVATE/PUBLIC/INTERFACE）</a></li>
+        <li><a href="#13-传统-cmake-vs-modern-cmake-核心区别">1.3 传统 CMake vs Modern CMake 核心区别</a></li>
+      </ul>
+    </li>
+    <li><a href="#二项目基础配置命令">二、项目基础配置命令</a>
+      <ul>
+        <li><a href="#21-cmake_minimum_required指定最低-cmake-版本">2.1 <code>cmake_minimum_required</code>：指定最低 CMake 版本</a></li>
+        <li><a href="#22-project定义项目信息">2.2 <code>project</code>：定义项目信息</a></li>
+        <li><a href="#23-全局-c-标准配置可选推荐">2.3 全局 C++ 标准配置（可选，推荐）</a></li>
+      </ul>
+    </li>
+    <li><a href="#三目标定义核心命令">三、目标定义核心命令</a>
+      <ul>
+        <li><a href="#31-add_executable定义可执行目标">3.1 <code>add_executable</code>：定义可执行目标</a></li>
+        <li><a href="#32-add_library定义库目标">3.2 <code>add_library</code>：定义库目标</a></li>
+        <li><a href="#33-add_library-alias定义别名目标">3.3 <code>add_library ALIAS</code>：定义别名目标</a></li>
+      </ul>
+    </li>
+    <li><a href="#四目标属性配置核心命令target_-系列">四、目标属性配置核心命令（target_* 系列）</a>
+      <ul>
+        <li><a href="#41-target_include_directories指定头文件搜索路径">4.1 <code>target_include_directories</code>：指定头文件搜索路径</a></li>
+        <li><a href="#42-target_link_libraries指定链接依赖">4.2 <code>target_link_libraries</code>：指定链接依赖</a></li>
+        <li><a href="#43-target_compile_definitions指定编译宏定义">4.3 <code>target_compile_definitions</code>：指定编译宏定义</a></li>
+        <li><a href="#44-target_compile_options指定编译选项">4.4 <code>target_compile_options</code>：指定编译选项</a></li>
+        <li><a href="#45-target_compile_features指定-cc-标准特性">4.5 <code>target_compile_features</code>：指定 C/C++ 标准特性</a></li>
+        <li><a href="#46-其他常用-target_-命令">4.6 其他常用 target_* 命令</a></li>
+        <li><a href="#47-set_target_properties设置目标通用属性">4.7 <code>set_target_properties</code>：设置目标通用属性</a></li>
+      </ul>
+    </li>
+    <li><a href="#五变量作用域与生成器表达式">五、变量、作用域与生成器表达式</a>
+      <ul>
+        <li><a href="#51-变量类型与语法">5.1 变量类型与语法</a></li>
+        <li><a href="#52-生成器表达式generator-expressions">5.2 生成器表达式（Generator Expressions）</a></li>
+      </ul>
+    </li>
+    <li><a href="#六流程控制语法">六、流程控制语法</a>
+      <ul>
+        <li><a href="#61-条件判断ifelseifelseendif">6.1 条件判断：<code>if()/elseif()/else()/endif()</code></a></li>
+        <li><a href="#62-循环foreachendforeach">6.2 循环：<code>foreach()/endforeach()</code></a></li>
+        <li><a href="#63-函数与宏functionmacro">6.3 函数与宏：<code>function()/macro()</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#七依赖管理">七、依赖管理</a>
+      <ul>
+        <li><a href="#71-find_package查找已安装依赖">7.1 <code>find_package</code>：查找已安装依赖</a></li>
+        <li><a href="#72-fetchcontent源码级依赖管理">7.2 <code>FetchContent</code>：源码级依赖管理</a></li>
+        <li><a href="#73-add_subdirectory添加子目录">7.3 <code>add_subdirectory</code>：添加子目录</a></li>
+      </ul>
+    </li>
+    <li><a href="#八安装与导出">八、安装与导出</a>
+      <ul>
+        <li><a href="#81-核心前置模块">8.1 核心前置模块</a></li>
+        <li><a href="#82-install安装目标与文件">8.2 <code>install</code>：安装目标与文件</a>
+          <ul>
+            <li><a href="#821-安装目标核心">8.2.1 安装目标（核心）</a></li>
+            <li><a href="#822-安装头文件">8.2.2 安装头文件</a></li>
+            <li><a href="#823-导出目标配置文件">8.2.3 导出目标配置文件</a></li>
+          </ul>
+        </li>
+        <li><a href="#83-生成包配置文件">8.3 生成包配置文件</a>
+          <ul>
+            <li><a href="#831-生成版本配置文件">8.3.1 生成版本配置文件</a></li>
+            <li><a href="#832-生成主配置文件">8.3.2 生成主配置文件</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#九最佳实践与避坑指南">九、最佳实践与避坑指南</a>
+      <ul>
+        <li><a href="#91-核心最佳实践">9.1 核心最佳实践</a></li>
+        <li><a href="#92-高频避坑点">9.2 高频避坑点</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="modern-cmake-语法详细总结">Modern CMake 语法详细总结</h1>
+<p>Modern CMake 特指 CMake 3.0+（工业级项目推荐最低 3.15+）的构建范式，核心设计哲学是<strong>面向目标（Target）编程、属性作用域隔离、依赖可传递</strong>，彻底摒弃传统 CMake 全局变量污染的写法，实现「声明式描述构建需求，而非硬编码编译步骤」，是跨平台 C/C++ 项目的事实标准构建方案。</p>
+<h2 id="一核心基础概念">一、核心基础概念</h2>
+<h3 id="11-核心范式一切皆目标">1.1 核心范式：一切皆目标</h3>
+<p>CMake 中所有构建行为都围绕「目标」展开，目标是构建的最小独立单元，所有编译、链接、头文件、宏定义等配置均作为目标的属性，而非全局设置。</p>
+<p>目标分为三大核心类型：</p>
+<table>
+  <thead>
+      <tr>
+          <th>目标类型</th>
+          <th>定义命令</th>
+          <th>核心用途</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>可执行目标</td>
+          <td><code>add_executable()</code></td>
+          <td>生成可执行程序</td>
+      </tr>
+      <tr>
+          <td>库目标</td>
+          <td><code>add_library()</code></td>
+          <td>生成静态库/动态库/头文件-only库/对象库</td>
+      </tr>
+      <tr>
+          <td>别名目标</td>
+          <td><code>add_library(xxx::yyy ALIAS)</code></td>
+          <td>给目标添加命名空间别名，避免名称冲突，与导出目标格式统一</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="12-核心传递性关键字privatepublicinterface">1.2 核心传递性关键字（PRIVATE/PUBLIC/INTERFACE）</h3>
+<p>这是 Modern CMake 最核心的设计，决定目标属性是否传递给依赖它的其他目标，<strong>所有 <code>target_*</code> 命令必须显式指定，禁止省略</strong>。</p>
+<table>
+  <thead>
+      <tr>
+          <th>关键字</th>
+          <th>作用规则</th>
+          <th>典型使用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>PRIVATE</td>
+          <td>属性仅对当前目标生效，不传递给依赖该目标的下游目标</td>
+          <td>库内部使用的头文件路径、内部编译选项、仅内部使用的依赖</td>
+      </tr>
+      <tr>
+          <td>PUBLIC</td>
+          <td>属性对当前目标生效，同时完整传递给所有依赖该目标的下游目标</td>
+          <td>库对外暴露的头文件路径、API 依赖的 C++ 标准、下游必须继承的宏定义</td>
+      </tr>
+      <tr>
+          <td>INTERFACE</td>
+          <td>属性不对当前目标生效，仅传递给依赖该目标的下游目标</td>
+          <td>纯头文件模板库的配置、仅下游需要使用的编译选项</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>传递性示例</strong>：
+A 链接 B，B 链接 C：</p>
+<ul>
+<li>若 B 对 C 是 <code>PRIVATE</code>：A 看不到 C 的任何属性，也不会链接 C</li>
+<li>若 B 对 C 是 <code>PUBLIC</code>：A 自动链接 C，完整继承 C 的 PUBLIC/INTERFACE 属性</li>
+<li>若 B 对 C 是 <code>INTERFACE</code>：B 自身不链接 C，A 自动链接 C 并继承其属性</li>
+</ul>
+<h3 id="13-传统-cmake-vs-modern-cmake-核心区别">1.3 传统 CMake vs Modern CMake 核心区别</h3>
+<table>
+  <thead>
+      <tr>
+          <th>传统 CMake 全局命令</th>
+          <th>Modern CMake 目标级替代命令</th>
+          <th>核心问题</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>include_directories()</code></td>
+          <td><code>target_include_directories()</code></td>
+          <td>全局头文件路径污染，易出现头文件冲突、作用域混乱</td>
+      </tr>
+      <tr>
+          <td><code>add_definitions()</code></td>
+          <td><code>target_compile_definitions()</code></td>
+          <td>全局宏定义泄露给所有目标</td>
+      </tr>
+      <tr>
+          <td><code>add_compile_options()</code></td>
+          <td><code>target_compile_options()</code></td>
+          <td>全局编译选项影响所有目标，跨平台适配困难</td>
+      </tr>
+      <tr>
+          <td><code>link_directories()</code></td>
+          <td><code>target_link_directories()</code>（极少推荐）</td>
+          <td>全局库搜索路径混乱，链接优先级不可控</td>
+      </tr>
+      <tr>
+          <td><code>link_libraries()</code></td>
+          <td><code>target_link_libraries()</code></td>
+          <td>全局链接库强制所有目标链接，依赖关系不清晰</td>
+      </tr>
+      <tr>
+          <td>手动设置 <code>CMAKE_CXX_FLAGS</code></td>
+          <td><code>target_compile_features()</code>/<code>target_compile_options()</code></td>
+          <td>编译器相关硬编码，跨编译器兼容性差</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="二项目基础配置命令">二、项目基础配置命令</h2>
+<h3 id="21-cmake_minimum_required指定最低-cmake-版本">2.1 <code>cmake_minimum_required</code>：指定最低 CMake 版本</h3>
+<p><strong>必须放在 CMakeLists.txt 的第一行</strong>，先于 <code>project()</code> 命令，否则会触发策略警告。</p>
+<p><strong>完整语法</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">&lt;min&gt;[...&lt;max&gt;]</span> <span class="s">[FATAL_ERROR]</span><span class="p">)</span></span></span></code></pre></div></div>
+<p><strong>关键参数与示例</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 基础用法：最低 3.15 版本
+</span></span></span><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.15</span> <span class="s">FATAL_ERROR</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 推荐用法：3.12+ 支持版本范围，兼容新老版本策略
+</span></span></span><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.15...3.30</span><span class="p">)</span></span></span></code></pre></div></div>
+<ul>
+<li><code>FATAL_ERROR</code>：3.12+ 已废弃，低版本不满足时默认直接报错</li>
+<li>版本范围：下限指定最低兼容版本，上限指定最高测试过的版本，避免新版本 CMake 策略变更导致的构建失败</li>
+</ul>
+<h3 id="22-project定义项目信息">2.2 <code>project</code>：定义项目信息</h3>
+<p><strong>完整语法</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">&lt;PROJECT-NAME&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">[VERSION</span> <span class="s">&lt;major&gt;[.&lt;minor&gt;[.&lt;patch&gt;[.&lt;tweak&gt;]]]]</span>
+</span></span><span class="line"><span class="cl">        <span class="s">[DESCRIPTION</span> <span class="s">&lt;project-description-string&gt;]</span>
+</span></span><span class="line"><span class="cl">        <span class="s">[HOMEPAGE_URL</span> <span class="s">&lt;url-string&gt;]</span>
+</span></span><span class="line"><span class="cl">        <span class="s">[LANGUAGES</span> <span class="s">&lt;language-name&gt;...]</span><span class="p">)</span></span></span></code></pre></div></div>
+<p><strong>关键参数与示例</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span><span class="s">MyDemo</span>
+</span></span><span class="line"><span class="cl">        <span class="s">VERSION</span> <span class="s">1.2.3</span>
+</span></span><span class="line"><span class="cl">        <span class="s">DESCRIPTION</span> <span class="s2">&#34;A modern CMake demo project&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">HOMEPAGE_URL</span> <span class="s2">&#34;https://github.com/xxx/mydemo&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">LANGUAGES</span> <span class="s">CXX</span><span class="p">)</span></span></span></code></pre></div></div>
+<ul>
+<li><code>LANGUAGES</code>：指定项目使用的编程语言，默认 <code>C CXX</code>，仅用 C++ 时显式指定可减少配置时间</li>
+<li>执行后自动生成核心变量：<code>PROJECT_NAME</code>、<code>PROJECT_VERSION</code>、<code>PROJECT_SOURCE_DIR</code>（当前项目源码目录）、<code>PROJECT_BINARY_DIR</code>（当前项目构建目录）</li>
+</ul>
+<h3 id="23-全局-c-标准配置可选推荐">2.3 全局 C++ 标准配置（可选，推荐）</h3>
+<p>若项目所有目标统一使用相同 C++ 标准，可在 <code>project()</code> 后全局设置，优先级低于目标级 <code>target_compile_features()</code>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 强制使用 C++17，不允许降级
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">17</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD_REQUIRED</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 禁用 GNU 编译器扩展（如 -std=gnu++17），保证跨编译器兼容性
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_EXTENSIONS</span> <span class="s">OFF</span><span class="p">)</span></span></span></code></pre></div></div>
+<h2 id="三目标定义核心命令">三、目标定义核心命令</h2>
+<h3 id="31-add_executable定义可执行目标">3.1 <code>add_executable</code>：定义可执行目标</h3>
+<p><strong>完整语法</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_executable</span><span class="p">(</span><span class="s">&lt;name&gt;</span> <span class="s">[WIN32]</span> <span class="s">[MACOSX_BUNDLE]</span>
+</span></span><span class="line"><span class="cl">               <span class="s">[EXCLUDE_FROM_ALL]</span>
+</span></span><span class="line"><span class="cl">               <span class="s">[source1]</span> <span class="s">[source2</span> <span class="s">...]</span><span class="p">)</span></span></span></code></pre></div></div>
+<p><strong>关键参数与示例</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 基础用法
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_executable</span><span class="p">(</span><span class="s">my_app</span> <span class="s">main.cpp</span> <span class="s">utils.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># Windows 窗口程序（WinMain 入口，而非 main）
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_executable</span><span class="p">(</span><span class="s">my_win_app</span> <span class="s">WIN32</span> <span class="s">win_main.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># macOS 应用 Bundle
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_executable</span><span class="p">(</span><span class="s">my_mac_app</span> <span class="s">MACOSX_BUNDLE</span> <span class="s">mac_main.cpp</span><span class="p">)</span></span></span></code></pre></div></div>
+<ul>
+<li><code>EXCLUDE_FROM_ALL</code>：该目标不会被默认构建，仅当被其他目标依赖或手动构建时才会编译，常用于测试、示例代码</li>
+<li><strong>最佳实践</strong>：显式列出源文件，禁止用 <code>file(GLOB)</code> 自动收集（除非使用 <code>CONFIGURE_DEPENDS</code>），避免新增文件后 CMake 无法自动感知</li>
+</ul>
+<h3 id="32-add_library定义库目标">3.2 <code>add_library</code>：定义库目标</h3>
+<p><strong>基础语法</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="s">&lt;name&gt;</span> <span class="s">[STATIC</span> <span class="s">|</span> <span class="s">SHARED</span> <span class="s">|</span> <span class="s">MODULE</span> <span class="s">|</span> <span class="s">INTERFACE</span> <span class="s">|</span> <span class="s">OBJECT]</span>
+</span></span><span class="line"><span class="cl">            <span class="s">[EXCLUDE_FROM_ALL]</span>
+</span></span><span class="line"><span class="cl">            <span class="s">[source1]</span> <span class="s">[source2</span> <span class="s">...]</span><span class="p">)</span></span></span></code></pre></div></div>
+<p><strong>库类型详解与示例</strong>：</p>
+<ol>
+<li>
+<p><strong>STATIC 静态库</strong>：编译为归档文件（<code>.a</code>/<code>.lib</code>），链接时直接嵌入到可执行文件中</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="s">my_static</span> <span class="s">STATIC</span> <span class="s">my_lib.cpp</span><span class="p">)</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>SHARED 动态/共享库</strong>：编译为动态链接库（<code>.so</code>/<code>.dll</code>/<code>.dylib</code>），运行时加载</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="s">my_shared</span> <span class="s">SHARED</span> <span class="s">my_lib.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 动态库默认开启 PIC（位置无关代码），静态库如需被动态库链接需手动开启
+</span></span></span><span class="line"><span class="cl"><span class="nb">set_target_properties</span><span class="p">(</span><span class="s">my_shared</span> <span class="s">PROPERTIES</span> <span class="s">POSITION_INDEPENDENT_CODE</span> <span class="s">ON</span><span class="p">)</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>MODULE 模块库</strong>：运行时动态加载的插件库，仅通过 <code>dlopen</code>/<code>LoadLibrary</code> 加载，Windows 下无法被其他目标链接</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="s">my_plugin</span> <span class="s">MODULE</span> <span class="s">plugin.cpp</span><span class="p">)</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>INTERFACE 头文件-only 库</strong>：无编译源文件，不生成二进制文件，仅用于传递属性，专为纯模板/纯头文件库设计</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="s">my_header_only</span> <span class="s">INTERFACE</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 仅传递属性给下游目标
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">my_header_only</span> <span class="s">INTERFACE</span> <span class="o">${</span><span class="nv">CMAKE_CURRENT_SOURCE_DIR</span><span class="o">}</span><span class="s">/include</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_compile_features</span><span class="p">(</span><span class="s">my_header_only</span> <span class="s">INTERFACE</span> <span class="s">cxx_std_17</span><span class="p">)</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>OBJECT 对象库</strong>：仅编译源文件为目标文件（<code>.o</code>/<code>.obj</code>），不归档/链接，可被多个目标复用</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="s">my_obj</span> <span class="s">OBJECT</span> <span class="s">common.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 3.12+ 直接链接即可复用对象文件，无需 $&lt;TARGET_OBJECTS&gt;
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_executable</span><span class="p">(</span><span class="s">app1</span> <span class="s">main1.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">app1</span> <span class="s">PRIVATE</span> <span class="s">my_obj</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_executable</span><span class="p">(</span><span class="s">app2</span> <span class="s">main2.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">app2</span> <span class="s">PRIVATE</span> <span class="s">my_obj</span><span class="p">)</span></span></span></code></pre></div></div>
+</li>
+</ol>
+<h3 id="33-add_library-alias定义别名目标">3.3 <code>add_library ALIAS</code>：定义别名目标</h3>
+<p>给库目标添加命名空间别名，与 <code>find_package</code> 导出的目标格式统一，避免名称冲突，Modern CMake 强烈推荐使用。</p>
+<p><strong>语法与示例</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="s">MyDemo::Core</span> <span class="s">ALIAS</span> <span class="s">my_static</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_library</span><span class="p">(</span><span class="s">MyDemo::HeaderOnly</span> <span class="s">ALIAS</span> <span class="s">my_header_only</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 下游使用时与导入目标完全一致
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_app</span> <span class="s">PRIVATE</span> <span class="s">MyDemo::Core</span><span class="p">)</span></span></span></code></pre></div></div>
+<h2 id="四目标属性配置核心命令target_-系列">四、目标属性配置核心命令（target_* 系列）</h2>
+<p>这是 Modern CMake 的核心，所有配置均作用于指定目标，严格遵循作用域与传递性规则，<strong>禁止使用全局替代命令</strong>。</p>
+<h3 id="41-target_include_directories指定头文件搜索路径">4.1 <code>target_include_directories</code>：指定头文件搜索路径</h3>
+<p>替代传统 <code>include_directories()</code>，指定目标的头文件搜索路径，支持构建/安装路径分离。</p>
+<p><strong>完整语法</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">&lt;target&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&lt;PRIVATE|PUBLIC|INTERFACE&gt;</span> <span class="s">&lt;item&gt;...</span>
+</span></span><span class="line"><span class="cl">  <span class="s">[&lt;PRIVATE|PUBLIC|INTERFACE&gt;</span> <span class="s">&lt;item&gt;...</span> <span class="s">...]</span>
+</span></span><span class="line"><span class="cl">  <span class="s">[SYSTEM]</span> <span class="s">[AFTER|BEFORE]</span><span class="p">)</span></span></span></code></pre></div></div>
+<p><strong>关键参数与最佳实践示例</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">my_lib</span>
+</span></span><span class="line"><span class="cl">  <span class="s">PUBLIC</span>
+</span></span><span class="line"><span class="cl">    <span class="c"># 构建时使用源码路径，安装后使用安装路径，核心必写
+</span></span></span><span class="line"><span class="cl">    <span class="o">$&lt;</span><span class="nv">BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">$&lt;</span><span class="nv">INSTALL_INTERFACE:include</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="s">PRIVATE</span>
+</span></span><span class="line"><span class="cl">    <span class="c"># 仅库内部使用的头文件路径，不传递给下游
+</span></span></span><span class="line"><span class="cl">    <span class="o">${</span><span class="nv">PROJECT_SOURCE_DIR</span><span class="o">}</span><span class="s">/src/internal</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span></span></span></code></pre></div></div>
+<ul>
+<li><code>SYSTEM</code>：标记为系统头文件，抑制编译器警告，常用于第三方库头文件</li>
+<li><code>AFTER/BEFORE</code>：指定路径追加/前置到搜索列表，默认 <code>AFTER</code></li>
+<li><strong>核心避坑</strong>：必须使用 <code>BUILD_INTERFACE</code>/<code>INSTALL_INTERFACE</code> 分离构建与安装路径，否则安装后下游项目无法找到头文件</li>
+</ul>
+<h3 id="42-target_link_libraries指定链接依赖">4.2 <code>target_link_libraries</code>：指定链接依赖</h3>
+<p>替代传统 <code>link_libraries()</code>，是依赖传递的核心命令，<strong>必须显式指定传递性关键字</strong>。</p>
+<p><strong>完整语法</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">&lt;target&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&lt;PRIVATE|PUBLIC|INTERFACE&gt;</span> <span class="s">&lt;item&gt;...</span>
+</span></span><span class="line"><span class="cl">  <span class="s">[&lt;PRIVATE|PUBLIC|INTERFACE&gt;</span> <span class="s">&lt;item&gt;...</span> <span class="s">...]</span><span class="p">)</span></span></span></code></pre></div></div>
+<p><strong>关键说明与示例</strong>：
+<code>&lt;item&gt;</code> 支持以下类型，优先级从高到低：</p>
+<ol>
+<li><strong>CMake 目标（强烈推荐）</strong>：别名目标/导入目标，自动传递所有 PUBLIC/INTERFACE 属性（头文件路径、编译选项、依赖链）
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 链接本地库目标
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_app</span> <span class="s">PRIVATE</span> <span class="s">MyDemo::Core</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 链接 find_package 导入的第三方目标
+</span></span></span><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">Boost</span> <span class="s">1.74</span> <span class="s">REQUIRED</span> <span class="s">COMPONENTS</span> <span class="s">system</span> <span class="s">thread</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_lib</span> <span class="s">PUBLIC</span> <span class="s">Boost::system</span> <span class="s">Boost::thread</span><span class="p">)</span></span></span></code></pre></div></div>
+</li>
+<li>库文件完整路径（<code>find_library</code> 查找结果）</li>
+<li>系统库名（如 <code>pthread</code>、<code>m</code>）</li>
+<li>链接器标志</li>
+</ol>
+<p><strong>核心规则</strong>：</p>
+<ul>
+<li>库内部实现使用的依赖用 <code>PRIVATE</code>，API 头文件中用到的依赖用 <code>PUBLIC</code></li>
+<li>禁止省略传递性关键字，否则会导致依赖传递混乱，出现「头文件找不到」「符号未定义」等疑难问题</li>
+</ul>
+<h3 id="43-target_compile_definitions指定编译宏定义">4.3 <code>target_compile_definitions</code>：指定编译宏定义</h3>
+<p>替代传统 <code>add_definitions()</code>，指定目标的编译宏，无需加 <code>-D</code> 前缀，CMake 自动处理。</p>
+<p><strong>语法与示例</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">my_lib</span>
+</span></span><span class="line"><span class="cl">  <span class="s">PUBLIC</span>
+</span></span><span class="line"><span class="cl">    <span class="c"># 下游也会继承该宏定义
+</span></span></span><span class="line"><span class="cl">    <span class="s">MY_LIB_VERSION=</span><span class="o">${</span><span class="nv">PROJECT_VERSION</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="s">MY_LIB_ENABLE_FEATURE_A</span>
+</span></span><span class="line"><span class="cl">  <span class="s">PRIVATE</span>
+</span></span><span class="line"><span class="cl">    <span class="c"># 仅库内部使用的宏定义
+</span></span></span><span class="line"><span class="cl">    <span class="s">MY_LIB_BUILD</span>
+</span></span><span class="line"><span class="cl">    <span class="o">$&lt;</span><span class="nv">$&lt;CONFIG:Debug</span><span class="o">&gt;</span><span class="s">:MY_LIB_DEBUG&gt;</span> <span class="c"># Debug 模式才启用的宏
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span></span></span></code></pre></div></div>
+<h3 id="44-target_compile_options指定编译选项">4.4 <code>target_compile_options</code>：指定编译选项</h3>
+<p>替代手动设置 <code>CMAKE_CXX_FLAGS</code>，指定目标专属编译选项，配合生成器表达式实现跨编译器兼容。</p>
+<p><strong>语法与跨平台示例</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">my_lib</span>
+</span></span><span class="line"><span class="cl">  <span class="s">PRIVATE</span>
+</span></span><span class="line"><span class="cl">    <span class="c"># GCC/Clang 编译器启用严格警告
+</span></span></span><span class="line"><span class="cl">    <span class="o">$&lt;</span><span class="nv">$&lt;CXX_COMPILER_ID:GNU,Clang,AppleClang</span><span class="o">&gt;</span><span class="s">:-Wall</span> <span class="s">-Wextra</span> <span class="s">-Wpedantic</span> <span class="s">-Werror&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="c"># MSVC 编译器启用严格警告，禁用不安全函数警告
+</span></span></span><span class="line"><span class="cl">    <span class="o">$&lt;</span><span class="nv">$&lt;CXX_COMPILER_ID:MSVC</span><span class="o">&gt;</span><span class="s">:/W4</span> <span class="s">/WX</span> <span class="s">/wd4996&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span></span></span></code></pre></div></div>
+<h3 id="45-target_compile_features指定-cc-标准特性">4.5 <code>target_compile_features</code>：指定 C/C++ 标准特性</h3>
+<p>替代全局标准设置，针对目标指定 C++ 标准，自动传递给下游目标，保证依赖链标准一致，跨编译器兼容性最佳。</p>
+<p><strong>语法与示例</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 强制目标及所有下游目标使用 C++17
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_compile_features</span><span class="p">(</span><span class="s">my_lib</span> <span class="s">PUBLIC</span> <span class="s">cxx_std_17</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 指定具体语言特性，CMake 自动推导所需最低标准
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_compile_features</span><span class="p">(</span><span class="s">my_lib</span> <span class="s">PRIVATE</span> <span class="s">cxx_lambda_init_captures</span> <span class="s">cxx_constexpr</span><span class="p">)</span></span></span></code></pre></div></div>
+<h3 id="46-其他常用-target_-命令">4.6 其他常用 target_* 命令</h3>
+<table>
+  <thead>
+      <tr>
+          <th>命令</th>
+          <th>最低版本</th>
+          <th>核心作用</th>
+          <th>示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>target_sources</code></td>
+          <td>3.13+</td>
+          <td>给目标追加源文件，支持子目录中给父目标添加文件</td>
+          <td><code>target_sources(my_lib PRIVATE submodule.cpp)</code></td>
+      </tr>
+      <tr>
+          <td><code>target_link_directories</code></td>
+          <td>3.13+</td>
+          <td>指定库搜索路径，<strong>强烈不推荐</strong>，优先使用导入目标</td>
+          <td><code>target_link_directories(my_lib PRIVATE /opt/xxx/lib)</code></td>
+      </tr>
+      <tr>
+          <td><code>target_link_options</code></td>
+          <td>3.13+</td>
+          <td>指定目标专属链接选项</td>
+          <td><code>target_link_options(my_app PRIVATE -Wl,--gc-sections)</code></td>
+      </tr>
+      <tr>
+          <td><code>target_precompile_headers</code></td>
+          <td>3.16+</td>
+          <td>预编译头文件，大幅提升编译速度</td>
+          <td><code>target_precompile_headers(my_lib PRIVATE &lt;vector&gt; &lt;string&gt; &lt;memory&gt;)</code></td>
+      </tr>
+      <tr>
+          <td><code>set_target_properties</code></td>
+          <td>3.0+</td>
+          <td>批量设置目标属性</td>
+          <td>见下文</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="47-set_target_properties设置目标通用属性">4.7 <code>set_target_properties</code>：设置目标通用属性</h3>
+<p>批量设置一个或多个目标的属性，是目标属性配置的兜底方案。</p>
+<p><strong>语法与常用示例</strong>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">set_target_properties</span><span class="p">(</span><span class="s">my_lib</span> <span class="s">PROPERTIES</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># 库版本号（Linux 下 soname）
+</span></span></span><span class="line"><span class="cl">  <span class="s">VERSION</span> <span class="o">${</span><span class="nv">PROJECT_VERSION</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">  <span class="s">SOVERSION</span> <span class="o">${</span><span class="nv">PROJECT_VERSION_MAJOR</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># 输出文件名
+</span></span></span><span class="line"><span class="cl">  <span class="s">OUTPUT_NAME</span> <span class="s2">&#34;mydemo_core&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># 安装后的运行时库搜索路径
+</span></span></span><span class="line"><span class="cl">  <span class="s">INSTALL_RPATH</span> <span class="s2">&#34;$ORIGIN/../lib&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># macOS 下的安装名
+</span></span></span><span class="line"><span class="cl">  <span class="s">INSTALL_NAME_DIR</span> <span class="s2">&#34;@rpath&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># 禁止输出前缀（如 libxxx.so → xxx.so）
+</span></span></span><span class="line"><span class="cl">  <span class="s">PREFIX</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span></span></span></code></pre></div></div>
+<p><strong>常用目标属性</strong>：</p>
+<table>
+  <thead>
+      <tr>
+          <th>属性名</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>CXX_STANDARD</code></td>
+          <td>目标专属 C++ 标准版本</td>
+      </tr>
+      <tr>
+          <td><code>CXX_STANDARD_REQUIRED</code></td>
+          <td>是否强制要求该标准</td>
+      </tr>
+      <tr>
+          <td><code>CXX_EXTENSIONS</code></td>
+          <td>是否启用编译器扩展</td>
+      </tr>
+      <tr>
+          <td><code>POSITION_INDEPENDENT_CODE</code></td>
+          <td>是否生成 PIC 位置无关代码</td>
+      </tr>
+      <tr>
+          <td><code>WIN32_EXECUTABLE</code></td>
+          <td>同 <code>add_executable</code> 的 <code>WIN32</code> 参数</td>
+      </tr>
+      <tr>
+          <td><code>MACOSX_BUNDLE</code></td>
+          <td>同 <code>add_executable</code> 的 <code>MACOSX_BUNDLE</code> 参数</td>
+      </tr>
+      <tr>
+          <td><code>EXCLUDE_FROM_ALL</code></td>
+          <td>是否排除在默认构建之外</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="五变量作用域与生成器表达式">五、变量、作用域与生成器表达式</h2>
+<h3 id="51-变量类型与语法">5.1 变量类型与语法</h3>
+<p>CMake 变量均为字符串类型，区分大小写，引用格式为 <code>${变量名}</code>，<code>if()</code> 语句中可直接使用变量名无需 <code>${}</code>。</p>
+<table>
+  <thead>
+      <tr>
+          <th>变量类型</th>
+          <th>定义语法</th>
+          <th>作用域与特性</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>普通变量</td>
+          <td><code>set(&lt;var&gt; &lt;value&gt;... [PARENT_SCOPE])</code></td>
+          <td>作用域为当前 CMakeLists.txt 及子目录，<code>PARENT_SCOPE</code> 可向上传递到父作用域</td>
+      </tr>
+      <tr>
+          <td>缓存变量</td>
+          <td><code>set(&lt;var&gt; &lt;value&gt;... CACHE &lt;type&gt; &lt;doc&gt; [FORCE])</code></td>
+          <td>全局生效，缓存到 <code>CMakeCache.txt</code>，可通过 <code>cmake -Dxxx=yyy</code> 命令行修改</td>
+      </tr>
+      <tr>
+          <td>环境变量</td>
+          <td><code>set(ENV{&lt;var&gt;} &lt;value&gt;)</code></td>
+          <td>仅当前 CMake 进程有效，读取格式为 <code>$ENV{&lt;var&gt;}</code></td>
+      </tr>
+      <tr>
+          <td>内置变量</td>
+          <td>CMake 预定义</td>
+          <td>如 <code>CMAKE_SOURCE_DIR</code>（顶层源码目录）、<code>CMAKE_BINARY_DIR</code>（顶层构建目录）、<code>CMAKE_BUILD_TYPE</code>（构建类型）</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>常用示例</strong>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 普通变量
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">MY_SRC_FILES</span> <span class="s">main.cpp</span> <span class="s">utils.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 缓存选项（用户可配置）
+</span></span></span><span class="line"><span class="cl"><span class="nb">option</span><span class="p">(</span><span class="s">MY_DEMO_BUILD_TESTS</span> <span class="s2">&#34;Build unit tests&#34;</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">MY_DEMO_MAX_THREADS</span> <span class="s">8</span> <span class="s">CACHE</span> <span class="s">INT</span> <span class="s2">&#34;Max thread count&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 内置变量使用
+</span></span></span><span class="line"><span class="cl"><span class="nb">if</span><span class="p">(</span><span class="s">CMAKE_BUILD_TYPE</span> <span class="s">STREQUAL</span> <span class="s2">&#34;Debug&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">  <span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s2">&#34;Debug build enabled&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endif</span><span class="p">()</span></span></span></code></pre></div></div>
+<h3 id="52-生成器表达式generator-expressions">5.2 生成器表达式（Generator Expressions）</h3>
+<p>Modern CMake 跨平台、跨配置适配的核心工具，<strong>在构建系统生成阶段（而非 CMake 配置阶段）求值</strong>，可精准区分编译器、构建类型、目标平台、编译语言等场景。</p>
+<p><strong>核心格式</strong>：</p>
+<ul>
+<li>条件表达式：<code>$&lt;condition:true_value&gt;</code> / <code>$&lt;condition:true_value:false_value&gt;</code></li>
+<li>信息表达式：<code>$&lt;KEYWORD&gt;</code>，返回对应信息</li>
+</ul>
+<p><strong>最常用生成器表达式</strong>：</p>
+<table>
+  <thead>
+      <tr>
+          <th>表达式</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>$&lt;BUILD_INTERFACE:path&gt;</code></td>
+          <td>构建阶段生效，安装阶段失效</td>
+      </tr>
+      <tr>
+          <td><code>$&lt;INSTALL_INTERFACE:path&gt;</code></td>
+          <td>安装阶段生效，构建阶段失效</td>
+      </tr>
+      <tr>
+          <td><code>$&lt;CXX_COMPILER_ID:id&gt;</code></td>
+          <td>编译器匹配时返回 1，如 <code>GNU</code>/<code>Clang</code>/<code>MSVC</code></td>
+      </tr>
+      <tr>
+          <td><code>$&lt;CONFIG:cfg&gt;</code></td>
+          <td>构建类型匹配时返回 1，如 <code>Debug</code>/<code>Release</code></td>
+      </tr>
+      <tr>
+          <td><code>$&lt;PLATFORM_ID:id&gt;</code></td>
+          <td>平台匹配时返回 1，如 <code>Linux</code>/<code>Windows</code>/<code>Darwin</code></td>
+      </tr>
+      <tr>
+          <td><code>$&lt;COMPILE_LANGUAGE:lang&gt;</code></td>
+          <td>编译语言匹配时返回 1，如 <code>CXX</code>/<code>C</code></td>
+      </tr>
+      <tr>
+          <td><code>$&lt;AND:a,b&gt;</code></td>
+          <td>逻辑与，a 和 b 均为 1 时返回 1</td>
+      </tr>
+      <tr>
+          <td><code>$&lt;OR:a,b&gt;</code></td>
+          <td>逻辑或，a 或 b 为 1 时返回 1</td>
+      </tr>
+      <tr>
+          <td><code>$&lt;NOT:a&gt;</code></td>
+          <td>逻辑非，a 为 0 时返回 1</td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>综合示例</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 仅 Debug 模式启用 DEBUG 宏
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">my_lib</span> <span class="s">PRIVATE</span> <span class="o">$&lt;</span><span class="nv">$&lt;CONFIG:Debug</span><span class="o">&gt;</span><span class="s">:DEBUG&gt;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 仅对 C++ 代码启用旧类型转换警告
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_compile_options</span><span class="p">(</span><span class="s">my_lib</span> <span class="s">PRIVATE</span> <span class="o">$&lt;</span><span class="nv">$&lt;COMPILE_LANGUAGE:CXX</span><span class="o">&gt;</span><span class="s">:-Wold-style-cast&gt;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 仅 Linux 平台链接 pthread 库
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_lib</span> <span class="s">PRIVATE</span> <span class="o">$&lt;</span><span class="nv">$&lt;PLATFORM_ID:Linux</span><span class="o">&gt;</span><span class="s">:pthread&gt;</span><span class="p">)</span></span></span></code></pre></div></div>
+<h2 id="六流程控制语法">六、流程控制语法</h2>
+<h3 id="61-条件判断ifelseifelseendif">6.1 条件判断：<code>if()/elseif()/else()/endif()</code></h3>
+<p><strong>核心语法规则</strong>：</p>
+<ul>
+<li>变量引用无需 <code>${}</code>，直接写变量名即可</li>
+<li>字符串比较需用双引号包裹</li>
+<li>支持版本比较专用关键字：<code>VERSION_LESS</code>/<code>VERSION_GREATER</code>/<code>VERSION_GREATER_EQUAL</code></li>
+</ul>
+<p><strong>常用示例</strong>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 判断目标是否存在
+</span></span></span><span class="line"><span class="cl"><span class="nb">if</span><span class="p">(</span><span class="s">TARGET</span> <span class="s">MyDemo::Core</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">  <span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s2">&#34;MyDemo::Core already exists&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 编译器版本判断
+</span></span></span><span class="line"><span class="cl"><span class="nb">if</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER_ID</span> <span class="s">STREQUAL</span> <span class="s2">&#34;GNU&#34;</span> <span class="s">AND</span> <span class="s">CMAKE_CXX_COMPILER_VERSION</span> <span class="s">VERSION_GREATER_EQUAL</span> <span class="s">9.0</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">  <span class="nb">target_compile_options</span><span class="p">(</span><span class="s">my_lib</span> <span class="s">PRIVATE</span> <span class="s">-fconcepts</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 平台判断
+</span></span></span><span class="line"><span class="cl"><span class="nb">if</span><span class="p">(</span><span class="s">WIN32</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">  <span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">my_lib</span> <span class="s">PRIVATE</span> <span class="s">MY_LIB_WINDOWS</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">elseif</span><span class="p">(</span><span class="s">APPLE</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">  <span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">my_lib</span> <span class="s">PRIVATE</span> <span class="s">MY_LIB_MACOS</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">elseif</span><span class="p">(</span><span class="s">UNIX</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">  <span class="nb">target_compile_definitions</span><span class="p">(</span><span class="s">my_lib</span> <span class="s">PRIVATE</span> <span class="s">MY_LIB_LINUX</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endif</span><span class="p">()</span></span></span></code></pre></div></div>
+<h3 id="62-循环foreachendforeach">6.2 循环：<code>foreach()/endforeach()</code></h3>
+<p><strong>常用语法与示例</strong>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 基础列表循环
+</span></span></span><span class="line"><span class="cl"><span class="nb">foreach</span><span class="p">(</span><span class="s">file</span> <span class="s">main.cpp</span> <span class="s">utils.cpp</span> <span class="s">module.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">  <span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s2">&#34;Processing file: ${file}&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endforeach</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 范围循环
+</span></span></span><span class="line"><span class="cl"><span class="nb">foreach</span><span class="p">(</span><span class="s">i</span> <span class="s">RANGE</span> <span class="s">1</span> <span class="s">10</span> <span class="s">2</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">  <span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s2">&#34;Number: ${i}&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endforeach</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 遍历子目录
+</span></span></span><span class="line"><span class="cl"><span class="nb">foreach</span><span class="p">(</span><span class="s">subdir</span> <span class="s">core</span> <span class="s">net</span> <span class="s">utils</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">  <span class="nb">add_subdirectory</span><span class="p">(</span><span class="o">${</span><span class="nv">subdir</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endforeach</span><span class="p">()</span></span></span></code></pre></div></div>
+<h3 id="63-函数与宏functionmacro">6.3 函数与宏：<code>function()/macro()</code></h3>
+<p>Modern CMake <strong>强烈推荐使用 function，禁止滥用 macro</strong>，function 有独立局部作用域，macro 是文本替换，无作用域隔离，极易引发副作用。</p>
+<p><strong>function 语法与示例</strong>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 定义函数
+</span></span></span><span class="line"><span class="cl"><span class="nb">function</span><span class="p">(</span><span class="s">add_my_executable</span> <span class="s">name</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">  <span class="c"># ARGN：超出命名参数的所有入参
+</span></span></span><span class="line"><span class="cl">  <span class="nb">add_executable</span><span class="p">(</span><span class="o">${</span><span class="nv">name</span><span class="o">}</span> <span class="o">${</span><span class="nv">ARGN</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">  <span class="c"># 统一配置
+</span></span></span><span class="line"><span class="cl">  <span class="nb">target_compile_features</span><span class="p">(</span><span class="o">${</span><span class="nv">name</span><span class="o">}</span> <span class="s">PRIVATE</span> <span class="s">cxx_std_17</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">  <span class="nb">target_compile_options</span><span class="p">(</span><span class="o">${</span><span class="nv">name</span><span class="o">}</span> <span class="s">PRIVATE</span> <span class="s">-Wall</span> <span class="s">-Wextra</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">  <span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">name</span><span class="o">}</span> <span class="s">PRIVATE</span> <span class="s">MyDemo::Core</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endfunction</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 使用函数
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_my_executable</span><span class="p">(</span><span class="s">app1</span> <span class="s">main1.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_my_executable</span><span class="p">(</span><span class="s">app2</span> <span class="s">main2.cpp</span> <span class="s">module.cpp</span><span class="p">)</span></span></span></code></pre></div></div>
+<p><strong>function 与 macro 核心区别</strong>：</p>
+<table>
+  <thead>
+      <tr>
+          <th>特性</th>
+          <th>function</th>
+          <th>macro</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>作用域</td>
+          <td>有独立局部作用域，变量默认局部</td>
+          <td>无作用域，变量直接修改父作用域</td>
+      </tr>
+      <tr>
+          <td>参数处理</td>
+          <td>实参传递，支持参数校验</td>
+          <td>文本替换，参数无类型校验</td>
+      </tr>
+      <tr>
+          <td>返回值</td>
+          <td>通过 <code>PARENT_SCOPE</code> 设置父作用域变量</td>
+          <td>直接修改父作用域变量</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="七依赖管理">七、依赖管理</h2>
+<p>Modern CMake 提供两套标准化依赖管理方案，彻底告别手动找头文件、手动链接库的原始写法。</p>
+<h3 id="71-find_package查找已安装依赖">7.1 <code>find_package</code>：查找已安装依赖</h3>
+<p>CMake 最主流的依赖查找方案，分为 <strong>Module 模式</strong> 和 <strong>Config 模式</strong>，Modern CMake 优先使用 Config 模式。</p>
+<p><strong>完整语法</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">&lt;PackageName&gt;</span> <span class="s">[version]</span> <span class="s">[EXACT]</span> <span class="s">[QUIET]</span> <span class="s">[MODULE]</span>
+</span></span><span class="line"><span class="cl">             <span class="s">[REQUIRED]</span> <span class="s">[[COMPONENTS]</span> <span class="s">[components...]]</span>
+</span></span><span class="line"><span class="cl">             <span class="s">[OPTIONAL_COMPONENTS</span> <span class="s">components...]</span><span class="p">)</span></span></span></code></pre></div></div>
+<p><strong>关键参数说明</strong>：</p>
+<ul>
+<li><code>REQUIRED</code>：必须找到该依赖，找不到直接终止配置</li>
+<li><code>COMPONENTS</code>：指定需要加载的组件</li>
+<li><code>EXACT</code>：必须匹配精确的版本号</li>
+<li><code>QUIET</code>：静默模式，不输出查找日志</li>
+<li><code>MODULE</code>：强制使用 Module 模式，默认优先 Config 模式</li>
+</ul>
+<p><strong>Config 模式（推荐）</strong>：
+依赖库的作者提供 <code>&lt;PackageName&gt;Config.cmake</code> 配置文件，里面导出了完整的 CMake 目标，包含头文件路径、链接库、编译选项等所有信息，直接链接目标即可，零配置成本。</p>
+<p><strong>示例</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 查找 Qt6
+</span></span></span><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">Qt6</span> <span class="s">6.5</span> <span class="s">REQUIRED</span> <span class="s">COMPONENTS</span> <span class="s">Core</span> <span class="s">Widgets</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 直接链接导入目标，自动处理所有依赖
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_app</span> <span class="s">PRIVATE</span> <span class="s">Qt6::Core</span> <span class="s">Qt6::Widgets</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 查找 OpenCV
+</span></span></span><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">OpenCV</span> <span class="s">4.0</span> <span class="s">REQUIRED</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_app</span> <span class="s">PRIVATE</span> <span class="o">${</span><span class="nv">OpenCV_LIBS</span><span class="o">}</span><span class="p">)</span> <span class="err">#</span> <span class="err">兼容旧写法，优先用导入目标</span></span></span></code></pre></div></div>
+<h3 id="72-fetchcontent源码级依赖管理">7.2 <code>FetchContent</code>：源码级依赖管理</h3>
+<p>3.11 引入，3.14 完善，支持<strong>配置阶段下载依赖源码</strong>，直接加入当前项目一起编译，完美支持 Modern CMake 目标传递，替代传统的 <code>ExternalProject</code>（构建时下载，不支持目标传递）。</p>
+<p><strong>完整流程与示例</strong>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 引入内置模块
+</span></span></span><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s">FetchContent</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 声明依赖：指定名称、源码地址、版本/提交号
+</span></span></span><span class="line"><span class="cl"><span class="nb">FetchContent_Declare</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="s">spdlog</span>
+</span></span><span class="line"><span class="cl">  <span class="s">GIT_REPOSITORY</span> <span class="s">https://github.com/gabime/spdlog.git</span>
+</span></span><span class="line"><span class="cl">  <span class="s">GIT_TAG</span>        <span class="s">v1.14.1</span>
+</span></span><span class="line"><span class="cl">  <span class="s">GIT_SHALLOW</span>    <span class="s">TRUE</span> <span class="c"># 浅克隆，加速下载
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 下载、配置、添加到当前项目
+</span></span></span><span class="line"><span class="cl"><span class="nb">FetchContent_MakeAvailable</span><span class="p">(</span><span class="s">spdlog</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 直接链接目标，与本地库完全一致
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_app</span> <span class="s">PRIVATE</span> <span class="s">spdlog::spdlog</span><span class="p">)</span></span></span></code></pre></div></div>
+<p><strong>支持的源码类型</strong>：</p>
+<ul>
+<li>Git 仓库（<code>GIT_REPOSITORY</code>）</li>
+<li>压缩包 URL（<code>URL</code>），支持 <code>URL_HASH</code> 校验完整性</li>
+<li>本地源码目录（<code>SOURCE_DIR</code>）</li>
+</ul>
+<h3 id="73-add_subdirectory添加子目录">7.3 <code>add_subdirectory</code>：添加子目录</h3>
+<p>用于项目内模块划分，或本地存放的第三方依赖源码，子目录需包含独立的 CMakeLists.txt。</p>
+<p><strong>语法与示例</strong>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 添加子模块
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">core</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">net</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 添加第三方源码，EXCLUDE_FROM_ALL 避免其测试/示例被默认构建
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">thirdparty/fmt</span> <span class="s">EXCLUDE_FROM_ALL</span><span class="p">)</span></span></span></code></pre></div></div>
+<h2 id="八安装与导出">八、安装与导出</h2>
+<p>Modern CMake 提供标准化的安装与导出流程，让你的库可以被其他项目通过 <code>find_package</code> 无缝使用，与第三方库完全一致。</p>
+<h3 id="81-核心前置模块">8.1 核心前置模块</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 提供标准安装目录变量，避免硬编码
+</span></span></span><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s">GNUInstallDirs</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 生成 Config.cmake 和 ConfigVersion.cmake 文件
+</span></span></span><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s">CMakePackageConfigHelpers</span><span class="p">)</span></span></span></code></pre></div></div>
+<h3 id="82-install安装目标与文件">8.2 <code>install</code>：安装目标与文件</h3>
+<h4 id="821-安装目标核心">8.2.1 安装目标（核心）</h4>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s">my_lib</span> <span class="s">my_app</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># 导出目标到 my_demo_targets 集合，后续用于生成配置文件
+</span></span></span><span class="line"><span class="cl">  <span class="s">EXPORT</span> <span class="s">my_demo_targets</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># 可执行文件/Windows DLL 安装路径
+</span></span></span><span class="line"><span class="cl">  <span class="s">RUNTIME</span> <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_BINDIR</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># Linux so/macOS dylib 安装路径
+</span></span></span><span class="line"><span class="cl">  <span class="s">LIBRARY</span> <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># 静态库/Windows 导入库安装路径
+</span></span></span><span class="line"><span class="cl">  <span class="s">ARCHIVE</span> <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># 头文件安装路径，自动添加到目标的 INTERFACE_INCLUDE_DIRECTORIES
+</span></span></span><span class="line"><span class="cl">  <span class="s">INCLUDES</span> <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_INCLUDEDIR</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span></span></span></code></pre></div></div>
+<h4 id="822-安装头文件">8.2.2 安装头文件</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 安装 include 目录下所有头文件，保留目录结构
+</span></span></span><span class="line"><span class="cl"><span class="nb">install</span><span class="p">(</span><span class="s">DIRECTORY</span> <span class="o">${</span><span class="nv">PROJECT_SOURCE_DIR</span><span class="o">}</span><span class="s">/include/</span>
+</span></span><span class="line"><span class="cl">  <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_INCLUDEDIR</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># 仅安装 .h/.hpp 文件
+</span></span></span><span class="line"><span class="cl">  <span class="s">FILES_MATCHING</span> <span class="s">PATTERN</span> <span class="s2">&#34;*.h&#34;</span> <span class="s">PATTERN</span> <span class="s2">&#34;*.hpp&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span></span></span></code></pre></div></div>
+<h4 id="823-导出目标配置文件">8.2.3 导出目标配置文件</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># 安装导出的目标，生成 my_demoTargets.cmake 文件
+</span></span></span><span class="line"><span class="cl"><span class="nb">install</span><span class="p">(</span><span class="s">EXPORT</span> <span class="s">my_demo_targets</span>
+</span></span><span class="line"><span class="cl">  <span class="s">FILE</span> <span class="s">my_demoTargets.cmake</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># 添加命名空间，与别名目标一致
+</span></span></span><span class="line"><span class="cl">  <span class="s">NAMESPACE</span> <span class="s">MyDemo::</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># 安装路径，标准 cmake 配置文件目录
+</span></span></span><span class="line"><span class="cl">  <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span><span class="s">/cmake/my_demo</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span></span></span></code></pre></div></div>
+<h3 id="83-生成包配置文件">8.3 生成包配置文件</h3>
+<h4 id="831-生成版本配置文件">8.3.1 生成版本配置文件</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">write_basic_package_version_file</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="o">${</span><span class="nv">PROJECT_BINARY_DIR</span><span class="o">}</span><span class="s">/my_demoConfigVersion.cmake</span>
+</span></span><span class="line"><span class="cl">  <span class="s">VERSION</span> <span class="o">${</span><span class="nv">PROJECT_VERSION</span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">  <span class="c"># 版本兼容性：同主版本号兼容
+</span></span></span><span class="line"><span class="cl">  <span class="s">COMPATIBILITY</span> <span class="s">SameMajorVersion</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span></span></span></code></pre></div></div>
+<h4 id="832-生成主配置文件">8.3.2 生成主配置文件</h4>
+<ol>
+<li>
+<p>新建模板文件 <code>cmake/my_demoConfig.cmake.in</code>：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="err">@PACKAGE_INIT@
+</span></span></span><span class="line"><span class="cl"><span class="c"># 包含目标导出文件
+</span></span></span><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="s2">&#34;${CMAKE_CURRENT_LIST_DIR}/my_demoTargets.cmake&#34;</span><span class="p">)</span></span></span></code></pre></div></div>
+</li>
+<li>
+<p>配置并安装配置文件：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">configure_package_config_file</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="o">${</span><span class="nv">PROJECT_SOURCE_DIR</span><span class="o">}</span><span class="s">/cmake/my_demoConfig.cmake.in</span>
+</span></span><span class="line"><span class="cl">  <span class="o">${</span><span class="nv">PROJECT_BINARY_DIR</span><span class="o">}</span><span class="s">/my_demoConfig.cmake</span>
+</span></span><span class="line"><span class="cl">  <span class="s">INSTALL_DESTINATION</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span><span class="s">/cmake/my_demo</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 安装配置文件
+</span></span></span><span class="line"><span class="cl"><span class="nb">install</span><span class="p">(</span><span class="s">FILES</span>
+</span></span><span class="line"><span class="cl">  <span class="o">${</span><span class="nv">PROJECT_BINARY_DIR</span><span class="o">}</span><span class="s">/my_demoConfig.cmake</span>
+</span></span><span class="line"><span class="cl">  <span class="o">${</span><span class="nv">PROJECT_BINARY_DIR</span><span class="o">}</span><span class="s">/my_demoConfigVersion.cmake</span>
+</span></span><span class="line"><span class="cl">  <span class="s">DESTINATION</span> <span class="o">${</span><span class="nv">CMAKE_INSTALL_LIBDIR</span><span class="o">}</span><span class="s">/cmake/my_demo</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span></span></span></code></pre></div></div>
+</li>
+</ol>
+<p>完成以上配置后，安装的库可被其他项目通过 <code>find_package(MyDemo REQUIRED)</code> 直接找到，链接 <code>MyDemo::my_lib</code> 目标即可使用。</p>
+<h2 id="九最佳实践与避坑指南">九、最佳实践与避坑指南</h2>
+<h3 id="91-核心最佳实践">9.1 核心最佳实践</h3>
+<ol>
+<li><strong>始终基于目标编程</strong>：所有配置使用 <code>target_*</code> 命令，绝对禁止使用全局的 <code>include_directories</code>/<code>link_directories</code>/<code>add_definitions</code> 等命令</li>
+<li><strong>显式指定传递性</strong>：所有 <code>target_*</code> 命令必须显式指定 <code>PRIVATE/PUBLIC/INTERFACE</code>，禁止省略</li>
+<li><strong>优先使用导入目标</strong>：第三方依赖始终链接 <code>find_package</code>/<code>FetchContent</code> 提供的导入目标，不手动处理头文件和库路径</li>
+<li><strong>命名空间别名</strong>：所有库目标必须添加 <code>xxx::yyy</code> 格式的别名，与导出目标格式统一</li>
+<li><strong>显式列出源文件</strong>：禁止用 <code>file(GLOB)</code> 收集源文件，除非使用 <code>CONFIGURE_DEPENDS</code>，避免新增文件后构建失效</li>
+<li><strong>跨平台适配用生成器表达式</strong>：替代大量 <code>if-else</code> 平台判断，代码更简洁、可维护性更强</li>
+<li><strong>禁用编译器扩展</strong>：设置 <code>CMAKE_CXX_EXTENSIONS OFF</code>，保证跨编译器兼容性</li>
+<li><strong>最小作用域原则</strong>：能用 <code>PRIVATE</code> 就不用 <code>PUBLIC</code>，能用局部变量就不用全局变量/缓存变量</li>
+</ol>
+<h3 id="92-高频避坑点">9.2 高频避坑点</h3>
+<ol>
+<li><strong>省略传递性关键字</strong>：导致依赖传递混乱，出现「头文件找不到」「符号未定义」等问题</li>
+<li><strong>混用构建/安装路径</strong>：未使用 <code>BUILD_INTERFACE</code>/<code>INSTALL_INTERFACE</code>，导致安装后下游项目无法找到头文件</li>
+<li><strong>全局配置污染</strong>：使用全局命令修改所有目标的配置，引发冲突和难以调试的编译问题</li>
+<li><strong>静态库未开启 PIC</strong>：静态库被动态库链接时，出现「重定位错误」，需设置 <code>POSITION_INDEPENDENT_CODE ON</code></li>
+<li><strong><code>CMAKE_BUILD_TYPE</code> 失效</strong>：该变量仅对单配置生成器（Makefile/Ninja）生效，多配置生成器（Visual Studio/Xcode）使用 <code>CMAKE_CONFIGURATION_TYPES</code></li>
+<li><strong>滥用 <code>file(GLOB)</code></strong>：新增源文件后 CMake 无法自动感知，必须手动重新配置，仅推荐使用 <code>file(GLOB CONFIGURE_DEPENDS)</code> 用于头文件-only 库</li>
+<li><strong>宏替代函数</strong>：使用 <code>macro</code> 导致变量污染父作用域，引发难以排查的副作用</li>
+<li><strong>硬编码路径</strong>：使用绝对路径导致项目无法迁移，始终使用 <code>${PROJECT_SOURCE_DIR}</code>/<code>${CMAKE_CURRENT_SOURCE_DIR}</code> 等相对路径变量</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-01-23</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/002_%E7%8E%B0%E4%BB%A3cmake%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/cmake/">CMake</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/001_cmake%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="CMake 语法详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>CMake 语法详细总结</a>
+            <a href="/blog/003_cmake%E5%A4%9A%E5%B9%B3%E5%8F%B0toolchain%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/" class="next" rel="next" title="CMake 多平台 Toolchain 配置指南">CMake 多平台 Toolchain 配置指南<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>HIDL 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/002_hidl%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="HIDL 语法详细总结">
+  <meta property="og:description" content="HIDL语法详细总结 一、HIDL基础概述 HIDL（HAL Interface Definition Language）是Android 8.0（Oreo）随Treble项目引入的硬件抽象层接口定义语言，核心目标是实现Android Framework与HAL的彻底解耦，解决Android碎片化OTA升级难题，让厂商无需重新编译HAL即可完成Framework升级。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-02-15T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-02-15T10:00:20+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="Android">
+    <meta property="article:tag" content="HIDL">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="HIDL 语法详细总结">
+  <meta name="twitter:description" content="HIDL语法详细总结 一、HIDL基础概述 HIDL（HAL Interface Definition Language）是Android 8.0（Oreo）随Treble项目引入的硬件抽象层接口定义语言，核心目标是实现Android Framework与HAL的彻底解耦，解决Android碎片化OTA升级难题，让厂商无需重新编译HAL即可完成Framework升级。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/002_hidl%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/001_jni%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/003_aidl%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "HIDL 语法详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/002_hidl%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, Android, HIDL","wordcount":  5962 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/002_hidl%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-02-15T09:00:20+08:00","dateModified": "2026-02-15T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/002_hidl%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/002_hidl%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">HIDL 语法详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-02-15">2026-02-15</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 5962 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 12 分钟&nbsp;<span id="/blog/002_hidl%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="HIDL 语法详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一hidl基础概述">一、HIDL基础概述</a></li>
+    <li><a href="#二核心语法规则与文件结构">二、核心语法规则与文件结构</a>
+      <ul>
+        <li><a href="#1-文件规范">1. 文件规范</a></li>
+        <li><a href="#2-基础语法规则">2. 基础语法规则</a></li>
+        <li><a href="#3-注释规范">3. 注释规范</a></li>
+      </ul>
+    </li>
+    <li><a href="#三包声明与导入">三、包声明与导入</a>
+      <ul>
+        <li><a href="#1-包声明package">1. 包声明（Package）</a></li>
+        <li><a href="#2-导入声明import">2. 导入声明（Import）</a></li>
+      </ul>
+    </li>
+    <li><a href="#四完整数据类型系统">四、完整数据类型系统</a>
+      <ul>
+        <li><a href="#1-基础标量类型">1. 基础标量类型</a></li>
+        <li><a href="#2-定长数组">2. 定长数组</a></li>
+        <li><a href="#3-动态向量vec">3. 动态向量vec</a></li>
+        <li><a href="#4-特殊类型">4. 特殊类型</a></li>
+        <li><a href="#5-接口类型">5. 接口类型</a></li>
+      </ul>
+    </li>
+    <li><a href="#五用户自定义类型">五、用户自定义类型</a>
+      <ul>
+        <li><a href="#1-枚举enum">1. 枚举（enum）</a></li>
+        <li><a href="#2-结构体struct">2. 结构体（struct）</a></li>
+        <li><a href="#3-联合体union与安全联合体safe_union">3. 联合体（union）与安全联合体（safe_union）</a></li>
+        <li><a href="#4-类型别名typedef">4. 类型别名（typedef）</a></li>
+      </ul>
+    </li>
+    <li><a href="#六接口与方法定义">六、接口与方法定义</a>
+      <ul>
+        <li><a href="#1-接口声明">1. 接口声明</a></li>
+        <li><a href="#2-方法定义">2. 方法定义</a></li>
+        <li><a href="#3-回调接口设计">3. 回调接口设计</a></li>
+      </ul>
+    </li>
+    <li><a href="#七注解系统">七、注解系统</a>
+      <ul>
+        <li><a href="#1-注解基础语法">1. 注解基础语法</a></li>
+        <li><a href="#2-常用核心注解">2. 常用核心注解</a></li>
+        <li><a href="#3-注解使用示例">3. 注解使用示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#八版本控制规则">八、版本控制规则</a>
+      <ul>
+        <li><a href="#1-版本号格式">1. 版本号格式</a></li>
+        <li><a href="#2-核心版本规则">2. 核心版本规则</a></li>
+        <li><a href="#3-版本升级示例">3. 版本升级示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#九代码风格与命名规范">九、代码风格与命名规范</a></li>
+    <li><a href="#十高级特性">十、高级特性</a>
+      <ul>
+        <li><a href="#1-直通模式passthrough">1. 直通模式（Passthrough）</a></li>
+        <li><a href="#2-快速消息队列fmq">2. 快速消息队列FMQ</a></li>
+        <li><a href="#3-共享内存memory">3. 共享内存memory</a></li>
+        <li><a href="#4-嵌套类型访问">4. 嵌套类型访问</a></li>
+        <li><a href="#5-权限控制">5. 权限控制</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="hidl语法详细总结">HIDL语法详细总结</h1>
+<h2 id="一hidl基础概述">一、HIDL基础概述</h2>
+<p>HIDL（HAL Interface Definition Language）是Android 8.0（Oreo）随Treble项目引入的硬件抽象层接口定义语言，核心目标是实现Android Framework与HAL的彻底解耦，解决Android碎片化OTA升级难题，让厂商无需重新编译HAL即可完成Framework升级。</p>
+<ul>
+<li><strong>运行模式</strong>：分为<strong>绑定式模式（Binderized）</strong>（基于Binder IPC跨进程通信，主流模式）和<strong>直通模式（Passthrough）</strong>（同进程dlopen加载，仅C++支持，用于兼容旧版HAL）。</li>
+<li><strong>生命周期</strong>：Android 10起官方宣布逐步弃用，推荐使用AIDL替代，但仍是Android 8-13版本HAL开发的核心规范，存量设备仍大量使用。</li>
+<li><strong>核心设计原则</strong>：接口发布后即冻结，仅可通过版本升级扩展，严格保证前向兼容；RPC仅使用in参数，避免内存所有权歧义；数据结构采用C++标准布局，无需解包即可直接用于IPC传输。</li>
+</ul>
+<h2 id="二核心语法规则与文件结构">二、核心语法规则与文件结构</h2>
+<h3 id="1-文件规范">1. 文件规范</h3>
+<ul>
+<li>后缀名：统一为<code>.hal</code></li>
+<li>两类核心文件：
+<ul>
+<li><strong>接口文件</strong>：如<code>IFoo.hal</code>，每个文件仅能定义一个接口，接口名必须与文件名一致，以<code>I</code>开头。</li>
+<li><strong>类型定义文件</strong>：<code>types.hal</code>，仅能定义用户自定义类型（结构体、枚举、联合体等），不能定义接口方法，包内所有接口自动导入该文件，无需显式import。</li>
+</ul>
+</li>
+<li>目录结构：<code><sup>根目录</sup>/<sub>模块名</sub>/[版本号]/</code>，例如<code>hardware/interfaces/nfc/1.0/</code>；核心系统包根目录为<code>hardware/interfaces</code>，厂商包根目录为<code>vendor/[厂商名]/interfaces</code>。</li>
+</ul>
+<h3 id="2-基础语法规则">2. 基础语法规则</h3>
+<ul>
+<li>语句终止：所有语句必须以分号<code>;</code>结尾，包括最后一个元素。</li>
+<li>空白符：换行符与空格、制表符等效，除单行注释外，换行不影响语法解析。</li>
+<li>预处理器：不支持C/C++预处理器（无#define、#include等）。</li>
+<li>大小写敏感：标识符、关键字、类型名均大小写敏感。</li>
+<li>标识符规则：遵循C标准标识符规则，由字母、数字、下划线组成，不能以数字开头。</li>
+</ul>
+<h3 id="3-注释规范">3. 注释规范</h3>
+<ul>
+<li><strong>文档注释</strong>：<code>/** */</code>，仅可用于类型、方法、字段、枚举值声明，会被编译到生成的代码文档中。</li>
+<li><strong>多行注释</strong>：<code>/* */</code>，用于普通说明，不会生成到文档中。</li>
+<li><strong>单行注释</strong>：<code>//</code>，行尾注释，不推荐用于文档说明，不会生成到输出代码中。</li>
+</ul>
+<h2 id="三包声明与导入">三、包声明与导入</h2>
+<h3 id="1-包声明package">1. 包声明（Package）</h3>
+<ul>
+<li>语法：<code>package 包名@主版本号.次版本号;</code></li>
+<li>命名规范：
+<ul>
+<li>核心系统包：<code>android.hardware.子系统名[.子模块]@x.y</code>，全小写，多单词用snake_case或子模块拆分。</li>
+<li>厂商包：<code>vendor.厂商名.hardware.子系统名@x.y</code></li>
+</ul>
+</li>
+<li>位置：必须位于文件首行（许可证注释之后），每个.hal文件有且仅有一个包声明。</li>
+<li>命名空间映射：包名会自动转换为对应语言的命名空间，例如<code>android.hardware.nfc@1.0</code>在C++中转为<code>android::hardware::nfc::V1_0</code>。</li>
+</ul>
+<h3 id="2-导入声明import">2. 导入声明（Import）</h3>
+<p>用于导入其他包或同包内的类型、接口，避免全限定名重复书写。</p>
+<ul>
+<li>语法格式：
+<ol>
+<li>全量包导入：<code>import 包名@x.y;</code>，导入该包下所有类型和接口。</li>
+<li>指定类型导入：<code>import 包名@x.y::类型名;</code>，仅导入指定的用户自定义类型或接口。</li>
+<li>同包导入：<code>import 接口名/类型名;</code>，导入同包内的其他接口或类型。</li>
+<li>仅导入类型：<code>import 包名@x.y::types;</code>，仅导入该包的types.hal中定义的类型。</li>
+</ol>
+</li>
+<li>核心规则：
+<ul>
+<li>当前包的types.hal会被自动导入，无需显式import。</li>
+<li>导入语句必须位于包声明之后，接口/类型定义之前。</li>
+<li>导入分组按规范排序：系统包→厂商包→同包内导入，组内按字母序排列，组间空行分隔。</li>
+</ul>
+</li>
+</ul>
+<h2 id="四完整数据类型系统">四、完整数据类型系统</h2>
+<p>HIDL数据类型分为基础类型、复合类型、特殊类型三大类，所有类型均有明确的跨语言映射规则，保证IPC传输的一致性。</p>
+<h3 id="1-基础标量类型">1. 基础标量类型</h3>
+<table>
+  <thead>
+      <tr>
+          <th>HIDL类型</th>
+          <th>说明</th>
+          <th>C++映射</th>
+          <th>Java映射</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>int8_t</td>
+          <td>8位有符号整数</td>
+          <td>int8_t</td>
+          <td>byte</td>
+      </tr>
+      <tr>
+          <td>uint8_t</td>
+          <td>8位无符号整数</td>
+          <td>uint8_t</td>
+          <td>byte（无符号语义需自行处理）</td>
+      </tr>
+      <tr>
+          <td>int16_t</td>
+          <td>16位有符号整数</td>
+          <td>int16_t</td>
+          <td>short</td>
+      </tr>
+      <tr>
+          <td>uint16_t</td>
+          <td>16位无符号整数</td>
+          <td>uint16_t</td>
+          <td>short</td>
+      </tr>
+      <tr>
+          <td>int32_t</td>
+          <td>32位有符号整数</td>
+          <td>int32_t</td>
+          <td>int</td>
+      </tr>
+      <tr>
+          <td>uint32_t</td>
+          <td>32位无符号整数</td>
+          <td>uint32_t</td>
+          <td>int</td>
+      </tr>
+      <tr>
+          <td>int64_t</td>
+          <td>64位有符号整数</td>
+          <td>int64_t</td>
+          <td>long</td>
+      </tr>
+      <tr>
+          <td>uint64_t</td>
+          <td>64位无符号整数</td>
+          <td>uint64_t</td>
+          <td>long</td>
+      </tr>
+      <tr>
+          <td>float</td>
+          <td>32位单精度浮点数</td>
+          <td>float</td>
+          <td>float</td>
+      </tr>
+      <tr>
+          <td>double</td>
+          <td>64位双精度浮点数</td>
+          <td>double</td>
+          <td>double</td>
+      </tr>
+      <tr>
+          <td>bool</td>
+          <td>布尔值</td>
+          <td>bool</td>
+          <td>boolean</td>
+      </tr>
+      <tr>
+          <td>string</td>
+          <td>UTF-8编码字符串</td>
+          <td>std::string</td>
+          <td>String</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-定长数组">2. 定长数组</h3>
+<ul>
+<li>语法：<code>类型[数组长度]</code>，数组长度必须是大于0的C风格常量表达式constexpr。</li>
+<li>示例：<code>int32_t[4] position;</code>、<code>string[10] nameList;</code></li>
+<li>规则：长度固定，编译期确定，支持多维数组，如<code>uint8_t[3][3] matrix;</code></li>
+</ul>
+<h3 id="3-动态向量vec">3. 动态向量vec<T></h3>
+<ul>
+<li>语法：<code>vec&lt;元素类型&gt;</code>，对应C++的std::vector，动态长度数组。</li>
+<li>示例：<code>vec&lt;uint8_t&gt; dataBuffer;</code>、<code>vec&lt;vec&lt;int32_t&gt;&gt; multiDimVector;</code></li>
+<li>特殊规则：接口类型仅支持单层vec嵌套，即<code>vec&lt;IFoo&gt;</code>合法，<code>vec&lt;vec&lt;IFoo&gt;&gt;</code>非法。</li>
+<li>复合用法：支持向量与数组嵌套，如<code>vec&lt;bool[4]&gt; arrayVector;</code></li>
+</ul>
+<h3 id="4-特殊类型">4. 特殊类型</h3>
+<ul>
+<li><code>memory</code>：对应Ashmem共享内存句柄，用于跨进程大数据传输，映射为<code>hidl_memory</code>类型。</li>
+<li><code>pointer</code>：无类型指针，仅用于直通模式，绑定式模式下不支持跨进程传输，映射为<code>void*</code>。</li>
+<li><code>native_handle_t</code>：原生句柄，用于传递文件描述符、驱动句柄等，支持跨进程传输。</li>
+<li><code>bitfield&lt;T&gt;</code>：位域类型，T必须是用户定义的枚举类型，用于按位存储枚举值，实现位掩码功能。</li>
+<li><code>fmq_sync&lt;T&gt;</code> / <code>fmq_unsync&lt;T&gt;</code>：快速消息队列（Fast Message Queue），分别对应同步/无锁异步模式，用于高频率低延迟的跨进程数据传输，T必须是可序列化的固定大小类型。</li>
+</ul>
+<h3 id="5-接口类型">5. 接口类型</h3>
+<ul>
+<li>所有自定义interface都是合法的类型，可作为方法参数、返回值、结构体字段。</li>
+<li>通用接口类型<code>interface</code>，等价于<code>android.hidl.base@1.0::IBase</code>，是所有HIDL接口的基类。</li>
+</ul>
+<h2 id="五用户自定义类型">五、用户自定义类型</h2>
+<p>HIDL支持丰富的用户自定义类型，所有类型均可用于方法参数、返回值和复合类型嵌套，<strong>不支持前向声明</strong>，类型必须在使用前定义（同文件内后续定义编译器会自动解析）。</p>
+<h3 id="1-枚举enum">1. 枚举（enum）</h3>
+<ul>
+<li>语法：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-hidl">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-hidl" data-lang="hidl">enum 枚举名 : 底层标量类型 {
+    枚举值1 [= 常量表达式],
+    枚举值2 [= 常量表达式],
+    ...
+};</code></pre></div>
+<ul>
+<li>核心规则：
+<ul>
+<li>底层类型必须是标量整数类型，必须显式声明。</li>
+<li>枚举值默认从0开始递增，也可手动赋值，支持位运算常量表达式（如<code>1 &lt;&lt; 3</code>）。</li>
+<li>枚举值命名规范：全大写，下划线分隔。</li>
+<li>支持枚举嵌套，可定义在结构体、接口内部。</li>
+<li>全限定名规则：<code>包名@x.y::枚举名:枚举值</code>，例如<code>android.hardware.nfc@1.0::NfcStatus:STATUS_OK</code>。</li>
+</ul>
+</li>
+<li>示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-hidl">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-hidl" data-lang="hidl">/** NFC操作状态码 */
+enum NfcStatus : int32_t {
+    STATUS_OK = 0,
+    STATUS_ERR_ARG = 1,
+    STATUS_ERR_TIMEOUT = 2,
+    STATUS_ERR_UNKNOWN = -1,
+};</code></pre></div>
+<h3 id="2-结构体struct">2. 结构体（struct）</h3>
+<ul>
+<li>语法：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-hidl">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-hidl" data-lang="hidl">struct 结构体名 {
+    类型1 字段名1;
+    类型2 字段名2;
+    ...
+    // 支持嵌套类型定义
+    struct 嵌套结构体名 {
+        ...
+    };
+};</code></pre></div>
+<ul>
+<li>核心规则：
+<ul>
+<li>字段命名采用lowerCamelCase，类型名采用UpperCamelCase。</li>
+<li>支持嵌套结构体、枚举、联合体定义，嵌套类型通过<code>.</code>访问，例如<code>Foo.Bar</code>。</li>
+<li>生成的C++代码为标准布局结构体，内存布局固定，可直接用于IPC传输。</li>
+<li>不支持前向声明，结构体不能直接或间接引用自身。</li>
+</ul>
+</li>
+<li>示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-hidl">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-hidl" data-lang="hidl">struct Point {
+    int32_t x;
+    int32_t y;
+};
+
+struct Rect {
+    Point topLeft;
+    Point bottomRight;
+    vec&lt;uint8_t&gt; extraData;
+};</code></pre></div>
+<h3 id="3-联合体union与安全联合体safe_union">3. 联合体（union）与安全联合体（safe_union）</h3>
+<ul>
+<li>普通union语法：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-hidl">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-hidl" data-lang="hidl">union 联合体名 {
+    类型1 字段名1;
+    类型2 字段名2;
+    ...
+};</code></pre></div>
+<ul>
+<li>safe_union：HIDL扩展的安全联合体，自动包含tag字段标识当前有效的成员，避免内存越界，Java仅支持safe_union，推荐优先使用。</li>
+<li>核心规则：
+<ul>
+<li>联合体所有成员共享同一块内存，大小为最大成员的大小。</li>
+<li>普通union不支持包含接口类型、string、vec等动态大小类型，safe_union无此限制。</li>
+</ul>
+</li>
+<li>示例：</li>
+</ul>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-hidl">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-hidl" data-lang="hidl">union DataUnion {
+    int32_t intValue;
+    float floatValue;
+    int64_t longValue;
+};
+
+safe_union SafeDataUnion {
+    int32_t intValue;
+    float floatValue;
+    vec&lt;uint8_t&gt; buffer;
+};</code></pre></div>
+<h3 id="4-类型别名typedef">4. 类型别名（typedef）</h3>
+<ul>
+<li>语法：<code>typedef 原类型 别名;</code></li>
+<li>作用：为复杂类型定义简短别名，提升代码可读性。</li>
+<li>示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-hidl">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-hidl" data-lang="hidl">typedef vec&lt;uint8_t&gt; ByteBuffer;
+typedef int32_t[4] FourIntArray;
+typedef android.hardware.nfc@1.0::NfcStatus StatusCode;</code></pre></div>
+<h2 id="六接口与方法定义">六、接口与方法定义</h2>
+<p>接口是HIDL的核心，定义了HAL提供的服务能力，每个接口对应一个独立的.hal文件，编译后生成对应的C++/Java客户端与服务端代码。</p>
+<h3 id="1-接口声明">1. 接口声明</h3>
+<ul>
+<li>基础语法：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-hidl">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-hidl" data-lang="hidl">[注解]
+interface 接口名 [extends 父接口全限定名] {
+    // 类型定义（枚举、结构体、typedef等）
+    // 方法定义
+};</code></pre></div>
+<ul>
+<li>核心规则：
+<ul>
+<li>接口名必须以<code>I</code>开头，采用UpperCamelCase，必须与文件名一致。</li>
+<li>支持单继承，仅能继承一个其他HIDL接口，父接口必须是全限定名导入的接口。</li>
+<li>所有HIDL接口都隐式继承自<code>android.hidl.base@1.0::IBase</code>，无需显式声明。</li>
+<li>接口内部可定义局部类型，仅在该接口内部可见。</li>
+</ul>
+</li>
+<li>最简示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-hidl">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-hidl" data-lang="hidl">package android.hardware.foo@1.0;
+
+/** 示例服务接口 */
+interface IFoo {
+    /** 无返回值方法 */
+    close();
+
+    /** 带返回值方法 */
+    open() generates (int32_t status);
+};</code></pre></div>
+<h3 id="2-方法定义">2. 方法定义</h3>
+<ul>
+<li>基础语法：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-hidl">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-hidl" data-lang="hidl">[注解] [oneway] 方法名(参数列表) [generates (返回值列表)];</code></pre></div>
+<ul>
+<li>
+<p>核心组成与规则：</p>
+<ol>
+<li><strong>方法名</strong>：采用lowerCamelCase，同一个接口内不支持方法重载。</li>
+<li><strong>参数列表</strong>：<code>类型 参数名</code>格式，多个参数用逗号分隔，所有参数均为in方向，无out/inout参数，避免内存所有权歧义。</li>
+<li><strong>oneway关键字</strong>：标记方法为异步单向调用，客户端调用后立即返回，不等待服务端执行，<strong>不能有generates返回值</strong>，服务端异常客户端无法感知。</li>
+<li><strong>generates关键字</strong>：用于定义返回值，支持多个返回值，是HIDL与AIDL的核心区别之一。</li>
+</ol>
+</li>
+<li>
+<p>方法示例：</p>
+</li>
+</ul>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-hidl">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-hidl" data-lang="hidl">/** 无返回值同步方法 */
+reset();
+
+/** 单返回值同步方法 */
+getVersion() generates (string versionName);
+
+/** 多返回值同步方法 */
+readData(int32_t address, uint32_t length) generates (int32_t status, vec&lt;uint8_t&gt; data);
+
+/** oneway异步方法 */
+oneway reportHeartbeat(int64_t timestamp);</code></pre></div>
+<h3 id="3-回调接口设计">3. 回调接口设计</h3>
+<p>HIDL通过接口类型参数实现回调，服务端可反向调用客户端实现的接口方法，实现异步事件通知。核心设计模式：</p>
+<ol>
+<li>定义回调接口，声明服务端需要调用的回调方法。</li>
+<li>主接口提供注册方法，接收回调接口实例作为参数。</li>
+<li>客户端实现回调接口，传递给服务端，服务端在事件触发时调用回调方法。</li>
+</ol>
+<ul>
+<li>示例：</li>
+</ul>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-hidl">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-hidl" data-lang="hidl">// IDataCallback.hal
+package android.hardware.foo@1.0;
+
+interface IDataCallback {
+    /** 数据就绪回调 */
+    oneway onDataReady(vec&lt;uint8_t&gt; data);
+};
+
+// IFoo.hal
+package android.hardware.foo@1.0;
+
+import IDataCallback;
+
+interface IFoo {
+    /** 注册数据回调 */
+    registerDataCallback(IDataCallback callback) generates (int32_t status);
+};</code></pre></div>
+<h2 id="七注解系统">七、注解系统</h2>
+<p>HIDL支持Java风格的注解，用于为类型、方法、参数添加额外的语义信息，编译器和工具链会根据注解做对应的校验和代码生成。</p>
+<h3 id="1-注解基础语法">1. 注解基础语法</h3>
+<ul>
+<li>无参数注解：<code>@注解名</code></li>
+<li>单参数注解：<code>@注解名(值)</code></li>
+<li>多参数注解：<code>@注解名(键1=值1, 键2=值2, ...)</code></li>
+<li>数组参数：<code>@注解名(键={值1, 值2, ...})</code></li>
+<li>位置：注解必须位于目标元素之前，单独占一行，多个注解按字母序排列。</li>
+</ul>
+<h3 id="2-常用核心注解">2. 常用核心注解</h3>
+<table>
+  <thead>
+      <tr>
+          <th>注解名</th>
+          <th>适用目标</th>
+          <th>核心作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>@entry</td>
+          <td>方法</td>
+          <td>标记为接口核心入口方法，VTS测试优先覆盖</td>
+      </tr>
+      <tr>
+          <td>@exit</td>
+          <td>方法</td>
+          <td>标记为资源释放、注销类退出方法</td>
+      </tr>
+      <tr>
+          <td>@callback</td>
+          <td>方法</td>
+          <td>标记为回调方法，提示由服务端反向调用客户端实现</td>
+      </tr>
+      <tr>
+          <td>@nullable</td>
+          <td>接口类型参数/字段</td>
+          <td>标记该接口类型参数可以为null，默认不允许为null</td>
+      </tr>
+      <tr>
+          <td>@noreturn</td>
+          <td>方法</td>
+          <td>标记该方法不会返回，编译器做死代码检查</td>
+      </tr>
+      <tr>
+          <td>@deprecated</td>
+          <td>接口/方法/类型</td>
+          <td>标记已废弃，编译器生成警告</td>
+      </tr>
+      <tr>
+          <td>@async</td>
+          <td>方法</td>
+          <td>标记为异步方法，结果通过回调传递</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-注解使用示例">3. 注解使用示例</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-hidl">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-hidl" data-lang="hidl">@deprecated
+interface IOldFoo {
+    @entry
+    open() generates (int32_t status);
+
+    @exit
+    close();
+
+    registerCallback(@nullable ICallback callback);
+};</code></pre></div>
+<h2 id="八版本控制规则">八、版本控制规则</h2>
+<p>HIDL的核心设计之一是版本化管理，接口发布后即冻结，所有修改必须通过版本升级实现，严格遵循语义化版本规范。</p>
+<h3 id="1-版本号格式">1. 版本号格式</h3>
+<ul>
+<li>格式：<code>主版本号.次版本号</code>，无补丁版本号。</li>
+<li><strong>次版本号升级（Minor）</strong>：必须保证前向兼容，仅可新增类型、新增接口、为已有接口新增方法，不能修改/删除已有方法、不能修改已有类型的定义。</li>
+<li><strong>主版本号升级（Major）</strong>：不保证前向兼容，可修改、删除、重构接口和类型，与旧版本完全独立。</li>
+</ul>
+<h3 id="2-核心版本规则">2. 核心版本规则</h3>
+<ul>
+<li>包级版本控制：版本号作用于整个包，包内所有接口和类型共享同一个版本号。</li>
+<li>接口冻结：发布后的包不可修改，任何修改必须创建新版本的包。</li>
+<li>继承扩展：新版本接口可继承旧版本接口，复用已有能力，新增扩展方法。</li>
+<li>导入规则：次版本升级的包必须导入同主版本的上一个次版本包，保证兼容。</li>
+</ul>
+<h3 id="3-版本升级示例">3. 版本升级示例</h3>
+<ul>
+<li>兼容升级（1.0→1.1）：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-hidl">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-hidl" data-lang="hidl">package android.hardware.nfc@1.1;
+
+import android.hardware.nfc@1.0::INfc;
+
+interface INfc extends @1.0::INfc {
+    // 仅新增方法，不修改原有定义
+    getNfcVersion() generates (string version);
+};</code></pre></div>
+<ul>
+<li>不兼容升级（1.1→2.0）：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-hidl">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code class="language-hidl" data-lang="hidl">package android.hardware.nfc@2.0;
+
+// 完全重构，无需兼容旧版本
+interface INfc {
+    init(NfcConfig config) generates (NfcStatus status);
+    deinit();
+};</code></pre></div>
+<h2 id="九代码风格与命名规范">九、代码风格与命名规范</h2>
+<p>基于AOSP官方HIDL代码风格指南，核心规范如下：</p>
+<table>
+  <thead>
+      <tr>
+          <th>元素类型</th>
+          <th>命名规范</th>
+          <th>示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>包名</td>
+          <td>全小写，多单词用snake_case或子模块拆分</td>
+          <td><a href="mailto:android.hardware.nfc@1.0" rel="">android.hardware.nfc@1.0</a></td>
+      </tr>
+      <tr>
+          <td>接口名</td>
+          <td>I开头，UpperCamelCase大驼峰</td>
+          <td>INfc、IPower</td>
+      </tr>
+      <tr>
+          <td>方法名</td>
+          <td>lowerCamelCase小驼峰</td>
+          <td>openDevice、readData</td>
+      </tr>
+      <tr>
+          <td>结构体/枚举/typedef名</td>
+          <td>UpperCamelCase大驼峰</td>
+          <td>NfcConfig、NfcStatus</td>
+      </tr>
+      <tr>
+          <td>枚举值</td>
+          <td>全大写，下划线分隔</td>
+          <td>STATUS_OK、ERROR_TIMEOUT</td>
+      </tr>
+      <tr>
+          <td>字段/参数名</td>
+          <td>lowerCamelCase小驼峰</td>
+          <td>dataBuffer、maxLength</td>
+      </tr>
+      <tr>
+          <td>文件名</td>
+          <td>与接口名一致，UpperCamelCase，.hal后缀</td>
+          <td>INfc.hal、types.hal</td>
+      </tr>
+  </tbody>
+</table>
+<ul>
+<li>格式规范：使用4个空格缩进，单行代码最大长度100列；左大括号与声明位于同一行，右大括号单独占一行；文档注释多行内容每行以<code>*</code>开头，对齐排列。</li>
+</ul>
+<h2 id="十高级特性">十、高级特性</h2>
+<h3 id="1-直通模式passthrough">1. 直通模式（Passthrough）</h3>
+<p>仅支持C++，用于将旧版HAL快速适配到HIDL框架，无需跨进程Binder通信。编译时生成<code>BsFoo.h</code>头文件，实现<code>dlopen</code>加载的入口函数<code>HIDL_FETCH_IFoo</code>；客户端通过<code>getService(name, true)</code>获取直通模式服务，同进程内直接函数调用。</p>
+<h3 id="2-快速消息队列fmq">2. 快速消息队列FMQ</h3>
+<p>基于共享内存实现的无Binder IPC开销的通信机制，分为<code>fmq_sync&lt;T&gt;</code>（同步模式，多写单读）和<code>fmq_unsync&lt;T&gt;</code>（无锁模式，单写单读，性能最高），用于高频率低延迟的跨进程数据传输（如传感器、音视频数据流）。</p>
+<h3 id="3-共享内存memory">3. 共享内存memory</h3>
+<p>基于Ashmem匿名共享内存，用于传输大体积数据，突破Binder IPC的4MB大小限制。通过<code>hidl_memory</code>句柄在进程间传递，对方映射到进程地址空间，实现零拷贝数据共享。</p>
+<h3 id="4-嵌套类型访问">4. 嵌套类型访问</h3>
+<p>嵌套定义的类型通过<code>.</code>访问，例如接口内的结构体<code>IFoo.InnerStruct</code>，全限定名示例：<code>android.hardware.foo@1.0::IFoo.InnerStruct</code>。</p>
+<h3 id="5-权限控制">5. 权限控制</h3>
+<p>每个HIDL方法对应一个Binder事务，支持SELinux权限控制，可通过SELinux策略限制进程的服务访问权限和方法调用权限。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-02-15</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/002_hidl%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/android/">Android</a>,&nbsp;<a href="/blog/tags/hidl/">HIDL</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/001_jni%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="JNI 语法详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>JNI 语法详细总结</a>
+            <a href="/blog/003_aidl%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="AIDL 语法详细总结">AIDL 语法详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

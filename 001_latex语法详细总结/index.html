@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>LaTeX 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_latex%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="LaTeX 语法详细总结">
+  <meta property="og:description" content="LaTeX 语法详细总结 LaTeX 是一款基于 TeX 的专业排版系统，核心优势是内容与格式分离，尤其擅长数学公式、学术论文、书籍、幻灯片的排版。以下是覆盖入门到进阶的完整语法总结，兼顾通用性与实用性，适配中文排版需求。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-02-21T09:00:20+08:00">
+    <meta property="article:modified_time" content="2026-02-21T10:00:20+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="LaTeX">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="LaTeX 语法详细总结">
+  <meta name="twitter:description" content="LaTeX 语法详细总结 LaTeX 是一款基于 TeX 的专业排版系统，核心优势是内容与格式分离，尤其擅长数学公式、学术论文、书籍、幻灯片的排版。以下是覆盖入门到进阶的完整语法总结，兼顾通用性与实用性，适配中文排版需求。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/001_latex%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/002_qt5%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/001_rust%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "LaTeX 语法详细总结",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/001_latex%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, LaTeX","wordcount":  8406 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/001_latex%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-02-21T09:00:20+08:00","dateModified": "2026-02-21T10:00:20+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/001_latex%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/001_latex%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">LaTeX 语法详细总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-02-21">2026-02-21</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 8406 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 17 分钟&nbsp;<span id="/blog/001_latex%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="leancloud_visitors" data-flag-title="LaTeX 语法详细总结">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一基础文档结构">一、基础文档结构</a>
+      <ul>
+        <li><a href="#1-最小可编译文档">1. 最小可编译文档</a></li>
+        <li><a href="#2-常用文档类">2. 常用文档类</a></li>
+        <li><a href="#3-文档层级结构">3. 文档层级结构</a></li>
+      </ul>
+    </li>
+    <li><a href="#二文本格式与基础排版">二、文本格式与基础排版</a>
+      <ul>
+        <li><a href="#1-换行分段与分页">1. 换行、分段与分页</a></li>
+        <li><a href="#2-特殊字符转义">2. 特殊字符转义</a></li>
+        <li><a href="#3-字体格式设置">3. 字体格式设置</a>
+          <ul>
+            <li><a href="#1核心字体样式">（1）核心字体样式</a></li>
+            <li><a href="#2字号大小相对文档默认字号默认10pt">（2）字号大小（相对文档默认字号，默认10pt）</a></li>
+            <li><a href="#3字体颜色">（3）字体颜色</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-段落对齐与缩进">4. 段落对齐与缩进</a>
+          <ul>
+            <li><a href="#1对齐环境">（1）对齐环境</a></li>
+            <li><a href="#2段落格式全局设置">（2）段落格式全局设置</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#三列表环境">三、列表环境</a>
+      <ul>
+        <li><a href="#1-无序列表itemize">1. 无序列表（itemize）</a></li>
+        <li><a href="#2-有序列表enumerate">2. 有序列表（enumerate）</a></li>
+        <li><a href="#3-描述列表description">3. 描述列表（description）</a></li>
+        <li><a href="#4-高级自定义enumitem宏包">4. 高级自定义（enumitem宏包）</a></li>
+      </ul>
+    </li>
+    <li><a href="#四数学公式核心功能">四、数学公式（核心功能）</a>
+      <ul>
+        <li><a href="#1-公式环境分类">1. 公式环境分类</a>
+          <ul>
+            <li><a href="#1行内公式嵌入文本中">（1）行内公式（嵌入文本中）</a></li>
+            <li><a href="#2行间公式单独成行">（2）行间公式（单独成行）</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-常用数学符号与结构">2. 常用数学符号与结构</a>
+          <ul>
+            <li><a href="#1上下标">（1）上下标</a></li>
+            <li><a href="#2分式与根式">（2）分式与根式</a></li>
+            <li><a href="#3大型运算符">（3）大型运算符</a></li>
+            <li><a href="#4希腊字母">（4）希腊字母</a></li>
+            <li><a href="#5括号与定界符">（5）括号与定界符</a></li>
+            <li><a href="#6数学字体">（6）数学字体</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-多行公式环境amsmath">3. 多行公式环境（amsmath）</a>
+          <ul>
+            <li><a href="#1对齐公式alignalign">（1）对齐公式（align/align*）</a></li>
+            <li><a href="#2无对齐多行公式gathergather">（2）无对齐多行公式（gather/gather*）</a></li>
+            <li><a href="#3分段函数cases">（3）分段函数（cases）</a></li>
+            <li><a href="#4长公式换行multlinemultline">（4）长公式换行（multline/multline*）</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-矩阵环境amsmath">4. 矩阵环境（amsmath）</a></li>
+      </ul>
+    </li>
+    <li><a href="#五表格排版">五、表格排版</a>
+      <ul>
+        <li><a href="#1-基础表格tabular环境">1. 基础表格（tabular环境）</a></li>
+        <li><a href="#2-学术规范三线表booktabs宏包">2. 学术规范三线表（booktabs宏包）</a></li>
+        <li><a href="#3-单元格合并">3. 单元格合并</a></li>
+        <li><a href="#4-表格浮动体与跨页表格">4. 表格浮动体与跨页表格</a></li>
+      </ul>
+    </li>
+    <li><a href="#六图片插入">六、图片插入</a>
+      <ul>
+        <li><a href="#1-基础插图命令">1. 基础插图命令</a></li>
+        <li><a href="#2-图片浮动体">2. 图片浮动体</a></li>
+        <li><a href="#3-子图与多图并排">3. 子图与多图并排</a>
+          <ul>
+            <li><a href="#1子图排版带独立子标题">（1）子图排版（带独立子标题）</a></li>
+            <li><a href="#2简单并排图片无独立子标题">（2）简单并排图片（无独立子标题）</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#七交叉引用与超链接">七、交叉引用与超链接</a>
+      <ul>
+        <li><a href="#1-基础交叉引用">1. 基础交叉引用</a></li>
+        <li><a href="#2-智能引用cleveref宏包">2. 智能引用（cleveref宏包）</a></li>
+        <li><a href="#3-超链接hyperref宏包">3. 超链接（hyperref宏包）</a></li>
+      </ul>
+    </li>
+    <li><a href="#八参考文献排版">八、参考文献排版</a>
+      <ul>
+        <li><a href="#1-手动排版thebibliography环境">1. 手动排版（thebibliography环境）</a></li>
+        <li><a href="#2-bibtex方式学术投稿通用">2. BibTeX方式（学术投稿通用）</a></li>
+        <li><a href="#3-biblatexbiber方式现代推荐">3. BibLaTeX+Biber方式（现代推荐）</a></li>
+      </ul>
+    </li>
+    <li><a href="#九中文排版支持">九、中文排版支持</a>
+      <ul>
+        <li><a href="#1-最简中文文档">1. 最简中文文档</a></li>
+        <li><a href="#2-常用中文设置">2. 常用中文设置</a></li>
+      </ul>
+    </li>
+    <li><a href="#十高级常用功能">十、高级常用功能</a>
+      <ul>
+        <li><a href="#1-定理环境amsthm宏包">1. 定理环境（amsthm宏包）</a>
+          <ul>
+            <li><a href="#1定义定理环境">（1）定义定理环境</a></li>
+            <li><a href="#2使用示例">（2）使用示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-页面布局设置geometry宏包">2. 页面布局设置（geometry宏包）</a></li>
+        <li><a href="#3-页眉页脚自定义fancyhdr宏包">3. 页眉页脚自定义（fancyhdr宏包）</a></li>
+        <li><a href="#4-代码高亮排版">4. 代码高亮排版</a>
+          <ul>
+            <li><a href="#1listings宏包无额外依赖兼容性好">（1）listings宏包（无额外依赖，兼容性好）</a></li>
+            <li><a href="#2minted宏包高亮效果更优">（2）minted宏包（高亮效果更优）</a></li>
+          </ul>
+        </li>
+        <li><a href="#5-分栏排版multicol宏包">5. 分栏排版（multicol宏包）</a></li>
+      </ul>
+    </li>
+    <li><a href="#十一编译方式与常见问题">十一、编译方式与常见问题</a>
+      <ul>
+        <li><a href="#1-主流编译方式选择">1. 主流编译方式选择</a></li>
+        <li><a href="#2-常见问题解决">2. 常见问题解决</a></li>
+      </ul>
+    </li>
+    <li><a href="#十二常用宏包速查表">十二、常用宏包速查表</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="latex-语法详细总结">LaTeX 语法详细总结</h1>
+<p>LaTeX 是一款基于 TeX 的专业排版系统，核心优势是<strong>内容与格式分离</strong>，尤其擅长数学公式、学术论文、书籍、幻灯片的排版。以下是覆盖入门到进阶的完整语法总结，兼顾通用性与实用性，适配中文排版需求。</p>
+<hr>
+<h2 id="一基础文档结构">一、基础文档结构</h2>
+<h3 id="1-最小可编译文档">1. 最小可编译文档</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="c">% 文档类声明，必选，放在第一行
+</span></span></span><span class="line"><span class="cl"><span class="k">\documentclass</span><span class="nb">{</span>article<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="c">% 导言区：加载宏包、全局设置，正文前执行
+</span></span></span><span class="line"><span class="cl"><span class="k">\usepackage</span><span class="nb">{</span>ctex<span class="nb">}</span> <span class="c">% 中文支持必备，适配XeLaTeX/LuaLaTeX编译
+</span></span></span><span class="line"><span class="cl"><span class="c">% 正文区，所有可见内容必须放在这里
+</span></span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>document<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">Hello World! 你好，LaTeX！
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>document<span class="nb">}</span></span></span></code></pre></div></div>
+<h3 id="2-常用文档类">2. 常用文档类</h3>
+<table>
+  <thead>
+      <tr>
+          <th>文档类</th>
+          <th>适用场景</th>
+          <th>核心特点</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>article</td>
+          <td>短文、论文、作业、技术报告</td>
+          <td>轻量化结构，无<code>\chapter</code>命令</td>
+      </tr>
+      <tr>
+          <td>report</td>
+          <td>中长篇报告、毕业论文</td>
+          <td>支持<code>\chapter</code>章节，适配正式报告结构</td>
+      </tr>
+      <tr>
+          <td>book</td>
+          <td>书籍、专著</td>
+          <td>完整章节体系，支持扉页、前言、附录、奇偶页差异化排版</td>
+      </tr>
+      <tr>
+          <td>ctexart/ctexrep/ctexbook</td>
+          <td>中文文档</td>
+          <td>内置ctex宏包，完美适配中文，无需额外配置中文环境</td>
+      </tr>
+      <tr>
+          <td>beamer</td>
+          <td>幻灯片/演示文稿</td>
+          <td>内置主题模板，支持动画、分帧、演示交互</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-文档层级结构">3. 文档层级结构</h3>
+<p>按优先级从高到低排列，不同文档类支持的层级不同：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\part</span><span class="nb">{</span>部分名<span class="nb">}</span>       <span class="c">% 最高层级，全文档类通用
+</span></span></span><span class="line"><span class="cl"><span class="k">\chapter</span><span class="nb">{</span>章名<span class="nb">}</span>      <span class="c">% 仅book/report/ctexbook/ctexrep支持
+</span></span></span><span class="line"><span class="cl"><span class="k">\section</span><span class="nb">{</span>节名<span class="nb">}</span>      <span class="c">% 核心层级，全文档类通用
+</span></span></span><span class="line"><span class="cl"><span class="k">\subsection</span><span class="nb">{</span>小节名<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\subsubsection</span><span class="nb">{</span>子小节名<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\paragraph</span><span class="nb">{</span>段落名<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\subparagraph</span><span class="nb">{</span>子段落名<span class="nb">}</span></span></span></code></pre></div></div>
+<ul>
+<li>目录生成：正文开头添加<code>\tableofcontents</code>，编译2次即可自动生成目录；</li>
+<li>取消编号：命令后加<code>*</code>，如<code>\section*{无编号节}</code>，内容不会进入目录。</li>
+</ul>
+<hr>
+<h2 id="二文本格式与基础排版">二、文本格式与基础排版</h2>
+<h3 id="1-换行分段与分页">1. 换行、分段与分页</h3>
+<table>
+  <thead>
+      <tr>
+          <th>命令/写法</th>
+          <th>作用</th>
+          <th>注意事项</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>空行</td>
+          <td>分段</td>
+          <td>生成新段落，默认触发首行缩进，段间距生效</td>
+      </tr>
+      <tr>
+          <td><code>\par</code></td>
+          <td>分段</td>
+          <td>等价于空行，多用于宏包/环境内的分段控制</td>
+      </tr>
+      <tr>
+          <td><code>\\</code></td>
+          <td>强制换行</td>
+          <td>仅换行不生成新段落，无首行缩进，禁止用于段落间换行</td>
+      </tr>
+      <tr>
+          <td><code>\\*</code></td>
+          <td>强制换行且不分页</td>
+          <td>禁止在此处触发分页</td>
+      </tr>
+      <tr>
+          <td><code>\newpage</code></td>
+          <td>强制分页</td>
+          <td>立即换页，剩余内容渲染到下一页</td>
+      </tr>
+      <tr>
+          <td><code>\clearpage</code></td>
+          <td>强制分页</td>
+          <td>同<code>\newpage</code>，同时输出所有未渲染的浮动体（图片/表格）</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-特殊字符转义">2. 特殊字符转义</h3>
+<p>LaTeX中以下字符为系统保留字符，必须转义才能正常输出：</p>
+<table>
+  <thead>
+      <tr>
+          <th>原字符</th>
+          <th>转义写法</th>
+          <th>输出效果</th>
+          <th>备注</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>#</td>
+          <td><code>\#</code></td>
+          <td>#</td>
+          <td>宏包参数标记</td>
+      </tr>
+      <tr>
+          <td>$</td>
+          <td><code>\$</code></td>
+          <td>$</td>
+          <td>数学公式起止标记</td>
+      </tr>
+      <tr>
+          <td>%</td>
+          <td><code>\%</code></td>
+          <td>%</td>
+          <td>注释标记，行内%后内容全部被忽略</td>
+      </tr>
+      <tr>
+          <td>&amp;</td>
+          <td><code>\&amp;</code></td>
+          <td>&amp;</td>
+          <td>表格/对齐环境列分隔符</td>
+      </tr>
+      <tr>
+          <td>_</td>
+          <td><code>\_</code></td>
+          <td>_</td>
+          <td>数学下标标记</td>
+      </tr>
+      <tr>
+          <td>^</td>
+          <td><code>\^{}</code></td>
+          <td>^</td>
+          <td>数学上标标记</td>
+      </tr>
+      <tr>
+          <td>{ }</td>
+          <td><code>\{ \}</code></td>
+          <td>{ }</td>
+          <td>分组/作用域标记</td>
+      </tr>
+      <tr>
+          <td>~</td>
+          <td><code>\textasciitilde</code></td>
+          <td>~</td>
+          <td>不可换行空格</td>
+      </tr>
+      <tr>
+          <td>\</td>
+          <td><code>\textbackslash</code></td>
+          <td>\</td>
+          <td>命令起始标记</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-字体格式设置">3. 字体格式设置</h3>
+<h4 id="1核心字体样式">（1）核心字体样式</h4>
+<table>
+  <thead>
+      <tr>
+          <th>命令</th>
+          <th>效果</th>
+          <th>适用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>\textbf{内容}</code></td>
+          <td>加粗</td>
+          <td>重点内容强调</td>
+      </tr>
+      <tr>
+          <td><code>\textit{内容}</code></td>
+          <td>斜体</td>
+          <td>术语、书名、变量标注</td>
+      </tr>
+      <tr>
+          <td><code>\underline{内容}</code></td>
+          <td>下划线</td>
+          <td>核心内容标注</td>
+      </tr>
+      <tr>
+          <td><code>\sout{内容}</code></td>
+          <td>删除线</td>
+          <td>需加载<code>ulem</code>宏包</td>
+      </tr>
+      <tr>
+          <td><code>\texttt{内容}</code></td>
+          <td>等宽打字机字体</td>
+          <td>代码、命令、终端输出</td>
+      </tr>
+      <tr>
+          <td><code>\textsf{内容}</code></td>
+          <td>无衬线字体</td>
+          <td>标题、标注、海报</td>
+      </tr>
+      <tr>
+          <td><code>\textnormal{内容}</code></td>
+          <td>恢复默认正文字体</td>
+          <td>嵌套格式中重置样式</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="2字号大小相对文档默认字号默认10pt">（2）字号大小（相对文档默认字号，默认10pt）</h4>
+<p>按从小到大排序，用花括号限制作用范围：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\tiny</span>  <span class="k">\scriptsize</span>  <span class="k">\footnotesize</span>  <span class="k">\small</span>  <span class="k">\normalsize</span>  <span class="k">\large</span>  <span class="k">\Large</span>  <span class="k">\LARGE</span>  <span class="k">\huge</span>  <span class="k">\Huge</span></span></span></code></pre></div></div>
+<p>用法示例：<code>{\large 大号文本}</code> 或 <code>\large 作用域内全部文本</code>。</p>
+<h4 id="3字体颜色">（3）字体颜色</h4>
+<p>需加载<code>xcolor</code>宏包，基础用法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\usepackage</span><span class="nb">{</span>xcolor<span class="nb">}</span> <span class="c">% 导言区加载
+</span></span></span><span class="line"><span class="cl"><span class="k">\textcolor</span><span class="nb">{</span>red<span class="nb">}{</span>红色文本<span class="nb">}</span> <span class="c">% 单行文本上色
+</span></span></span><span class="line"><span class="cl"><span class="k">\color</span><span class="nb">{</span>blue<span class="nb">}</span> 整个段落/环境内文本变为蓝色</span></span></code></pre></div></div>
+<p>支持预定义颜色：black、white、red、green、blue、yellow、gray、cyan、magenta等，也支持自定义RGB颜色。</p>
+<h3 id="4-段落对齐与缩进">4. 段落对齐与缩进</h3>
+<h4 id="1对齐环境">（1）对齐环境</h4>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="c">% 左对齐
+</span></span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>flushleft<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">左对齐文本，默认段落为左对齐，多用于局部重置
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>flushleft<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c">% 居中对齐
+</span></span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>center<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">居中对齐文本<span class="k">\\</span>
+</span></span><span class="line"><span class="cl">第二行居中
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>center<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c">% 右对齐
+</span></span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>flushright<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">右对齐文本
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>flushright<span class="nb">}</span></span></span></code></pre></div></div>
+<ul>
+<li>简化命令：<code>\centering</code>（居中）、<code>\raggedright</code>（左对齐）、<code>\raggedleft</code>（右对齐），作用于当前分组/环境，无额外垂直间距，多用于浮动体内部。</li>
+</ul>
+<h4 id="2段落格式全局设置">（2）段落格式全局设置</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\parindent</span>=2em <span class="c">% 首行缩进2个字符，设为0pt可取消首行缩进
+</span></span></span><span class="line"><span class="cl"><span class="k">\parskip</span>=1ex <span class="c">% 段间距，设置段落之间的垂直间距
+</span></span></span><span class="line"><span class="cl"><span class="k">\linespread</span><span class="nb">{</span>1.5<span class="nb">}</span> <span class="err">%</span> 全局行间距1.5倍，导言区设置生效</span></span></code></pre></div></div>
+<hr>
+<h2 id="三列表环境">三、列表环境</h2>
+<p>LaTeX提供3种核心列表环境，支持无限嵌套，默认4层以内样式自动区分。</p>
+<h3 id="1-无序列表itemize">1. 无序列表（itemize）</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>itemize<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\item</span> 一级列表项1
+</span></span><span class="line"><span class="cl">    <span class="k">\item</span> 一级列表项2
+</span></span><span class="line"><span class="cl">    <span class="k">\begin</span><span class="nb">{</span>itemize<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">\item</span> 二级列表项1
+</span></span><span class="line"><span class="cl">        <span class="k">\item</span> 二级列表项2
+</span></span><span class="line"><span class="cl">    <span class="k">\end</span><span class="nb">{</span>itemize<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\item</span> 一级列表项3
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>itemize<span class="nb">}</span></span></span></code></pre></div></div>
+<ul>
+<li>自定义符号：<code>\item[★] 自定义符号的列表项</code></li>
+</ul>
+<h3 id="2-有序列表enumerate">2. 有序列表（enumerate）</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>enumerate<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\item</span> 一级有序项1
+</span></span><span class="line"><span class="cl">    <span class="k">\item</span> 一级有序项2
+</span></span><span class="line"><span class="cl">    <span class="k">\begin</span><span class="nb">{</span>enumerate<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">\item</span> 二级有序项1
+</span></span><span class="line"><span class="cl">        <span class="k">\item</span> 二级有序项2
+</span></span><span class="line"><span class="cl">    <span class="k">\end</span><span class="nb">{</span>enumerate<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\item</span> 一级有序项3
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>enumerate<span class="nb">}</span></span></span></code></pre></div></div>
+<ul>
+<li>自定义编号：<code>\item[(1)] 自定义编号项</code>，推荐用<code>enumitem</code>宏包实现全局样式修改。</li>
+</ul>
+<h3 id="3-描述列表description">3. 描述列表（description）</h3>
+<p>用于术语解释、定义说明，自带加粗标签：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>description<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\item</span><span class="na">[LaTeX]</span> 专业排版系统，核心优势为学术文档与数学公式排版
+</span></span><span class="line"><span class="cl">    <span class="k">\item</span><span class="na">[TeX]</span> LaTeX的底层排版引擎，由高德纳开发
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>description<span class="nb">}</span></span></span></code></pre></div></div>
+<h3 id="4-高级自定义enumitem宏包">4. 高级自定义（enumitem宏包）</h3>
+<p>导言区加载<code>\usepackage{enumitem}</code>，可全局/局部设置列表的缩进、标签、间距、编号样式：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="c">% 有序列表全局设置为(1)(2)样式，缩进2em
+</span></span></span><span class="line"><span class="cl"><span class="k">\setlist</span><span class="na">[enumerate]</span><span class="nb">{</span>label=(<span class="k">\arabic*</span>), leftmargin=2em<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="c">% 无序列表全局设置为●符号
+</span></span></span><span class="line"><span class="cl"><span class="k">\setlist</span><span class="na">[itemize]</span><span class="nb">{</span>label=<span class="s">$</span><span class="nv">\bullet</span><span class="s">$</span><span class="nb">}</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="四数学公式核心功能">四、数学公式（核心功能）</h2>
+<p>LaTeX的核心优势是数学公式排版，<strong>必须加载<code>amsmath</code>宏包</strong>（标准数学宏包），进阶符号需加载<code>amssymb</code>宏包。</p>
+<h3 id="1-公式环境分类">1. 公式环境分类</h3>
+<h4 id="1行内公式嵌入文本中">（1）行内公式（嵌入文本中）</h4>
+<p>最常用写法：<code>$ 公式内容 $</code>，等价于<code>\( 公式内容 \)</code>，示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl">勾股定理可表示为 <span class="s">$</span><span class="nb">a^</span><span class="m">2</span><span class="nb"> </span><span class="o">+</span><span class="nb"> b^</span><span class="m">2</span><span class="nb"> </span><span class="o">=</span><span class="nb"> c^</span><span class="m">2</span><span class="s">$</span>，其中<span class="s">$</span><span class="nb">a,b</span><span class="s">$</span>为直角边，<span class="s">$</span><span class="nb">c</span><span class="s">$</span>为斜边。</span></span></code></pre></div></div>
+<h4 id="2行间公式单独成行">（2）行间公式（单独成行）</h4>
+<ul>
+<li>无编号公式（推荐）：<code>\[ 公式内容 \]</code>，<strong>禁止用<code>$$ 公式 $$</code></strong>（存在间距兼容问题）</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl">勾股定理的标准形式为：
+</span></span><span class="line"><span class="cl"><span class="sb">\[</span><span class="nb"> a^</span><span class="m">2</span><span class="nb"> </span><span class="o">+</span><span class="nb"> b^</span><span class="m">2</span><span class="nb"> </span><span class="o">=</span><span class="nb"> c^</span><span class="m">2</span><span class="nb"> </span><span class="s">\]</span></span></span></code></pre></div></div>
+<ul>
+<li>有编号公式（可交叉引用）：<code>equation</code>环境，自动编号</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>equation<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>eq:pythagorean<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">a<span class="nb">^</span>2 + b<span class="nb">^</span>2 = c<span class="nb">^</span>2
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>equation<span class="nb">}</span></span></span></code></pre></div></div>
+<p>引用方式：<code>式\ref{eq:pythagorean}为勾股定理</code>，编译2次可正常显示编号。</p>
+<ul>
+<li>无编号equation环境：<code>equation*</code>，需amsmath宏包支持。</li>
+</ul>
+<h3 id="2-常用数学符号与结构">2. 常用数学符号与结构</h3>
+<h4 id="1上下标">（1）上下标</h4>
+<ul>
+<li>上标：<code>^</code>，下标：<code>_</code>，多个字符需用<code>{}</code>包裹</li>
+<li>示例：<code>$x_{i}^2$</code> → $x_i^2$；<code>$a_{n-1}^{k+2}$</code> → $a_{n-1}^{k+2}$</li>
+</ul>
+<h4 id="2分式与根式">（2）分式与根式</h4>
+<ul>
+<li>分式：<code>\frac{分子}{分母}</code>，行内分式可用<code>\dfrac{分子}{分母}</code>强制显示为行间大小</li>
+<li>根式：<code>\sqrt[开方次数]{被开方数}</code>，默认平方根，无需写次数</li>
+<li>示例：<code>$\sqrt{2} + \sqrt[3]{x+y} = \frac{1}{2}$</code> → $\sqrt{2} + \sqrt[3]{x+y} = \frac{1}{2}$</li>
+</ul>
+<h4 id="3大型运算符">（3）大型运算符</h4>
+<p>求和、积分、极限等，行间公式自动显示上下限，行内公式默认压缩到上下标位置，可用<code>\limits</code>强制显示上下限。</p>
+<table>
+  <thead>
+      <tr>
+          <th>运算符</th>
+          <th>命令</th>
+          <th>示例</th>
+          <th>输出效果</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>求和</td>
+          <td><code>\sum</code></td>
+          <td><code>$\sum_{i=1}^n i$</code></td>
+          <td>$\sum_{i=1}^n i$</td>
+      </tr>
+      <tr>
+          <td>积分</td>
+          <td><code>\int</code></td>
+          <td><code>$\int_{a}^{b} f(x)dx$</code></td>
+          <td>$\int_a^b f(x)dx$</td>
+      </tr>
+      <tr>
+          <td>乘积</td>
+          <td><code>\prod</code></td>
+          <td><code>$\prod_{k=1}^n k$</code></td>
+          <td>$\prod_{k=1}^n k$</td>
+      </tr>
+      <tr>
+          <td>极限</td>
+          <td><code>\lim</code></td>
+          <td><code>$\lim_{x \to 0} \frac{\sin x}{x}=1$</code></td>
+          <td>$\lim_{x \to 0} \frac{\sin x}{x}=1$</td>
+      </tr>
+      <tr>
+          <td>最大值</td>
+          <td><code>\max</code></td>
+          <td><code>$\max_{x \in [0,1]} f(x)$</code></td>
+          <td>$\max_{x \in [0,1]} f(x)$</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="4希腊字母">（4）希腊字母</h4>
+<p>小写字母命令为小写开头，大写字母命令为大写开头（仅部分大写希腊字母有单独命令），常用示例：</p>
+<table>
+  <thead>
+      <tr>
+          <th>小写</th>
+          <th>命令</th>
+          <th>大写</th>
+          <th>命令</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>α</td>
+          <td><code>\alpha</code></td>
+          <td>Γ</td>
+          <td><code>\Gamma</code></td>
+      </tr>
+      <tr>
+          <td>β</td>
+          <td><code>\beta</code></td>
+          <td>Δ</td>
+          <td><code>\Delta</code></td>
+      </tr>
+      <tr>
+          <td>γ</td>
+          <td><code>\gamma</code></td>
+          <td>Θ</td>
+          <td><code>\Theta</code></td>
+      </tr>
+      <tr>
+          <td>δ</td>
+          <td><code>\delta</code></td>
+          <td>Λ</td>
+          <td><code>\Lambda</code></td>
+      </tr>
+      <tr>
+          <td>ε</td>
+          <td><code>\epsilon</code></td>
+          <td>Σ</td>
+          <td><code>\Sigma</code></td>
+      </tr>
+      <tr>
+          <td>θ</td>
+          <td><code>\theta</code></td>
+          <td>Ω</td>
+          <td><code>\Omega</code></td>
+      </tr>
+      <tr>
+          <td>λ</td>
+          <td><code>\lambda</code></td>
+          <td>Π</td>
+          <td><code>\Pi</code></td>
+      </tr>
+      <tr>
+          <td>μ</td>
+          <td><code>\mu</code></td>
+          <td>Φ</td>
+          <td><code>\Phi</code></td>
+      </tr>
+      <tr>
+          <td>π</td>
+          <td><code>\pi</code></td>
+          <td>Ψ</td>
+          <td><code>\Psi</code></td>
+      </tr>
+      <tr>
+          <td>σ</td>
+          <td><code>\sigma</code></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>φ</td>
+          <td><code>\phi</code></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>ω</td>
+          <td><code>\omega</code></td>
+          <td></td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="5括号与定界符">（5）括号与定界符</h4>
+<ul>
+<li>基础括号：<code>()</code>、<code>[]</code>、<code>\{ \}</code>、<code>| |</code>、<code>\| \|</code></li>
+<li>自动适配大小：<code>\left</code> + 左括号 + 内容 + <code>\right</code> + 右括号，自动匹配内容高度，必须成对出现，无对应括号用<code>.</code>代替（如<code>\right.</code>）</li>
+<li>示例：</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="sb">\[</span><span class="nb"> </span><span class="nv">\left</span><span class="o">(</span><span class="nb"> </span><span class="nv">\frac</span><span class="nb">{</span><span class="m">1</span><span class="nb">}{</span><span class="m">1</span><span class="o">+</span><span class="nb">x^</span><span class="m">2</span><span class="nb">} </span><span class="nv">\right</span><span class="o">)</span><span class="nb">^</span><span class="m">2</span><span class="nb"> </span><span class="s">\]</span>
+</span></span><span class="line"><span class="cl"><span class="sb">\[</span><span class="nb"> </span><span class="nv">\left</span><span class="nb">| </span><span class="nv">\int</span><span class="nb">_{</span><span class="m">0</span><span class="nb">}^{</span><span class="m">1</span><span class="nb">} f</span><span class="o">(</span><span class="nb">x</span><span class="o">)</span><span class="nb"> dx </span><span class="nv">\right</span><span class="nb">| </span><span class="s">\]</span></span></span></code></pre></div></div>
+<ul>
+<li>手动指定大小：<code>\big</code>、<code>\Big</code>、<code>\bigg</code>、<code>\Bigg</code>，从小到大，示例：<code>\bigg( \Big( \big( () \big) \Big) \bigg)</code></li>
+</ul>
+<h4 id="6数学字体">（6）数学字体</h4>
+<p>需加载<code>amssymb</code>宏包支持部分字体，常用：</p>
+<table>
+  <thead>
+      <tr>
+          <th>字体命令</th>
+          <th>效果</th>
+          <th>适用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>\mathbf{}</code></td>
+          <td>数学黑体</td>
+          <td>向量、矩阵</td>
+      </tr>
+      <tr>
+          <td><code>\mathbb{}</code></td>
+          <td>黑板粗体</td>
+          <td>数集：$\mathbb{R}$(实数)、$\mathbb{Z}$(整数)、$\mathbb{N}$(自然数)</td>
+      </tr>
+      <tr>
+          <td><code>\mathcal{}</code></td>
+          <td>花体</td>
+          <td>集合、算子</td>
+      </tr>
+      <tr>
+          <td><code>\mathit{}</code></td>
+          <td>数学斜体</td>
+          <td>多字符变量名</td>
+      </tr>
+      <tr>
+          <td><code>\mathrm{}</code></td>
+          <td>数学正体</td>
+          <td>算子、单位：$\mathrm{sin}x$、$\mathrm{m}$</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3-多行公式环境amsmath">3. 多行公式环境（amsmath）</h3>
+<h4 id="1对齐公式alignalign">（1）对齐公式（align/align*）</h4>
+<p>最常用的多行公式环境，用<code>&amp;</code>指定对齐点，<code>\\</code>换行，align自动编号，align*无编号：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>align*<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">f(x) <span class="nb">&amp;</span>= (x+1)(x-1) <span class="k">\\</span>
+</span></span><span class="line"><span class="cl">     <span class="nb">&amp;</span>= x<span class="nb">^</span>2 - 1
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>align*<span class="nb">}</span></span></span></code></pre></div></div>
+<p>多列对齐：用<code>&amp;</code>分隔列，示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>align<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">x + y <span class="nb">&amp;</span>= 3  <span class="nb">&amp;</span>  x - y <span class="nb">&amp;</span>= 1 <span class="k">\\</span>
+</span></span><span class="line"><span class="cl">2x + y <span class="nb">&amp;</span>= 5 <span class="nb">&amp;</span>  2x - y <span class="nb">&amp;</span>= 3
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>align<span class="nb">}</span></span></span></code></pre></div></div>
+<h4 id="2无对齐多行公式gathergather">（2）无对齐多行公式（gather/gather*）</h4>
+<p>每行居中，无需对齐点，适合无关联的多行公式：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>gather*<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">a<span class="nb">^</span>2 + b<span class="nb">^</span>2 = c<span class="nb">^</span>2 <span class="k">\\</span>
+</span></span><span class="line"><span class="cl"><span class="k">\sin</span><span class="nb">^</span>2 x + <span class="k">\cos</span><span class="nb">^</span>2 x = 1
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>gather*<span class="nb">}</span></span></span></code></pre></div></div>
+<h4 id="3分段函数cases">（3）分段函数（cases）</h4>
+<p>用于分段函数、条件表达式，自动生成大括号：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="sb">\[</span><span class="nb">
+</span></span></span><span class="line"><span class="cl"><span class="nb">f</span><span class="o">(</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb">
+</span></span></span><span class="line"><span class="cl"><span class="nv">\begin</span><span class="nb">{cases}
+</span></span></span><span class="line"><span class="cl"><span class="nb">x, &amp; x </span><span class="nv">\geq</span><span class="nb"> </span><span class="m">0</span><span class="nb"> </span><span class="nv">\\</span><span class="nb">
+</span></span></span><span class="line"><span class="cl"><span class="o">-</span><span class="nb">x, &amp; x &lt; </span><span class="m">0</span><span class="nb">
+</span></span></span><span class="line"><span class="cl"><span class="nv">\end</span><span class="nb">{cases}
+</span></span></span><span class="line"><span class="cl"><span class="s">\]</span></span></span></code></pre></div></div>
+<h4 id="4长公式换行multlinemultline">（4）长公式换行（multline/multline*）</h4>
+<p>首行左对齐，末行右对齐，中间行居中，适合超长公式：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>multline*<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">(a+b+c+d+e+f+g+h+i+j+k+l+m) <span class="k">\\</span>
+</span></span><span class="line"><span class="cl"><span class="k">\times</span> (n+o+p+q+r+s+t+u+v+w+x+y+z) <span class="k">\\</span>
+</span></span><span class="line"><span class="cl">= <span class="k">\text</span><span class="nb">{</span>超长公式的换行示例<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>multline*<span class="nb">}</span></span></span></code></pre></div></div>
+<h3 id="4-矩阵环境amsmath">4. 矩阵环境（amsmath）</h3>
+<p>所有矩阵环境都必须放在数学公式内，用<code>&amp;</code>分隔列，<code>\\</code>换行，核心环境：</p>
+<table>
+  <thead>
+      <tr>
+          <th>环境名</th>
+          <th>括号类型</th>
+          <th>适用场景</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>matrix</td>
+          <td>无括号</td>
+          <td>基础矩阵</td>
+      </tr>
+      <tr>
+          <td>pmatrix</td>
+          <td>圆括号()</td>
+          <td>最常用，矩阵标准写法</td>
+      </tr>
+      <tr>
+          <td>bmatrix</td>
+          <td>方括号[]</td>
+          <td>通用矩阵写法</td>
+      </tr>
+      <tr>
+          <td>Bmatrix</td>
+          <td>大括号{}</td>
+          <td>集合类矩阵</td>
+      </tr>
+      <tr>
+          <td>vmatrix</td>
+          <td>单竖线</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>Vmatrix</td>
+          <td>双竖线</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<p>示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="sb">\[</span><span class="nb">
+</span></span></span><span class="line"><span class="cl"><span class="nb">A </span><span class="o">=</span><span class="nb"> </span><span class="nv">\begin</span><span class="nb">{pmatrix}
+</span></span></span><span class="line"><span class="cl"><span class="m">1</span><span class="nb"> &amp; </span><span class="m">2</span><span class="nb"> &amp; </span><span class="m">3</span><span class="nb"> </span><span class="nv">\\</span><span class="nb">
+</span></span></span><span class="line"><span class="cl"><span class="m">4</span><span class="nb"> &amp; </span><span class="m">5</span><span class="nb"> &amp; </span><span class="m">6</span><span class="nb"> </span><span class="nv">\\</span><span class="nb">
+</span></span></span><span class="line"><span class="cl"><span class="m">7</span><span class="nb"> &amp; </span><span class="m">8</span><span class="nb"> &amp; </span><span class="m">9</span><span class="nb">
+</span></span></span><span class="line"><span class="cl"><span class="nv">\end</span><span class="nb">{pmatrix}, </span><span class="nv">\quad</span><span class="nb">
+</span></span></span><span class="line"><span class="cl"><span class="nb">|B| </span><span class="o">=</span><span class="nb"> </span><span class="nv">\begin</span><span class="nb">{vmatrix}
+</span></span></span><span class="line"><span class="cl"><span class="nb">a &amp; b </span><span class="nv">\\</span><span class="nb">
+</span></span></span><span class="line"><span class="cl"><span class="nb">c &amp; d
+</span></span></span><span class="line"><span class="cl"><span class="nv">\end</span><span class="nb">{vmatrix} </span><span class="o">=</span><span class="nb"> ad </span><span class="o">-</span><span class="nb"> bc
+</span></span></span><span class="line"><span class="cl"><span class="s">\]</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="五表格排版">五、表格排版</h2>
+<h3 id="1-基础表格tabular环境">1. 基础表格（tabular环境）</h3>
+<p>核心语法：<code>\begin{tabular}{列格式} 内容 \end{tabular}</code></p>
+<ul>
+<li>列格式说明符：<code>l</code>(左对齐)、<code>c</code>(居中)、<code>r</code>(右对齐)、<code>|</code>(竖线)、<code>p{宽度}</code>(固定宽度列，自动换行)</li>
+<li>列分隔符：<code>&amp;</code>，行结束符：<code>\\</code></li>
+<li>横线：<code>\hline</code>(全宽横线)，<code>\cline{起始列-结束列}</code>(局部横线)</li>
+</ul>
+<p>基础示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>center<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>tabular<span class="nb">}{</span>|c|c|c|<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\hline</span>
+</span></span><span class="line"><span class="cl">姓名 <span class="nb">&amp;</span> 年龄 <span class="nb">&amp;</span> 性别 <span class="k">\\</span>
+</span></span><span class="line"><span class="cl"><span class="k">\hline</span>
+</span></span><span class="line"><span class="cl">张三 <span class="nb">&amp;</span> 20 <span class="nb">&amp;</span> 男 <span class="k">\\</span>
+</span></span><span class="line"><span class="cl"><span class="k">\hline</span>
+</span></span><span class="line"><span class="cl">李四 <span class="nb">&amp;</span> 21 <span class="nb">&amp;</span> 女 <span class="k">\\</span>
+</span></span><span class="line"><span class="cl"><span class="k">\hline</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>tabular<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>center<span class="nb">}</span></span></span></code></pre></div></div>
+<h3 id="2-学术规范三线表booktabs宏包">2. 学术规范三线表（booktabs宏包）</h3>
+<p>学术论文通用标准，无竖线，横线粗细区分，需加载<code>booktabs</code>宏包，核心命令：</p>
+<ul>
+<li><code>\toprule</code>：顶部粗线</li>
+<li><code>\midrule</code>：中间细线</li>
+<li><code>\bottomrule</code>：底部粗线</li>
+</ul>
+<p>示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>table<span class="nb">}</span>[htbp]
+</span></span><span class="line"><span class="cl">  <span class="k">\centering</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\caption</span><span class="nb">{</span>三线表示例<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\label</span><span class="nb">{</span>tab:demo<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\begin</span><span class="nb">{</span>tabular<span class="nb">}{</span>lccr<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\toprule</span>
+</span></span><span class="line"><span class="cl">    姓名 <span class="nb">&amp;</span> 语文 <span class="nb">&amp;</span> 数学 <span class="nb">&amp;</span> 总分 <span class="k">\\</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\midrule</span>
+</span></span><span class="line"><span class="cl">    张三 <span class="nb">&amp;</span> 90 <span class="nb">&amp;</span> 95 <span class="nb">&amp;</span> 185 <span class="k">\\</span>
+</span></span><span class="line"><span class="cl">    李四 <span class="nb">&amp;</span> 88 <span class="nb">&amp;</span> 98 <span class="nb">&amp;</span> 186 <span class="k">\\</span>
+</span></span><span class="line"><span class="cl">    王五 <span class="nb">&amp;</span> 92 <span class="nb">&amp;</span> 93 <span class="nb">&amp;</span> 185 <span class="k">\\</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\bottomrule</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\end</span><span class="nb">{</span>tabular<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>table<span class="nb">}</span></span></span></code></pre></div></div>
+<h3 id="3-单元格合并">3. 单元格合并</h3>
+<ul>
+<li>列合并：<code>\multicolumn{合并列数}{列格式}{内容}</code>，全表格通用</li>
+<li>行合并：<code>\multirow{合并行数}{宽度}{内容}</code>，需加载<code>multirow</code>宏包</li>
+</ul>
+<p>合并示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>tabular<span class="nb">}{</span>|c|c|c|<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\hline</span>
+</span></span><span class="line"><span class="cl"><span class="k">\multicolumn</span><span class="nb">{</span>2<span class="nb">}{</span>|c|<span class="nb">}{</span>合并两列<span class="nb">}</span> <span class="nb">&amp;</span> 单列 <span class="k">\\</span>
+</span></span><span class="line"><span class="cl"><span class="k">\hline</span>
+</span></span><span class="line"><span class="cl"><span class="k">\multirow</span><span class="nb">{</span>2<span class="nb">}{</span>*<span class="nb">}{</span>合并两行<span class="nb">}</span> <span class="nb">&amp;</span> 单元格1 <span class="nb">&amp;</span> 单元格2 <span class="k">\\</span>
+</span></span><span class="line"><span class="cl"><span class="k">\cline</span><span class="nb">{</span>2-3<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">&amp;</span> 单元格3 <span class="nb">&amp;</span> 单元格4 <span class="k">\\</span>
+</span></span><span class="line"><span class="cl"><span class="k">\hline</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>tabular<span class="nb">}</span></span></span></code></pre></div></div>
+<h3 id="4-表格浮动体与跨页表格">4. 表格浮动体与跨页表格</h3>
+<ul>
+<li>浮动体：<code>table</code>环境，用于控制表格位置，添加标题、标签，位置参数<code>[htbp]</code>：
+<ul>
+<li><code>h</code>(here)：当前位置，<code>t</code>(top)：页面顶部，<code>b</code>(bottom)：页面底部，<code>p</code>(page)：单独浮动页</li>
+</ul>
+</li>
+<li>跨页长表格：<code>longtable</code>环境，需加载<code>longtable</code>宏包，无需放在table环境内，支持自动分页，可设置表头、表尾重复。</li>
+</ul>
+<hr>
+<h2 id="六图片插入">六、图片插入</h2>
+<p>需加载<code>graphicx</code>宏包（标准插图宏包，必加），支持png、jpg、pdf、eps等格式，推荐用XeLaTeX/pdfLaTeX编译。</p>
+<h3 id="1-基础插图命令">1. 基础插图命令</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\includegraphics</span><span class="na">[可选参数]</span><span class="nb">{</span>图片文件路径/文件名<span class="nb">}</span></span></span></code></pre></div></div>
+<p>常用可选参数：</p>
+<table>
+  <thead>
+      <tr>
+          <th>参数</th>
+          <th>作用</th>
+          <th>示例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>width=</td>
+          <td>固定宽度</td>
+          <td><code>width=8cm</code>、<code>width=\linewidth</code>(占满当前行宽)</td>
+      </tr>
+      <tr>
+          <td>height=</td>
+          <td>固定高度</td>
+          <td><code>height=5cm</code></td>
+      </tr>
+      <tr>
+          <td>scale=</td>
+          <td>按比例缩放</td>
+          <td><code>scale=0.8</code>(缩小为原尺寸80%)</td>
+      </tr>
+      <tr>
+          <td>angle=</td>
+          <td>旋转角度</td>
+          <td><code>angle=90</code>(顺时针旋转90度)</td>
+      </tr>
+      <tr>
+          <td>keepaspectratio</td>
+          <td>保持宽高比</td>
+          <td>配合width/height使用，防止图片变形</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-图片浮动体">2. 图片浮动体</h3>
+<p><code>figure</code>环境，控制图片位置，添加标题、标签，和table环境用法一致：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>figure<span class="nb">}</span>[htbp]
+</span></span><span class="line"><span class="cl">  <span class="k">\centering</span> <span class="c">% 图片居中
+</span></span></span><span class="line"><span class="cl">  <span class="k">\includegraphics</span><span class="na">[width=0.8\textwidth]</span><span class="nb">{</span>demo.jpg<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\caption</span><span class="nb">{</span>图片标题<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\label</span><span class="nb">{</span>fig:demo<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>figure<span class="nb">}</span></span></span></code></pre></div></div>
+<ul>
+<li>引用方式：<code>图\ref{fig:demo}为示例图片</code></li>
+</ul>
+<h3 id="3-子图与多图并排">3. 子图与多图并排</h3>
+<p>推荐用<code>subcaption</code>宏包实现子图排版，导言区加载<code>\usepackage{subcaption}</code>。</p>
+<h4 id="1子图排版带独立子标题">（1）子图排版（带独立子标题）</h4>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>figure<span class="nb">}</span>[htbp]
+</span></span><span class="line"><span class="cl">  <span class="k">\centering</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\begin</span><span class="nb">{</span>subfigure<span class="nb">}{</span>0.45<span class="k">\textwidth</span><span class="nb">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\centering</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\includegraphics</span><span class="na">[width=\linewidth]</span><span class="nb">{</span>fig1.jpg<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\caption</span><span class="nb">{</span>子图1标题<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\label</span><span class="nb">{</span>fig:sub1<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\end</span><span class="nb">{</span>subfigure<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\hfill</span> <span class="c">% 两个子图之间填充空白
+</span></span></span><span class="line"><span class="cl">  <span class="k">\begin</span><span class="nb">{</span>subfigure<span class="nb">}{</span>0.45<span class="k">\textwidth</span><span class="nb">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\centering</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\includegraphics</span><span class="na">[width=\linewidth]</span><span class="nb">{</span>fig2.jpg<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\caption</span><span class="nb">{</span>子图2标题<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\label</span><span class="nb">{</span>fig:sub2<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\end</span><span class="nb">{</span>subfigure<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\caption</span><span class="nb">{</span>总标题<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\label</span><span class="nb">{</span>fig:total<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>figure<span class="nb">}</span></span></span></code></pre></div></div>
+<h4 id="2简单并排图片无独立子标题">（2）简单并排图片（无独立子标题）</h4>
+<p>用<code>minipage</code>环境实现：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>figure<span class="nb">}</span>[htbp]
+</span></span><span class="line"><span class="cl">  <span class="k">\centering</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\begin</span><span class="nb">{</span>minipage<span class="nb">}{</span>0.45<span class="k">\textwidth</span><span class="nb">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\centering</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\includegraphics</span><span class="na">[width=\linewidth]</span><span class="nb">{</span>fig1.jpg<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\end</span><span class="nb">{</span>minipage<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\hfill</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\begin</span><span class="nb">{</span>minipage<span class="nb">}{</span>0.45<span class="k">\textwidth</span><span class="nb">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\centering</span>
+</span></span><span class="line"><span class="cl">    <span class="k">\includegraphics</span><span class="na">[width=\linewidth]</span><span class="nb">{</span>fig2.jpg<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\end</span><span class="nb">{</span>minipage<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\caption</span><span class="nb">{</span>两张图片并排<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>figure<span class="nb">}</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="七交叉引用与超链接">七、交叉引用与超链接</h2>
+<h3 id="1-基础交叉引用">1. 基础交叉引用</h3>
+<p>核心逻辑：<code>\label{标签名}</code> 标记对象 → <code>\ref{标签名}</code> 引用编号 → <code>\pageref{标签名}</code> 引用页码</p>
+<ul>
+<li>标签命名规范（避免冲突）：
+<ul>
+<li>章节：<code>sec:xxx</code>，公式：<code>eq:xxx</code>，图片：<code>fig:xxx</code>，表格：<code>tab:xxx</code>，定理：<code>thm:xxx</code></li>
+</ul>
+</li>
+<li>注意：必须编译2次以上，引用编号才能正常显示，单次编译会显示<code>??</code>。</li>
+</ul>
+<p>示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\section</span><span class="nb">{</span>引言<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>sec:intro<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">本文在<span class="k">\ref</span><span class="nb">{</span>sec:method<span class="nb">}</span>章节介绍方法，核心公式见式<span class="k">\ref</span><span class="nb">{</span>eq:pythagorean<span class="nb">}</span>，实验数据见表<span class="k">\ref</span><span class="nb">{</span>tab:demo<span class="nb">}</span>，图片见图<span class="k">\ref</span><span class="nb">{</span>fig:demo<span class="nb">}</span>。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">\section</span><span class="nb">{</span>方法<span class="nb">}</span><span class="k">\label</span><span class="nb">{</span>sec:method<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">方法内容...</span></span></code></pre></div></div>
+<h3 id="2-智能引用cleveref宏包">2. 智能引用（cleveref宏包）</h3>
+<p>导言区加载<code>\usepackage{cleveref}</code>，<strong>必须放在hyperref之后</strong>，可自动识别引用类型，添加前缀，无需手动写“图/表/式”：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\cref</span><span class="nb">{</span>fig:demo<span class="nb">}</span> <span class="c">% 自动输出“图1”
+</span></span></span><span class="line"><span class="cl"><span class="k">\cref</span><span class="nb">{</span>tab:demo,eq:pythagorean<span class="nb">}</span> <span class="err">%</span> 自动输出“表1和式(1)”</span></span></code></pre></div></div>
+<h3 id="3-超链接hyperref宏包">3. 超链接（hyperref宏包）</h3>
+<p>导言区加载<code>\usepackage{hyperref}</code>，<strong>必须放在所有宏包的最后</strong>（极少数宏包除外，如cleveref），自动为目录、引用、参考文献生成超链接，支持自定义样式。</p>
+<p>常用命令：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\url</span><span class="nb">{</span>https://www.latex-project.org<span class="nb">}</span> <span class="c">% 直接显示网址，自动生成超链接
+</span></span></span><span class="line"><span class="cl"><span class="k">\href</span><span class="nb">{</span>https://www.latex-project.org<span class="nb">}{</span>LaTeX官方网站<span class="nb">}</span> <span class="c">% 自定义显示文本的超链接
+</span></span></span><span class="line"><span class="cl"><span class="k">\hypertarget</span><span class="nb">{</span>锚点名<span class="nb">}{</span>锚点文本<span class="nb">}</span> <span class="c">% 文档内锚点
+</span></span></span><span class="line"><span class="cl"><span class="k">\hyperlink</span><span class="nb">{</span>锚点名<span class="nb">}{</span>跳转文本<span class="nb">}</span> <span class="err">%</span> 跳转到文档内锚点</span></span></code></pre></div></div>
+<ul>
+<li>常用选项：<code>\usepackage[colorlinks,linkcolor=blue,citecolor=blue,urlcolor=red]{hyperref}</code>，设置彩色链接，取消默认边框。</li>
+</ul>
+<hr>
+<h2 id="八参考文献排版">八、参考文献排版</h2>
+<p>LaTeX提供3种主流参考文献排版方式，适配不同场景。</p>
+<h3 id="1-手动排版thebibliography环境">1. 手动排版（thebibliography环境）</h3>
+<p>适合10条以内的少量参考文献，无需额外编译，示例：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="c">% 正文末尾，\end{document}之前
+</span></span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>thebibliography<span class="nb">}{</span>99<span class="nb">}</span> <span class="c">% 99为最大编号位数，两位数写99
+</span></span></span><span class="line"><span class="cl"><span class="k">\bibitem</span><span class="nb">{</span>latex<span class="nb">_</span>book<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  刘海洋. LaTeX入门[M]. 电子工业出版社, 2013.
+</span></span><span class="line"><span class="cl"><span class="k">\bibitem</span><span class="nb">{</span>lamport1994<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  Lamport L. LaTeX: A Document Preparation System[M]. Addison-Wesley, 1994.
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>thebibliography<span class="nb">}</span></span></span></code></pre></div></div>
+<ul>
+<li>引用方式：正文内<code>\cite{latex_book}</code>，输出引用编号。</li>
+</ul>
+<h3 id="2-bibtex方式学术投稿通用">2. BibTeX方式（学术投稿通用）</h3>
+<p>适合中大量参考文献，分离文献数据与排版格式，期刊投稿主流方案，步骤：</p>
+<ol>
+<li>创建<code>.bib</code>文献库文件（如<code>ref.bib</code>），存放参考文献条目，示例：</li>
+</ol>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bibtex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bibtex" data-lang="bibtex"><span class="line"><span class="cl"><span class="c">% 期刊文章</span>
+</span></span><span class="line"><span class="cl"><span class="nc">@article</span><span class="p">{</span><span class="nl">zhang2020</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">author</span>  <span class="p">=</span> <span class="s">{张三 and 李四}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">title</span>   <span class="p">=</span> <span class="s">{论文标题}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">journal</span> <span class="p">=</span> <span class="s">{期刊名}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">year</span>    <span class="p">=</span> <span class="s">{2020}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">volume</span>  <span class="p">=</span> <span class="s">{10}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">number</span>  <span class="p">=</span> <span class="s">{2}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">pages</span>   <span class="p">=</span> <span class="s">{123-145}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c">% 书籍</span>
+</span></span><span class="line"><span class="cl"><span class="nc">@book</span><span class="p">{</span><span class="nl">liu2013</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">author</span>    <span class="p">=</span> <span class="s">{刘海洋}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">title</span>     <span class="p">=</span> <span class="s">{LaTeX入门}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">publisher</span> <span class="p">=</span> <span class="s">{电子工业出版社}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">year</span>      <span class="p">=</span> <span class="s">{2013}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">address</span>   <span class="p">=</span> <span class="s">{北京}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c">% 会议论文</span>
+</span></span><span class="line"><span class="cl"><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">wang2022</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">author</span>    <span class="p">=</span> <span class="s">{王五 and 赵六}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">title</span>     <span class="p">=</span> <span class="s">{会议论文标题}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">booktitle</span> <span class="p">=</span> <span class="s">{会议名称}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">year</span>      <span class="p">=</span> <span class="s">{2022}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">pages</span>     <span class="p">=</span> <span class="s">{456-460}</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="na">address</span>   <span class="p">=</span> <span class="s">{上海}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<ol start="2">
+<li>导言区设置样式：<code>\bibliographystyle{样式名}</code>
+<ul>
+<li>常用样式：<code>plain</code>(标准排序)、<code>ieeetr</code>(IEEE期刊格式)、<code>apalike</code>(APA格式)、<code>unsrt</code>(按引用顺序排序)</li>
+</ul>
+</li>
+<li>正文末尾添加文献库引用：<code>\bibliography{ref}</code>（ref为.bib文件名，无需后缀）</li>
+<li>正文内引用：<code>\cite{zhang2020}</code></li>
+<li>编译流程：pdfLaTeX → BibTeX → pdfLaTeX × 2</li>
+</ol>
+<h3 id="3-biblatexbiber方式现代推荐">3. BibLaTeX+Biber方式（现代推荐）</h3>
+<p>功能更强大，格式自定义更简单，适配Unicode，是现代LaTeX推荐方案，步骤：</p>
+<ol>
+<li>导言区加载宏包并设置：</li>
+</ol>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\usepackage</span><span class="na">[backend=biber,style=ieee,citestyle=ieee]</span><span class="nb">{</span>biblatex<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\addbibresource</span><span class="nb">{</span>ref.bib<span class="nb">}</span> <span class="err">%</span> 加载.bib文件，必须写后缀.bib</span></span></code></pre></div></div>
+<ol start="2">
+<li>正文内引用：<code>\cite{zhang2020}</code></li>
+<li>正文末尾输出参考文献列表：<code>\printbibliography[title=参考文献]</code></li>
+<li>编译流程：XeLaTeX/pdfLaTeX → Biber → XeLaTeX/pdfLaTeX × 2</li>
+</ol>
+<hr>
+<h2 id="九中文排版支持">九、中文排版支持</h2>
+<p>中文排版<strong>强烈推荐使用ctex宏包/文档类</strong>，完美适配中文标点、换行、字体、章节格式，无需额外配置，兼容XeLaTeX和LuaLaTeX编译（优先推荐XeLaTeX）。</p>
+<h3 id="1-最简中文文档">1. 最简中文文档</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\documentclass</span><span class="nb">{</span>ctexart<span class="nb">}</span> <span class="c">% 中文article文档类，内置ctex宏包
+</span></span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>document<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\section</span><span class="nb">{</span>中文标题<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">你好，LaTeX！这是中文排版示例，支持自动换行、标点压缩、首行缩进。
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>document<span class="nb">}</span></span></span></code></pre></div></div>
+<h3 id="2-常用中文设置">2. 常用中文设置</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="c">% 导言区设置
+</span></span></span><span class="line"><span class="cl"><span class="k">\ctexset</span><span class="nb">{</span>
+</span></span><span class="line"><span class="cl">  section = <span class="nb">{</span>
+</span></span><span class="line"><span class="cl">    name = <span class="nb">{</span>第,节<span class="nb">}</span>, <span class="c">% 章节名前缀，如“第1节”
+</span></span></span><span class="line"><span class="cl">    number = <span class="k">\chinese</span><span class="nb">{</span>section<span class="nb">}</span>, <span class="c">% 章节编号用中文数字
+</span></span></span><span class="line"><span class="cl">  <span class="nb">}</span>,
+</span></span><span class="line"><span class="cl">  chapter = <span class="nb">{</span>
+</span></span><span class="line"><span class="cl">    name = <span class="nb">{</span>第,章<span class="nb">}</span>,
+</span></span><span class="line"><span class="cl">    number = <span class="k">\chinese</span><span class="nb">{</span>chapter<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">}</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="十高级常用功能">十、高级常用功能</h2>
+<h3 id="1-定理环境amsthm宏包">1. 定理环境（amsthm宏包）</h3>
+<p>用于学术论文的定理、引理、定义、证明等环境，导言区加载<code>\usepackage{amsthm}</code>。</p>
+<h4 id="1定义定理环境">（1）定义定理环境</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="c">% 语法：\newtheorem{环境名}{显示名称}[编号层级]
+</span></span></span><span class="line"><span class="cl"><span class="k">\newtheorem</span><span class="nb">{</span>theorem<span class="nb">}{</span>定理<span class="nb">}</span>[section] <span class="c">% 按section编号，如“定理1.1”
+</span></span></span><span class="line"><span class="cl"><span class="k">\newtheorem</span><span class="nb">{</span>lemma<span class="nb">}</span>[theorem]<span class="nb">{</span>引理<span class="nb">}</span> <span class="c">% 和theorem共用编号
+</span></span></span><span class="line"><span class="cl"><span class="k">\newtheorem</span><span class="nb">{</span>definition<span class="nb">}{</span>定义<span class="nb">}</span>[section]
+</span></span><span class="line"><span class="cl"><span class="k">\newtheorem</span><span class="nb">{</span>corollary<span class="nb">}{</span>推论<span class="nb">}</span>[theorem]</span></span></code></pre></div></div>
+<h4 id="2使用示例">（2）使用示例</h4>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>theorem<span class="nb">}</span>[勾股定理]<span class="k">\label</span><span class="nb">{</span>thm:pyth<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">直角三角形两直角边的平方和等于斜边的平方，即：
+</span></span><span class="line"><span class="cl"><span class="sb">\[</span><span class="nb"> a^</span><span class="m">2</span><span class="nb"> </span><span class="o">+</span><span class="nb"> b^</span><span class="m">2</span><span class="nb"> </span><span class="o">=</span><span class="nb"> c^</span><span class="m">2</span><span class="nb"> </span><span class="s">\]</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>theorem<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>proof<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">证明过程...
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>proof<span class="nb">}</span></span></span></code></pre></div></div>
+<ul>
+<li><code>proof</code>环境自动生成“证明”标题，末尾自动添加证毕符号□。</li>
+</ul>
+<h3 id="2-页面布局设置geometry宏包">2. 页面布局设置（geometry宏包）</h3>
+<p>导言区加载<code>\usepackage{geometry}</code>，快速设置纸张大小、页边距等，替代原生复杂命令：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\usepackage</span><span class="nb">{</span>geometry<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\geometry</span><span class="nb">{</span>
+</span></span><span class="line"><span class="cl">  a4paper,
+</span></span><span class="line"><span class="cl">  left=2.5cm,
+</span></span><span class="line"><span class="cl">  right=2.5cm,
+</span></span><span class="line"><span class="cl">  top=2.5cm,
+</span></span><span class="line"><span class="cl">  bottom=2.5cm,
+</span></span><span class="line"><span class="cl">  headheight=15pt, <span class="c">% 页眉高度
+</span></span></span><span class="line"><span class="cl">  footskip=10pt <span class="c">% 页脚距离
+</span></span></span><span class="line"><span class="cl"><span class="nb">}</span></span></span></code></pre></div></div>
+<h3 id="3-页眉页脚自定义fancyhdr宏包">3. 页眉页脚自定义（fancyhdr宏包）</h3>
+<p>导言区加载<code>\usepackage{fancyhdr}</code>，自定义页眉页脚内容：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\pagestyle</span><span class="nb">{</span>fancy<span class="nb">}</span> <span class="c">% 启用fancy样式
+</span></span></span><span class="line"><span class="cl"><span class="c">% 清除默认设置
+</span></span></span><span class="line"><span class="cl"><span class="k">\fancyhf</span><span class="nb">{}</span>
+</span></span><span class="line"><span class="cl"><span class="c">% 页眉设置
+</span></span></span><span class="line"><span class="cl"><span class="k">\lhead</span><span class="nb">{</span>左侧页眉<span class="nb">}</span> <span class="c">% 左页眉
+</span></span></span><span class="line"><span class="cl"><span class="k">\chead</span><span class="nb">{</span>居中页眉<span class="nb">}</span> <span class="c">% 中页眉
+</span></span></span><span class="line"><span class="cl"><span class="k">\rhead</span><span class="nb">{</span><span class="k">\thepage</span><span class="nb">}</span> <span class="c">% 右页眉，显示页码
+</span></span></span><span class="line"><span class="cl"><span class="c">% 页脚设置
+</span></span></span><span class="line"><span class="cl"><span class="k">\lfoot</span><span class="nb">{</span>左侧页脚<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\cfoot</span><span class="nb">{}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\rfoot</span><span class="nb">{</span>右侧页脚<span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="c">% 章节首页页眉页脚设置
+</span></span></span><span class="line"><span class="cl"><span class="k">\fancypagestyle</span><span class="nb">{</span>plain<span class="nb">}{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\fancyhf</span><span class="nb">{}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\rfoot</span><span class="nb">{</span><span class="k">\thepage</span><span class="nb">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">\renewcommand</span><span class="nb">{</span><span class="k">\headrulewidth</span><span class="nb">}{</span>0pt<span class="nb">}</span> <span class="c">% 取消页眉横线
+</span></span></span><span class="line"><span class="cl"><span class="nb">}</span></span></span></code></pre></div></div>
+<h3 id="4-代码高亮排版">4. 代码高亮排版</h3>
+<h4 id="1listings宏包无额外依赖兼容性好">（1）listings宏包（无额外依赖，兼容性好）</h4>
+<p>导言区加载<code>\usepackage{listings,xcolor}</code>，示例：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\lstset</span><span class="nb">{</span>
+</span></span><span class="line"><span class="cl">  language=C++, <span class="c">% 代码语言
+</span></span></span><span class="line"><span class="cl">  numbers=left, <span class="c">% 行号在左侧
+</span></span></span><span class="line"><span class="cl">  numberstyle=<span class="k">\tiny\color</span><span class="nb">{</span>gray<span class="nb">}</span>, <span class="c">% 行号样式
+</span></span></span><span class="line"><span class="cl">  basicstyle=<span class="k">\ttfamily\footnotesize</span>, <span class="c">% 代码基础样式
+</span></span></span><span class="line"><span class="cl">  keywordstyle=<span class="k">\color</span><span class="nb">{</span>blue<span class="nb">}</span><span class="k">\bfseries</span>, <span class="c">% 关键字样式
+</span></span></span><span class="line"><span class="cl">  commentstyle=<span class="k">\color</span><span class="nb">{</span>green!60!black<span class="nb">}</span>, <span class="c">% 注释样式
+</span></span></span><span class="line"><span class="cl">  stringstyle=<span class="k">\color</span><span class="nb">{</span>red<span class="nb">}</span>, <span class="c">% 字符串样式
+</span></span></span><span class="line"><span class="cl">  frame=single, <span class="c">% 边框
+</span></span></span><span class="line"><span class="cl">  breaklines=true, <span class="c">% 自动换行
+</span></span></span><span class="line"><span class="cl">  tabsize=4 <span class="c">% tab宽度
+</span></span></span><span class="line"><span class="cl"><span class="nb">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c">% 插入代码
+</span></span></span><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>lstlisting<span class="nb">}</span>
+</span></span><span class="line"><span class="cl">#include &lt;iostream&gt;
+</span></span><span class="line"><span class="cl">using namespace std;
+</span></span><span class="line"><span class="cl">int main() <span class="nb">{</span>
+</span></span><span class="line"><span class="cl">  cout &lt;&lt; &#34;Hello LaTeX!&#34; &lt;&lt; endl;
+</span></span><span class="line"><span class="cl">  return 0;
+</span></span><span class="line"><span class="cl"><span class="nb">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>lstlisting<span class="nb">}</span></span></span></code></pre></div></div>
+<h4 id="2minted宏包高亮效果更优">（2）minted宏包（高亮效果更优）</h4>
+<p>需安装Python和pygments库，编译时加<code>-shell-escape</code>参数，高亮效果接近IDE。</p>
+<h3 id="5-分栏排版multicol宏包">5. 分栏排版（multicol宏包）</h3>
+<p>导言区加载<code>\usepackage{multicol}</code>，实现灵活的多栏排版，支持跨栏标题、自动平衡栏高：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-latex">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-latex" data-lang="latex"><span class="line"><span class="cl"><span class="k">\begin</span><span class="nb">{</span>multicols<span class="nb">}{</span>2<span class="nb">}</span> <span class="c">% 双栏排版，数字为栏数
+</span></span></span><span class="line"><span class="cl">这里是双栏排版的内容，会自动分栏，支持自动换行、分页。
+</span></span><span class="line"><span class="cl"><span class="c">% 单栏内容
+</span></span></span><span class="line"><span class="cl"><span class="k">\onecolumn</span>
+</span></span><span class="line"><span class="cl">单栏内容，占满整行
+</span></span><span class="line"><span class="cl"><span class="k">\twocolumn</span>
+</span></span><span class="line"><span class="cl">恢复双栏排版
+</span></span><span class="line"><span class="cl"><span class="k">\end</span><span class="nb">{</span>multicols<span class="nb">}</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="十一编译方式与常见问题">十一、编译方式与常见问题</h2>
+<h3 id="1-主流编译方式选择">1. 主流编译方式选择</h3>
+<table>
+  <thead>
+      <tr>
+          <th>编译方式</th>
+          <th>适用场景</th>
+          <th>核心优势</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>pdfLaTeX</td>
+          <td>英文文档，无生僻字符</td>
+          <td>编译速度快，兼容性好，直接生成PDF</td>
+      </tr>
+      <tr>
+          <td>XeLaTeX</td>
+          <td>中文文档，Unicode字符</td>
+          <td>完美支持中文、各类字体，无需额外配置</td>
+      </tr>
+      <tr>
+          <td>LuaLaTeX</td>
+          <td>高级排版，复杂宏包</td>
+          <td>支持Lua脚本扩展，Unicode兼容性强</td>
+      </tr>
+      <tr>
+          <td>Biber</td>
+          <td>配合biblatex使用</td>
+          <td>替代BibTeX，支持Unicode，格式自定义灵活</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="2-常见问题解决">2. 常见问题解决</h3>
+<ol>
+<li><strong>中文乱码/不显示</strong>：使用ctex文档类，用XeLaTeX编译，不要用pdfLaTeX。</li>
+<li><strong>引用显示??</strong>：至少编译2次，确保\label和\ref对应，无拼写错误。</li>
+<li><strong>图片/表格位置不对</strong>：调整浮动体位置参数<code>[htbp]</code>，优先用<code>[!htbp]</code>强制优先当前位置。</li>
+<li><strong>宏包冲突</strong>：精简宏包，hyperref宏包必须放在导言区最后加载。</li>
+<li><strong>公式报错</strong>：确保数学公式放在$&hellip;$或[&hellip;]内，特殊字符转义，括号成对，amsmath宏包已加载。</li>
+<li><strong>参考文献不显示</strong>：按正确编译流程执行，确保.bib文件路径正确，引用键无拼写错误。</li>
+</ol>
+<hr>
+<h2 id="十二常用宏包速查表">十二、常用宏包速查表</h2>
+<table>
+  <thead>
+      <tr>
+          <th>分类</th>
+          <th>宏包名</th>
+          <th>核心功能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>中文支持</td>
+          <td>ctex</td>
+          <td>中文排版全支持，适配字体、标点、章节格式</td>
+      </tr>
+      <tr>
+          <td>数学公式</td>
+          <td>amsmath</td>
+          <td>核心数学环境、公式排版，必加</td>
+      </tr>
+      <tr>
+          <td>数学符号</td>
+          <td>amssymb</td>
+          <td>扩展数学符号、黑板粗体等</td>
+      </tr>
+      <tr>
+          <td>定理环境</td>
+          <td>amsthm</td>
+          <td>定理、引理、证明环境定义</td>
+      </tr>
+      <tr>
+          <td>表格</td>
+          <td>booktabs</td>
+          <td>三线表排版，学术规范</td>
+      </tr>
+      <tr>
+          <td>表格</td>
+          <td>multirow</td>
+          <td>单元格行合并</td>
+      </tr>
+      <tr>
+          <td>表格</td>
+          <td>longtable</td>
+          <td>跨页长表格</td>
+      </tr>
+      <tr>
+          <td>图片</td>
+          <td>graphicx</td>
+          <td>图片插入核心宏包，必加</td>
+      </tr>
+      <tr>
+          <td>图片</td>
+          <td>subcaption</td>
+          <td>子图排版，子标题设置</td>
+      </tr>
+      <tr>
+          <td>文本格式</td>
+          <td>xcolor</td>
+          <td>字体、背景颜色设置</td>
+      </tr>
+      <tr>
+          <td>文本格式</td>
+          <td>ulem</td>
+          <td>下划线、删除线等文本装饰</td>
+      </tr>
+      <tr>
+          <td>页面布局</td>
+          <td>geometry</td>
+          <td>页边距、纸张大小快速设置</td>
+      </tr>
+      <tr>
+          <td>页眉页脚</td>
+          <td>fancyhdr</td>
+          <td>自定义页眉页脚</td>
+      </tr>
+      <tr>
+          <td>列表</td>
+          <td>enumitem</td>
+          <td>列表样式、缩进、间距自定义</td>
+      </tr>
+      <tr>
+          <td>引用</td>
+          <td>hyperref</td>
+          <td>超链接、书签生成，必加</td>
+      </tr>
+      <tr>
+          <td>引用</td>
+          <td>cleveref</td>
+          <td>智能交叉引用，自动识别类型</td>
+      </tr>
+      <tr>
+          <td>参考文献</td>
+          <td>biblatex</td>
+          <td>现代参考文献排版，配合biber使用</td>
+      </tr>
+      <tr>
+          <td>代码高亮</td>
+          <td>listings</td>
+          <td>代码插入与高亮，兼容性好</td>
+      </tr>
+      <tr>
+          <td>分栏</td>
+          <td>multicol</td>
+          <td>灵活多栏排版</td>
+      </tr>
+      <tr>
+          <td>幻灯片</td>
+          <td>beamer</td>
+          <td>LaTeX幻灯片制作</td>
+      </tr>
+  </tbody>
+</table>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-02-21</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/001_latex%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/latex/">LaTeX</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/002_qt5%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="Qt5 语法详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>Qt5 语法详细总结</a>
+            <a href="/blog/001_rust%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="Rust 语法详细总结">Rust 语法详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

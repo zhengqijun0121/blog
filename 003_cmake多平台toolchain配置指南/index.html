@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>CMake 多平台 Toolchain 配置指南 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/003_cmake%E5%A4%9A%E5%B9%B3%E5%8F%B0toolchain%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="CMake 多平台 Toolchain 配置指南">
+  <meta property="og:description" content="CMake 多平台 Toolchain 编写指南 CMake Toolchain 的核心作用是隔离平台/架构的编译器、链接器、系统配置差异，配合通用构建逻辑实现一套代码多平台编译。分为两大核心场景：原生多平台适配（在目标平台本地编译，自动适配环境）、交叉编译（在主机编译其他平台的目标程序），以下是完整的实现方案、模板和最佳实践。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-01-24T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-01-24T09:00:00+08:00">
+    <meta property="article:tag" content="编程语言">
+    <meta property="article:tag" content="CMake">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="CMake 多平台 Toolchain 配置指南">
+  <meta name="twitter:description" content="CMake 多平台 Toolchain 编写指南 CMake Toolchain 的核心作用是隔离平台/架构的编译器、链接器、系统配置差异，配合通用构建逻辑实现一套代码多平台编译。分为两大核心场景：原生多平台适配（在目标平台本地编译，自动适配环境）、交叉编译（在主机编译其他平台的目标程序），以下是完整的实现方案、模板和最佳实践。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/003_cmake%E5%A4%9A%E5%B9%B3%E5%8F%B0toolchain%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/002_%E7%8E%B0%E4%BB%A3cmake%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/001_excel%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "CMake 多平台 Toolchain 配置指南",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/003_cmake%E5%A4%9A%E5%B9%B3%E5%8F%B0toolchain%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "programming, CMake","wordcount":  3495 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/003_cmake%E5%A4%9A%E5%B9%B3%E5%8F%B0toolchain%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97\/","datePublished": "2026-01-24T09:00:00+08:00","dateModified": "2026-01-24T09:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/003_cmake%E5%A4%9A%E5%B9%B3%E5%8F%B0toolchain%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/003_cmake%E5%A4%9A%E5%B9%B3%E5%8F%B0toolchain%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">CMake 多平台 Toolchain 配置指南</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://zhengqijun0121/zhengqijun0121" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/programming/"><i class="far fa-folder" aria-hidden="true"></i>编程语言</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-01-24">2026-01-24</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 3495 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 7 分钟&nbsp;<span id="/blog/003_cmake%E5%A4%9A%E5%B9%B3%E5%8F%B0toolchain%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/" class="leancloud_visitors" data-flag-title="CMake 多平台 Toolchain 配置指南">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一核心基础概念与关键变量">一、核心基础概念与关键变量</a>
+      <ul>
+        <li><a href="#11-toolchain-执行原理">1.1 Toolchain 执行原理</a></li>
+        <li><a href="#12-核心必知变量">1.2 核心必知变量</a></li>
+      </ul>
+    </li>
+    <li><a href="#二多平台-toolchain-通用架构设计">二、多平台 Toolchain 通用架构设计</a></li>
+    <li><a href="#三全平台通用配置模板commoncmake">三、全平台通用配置模板（common.cmake）</a></li>
+    <li><a href="#四主流平台-toolchain-完整示例">四、主流平台 Toolchain 完整示例</a>
+      <ul>
+        <li><a href="#41-linux-x86_64-原生交叉编译">4.1 Linux x86_64 原生/交叉编译</a></li>
+        <li><a href="#42-linux-arm64-aarch64-交叉编译">4.2 Linux ARM64 (aarch64) 交叉编译</a></li>
+        <li><a href="#43-windows-mingw-交叉编译linux主机编译windows程序">4.3 Windows MinGW 交叉编译（Linux主机编译Windows程序）</a></li>
+        <li><a href="#44-windows-msvc-原生适配">4.4 Windows MSVC 原生适配</a></li>
+        <li><a href="#45-macos-通用二进制x86_64arm64">4.5 macOS 通用二进制（x86_64+arm64）</a></li>
+        <li><a href="#46-android-平台适配">4.6 Android 平台适配</a></li>
+      </ul>
+    </li>
+    <li><a href="#五多平台统一构建脚本">五、多平台统一构建脚本</a></li>
+    <li><a href="#六最佳实践与避坑指南">六、最佳实践与避坑指南</a>
+      <ul>
+        <li><a href="#61-核心最佳实践">6.1 核心最佳实践</a></li>
+        <li><a href="#62-常见坑与解决方案">6.2 常见坑与解决方案</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="cmake-多平台-toolchain-编写指南">CMake 多平台 Toolchain 编写指南</h1>
+<p>CMake Toolchain 的核心作用是<strong>隔离平台/架构的编译器、链接器、系统配置差异</strong>，配合通用构建逻辑实现一套代码多平台编译。分为两大核心场景：<strong>原生多平台适配</strong>（在目标平台本地编译，自动适配环境）、<strong>交叉编译</strong>（在主机编译其他平台的目标程序），以下是完整的实现方案、模板和最佳实践。</p>
+<hr>
+<h2 id="一核心基础概念与关键变量">一、核心基础概念与关键变量</h2>
+<h3 id="11-toolchain-执行原理">1.1 Toolchain 执行原理</h3>
+<p>Toolchain 文件通过 <code>-DCMAKE_TOOLCHAIN_FILE=xxx.cmake</code> 参数传入，会在 CMake 系统检测流程<strong>之前</strong>执行，用于覆盖默认的编译器、目标系统属性、编译/链接规则，是交叉编译的核心，也可用于原生平台的编译配置统一管理。</p>
+<h3 id="12-核心必知变量">1.2 核心必知变量</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">变量分类</th>
+          <th style="text-align: left">关键变量</th>
+          <th style="text-align: left">作用说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">目标系统配置</td>
+          <td style="text-align: left"><code>CMAKE_SYSTEM_NAME</code></td>
+          <td style="text-align: left">目标操作系统名（如<code>Linux</code>/<code>Windows</code>/<code>Darwin</code>/<code>Android</code>/<code>Generic</code>），<strong>设置后CMake自动进入交叉编译模式</strong></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"><code>CMAKE_SYSTEM_PROCESSOR</code></td>
+          <td style="text-align: left">目标CPU架构（如<code>x86_64</code>/<code>aarch64</code>/<code>armv7-a</code>/<code>riscv64</code>/<code>AMD64</code>）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"><code>CMAKE_SYSROOT</code></td>
+          <td style="text-align: left">交叉编译的系统根目录，对应目标平台的系统头文件/库根路径</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">工具链配置</td>
+          <td style="text-align: left"><code>CMAKE_C_COMPILER</code></td>
+          <td style="text-align: left">C编译器路径/名称（如<code>gcc</code>/<code>clang</code>/<code>cl</code>/<code>aarch64-linux-gnu-gcc</code>）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"><code>CMAKE_CXX_COMPILER</code></td>
+          <td style="text-align: left">C++编译器路径/名称</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"><code>CMAKE_AR</code>/<code>CMAKE_RANLIB</code>/<code>CMAKE_STRIP</code></td>
+          <td style="text-align: left">静态库归档、符号表处理、裁剪工具路径</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"><code>CMAKE_LINKER</code></td>
+          <td style="text-align: left">链接器路径</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">编译链接选项</td>
+          <td style="text-align: left"><code>CMAKE_C_FLAGS</code>/<code>CMAKE_CXX_FLAGS</code></td>
+          <td style="text-align: left">全局C/C++编译选项，分构建类型可加<code>_DEBUG</code>/<code>_RELEASE</code>后缀</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"><code>CMAKE_EXE_LINKER_FLAGS</code></td>
+          <td style="text-align: left">可执行文件全局链接选项</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"><code>CMAKE_SHARED_LINKER_FLAGS</code></td>
+          <td style="text-align: left">共享库全局链接选项</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"><code>CMAKE_POSITION_INDEPENDENT_CODE</code></td>
+          <td style="text-align: left">生成位置无关代码，Linux/macOS共享库必须开启（设为<code>ON</code>）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">交叉编译查找规则</td>
+          <td style="text-align: left"><code>CMAKE_FIND_ROOT_PATH</code></td>
+          <td style="text-align: left">交叉编译时，查找头文件/库/程序的根目录前缀</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"><code>CMAKE_FIND_ROOT_PATH_MODE_PROGRAM</code></td>
+          <td style="text-align: left">程序查找模式，交叉编译设为<code>NEVER</code>（仅找主机程序）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"><code>CMAKE_FIND_ROOT_PATH_MODE_LIBRARY</code></td>
+          <td style="text-align: left">库查找模式，交叉编译设为<code>ONLY</code>（仅找目标平台库）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"><code>CMAKE_FIND_ROOT_PATH_MODE_INCLUDE</code></td>
+          <td style="text-align: left">头文件查找模式，交叉编译设为<code>ONLY</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"></td>
+          <td style="text-align: left"><code>CMAKE_FIND_ROOT_PATH_MODE_PACKAGE</code></td>
+          <td style="text-align: left">包查找模式，交叉编译设为<code>ONLY</code></td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="二多平台-toolchain-通用架构设计">二、多平台 Toolchain 通用架构设计</h2>
+<p>最佳实践是<strong>拆分通用配置与平台专属配置</strong>，避免重复代码，便于维护和扩展，架构如下：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>cmake/
+├── toolchain/
+│   ├── common.cmake          # 全平台通用基础配置（C++标准、警告规则、构建默认值）
+│   ├── linux-x86_64.cmake    # Linux x86_64 平台配置
+│   ├── linux-aarch64.cmake   # Linux ARM64 交叉编译配置
+│   ├── windows-mingw.cmake   # Windows MinGW 交叉编译配置
+│   ├── windows-msvc.cmake    # Windows MSVC 原生配置
+│   ├── macos-universal.cmake # macOS 通用二进制配置
+│   └── android.cmake         # Android 平台配置
+└── build.sh                  # 多平台统一构建脚本</code></pre></div>
+<hr>
+<h2 id="三全平台通用配置模板commoncmake">三、全平台通用配置模板（common.cmake）</h2>
+<p>所有平台的toolchain都先引入该文件，统一编译规则，避免重复配置，可直接复用：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># cmake/toolchain/common.cmake
+</span></span></span><span class="line"><span class="cl"><span class="c"># 防止重复引入
+</span></span></span><span class="line"><span class="cl"><span class="nb">if</span><span class="p">(</span><span class="s">COMMON_TOOLCHAIN_INCLUDED</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="nb">return</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">COMMON_TOOLCHAIN_INCLUDED</span> <span class="s">ON</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 1. 统一C/C++标准
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_C_STANDARD</span> <span class="s">11</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;C standard&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_C_STANDARD_REQUIRED</span> <span class="s">ON</span> <span class="s">CACHE</span> <span class="s">BOOL</span> <span class="s2">&#34;C standard required&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_C_EXTENSIONS</span> <span class="s">OFF</span> <span class="s">CACHE</span> <span class="s">BOOL</span> <span class="s2">&#34;Disable GNU C extensions&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">17</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;C++ standard&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD_REQUIRED</span> <span class="s">ON</span> <span class="s">CACHE</span> <span class="s">BOOL</span> <span class="s2">&#34;C++ standard required&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_EXTENSIONS</span> <span class="s">OFF</span> <span class="s">CACHE</span> <span class="s">BOOL</span> <span class="s2">&#34;Disable GNU C++ extensions&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 2. 默认构建类型（无指定时用Release）
+</span></span></span><span class="line"><span class="cl"><span class="nb">if</span><span class="p">(</span><span class="s">NOT</span> <span class="s">CMAKE_BUILD_TYPE</span> <span class="s">AND</span> <span class="s">NOT</span> <span class="s">CMAKE_CONFIGURATION_TYPES</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_BUILD_TYPE</span> <span class="s">Release</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Build type&#34;</span> <span class="s">FORCE</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="nb">set_property</span><span class="p">(</span><span class="s">CACHE</span> <span class="s">CMAKE_BUILD_TYPE</span> <span class="s">PROPERTY</span> <span class="s">STRINGS</span> <span class="s2">&#34;Debug&#34;</span> <span class="s2">&#34;Release&#34;</span> <span class="s2">&#34;RelWithDebInfo&#34;</span> <span class="s2">&#34;MinSizeRel&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 3. 统一警告规则（分编译器适配）
+</span></span></span><span class="line"><span class="cl"><span class="nb">if</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER_ID</span> <span class="s">MATCHES</span> <span class="s2">&#34;GNU|Clang|AppleClang&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="c"># GCC/Clang 通用警告选项
+</span></span></span><span class="line"><span class="cl">    <span class="nb">add_compile_options</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="s">-Wall</span> <span class="s">-Wextra</span> <span class="s">-Wpedantic</span>
+</span></span><span class="line"><span class="cl">        <span class="s">-Wunused</span> <span class="s">-Wshadow</span> <span class="s">-Wconversion</span> <span class="s">-Wsign-conversion</span>
+</span></span><span class="line"><span class="cl">        <span class="s">-Wformat=2</span> <span class="s">-Wnull-dereference</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="c"># Release 优化配置
+</span></span></span><span class="line"><span class="cl">    <span class="nb">add_compile_options</span><span class="p">(</span><span class="o">$&lt;</span><span class="nv">$&lt;CONFIG:Release</span><span class="o">&gt;</span><span class="s">:-O3</span> <span class="s">-ffunction-sections</span> <span class="s">-fdata-sections&gt;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="c"># Debug 调试配置
+</span></span></span><span class="line"><span class="cl">    <span class="nb">add_compile_options</span><span class="p">(</span><span class="o">$&lt;</span><span class="nv">$&lt;CONFIG:Debug</span><span class="o">&gt;</span><span class="s">:-O0</span> <span class="s">-g3</span> <span class="s">-ggdb&gt;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">elseif</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER_ID</span> <span class="s">STREQUAL</span> <span class="s2">&#34;MSVC&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="c"># MSVC 警告与编码配置
+</span></span></span><span class="line"><span class="cl">    <span class="nb">add_compile_options</span><span class="p">(</span><span class="s">/W4</span> <span class="s">/utf-8</span> <span class="s">/MP</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="nb">add_compile_options</span><span class="p">(</span><span class="s">/wd4996</span><span class="p">)</span> <span class="c"># 禁用不安全函数警告
+</span></span></span><span class="line"><span class="cl">    <span class="c"># Release 优化配置
+</span></span></span><span class="line"><span class="cl">    <span class="nb">add_compile_options</span><span class="p">(</span><span class="o">$&lt;</span><span class="nv">$&lt;CONFIG:Release</span><span class="o">&gt;</span><span class="s">:/O2</span> <span class="s">/GL&gt;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="nb">add_link_options</span><span class="p">(</span><span class="o">$&lt;</span><span class="nv">$&lt;CONFIG:Release</span><span class="o">&gt;</span><span class="s">:/LTCG&gt;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="c"># Debug 调试配置
+</span></span></span><span class="line"><span class="cl">    <span class="nb">add_compile_options</span><span class="p">(</span><span class="o">$&lt;</span><span class="nv">$&lt;CONFIG:Debug</span><span class="o">&gt;</span><span class="s">:/Od</span> <span class="s">/Zi&gt;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 4. 全局链接优化（GCC/Clang 垃圾回收无用段）
+</span></span></span><span class="line"><span class="cl"><span class="nb">if</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER_ID</span> <span class="s">MATCHES</span> <span class="s2">&#34;GNU|Clang|AppleClang&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="nb">add_link_options</span><span class="p">(</span><span class="o">$&lt;</span><span class="nv">$&lt;CONFIG:Release</span><span class="o">&gt;</span><span class="s">:-Wl,--gc-sections&gt;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 5. 输出目录统一规划（按平台+架构隔离，避免文件覆盖）
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_RUNTIME_OUTPUT_DIRECTORY</span> <span class="o">${</span><span class="nv">CMAKE_BINARY_DIR</span><span class="o">}</span><span class="s">/bin</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_LIBRARY_OUTPUT_DIRECTORY</span> <span class="o">${</span><span class="nv">CMAKE_BINARY_DIR</span><span class="o">}</span><span class="s">/lib</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_ARCHIVE_OUTPUT_DIRECTORY</span> <span class="o">${</span><span class="nv">CMAKE_BINARY_DIR</span><span class="o">}</span><span class="s">/lib</span><span class="p">)</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="四主流平台-toolchain-完整示例">四、主流平台 Toolchain 完整示例</h2>
+<h3 id="41-linux-x86_64-原生交叉编译">4.1 Linux x86_64 原生/交叉编译</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># cmake/toolchain/linux-x86_64.cmake
+</span></span></span><span class="line"><span class="cl"><span class="c"># 引入通用配置
+</span></span></span><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_CURRENT_LIST_DIR</span><span class="o">}</span><span class="s">/common.cmake</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 目标系统配置
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_NAME</span> <span class="s">Linux</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Target system&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_PROCESSOR</span> <span class="s">x86_64</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Target processor&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 编译器配置（原生编译可直接写gcc/g++，交叉编译填绝对路径）
+</span></span></span><span class="line"><span class="cl"><span class="c"># 可通过环境变量 TOOLCHAIN_PREFIX 传入编译器前缀，如 export TOOLCHAIN_PREFIX=/usr/bin/
+</span></span></span><span class="line"><span class="cl"><span class="nb">if</span><span class="p">(</span><span class="s">DEFINED</span> <span class="s">ENV{TOOLCHAIN_PREFIX}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="nb">set</span><span class="p">(</span><span class="s">TOOLCHAIN_PREFIX</span> <span class="o">$ENV{</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Toolchain prefix&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">else</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="nb">set</span><span class="p">(</span><span class="s">TOOLCHAIN_PREFIX</span> <span class="s2">&#34;&#34;</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Toolchain prefix&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_C_COMPILER</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">gcc</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;C compiler&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">g++</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;C++ compiler&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_AR</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">ar</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;AR tool&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_RANLIB</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">ranlib</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;RANLIB tool&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_STRIP</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">strip</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;STRIP tool&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 交叉编译查找规则（原生编译可注释，交叉编译必须开启）
+</span></span></span><span class="line"><span class="cl"><span class="nb">if</span><span class="p">(</span><span class="s">CMAKE_CROSSCOMPILING</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_FIND_ROOT_PATH</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">../</span><span class="o">${</span><span class="nv">CMAKE_SYSTEM_PROCESSOR</span><span class="o">}</span><span class="s">-linux-gnu</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_FIND_ROOT_PATH_MODE_PROGRAM</span> <span class="s">NEVER</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_FIND_ROOT_PATH_MODE_LIBRARY</span> <span class="s">ONLY</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_FIND_ROOT_PATH_MODE_INCLUDE</span> <span class="s">ONLY</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_FIND_ROOT_PATH_MODE_PACKAGE</span> <span class="s">ONLY</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># Linux 专属配置
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_LINUX_PLATFORM_</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 开启PIC
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_POSITION_INDEPENDENT_CODE</span> <span class="s">ON</span> <span class="s">CACHE</span> <span class="s">BOOL</span> <span class="s2">&#34;Enable PIC&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># Linux 必须链接pthread库
+</span></span></span><span class="line"><span class="cl"><span class="nb">link_libraries</span><span class="p">(</span><span class="s">pthread</span><span class="p">)</span></span></span></code></pre></div></div>
+<h3 id="42-linux-arm64-aarch64-交叉编译">4.2 Linux ARM64 (aarch64) 交叉编译</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># cmake/toolchain/linux-aarch64.cmake
+</span></span></span><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_CURRENT_LIST_DIR</span><span class="o">}</span><span class="s">/common.cmake</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 目标系统配置
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_NAME</span> <span class="s">Linux</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Target system&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_PROCESSOR</span> <span class="s">aarch64</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Target processor&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 交叉编译器前缀（需提前安装 aarch64-linux-gnu-gcc 工具链）
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">TOOLCHAIN_PREFIX</span> <span class="s">aarch64-linux-gnu-</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Toolchain prefix&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">if</span><span class="p">(</span><span class="s">DEFINED</span> <span class="s">ENV{AARCH64_TOOLCHAIN_PATH}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="nb">set</span><span class="p">(</span><span class="s">TOOLCHAIN_PATH</span> <span class="o">$ENV{</span><span class="nv">AARCH64_TOOLCHAIN_PATH</span><span class="o">}</span><span class="s">/bin/</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_C_COMPILER</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PATH</span><span class="o">}${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">gcc</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;C compiler&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PATH</span><span class="o">}${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">g++</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;C++ compiler&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_AR</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PATH</span><span class="o">}${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">ar</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;AR tool&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_RANLIB</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PATH</span><span class="o">}${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">ranlib</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;RANLIB tool&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_STRIP</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PATH</span><span class="o">}${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">strip</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;STRIP tool&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 交叉编译查找规则
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_FIND_ROOT_PATH_MODE_PROGRAM</span> <span class="s">NEVER</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_FIND_ROOT_PATH_MODE_LIBRARY</span> <span class="s">ONLY</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_FIND_ROOT_PATH_MODE_INCLUDE</span> <span class="s">ONLY</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_FIND_ROOT_PATH_MODE_PACKAGE</span> <span class="s">ONLY</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># ARM64 专属配置
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_POSITION_INDEPENDENT_CODE</span> <span class="s">ON</span> <span class="s">CACHE</span> <span class="s">BOOL</span> <span class="s2">&#34;Enable PIC&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_LINUX_ARM64_PLATFORM_</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">link_libraries</span><span class="p">(</span><span class="s">pthread</span><span class="p">)</span></span></span></code></pre></div></div>
+<h3 id="43-windows-mingw-交叉编译linux主机编译windows程序">4.3 Windows MinGW 交叉编译（Linux主机编译Windows程序）</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># cmake/toolchain/windows-mingw.cmake
+</span></span></span><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_CURRENT_LIST_DIR</span><span class="o">}</span><span class="s">/common.cmake</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 目标系统配置
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_NAME</span> <span class="s">Windows</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Target system&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_PROCESSOR</span> <span class="s">AMD64</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Target processor&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># MinGW 交叉编译器（需提前安装 mingw-w64 工具链）
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">TOOLCHAIN_PREFIX</span> <span class="s">x86_64-w64-mingw32-</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Toolchain prefix&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">if</span><span class="p">(</span><span class="s">DEFINED</span> <span class="s">ENV{MINGW_TOOLCHAIN_PATH}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl">    <span class="nb">set</span><span class="p">(</span><span class="s">TOOLCHAIN_PATH</span> <span class="o">$ENV{</span><span class="nv">MINGW_TOOLCHAIN_PATH</span><span class="o">}</span><span class="s">/bin/</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">endif</span><span class="p">()</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_C_COMPILER</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PATH</span><span class="o">}${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">gcc</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;C compiler&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PATH</span><span class="o">}${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">g++</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;C++ compiler&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_RC_COMPILER</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PATH</span><span class="o">}${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">windres</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;RC compiler&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_AR</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PATH</span><span class="o">}${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">ar</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;AR tool&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_RANLIB</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PATH</span><span class="o">}${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">ranlib</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;RANLIB tool&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_STRIP</span> <span class="o">${</span><span class="nv">TOOLCHAIN_PATH</span><span class="o">}${</span><span class="nv">TOOLCHAIN_PREFIX</span><span class="o">}</span><span class="s">strip</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;STRIP tool&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 交叉编译查找规则
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_FIND_ROOT_PATH_MODE_PROGRAM</span> <span class="s">NEVER</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_FIND_ROOT_PATH_MODE_LIBRARY</span> <span class="s">ONLY</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_FIND_ROOT_PATH_MODE_INCLUDE</span> <span class="s">ONLY</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_FIND_ROOT_PATH_MODE_PACKAGE</span> <span class="s">ONLY</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># Windows 专属配置
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_EXECUTABLE_SUFFIX</span> <span class="s">.exe</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SHARED_LIBRARY_PREFIX</span> <span class="s2">&#34;&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SHARED_LIBRARY_SUFFIX</span> <span class="s">.dll</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_STATIC_LIBRARY_PREFIX</span> <span class="s2">&#34;&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_STATIC_LIBRARY_SUFFIX</span> <span class="s">.lib</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># MinGW 静态链接标准库，避免依赖dll
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_link_options</span><span class="p">(</span><span class="s">-static-libgcc</span> <span class="s">-static-libstdc++</span> <span class="s">-Wl,--subsystem,console</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_WINDOWS_PLATFORM_</span> <span class="s">-DWIN32_LEAN_AND_MEAN</span> <span class="s">-DNOMINMAX</span><span class="p">)</span></span></span></code></pre></div></div>
+<h3 id="44-windows-msvc-原生适配">4.4 Windows MSVC 原生适配</h3>
+<p>MSVC 通常无需单独的toolchain文件，通过VS开发人员命令提示符执行CMake即可自动适配，如需统一配置，可使用以下模板：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># cmake/toolchain/windows-msvc.cmake
+</span></span></span><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_CURRENT_LIST_DIR</span><span class="o">}</span><span class="s">/common.cmake</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 目标系统配置
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_NAME</span> <span class="s">Windows</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Target system&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_PROCESSOR</span> <span class="s">AMD64</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Target processor&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># MSVC 工具集版本（可选，默认使用最新）
+</span></span></span><span class="line"><span class="cl"><span class="c"># set(CMAKE_GENERATOR_TOOLSET v143 CACHE STRING &#34;MSVC toolset&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="c"># set(CMAKE_VS_PLATFORM_TOOLSET_HOST_ARCHITECTURE x64 CACHE STRING &#34;Host arch&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># Windows 专属配置
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_WINDOWS_PLATFORM_</span> <span class="s">-DWIN32_LEAN_AND_MEAN</span> <span class="s">-DNOMINMAX</span> <span class="s">-D_CRT_SECURE_NO_WARNINGS</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 运行时库配置（MT/MD，根据需求调整）
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_MSVC_RUNTIME_LIBRARY</span> <span class="s2">&#34;MultiThreaded$&lt;$&lt;CONFIG:Debug&gt;:Debug&gt;DLL&#34;</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;MSVC runtime&#34;</span><span class="p">)</span></span></span></code></pre></div></div>
+<h3 id="45-macos-通用二进制x86_64arm64">4.5 macOS 通用二进制（x86_64+arm64）</h3>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># cmake/toolchain/macos-universal.cmake
+</span></span></span><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_CURRENT_LIST_DIR</span><span class="o">}</span><span class="s">/common.cmake</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 目标系统配置
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_NAME</span> <span class="s">Darwin</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Target system&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_SYSTEM_PROCESSOR</span> <span class="s">arm64</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Target processor&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 编译器配置（macOS 原生 clang）
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_C_COMPILER</span> <span class="s">clang</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;C compiler&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_COMPILER</span> <span class="s">clang++</span> <span class="s">CACHE</span> <span class="s">FILEPATH</span> <span class="s2">&#34;C++ compiler&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 通用二进制配置（同时支持x86_64和arm64）
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_OSX_ARCHITECTURES</span> <span class="s2">&#34;x86_64;arm64&#34;</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;macOS architectures&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 最低支持的macOS版本
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_OSX_DEPLOYMENT_TARGET</span> <span class="s">10.15</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;macOS deployment target&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># SDK路径（自动检测，也可手动指定）
+</span></span></span><span class="line"><span class="cl"><span class="nb">execute_process</span><span class="p">(</span><span class="s">COMMAND</span> <span class="s">xcrun</span> <span class="s">--sdk</span> <span class="s">macosx</span> <span class="s">--show-sdk-path</span> <span class="s">OUTPUT_VARIABLE</span> <span class="s">MACOS_SDK_PATH</span> <span class="s">OUTPUT_STRIP_TRAILING_WHITESPACE</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_OSX_SYSROOT</span> <span class="o">${</span><span class="nv">MACOS_SDK_PATH</span><span class="o">}</span> <span class="s">CACHE</span> <span class="s">PATH</span> <span class="s2">&#34;macOS SDK path&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># macOS 专属配置
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_POSITION_INDEPENDENT_CODE</span> <span class="s">ON</span> <span class="s">CACHE</span> <span class="s">BOOL</span> <span class="s2">&#34;Enable PIC&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_MACOSX_RPATH</span> <span class="s">ON</span> <span class="s">CACHE</span> <span class="s">BOOL</span> <span class="s2">&#34;Enable RPATH&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_INSTALL_RPATH</span> <span class="s2">&#34;@executable_path/../lib&#34;</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Install RPATH&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_DARWIN_PLATFORM_</span> <span class="s">-D_MACOS_PLATFORM_</span><span class="p">)</span></span></span></code></pre></div></div>
+<h3 id="46-android-平台适配">4.6 Android 平台适配</h3>
+<p>Android NDK 已内置官方toolchain文件，无需从零编写，直接调用即可，示例如下：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 直接通过命令行调用NDK内置toolchain，无需单独写cmake文件</span>
+</span></span><span class="line"><span class="cl">cmake -DCMAKE_TOOLCHAIN_FILE<span class="o">=</span><span class="si">${</span><span class="nv">NDK_PATH</span><span class="si">}</span>/build/cmake/android.toolchain.cmake <span class="se">\
+</span></span></span><span class="line"><span class="cl">      -DANDROID_ABI<span class="o">=</span>arm64-v8a <span class="se">\
+</span></span></span><span class="line"><span class="cl">      -DANDROID_PLATFORM<span class="o">=</span>android-24 <span class="se">\
+</span></span></span><span class="line"><span class="cl">      -DANDROID_STL<span class="o">=</span>c++_shared <span class="se">\
+</span></span></span><span class="line"><span class="cl">      ..</span></span></code></pre></div></div>
+<p>如需自定义扩展，可在自己的toolchain中引入NDK的官方toolchain：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cmake">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="c"># cmake/toolchain/android.cmake
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">ANDROID_ABI</span> <span class="s">arm64-v8a</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Android ABI&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">ANDROID_PLATFORM</span> <span class="s">android-24</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Android min platform&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">ANDROID_STL</span> <span class="s">c++_shared</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&#34;Android STL&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 引入NDK官方toolchain
+</span></span></span><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="o">$ENV{</span><span class="nv">NDK_PATH</span><span class="o">}</span><span class="s">/build/cmake/android.toolchain.cmake</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 引入通用配置
+</span></span></span><span class="line"><span class="cl"><span class="nb">include</span><span class="p">(</span><span class="o">${</span><span class="nv">CMAKE_CURRENT_LIST_DIR</span><span class="o">}</span><span class="s">/common.cmake</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c"># 自定义Android专属配置
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_definitions</span><span class="p">(</span><span class="s">-D_ANDROID_PLATFORM_</span><span class="p">)</span></span></span></code></pre></div></div>
+<hr>
+<h2 id="五多平台统一构建脚本">五、多平台统一构建脚本</h2>
+<p>编写一键构建脚本，通过参数指定目标平台，自动调用对应toolchain，示例（bash脚本，Linux/macOS可用）：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="c1"># build.sh</span>
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> -e
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 支持的平台列表</span>
+</span></span><span class="line"><span class="cl"><span class="nv">SUPPORTED_PLATFORMS</span><span class="o">=</span><span class="s2">&#34;linux-x86_64 linux-aarch64 windows-mingw macos-universal android&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 入参检查</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> <span class="nv">$#</span> -lt <span class="m">1</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;Usage: </span><span class="nv">$0</span><span class="s2"> &lt;platform&gt; [build_type]&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;Supported platforms: </span><span class="si">${</span><span class="nv">SUPPORTED_PLATFORMS</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;Default build_type: Release&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">PLATFORM</span><span class="o">=</span><span class="nv">$1</span>
+</span></span><span class="line"><span class="cl"><span class="nv">BUILD_TYPE</span><span class="o">=</span><span class="si">${</span><span class="nv">2</span><span class="k">:-</span><span class="nv">Release</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nv">TOOLCHAIN_FILE</span><span class="o">=</span><span class="s2">&#34;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/cmake/toolchain/</span><span class="si">${</span><span class="nv">PLATFORM</span><span class="si">}</span><span class="s2">.cmake&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">BUILD_DIR</span><span class="o">=</span><span class="s2">&#34;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/build/</span><span class="si">${</span><span class="nv">PLATFORM</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 检查toolchain文件是否存在</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> ! -f <span class="s2">&#34;</span><span class="si">${</span><span class="nv">TOOLCHAIN_FILE</span><span class="si">}</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;Error: Toolchain file </span><span class="si">${</span><span class="nv">TOOLCHAIN_FILE</span><span class="si">}</span><span class="s2"> not found!&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 创建构建目录</span>
+</span></span><span class="line"><span class="cl">mkdir -p <span class="s2">&#34;</span><span class="si">${</span><span class="nv">BUILD_DIR</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> <span class="s2">&#34;</span><span class="si">${</span><span class="nv">BUILD_DIR</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 执行CMake构建</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Building </span><span class="si">${</span><span class="nv">PLATFORM</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">BUILD_TYPE</span><span class="si">}</span><span class="s2">...&#34;</span>
+</span></span><span class="line"><span class="cl">cmake <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -DCMAKE_TOOLCHAIN_FILE<span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">TOOLCHAIN_FILE</span><span class="si">}</span><span class="s2">&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -DCMAKE_BUILD_TYPE<span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">BUILD_TYPE</span><span class="si">}</span><span class="s2">&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    ../..
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">cmake --build . -j<span class="k">$(</span>nproc<span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Build completed! Output: </span><span class="si">${</span><span class="nv">BUILD_DIR</span><span class="si">}</span><span class="s2">/bin&#34;</span></span></span></code></pre></div></div>
+<p>使用方法：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 构建Linux x86_64 Release版本</span>
+</span></span><span class="line"><span class="cl">./build.sh linux-x86_64 Release
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 构建Windows MinGW Debug版本</span>
+</span></span><span class="line"><span class="cl">./build.sh windows-mingw Debug
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 构建Linux ARM64版本</span>
+</span></span><span class="line"><span class="cl">./build.sh linux-aarch64</span></span></code></pre></div></div>
+<hr>
+<h2 id="六最佳实践与避坑指南">六、最佳实践与避坑指南</h2>
+<h3 id="61-核心最佳实践">6.1 核心最佳实践</h3>
+<ol>
+<li><strong>严格隔离平台差异</strong>：平台专属的编译选项、链接库、宏定义全部放在toolchain文件中，主<code>CMakeLists.txt</code>只写通用构建逻辑，避免大量<code>if(WIN32)</code>/<code>if(UNIX)</code>分支。</li>
+<li><strong>避免硬编码路径</strong>：编译器路径、SDK路径通过环境变量传入，不要写死在cmake文件中，适配不同开发环境。</li>
+<li><strong>输出目录按平台隔离</strong>：不同平台的构建产物放在独立的build目录下，避免文件覆盖和增量编译异常。</li>
+<li><strong>统一编译标准与警告规则</strong>：通过common.cmake统一C/C++标准和警告等级，避免不同平台出现编译行为不一致。</li>
+<li><strong>交叉编译严格控制查找规则</strong>：必须设置<code>CMAKE_FIND_ROOT_PATH_MODE_*</code>变量，防止<code>find_library</code>/<code>find_package</code>找到主机的库，导致链接失败。</li>
+<li><strong>优先使用官方toolchain</strong>：Android、iOS、ROS等平台已提供官方维护的toolchain文件，直接复用即可，无需从零编写，减少兼容性问题。</li>
+</ol>
+<h3 id="62-常见坑与解决方案">6.2 常见坑与解决方案</h3>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">问题现象</th>
+          <th style="text-align: left">根因</th>
+          <th style="text-align: left">解决方案</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">交叉编译时，CMake提示“编译器无法编译简单测试程序”</td>
+          <td style="text-align: left">未设置<code>CMAKE_SYSTEM_NAME</code>，CMake未进入交叉编译模式，用主机规则校验目标编译器</td>
+          <td style="text-align: left">必须在toolchain开头设置<code>CMAKE_SYSTEM_NAME</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">交叉编译链接时，找到主机的so库，出现架构不匹配错误</td>
+          <td style="text-align: left">未设置<code>FIND_ROOT_PATH</code>相关变量，CMake优先查找主机系统库</td>
+          <td style="text-align: left">设置<code>CMAKE_FIND_ROOT_PATH_MODE_LIBRARY/INCLUDE</code>为<code>ONLY</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Linux共享库编译报错“relocation R_X86_64_32 against `.rodata&rsquo; can not be used when making a shared object”</td>
+          <td style="text-align: left">未开启PIC（位置无关代码）</td>
+          <td style="text-align: left">设置<code>CMAKE_POSITION_INDEPENDENT_CODE ON</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">MinGW编译的程序运行时缺少libgcc_s_seh-1.dll等依赖</td>
+          <td style="text-align: left">标准库动态链接，未静态链接</td>
+          <td style="text-align: left">添加链接选项<code>-static-libgcc -static-libstdc++</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">MSVC编译出现中文乱码</td>
+          <td style="text-align: left">未指定源码编码为UTF-8</td>
+          <td style="text-align: left">添加编译选项<code>/utf-8</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">macOS编译提示“library not found for -lxxx”</td>
+          <td style="text-align: left">RPATH未配置，运行时找不到动态库</td>
+          <td style="text-align: left">开启<code>CMAKE_MACOSX_RPATH</code>，设置<code>CMAKE_INSTALL_RPATH</code></td>
+      </tr>
+  </tbody>
+</table>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-01-24</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/003_cmake%E5%A4%9A%E5%B9%B3%E5%8F%B0toolchain%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/programming/">编程语言</a>,&nbsp;<a href="/blog/tags/cmake/">CMake</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/002_%E7%8E%B0%E4%BB%A3cmake%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="现代 CMake 语法详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>现代 CMake 语法详细总结</a>
+            <a href="/blog/001_excel%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="next" rel="next" title="Excel 使用详细总结">Excel 使用详细总结<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://zhengqijun0121/zhengqijun0121" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>
