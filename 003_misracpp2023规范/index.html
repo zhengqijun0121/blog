@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Misra C&#43;&#43; 2023 规范 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/003_misracpp2023%E8%A7%84%E8%8C%83/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="Misra C&#43;&#43; 2023 规范">
+  <meta property="og:description" content="Misra Cpp 2023 English Version Language independent issues MISRA C&#43;&#43;:2023 Rule 0.0.1	A function shall not contain unreachable statements. MISRA C&#43;&#43;:2023 Rule 0.0.2	Controlling expressions should not be invariant. MISRA C&#43;&#43;:2023 Rule 0.1.1	A value should not be unnecessarily written to a local object. MISRA C&#43;&#43;:2023 Rule 0.1.2	The value returned by a function shall be used. MISRA C&#43;&#43;:2023 Rule 0.2.1	Variables with limited visibility should be used at least once. MISRA C&#43;&#43;:2023 Rule 0.2.2	A named function parameter shall be used at least once. MISRA C&#43;&#43;:2023 Rule 0.2.3	Types with limited visibility should be used at least once. MISRA C&#43;&#43;:2023 Rule 0.2.4	Functions with limited visibility should be used at least once. MISRA C&#43;&#43;:2023 Dir 0.3.1	Floating-point arithmetic should be used appropriately. MISRA C&#43;&#43;:2023 Dir 0.3.2	A function call shall not violate the function’s preconditions.">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-04-19T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-04-19T10:00:00+08:00">
+    <meta property="article:tag" content="MisraCpp">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="Misra C&#43;&#43; 2023 规范">
+  <meta name="twitter:description" content="Misra Cpp 2023 English Version Language independent issues MISRA C&#43;&#43;:2023 Rule 0.0.1	A function shall not contain unreachable statements. MISRA C&#43;&#43;:2023 Rule 0.0.2	Controlling expressions should not be invariant. MISRA C&#43;&#43;:2023 Rule 0.1.1	A value should not be unnecessarily written to a local object. MISRA C&#43;&#43;:2023 Rule 0.1.2	The value returned by a function shall be used. MISRA C&#43;&#43;:2023 Rule 0.2.1	Variables with limited visibility should be used at least once. MISRA C&#43;&#43;:2023 Rule 0.2.2	A named function parameter shall be used at least once. MISRA C&#43;&#43;:2023 Rule 0.2.3	Types with limited visibility should be used at least once. MISRA C&#43;&#43;:2023 Rule 0.2.4	Functions with limited visibility should be used at least once. MISRA C&#43;&#43;:2023 Dir 0.3.1	Floating-point arithmetic should be used appropriately. MISRA C&#43;&#43;:2023 Dir 0.3.2	A function call shall not violate the function’s preconditions.">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/003_misracpp2023%E8%A7%84%E8%8C%83/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/010_misracpp2008%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/002_misracpp2008%E8%A7%84%E8%8C%83/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Misra C++ 2023 规范",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/003_misracpp2023%E8%A7%84%E8%8C%83\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "MisraCpp","wordcount":  2866 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/003_misracpp2023%E8%A7%84%E8%8C%83\/","datePublished": "2026-04-19T09:00:00+08:00","dateModified": "2026-04-19T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/003_misracpp2023%E8%A7%84%E8%8C%83/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/003_misracpp2023%E8%A7%84%E8%8C%83/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Misra C++ 2023 规范</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/misracpp/"><i class="far fa-folder" aria-hidden="true"></i>MisraCpp</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-04-19">2026-04-19</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 2866 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 6 分钟&nbsp;<span id="/blog/003_misracpp2023%E8%A7%84%E8%8C%83/" class="leancloud_visitors" data-flag-title="Misra C&#43;&#43; 2023 规范">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#english-version">English Version</a>
+      <ul>
+        <li><a href="#language-independent-issues">Language independent issues</a></li>
+        <li><a href="#general-principles">General principles</a></li>
+        <li><a href="#lexical-conventions">Lexical conventions</a></li>
+        <li><a href="#basic-concepts">Basic concepts</a></li>
+        <li><a href="#standard-conventions">Standard conventions</a></li>
+        <li><a href="#expressions">Expressions</a></li>
+        <li><a href="#statements">Statements</a></li>
+        <li><a href="#declarations">Declarations</a></li>
+        <li><a href="#declarators">Declarators</a></li>
+        <li><a href="#classes">Classes</a></li>
+        <li><a href="#derived-classes">Derived classes</a></li>
+        <li><a href="#member-access-control">Member access control</a></li>
+        <li><a href="#special-member-functions">Special member functions</a></li>
+        <li><a href="#overriding">Overriding</a></li>
+        <li><a href="#templates">Templates</a></li>
+        <li><a href="#exception-handling">Exception handling</a></li>
+        <li><a href="#preprocessing-directives">Preprocessing directives</a></li>
+        <li><a href="#language-support-library">Language support library</a></li>
+        <li><a href="#diagnostics-library">Diagnostics library</a></li>
+        <li><a href="#genaral-utilities-library">Genaral utilities library</a></li>
+        <li><a href="#strings-library">Strings library</a></li>
+        <li><a href="#localization-library">Localization library</a></li>
+        <li><a href="#containers-library">Containers library</a></li>
+        <li><a href="#algorithms-library">Algorithms library</a></li>
+        <li><a href="#inputoutput-library">Input/output library</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="misra-cpp-2023">Misra Cpp 2023</h1>
+<hr>
+<h2 id="english-version">English Version</h2>
+<h3 id="language-independent-issues">Language independent issues</h3>
+<p>MISRA C++:2023 Rule 0.0.1	A function shall not contain unreachable statements.
+MISRA C++:2023 Rule 0.0.2	Controlling expressions should not be invariant.
+MISRA C++:2023 Rule 0.1.1	A value should not be unnecessarily written to a local object.
+MISRA C++:2023 Rule 0.1.2	The value returned by a function shall be used.
+MISRA C++:2023 Rule 0.2.1	Variables with limited visibility should be used at least once.
+MISRA C++:2023 Rule 0.2.2	A named function parameter shall be used at least once.
+MISRA C++:2023 Rule 0.2.3	Types with limited visibility should be used at least once.
+MISRA C++:2023 Rule 0.2.4	Functions with limited visibility should be used at least once.
+MISRA C++:2023 Dir 0.3.1	Floating-point arithmetic should be used appropriately.
+MISRA C++:2023 Dir 0.3.2	A function call shall not violate the function&rsquo;s preconditions.</p>
+<hr>
+<h3 id="general-principles">General principles</h3>
+<p>MISRA C++:2023 Rule 4.1.1	A program shall conform to ISO/IEC 14882:2017 (C++17).
+MISRA C++:2023 Rule 4.1.2	Deprecated features should not be used.
+MISRA C++:2023 Rule 4.1.3	There shall be no occurrence of undefined or critical unspecified behaviour.
+MISRA C++:2023 Rule 4.6.1	Operations on a memory location shall be sequenced appropriately.</p>
+<hr>
+<h3 id="lexical-conventions">Lexical conventions</h3>
+<p>MISRA C++:2023 Rule 5.0.1	Trigraph-like sequences should not be used.
+MISRA C++:2023 Rule 5.7.1	The character sequence /* shall not be used within a C-style comment.
+MISRA C++:2023 Dir 5.7.2	Sections of code should not be &ldquo;commented out&rdquo;.
+MISRA C++:2023 Rule 5.7.3	Line-splicing shall not be used in // comments.
+MISRA C++:2023 Rule 5.10.1	User-defined identifiers shall have an appropriate form.
+MISRA C++:2023 Rule 5.13.1	Within character literals and non raw-string literals, \ shall only be used to form a defined escape sequence or universal character name.
+MISRA C++:2023 Rule 5.13.2	Octal escape sequences, hexadecimal escape sequences and universal character names shall be terminated.
+MISRA C++:2023 Rule 5.13.3	Octal constants shall not be used.
+MISRA C++:2023 Rule 5.13.4	Unsigned integer literals shall be appropriately suffixed.
+MISRA C++:2023 Rule 5.13.5	The lowercase form of L shall not be used as the first character in a literal suffix.
+MISRA C++:2023 Rule 5.13.6	An integer-literal of type long long shall not use a single L or l in any suffix.
+MISRA C++:2023 Rule 5.13.7	String literals with different encoding prefixes shall not be concatenated.</p>
+<hr>
+<h3 id="basic-concepts">Basic concepts</h3>
+<p>MISRA C++:2023 Rule 6.0.1	Block scope declarations shall not be visually ambiguous.
+MISRA C++:2023 Rule 6.0.2	When an array with external linkage is declared, its size should be explicitly specified.
+MISRA C++:2023 Rule 6.0.3	The only declarations in the global namespace should be main, namespace declarations and extern &ldquo;C&rdquo; declarations.
+MISRA C++:2023 Rule 6.0.4	The identifier main shall not be used for a function other than the global function main.
+MISRA C++:2023 Rule 6.2.1	The one-definition rule shall not be violated.
+MISRA C++:2023 Rule 6.2.2	All declarations of a variable or function shall have the same type.
+MISRA C++:2023 Rule 6.2.3	The source code used to implement an entity shall appear only once.
+MISRA C++:2023 Rule 6.2.4	A header file shall not contain definitions of functions or objects that are non-inline and have external linkage.
+MISRA C++:2023 Rule 6.4.1	A variable declared in an inner scope shall not hide a variable declared in an outer scope.
+MISRA C++:2023 Rule 6.4.2	Derived classes shall not conceal functions that are inherited from their bases.
+MISRA C++:2023 Rule 6.4.3	A name that is present in a dependent base shall not be resolved by unqualified lookup.
+MISRA C++:2023 Rule 6.5.1	A function or object with external linkage should be introduced in a header file.
+MISRA C++:2023 Rule 6.5.2	Internal linkage should be specified appropriately.
+MISRA C++:2023 Rule 6.7.1	Local variables shall not have static storage duration.
+MISRA C++:2023 Rule 6.7.2	Global variables shall not be used.
+MISRA C++:2023 Rule 6.8.1	An object shall not be accessed outside of its lifetime.
+MISRA C++:2023 Rule 6.8.2	A function must not return a reference or a pointer to a local variable with automatic storage duration.
+MISRA C++:2023 Rule 6.8.3	An assignment operator shall not assign the address of an object with automatic storage duration to an object with a greater lifetime.
+MISRA C++:2023 Rule 6.8.4	Member functions returning references to their object should be ref-qualified appropriately.
+MISRA C++:2023 Rule 6.9.1	The same type aliases shall be used in all declarations of the same entity.
+MISRA C++:2023 Rule 6.9.2	The names of the standard signed integer types and standard unsigned integer types should not be used.</p>
+<hr>
+<h3 id="standard-conventions">Standard conventions</h3>
+<p>MISRA C++:2023 Rule 7.0.1	There shall be no conversion from type bool.
+MISRA C++:2023 Rule 7.0.2	There shall be no conversion to type bool.
+MISRA C++:2023 Rule 7.0.3	The numerical value of a character shall not be used.
+MISRA C++:2023 Rule 7.0.4	The operands of bitwise operators and shift operators shall be appropriate.
+MISRA C++:2023 Rule 7.0.5	Integral promotion and the usual arithmetic conversions shall not change the signedness or the type category of an operand.
+MISRA C++:2023 Rule 7.0.6	Assignment between numeric types shall be appropriate.
+MISRA C++:2023 Rule 7.11.1	nullptr shall be the only form of the null-pointer-constant.
+MISRA C++:2023 Rule 7.11.2	An array passed as a function argument shall not decay to a pointer.
+MISRA C++:2023 Rule 7.11.3	A conversion from function type to pointer-to-function type shall only occur in appropriate contexts.</p>
+<hr>
+<h3 id="expressions">Expressions</h3>
+<p>MISRA C++:2023 Rule 8.0.1	Parentheses should be used to make the meaning of an expression appropriately explicit.
+MISRA C++:2023 Rule 8.1.1	A non-transient lambda shall not implicitly capture this.
+MISRA C++:2023 Rule 8.1.2	Variables should be captured explicitly in a non-transient lambda.
+MISRA C++:2023 Rule 8.2.1	A virtual base class shall only be cast to a derived class by means of dynamic_cast.
+MISRA C++:2023 Rule 8.2.2	C-style casts and functional notation casts shall not be used.
+MISRA C++:2023 Rule 8.2.3	A cast shall not remove any const or volatile qualification from the type accessed via a pointer or by reference.
+MISRA C++:2023 Rule 8.2.4	Casts shall not be performed between a pointer to function and any other type.
+MISRA C++:2023 Rule 8.2.5	reinterpret_cast shall not be used.
+MISRA C++:2023 Rule 8.2.6	An object with integral, enumerated, or pointer to void type shall not be cast to a pointer type.
+MISRA C++:2023 Rule 8.2.7	A cast should not convert a pointer type to an integral type.
+MISRA C++:2023 Rule 8.2.8	An object pointer type shall not be cast to an integral type other than std::uintptr_t or std::intptr_t.
+MISRA C++:2023 Rule 8.2.9	The operand to typeid shall not be an expression of polymorphic class type.
+MISRA C++:2023 Rule 8.2.10	Functions shall not call themselves, either directly or indirectly.
+MISRA C++:2023 Rule 8.2.11	An argument passed via ellipsis shall have an appropriate type.
+MISRA C++:2023 Rule 8.3.1	The built-in unary - operator should not be applied to an expression of unsigned type.
+MISRA C++:2023 Rule 8.3.2	The built-in unary + operator should not be used.
+MISRA C++:2023 Rule 8.7.1	Pointer arithmetic shall not form an invalid pointer.
+MISRA C++:2023 Rule 8.7.2	Subtraction between pointers shall only be applied to pointers that address elements of the same array.
+MISRA C++:2023 Rule 8.9.1	The built-in relational operators &gt;, &gt;=, &lt; and &lt;= shall not be applied to objects of pointer type, except where they point to elements of the same array.
+MISRA C++:2023 Rule 8.14.1	The right-hand operand of a logical &amp;&amp; or || operator should not contain persistent side effects.
+MISRA C++:2023 Rule 8.18.1	An object or subobject must not be copied to an overlapping object.
+MISRA C++:2023 Rule 8.18.2	The result of an assignment operator should not be used.
+MISRA C++:2023 Rule 8.19.1	The comma operator should not be used.
+MISRA C++:2023 Rule 8.20.1	An unsigned arithmetic operation with constant operands should not wrap.</p>
+<hr>
+<h3 id="statements">Statements</h3>
+<p>MISRA C++:2023 Rule 9.2.1	An explicit type conversion shall not be an expression statement.
+MISRA C++:2023 Rule 9.3.1	The body of an iteration-statement or a selection-statement shall be a compound-statement.
+MISRA C++:2023 Rule 9.4.1	All if &hellip; else if constructs shall be terminated with an else statement.
+MISRA C++:2023 Rule 9.4.2	The structure of a switch statement shall be appropriate.
+MISRA C++:2023 Rule 9.5.1	Legacy for statements should be simple.
+MISRA C++:2023 Rule 9.5.2	A for-range-initializer shall contain at most one function call.
+MISRA C++:2023 Rule 9.6.1	The goto statement should not be used.
+MISRA C++:2023 Rule 9.6.2	A goto statement shall reference a label in a surrounding block.
+MISRA C++:2023 Rule 9.6.3	The goto statement shall jump to a label declared later in the function body.
+MISRA C++:2023 Rule 9.6.4	A function declared with the [[noreturn]] attribute shall not return.
+MISRA C++:2023 Rule 9.6.5	A function with non-void return type shall return a value on all paths.</p>
+<hr>
+<h3 id="declarations">Declarations</h3>
+<p>MISRA C++:2023 Rule 10.0.1	A declaration should not declare more than one variable or member variable.
+MISRA C++:2023 Rule 10.1.1	The target type of a pointer or lvalue reference parameter should be const-qualified appropriately.
+MISRA C++:2023 Rule 10.1.2	The volatile qualifier shall be used appropriately.
+MISRA C++:2023 Rule 10.2.1	An enumeration shall be defined with an explicit underlying type.
+MISRA C++:2023 Rule 10.2.2	Unscoped enumerations should not be declared.
+MISRA C++:2023 Rule 10.2.3	The numeric value of an unscoped enumeration with no fixed underlying type shall not be used.
+MISRA C++:2023 Rule 10.3.1	There should be no unnamed namespaces in header files.
+MISRA C++:2023 Rule 10.4.1	The asm declaration shall not be used.</p>
+<hr>
+<h3 id="declarators">Declarators</h3>
+<p>MISRA C++:2023 Rule 11.3.1	Variables of array type should not be declared.
+MISRA C++:2023 Rule 11.3.2	The declaration of an object should contain no more than two levels of pointer indirection.
+MISRA C++:2023 Rule 11.6.1	All variables should be initialized.
+MISRA C++:2023 Rule 11.6.2	The value of an object must not be read before it has been set.
+MISRA C++:2023 Rule 11.6.3	Within an enumerator list, the value of an implicitly-specified enumeration constant shall be unique.</p>
+<hr>
+<h3 id="classes">Classes</h3>
+<p>MISRA C++:2023 Rule 12.2.1	Bit-fields should not be declared.
+MISRA C++:2023 Rule 12.2.2	A bit-field shall have an appropriate type.
+MISRA C++:2023 Rule 12.2.3	A named bit-field with signed integer type shall not have a length of one bit.
+MISRA C++:2023 Rule 12.3.1	The union keyword shall not be used.
+MISRA C++:2023 Rule 12.3.1	The union keyword shall not be used.</p>
+<hr>
+<h3 id="derived-classes">Derived classes</h3>
+<p>MISRA C++:2023 Rule 13.1.1	Classes should not be inherited virtually.
+MISRA C++:2023 Rule 13.1.2	An accessible base class shall not be both virtual and non-virtual in the same hierarchy.
+MISRA C++:2023 Rule 13.3.1	User-declared member functions shall use the virtual, override and final specifiers appropriately.
+MISRA C++:2023 Rule 13.3.2	Parameters in an overriding virtual function shall not specify different default arguments.
+MISRA C++:2023 Rule 13.3.3	The parameters in all declarations or overrides of a function shall either be unnamed or have identical names.
+MISRA C++:2023 Rule 13.3.4	A comparison of a potentially virtual pointer to member function shall only be with nullptr.</p>
+<hr>
+<h3 id="member-access-control">Member access control</h3>
+<p>MISRA C++:2023 Rule 14.1.1	Non-static data members should be either all private or all public.</p>
+<hr>
+<h3 id="special-member-functions">Special member functions</h3>
+<p>MISRA C++:2023 Rule 15.0.1	Special member functions shall be provided appropriately.
+MISRA C++:2023 Rule 15.0.2	User-provided copy and move member functions of a class should have appropriate signatures.
+MISRA C++:2023 Rule 15.1.1	An object&rsquo;s dynamic type shall not be used from within its constructor or destructor.
+MISRA C++:2023 Rule 15.1.2	All constructors of a class should explicitly initialize all of its virtual base classes and immediate base classes.
+MISRA C++:2023 Rule 15.1.3	Conversion operators and constructors that are callable with a single argument shall be explicit.
+MISRA C++:2023 Rule 15.1.4	All direct, non-static data members of a class should be initialized before the class object is accessible.
+MISRA C++:2023 Rule 15.1.5	A class shall only define an initializer-list constructor when it is the only constructor.
+MISRA C++:2023 Dir 15.8.1	User-provided copy assignment operators and move assignment operators shall handle self-assignment.</p>
+<hr>
+<h3 id="overriding">Overriding</h3>
+<p>MISRA C++:2023 Rule 16.5.1	The logical AND and logical OR operators shall not be overloaded.
+MISRA C++:2023 Rule 16.5.2	The address-of operator shall not be overloaded.
+MISRA C++:2023 Rule 16.6.1	Symmetrical operators should only be implemented as non-member functions.</p>
+<hr>
+<h3 id="templates">Templates</h3>
+<p>MISRA C++:2023 Rule 17.8.1	Function templates shall not be explicitly specialized.</p>
+<hr>
+<h3 id="exception-handling">Exception handling</h3>
+<p>MISRA C++:2023 Rule 18.1.1	An exception object shall not have pointer type.
+MISRA C++:2023 Rule 18.1.2	An empty throw shall only occur within the compound-statement of a catch handler.
+MISRA C++:2023 Rule 18.3.1	There should be at least one exception handler to catch all otherwise unhandled exceptions.
+MISRA C++:2023 Rule 18.3.2	An exception of class type shall be caught by const reference or reference.
+MISRA C++:2023 Rule 18.3.3	Handlers for a function-try-block of a constructor or destructor shall not refer to non-static members from their class or its bases.
+MISRA C++:2023 Rule 18.4.1	Exception-unfriendly functions shall be noexcept.
+MISRA C++:2023 Rule 18.5.1	A noexcept function should not attempt to propagate an exception to the calling function.
+MISRA C++:2023 Rule 18.5.2	Program-terminating functions should not be used.</p>
+<hr>
+<h3 id="preprocessing-directives">Preprocessing directives</h3>
+<p>MISRA C++:2023 Rule 19.0.1	A line whose first token is # shall be a valid preprocessing directive.
+MISRA C++:2023 Rule 19.0.2	Function-like macros shall not be defined.
+MISRA C++:2023 Rule 19.0.3	#include directives should only be preceded by preprocessor directives or comments.
+MISRA C++:2023 Rule 19.0.4	#undef should only be used for macros defined previously in the same file.
+MISRA C++:2023 Rule 19.1.1	The defined preprocessor operator shall be used appropriately.
+MISRA C++:2023 Rule 19.1.2	All #else, #elif and #endif preprocessor directives shall reside in the same file as the #if, #ifdef or #ifndef directive to which they are related.
+MISRA C++:2023 Rule 19.1.3	All identifiers used in the controlling expression of #if or #elif preprocessing directives shall be defined prior to evaluation.
+MISRA C++:2023 Rule 19.2.1	Precautions shall be taken in order to prevent the contents of a header file being included more than once.
+MISRA C++:2023 Rule 19.2.2	The #include directive shall be followed by either a <filename> or &ldquo;filename&rdquo; sequence.
+MISRA C++:2023 Rule 19.2.3	The &rsquo; or &quot; or \ characters and the /* or // character sequences shall not occur in a header file name.
+MISRA C++:2023 Rule 19.3.1	The # and ## preprocessor operators should not be used.
+MISRA C++:2023 Rule 19.3.2	A macro parameter immediately following a # operator shall not be immediately followed by a ## operator.
+MISRA C++:2023 Rule 19.3.3	The argument to a mixed-use macro parameter shall not be subject to further expansion.
+MISRA C++:2023 Rule 19.3.4	Parentheses shall be used to ensure macro arguments are expanded appropriately.
+MISRA C++:2023 Rule 19.3.5	Tokens that look like a preprocessing directive shall not occur within a macro argument.
+MISRA C++:2023 Rule 19.6.1	The #pragma directive and the _Pragma operator should not be used.</p>
+<hr>
+<h3 id="language-support-library">Language support library</h3>
+<p>MISRA C++:2023 Rule 21.2.1	The library functions atof, atoi, atol and atoll from <cstdlib> shall not be used.
+MISRA C++:2023 Rule 21.2.2	The string handling functions from <cstring>, <cstdlib>, <cwchar> and <cinttypes> shall not be used.
+MISRA C++:2023 Rule 21.2.3	The library function system from <cstdlib> shall not be used.
+MISRA C++:2023 Rule 21.2.4	The macro offsetof shall not be used.
+MISRA C++:2023 Rule 21.6.1	Dynamic memory should not be used.
+MISRA C++:2023 Rule 21.6.2	Dynamic memory shall be managed automatically.
+MISRA C++:2023 Rule 21.6.3	Advanced memory management shall not be used.
+MISRA C++:2023 Rule 21.6.4	If a project defines either a sized or unsized version of a global operator delete, then both shall be defined.
+MISRA C++:2023 Rule 21.6.5	A pointer to an incomplete class type shall not be deleted.
+MISRA C++:2023 Rule 21.10.1	The features of <cstdarg> shall not be used.
+MISRA C++:2023 Rule 21.10.2	The standard header file <csetjmp> shall not be used.
+MISRA C++:2023 Rule 21.10.3	The facilities provided by the standard header file <csignal> shall not be used.</p>
+<hr>
+<h3 id="diagnostics-library">Diagnostics library</h3>
+<p>MISRA C++:2023 Rule 22.3.1	The assert macro shall not be used with a constant-expression.
+MISRA C++:2023 Rule 22.4.1	The literal value zero shall be the only value assigned to errno.</p>
+<hr>
+<h3 id="genaral-utilities-library">Genaral utilities library</h3>
+<p>MISRA C++:2023 Rule 23.11.1	The raw pointer constructors of std::shared_ptr and std::unique_ptr should not be used.</p>
+<hr>
+<h3 id="strings-library">Strings library</h3>
+<p>MISRA C++:2023 Rule 24.5.1	The character handling functions from <cctype> and <cwctype> shall not be used.
+MISRA C++:2023 Rule 24.5.2	The C++ Standard Library functions memcpy, memmove, memcmp from <cstring> shall not be used.</p>
+<hr>
+<h3 id="localization-library">Localization library</h3>
+<p>MISRA C++:2023 Rule 25.5.1	The setlocale and std::locale::global functions shall not be called.
+MISRA C++:2023 Rule 25.5.2	The pointers returned by the C++ Standard Library functions localeconv, getenv, setlocale or strerror must only be used as if they have pointer to const-qualified type.
+MISRA C++:2023 Rule 25.5.3	The pointer returned by the C++ Standard Library functions asctime, ctime, gmtime, localtime, localeconv, getenv, setlocale or strerror must not be used following a subsequent call to the same function.</p>
+<hr>
+<h3 id="containers-library">Containers library</h3>
+<p>MISRA C++:2023 Rule 26.3.1	std::vector should not be specialized with bool.</p>
+<hr>
+<h3 id="algorithms-library">Algorithms library</h3>
+<p>MISRA C++:2023 Rule 28.3.1	Predicates shall not have persistent side effects.
+MISRA C++:2023 Rule 28.6.1	The argument to std::move shall be a non-const lvalue.
+MISRA C++:2023 Rule 28.6.2	Forwarding references and std::forward shall be used together.
+MISRA C++:2023 Rule 28.6.3	An object shall not be used while in a potentially moved-from state.
+MISRA C++:2023 Rule 28.6.4	The result of std::remove, std::remove_if, std::unique and empty shall be used.</p>
+<hr>
+<h3 id="inputoutput-library">Input/output library</h3>
+<p>MISRA C++:2023 Rule 30.0.1	The C Library input/output functions shall not be used.
+MISRA C++:2023 Rule 30.0.2	Reads and writes on the same file stream shall be separated by a positioning operation.</p>
+<hr>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-04-19</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/003_misracpp2023%E8%A7%84%E8%8C%83/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/misracpp/">MisraCpp</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/010_misracpp2008%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="Misra C&#43;&#43; 2008 详细总结"><i class="fas fa-angle-left" aria-hidden="true"></i>Misra C++ 2008 详细总结</a>
+            <a href="/blog/002_misracpp2008%E8%A7%84%E8%8C%83/" class="next" rel="next" title="Misra C&#43;&#43; 2008 规范">Misra C++ 2008 规范<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>
