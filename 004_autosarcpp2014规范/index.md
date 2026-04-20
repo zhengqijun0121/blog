@@ -1,4 +1,4 @@
-#  AUTOSAR C++ 2014 规范
+# AUTOSAR C++ 2014 规范
 
 
 # AUTOSAR Cpp 2014 规范

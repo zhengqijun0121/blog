@@ -1,4 +1,4 @@
-#  CERT C++ 规范
+# CERT C++ 规范
 
 
 # CERT Cpp 规范
@@ -26,9 +26,9 @@ CERT C++: DCL53-CPP	Do not write syntactically ambiguous declarations
 
 CERT C++: DCL54-CPP	Overload allocation and deallocation functions as a pair in the same scope
 
-CERT C++: DCL55-CPP	Avoid information leakage when passing a class object across a trust boundary (Since R2022b)
+CERT C++: DCL55-CPP	Avoid information leakage when passing a class object across a trust boundary
 
-CERT C++: DCL56-CPP	Avoid cycles during initialization of static objects (Since R2022b)
+CERT C++: DCL56-CPP	Avoid cycles during initialization of static objects
 
 CERT C++: DCL57-CPP	Do not let exceptions escape from destructors or deallocation functions
 
@@ -63,7 +63,7 @@ CERT C++: EXP47-C	Do not call va_arg with an argument of the incorrect type
 
 CERT C++: EXP50-CPP	Do not depend on the order of evaluation for side effects
 
-CERT C++: EXP51-CPP	Do not delete an array through a pointer of the incorrect type (Since R2022b)
+CERT C++: EXP51-CPP	Do not delete an array through a pointer of the incorrect type
 
 CERT C++: EXP52-CPP	Do not rely on side effects in unevaluated operands
 
@@ -73,7 +73,7 @@ CERT C++: EXP54-CPP	Do not access an object outside of its lifetime
 
 CERT C++: EXP55-CPP	Do not access a cv-qualified object through a cv-unqualified type
 
-CERT C++: EXP56-CPP	Do not call a function with a mismatched language linkage (Since R2023b)
+CERT C++: EXP56-CPP	Do not call a function with a mismatched language linkage
 
 CERT C++: EXP57-CPP	Do not cast or delete pointers to incomplete classes
 
@@ -81,11 +81,11 @@ CERT C++: EXP58-CPP	Pass an object of the correct type to va_start
 
 CERT C++: EXP59-CPP	Use offsetof() on valid types and members
 
-CERT C++: EXP60-CPP	Do not pass a nonstandard-layout type object across execution boundaries (Since R2023b)
+CERT C++: EXP60-CPP	Do not pass a nonstandard-layout type object across execution boundaries
 
 CERT C++: EXP61-CPP	A lambda object must not outlive any of its reference captured objects
 
-CERT C++: EXP62-CPP	Do not access the bits of an object representation that are not part of the object's value representation (Since R2022b)
+CERT C++: EXP62-CPP	Do not access the bits of an object representation that are not part of the object's value representation
 
 CERT C++: EXP63-CPP	Do not rely on the value of a moved-from object
 
@@ -108,7 +108,7 @@ CERT C++: INT35-C	Use correct integer precisions
 
 CERT C++: INT36-C	Converting a pointer to integer or integer to pointer
 
-CERT C++: INT50-CPP	Do not cast to an out-of-range enumeration value (Since R2023b)
+CERT C++: INT50-CPP	Do not cast to an out-of-range enumeration value
 
 ----
 
@@ -125,220 +125,259 @@ CERT C++: ARR39-C	Do not add or subtract a scaled integer to a pointer
 
 CERT C++: CTR50-CPP	Guarantee that container indices and iterators are within the valid range
 
-CERT C++: CTR51-CPP	Use valid references, pointers, and iterators to reference elements of a container (Since R2022a)
+CERT C++: CTR51-CPP	Use valid references, pointers, and iterators to reference elements of a container
 
-CERT C++: CTR52-CPP	Guarantee that library functions do not overflow (Since R2022b)
+CERT C++: CTR52-CPP	Guarantee that library functions do not overflow
 
-CERT C++: CTR53-CPP	Use valid iterator ranges (Since R2022b)
+CERT C++: CTR53-CPP	Use valid iterator ranges
 
-CERT C++: CTR54-CPP	Do not subtract iterators that do not refer to the same container (Since R2022b)
+CERT C++: CTR54-CPP	Do not subtract iterators that do not refer to the same container
 
-CERT C++: CTR55-CPP	Do not use an additive operator on an iterator if the result would overflow (Since R2022b)
+CERT C++: CTR55-CPP	Do not use an additive operator on an iterator if the result would overflow
 
-CERT C++: CTR56-CPP	Do not use pointer arithmetic on polymorphic objects (Since R2023a)
+CERT C++: CTR56-CPP	Do not use pointer arithmetic on polymorphic objects
 
-CERT C++: CTR57-CPP	Provide a valid ordering predicate (Since R2022a)
+CERT C++: CTR57-CPP	Provide a valid ordering predicate
 
-CERT C++: CTR58-CPP	Predicate function objects should not be mutable (Since R2022a)
-
-----
-
-### Standard conventions
-
-AUTOSAR C++14 Rule A4-5-1	Expressions with type enum or enum class shall not be used as operands to built-in and overloaded operators other than the subscript operator [], the assignment operator =, the equality operators == and !=, the unary & operator, and the relational operators <, <=, >, >=
-AUTOSAR C++14 Rule A4-7-1	An integer expression shall not lead to data loss
-AUTOSAR C++14 Rule A4-10-1	Only nullptr literal shall be used as the null-pointer-constraint
-AUTOSAR C++14 Rule M4-5-1	Expressions with type bool shall not be used as operands to built-in operators other than the assignment operator =, the logical operators &&, ||, !, the equality operators == and ! =, the unary & operator, and the conditional operator
-AUTOSAR C++14 Rule M4-5-3	Expressions with type (plain) char and wchar_t shall not be used as operands to built-in operators other than the assignment operator =, the equality operators == and ! =, and the unary & operator
-AUTOSAR C++14 Rule M4-10-1	NULL shall not be used as an integer value
-AUTOSAR C++14 Rule M4-10-2	Literal zero (0) shall not be used as the null-pointer-constant
+CERT C++: CTR58-CPP	Predicate function objects should not be mutable
 
 ----
 
-### Expressions
+### Characters and strings
 
-AUTOSAR C++14 Rule A5-0-1	The value of an expression shall be the same under any order of evaluation that the standard permits
-AUTOSAR C++14 Rule A5-0-2	The condition of an if-statement and the condition of an iteration statement shall have type bool
-AUTOSAR C++14 Rule A5-0-3	The declaration of objects shall contain no more than two levels of pointer indirection
-AUTOSAR C++14 Rule A5-0-4	Pointer arithmetic shall not be used with pointers to non-final classes
-AUTOSAR C++14 Rule A5-1-1	Literal values shall not be used apart from type initialization, otherwise symbolic names shall be used instead
-AUTOSAR C++14 Rule A5-1-2	Variables shall not be implicitly captured in a lambda expression
-AUTOSAR C++14 Rule A5-1-3	Parameter list (possibly empty) shall be included in every lambda expression
-AUTOSAR C++14 Rule A5-1-4	A lambda expression object shall not outlive any of its reference-captured objects
-AUTOSAR C++14 Rule A5-1-6	Return type of a non-void return type lambda expression should be explicitly specified
-AUTOSAR C++14 Rule A5-1-7	A lambda shall not be an operand to decltype or typeid
-AUTOSAR C++14 Rule A5-1-8	Lambda expressions should not be defined inside another lambda expression
-AUTOSAR C++14 Rule A5-1-9	Identical unnamed lambda expressions shall be replaced with a named function or a named lambda expression
-AUTOSAR C++14 Rule A5-2-1	dynamic_cast should not be used
-AUTOSAR C++14 Rule A5-2-2	Traditional C-style casts shall not be used
-AUTOSAR C++14 Rule A5-2-3	A cast shall not remove any const or volatile qualification from the type of a pointer or reference
-AUTOSAR C++14 Rule A5-2-4	reinterpret_cast shall not be used
-AUTOSAR C++14 Rule A5-2-5	An array or container shall not be accessed beyond its range
-AUTOSAR C++14 Rule A5-2-6	The operands of a logical && or || shall be parenthesized if the operands contain binary operators
-AUTOSAR C++14 Rule A5-3-1	Evaluation of the operand to the typeid operator shall not contain side effects
-AUTOSAR C++14 Rule A5-3-2	Null pointers shall not be dereferenced
-AUTOSAR C++14 Rule A5-3-3	Pointers to incomplete class types shall not be deleted
-AUTOSAR C++14 Rule A5-5-1	A pointer to member shall not access non-existent class members
-AUTOSAR C++14 Rule A5-6-1	The right hand operand of the integer division or remainder operators shall not be equal to zero
-AUTOSAR C++14 Rule A5-10-1	A pointer to member virtual function shall only be tested for equality with null-pointer-constant
-AUTOSAR C++14 Rule A5-16-1	The ternary conditional operator shall not be used as a sub-expression
-AUTOSAR C++14 Rule M5-0-2	Limited dependence should be placed on C++ operator precedence rules in expressions
-AUTOSAR C++14 Rule M5-0-3	A cvalue expression shall not be implicitly converted to a different underlying type
-AUTOSAR C++14 Rule M5-0-4	An implicit integral conversion shall not change the signedness of the underlying type
-AUTOSAR C++14 Rule M5-0-5	There shall be no implicit floating-integral conversions
-AUTOSAR C++14 Rule M5-0-6	An implicit integral or floating-point conversion shall not reduce the size of the underlying type
-AUTOSAR C++14 Rule M5-0-7	There shall be no explicit floating-integral conversions of a cvalue expression
-AUTOSAR C++14 Rule M5-0-8	An explicit integral or floating-point conversion shall not increase the size of the underlying type of a cvalue expression
-AUTOSAR C++14 Rule M5-0-9	An explicit integral conversion shall not change the signedness of the underlying type of a cvalue expression
-AUTOSAR C++14 Rule M5-0-10	If the bitwise operators ~and << are applied to an operand with an underlying type of unsigned char or unsigned short, the result shall be immediately cast to the underlying type of the operand
-AUTOSAR C++14 Rule M5-0-11	The plain char type shall only be used for the storage and use of character values
-AUTOSAR C++14 Rule M5-0-12	Signed char and unsigned char type shall only be used for the storage and use of numeric values
-AUTOSAR C++14 Rule M5-0-14	The first operand of a conditional-operator shall have type bool
-AUTOSAR C++14 Rule M5-0-15	Array indexing shall be the only form of pointer arithmetic
-AUTOSAR C++14 Rule M5-0-16	A pointer operand and any pointer resulting from pointer arithmetic using that operand shall both address elements of the same array
-AUTOSAR C++14 Rule M5-0-17	Subtraction between pointers shall only be applied to pointers that address elements of the same array
-AUTOSAR C++14 Rule M5-0-18	>, >=, <, <= shall not be applied to objects of pointer type, except where they point to the same array
-AUTOSAR C++14 Rule M5-0-20	Non-constant operands to a binary bitwise operator shall have the same underlying type
-AUTOSAR C++14 Rule M5-0-21	Bitwise operators shall only be applied to operands of unsigned underlying type
-AUTOSAR C++14 Rule M5-2-2	A pointer to a virtual base class shall only be cast to a pointer to a derived class by means of dynamic_cast
-AUTOSAR C++14 Rule M5-2-3	Casts from a base class to a derived class should not be performed on polymorphic types
-AUTOSAR C++14 Rule M5-2-6	A cast shall not convert a pointer to a function to any other pointer type, including a pointer to function type
-AUTOSAR C++14 Rule M5-2-8	An object with integer type or pointer to void type shall not be converted to an object with pointer type
-AUTOSAR C++14 Rule M5-2-9	A cast shall not convert a pointer type to an integral type
-AUTOSAR C++14 Rule M5-2-10	The increment (++) and decrement (--) operators shall not be mixed with other operators in an expression
-AUTOSAR C++14 Rule M5-2-11	The comma operator, && operator and the || operator shall not be overloaded
-AUTOSAR C++14 Rule M5-2-12	An identifier with array type passed as a function argument shall not decay to a pointer
-AUTOSAR C++14 Rule M5-3-1	Each operand of the ! operator, the logical && or the logical || operators shall have type bool
-AUTOSAR C++14 Rule M5-3-2	The unary minus operator shall not be applied to an expression whose underlying type is unsigned
-AUTOSAR C++14 Rule M5-3-3	The unary & operator shall not be overloaded
-AUTOSAR C++14 Rule M5-3-4	Evaluation of the operand to the sizeof operator shall not contain side effects
-AUTOSAR C++14 Rule M5-8-1	The right hand operand of a shift operator shall lie between zero and one less than the width in bits of the underlying type of the left hand operand
-AUTOSAR C++14 Rule M5-14-1	The right hand operand of a logical &&, || operators shall not contain side effects
-AUTOSAR C++14 Rule M5-18-1	The comma operator shall not be used
-AUTOSAR C++14 Rule M5-19-1	Evaluation of constant unsigned integer expressions shall not lead to wrap-around
+CERT C++: STR30-C	Do not attempt to modify string literals
+
+CERT C++: STR31-C	Guarantee that storage for strings has sufficient space for character data and the null terminator
+
+CERT C++: STR32-C	Do not pass a non-null-terminated character sequence to a library function that expects a string
+
+CERT C++: STR34-C	Cast characters to unsigned char before converting to larger integer sizes
+
+CERT C++: STR37-C	Arguments to character-handling functions must be representable as an unsigned char
+
+CERT C++: STR38-C	Do not confuse narrow and wide character strings and functions
+
+CERT C++: STR50-CPP	Guarantee that storage for strings has sufficient space for character data and the null terminator
+
+CERT C++: STR51-CPP	Do not attempt to create a std::string from a null pointer
+
+CERT C++: STR52-CPP	Use valid references, pointers, and iterators to reference elements of a basic_string
+
+CERT C++: STR53-CPP	Range check element access
 
 ----
 
-### Statements
+### Memory Management
 
-AUTOSAR C++14 Rule A6-2-1	Move and copy assignment operators shall either move or respectively copy base classes and data members of a class, without any side effects
-AUTOSAR C++14 Rule A6-2-2	Expression statements shall not be explicit calls to constructors of temporary objects only
-AUTOSAR C++14 Rule A6-4-1	A switch statement shall have at least two case-clauses, distinct from the default label
-AUTOSAR C++14 Rule A6-5-1	A for-loop that loops through all elements of the container and does not use its loop-counter shall not be used
-AUTOSAR C++14 Rule A6-5-2	A for loop shall contain a single loop-counter which shall not have floating-point type
-AUTOSAR C++14 Rule A6-5-3	Do statements should not be used
-AUTOSAR C++14 Rule A6-5-4	For-init-statement and expression should not perform actions other than loop-counter initialization and modification
-AUTOSAR C++14 Rule A6-6-1	The goto statement shall not be used
-AUTOSAR C++14 Rule M6-2-1	Assignment operators shall not be used in sub-expressions
-AUTOSAR C++14 Rule M6-2-2	Floating-point expressions shall not be directly or indirectly tested for equality or inequality
-AUTOSAR C++14 Rule M6-2-3	Before preprocessing, a null statement shall only occur on a line by itself; it may be followed by a comment, provided that the first character following the null statement is a white-space character
-AUTOSAR C++14 Rule M6-3-1	The statement forming the body of a switch, while, do ... while or for statement shall be a compound statement
-AUTOSAR C++14 Rule M6-4-1	An if ( condition ) construct shall be followed by a compound statement. The else keyword shall be followed by either a compound statement, or another if statement
-AUTOSAR C++14 Rule M6-4-2	All if ... else if constructs shall be terminated with an else clause
-AUTOSAR C++14 Rule M6-4-3	A switch statement shall be a well-formed switch statement
-AUTOSAR C++14 Rule M6-4-4	A switch-label shall only be used when the most closely-enclosing compound statement is the body of a switch statement
-AUTOSAR C++14 Rule M6-4-5	An unconditional throw or break statement shall terminate every non-empty switch-clause
-AUTOSAR C++14 Rule M6-4-6	The final clause of a switch statement shall be the default-clause
-AUTOSAR C++14 Rule M6-4-7	The condition of a switch statement shall not have bool type
-AUTOSAR C++14 Rule M6-5-2	If loop-counter is not modified by -- or ++, then, within condition, the loop-counter shall only be used as an operand to <=, <, > or >=
-AUTOSAR C++14 Rule M6-5-3	The loop-counter shall not be modified within condition or statement
-AUTOSAR C++14 Rule M6-5-4	The loop-counter shall be modified by one of: --, ++, -=n, or +=n; where n remains constant for the duration of the loop
-AUTOSAR C++14 Rule M6-5-5	A loop-control-variable other than the loop-counter shall not be modified within condition or expression
-AUTOSAR C++14 Rule M6-5-6	A loop-control-variable other than the loop-counter which is modified in statement shall have type bool
-AUTOSAR C++14 Rule M6-6-1	Any label referenced by a goto statement shall be declared in the same block, or in a block enclosing the goto statement
-AUTOSAR C++14 Rule M6-6-2	The goto statement shall jump to a label declared later in the same function body
-AUTOSAR C++14 Rule M6-6-3	The continue statement shall only be used within a well-formed for loop
+CERT C++: MEM30-C	Do not access freed memory
+
+CERT C++: MEM31-C	Free dynamically allocated memory when no longer needed
+
+CERT C++: MEM34-C	Only free memory allocated dynamically
+
+CERT C++: MEM35-C	Allocate sufficient memory for an object
+
+CERT C++: MEM36-C	Do not modify the alignment of objects by calling realloc()
+
+CERT C++: MEM50-CPP	Do not access freed memory
+
+CERT C++: MEM51-CPP	Properly deallocate dynamically allocated resources
+
+CERT C++: MEM52-CPP	Detect and handle memory allocation errors
+
+CERT C++: MEM53-CPP	Explicitly construct and destruct objects when manually managing object lifetime
+
+CERT C++: MEM54-CPP	Provide placement new with properly aligned pointers to sufficient storage capacity
+
+CERT C++: MEM55-CPP	Honor replacement dynamic storage management requirements
+
+CERT C++: MEM56-CPP	Do not store an already-owned pointer value in an unrelated smart pointer
+
+CERT C++: MEM57-CPP	Avoid using default operator new for over-aligned types
 
 ----
 
-### Declarations
+### Input and output
 
-AUTOSAR C++14 Rule A7-1-1	Constexpr or const specifiers shall be used for immutable data declaration
-AUTOSAR C++14 Rule A7-1-2	The constexpr specifier shall be used for values that can be determined at compile time
-AUTOSAR C++14 Rule A7-1-3	CV-qualifiers shall be placed on the right hand side of the type that is a typedef or a using name
-AUTOSAR C++14 Rule A7-1-4	The register keyword shall not be used
-AUTOSAR C++14 Rule A7-1-5	The auto specifier shall not be used apart from following cases: (1) to declare that a variable has the same type as return type of a function call, (2) to declare that a variable has the same type as initializer of non-fundamental type, (3) to declare parameters of a generic lambda expression, (4) to declare a function template using trailing return type syntax
-AUTOSAR C++14 Rule A7-1-6	The typedef specifier shall not be used
-AUTOSAR C++14 Rule A7-1-7	Each expression statement and identifier declaration shall be placed on a separate line
-AUTOSAR C++14 Rule A7-1-8	A non-type specifier shall be placed before a type specifier in a declaration
-AUTOSAR C++14 Rule A7-1-9	A class, structure, or enumeration shall not be declared in the definition of its type
-AUTOSAR C++14 Rule A7-2-1	An expression with enum underlying type shall only have values corresponding to the enumerators of the enumeration
-AUTOSAR C++14 Rule A7-2-2	Enumeration underlying type shall be explicitly defined
-AUTOSAR C++14 Rule A7-2-3	Enumerations shall be declared as scoped enum classes
-AUTOSAR C++14 Rule A7-2-4	In an enumeration, either (1) none, (2) the first or (3) all enumerators shall be initialized
-AUTOSAR C++14 Rule A7-3-1	All overloads of a function shall be visible from where it is called
-AUTOSAR C++14 Rule A7-5-1	A function shall not return a reference or a pointer to a parameter that is passed by reference to const
-AUTOSAR C++14 Rule A7-5-2	Functions shall not call themselves, either directly or indirectly
-AUTOSAR C++14 Rule A7-6-1	Functions declared with the [[noreturn]] attribute shall not return
-AUTOSAR C++14 Rule M7-1-2	A pointer or reference parameter in a function shall be declared as pointer to const or reference to const if the corresponding object is not modified
-AUTOSAR C++14 Rule M7-3-1	The global namespace shall only contain main, namespace declarations and extern "C" declarations
-AUTOSAR C++14 Rule M7-3-2	The identifier main shall not be used for a function other than the global function main
-AUTOSAR C++14 Rule M7-3-3	There shall be no unnamed namespaces in header files
-AUTOSAR C++14 Rule M7-3-4	Using-directives shall not be used
-AUTOSAR C++14 Rule M7-3-6	Using-directives and using-declarations (excluding class scope or function scope using-declarations) shall not be used in header files
-AUTOSAR C++14 Rule A7-4-1	The asm declaration shall not be used
-AUTOSAR C++14 Rule M7-4-2	Assembler instructions shall only be introduced using the asm declaration
-AUTOSAR C++14 Rule M7-4-3	Assembly language shall be encapsulated and isolated
-AUTOSAR C++14 Rule M7-5-1	A function shall not return a reference or a pointer to an automatic variable (including parameters), defined within the function
-AUTOSAR C++14 Rule M7-5-2	The address of an object with automatic storage shall not be assigned to another object that may persist after the first object has ceased to exist
+CERT C++: FIO30-C	Exclude user input from format strings
 
-----
+CERT C++: FIO32-C	Do not perform operations on devices that are only appropriate for files
 
-### Declarators
+CERT C++: FIO34-C	Distinguish between characters read from a file and EOF or WEOF
 
-AUTOSAR C++14 Rule A8-2-1	When declaring function templates, the trailing return type syntax shall be used if the return type depends on the type of parameters
-AUTOSAR C++14 Rule A8-4-1	Functions shall not be defined using the ellipsis notation
-AUTOSAR C++14 Rule A8-4-2	All exit paths from a function with non-void return type shall have an explicit return statement with an expression
-AUTOSAR C++14 Rule A8-4-3	Common ways of passing parameters should be used.
-AUTOSAR C++14 Rule A8-4-4	Multiple output values from a function should be returned as a struct or tuple
-AUTOSAR C++14 Rule A8-4-5	"consume" parameters declared as X && shall always be moved from
-AUTOSAR C++14 Rule A8-4-6	"forward" parameters declared as T && shall always be forwarded
-AUTOSAR C++14 Rule A8-4-7	"in" parameters for "cheap to copy" types shall be passed by value
-AUTOSAR C++14 Rule A8-4-8	Output parameters shall not be used
-AUTOSAR C++14 Rule A8-4-9	"in-out" parameters declared as T & shall be modified
-AUTOSAR C++14 Rule A8-4-10	A parameter shall be passed by reference if it can't be NULL
-AUTOSAR C++14 Rule A8-4-11	A smart pointer shall only be used as a parameter type if it expresses lifetime semantics (Since R2022b)
-AUTOSAR C++14 Rule A8-4-12	A std::unique_ptr shall be passed to a function as: (1) a copy to express the function assumes ownership (2) an lvalue reference to express that the function replaces the managed object. (Since R2022b)
-AUTOSAR C++14 Rule A8-4-13	A std::shared_ptr shall be passed to a function as: (1) a copy to express the function shares ownership (2) an lvalue reference to express that the function replaces the managed object (3) a const lvalue reference to express that the function retains a reference count. (Since R2022b)
-AUTOSAR C++14 Rule A8-4-14	Interfaces shall be precisely and strongly typed
-AUTOSAR C++14 Rule A8-5-0	All memory shall be initialized before it is read
-AUTOSAR C++14 Rule A8-5-1	In an initialization list, the order of initialization shall be following: (1) virtual base classes in depth and left to right order of the inheritance graph, (2) direct base classes in left to right order of inheritance list, (3) non-static data members in the order they were declared in the class definition
-AUTOSAR C++14 Rule A8-5-2	Braced-initialization {}, without equals sign, shall be used for variable initialization
-AUTOSAR C++14 Rule A8-5-4	If a class has a user-declared constructor that takes a parameter of type std::initializer_list, then it shall be the only constructor apart from special member function constructors
-AUTOSAR C++14 Rule A8-5-3	A variable of type auto shall not be initialized using {} or ={} braced-initialization
-AUTOSAR C++14 Rule M8-0-1	An init-declarator-list or a member-declarator-list shall consist of a single init-declarator or member-declarator respectively
-AUTOSAR C++14 Rule M8-3-1	Parameters in an overriding virtual function shall either use the same default arguments as the function they override, or else shall not specify any default arguments
-AUTOSAR C++14 Rule M8-4-2	The identifiers used for the parameters in a re-declaration of a function shall be identical to those in the declaration
-AUTOSAR C++14 Rule M8-4-4	A function identifier shall either be used to call the function or it shall be preceded by &
-AUTOSAR C++14 Rule M8-5-2	Braces shall be used to indicate and match the structure in the non-zero initialization of arrays and structures
+CERT C++: FIO37-C	Do not assume that fgets() or fgetws() returns a nonempty string when successful
+
+CERT C++: FIO38-C	Do not copy a FILE object
+
+CERT C++: FIO39-C	Do not alternately input and output from a stream without an intervening flush or positioning call
+
+CERT C++: FIO40-C	Reset strings on fgets() or fgetws() failure
+
+CERT C++: FIO41-C	Do not call getc(), putc(), getwc(), or putwc() with a stream argument that has side effects
+
+CERT C++: FIO42-C	Close files when they are no longer needed
+
+CERT C++: FIO44-C	Only use values for fsetpos() that are returned from fgetpos()
+
+CERT C++: FIO45-C	Avoid TOCTOU race conditions while accessing files
+
+CERT C++: FIO46-C	Do not access a closed file
+
+CERT C++: FIO47-C	Use valid format strings
+
+CERT C++: FIO50-CPP	Do not alternately input and output from a file stream without an intervening positioning call
+
+CERT C++: FIO51-CPP	Close files when they are no longer needed
 
 ----
 
-### Classes
+### Exceptions and error handling
 
-AUTOSAR C++14 Rule A9-3-1	Member functions shall not return non-constant "raw" pointers or references to private or protected data owned by the class
-AUTOSAR C++14 Rule A9-5-1	Unions shall not be used
-AUTOSAR C++14 Rule A9-6-1	Data types used for interfacing with hardware or conforming to communication protocols shall be trivial, standard-layout and only contain members of types with defined sizes
-AUTOSAR C++14 Rule M9-3-1	Const member functions shall not return non-const pointers or references to class-data
-AUTOSAR C++14 Rule M9-3-3	If a member function can be made static then it shall be made static, otherwise if it can be made const then it shall be made const
-AUTOSAR C++14 Rule M9-6-4	Named bit-fields with signed integer type shall have a length of more than one bit
+CERT C++: ERR30-C	Set errno to zero before calling a library function known to set errno, and check errno only after the function returns a value indicating failure
+
+CERT C++: ERR32-C	Do not rely on indeterminate values of errno
+
+CERT C++: ERR33-C	Detect and handle standard library errors
+
+CERT C++: ERR34-C	Detect errors when converting a string to a number
+
+CERT C++: ERR50-CPP	Do not abruptly terminate the program
+
+CERT C++: ERR51-CPP	Handle all exceptions
+
+CERT C++: ERR52-CPP	Do not use setjmp() or longjmp()
+
+CERT C++: ERR53-CPP	Do not reference base classes or class data members in a constructor or destructor function-try-block handler
+
+CERT C++: ERR54-CPP	Catch handlers should order their parameter types from most derived to least derived
+
+CERT C++: ERR55-CPP	Honor exception specifications
+
+CERT C++: ERR56-CPP	Guarantee exception safety
+
+CERT C++: ERR57-CPP	Do not leak resources when handling exceptions
+
+CERT C++: ERR58-CPP	Handle all exceptions thrown before main() begins executing
+
+CERT C++: ERR59-CPP	Do not throw an exception across execution boundaries
+
+CERT C++: ERR60-CPP	Exception objects must be nothrow copy constructible
+
+CERT C++: ERR61-CPP	Catch exceptions by lvalue reference
+
+CERT C++: ERR62-CPP	Detect errors when converting a string to a number
 
 ----
 
-### Derived classes
+### Object-oriented programming
 
-AUTOSAR C++14 Rule A10-1-1	Class shall not be derived from more than one base class which is not an interface class
-AUTOSAR C++14 Rule A10-2-1	Non-virtual public or protected member functions shall not be redefined in derived classes
-AUTOSAR C++14 Rule A10-3-1	Virtual function declaration shall contain exactly one of the three specifiers: (1) virtual, (2) override, (3) final
-AUTOSAR C++14 Rule A10-3-2	Each overriding virtual function shall be declared with the override or final specifier
-AUTOSAR C++14 Rule A10-3-3	Virtual functions shall not be introduced in a final class
-AUTOSAR C++14 Rule A10-3-5	A user-defined assignment operator shall not be virtual
-AUTOSAR C++14 Rule A10-4-1	Hierarchies should be based on interface classes
-AUTOSAR C++14 Rule M10-1-1	Classes should not be derived from virtual bases
-AUTOSAR C++14 Rule M10-1-2	A base class shall only be declared virtual if it is used in a diamond hierarchy
-AUTOSAR C++14 Rule M10-1-3	An accessible base class shall not be both virtual and non-virtual in the same hierarchy
-AUTOSAR C++14 Rule M10-2-1	All accessible entity names within a multiple inheritance hierarchy should be unique
-AUTOSAR C++14 Rule M10-3-3	A virtual function shall only be overridden by a pure virtual function if it is itself declared as pure virtual
+CERT C++: OOP50-CPP	Do not invoke virtual functions from constructors or destructors
+
+CERT C++: OOP51-CPP	Do not slice derived objects
+
+CERT C++: OOP52-CPP	Do not delete a polymorphic object without a virtual destructor
+
+CERT C++: OOP53-CPP	Write constructor member initializers in the canonical order
+
+CERT C++: OOP54-CPP	Gracefully handle self-copy assignment
+
+CERT C++: OOP55-CPP	Do not use pointer-to-member operators to access nonexistent members
+
+CERT C++: OOP56-CPP	Honor replacement handler requirements
+
+CERT C++: OOP57-CPP	Prefer special member functions and overloaded operators to C Standard Library functions
+
+CERT C++: OOP58-CPP	Copy operations must not mutate the source object
+
+----
+
+### Concurrency
+
+CERT C++: CON33-C	Avoid race conditions when using library functions
+
+CERT C++: CON37-C	Do not call signal() in a multithreaded program
+
+CERT C++: CON40-C	Do not refer to an atomic variable twice in an expression
+
+CERT C++: CON41-C	Wrap functions that can fail spuriously in a loop
+
+CERT C++: CON43-C	Do not allow data races in multithreaded code
+
+CERT C++: CON50-CPP	Do not destroy a mutex while it is locked
+
+CERT C++: CON51-CPP	Ensure actively held locks are released on exceptional conditions
+
+CERT C++: CON52-CPP	Prevent data races when accessing bit-fields from multiple threads
+
+CERT C++: CON53-CPP	Avoid deadlock by locking in a predefined order
+
+CERT C++: CON54-CPP	Wrap functions that can spuriously wake up in a loop
+
+CERT C++: CON55-CPP	Preserve thread safety and liveness when using condition variables
+
+CERT C++: CON56-CPP	Do not speculatively lock a non-recursive mutex that is already owned by the calling thread
+
+----
+
+### Miscellaneous
+
+CERT C++: ENV30-C	Do not modify the object referenced by the return value of certain functions
+
+CERT C++: ENV31-C	Do not rely on an environment pointer following an operation that may invalidate it
+
+CERT C++: ENV32-C	All exit handlers must return normally
+
+CERT C++: ENV33-C	Do not call system()
+
+CERT C++: ENV34-C	Do not store pointers returned by certain functions
+
+CERT C++: FLP30-C	Do not use floating-point variables as loop counters
+
+CERT C++: FLP32-C	Prevent or detect domain and range errors in math functions
+
+CERT C++: FLP34-C	Ensure that floating-point conversions are within range of the new type
+
+CERT C++: FLP36-C	Preserve precision when converting integral values to floating-point type
+
+CERT C++: FLP37-C	Do not use object representations to compare floating-point values
+
+CERT C++: MSC30-C	Do not use the rand() function for generating pseudorandom numbers
+
+CERT C++: MSC32-C	Properly seed pseudorandom number generators
+
+CERT C++: MSC33-C	Do not pass invalid data to the asctime() function
+
+CERT C++: MSC37-C	Ensure that control never reaches the end of a non-void function
+
+CERT C++: MSC38-C	Do not treat a predefined identifier as an object if it might only be implemented as a macro
+
+CERT C++: MSC39-C	Do not call va_arg() on a va_list that has an indeterminate value
+
+CERT C++: MSC40-C	Do not violate constraints
+
+CERT C++: MSC41-C	Never hard code sensitive information
+
+CERT C++: MSC50-CPP	Do not use std::rand() for generating pseudorandom numbers
+
+CERT C++: MSC51-CPP	Ensure your random number generator is properly seeded
+
+CERT C++: MSC52-CPP	Value-returning functions must return a value from all exit paths
+
+CERT C++: MSC53-CPP	Do not return from a function declared [[noreturn]]
+
+CERT C++: MSC54-CPP	A signal handler must be a plain old function
+
+CERT C++: PRE30-C	Do not create a universal character name through concatenation
+
+CERT C++: PRE31-C	Avoid side effects in arguments to unsafe macros
+
+CERT C++: PRE32-C	Do not use preprocessor directives in invocations of function-like macros
+
+CERT C++: SIG31-C	Do not access shared objects in signal handlers
+
+CERT C++: SIG34-C	Do not call signal() from within interruptible signal handlers
+
+CERT C++: SIG35-C	Do not return from a computational exception signal handler
 
 ----
 
@@ -416,7 +455,7 @@ AUTOSAR C++14 Rule A15-1-1	Only instances of types derived from std::exception s
 AUTOSAR C++14 Rule A15-1-2	An exception object shall not be a pointer
 AUTOSAR C++14 Rule A15-1-3	All thrown exceptions should be unique
 AUTOSAR C++14 Rule A15-1-4	If a function exits with an exception, then before a throw, the function shall place all objects/resources that the function constructed in valid states or it shall delete them.
-AUTOSAR C++14 Rule A15-1-5	Exceptions shall not be thrown across execution boundaries (Since R2022b)
+AUTOSAR C++14 Rule A15-1-5	Exceptions shall not be thrown across execution boundaries
 AUTOSAR C++14 Rule A15-2-1	Constructors that are not noexcept shall not be invoked before program startup
 AUTOSAR C++14 Rule A15-2-2	If a constructor is not noexcept and the constructor cannot finish object initialization, then it shall deallocate the object's resources and it shall throw an exception
 AUTOSAR C++14 Rule A15-3-3	Main function and a task main function shall catch at least: base class exceptions from all third-party libraries used, std::exception and all otherwise unhandled exceptions
@@ -518,7 +557,7 @@ AUTOSAR C++14 Rule M19-3-1	The error indicator errno shall not be used
 AUTOSAR C++14 Rule A20-8-1	An already-owned pointer value shall not be stored in an unrelated smart pointer
 AUTOSAR C++14 Rule A20-8-2	A std::unique_ptr shall be used to represent exclusive ownership
 AUTOSAR C++14 Rule A20-8-3	A std::shared_ptr shall be used to represent shared ownership
-AUTOSAR C++14 Rule A20-8-4	A std::unique_ptr shall be used over std::shared_ptr if ownership sharing is not required (Since R2022b)
+AUTOSAR C++14 Rule A20-8-4	A std::unique_ptr shall be used over std::shared_ptr if ownership sharing is not required
 AUTOSAR C++14 Rule A20-8-5	std::make_unique shall be used to construct objects owned by std::unique_ptr
 AUTOSAR C++14 Rule A20-8-6	std::make_shared shall be used to construct objects owned by std::shared_ptr
 AUTOSAR C++14 Rule A20-8-7	A std::weak_ptr shall be used to represent temporary shared ownership.
