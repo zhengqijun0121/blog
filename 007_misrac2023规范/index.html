@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>MISRA C 2023 规范 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/007_misrac2023%E8%A7%84%E8%8C%83/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="MISRA C 2023 规范">
+  <meta property="og:description" content="MISRA C 2023 规范 English Version Directives Implementation MISRA C:2023 D1.1	Any implementation-defined behavior on which the output of the program depends shall be documented and understood (Since R2024a)
+Compilation and build MISRA C:2023 D2.1	All source files shall compile without any compilation errors (Since R2024a)
+Code design MISRA C:2023 D4.1	Run-time failures shall be minimized (Since R2024a)
+MISRA C:2023 D4.3	Assembly language shall be encapsulated and isolated (Since R2024a)">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-04-22T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-04-22T10:00:00+08:00">
+    <meta property="article:tag" content="MISRA">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="MISRA C 2023 规范">
+  <meta name="twitter:description" content="MISRA C 2023 规范 English Version Directives Implementation MISRA C:2023 D1.1	Any implementation-defined behavior on which the output of the program depends shall be documented and understood (Since R2024a)
+Compilation and build MISRA C:2023 D2.1	All source files shall compile without any compilation errors (Since R2024a)
+Code design MISRA C:2023 D4.1	Run-time failures shall be minimized (Since R2024a)
+MISRA C:2023 D4.3	Assembly language shall be encapsulated and isolated (Since R2024a)">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/007_misrac2023%E8%A7%84%E8%8C%83/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/006_certc%E8%A7%84%E8%8C%83/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "MISRA C 2023 规范",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/007_misrac2023%E8%A7%84%E8%8C%83\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "MISRA","wordcount":  4359 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/007_misrac2023%E8%A7%84%E8%8C%83\/","datePublished": "2026-04-22T09:00:00+08:00","dateModified": "2026-04-22T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/007_misrac2023%E8%A7%84%E8%8C%83/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/007_misrac2023%E8%A7%84%E8%8C%83/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">MISRA C 2023 规范</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/misra/"><i class="far fa-folder" aria-hidden="true"></i>MISRA</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-04-22">2026-04-22</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 4359 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 9 分钟&nbsp;<span id="/blog/007_misrac2023%E8%A7%84%E8%8C%83/" class="leancloud_visitors" data-flag-title="MISRA C 2023 规范">
+                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#english-version">English Version</a>
+      <ul>
+        <li><a href="#directives">Directives</a>
+          <ul>
+            <li><a href="#implementation">Implementation</a></li>
+            <li><a href="#compilation-and-build">Compilation and build</a></li>
+            <li><a href="#code-design">Code design</a></li>
+            <li><a href="#concurrency-considerations">Concurrency considerations</a></li>
+          </ul>
+        </li>
+        <li><a href="#rules">Rules</a>
+          <ul>
+            <li><a href="#standard-c-environment">Standard C environment</a></li>
+            <li><a href="#unused-code">Unused code</a></li>
+            <li><a href="#comments">Comments</a></li>
+            <li><a href="#character-sets-and-lexical-conventions">Character sets and lexical conventions</a></li>
+            <li><a href="#identifiers">Identifiers</a></li>
+            <li><a href="#types">Types</a></li>
+            <li><a href="#literals-and-constants">Literals and constants</a></li>
+            <li><a href="#declarations-and-definitions">Declarations and definitions</a></li>
+            <li><a href="#initialization">Initialization</a></li>
+            <li><a href="#the-essential-type-module">The Essential type module</a></li>
+            <li><a href="#points-type-conversion">Points type conversion</a></li>
+            <li><a href="#expressions">Expressions</a></li>
+            <li><a href="#side-affects">Side affects</a></li>
+            <li><a href="#control-statement-expression">Control statement expression</a></li>
+            <li><a href="#control-flow">Control flow</a></li>
+            <li><a href="#switch-statements">Switch statements</a></li>
+            <li><a href="#functions">Functions</a></li>
+            <li><a href="#points-and-arrays">Points and arrays</a></li>
+            <li><a href="#overlapping-storage">Overlapping storage</a></li>
+            <li><a href="#preprocessing-directives">Preprocessing directives</a></li>
+            <li><a href="#standard-libraries">Standard libraries</a></li>
+            <li><a href="#resources">Resources</a></li>
+            <li><a href="#generic-selections">Generic selections</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="misra-c-2023-规范">MISRA C 2023 规范</h1>
+<hr>
+<h2 id="english-version">English Version</h2>
+<h3 id="directives">Directives</h3>
+<h4 id="implementation">Implementation</h4>
+<p>MISRA C:2023 D1.1	Any implementation-defined behavior on which the output of the program depends shall be documented and understood (Since R2024a)</p>
+<hr>
+<h4 id="compilation-and-build">Compilation and build</h4>
+<p>MISRA C:2023 D2.1	All source files shall compile without any compilation errors (Since R2024a)</p>
+<hr>
+<h4 id="code-design">Code design</h4>
+<p>MISRA C:2023 D4.1	Run-time failures shall be minimized (Since R2024a)</p>
+<p>MISRA C:2023 D4.3	Assembly language shall be encapsulated and isolated (Since R2024a)</p>
+<p>MISRA C:2023 D4.4	Sections of code should not be &ldquo;commented out&rdquo; (Since R2024a)</p>
+<p>MISRA C:2023 D4.5	Identifiers in the same name space with overlapping visibility should be typographically unambiguous (Since R2024a)</p>
+<p>MISRA C:2023 D4.6	typedefs that indicate size and signedness should be used in place of the basic numerical types (Since R2024a)</p>
+<p>MISRA C:2023 D4.7	If a function returns error information, then that error information shall be tested (Since R2024a)</p>
+<p>MISRA C:2023 D4.8	If a pointer to a structure or union is never dereferenced within a translation unit, then the implementation of the object should be hidden (Since R2024a)</p>
+<p>MISRA C:2023 D4.9	A function should be used in preference to a function-like macro where they are interchangeable (Since R2024a)</p>
+<p>MISRA C:2023 D4.10	Precautions shall be taken in order to prevent the contents of a header file being included more than once (Since R2024a)</p>
+<p>MISRA C:2023 D4.11	The validity of values passed to library functions shall be checked (Since R2024a)</p>
+<p>MISRA C:2023 D4.12	Dynamic memory allocation shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 D4.13	Functions which are designed to provide operations on a resource should be called in an appropriate sequence (Since R2024a)</p>
+<p>MISRA C:2023 D4.14	The validity of values received from external sources shall be checked (Since R2024a)</p>
+<p>MISRA C:2023 D4.15	Evaluation of floating-point expressions shall not lead to the undetected generation of infinities and NaNs (Since R2024a)</p>
+<hr>
+<h4 id="concurrency-considerations">Concurrency considerations</h4>
+<p>MISRA C:2023 D5.1	There shall be no data races between threads (Since R2024b)</p>
+<p>MISRA C:2023 D5.2	There shall be no deadlocks between threads (Since R2024b)</p>
+<p>MISRA C:2023 D5.3	There shall be no dynamic thread creation (Since R2025b)</p>
+<hr>
+<h3 id="rules">Rules</h3>
+<h4 id="standard-c-environment">Standard C environment</h4>
+<p>MISRA C:2023 Rule 1.1	The program shall contain no violations of the standard C syntax and constraints, and shall not exceed the implementation&rsquo;s translation limits (Since R2024a)</p>
+<p>MISRA C:2023 Rule 1.2	Language extensions should not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 1.3	There shall be no occurrence of undefined or critical unspecified behaviour (Since R2024a)</p>
+<p>MISRA C:2023 Rule 1.4	Emergent language features shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 1.5	Obsolescent language features shall not be used (Since R2024a)</p>
+<hr>
+<h4 id="unused-code">Unused code</h4>
+<p>MISRA C:2023 Rule 2.1	A project shall not contain unreachable code (Since R2024a)</p>
+<p>MISRA C:2023 Rule 2.2	A project shall not contain dead code (Since R2024a)</p>
+<p>MISRA C:2023 Rule 2.3	A project should not contain unused type declarations (Since R2024a)</p>
+<p>MISRA C:2023 Rule 2.4	A project should not contain unused tag declarations (Since R2024a)</p>
+<p>MISRA C:2023 Rule 2.5	A project should not contain unused macro definitions (Since R2024a)</p>
+<p>MISRA C:2023 Rule 2.6	A function should not contain unused label declarations (Since R2024a)</p>
+<p>MISRA C:2023 Rule 2.7	A function should not contain unused parameters (Since R2024a)</p>
+<p>MISRA C:2023 Rule 2.8	A project should not contain unused object definitions (Since R2025a)</p>
+<hr>
+<h4 id="comments">Comments</h4>
+<p>MISRA C:2023 Rule 3.1	The character sequences /* and // shall not be used within a comment (Since R2024a)</p>
+<p>MISRA C:2023 Rule 3.2	Line-splicing shall not be used in // comments (Since R2024a)</p>
+<hr>
+<h4 id="character-sets-and-lexical-conventions">Character sets and lexical conventions</h4>
+<p>MISRA C:2023 Rule 4.1	Octal and hexadecimal escape sequences shall be terminated (Since R2024a)</p>
+<p>MISRA C:2023 Rule 4.2	Trigraphs should not be used (Since R2024a)</p>
+<hr>
+<h4 id="identifiers">Identifiers</h4>
+<p>MISRA C:2023 Rule 5.1	External identifiers shall be distinct (Since R2024a)</p>
+<p>MISRA C:2023 Rule 5.2	Identifiers declared in the same scope and name space shall be distinct (Since R2024a)</p>
+<p>MISRA C:2023 Rule 5.3	An identifier declared in an inner scope shall not hide an identifier declared in an outer scope (Since R2024a)</p>
+<p>MISRA C:2023 Rule 5.4	Macro identifiers shall be distinct (Since R2024a)</p>
+<p>MISRA C:2023 Rule 5.5	Identifiers shall be distinct from macro names (Since R2024a)</p>
+<p>MISRA C:2023 Rule 5.6	A typedef name shall be a unique identifier (Since R2024a)</p>
+<p>MISRA C:2023 Rule 5.7	A tag name shall be a unique identifier (Since R2024a)</p>
+<p>MISRA C:2023 Rule 5.8	Identifiers that define objects or functions with external linkage shall be unique (Since R2024a)</p>
+<p>MISRA C:2023 Rule 5.9	Identifiers that define objects or functions with internal linkage should be unique (Since R2024a)</p>
+<hr>
+<h4 id="types">Types</h4>
+<p>MISRA C:2023 Rule 6.1	Bit-fields shall only be declared with an appropriate type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 6.2	Single-bit named bit-fields shall not be of a signed type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 6.3	A bit field shall not be declared as a member of a union (Since R2024a)</p>
+<hr>
+<h4 id="literals-and-constants">Literals and constants</h4>
+<p>MISRA C:2023 Rule 7.1	Octal constants shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 7.2	A “u” or “U” suffix shall be applied to all integer constants that are represented in an unsigned type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 7.3	The lowercase character “l” shall not be used in a literal suffix (Since R2024a)</p>
+<p>MISRA C:2023 Rule 7.4	A string literal shall not be assigned to an object unless the object’s type is “pointer to const-qualified char” (Since R2024a)</p>
+<p>MISRA C:2023 Rule 7.5	The argument of an integer constant macro shall have an appropriate form (Since R2024a)</p>
+<p>MISRA C:2023 Rule 7.6	The small integer variants of the minimum-width integer constant macros shall not be used (Since R2025a)</p>
+<hr>
+<h4 id="declarations-and-definitions">Declarations and definitions</h4>
+<p>MISRA C:2023 Rule 8.1	Types shall be explicitly specified (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.2	Function types shall be in prototype form with named parameters (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.3	All declarations of an object or function shall use the same names and type qualifiers (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.4	A compatible declaration shall be visible when an object or function with external linkage is defined (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.5	An external object or function shall be declared once in one and only one file (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.6	An identifier with external linkage shall have exactly one external definition (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.7	Functions and objects should not be defined with external linkage if they are referenced in only one translation unit (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.8	The static storage class specifier shall be used in all declarations of objects and functions that have internal linkage (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.9	An object should be declared at block scope if its identifier only appears in a single function (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.10	An inline function shall be declared with the static storage class (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.11	When an array with external linkage is declared, its size should be explicitly specified (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.12	Within an enumerator list, the value of an implicitly-specified enumeration constant shall be unique (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.13	A pointer should point to a const-qualified type whenever possible (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.14	The restrict type qualifier shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.15	All declarations of an object with an explicit alignment specification shall specify the same alignment (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.16	The alignment specification of zero should not appear in an object declaration (Since R2024a)</p>
+<p>MISRA C:2023 Rule 8.17	At most one explicit alignment specifier should appear in an object declaration (Since R2024a)</p>
+<hr>
+<h4 id="initialization">Initialization</h4>
+<p>MISRA C:2023 Rule 9.1	The value of an object with automatic storage duration shall not be read before it has been set (Since R2024a)</p>
+<p>MISRA C:2023 Rule 9.2	The initializer for an aggregate or union shall be enclosed in braces (Since R2024a)</p>
+<p>MISRA C:2023 Rule 9.3	Arrays shall not be partially initialized (Since R2024a)</p>
+<p>MISRA C:2023 Rule 9.4	An element of an object shall not be initialized more than once (Since R2024a)</p>
+<p>MISRA C:2023 Rule 9.5	Where designated initializers are used to initialize an array object the size of the array shall be specified explicitly (Since R2024a)</p>
+<p>MISRA C:2023 Rule 9.6	An initializer using chained designators shall not contain initializers without designators (Since R2025a)</p>
+<p>MISRA C:2023 Rule 9.7	Atomic objects shall be appropriately initialized before being accessed (Since R2025b)</p>
+<hr>
+<h4 id="the-essential-type-module">The Essential type module</h4>
+<p>MISRA C:2023 Rule 10.1	Operands shall not be of an inappropriate essential type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 10.2	Expressions of essentially character type shall not be used inappropriately in addition and subtraction operations (Since R2024a)</p>
+<p>MISRA C:2023 Rule 10.3	The value of an expression shall not be assigned to an object with a narrower essential type or of a different essential type category (Since R2024a)</p>
+<p>MISRA C:2023 Rule 10.4	Both operands of an operator in which the usual arithmetic conversions are performed shall have the same essential type category (Since R2024a)</p>
+<p>MISRA C:2023 Rule 10.5	The value of an expression should not be cast to an inappropriate essential type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 10.6	The value of a composite expression shall not be assigned to an object with wider essential type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 10.7	If a composite expression is used as one operand of an operator in which the usual arithmetic conversions are performed then the other operand shall not have wider essential type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 10.8	The value of a composite expression shall not be cast to a different essential type category or a wider essential type (Since R2024a)</p>
+<hr>
+<h4 id="points-type-conversion">Points type conversion</h4>
+<p>MISRA C:2023 Rule 11.1	Conversions shall not be performed between a pointer to a function and any other type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 11.2	Conversions shall not be performed between a pointer to an incomplete type and any other type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 11.3	A conversion shall not be performed between a pointer to object type and a pointer to a different object type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 11.4	A conversion should not be performed between a pointer to object and an integer type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 11.5	A conversion should not be performed from pointer to void into pointer to object (Since R2024a)</p>
+<p>MISRA C:2023 Rule 11.6	A cast shall not be performed between pointer to void and an arithmetic type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 11.7	A cast shall not be performed between pointer to object and a non-integer arithmetic type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 11.8	A conversion shall not remove any const, volatile, or _Atomic qualification from the type pointed to by a pointer (Since R2024a)</p>
+<p>MISRA C:2023 Rule 11.9	The macro NULL shall be the only permitted form of integer null pointer constant (Since R2024a)</p>
+<p>MISRA C:2023 Rule 11.10	The _Atomic qualifier shall not be applied to the incomplete type void (Since R2025a)</p>
+<hr>
+<h4 id="expressions">Expressions</h4>
+<p>MISRA C:2023 Rule 12.1	The precedence of operators within expressions should be made explicit (Since R2024a)</p>
+<p>MISRA C:2023 Rule 12.2	The right hand operand of a shift operator shall lie in the range zero to one less than the width in bits of the essential type of the left hand operand (Since R2024a)</p>
+<p>MISRA C:2023 Rule 12.3	The comma operator should not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 12.4	Evaluation of constant expressions should not lead to unsigned integer wrap-around (Since R2024a)</p>
+<p>MISRA C:2023 Rule 12.5	The sizeof operator shall not have an operand which is a function parameter declared as “array of type” (Since R2024a)</p>
+<p>MISRA C:2023 Rule 12.6	Structure and union members of atomic objects shall not be directly accessed (Since R2025a)</p>
+<hr>
+<h4 id="side-affects">Side affects</h4>
+<p>MISRA C:2023 Rule 13.1	Initializer lists shall not contain persistent side effects (Since R2024a)</p>
+<p>MISRA C:2023 Rule 13.2	The value of an expression and its persistent side effects shall be the same under all permitted evaluation orders and shall be independent from thread interleaving (Since R2024a)</p>
+<p>MISRA C:2023 Rule 13.3	A full expression containing an increment (++) or decrement (&ndash;) operator should have no other potential side effects other than that caused by the increment or decrement operator (Since R2024a)</p>
+<p>MISRA C:2023 Rule 13.4	The result of an assignment operator should not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 13.5	The right hand operand of a logical &amp;&amp; or || operator shall not contain persistent side effects (Since R2024a)</p>
+<p>MISRA C:2023 Rule 13.6	The operand of the sizeof operator shall not contain any expression which has potential side effects (Since R2024a)</p>
+<hr>
+<h4 id="control-statement-expression">Control statement expression</h4>
+<p>MISRA C:2023 Rule 14.1	A loop counter shall not have essentially floating type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 14.2	A for loop shall be well-formed (Since R2024a)</p>
+<p>MISRA C:2023 Rule 14.3	Controlling expressions shall not be invariant (Since R2024a)</p>
+<p>MISRA C:2023 Rule 14.4	The controlling expression of an if statement and the controlling expression of an iteration-statement shall have essentially Boolean type (Since R2024a)</p>
+<hr>
+<h4 id="control-flow">Control flow</h4>
+<p>MISRA C:2023 Rule 15.1	The goto statement should not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 15.2	The goto statement shall jump to a label declared later in the same function (Since R2024a)</p>
+<p>MISRA C:2023 Rule 15.3	Any label referenced by a goto statement shall be declared in the same block, or in any block enclosing the goto statement (Since R2024a)</p>
+<p>MISRA C:2023 Rule 15.4	There should be no more than one break or goto statement used to terminate any iteration statement (Since R2024a)</p>
+<p>MISRA C:2023 Rule 15.5	A function should have a single point of exit at the end (Since R2024a)</p>
+<p>MISRA C:2023 Rule 15.6	The body of an iteration-statement or a selection-statement shall be a compound statement (Since R2024a)</p>
+<p>MISRA C:2023 Rule 15.7	All if … else if constructs shall be terminated with an else statement (Since R2024a)</p>
+<hr>
+<h4 id="switch-statements">Switch statements</h4>
+<p>MISRA C:2023 Rule 16.1	All switch statements shall be well-formed (Since R2024a)</p>
+<p>MISRA C:2023 Rule 16.2	A switch label shall only be used when the most closely-enclosing compound statement is the body of a switch statement (Since R2024a)</p>
+<p>MISRA C:2023 Rule 16.3	An unconditional break statement shall terminate every switch-clause (Since R2024a)</p>
+<p>MISRA C:2023 Rule 16.4	Every switch statement shall have a default label (Since R2024a)</p>
+<p>MISRA C:2023 Rule 16.5	A default label shall appear as either the first or the last switch label of a switch statement (Since R2024a)</p>
+<p>MISRA C:2023 Rule 16.6	Every switch statement shall have at least two switch-clauses (Since R2024a)</p>
+<p>MISRA C:2023 Rule 16.7	A switch-expression shall not have essentially Boolean type (Since R2024a)</p>
+<hr>
+<h4 id="functions">Functions</h4>
+<p>MISRA C:2023 Rule 17.1	The standard header file &lt;stdarg.h&gt; shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 17.2	Functions shall not call themselves, either directly or indirectly (Since R2024a)</p>
+<p>MISRA C:2023 Rule 17.3	A function shall not be declared implicitly (Since R2024a)</p>
+<p>MISRA C:2023 Rule 17.4	All exit paths from a function with non-void return type shall have an explicit return statement with an expression (Since R2024a)</p>
+<p>MISRA C:2023 Rule 17.5	The function argument corresponding to a parameter declared to have an array type shall have an appropriate number of elements (Since R2024a)</p>
+<p>MISRA C:2023 Rule 17.6	The declaration of an array parameter shall not contain the static keyword between the [ ] (Since R2024a)</p>
+<p>MISRA C:2023 Rule 17.7	The value returned by a function having non-void return type shall be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 17.8	A function parameter should not be modified (Since R2024a)</p>
+<p>MISRA C:2023 Rule 17.9	A function declared with a _Noreturn function specifier shall not return to its caller (Since R2024a)</p>
+<p>MISRA C:2023 Rule 17.10	A function declared with a _Noreturn function specifier shall have void return type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 17.11	A function that never returns should be declared with a _Noreturn function specifier (Since R2024a)</p>
+<p>MISRA C:2023 Rule 17.12	A function identifier should only be used with either a preceding &amp;, or with a parenthesized parameter list (Since R2024a)</p>
+<p>MISRA C:2023 Rule 17.13	A function type shall not be type qualified (Since R2024a)</p>
+<hr>
+<h4 id="points-and-arrays">Points and arrays</h4>
+<p>MISRA C:2023 Rule 18.1	A pointer resulting from arithmetic on a pointer operand shall address an element of the same array as that pointer operand (Since R2024a)</p>
+<p>MISRA C:2023 Rule 18.2	Subtraction between pointers shall only be applied to pointers that address elements of the same array (Since R2024a)</p>
+<p>MISRA C:2023 Rule 18.3	The relational operators &gt;, &gt;=, &lt; and &lt;= shall not be applied to expressions of pointer type except where they point into the same object (Since R2024a)</p>
+<p>MISRA C:2023 Rule 18.4	The +, -, += and -= operators should not be applied to an expression of pointer type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 18.5	Declarations should contain no more than two levels of pointer nesting (Since R2024a)</p>
+<p>MISRA C:2023 Rule 18.6	The address of an object with automatic or thread-local storage shall not be copied to another object that persists after the first object has ceased to exist (Since R2024a)</p>
+<p>MISRA C:2023 Rule 18.7	Flexible array members shall not be declared (Since R2024a)</p>
+<p>MISRA C:2023 Rule 18.8	Variable-length arrays shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 18.9	An object with temporary lifetime shall not undergo array-to-pointer conversion (Since R2024a)</p>
+<p>MISRA C:2023 Rule 18.10	Pointers to variably-modified array types shall not be used (Since R2025a)</p>
+<hr>
+<h4 id="overlapping-storage">Overlapping storage</h4>
+<p>MISRA C:2023 Rule 19.1	An object shall not be assigned or copied to an overlapping object (Since R2024a)</p>
+<p>MISRA C:2023 Rule 19.2	The union keyword should not be used (Since R2024a)</p>
+<hr>
+<h4 id="preprocessing-directives">Preprocessing directives</h4>
+<p>MISRA C:2023 Rule 20.1	#include directives should only be preceded by preprocessor directives or comments (Since R2024a)</p>
+<p>MISRA C:2023 Rule 20.2	The &lsquo;, &quot; or \ characters and the /* or // character sequences shall not occur in a header file name (Since R2024a)</p>
+<p>MISRA C:2023 Rule 20.3	The #include directive shall be followed by either a <filename> or &ldquo;filename&rdquo; sequence (Since R2024a)</p>
+<p>MISRA C:2023 Rule 20.4	A macro shall not be defined with the same name as a keyword (Since R2024a)</p>
+<p>MISRA C:2023 Rule 20.5	#undef should not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 20.6	Tokens that look like a preprocessing directive shall not occur within a macro argument (Since R2024a)</p>
+<p>MISRA C:2023 Rule 20.7	Expressions resulting from the expansion of macro parameters shall be enclosed in parentheses (Since R2024a)</p>
+<p>MISRA C:2023 Rule 20.8	The controlling expression of a #if or #elif preprocessing directive shall evaluate to 0 or 1 (Since R2024a)</p>
+<p>MISRA C:2023 Rule 20.9	All identifiers used in the controlling expression of #if or #elif preprocessing directives shall be #define&rsquo;d before evaluation (Since R2024a)</p>
+<p>MISRA C:2023 Rule 20.10	The # and ## preprocessor operators should not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 20.11	A macro parameter immediately following a # operator shall not immediately be followed by a ## operator (Since R2024a)</p>
+<p>MISRA C:2023 Rule 20.12	A macro parameter used as an operand to the # or ## operators, which is itself subject to further macro replacement, shall only be used as an operand to these operators (Since R2024a)</p>
+<p>MISRA C:2023 Rule 20.13	A line whose first token is # shall be a valid preprocessing directive (Since R2024a)</p>
+<p>MISRA C:2023 Rule 20.14	All #else, #elif and #endif preprocessor directives shall reside in the same file as the #if, #ifdef or #ifndef directive to which they are related (Since R2024a)</p>
+<hr>
+<h4 id="standard-libraries">Standard libraries</h4>
+<p>MISRA C:2023 Rule 21.1	#define and #undef shall not be used on a reserved identifier or reserved macro name (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.2	A reserved identifier or reserved macro name shall not be declared (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.3	The memory allocation and deallocation functions of &lt;stdlib.h&gt; shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.4	The standard header file &lt;setjmp.h&gt; shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.5	The standard header file &lt;signal.h&gt; shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.6	The Standard Library input/output functions shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.7	The Standard Library functions atof, atoi, atol, and atoll functions of &lt;stdlib.h&gt; shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.8	The Standard Library termination functions of &lt;stdlib.h&gt; shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.9	The Standard Library library functions bsearch and qsort of &lt;stdlib.h&gt; shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.10	The Standard Library time and date functions shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.11	The standard header file &lt;tgmath.h&gt; should not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.12	The standard header file &lt;fenv.h&gt; shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.13	Any value passed to a function in &lt;ctype.h&gt; shall be representable as an unsigned char or be the value EOF (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.14	The Standard Library function memcmp shall not be used to compare null terminated strings (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.15	The pointer arguments to the Standard Library functions memcpy, memmove and memcmp shall be pointers to qualified or unqualified versions of compatible types (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.16	The pointer arguments to the Standard Library function memcmp shall point to either a pointer type, an essentially signed type, an essentially unsigned type, an essentially Boolean type or an essentially enum type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.17	Use of the string handling function from &lt;string.h&gt; shall not result in accesses beyond the bounds of the objects referenced by their pointer parameters (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.18	The size_t argument passed to any function in &lt;string.h&gt; shall have an appropriate value (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.19	The pointers returned by the Standard Library functions localeconv, getenv, setlocale or strerror shall only be used as if they have pointer to const-qualified type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.20	The pointer returned by the Standard Library functions asctime, ctime, gmtime, localtime, localeconv, getenv, setlocale or strerror shall not be used following a subsequent call to the same function (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.21	The Standard Library function system of &lt;stdlib.h&gt; shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.22	All operand arguments to any type-generic macros declared in &lt;tgmath.h&gt; shall have an appropriate essential type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.23	All operand arguments to any multi-argument type-generic macros declared in &lt;tgmath.h&gt; shall have the same standard type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.24	The random number generator functions of &lt;stdlib.h&gt; shall not be used (Since R2024a)</p>
+<p>MISRA C:2023 Rule 21.25	All memory synchronization operations shall be executed in sequentially consistent order (Since R2025a)</p>
+<p>MISRA C:2023 Rule 21.26	The Standard Library function mtx_timedlock() shall only be invoked on mutex objects of appropriate mutex type (Since R2025b)</p>
+<hr>
+<h4 id="resources">Resources</h4>
+<p>MISRA C:2023 Rule 22.1	All resources obtained dynamically by means of Standard Library functions shall be explicitly released (Since R2024a)</p>
+<p>MISRA C:2023 Rule 22.2	A block of memory shall only be freed if it was allocated by means of a Standard Library function (Since R2024a)</p>
+<p>MISRA C:2023 Rule 22.3	The same file shall not be open for read and write access at the same time on different streams (Since R2024a)</p>
+<p>MISRA C:2023 Rule 22.4	There shall be no attempt to write to a stream which has been opened as read-only (Since R2024a)</p>
+<p>MISRA C:2023 Rule 22.5	A pointer to a FILE object shall not be dereferenced (Since R2024a)</p>
+<p>MISRA C:2023 Rule 22.6	The value of a pointer to a FILE shall not be used after the associated stream has been closed (Since R2024a)</p>
+<p>MISRA C:2023 Rule 22.7	The macro EOF shall only be compared with the unmodified return value from any Standard Library function capable of returning EOF (Since R2024a)</p>
+<p>MISRA C:2023 Rule 22.8	The value of errno shall be set to zero prior to a call to an errno-setting-function (Since R2024a)</p>
+<p>MISRA C:2023 Rule 22.9	The value of errno shall be tested against zero after calling an errno-setting function (Since R2024a)</p>
+<p>MISRA C:2023 Rule 22.10	The value of errno shall only be tested when the last function to be called was an errno-setting function (Since R2024a)</p>
+<p>MISRA C:2023 Rule 22.11	A thread that was previously either joined or detached shall not be subsequently joined nor detached (Since R2024b)</p>
+<p>MISRA C:2023 Rule 22.12	Thread objects, thread synchronization objects, and thread-specific storage pointers shall only be accessed by the appropriate Standard Library functions (Since R2025b)</p>
+<p>MISRA C:2023 Rule 22.13	Thread objects, thread synchronization objects and thread-specific storage pointers shall have appropriate storage duration (Since R2025a)</p>
+<p>MISRA C:2023 Rule 22.14	Thread synchronization objects shall be initialized before being accessed (Since R2025b)</p>
+<p>MISRA C:2023 Rule 22.15	Thread synchronization objects and thread-specific storage pointers shall not be destroyed until after all threads accessing them have terminated (Since R2024b)</p>
+<p>MISRA C:2023 Rule 22.16	All mutex objects locked by a thread shall be explicitly unlocked by the same thread (Since R2024b)</p>
+<p>MISRA C:2023 Rule 22.17	No thread shall unlock a mutex or call cnd_wait() or cnd_timedwait() for a mutex it has not locked before (Since R2024b)</p>
+<p>MISRA C:2023 Rule 22.18	Non-recursive mutexes shall not be recursively locked (Since R2025a)</p>
+<p>MISRA C:2023 Rule 22.19	A condition variable shall be associated with at most one mutex object (Since R2025b)</p>
+<p>MISRA C:2023 Rule 22.20	Thread-specific storage pointers shall be created before being accessed (Since R2025b)</p>
+<hr>
+<h4 id="generic-selections">Generic selections</h4>
+<p>MISRA C:2023 Rule 23.1	A generic selection should only be expanded from a macro (Since R2024a)</p>
+<p>MISRA C:2023 Rule 23.2	A generic selection that is not expanded from a macro shall not contain potential side effects in the controlling expression (Since R2024a)</p>
+<p>MISRA C:2023 Rule 23.3	A generic selection should contain at least one non-default association (Since R2024a)</p>
+<p>MISRA C:2023 Rule 23.4	A generic association shall list an appropriate type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 23.5	A generic selection should not depend on implicit pointer type conversion (Since R2024a)</p>
+<p>MISRA C:2023 Rule 23.6	The controlling expression of a generic selection shall have an essential type that matches its standard type (Since R2024a)</p>
+<p>MISRA C:2023 Rule 23.7	A generic selection that is expanded from a macro should evaluate its argument only once (Since R2024a)</p>
+<p>MISRA C:2023 Rule 23.8	A default association shall appear as either the first or the last association of a generic selection (Since R2024a)</p>
+<hr>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-04-22</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/007_misrac2023%E8%A7%84%E8%8C%83/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/misra/">MISRA</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/006_certc%E8%A7%84%E8%8C%83/" class="prev" rel="prev" title="CERT C 规范"><i class="fas fa-angle-left" aria-hidden="true"></i>CERT C 规范</a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/blog/lib/valine/valine.min.css"><script src="https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{"valine":{"appId":"QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI","appKey":"WBmoGyJtbqUswvfLh6L8iEBr","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@15.1.2/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-CN","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"serverURLs":"https://valine.hugoloveit.com","visitor":true}},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>
