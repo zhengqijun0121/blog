@@ -477,382 +477,382 @@
 
 ### Derived classes
 
-Rule A10-1-1 Class shall not be derived from more than one base class which is not an interface class.
+[Rule A10-1-1] Class shall not be derived from more than one base class which is not an interface class.
 
-Rule A10-2-1 Non-virtual public or protected member functions shall not be redefined in derived classes.
+[Rule A10-2-1] Non-virtual public or protected member functions shall not be redefined in derived classes.
 
-Rule A10-3-1 Virtual function declaration shall contain exactly one of the three specifiers: (1) virtual, (2) override, (3) final.
+[Rule A10-3-1] Virtual function declaration shall contain exactly one of the three specifiers: (1) virtual, (2) override, (3) final.
 
-Rule A10-3-2 Each overriding virtual function shall be declared with the override or final specifier.
+[Rule A10-3-2] Each overriding virtual function shall be declared with the override or final specifier.
 
-Rule A10-3-3 Virtual functions shall not be introduced in a final class.
+[Rule A10-3-3] Virtual functions shall not be introduced in a final class.
 
-Rule A10-3-5 A user-defined assignment operator shall not be virtual.
+[Rule A10-3-5] A user-defined assignment operator shall not be virtual.
 
-Rule A10-4-1 Hierarchies should be based on interface classes.
+[Rule A10-4-1] Hierarchies should be based on interface classes.
 
-Rule M10-1-1 Classes should not be derived from virtual bases.
+[Rule M10-1-1] Classes should not be derived from virtual bases.
 
-Rule M10-1-2 A base class shall only be declared virtual if it is used in a diamond hierarchy.
+[Rule M10-1-2] A base class shall only be declared virtual if it is used in a diamond hierarchy.
 
-Rule M10-1-3 An accessible base class shall not be both virtual and non-virtual in the same hierarchy.
+[Rule M10-1-3] An accessible base class shall not be both virtual and non-virtual in the same hierarchy.
 
-Rule M10-2-1 All accessible entity names within a multiple inheritance hierarchy should be unique.
+[Rule M10-2-1] All accessible entity names within a multiple inheritance hierarchy should be unique.
 
-Rule M10-3-3 A virtual function shall only be overridden by a pure virtual function if it is itself declared as pure virtual.
+[Rule M10-3-3] A virtual function shall only be overridden by a pure virtual function if it is itself declared as pure virtual.
 
 ----
 
 ### Member access control
 
-Rule A11-0-1 A non-POD type should be defined as class.
+[Rule A11-0-1] A non-POD type should be defined as class.
 
-Rule A11-0-2 A type defined as struct shall: (1) provide only public data members, (2) not provide any special member functions or methods, (3) not be a base of another struct or class, (4) not inherit from another struct or class.
+[Rule A11-0-2] A type defined as struct shall: (1) provide only public data members, (2) not provide any special member functions or methods, (3) not be a base of another struct or class, (4) not inherit from another struct or class.
 
-Rule A11-3-1 Friend declarations shall not be used.
+[Rule A11-3-1] Friend declarations shall not be used.
 
-Rule M11-0-1 Member data in non-POD class types shall be private.
+[Rule M11-0-1] Member data in non-POD class types shall be private.
 
 ----
 
 ### Special member functions
 
-Rule A12-0-1 If a class declares a copy or move operation, or a destructor, either via "=default", "=delete", or via a user-provided declaration, then all others of these five special member functions shall be declared as well.
+[Rule A12-0-1] If a class declares a copy or move operation, or a destructor, either via "=default", "=delete", or via a user-provided declaration, then all others of these five special member functions shall be declared as well.
 
-Rule A12-0-2 Bitwise operations and operations that assume data representation in memory shall not be performed on objects.
+[Rule A12-0-2] Bitwise operations and operations that assume data representation in memory shall not be performed on objects.
 
-Rule A12-1-1 Constructors shall explicitly initialize all virtual base classes, all direct non-virtual base classes and all non-static data members.
+[Rule A12-1-1] Constructors shall explicitly initialize all virtual base classes, all direct non-virtual base classes and all non-static data members.
 
-Rule A12-1-2 Both NSDMI and a non-static member initializer in a constructor shall not be used in the same type.
+[Rule A12-1-2] Both NSDMI and a non-static member initializer in a constructor shall not be used in the same type.
 
-Rule A12-1-3 If all user-defined constructors of a class initialize data members with constant values that are the same across all constructors, then data members shall be initialized using NSDMI instead.
+[Rule A12-1-3] If all user-defined constructors of a class initialize data members with constant values that are the same across all constructors, then data members shall be initialized using NSDMI instead.
 
-Rule A12-1-4 All constructors that are callable with a single argument of fundamental type shall be declared explicit.
+[Rule A12-1-4] All constructors that are callable with a single argument of fundamental type shall be declared explicit.
 
-Rule A12-1-5 Common class initialization for non-constant members shall be done by a delegating constructor.
+[Rule A12-1-5] Common class initialization for non-constant members shall be done by a delegating constructor.
 
-Rule A12-1-6 Derived classes that do not need further explicit initialization and require all the constructors from the base class shall use inheriting constructors.
+[Rule A12-1-6] Derived classes that do not need further explicit initialization and require all the constructors from the base class shall use inheriting constructors.
 
-Rule A12-4-1 Destructor of a base class shall be public virtual, public override or protected non-virtual.
+[Rule A12-4-1] Destructor of a base class shall be public virtual, public override or protected non-virtual.
 
-Rule A12-4-2 If a public destructor of a class is non-virtual, then the class should be declared final.
+[Rule A12-4-2] If a public destructor of a class is non-virtual, then the class should be declared final.
 
-Rule A12-6-1 All class data members that are initialized by the constructor shall be initialized using member initializers.
+[Rule A12-6-1] All class data members that are initialized by the constructor shall be initialized using member initializers.
 
-Rule A12-7-1 If the behavior of a user-defined special member function is identical to implicitly defined special member function, then it shall be defined "=default" or be left undefined.
+[Rule A12-7-1] If the behavior of a user-defined special member function is identical to implicitly defined special member function, then it shall be defined "=default" or be left undefined.
 
-Rule A12-8-1 Move and copy constructors shall move and respectively copy base classes and data members of a class, without any side effects.
+[Rule A12-8-1] Move and copy constructors shall move and respectively copy base classes and data members of a class, without any side effects.
 
-Rule A12-8-2 User-defined copy and move assignment operators should use user-defined no-throw swap function.
+[Rule A12-8-2] User-defined copy and move assignment operators should use user-defined no-throw swap function.
 
-Rule A12-8-3 Moved-from object shall not be read-accessed.
+[Rule A12-8-3] Moved-from object shall not be read-accessed.
 
-Rule A12-8-4 Move constructor shall not initialize its class members and base classes using copy semantics.
+[Rule A12-8-4] Move constructor shall not initialize its class members and base classes using copy semantics.
 
-Rule A12-8-5 A copy assignment and a move assignment operators shall handle self-assignment.
+[Rule A12-8-5] A copy assignment and a move assignment operators shall handle self-assignment.
 
-Rule A12-8-6 Copy and move constructors and copy assignment and move assignment operators shall be declared protected or defined "=delete" in base class.
+[Rule A12-8-6] Copy and move constructors and copy assignment and move assignment operators shall be declared protected or defined "=delete" in base class.
 
-Rule A12-8-7 Assignment operators should be declared with the ref-qualifier &.
+[Rule A12-8-7] Assignment operators should be declared with the ref-qualifier &.
 
-Rule M12-1-1 An object's dynamic type shall not be used from the body of its constructor or destructor.
+[Rule M12-1-1] An object's dynamic type shall not be used from the body of its constructor or destructor.
 
 ----
 
 ### Overriding
 
-Rule A13-1-2 User defined suffixes of the user defined literal operators shall start with underscore followed by one or more letters.
+[Rule A13-1-2] User defined suffixes of the user defined literal operators shall start with underscore followed by one or more letters.
 
-Rule A13-1-3 User defined literals operators shall only perform conversion of passed parameters.
+[Rule A13-1-3] User defined literals operators shall only perform conversion of passed parameters.
 
-Rule A13-2-1 An assignment operator shall return a reference to "this".
+[Rule A13-2-1] An assignment operator shall return a reference to "this".
 
-Rule A13-2-2 A binary arithmetic operator and a bitwise operator shall return a "prvalue".
+[Rule A13-2-2] A binary arithmetic operator and a bitwise operator shall return a "prvalue".
 
-Rule A13-2-3 A relational operator shall return a boolean value.
+[Rule A13-2-3] A relational operator shall return a boolean value.
 
-Rule A13-3-1 A function that contains "forwarding reference" as its argument shall not be overloaded.
+[Rule A13-3-1] A function that contains "forwarding reference" as its argument shall not be overloaded.
 
-Rule A13-5-1 If "operator[]" is to be overloaded with a non-const version, const version shall also be implemented.
+[Rule A13-5-1] If "operator[]" is to be overloaded with a non-const version, const version shall also be implemented.
 
-Rule A13-5-2 All user-defined conversion operators shall be defined explicit.
+[Rule A13-5-2] All user-defined conversion operators shall be defined explicit.
 
-Rule A13-5-3 User-defined conversion operators should not be used.
+[Rule A13-5-3] User-defined conversion operators should not be used.
 
-Rule A13-5-4 If two opposite operators are defined, one shall be defined in terms of the other.
+[Rule A13-5-4] If two opposite operators are defined, one shall be defined in terms of the other.
 
-Rule A13-5-5 Comparison operators shall be non-member functions with identical parameter types and noexcept.
+[Rule A13-5-5] Comparison operators shall be non-member functions with identical parameter types and noexcept.
 
-Rule A13-6-1 Digit sequences separators ' shall only be used as follows: (1) for decimal, every 3 digits, (2) for hexadecimal, every 2 digits, (3) for binary, every 4 digits.
+[Rule A13-6-1] Digit sequences separators ' shall only be used as follows: (1) for decimal, every 3 digits, (2) for hexadecimal, every 2 digits, (3) for binary, every 4 digits.
 
 ----
 
 ### Templates
 
-Rule A14-1-1 A template should check if a specific template argument is suitable for this template.
+[Rule A14-1-1] A template should check if a specific template argument is suitable for this template.
 
-Rule A14-5-1 A template constructor shall not participate in overload resolution for a single argument of the enclosing class type.
+[Rule A14-5-1] A template constructor shall not participate in overload resolution for a single argument of the enclosing class type.
 
-Rule A14-5-2 Class members that are not dependent on template class parameters should be defined in a separate base class.
+[Rule A14-5-2] Class members that are not dependent on template class parameters should be defined in a separate base class.
 
-Rule A14-5-3 A non-member generic operator shall only be declared in a namespace that does not contain class (struct) type, enum type or union type declarations.
+[Rule A14-5-3] A non-member generic operator shall only be declared in a namespace that does not contain class (struct) type, enum type or union type declarations.
 
-Rule A14-7-1 A type used as a template argument shall provide all members that are used by the template.
+[Rule A14-7-1] A type used as a template argument shall provide all members that are used by the template.
 
-Rule A14-7-2 Template specialization shall be declared in the same file (1) as the primary template (2) as a user-defined type, for which the specialization is declared.
+[Rule A14-7-2] Template specialization shall be declared in the same file (1) as the primary template (2) as a user-defined type, for which the specialization is declared.
 
-Rule A14-8-2 Explicit specializations of function templates shall not be used.
+[Rule A14-8-2] Explicit specializations of function templates shall not be used.
 
-Rule M14-5-3 A copy assignment operator shall be declared when there is a template assignment operator with a parameter that is a generic parameter.
+[Rule M14-5-3] A copy assignment operator shall be declared when there is a template assignment operator with a parameter that is a generic parameter.
 
-Rule M14-6-1 In a class template with a dependent base, any name that may be found in that dependent base shall be referred to using a qualified-id or this->.
+[Rule M14-6-1] In a class template with a dependent base, any name that may be found in that dependent base shall be referred to using a qualified-id or this->.
 
 ----
 
 ### Exception handling
 
-Rule A15-0-2 At least the basic guarantee for exception safety shall be provided for all operations. In addition, each function may offer either the strong guarantee or the nothrow guarantee.
+[Rule A15-0-2] At least the basic guarantee for exception safety shall be provided for all operations. In addition, each function may offer either the strong guarantee or the nothrow guarantee.
 
-Rule A15-0-3 Exception safety guarantee of a called function shall be considered.
+[Rule A15-0-3] Exception safety guarantee of a called function shall be considered.
 
-Rule A15-0-7 Exception handling mechanism shall guarantee a deterministic worst-case time execution time.
+[Rule A15-0-7] Exception handling mechanism shall guarantee a deterministic worst-case time execution time.
 
-Rule A15-1-1 Only instances of types derived from std::exception should be thrown.
+[Rule A15-1-1] Only instances of types derived from std::exception should be thrown.
 
-Rule A15-1-2 An exception object shall not be a pointer.
+[Rule A15-1-2] An exception object shall not be a pointer.
 
-Rule A15-1-3 All thrown exceptions should be unique.
+[Rule A15-1-3] All thrown exceptions should be unique.
 
-Rule A15-1-4 If a function exits with an exception, then before a throw, the function shall place all objects/resources that the function constructed in valid states or it shall delete them..
+[Rule A15-1-4] If a function exits with an exception, then before a throw, the function shall place all objects/resources that the function constructed in valid states or it shall delete them..
 
-Rule A15-1-5 Exceptions shall not be thrown across execution boundaries (Since R2022b).
+[Rule A15-1-5] Exceptions shall not be thrown across execution boundaries (Since R2022b).
 
-Rule A15-2-1 Constructors that are not noexcept shall not be invoked before program startup.
+[Rule A15-2-1] Constructors that are not noexcept shall not be invoked before program startup.
 
-Rule A15-2-2 If a constructor is not noexcept and the constructor cannot finish object initialization, then it shall deallocate the object's resources and it shall throw an exception.
+[Rule A15-2-2] If a constructor is not noexcept and the constructor cannot finish object initialization, then it shall deallocate the object's resources and it shall throw an exception.
 
-Rule A15-3-3 Main function and a task main function shall catch at least: base class exceptions from all third-party libraries used, std::exception and all otherwise unhandled exceptions.
+[Rule A15-3-3] Main function and a task main function shall catch at least: base class exceptions from all third-party libraries used, std::exception and all otherwise unhandled exceptions.
 
-Rule A15-3-4 Catch-all (ellipsis and std::exception) handlers shall be used only in (a) main, (b) task main functions, (c) in functions that are supposed to isolate independent components and (d) when calling third-party code that uses exceptions not according to.
+[Rule A15-3-4] Catch-all (ellipsis and std::exception) handlers shall be used only in (a) main, (b) task main functions, (c) in functions that are supposed to isolate independent components and (d) when calling third-party code that uses exceptions not according to.
 guidelines
 
-Rule A15-3-5 A class type exception shall be caught by reference or const reference.
+[Rule A15-3-5] A class type exception shall be caught by reference or const reference.
 
-Rule A15-4-1 Dynamic exception-specification shall not be used.
+[Rule A15-4-1] Dynamic exception-specification shall not be used.
 
-Rule A15-4-2 If a function is declared to be noexcept, noexcept(true) or noexcept(<true condition>), then it shall not exit with an exception.
+[Rule A15-4-2] If a function is declared to be noexcept, noexcept(true) or noexcept(<true condition>), then it shall not exit with an exception.
 
-Rule A15-4-3 The noexcept specification of a function shall either be identical across all translation units, or identical or more restrictive between a virtual member function and an overrider.
+[Rule A15-4-3] The noexcept specification of a function shall either be identical across all translation units, or identical or more restrictive between a virtual member function and an overrider.
 
-Rule A15-4-4 A declaration of non-throwing function shall contain noexcept specification.
+[Rule A15-4-4] A declaration of non-throwing function shall contain noexcept specification.
 
-Rule A15-4-5 Checked exceptions that could be thrown from a function shall be specified together with the function declaration and they shall be identical in all function declarations and for all its overriders.
+[Rule A15-4-5] Checked exceptions that could be thrown from a function shall be specified together with the function declaration and they shall be identical in all function declarations and for all its overriders.
 
-Rule A15-5-1 All user-provided class destructors, deallocation functions, move constructors, move assignment operators and swap functions shall not exit with an exception. A noexcept exception specification shall be added to these functions as appropriate.
+[Rule A15-5-1] All user-provided class destructors, deallocation functions, move constructors, move assignment operators and swap functions shall not exit with an exception. A noexcept exception specification shall be added to these functions as appropriate.
 
-Rule A15-5-2 Program shall not be abruptly terminated. In particular, an implicit or explicit invocation of std::abort(), std::quick_exit(), std::_Exit(), std::terminate() shall not be done.
+[Rule A15-5-2] Program shall not be abruptly terminated. In particular, an implicit or explicit invocation of std::abort(), std::quick_exit(), std::_Exit(), std::terminate() shall not be done.
 
-Rule A15-5-3 The std::terminate() function shall not be called implicitly.
+[Rule A15-5-3] The std::terminate() function shall not be called implicitly.
 
-Rule M15-0-3 Control shall not be transferred into a try or catch block using a goto or a switch statement.
+[Rule M15-0-3] Control shall not be transferred into a try or catch block using a goto or a switch statement.
 
-Rule M15-1-1 The assignment-expression of a throw statement shall not itself cause an exception to be thrown.
+[Rule M15-1-1] The assignment-expression of a throw statement shall not itself cause an exception to be thrown.
 
-Rule M15-1-2 NULL shall not be thrown explicitly.
+[Rule M15-1-2] NULL shall not be thrown explicitly.
 
-Rule M15-1-3 An empty throw (throw;) shall only be used in the compound statement of a catch handler.
+[Rule M15-1-3] An empty throw (throw;) shall only be used in the compound statement of a catch handler.
 
-Rule M15-3-1 Exceptions shall be raised only after startup and before termination.
+[Rule M15-3-1] Exceptions shall be raised only after startup and before termination.
 
-Rule M15-3-3 Handlers of a function-try-block implementation of a class constructor or destructor shall not reference non-static members from this class or its bases.
+[Rule M15-3-3] Handlers of a function-try-block implementation of a class constructor or destructor shall not reference non-static members from this class or its bases.
 
-Rule M15-3-4 Each exception explicitly thrown in the code shall have a handler of a compatible type in all call paths that could lead to that point.
+[Rule M15-3-4] Each exception explicitly thrown in the code shall have a handler of a compatible type in all call paths that could lead to that point.
 
-Rule M15-3-6 Where multiple handlers are provided in a single try-catch statement or function-try-block for a derived class and some or all of its bases, the handlers shall be ordered most-derived to base class.
+[Rule M15-3-6] Where multiple handlers are provided in a single try-catch statement or function-try-block for a derived class and some or all of its bases, the handlers shall be ordered most-derived to base class.
 
-Rule M15-3-7 Where multiple handlers are provided in a single try-catch statement or function-try-block, any ellipsis (catch-all) handler shall occur last.
+[Rule M15-3-7] Where multiple handlers are provided in a single try-catch statement or function-try-block, any ellipsis (catch-all) handler shall occur last.
 
 ----
 
 ### Preprocessing directives
 
-Rule A16-0-1 The preprocessor shall only be used for unconditional and conditional file inclusion and include guards, and using specific directives.
+[Rule A16-0-1] The preprocessor shall only be used for unconditional and conditional file inclusion and include guards, and using specific directives.
 
-Rule A16-2-1 The ', ", /*, //, \ characters shall not occur in a header file name or in #include directive.
+[Rule A16-2-1] The ', ", /*, //, \ characters shall not occur in a header file name or in #include directive.
 
-Rule A16-2-2 There shall be no unused include directives.
+[Rule A16-2-2] There shall be no unused include directives.
 
-Rule A16-2-3 An include directive shall be added explicitly for every symbol used in a file.
+[Rule A16-2-3] An include directive shall be added explicitly for every symbol used in a file.
 
-Rule A16-6-1 #error directive shall not be used.
+[Rule A16-6-1] #error directive shall not be used.
 
-Rule A16-7-1 The #pragma directive shall not be used.
+[Rule A16-7-1] The #pragma directive shall not be used.
 
-Rule M16-0-1 #include directives in a file shall only be preceded by other preprocessor directives or comments.
+[Rule M16-0-1] #include directives in a file shall only be preceded by other preprocessor directives or comments.
 
-Rule M16-0-2 Macros shall only be #define'd or #undef'd in the global namespace.
+[Rule M16-0-2] Macros shall only be #define'd or #undef'd in the global namespace.
 
-Rule M16-0-5 Arguments to a function-like macro shall not contain tokens that look like pre-processing directives.
+[Rule M16-0-5] Arguments to a function-like macro shall not contain tokens that look like pre-processing directives.
 
-Rule M16-0-6 In the definition of a function-like macro, each instance of a parameter shall be enclosed in parentheses, unless it is used as the operand of # or ##.
+[Rule M16-0-6] In the definition of a function-like macro, each instance of a parameter shall be enclosed in parentheses, unless it is used as the operand of # or ##.
 
-Rule M16-0-7 Undefined macro identifiers shall not be used in #if or #elif pre-processor directives, except as operands to the defined operator.
+[Rule M16-0-7] Undefined macro identifiers shall not be used in #if or #elif pre-processor directives, except as operands to the defined operator.
 
-Rule M16-0-8 If the # token appears as the first token on a line, then it shall be immediately followed by a preprocessing token.
+[Rule M16-0-8] If the # token appears as the first token on a line, then it shall be immediately followed by a preprocessing token.
 
-Rule M16-1-1 The defined pre-processor operator shall only be used in one of the two standard forms.
+[Rule M16-1-1] The defined pre-processor operator shall only be used in one of the two standard forms.
 
-Rule M16-1-2 All #else, #elif and #endif pre-processor directives shall reside in the same file as the #if or #ifdef directive to which they are related.
+[Rule M16-1-2] All #else, #elif and #endif pre-processor directives shall reside in the same file as the #if or #ifdef directive to which they are related.
 
-Rule M16-2-3 Include guards shall be provided.
+[Rule M16-2-3] Include guards shall be provided.
 
-Rule M16-3-1 There shall be at most one occurrence of the # or ## operators in a single macro definition.
+[Rule M16-3-1] There shall be at most one occurrence of the # or ## operators in a single macro definition.
 
-Rule M16-3-2 The # and ## operators should not be used.
+[Rule M16-3-2] The # and ## operators should not be used.
 
 ----
 
 ### Library Introduction
 
-Rule A17-0-1 Reserved identifiers, macros and functions in the C++ standard library shall not be defined, redefined or undefined.
+[Rule A17-0-1] Reserved identifiers, macros and functions in the C++ standard library shall not be defined, redefined or undefined.
 
-Rule A17-1-1 Use of the C Standard Library shall be encapsulated and isolated.
+[Rule A17-1-1] Use of the C Standard Library shall be encapsulated and isolated.
 
-Rule A17-6-1 Non-standard entities shall not be added to standard namespaces.
+[Rule A17-6-1] Non-standard entities shall not be added to standard namespaces.
 
-Rule M17-0-2 The names of standard library macros and objects shall not be reused.
+[Rule M17-0-2] The names of standard library macros and objects shall not be reused.
 
-Rule M17-0-3 The names of standard library functions shall not be overridden.
+[Rule M17-0-3] The names of standard library functions shall not be overridden.
 
-Rule M17-0-5 The setjmp macro and the longjmp function shall not be used.
+[Rule M17-0-5] The setjmp macro and the longjmp function shall not be used.
 
 ----
 
 ### Language support library
 
 
-Rule A18-0-1 The C library facilities shall only be accessed through C++ library headers.
+[Rule A18-0-1] The C library facilities shall only be accessed through C++ library headers.
 
-Rule A18-0-2 The error state of a conversion from string to a numeric value shall be checked.
+[Rule A18-0-2] The error state of a conversion from string to a numeric value shall be checked.
 
-Rule A18-0-3 The library <clocale> (locale.h) and the setlocale function shall not be used.
+[Rule A18-0-3] The library <clocale> (locale.h) and the setlocale function shall not be used.
 
-Rule A18-1-1 C-style arrays shall not be used.
+[Rule A18-1-1] C-style arrays shall not be used.
 
-Rule A18-1-2 The std::vector<bool> specialization shall not be used.
+[Rule A18-1-2] The std::vector<bool> specialization shall not be used.
 
-Rule A18-1-3 The std::auto_ptr shall not be used.
+[Rule A18-1-3] The std::auto_ptr shall not be used.
 
-Rule A18-1-4 A pointer pointing to an element of an array of objects shall not be passed to a smart pointer of single object type.
+[Rule A18-1-4] A pointer pointing to an element of an array of objects shall not be passed to a smart pointer of single object type.
 
-Rule A18-1-6 All std::hash specializations for user-defined types shall have a noexcept function call operator.
+[Rule A18-1-6] All std::hash specializations for user-defined types shall have a noexcept function call operator.
 
-Rule A18-5-1 Functions malloc, calloc, realloc and free shall not be used.
+[Rule A18-5-1] Functions malloc, calloc, realloc and free shall not be used.
 
-Rule A18-5-2 Non-placement new or delete expressions shall not be used.
+[Rule A18-5-2] Non-placement new or delete expressions shall not be used.
 
-Rule A18-5-3 The form of delete operator shall match the form of new operator used to allocate the memory.
+[Rule A18-5-3] The form of delete operator shall match the form of new operator used to allocate the memory.
 
-Rule A18-5-4 If a project has sized or unsized version of operator 'delete' globally defined, then both sized and unsized versions shall be defined.
+[Rule A18-5-4] If a project has sized or unsized version of operator 'delete' globally defined, then both sized and unsized versions shall be defined.
 
-Rule A18-5-5 Memory management functions shall ensure the following: (a) deterministic behavior resulting with the existence of worst-case execution time, (b) avoiding memory fragmentation, (c) avoid running out of memory, (d) avoiding mismatched allocations or deallocations, (e) no dependence on non-deterministic calls to kernel.
+[Rule A18-5-5] Memory management functions shall ensure the following: (a) deterministic behavior resulting with the existence of worst-case execution time, (b) avoiding memory fragmentation, (c) avoid running out of memory, (d) avoiding mismatched allocations or deallocations, (e) no dependence on non-deterministic calls to kernel.
 
-Rule A18-5-7 If non-real-time implementation of dynamic memory management functions is used in the project, then memory shall only be allocated and deallocated during non-real-time program phases.
+[Rule A18-5-7] If non-real-time implementation of dynamic memory management functions is used in the project, then memory shall only be allocated and deallocated during non-real-time program phases.
 
-Rule A18-5-8 Objects that do not outlive a function shall have automatic storage duration.
+[Rule A18-5-8] Objects that do not outlive a function shall have automatic storage duration.
 
-Rule A18-5-9 Custom implementations of dynamic memory allocation and deallocation functions shall meet the semantic requirements specified in the corresponding "Required behaviour" clause from the C++ Standard.
+[Rule A18-5-9] Custom implementations of dynamic memory allocation and deallocation functions shall meet the semantic requirements specified in the corresponding "Required behaviour" clause from the C++ Standard.
 
-Rule A18-5-10 Placement new shall be used only with properly aligned pointers to sufficient storage capacity.
+[Rule A18-5-10] Placement new shall be used only with properly aligned pointers to sufficient storage capacity.
 
-Rule A18-5-11 "operator new" and "operator delete" shall be defined together.
+[Rule A18-5-11] "operator new" and "operator delete" shall be defined together.
 
-Rule A18-9-1 The std::bind shall not be used.
+[Rule A18-9-1] The std::bind shall not be used.
 
-Rule A18-9-2 Forwarding values to other functions shall be done via: (1) std::move if the value is an rvalue reference, (2) std::forward if the value is forwarding reference.
+[Rule A18-9-2] Forwarding values to other functions shall be done via: (1) std::move if the value is an rvalue reference, (2) std::forward if the value is forwarding reference.
 
-Rule A18-9-3 The std::move shall not be used on objects declared const or const&.
+[Rule A18-9-3] The std::move shall not be used on objects declared const or const&.
 
-Rule A18-9-4 An argument to std::forward shall not be subsequently used.
+[Rule A18-9-4] An argument to std::forward shall not be subsequently used.
 
-Rule M18-0-3 The library functions abort, exit, getenv and system from library <cstdlib> shall not be used.
+[Rule M18-0-3] The library functions abort, exit, getenv and system from library <cstdlib> shall not be used.
 
-Rule M18-0-4 The time handling functions of library <ctime> shall not be used.
+[Rule M18-0-4] The time handling functions of library <ctime> shall not be used.
 
-Rule M18-0-5 The unbounded functions of library <cstring> shall not be used.
+[Rule M18-0-5] The unbounded functions of library <cstring> shall not be used.
 
-Rule M18-2-1 The macro offsetof shall not be used.
+[Rule M18-2-1] The macro offsetof shall not be used.
 
-Rule M18-7-1 The signal handling facilities of <csignal> shall not be used.
+[Rule M18-7-1] The signal handling facilities of <csignal> shall not be used.
 
 ----
 
 ### Diagnostics library
 
-Rule M19-3-1 The error indicator errno shall not be used.
+[Rule M19-3-1] The error indicator errno shall not be used.
 
 ----
 
 ### Genaral utilities library
 
-Rule A20-8-1 An already-owned pointer value shall not be stored in an unrelated smart pointer.
+[Rule A20-8-1] An already-owned pointer value shall not be stored in an unrelated smart pointer.
 
-Rule A20-8-2 A std::unique_ptr shall be used to represent exclusive ownership.
+[Rule A20-8-2] A std::unique_ptr shall be used to represent exclusive ownership.
 
-Rule A20-8-3 A std::shared_ptr shall be used to represent shared ownership.
+[Rule A20-8-3] A std::shared_ptr shall be used to represent shared ownership.
 
-Rule A20-8-4 A std::unique_ptr shall be used over std::shared_ptr if ownership sharing is not required (Since R2022b).
+[Rule A20-8-4] A std::unique_ptr shall be used over std::shared_ptr if ownership sharing is not required (Since R2022b).
 
-Rule A20-8-5 std::make_unique shall be used to construct objects owned by std::unique_ptr.
+[Rule A20-8-5] std::make_unique shall be used to construct objects owned by std::unique_ptr.
 
-Rule A20-8-6 std::make_shared shall be used to construct objects owned by std::shared_ptr.
+[Rule A20-8-6] std::make_shared shall be used to construct objects owned by std::shared_ptr.
 
-Rule A20-8-7 A std::weak_ptr shall be used to represent temporary shared ownership..
+[Rule A20-8-7] A std::weak_ptr shall be used to represent temporary shared ownership..
 
 ----
 
 ### Strings library
 
-Rule A21-8-1 Arguments to character-handling functions shall be representable as an unsigned char.
+[Rule A21-8-1] Arguments to character-handling functions shall be representable as an unsigned char.
 
 ----
 
 ### Containers library
 
-Rule A23-0-1 An iterator shall not be implicitly converted to const_iterator.
+[Rule A23-0-1] An iterator shall not be implicitly converted to const_iterator.
 
-Rule A23-0-2 Elements of a container shall only be accessed via valid references, iterators, and pointers.
+[Rule A23-0-2] Elements of a container shall only be accessed via valid references, iterators, and pointers.
 
 ----
 
 ### Algorithms library
 
-Rule A25-1-1 Non-static data members or captured values of predicate function objects that are state related to this object's identity shall not be copied.
+[Rule A25-1-1] Non-static data members or captured values of predicate function objects that are state related to this object's identity shall not be copied.
 
-Rule A25-4-1 Ordering predicates used with associative containers and STL sorting and related algorithms shall adhere to a strict weak ordering relation.
+[Rule A25-4-1] Ordering predicates used with associative containers and STL sorting and related algorithms shall adhere to a strict weak ordering relation.
 
 ----
 
 ### Ramdom number generation
 
-Rule A26-5-1 Pseudorandom numbers shall not be generated using std::rand().
+[Rule A26-5-1] Pseudorandom numbers shall not be generated using std::rand().
 
-Rule A26-5-2 Random number engines shall not be default-initialized.
+[Rule A26-5-2] Random number engines shall not be default-initialized.
 
 ----
 
 ### Input/output library
 
 
-Rule A27-0-1 Inputs from independent components shall be validated..
+[Rule A27-0-1] Inputs from independent components shall be validated..
 
-Rule A27-0-2 A C-style string shall guarantee sufficient space for data and the null terminator.
+[Rule A27-0-2] A C-style string shall guarantee sufficient space for data and the null terminator.
 
-Rule A27-0-3 Alternate input and output operations on a file stream shall not be used without an intervening flush or positioning call.
+[Rule A27-0-3] Alternate input and output operations on a file stream shall not be used without an intervening flush or positioning call.
 
-Rule A27-0-4 C-style strings shall not be used.
+[Rule A27-0-4] C-style strings shall not be used.
 
-Rule M27-0-1 The stream input/output library <cstdio> shall not be used.
+[Rule M27-0-1] The stream input/output library <cstdio> shall not be used.
 
 ----
 
