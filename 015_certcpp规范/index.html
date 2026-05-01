@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>CERT C&#43;&#43; 规范 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/015_certcpp%E8%A7%84%E8%8C%83/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="CERT C&#43;&#43; 规范">
+  <meta property="og:description" content="CERT Cpp 规范 https://ww2.mathworks.cn/help/bugfinder/cert-c-rules.html?lang=en
+English Version
+声明与初始化 [DCL30-C] 为对象声明恰当的存储期。
+[DCL39-C] 避免结构体填充带来的信息泄露。
+[DCL40-C] 不要为同一个函数或对象创建不兼容的声明。
+[DCL50-CPP] 不要定义 C 风格的可变参数函数。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-04-19T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-04-19T10:00:00+08:00">
+    <meta property="article:tag" content="CERT">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="CERT C&#43;&#43; 规范">
+  <meta name="twitter:description" content="CERT Cpp 规范 https://ww2.mathworks.cn/help/bugfinder/cert-c-rules.html?lang=en
+English Version
+声明与初始化 [DCL30-C] 为对象声明恰当的存储期。
+[DCL39-C] 避免结构体填充带来的信息泄露。
+[DCL40-C] 不要为同一个函数或对象创建不兼容的声明。
+[DCL50-CPP] 不要定义 C 风格的可变参数函数。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/015_certcpp%E8%A7%84%E8%8C%83/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/005_certcpp%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/004_autosarcpp2014%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "CERT C++ 规范",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/015_certcpp%E8%A7%84%E8%8C%83\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "CERT","wordcount":  3017 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/015_certcpp%E8%A7%84%E8%8C%83\/","datePublished": "2026-04-19T09:00:00+08:00","dateModified": "2026-04-19T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/015_certcpp%E8%A7%84%E8%8C%83/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/015_certcpp%E8%A7%84%E8%8C%83/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">CERT C++ 规范</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/cert/"><i class="far fa-folder" aria-hidden="true"></i>CERT</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-04-19">2026-04-19</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 3017 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 7 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#声明与初始化">声明与初始化</a></li>
+    <li><a href="#表达式">表达式</a></li>
+    <li><a href="#整数">整数</a></li>
+    <li><a href="#容器">容器</a></li>
+    <li><a href="#字符与字符串">字符与字符串</a></li>
+    <li><a href="#内存管理">内存管理</a></li>
+    <li><a href="#输入与输出">输入与输出</a></li>
+    <li><a href="#异常与错误处理">异常与错误处理</a></li>
+    <li><a href="#面向对象编程">面向对象编程</a></li>
+    <li><a href="#并发">并发</a></li>
+    <li><a href="#其他规则">其他规则</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="cert-cpp-规范">CERT Cpp 规范</h1>
+<blockquote>
+<p><a href="https://ww2.mathworks.cn/help/bugfinder/cert-c-rules.html?lang=en" target="_blank" rel="noopener noreffer ">https://ww2.mathworks.cn/help/bugfinder/cert-c-rules.html?lang=en</a></p>
+</blockquote>
+<p><strong><a href="./005_CertCpp%e8%a7%84%e8%8c%83%e8%8b%b1%e6%96%87%e7%89%88.md" rel="">English Version</a></strong></p>
+<hr>
+<h2 id="声明与初始化">声明与初始化</h2>
+<p>[DCL30-C] 为对象声明恰当的存储期。</p>
+<p>[DCL39-C] 避免结构体填充带来的信息泄露。</p>
+<p>[DCL40-C] 不要为同一个函数或对象创建不兼容的声明。</p>
+<p>[DCL50-CPP] 不要定义 <code>C</code> 风格的可变参数函数。</p>
+<p>[DCL51-CPP] 不要声明或定义保留标识符。</p>
+<p>[DCL52-CPP] 切勿用 <code>const</code> 或 <code>volatile</code> 限定引用类型。</p>
+<p>[DCL53-CPP] 不要编写存在语法歧义的声明。</p>
+<p>[DCL54-CPP] 在同一作用域内成对重载内存分配与释放函数。</p>
+<p>[DCL55-CPP] 跨信任边界传递类对象时，避免信息泄露。</p>
+<p>[DCL56-CPP] 避免静态对象初始化过程中的循环依赖。</p>
+<p>[DCL57-CPP] 不要让异常从析构函数或内存释放函数中逃逸。</p>
+<p>[DCL58-CPP] 不要修改标准命名空间。</p>
+<p>[DCL59-CPP] 不要在头文件中定义未命名命名空间。</p>
+<p>[DCL60-CPP] 遵守单一定义规则。</p>
+<hr>
+<h2 id="表达式">表达式</h2>
+<p>[EXP34-C] 不要解引用空指针。</p>
+<p>[EXP35-C] 不要修改具有临时生存期的对象。</p>
+<p>[EXP36-C] 不要将指针强制转换为对齐要求更严格的指针类型。</p>
+<p>[EXP37-C] 调用函数时传入正确数量和类型的参数。</p>
+<p>[EXP39-C] 不要通过类型不兼容的指针访问变量。</p>
+<p>[EXP42-C] 不要对填充数据进行比较操作。</p>
+<p>[EXP45-C] 不要在选择语句中执行赋值操作。</p>
+<p>[EXP46-C] 不要对类布尔操作数使用位运算符。</p>
+<p>[EXP47-C] 调用 <code>va_arg</code> 时不要传入类型不正确的参数。</p>
+<p>[EXP50-CPP] 不要依赖带副作用操作数的求值顺序。</p>
+<p>[EXP51-CPP] 不要通过类型不正确的指针删除数组。</p>
+<p>[EXP52-CPP] 不要依赖未求值操作数中的副作用。</p>
+<p>[EXP53-CPP] 不要读取未初始化的内存。</p>
+<p>[EXP54-CPP] 不要在对象的生存期之外访问对象。</p>
+<p>[EXP55-CPP] 不要通过非 <code>cv</code> 限定类型访问 <code>cv</code> 限定的对象。</p>
+<p>[EXP56-CPP] 不要调用语言链接不匹配的函数。</p>
+<p>[EXP57-CPP] 不要对指向不完整类的指针进行强制转换或删除操作。</p>
+<p>[EXP58-CPP] 为 <code>va_start</code> 传入正确类型的对象。</p>
+<p>[EXP59-CPP] 对合法的类型和成员使用 <code>offsetof()</code> 宏。</p>
+<p>[EXP60-CPP] 不要跨执行边界传递非标准布局类型的对象。</p>
+<p>[EXP61-CPP] lambda 对象的生存期不得超过其任何引用捕获的对象。</p>
+<p>[EXP62-CPP] 不要访问对象表示中不属于其值表示的二进制位。</p>
+<p>[EXP63-CPP] 不要依赖被移动后对象的值。</p>
+<hr>
+<h2 id="整数">整数</h2>
+<p>[INT30-C] 确保无符号整数运算不会发生回绕。</p>
+<p>[INT31-C] 确保整数转换不会导致数据丢失或被错误解读。</p>
+<p>[INT32-C] 确保有符号整数运算不会发生溢出。</p>
+<p>[INT33-C] 确保除法和取余运算不会出现除零错误。</p>
+<p>[INT34-C] 不要对表达式执行负数位数的移位，或移位位数大于等于操作数本身的位宽。</p>
+<p>[INT35-C] 使用正确的整数精度。</p>
+<p>[INT36-C] 谨慎执行指针与整数之间的相互转换。</p>
+<p>[INT50-CPP] 不要强制转换为取值范围外的枚举值。</p>
+<hr>
+<h2 id="容器">容器</h2>
+<p>[ARR30-C] 不要生成或使用越界的指针或数组下标。</p>
+<p>[ARR37-C] 不要对指向非数组对象的指针进行整数加减操作。</p>
+<p>[ARR38-C] 确保库函数不会生成无效指针。</p>
+<p>[ARR39-C] 不要对指针执行缩放后的整数加减操作。</p>
+<p>[CTR50-CPP] 确保容器的下标和迭代器处于合法范围内。</p>
+<p>[CTR51-CPP] 使用合法的引用、指针和迭代器来访问容器元素。</p>
+<p>[CTR52-CPP] 确保库函数不会发生溢出。</p>
+<p>[CTR53-CPP] 使用合法的迭代器区间。</p>
+<p>[CTR54-CPP] 不要对不属于同一容器的迭代器执行减法操作。</p>
+<p>[CTR55-CPP] 对迭代器使用加法运算符时，确保结果不会溢出。</p>
+<p>[CTR56-CPP] 不要对多态对象使用指针算术运算。</p>
+<p>[CTR57-CPP] 提供合法的排序谓词。</p>
+<p>[CTR58-CPP] 谓词函数对象不应是可修改的。</p>
+<hr>
+<h2 id="字符与字符串">字符与字符串</h2>
+<p>[STR30-C] 不要尝试修改字符串字面量。</p>
+<p>[STR31-C] 确保字符串的存储空间足以容纳字符数据和空终止符。</p>
+<p>[STR32-C] 不要向期望字符串的库函数传入非空终止的字符序列。</p>
+<p>[STR34-C] 字符转换为更大的整数类型前，先强制转换为 <code>unsigned char</code> 类型。</p>
+<p>[STR37-C] 字符处理函数的参数必须能表示为 <code>unsigned char</code> 类型。</p>
+<p>[STR38-C] 不要混淆窄字符、宽字符字符串及其对应的处理函数。</p>
+<p>[STR50-CPP] 确保字符串的存储空间足以容纳字符数据和空终止符。</p>
+<p>[STR51-CPP] 不要尝试通过空指针构造 <code>std::string</code> 对象。</p>
+<p>[STR52-CPP] 使用合法的引用、指针和迭代器来访问 <code>basic_string</code> 的元素。</p>
+<p>[STR53-CPP] 对元素访问执行范围检查。</p>
+<hr>
+<h2 id="内存管理">内存管理</h2>
+<p>[MEM30-C] 不要访问已释放的内存。</p>
+<p>[MEM31-C] 动态分配的内存不再使用时应及时释放。</p>
+<p>[MEM34-C] 仅释放动态分配的内存。</p>
+<p>[MEM35-C] 为对象分配足够的内存。</p>
+<p>[MEM36-C] 不要通过调用 <code>realloc()</code> 修改对象的对齐方式。</p>
+<p>[MEM50-CPP] 不要访问已释放的内存。</p>
+<p>[MEM51-CPP] 正确释放动态分配的资源。</p>
+<p>[MEM52-CPP] 检测并处理内存分配错误。</p>
+<p>[MEM53-CPP] 手动管理对象生存期时，显式执行对象的构造与析构。</p>
+<p>[MEM54-CPP] 为 <code>placement new</code> 提供对齐正确、存储空间充足的指针。</p>
+<p>[MEM55-CPP] 遵守动态存储管理函数替换的相关要求。</p>
+<p>[MEM56-CPP] 不要将已被持有所有权的指针值存入无关的智能指针中。</p>
+<p>[MEM57-CPP] 避免对过对齐类型使用默认的 <code>operator new</code>。</p>
+<hr>
+<h2 id="输入与输出">输入与输出</h2>
+<p>[FIO30-C] 禁止用户输入进入格式字符串。</p>
+<p>[FIO32-C] 不要对设备执行仅适用于文件的操作。</p>
+<p>[FIO34-C] 区分从文件读取的字符与 <code>EOF</code>、<code>WEOF</code>。</p>
+<p>[FIO37-C] 不要假定 <code>fgets()</code> 或 <code>fgetws()</code> 调用成功时一定会返回非空字符串。</p>
+<p>[FIO38-C] 不要复制 <code>FILE</code> 对象。</p>
+<p>[FIO39-C] 对流交替执行输入输出操作时，中间必须执行刷新或定位操作。</p>
+<p>[FIO40-C] <code>fgets()</code> 或 fgetws() 调用失败时重置字符串。</p>
+<p>[FIO41-C] 调用 <code>getc()</code>、<code>putc()</code>、<code>getwc()</code>、<code>putwc()</code> 时，流参数不要带有副作用。</p>
+<p>[FIO42-C] 文件不再使用时应及时关闭。</p>
+<p>[FIO44-C] <code>fsetpos()</code> 仅使用 <code>fgetpos()</code> 返回的合法值。</p>
+<p>[FIO45-C] 访问文件时避免 <code>TOCTOU</code>（检查时间与使用时间）竞态条件。</p>
+<p>[FIO46-C] 不要访问已关闭的文件。</p>
+<p>[FIO47-C] 使用合法的格式字符串。</p>
+<p>[FIO50-CPP] 对文件流交替执行输入输出操作时，中间必须执行定位操作。</p>
+<p>[FIO51-CPP] 文件不再使用时应及时关闭。</p>
+<hr>
+<h2 id="异常与错误处理">异常与错误处理</h2>
+<p>[ERR30-C] 调用会设置 <code>errno</code> 的库函数前，先将 <code>errno</code> 置为 <code>0</code>；且仅当函数返回值表明调用失败后，再检查 <code>errno</code> 的值。</p>
+<p>[ERR32-C] 不要依赖 <code>errno</code> 的不确定值。</p>
+<p>[ERR33-C] 检测并处理标准库的错误。</p>
+<p>[ERR34-C] 字符串转换为数值时检测并处理错误。</p>
+<p>[ERR50-CPP] 不要让程序异常终止。</p>
+<p>[ERR51-CPP] 处理所有异常。</p>
+<p>[ERR52-CPP] 不要使用 <code>setjmp()</code> 或 <code>longjmp()</code> 函数。</p>
+<p>[ERR53-CPP] 不要在构造函数或析构函数的函数级 <code>try</code> 块处理程序中，引用基类或类的数据成员。</p>
+<p>[ERR54-CPP] 异常捕获处理程序应按参数类型从派生程度最高到最低的顺序排列。</p>
+<p>[ERR55-CPP] 遵守异常规范。</p>
+<p>[ERR56-CPP] 确保异常安全。</p>
+<p>[ERR57-CPP] 异常处理过程中不要发生资源泄漏。</p>
+<p>[ERR58-CPP] 处理 <code>main()</code> 函数开始执行前抛出的所有异常。</p>
+<p>[ERR59-CPP] 不要跨执行边界抛出异常。</p>
+<p>[ERR60-CPP] 异常对象必须具备不抛出异常的拷贝构造能力。</p>
+<p>[ERR61-CPP] 通过左值引用捕获异常。</p>
+<p>[ERR62-CPP] 字符串转换为数值时检测并处理错误。</p>
+<hr>
+<h2 id="面向对象编程">面向对象编程</h2>
+<p>[OOP50-CPP] 不要在构造函数或析构函数中调用虚函数。</p>
+<p>[OOP51-CPP] 不要对派生类对象进行切片操作。</p>
+<p>[OOP52-CPP] 删除多态对象时，其基类必须具备虚析构函数。</p>
+<p>[OOP53-CPP] 按规范顺序编写构造函数的成员初始化列表。</p>
+<p>[OOP54-CPP] 妥善处理自拷贝赋值操作。</p>
+<p>[OOP55-CPP] 不要使用指向成员的指针运算符访问不存在的成员。</p>
+<p>[OOP56-CPP] 遵守替换处理程序的相关要求。</p>
+<p>[OOP57-CPP] 优先使用特殊成员函数和重载运算符，而非 <code>C</code> 标准库函数。</p>
+<p>[OOP58-CPP] 拷贝操作不得修改源对象。</p>
+<hr>
+<h2 id="并发">并发</h2>
+<p>[CON33-C] 使用库函数时避免竞态条件。</p>
+<p>[CON37-C] 多线程程序中不要调用 <code>signal()</code> 函数。</p>
+<p>[CON40-C] 不要在一个表达式中两次引用同一个原子变量。</p>
+<p>[CON41-C] 将可能虚假失败的函数封装在循环中。</p>
+<p>[CON43-C] 多线程代码中禁止出现数据竞争。</p>
+<p>[CON50-CPP] 不要销毁处于锁定状态的互斥量。</p>
+<p>[CON51-CPP] 确保异常发生时主动持有的锁能被正确释放。</p>
+<p>[CON52-CPP] 多线程访问位域时防止数据竞争。</p>
+<p>[CON53-CPP] 按预定义顺序加锁以避免死锁。</p>
+<p>[CON54-CPP] 将可能虚假唤醒的函数封装在循环中。</p>
+<p>[CON55-CPP] 使用条件变量时，保证线程安全与活性。</p>
+<p>[CON56-CPP] 不要对调用线程已持有的非递归互斥量执行投机性加锁。</p>
+<hr>
+<h2 id="其他规则">其他规则</h2>
+<p>[ENV30-C] 不要修改特定函数返回值所引用的对象。</p>
+<p>[ENV31-C] 执行可能使环境指针失效的操作后，不要依赖该环境指针。</p>
+<p>[ENV32-C] 所有退出处理程序必须正常返回。</p>
+<p>[ENV33-C] 不要调用 <code>system()</code> 函数。</p>
+<p>[ENV34-C] 不要存储特定函数返回的指针。</p>
+<p>[FLP30-C] 不要使用浮点变量作为循环计数器。</p>
+<p>[FLP32-C] 预防并检测数学函数中的定义域和值域错误。</p>
+<p>[FLP34-C] 确保浮点转换的结果在目标类型的取值范围内。</p>
+<p>[FLP36-C] 整数值转换为浮点类型时保留精度。</p>
+<p>[FLP37-C] 不要通过对象表示来比较浮点值。</p>
+<p>[MSC30-C] 不要使用 <code>rand()</code> 函数生成伪随机数。</p>
+<p>[MSC32-C] 为伪随机数生成器设置正确的种子。</p>
+<p>[MSC33-C] 不要向 <code>asctime()</code> 函数传入非法数据。</p>
+<p>[MSC37-C] 确保控制流永远不会到达非 <code>void</code> 函数的末尾。</p>
+<p>[MSC38-C] 若预定义标识符可能仅以宏的形式实现，不要将其当作对象处理。</p>
+<p>[MSC39-C] 不要对值不确定的 <code>va_list</code> 调用 <code>va_arg()</code>。</p>
+<p>[MSC40-C] 不要违反语言约束。</p>
+<p>[MSC41-C] 切勿硬编码敏感信息。</p>
+<p>[MSC50-CPP] 不要使用 <code>std::rand()</code> 生成伪随机数。</p>
+<p>[MSC51-CPP] 确保随机数生成器被正确设置种子。</p>
+<p>[MSC52-CPP] 有返回值的函数必须在所有退出路径都返回值。</p>
+<p>[MSC53-CPP] 不要从声明为 <code>[[noreturn]]</code> 的函数中返回。</p>
+<p>[MSC54-CPP] 信号处理函数必须是普通函数。</p>
+<p>[PRE30-C] 不要通过拼接生成通用字符名。</p>
+<p>[PRE31-C] 避免不安全宏的参数带有副作用。</p>
+<p>[PRE32-C] 不要在调用类函数宏时使用预处理指令。</p>
+<p>[SIG31-C] 不要在信号处理函数中访问共享对象。</p>
+<p>[SIG34-C] 不要在可中断的信号处理函数内部调用 <code>signal()</code>。</p>
+<p>[SIG35-C] 不要从计算异常的信号处理函数中返回。</p>
+<hr>
+<p><strong><a href="./005_CertCpp%e8%a7%84%e8%8c%83%e8%8b%b1%e6%96%87%e7%89%88.md" rel="">English Version</a></strong></p>
+<hr>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-04-19</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/015_certcpp%E8%A7%84%E8%8C%83/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/cert/">CERT</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/005_certcpp%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/" class="prev" rel="prev" title="CERT C&#43;&#43; 规范英文版"><i class="fas fa-angle-left" aria-hidden="true"></i>CERT C++ 规范英文版</a>
+            <a href="/blog/004_autosarcpp2014%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/" class="next" rel="next" title="AUTOSAR C&#43;&#43; 2014 规范英文版">AUTOSAR C++ 2014 规范英文版<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

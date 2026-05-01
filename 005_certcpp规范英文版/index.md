@@ -1,15 +1,15 @@
-# CERT C++ 规范
+# CERT C++ 规范英文版
 
 
-# CERT Cpp 规范
+# CERT C++ 规范英文版
 
 > [https://ww2.mathworks.cn/help/bugfinder/cert-c-rules.html?lang=en](https://ww2.mathworks.cn/help/bugfinder/cert-c-rules.html?lang=en)
 
+**[中文版本](./015_CertCpp规范.md)**
+
 ----
 
-## English Version
-
-### Declare and Initialization
+## Declare and Initialization
 
 [DCL30-C] Declare objects with appropriate storage durations.
 
@@ -41,7 +41,7 @@
 
 ----
 
-### Expressions
+## Expressions
 
 [EXP34-C] Do not dereference null pointers.
 
@@ -91,7 +91,7 @@
 
 ----
 
-### Integers
+## Integers
 
 [INT30-C] Ensure that unsigned integer operations do not wrap.
 
@@ -111,7 +111,7 @@
 
 ----
 
-### Containers
+## Containers
 
 [ARR30-C] Do not form or use out-of-bounds pointers or array subscripts.
 
@@ -141,7 +141,7 @@
 
 ----
 
-### Characters and strings
+## Characters and strings
 
 [STR30-C] Do not attempt to modify string literals.
 
@@ -165,7 +165,7 @@
 
 ----
 
-### Memory Management
+## Memory Management
 
 [MEM30-C] Do not access freed memory.
 
@@ -195,7 +195,7 @@
 
 ----
 
-### Input and output
+## Input and output
 
 [FIO30-C] Exclude user input from format strings.
 
@@ -229,7 +229,7 @@
 
 ----
 
-### Exceptions and error handling
+## Exceptions and error handling
 
 [ERR30-C] Set errno to zero before calling a library function known to set errno, and check errno only after the function returns a value indicating failure.
 
@@ -267,7 +267,7 @@
 
 ----
 
-### Object-oriented programming
+## Object-oriented programming
 
 [OOP50-CPP] Do not invoke virtual functions from constructors or destructors.
 
@@ -289,7 +289,7 @@
 
 ----
 
-### Concurrency
+## Concurrency
 
 [CON33-C] Avoid race conditions when using library functions.
 
@@ -317,7 +317,7 @@
 
 ----
 
-### Miscellaneous
+## Miscellaneous
 
 [ENV30-C] Do not modify the object referenced by the return value of certain functions.
 
@@ -376,6 +376,10 @@
 [SIG34-C] Do not call signal() from within interruptible signal handlers.
 
 [SIG35-C] Do not return from a computational exception signal handler.
+
+----
+
+**[中文版本](./015_CertCpp规范.md)**
 
 ----
 
