@@ -7,555 +7,553 @@
 
 ----
 
-## English Version
+## 导则
 
-### Directives
+### 实现相关
 
-#### Implementation
-
-[Dir 1.1] Any implementation-defined behavior on which the output of the program depends shall be documented and understood.
+[导则 1.1] 程序输出所依赖的任何实现定义行为，均应形成文档并被充分理解。
 
 ----
 
-#### Compilation and build
+### 编译与构建
 
-[Dir 2.1] All source files shall compile without any compilation errors.
-
-----
-
-#### Code design
-
-[Dir 4.1] Run-time failures shall be minimized.
-
-[Dir 4.3] Assembly language shall be encapsulated and isolated.
-
-[Dir 4.4] Sections of code should not be "commented out".
-
-[Dir 4.5] Identifiers in the same name space with overlapping visibility should be typographically unambiguous.
-
-[Dir 4.6] typedefs that indicate size and signedness should be used in place of the basic numerical types.
-
-[Dir 4.7] If a function returns error information, then that error information shall be tested.
-
-[Dir 4.8] If a pointer to a structure or union is never dereferenced within a translation unit, then the implementation of the object should be hidden.
-
-[Dir 4.9] A function should be used in preference to a function-like macro where they are interchangeable.
-
-[Dir 4.10] Precautions shall be taken in order to prevent the contents of a header file being included more than once.
-
-[Dir 4.11] The validity of values passed to library functions shall be checked.
-
-[Dir 4.12] Dynamic memory allocation shall not be used.
-
-[Dir 4.13] Functions which are designed to provide operations on a resource should be called in an appropriate sequence.
-
-[Dir 4.14] The validity of values received from external sources shall be checked.
-
-[Dir 4.15] Evaluation of floating-point expressions shall not lead to the undetected generation of infinities and NaNs.
+[导则 2.1] 所有源文件的编译过程不应产生任何编译错误。
 
 ----
 
-#### Concurrency considerations
+### 代码设计
 
-[Dir 5.1] There shall be no data races between threads.
+[导则 4.1] 应最大限度降低运行时故障的发生概率。
 
-[Dir 5.2] There shall be no deadlocks between threads.
+[导则 4.3] 汇编语言应进行封装与隔离。
 
-[Dir 5.3] There shall be no dynamic thread creation.
+[导则 4.4] 不应将代码段 “注释掉”。
 
-----
+[导则 4.5] 同一命名空间中、可见范围存在重叠的标识符，在字形上应无歧义。
 
-### Rules
+[导则 4.6] 宜使用指明了大小和符号性的 `typedef` 类型，替代基础数值类型。
 
-#### Standard C environment
+[导则 4.7] 若函数返回错误信息，则应对该错误信息进行检查。
 
-[Rule 1.1] The program shall contain no violations of the standard C syntax and constraints, and shall not exceed the implementation's translation limits.
+[导则 4.8] 若指向结构体或联合体的指针在单个翻译单元内从未被解引用，则该对象的实现宜对外隐藏。
 
-[Rule 1.2] Language extensions should not be used.
+[导则 4.9] 在函数与类函数宏可互换使用的场景下，宜优先使用函数。
 
-[Rule 1.3] There shall be no occurrence of undefined or critical unspecified behaviour.
+[导则 4.10] 应采取预防措施，避免头文件内容被多次包含。
 
-[Rule 1.4] Emergent language features shall not be used.
+[导则 4.11] 应对传递给库函数的数值的有效性进行检查。
 
-[Rule 1.5] Obsolescent language features shall not be used.
+[导则 4.12] 不应使用动态内存分配。
 
-----
+[导则 4.13] 用于对资源执行操作的函数，应按合理的顺序调用。
 
-#### Unused code
+[导则 4.14] 应对从外部来源接收的数值的有效性进行检查。
 
-[Rule 2.1] A project shall not contain unreachable code.
-
-[Rule 2.2] A project shall not contain dead code.
-
-[Rule 2.3] A project should not contain unused type declarations.
-
-[Rule 2.4] A project should not contain unused tag declarations.
-
-[Rule 2.5] A project should not contain unused macro definitions.
-
-[Rule 2.6] A function should not contain unused label declarations.
-
-[Rule 2.7] A function should not contain unused parameters.
-
-[Rule 2.8] A project should not contain unused object definitions.
+[导则 4.15] 浮点表达式的计算过程，不应导致无穷大与非数值（`NaN`）的生成未被检测。
 
 ----
 
-#### Comments
+### 并发相关考量
 
-[Rule 3.1] The character sequences /* and // shall not be used within a comment.
+[导则 5.1] 线程之间不应存在数据竞争。
 
-[Rule 3.2] Line-splicing shall not be used in // comments.
+[导则 5.2] 线程之间不应出现死锁。
 
-----
-
-#### Character sets and lexical conventions
-
-[Rule 4.1] Octal and hexadecimal escape sequences shall be terminated.
-
-[Rule 4.2] Trigraphs should not be used.
+[导则 5.3] 不应进行动态线程创建。
 
 ----
 
-#### Identifiers
+## 规则
 
-[Rule 5.1] External identifiers shall be distinct.
+### 标准 C 语言环境
 
-[Rule 5.2] Identifiers declared in the same scope and name space shall be distinct.
+[规则 1.1] 程序不得违反标准 `C` 语言的语法与约束，且不得超出编译器实现的翻译限制。
 
-[Rule 5.3] An identifier declared in an inner scope shall not hide an identifier declared in an outer scope.
+[规则 1.2] 不宜使用语言扩展特性。
 
-[Rule 5.4] Macro identifiers shall be distinct.
+[规则 1.3] 程序中不应出现未定义行为或关键的未明确行为。
 
-[Rule 5.5] Identifiers shall be distinct from macro names.
+[规则 1.4] 不应使用新兴语言特性。
 
-[Rule 5.6] A typedef name shall be a unique identifier.
-
-[Rule 5.7] A tag name shall be a unique identifier.
-
-[Rule 5.8] Identifiers that define objects or functions with external linkage shall be unique.
-
-[Rule 5.9] Identifiers that define objects or functions with internal linkage should be unique.
+[规则 1.5] 不应使用过时语言特性。
 
 ----
 
-#### Types
+### 未使用代码
 
-[Rule 6.1] Bit-fields shall only be declared with an appropriate type.
+[规则 2.1] 项目中不应包含不可达代码。
 
-[Rule 6.2] Single-bit named bit-fields shall not be of a signed type.
+[规则 2.2] 项目中不应包含死代码。
 
-[Rule 6.3] A bit field shall not be declared as a member of a union.
+[规则 2.3] 项目中不宜包含未使用的类型声明。
 
-----
+[规则 2.4] 项目中不宜包含未使用的标签声明。
 
-#### Literals and constants
+[规则 2.5] 项目中不宜包含未使用的宏定义。
 
-[Rule 7.1] Octal constants shall not be used.
+[规则 2.6] 函数中不宜包含未使用的标签声明。
 
-[Rule 7.2] A “u” or “U” suffix shall be applied to all integer constants that are represented in an unsigned type.
+[规则 2.7] 函数中不宜包含未使用的参数。
 
-[Rule 7.3] The lowercase character “l” shall not be used in a literal suffix.
-
-[Rule 7.4] A string literal shall not be assigned to an object unless the object’s type is “pointer to const-qualified char”.
-
-[Rule 7.5] The argument of an integer constant macro shall have an appropriate form.
-
-[Rule 7.6] The small integer variants of the minimum-width integer constant macros shall not be used.
+[规则 2.8] 项目中不宜包含未使用的对象定义。
 
 ----
 
-#### Declarations and definitions
+### 注释
 
-[Rule 8.1] Types shall be explicitly specified.
+[规则 3.1] 注释内部不得使用 `/*` 和 `//` 字符序列。
 
-[Rule 8.2] Function types shall be in prototype form with named parameters.
-
-[Rule 8.3] All declarations of an object or function shall use the same names and type qualifiers.
-
-[Rule 8.4] A compatible declaration shall be visible when an object or function with external linkage is defined.
-
-[Rule 8.5] An external object or function shall be declared once in one and only one file.
-
-[Rule 8.6] An identifier with external linkage shall have exactly one external definition.
-
-[Rule 8.7] Functions and objects should not be defined with external linkage if they are referenced in only one translation unit.
-
-[Rule 8.8] The static storage class specifier shall be used in all declarations of objects and functions that have internal linkage.
-
-[Rule 8.9] An object should be declared at block scope if its identifier only appears in a single function.
-
-[Rule 8.10] An inline function shall be declared with the static storage class.
-
-[Rule 8.11] When an array with external linkage is declared, its size should be explicitly specified.
-
-[Rule 8.12] Within an enumerator list, the value of an implicitly-specified enumeration constant shall be unique.
-
-[Rule 8.13] A pointer should point to a const-qualified type whenever possible.
-
-[Rule 8.14] The restrict type qualifier shall not be used.
-
-[Rule 8.15] All declarations of an object with an explicit alignment specification shall specify the same alignment.
-
-[Rule 8.16] The alignment specification of zero should not appear in an object declaration.
-
-[Rule 8.17] At most one explicit alignment specifier should appear in an object declaration.
+[规则 3.2] `//` 单行注释中不得使用行拼接。
 
 ----
 
-#### Initialization
+### 字符集与词法约定
 
-[Rule 9.1] The value of an object with automatic storage duration shall not be read before it has been set.
+[规则 4.1] 八进制和十六进制转义序列必须有明确终止。
 
-[Rule 9.2] The initializer for an aggregate or union shall be enclosed in braces.
-
-[Rule 9.3] Arrays shall not be partially initialized.
-
-[Rule 9.4] An element of an object shall not be initialized more than once.
-
-[Rule 9.5] Where designated initializers are used to initialize an array object the size of the array shall be specified explicitly.
-
-[Rule 9.6] An initializer using chained designators shall not contain initializers without designators.
-
-[Rule 9.7] Atomic objects shall be appropriately initialized before being accessed.
+[规则 4.2] 不宜使用三字符序列。
 
 ----
 
-#### The Essential type module
+### 标识符
 
-[Rule 10.1] Operands shall not be of an inappropriate essential type.
+[规则 5.1] 外部标识符必须具备唯一性。
 
-[Rule 10.2] Expressions of essentially character type shall not be used inappropriately in addition and subtraction operations.
+[规则 5.2] 在同一作用域和命名空间中声明的标识符必须具备唯一性。
 
-[Rule 10.3] The value of an expression shall not be assigned to an object with a narrower essential type or of a different essential type category.
+[规则 5.3] 内层作用域中声明的标识符，不得隐藏外层作用域中声明的同名标识符。
 
-[Rule 10.4] Both operands of an operator in which the usual arithmetic conversions are performed shall have the same essential type category.
+[规则 5.4] 宏标识符必须具备唯一性。
 
-[Rule 10.5] The value of an expression should not be cast to an inappropriate essential type.
+[规则 5.5] 标识符不得与宏名称重名。
 
-[Rule 10.6] The value of a composite expression shall not be assigned to an object with wider essential type.
+[规则 5.6] `typedef` 名称必须是唯一标识符。
 
-[Rule 10.7] If a composite expression is used as one operand of an operator in which the usual arithmetic conversions are performed then the other operand shall not have wider essential type.
+[规则 5.7] 标签名必须是唯一标识符。
 
-[Rule 10.8] The value of a composite expression shall not be cast to a different essential type category or a wider essential type.
+[规则 5.8] 定义了具备外部链接属性的对象或函数的标识符，必须具备唯一性。
 
-----
-
-#### Points type conversion
-
-[Rule 11.1] Conversions shall not be performed between a pointer to a function and any other type.
-
-[Rule 11.2] Conversions shall not be performed between a pointer to an incomplete type and any other type.
-
-[Rule 11.3] A conversion shall not be performed between a pointer to object type and a pointer to a different object type.
-
-[Rule 11.4] A conversion should not be performed between a pointer to object and an integer type.
-
-[Rule 11.5] A conversion should not be performed from pointer to void into pointer to object.
-
-[Rule 11.6] A cast shall not be performed between pointer to void and an arithmetic type.
-
-[Rule 11.7] A cast shall not be performed between pointer to object and a non-integer arithmetic type.
-
-[Rule 11.8] A conversion shall not remove any const, volatile, or _Atomic qualification from the type pointed to by a pointer.
-
-[Rule 11.9] The macro NULL shall be the only permitted form of integer null pointer constant.
-
-[Rule 11.10] The _Atomic qualifier shall not be applied to the incomplete type void.
+[规则 5.9] 定义了具备内部链接属性的对象或函数的标识符，宜具备唯一性。
 
 ----
 
-#### Expressions
+### 类型
 
-[Rule 12.1] The precedence of operators within expressions should be made explicit.
+[规则 6.1] 位域只能使用合规的类型进行声明。
 
-[Rule 12.2] The right hand operand of a shift operator shall lie in the range zero to one less than the width in bits of the essential type of the left hand operand.
+[规则 6.2] 单比特命名位域不得使用有符号类型。
 
-[Rule 12.3] The comma operator should not be used.
-
-[Rule 12.4] Evaluation of constant expressions should not lead to unsigned integer wrap-around.
-
-[Rule 12.5] The sizeof operator shall not have an operand which is a function parameter declared as “array of type”.
-
-[Rule 12.6] Structure and union members of atomic objects shall not be directly accessed.
+[规则 6.3] 位域不得声明为联合体的成员。
 
 ----
 
-#### Side affects
+### 字面量与常量
 
-[Rule 13.1] Initializer lists shall not contain persistent side effects.
+[规则 7.1] 不应使用八进制常量。
 
-[Rule 13.2] The value of an expression and its persistent side effects shall be the same under all permitted evaluation orders and shall be independent from thread interleaving.
+[规则 7.2] 所有以无符号类型表示的整型常量，都必须添加 `u` 或 `U` 后缀。
 
-[Rule 13.3] A full expression containing an increment (++) or decrement (--) operator should have no other potential side effects other than that caused by the increment or decrement operator.
+[规则 7.3] 字面量后缀中不得使用小写字母 `l`。
 
-[Rule 13.4] The result of an assignment operator should not be used.
+[规则 7.4] 除非对象的类型为 “指向 `const` 限定的 `char` 类型的指针”，否则不得将字符串字面量赋值给该对象。
 
-[Rule 13.5] The right hand operand of a logical && or || operator shall not contain persistent side effects.
+[规则 7.5] 整型常量宏的参数必须使用合规的形式。
 
-[Rule 13.6] The operand of the sizeof operator shall not contain any expression which has potential side effects.
-
-----
-
-#### Control statement expression
-
-[Rule 14.1] A loop counter shall not have essentially floating type.
-
-[Rule 14.2] A for loop shall be well-formed.
-
-[Rule 14.3] Controlling expressions shall not be invariant.
-
-[Rule 14.4] The controlling expression of an if statement and the controlling expression of an iteration-statement shall have essentially Boolean type.
+[规则 7.6] 不得使用最小宽度整型常量宏的短整型变体。
 
 ----
 
-#### Control flow
+### 声明与定义
 
-[Rule 15.1] The goto statement should not be used.
+[规则 8.1] 必须显式指定类型。
 
-[Rule 15.2] The goto statement shall jump to a label declared later in the same function.
+[规则 8.2] 函数类型必须采用带命名参数的原型形式。
 
-[Rule 15.3] Any label referenced by a goto statement shall be declared in the same block, or in any block enclosing the goto statement.
+[规则 8.3] 同一对象或函数的所有声明，必须使用相同的名称与类型限定符。
 
-[Rule 15.4] There should be no more than one break or goto statement used to terminate any iteration statement.
+[规则 8.4] 定义具备外部链接属性的对象或函数时，必须有一个兼容的声明处于可见状态。
 
-[Rule 15.5] A function should have a single point of exit at the end.
+[规则 8.5] 外部对象或函数必须在且仅在一个文件中声明一次。
 
-[Rule 15.6] The body of an iteration-statement or a selection-statement shall be a compound statement.
+[规则 8.6] 具备外部链接属性的标识符，必须有且仅有一个外部定义。
 
-[Rule 15.7] All if … else if constructs shall be terminated with an else statement.
+[规则 8.7] 若函数和对象仅在单个翻译单元中被引用，则不宜定义为具备外部链接属性。
 
-----
+[规则 8.8] 所有具备内部链接属性的对象和函数的声明，都必须使用 `static` 存储类型说明符。
 
-#### Switch statements
+[规则 8.9] 若对象的标识符仅在单个函数中出现，则宜在块作用域中声明该对象。
 
-[Rule 16.1] All switch statements shall be well-formed.
+[规则 8.10] 内联函数必须使用 `static` 存储类型说明符声明。
 
-[Rule 16.2] A switch label shall only be used when the most closely-enclosing compound statement is the body of a switch statement.
+[规则 8.11] 声明具备外部链接属性的数组时，宜显式指定其大小。
 
-[Rule 16.3] An unconditional break statement shall terminate every switch-clause.
+[规则 8.12] 枚举列表中，隐式赋值的枚举常量的值必须具备唯一性。
 
-[Rule 16.4] Every switch statement shall have a default label.
+[规则 8.13] 只要可行，指针就应指向 `const` 限定的类型。
 
-[Rule 16.5] A default label shall appear as either the first or the last switch label of a switch statement.
+[规则 8.14] 不应使用 `restrict` 类型限定符。
 
-[Rule 16.6] Every switch statement shall have at least two switch-clauses.
+[规则 8.15] 带有显式对齐规范的对象的所有声明，必须指定相同的对齐要求。
 
-[Rule 16.7] A switch-expression shall not have essentially Boolean type.
+[规则 8.16] 对象声明中不宜出现零值对齐规范。
 
-----
-
-#### Functions
-
-[Rule 17.1] The standard header file <stdarg.h> shall not be used.
-
-[Rule 17.2] Functions shall not call themselves, either directly or indirectly.
-
-[Rule 17.3] A function shall not be declared implicitly.
-
-[Rule 17.4] All exit paths from a function with non-void return type shall have an explicit return statement with an expression.
-
-[Rule 17.5] The function argument corresponding to a parameter declared to have an array type shall have an appropriate number of elements.
-
-[Rule 17.6] The declaration of an array parameter shall not contain the static keyword between the [ ].
-
-[Rule 17.7] The value returned by a function having non-void return type shall be used.
-
-[Rule 17.8] A function parameter should not be modified.
-
-[Rule 17.9] A function declared with a _Noreturn function specifier shall not return to its caller.
-
-[Rule 17.10] A function declared with a _Noreturn function specifier shall have void return type.
-
-[Rule 17.11] A function that never returns should be declared with a _Noreturn function specifier.
-
-[Rule 17.12] A function identifier should only be used with either a preceding &, or with a parenthesized parameter list.
-
-[Rule 17.13] A function type shall not be type qualified.
+[规则 8.17] 单个对象声明中最多只能出现一个显式对齐说明符。
 
 ----
 
-#### Points and arrays
+### 初始化
 
-[Rule 18.1] A pointer resulting from arithmetic on a pointer operand shall address an element of the same array as that pointer operand.
+[规则 9.1] 自动存储期的对象，在赋值前不得读取其值。
 
-[Rule 18.2] Subtraction between pointers shall only be applied to pointers that address elements of the same array.
+[规则 9.2] 聚合体或联合体的初始化器必须包裹在大括号中。
 
-[Rule 18.3] The relational operators >, >=, < and <= shall not be applied to expressions of pointer type except where they point into the same object.
+[规则 9.3] 数组不得进行部分初始化。
 
-[Rule 18.4] The +, -, += and -= operators should not be applied to an expression of pointer type.
+[规则 9.4] 对象的元素不得被多次初始化。
 
-[Rule 18.5] Declarations should contain no more than two levels of pointer nesting.
+[规则 9.5] 使用指定初始化器对数组对象进行初始化时，必须显式指定数组的大小。
 
-[Rule 18.6] The address of an object with automatic or thread-local storage shall not be copied to another object that persists after the first object has ceased to exist.
+[规则 9.6] 使用链式指定符的初始化器中，不得包含无指定符的初始化项。
 
-[Rule 18.7] Flexible array members shall not be declared.
-
-[Rule 18.8] Variable-length arrays shall not be used.
-
-[Rule 18.9] An object with temporary lifetime shall not undergo array-to-pointer conversion.
-
-[Rule 18.10] Pointers to variably-modified array types shall not be used.
+[规则 9.7] 原子对象在被访问前，必须进行合规的初始化。
 
 ----
 
-#### Overlapping storage
+### 基本类型模块
 
-[Rule 19.1] An object shall not be assigned or copied to an overlapping object.
+[规则 10.1] 操作数不得使用不合规的基本类型。
 
-[Rule 19.2] The union keyword should not be used.
+[规则 10.2] 本质为字符类型的表达式，不得在加减运算中违规使用。
 
-----
+[规则 10.3] 表达式的值不得赋值给基本类型更窄、或基本类型类别不同的对象。
 
-#### Preprocessing directives
+[规则 10.4] 执行通常算术转换的运算符的两个操作数，必须属于同一基本类型类别。
 
-[Rule 20.1] #include directives should only be preceded by preprocessor directives or comments.
+[规则 10.5] 表达式的值不宜强制转换为不合规的基本类型。
 
-[Rule 20.2] The ', " or \ characters and the /* or // character sequences shall not occur in a header file name.
+[规则 10.6] 复合表达式的值不得赋值给基本类型更宽的对象。
 
-[Rule 20.3] The #include directive shall be followed by either a <filename> or "filename" sequence.
+[规则 10.7] 若复合表达式作为执行通常算术转换的运算符的一个操作数，则另一个操作数不得使用更宽的基本类型。
 
-[Rule 20.4] A macro shall not be defined with the same name as a keyword.
-
-[Rule 20.5] #undef should not be used.
-
-[Rule 20.6] Tokens that look like a preprocessing directive shall not occur within a macro argument.
-
-[Rule 20.7] Expressions resulting from the expansion of macro parameters shall be enclosed in parentheses.
-
-[Rule 20.8] The controlling expression of a #if or #elif preprocessing directive shall evaluate to 0 or 1.
-
-[Rule 20.9] All identifiers used in the controlling expression of #if or #elif preprocessing directives shall be #define'd before evaluation.
-
-[Rule 20.10] The # and ## preprocessor operators should not be used.
-
-[Rule 20.11] A macro parameter immediately following a # operator shall not immediately be followed by a ## operator.
-
-[Rule 20.12] A macro parameter used as an operand to the # or ## operators, which is itself subject to further macro replacement, shall only be used as an operand to these operators.
-
-[Rule 20.13] A line whose first token is # shall be a valid preprocessing directive.
-
-[Rule 20.14] All #else, #elif and #endif preprocessor directives shall reside in the same file as the #if, #ifdef or #ifndef directive to which they are related.
+[规则 10.8] 复合表达式的值不得强制转换为不同的基本类型类别，或更宽的基本类型。
 
 ----
 
-#### Standard libraries
+### 指针类型转换
 
-[Rule 21.1] #define and #undef shall not be used on a reserved identifier or reserved macro name.
+[规则 11.1] 不得在函数指针与任何其他类型之间进行转换。
 
-[Rule 21.2] A reserved identifier or reserved macro name shall not be declared.
+[规则 11.2] 不得在指向不完整类型的指针与任何其他类型之间进行转换。
 
-[Rule 21.3] The memory allocation and deallocation functions of <stdlib.h> shall not be used.
+[规则 11.3] 不得在指向不同对象类型的指针之间进行转换。
 
-[Rule 21.4] The standard header file <setjmp.h> shall not be used.
+[规则 11.4] 不宜在对象指针与整型之间进行转换。
 
-[Rule 21.5] The standard header file <signal.h> shall not be used.
+[规则 11.5] 不宜将 `void` 指针转换为对象指针。
 
-[Rule 21.6] The Standard Library input/output functions shall not be used.
+[规则 11.6] 不得在 `void` 指针与算术类型之间进行强制类型转换。
 
-[Rule 21.7] The Standard Library functions atof, atoi, atol, and atoll functions of <stdlib.h> shall not be used.
+[规则 11.7] 不得在对象指针与非整型算术类型之间进行强制类型转换。
 
-[Rule 21.8] The Standard Library termination functions of <stdlib.h> shall not be used.
+[规则 11.8] 类型转换不得移除指针所指向类型的任何 `const`、`volatile` 或 `_Atomic` 限定。
 
-[Rule 21.9] The Standard Library library functions bsearch and qsort of <stdlib.h> shall not be used.
+[规则 11.9] 宏 `NULL` 是唯一允许使用的整型空指针常量形式。
 
-[Rule 21.10] The Standard Library time and date functions shall not be used.
-
-[Rule 21.11] The standard header file <tgmath.h> should not be used.
-
-[Rule 21.12] The standard header file <fenv.h> shall not be used.
-
-[Rule 21.13] Any value passed to a function in <ctype.h> shall be representable as an unsigned char or be the value EOF.
-
-[Rule 21.14] The Standard Library function memcmp shall not be used to compare null terminated strings.
-
-[Rule 21.15] The pointer arguments to the Standard Library functions memcpy, memmove and memcmp shall be pointers to qualified or unqualified versions of compatible types.
-
-[Rule 21.16] The pointer arguments to the Standard Library function memcmp shall point to either a pointer type, an essentially signed type, an essentially unsigned type, an essentially Boolean type or an essentially enum type.
-
-[Rule 21.17] Use of the string handling function from <string.h> shall not result in accesses beyond the bounds of the objects referenced by their pointer parameters.
-
-[Rule 21.18] The size_t argument passed to any function in <string.h> shall have an appropriate value.
-
-[Rule 21.19] The pointers returned by the Standard Library functions localeconv, getenv, setlocale or strerror shall only be used as if they have pointer to const-qualified type.
-
-[Rule 21.20] The pointer returned by the Standard Library functions asctime, ctime, gmtime, localtime, localeconv, getenv, setlocale or strerror shall not be used following a subsequent call to the same function.
-
-[Rule 21.21] The Standard Library function system of <stdlib.h> shall not be used.
-
-[Rule 21.22] All operand arguments to any type-generic macros declared in <tgmath.h> shall have an appropriate essential type.
-
-[Rule 21.23] All operand arguments to any multi-argument type-generic macros declared in <tgmath.h> shall have the same standard type.
-
-[Rule 21.24] The random number generator functions of <stdlib.h> shall not be used.
-
-[Rule 21.25] All memory synchronization operations shall be executed in sequentially consistent order.
-
-[Rule 21.26] The Standard Library function mtx_timedlock() shall only be invoked on mutex objects of appropriate mutex type.
+[规则 11.10] `_Atomic` 限定符不得应用于不完整的 `void` 类型。
 
 ----
 
-#### Resources
+### 表达式
 
-[Rule 22.1] All resources obtained dynamically by means of Standard Library functions shall be explicitly released.
+[规则 12.1] 表达式中运算符的优先级应显式明确。
 
-[Rule 22.2] A block of memory shall only be freed if it was allocated by means of a Standard Library function.
+[规则 12.2] 移位运算符的右操作数，取值范围必须在 `0` 到左操作数基本类型的比特宽度减 `1` 之间。
 
-[Rule 22.3] The same file shall not be open for read and write access at the same time on different streams.
+[规则 12.3] 不宜使用逗号运算符。
 
-[Rule 22.4] There shall be no attempt to write to a stream which has been opened as read-only.
+[规则 12.4] 常量表达式的计算不宜导致无符号整数回绕。
 
-[Rule 22.5] A pointer to a FILE object shall not be dereferenced.
+[规则 12.5] `sizeof` 运算符的操作数不得是声明为 “类型数组” 的函数参数。
 
-[Rule 22.6] The value of a pointer to a FILE shall not be used after the associated stream has been closed.
-
-[Rule 22.7] The macro EOF shall only be compared with the unmodified return value from any Standard Library function capable of returning EOF.
-
-[Rule 22.8] The value of errno shall be set to zero prior to a call to an errno-setting-function.
-
-[Rule 22.9] The value of errno shall be tested against zero after calling an errno-setting function.
-
-[Rule 22.10] The value of errno shall only be tested when the last function to be called was an errno-setting function.
-
-[Rule 22.11] A thread that was previously either joined or detached shall not be subsequently joined nor detached.
-
-[Rule 22.12] Thread objects, thread synchronization objects, and thread-specific storage pointers shall only be accessed by the appropriate Standard Library functions.
-
-[Rule 22.13] Thread objects, thread synchronization objects and thread-specific storage pointers shall have appropriate storage duration.
-
-[Rule 22.14] Thread synchronization objects shall be initialized before being accessed.
-
-[Rule 22.15] Thread synchronization objects and thread-specific storage pointers shall not be destroyed until after all threads accessing them have terminated.
-
-[Rule 22.16] All mutex objects locked by a thread shall be explicitly unlocked by the same thread.
-
-[Rule 22.17] No thread shall unlock a mutex or call cnd_wait() or cnd_timedwait() for a mutex it has not locked before.
-
-[Rule 22.18] Non-recursive mutexes shall not be recursively locked.
-
-[Rule 22.19] A condition variable shall be associated with at most one mutex object.
-
-[Rule 22.20] Thread-specific storage pointers shall be created before being accessed.
+[规则 12.6] 不得直接访问原子对象的结构体与联合体成员。
 
 ----
 
-#### Generic selections
+### 副作用
 
-[Rule 23.1] A generic selection should only be expanded from a macro.
+[规则 13.1] 初始化器列表中不得包含持续副作用。
 
-[Rule 23.2] A generic selection that is not expanded from a macro shall not contain potential side effects in the controlling expression.
+[规则 13.2] 表达式的值及其持续副作用，在所有允许的求值顺序下必须保持一致，且不受线程交错执行的影响。
 
-[Rule 23.3] A generic selection should contain at least one non-default association.
+[规则 13.3] 包含自增 (`++`) 或自减 (`--`) 运算符的完整表达式，除自增或自减运算符本身带来的副作用外，不宜存在其他潜在副作用。
 
-[Rule 23.4] A generic association shall list an appropriate type.
+[规则 13.4] 不宜使用赋值运算符的运算结果。
 
-[Rule 23.5] A generic selection should not depend on implicit pointer type conversion.
+[规则 13.5] 逻辑与 `&&`、逻辑或 `||` 运算符的右操作数，不得包含持续副作用。
 
-[Rule 23.6] The controlling expression of a generic selection shall have an essential type that matches its standard type.
+[规则 13.6] `sizeof` 运算符的操作数中，不得包含任何存在潜在副作用的表达式。
 
-[Rule 23.7] A generic selection that is expanded from a macro should evaluate its argument only once.
+----
 
-[Rule 23.8] A default association shall appear as either the first or the last association of a generic selection.
+### 控制语句表达式
+
+[规则 14.1] 循环计数器不得使用本质为浮点的类型。
+
+[规则 14.2] `for` 循环必须符合规范格式。
+
+[规则 14.3] 控制表达式不得为不变量。
+
+[规则 14.4] `if` 语句的控制表达式与迭代语句的控制表达式，必须使用本质为布尔的类型。
+
+----
+
+### 控制流
+
+[规则 15.1] 不宜使用 `goto` 语句。
+
+[规则 15.2] `goto` 语句必须跳转到同一函数中、声明在跳转语句之后的标签。
+
+[规则 15.3] `goto` 语句引用的任何标签，必须声明在同一代码块中，或包裹该 `goto` 语句的任何外层代码块中。
+
+[规则 15.4] 用于终止任意迭代语句的 `break` 或 `goto` 语句，不宜超过一个。
+
+[规则 15.5] 函数宜在末尾设置单一退出点。
+
+[规则 15.6] 迭代语句或选择语句的主体必须是复合语句。
+
+[规则 15.7] 所有 `if ... else if` 结构必须以 `else` 语句结尾。
+
+----
+
+### switch 语句
+
+[规则 16.1] 所有 `switch` 语句必须符合规范格式。
+
+[规则 16.2] `switch` 标签只能在最内层闭合复合语句为 `switch` 语句体的场景下使用。
+
+[规则 16.3] 每个 `switch` 子句都必须以无条件 `break` 语句终止。
+
+[规则 16.4] 每个 `switch` 语句都必须包含 `default` 标签。
+
+[规则 16.5] `default` 标签必须位于 `switch` 语句的第一个或最后一个 `switch` 标签位置。
+
+[规则 16.6] 每个 `switch` 语句必须至少包含两个 `switch` 子句。
+
+[规则 16.7] `switch` 表达式不得使用本质为布尔的类型。
+
+----
+
+### 函数
+
+[规则 17.1] 不得使用标准头文件 `<stdarg.h>`。
+
+[规则 17.2] 函数不得直接或间接调用自身（禁止递归）。
+
+[规则 17.3] 不得隐式声明函数。
+
+[规则 17.4] 非 `void` 返回类型的函数，所有退出路径都必须带有带表达式的显式 `return` 语句。
+
+[规则 17.5] 与声明为数组类型的形参对应的函数实参，必须包含合规数量的元素。
+
+[规则 17.6] 数组参数的声明中，不得在[]之间使用 `static` 关键字。
+
+[规则 17.7] 非 `void` 返回类型的函数的返回值必须被使用。
+
+[规则 17.8] 不宜修改函数的形参。
+
+[规则 17.9] 声明为 `_Noreturn` 的函数，不得返回到其调用方。
+
+[规则 17.10] 声明为 `_Noreturn` 的函数，必须使用 `void` 返回类型。
+
+[规则 17.11] 永不返回的函数，宜使用 `_Noreturn` 函数说明符声明。
+
+[规则 17.12] 函数标识符只能配合前置 `&` 符号、或带括号的参数列表使用。
+
+[规则 17.13] 不得对函数类型进行类型限定。
+
+----
+
+### 指针与数组
+
+[规则 18.1] 指针算术运算生成的结果指针，必须与原指针操作数指向同一数组的元素。
+
+[规则 18.2] 指针之间的减法运算，只能应用于指向同一数组元素的指针。
+
+[规则 18.3] 关系运算符 `>`、`>=`、`<`、`<=` 不得应用于指针类型表达式，除非它们指向同一对象的内部。
+
+[规则 18.4] 不宜对指针类型表达式使用 `+`、`-`、`+=` 和 `-=` 运算符。
+
+[规则 18.5] 声明中的指针嵌套层级不宜超过两层。
+
+[规则 18.6] 自动存储期或线程本地存储期对象的地址，不得复制到在该对象销毁后仍持续存在的其他对象中。
+
+[规则 18.7] 不得声明柔性数组成员。
+
+[规则 18.8] 不得使用变长数组。
+
+[规则 18.9] 临时生存期的对象不得进行数组到指针的转换。
+
+[规则 18.10] 不得使用指向可变修改数组类型的指针。
+
+----
+
+### 重叠存储
+
+[规则 19.1] 不得向重叠的对象进行赋值或拷贝操作。
+
+[规则 19.2] 不宜使用 `union` 联合体关键字。
+
+----
+
+### 预处理指令
+
+[规则 20.1] `#include` 指令之前只能出现预处理指令或注释。
+
+[规则 20.2] 头文件名中不得出现 `'`、`"`、`\` 字符，以及 `/*` 或 `//` 字符序列。
+
+[规则 20.3] `#include` 指令之后必须跟随 `<filename>` 或 `"filename"` 格式的内容。
+
+[规则 20.4] 不得定义与关键字重名的宏。
+
+[规则 20.5] 不宜使用 `#undef` 指令。
+
+[规则 20.6] 宏参数中不得出现形似预处理指令的标记。
+
+[规则 20.7] 宏参数展开后生成的表达式，必须包裹在圆括号中。
+
+[规则 20.8] `#if` 或 `#elif` 预处理指令的控制表达式，求值结果必须为 `0` 或 `1`。
+
+[规则 20.9] `#if` 或 `#elif` 预处理指令的控制表达式中使用的所有标识符，必须在求值前通过 `#define` 定义。
+
+[规则 20.10] 不宜使用 `#` 和 `##` 预处理运算符。
+
+[规则 20.11] 紧跟 `#` 运算符的宏参数，不得再紧跟 `##` 运算符。
+
+[规则 20.12] 作为 `#` 或 `##` 运算符操作数的宏参数，若其本身需要进一步宏替换，则只能作为这两个运算符的操作数使用。
+
+[规则 20.13] 首个标记为 `#` 的行，必须是合法的预处理指令。
+
+[规则 20.14] 所有 `#else`、`#elif` 和 `#endif` 预处理指令，必须与其对应的 `#if`、`#ifdef` 或 `#ifndef` 指令位于同一文件中。
+
+----
+
+### 标准库
+
+[规则 21.1] 不得对保留标识符或保留宏名使用 `#define` 和 `#undef` 指令。
+
+[规则 21.2] 不得声明保留标识符或保留宏名。
+
+[规则 21.3] 不得使用 `<stdlib.h>` 中的内存分配与释放函数。
+
+[规则 21.4] 不得使用标准头文件 `<setjmp.h>`。
+
+[规则 21.5] 不得使用标准头文件 `<signal.h>`。
+
+[规则 21.6] 不得使用标准库的输入输出函数。
+
+[规则 21.7] 不得使用 `<stdlib.h>` 中的 `atof`、`atoi`、`atol` 和 `atoll` 函数。
+
+[规则 21.8] 不得使用 `<stdlib.h>` 中的标准库程序终止函数。
+
+[规则 21.9] 不得使用 `<stdlib.h>` 中的 `bsearch` 和 `qsort` 标准库函数。
+
+[规则 21.10] 不得使用标准库的时间与日期函数。
+
+[规则 21.11] 不宜使用标准头文件 `<tgmath.h>`。
+
+[规则 21.12] 不得使用标准头文件 `<fenv.h>`。
+
+[规则 21.13] 传递给 `<ctype.h>` 中函数的任何值，必须能表示为 `unsigned char` 类型，或为 `EOF` 值。
+
+[规则 21.14] 不得使用 `memcmp` 函数比较以空字符结尾的字符串。
+
+[规则 21.15] 标准库函数 `memcpy`、`memmove` 和 `memcmp` 的指针实参，必须是指向兼容类型的限定或非限定版本的指针。
+
+[规则 21.16] 标准库函数 `memcmp` 的指针实参，必须指向指针类型、本质有符号类型、本质无符号类型、本质布尔类型或本质枚举类型。
+
+[规则 21.17] 使用 `<string.h>` 中的字符串处理函数时，不得导致对其指针参数所引用对象的越界访问。
+
+[规则 21.18] 传递给 `<string.h>` 中任意函数的 `size_t` 类型参数，必须为合规值。
+
+[规则 21.19] 标准库函数 `localeconv`、`getenv`、`setlocale` 或 `strerror` 返回的指针，只能作为指向 `const` 限定类型的指针使用。
+
+[规则 21.20] 标准库函数 `asctime`、`ctime`、`gmtime`、`localtime`、`localeconv`、`getenv`、`setlocale` 或 `strerror` 返回的指针，在后续调用同一函数后不得再使用。
+
+[规则 21.21] 不得使用 `<stdlib.h>` 中的标准库 `system` 函数。
+
+[规则 21.22] `<tgmath.h>` 中声明的任意泛型宏的所有操作数实参，必须使用合规的基本类型。
+
+[规则 21.23] `<tgmath.h>` 中声明的任意多参数泛型宏的所有操作数实参，必须使用相同的标准类型。
+
+[规则 21.24] 不得使用 `<stdlib.h>` 中的随机数生成函数。
+
+[规则 21.25] 所有内存同步操作必须以顺序一致性序执行。
+
+[规则 21.26] 标准库函数 `mtx_timedlock()` 只能在具备合规互斥锁类型的互斥锁对象上调用。
+
+----
+
+### 资源
+
+[规则 22.1] 通过标准库函数动态获取的所有资源，必须被显式释放。
+
+[规则 22.2] 仅当内存块通过标准库函数分配时，才能对其进行释放操作。
+
+[规则 22.3] 同一文件不得在不同流上同时以读写模式打开。
+
+[规则 22.4] 不得尝试向以只读模式打开的流执行写入操作。
+
+[规则 22.5] 不得对 `FILE` 对象指针进行解引用。
+
+[规则 22.6] 关联的流关闭后，不得再使用指向该 `FILE` 对象的指针。
+
+[规则 22.7] 宏 `EOF` 只能与可返回 `EOF` 的标准库函数的未修改返回值进行比较。
+
+[规则 22.8] 调用会设置 `errno` 的函数之前，必须将 `errno` 的值置为 `0`。
+
+[规则 22.9] 调用会设置 `errno` 的函数之后，必须检查 `errno` 的值是否为 `0`。
+
+[规则 22.10] 仅当最近一次调用的函数是会设置 `errno` 的函数时，才能对 `errno` 的值进行检查。
+
+[规则 22.11] 此前已执行过加入或分离操作的线程，不得再次执行加入或分离操作。
+
+[规则 22.12] 线程对象、线程同步对象和线程本地存储指针，只能通过对应的标准库函数访问。
+
+[规则 22.13] 线程对象、线程同步对象和线程本地存储指针，必须具备合规的存储期。
+
+[规则 22.14] 线程同步对象在被访问前，必须完成初始化。
+
+[规则 22.15] 线程同步对象和线程本地存储指针，必须在所有访问它们的线程终止后，才能被销毁。
+
+[规则 22.16] 线程锁定的所有互斥锁对象，必须由同一线程显式解锁。
+
+[规则 22.17] 线程不得解锁未被自身锁定的互斥锁，也不得对未被自身锁定的互斥锁调用 `cnd_wait()` 或 `cnd_timedwait()` 函数。
+
+[规则 22.18] 不得对非递归互斥锁执行递归锁定操作。
+
+[规则 22.19] 一个条件变量最多只能关联一个互斥锁对象。
+
+[规则 22.20] 线程本地存储指针在被访问前，必须完成创建。
+
+----
+
+### 泛型选择
+
+[规则 23.1] 泛型选择宜仅通过宏展开使用。
+
+[规则 23.2] 非宏展开的泛型选择，其控制表达式中不得包含潜在副作用。
+
+[规则 23.3] 泛型选择宜至少包含一个非默认关联。
+
+[规则 23.4] 泛型关联必须列出合规的类型。
+
+[规则 23.5] 泛型选择不宜依赖隐式指针类型转换。
+
+[规则 23.6] 泛型选择的控制表达式，其基本类型必须与标准类型匹配。
+
+[规则 23.7] 宏展开的泛型选择，应对其参数仅求值一次。
+
+[规则 23.8] 泛型选择的默认关联，必须位于第一个或最后一个关联位置。
 
 ----
 

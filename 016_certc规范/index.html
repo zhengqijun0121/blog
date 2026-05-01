@@ -8,12 +8,10 @@
   <meta property="og:site_name" content="LoveIt">
   <meta property="og:title" content="CERT C 规范">
   <meta property="og:description" content="CERT C 规范 https://ww2.mathworks.cn/help/bugfinder/cert-c-rules-and-recommendations.html?lang=en
-English Version Rules Preprocessor [Rule PRE30-C] Do not create a universal character name through concatenation.
-[Rule PRE31-C] Avoid side effects in arguments to unsafe macros.
-[Rule PRE32-C] Do not use preprocessor directives in invocations of function-like macros.
-Declarations and initialization [Rule DCL30-C] Declare objects with appropriate storage durations.
-[Rule DCL31-C] Declare identifiers before using them.
-[Rule DCL36-C] Do not declare an identifier with conflicting linkage classifications.">
+规则 预处理器 [规则 PRE30-C] 禁止通过宏拼接创建通用字符名。
+[规则 PRE31-C] 避免在不安全宏的参数中引入副作用。
+[规则 PRE32-C] 禁止在类函数宏的调用中使用预处理指令。
+声明与初始化 [规则 DCL30-C] 为对象声明合适的存储期。">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -26,12 +24,10 @@ Declarations and initialization [Rule DCL30-C] Declare objects with appropriate 
   <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
   <meta name="twitter:title" content="CERT C 规范">
   <meta name="twitter:description" content="CERT C 规范 https://ww2.mathworks.cn/help/bugfinder/cert-c-rules-and-recommendations.html?lang=en
-English Version Rules Preprocessor [Rule PRE30-C] Do not create a universal character name through concatenation.
-[Rule PRE31-C] Avoid side effects in arguments to unsafe macros.
-[Rule PRE32-C] Do not use preprocessor directives in invocations of function-like macros.
-Declarations and initialization [Rule DCL30-C] Declare objects with appropriate storage durations.
-[Rule DCL31-C] Declare identifiers before using them.
-[Rule DCL36-C] Do not declare an identifier with conflicting linkage classifications.">
+规则 预处理器 [规则 PRE30-C] 禁止通过宏拼接创建通用字符名。
+[规则 PRE31-C] 避免在不安全宏的参数中引入副作用。
+[规则 PRE32-C] 禁止在类函数宏的调用中使用预处理指令。
+声明与初始化 [规则 DCL30-C] 为对象声明合适的存储期。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -47,7 +43,7 @@ Declarations and initialization [Rule DCL30-C] Declare objects with appropriate 
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/zhengqijun0121.github.io\/blog\/016_certc%E8%A7%84%E8%8C%83\/"
-        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "CERT","wordcount":  2794 ,
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "CERT","wordcount":  5428 ,
         "url": "https:\/\/zhengqijun0121.github.io\/blog\/016_certc%E8%A7%84%E8%8C%83\/","datePublished": "2026-04-21T09:00:00+08:00","dateModified": "2026-04-21T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
@@ -138,8 +134,8 @@ Declarations and initialization [Rule DCL30-C] Declare objects with appropriate 
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">CERT C 规范</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/cert/"><i class="far fa-folder" aria-hidden="true"></i>CERT</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-04-21">2026-04-21</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 2794 字&nbsp;
-                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 6 分钟&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-04-21">2026-04-21</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 5428 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 11 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>目录</span>
@@ -147,49 +143,45 @@ Declarations and initialization [Rule DCL30-C] Declare objects with appropriate 
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#english-version">English Version</a>
+    <li><a href="#规则">规则</a>
       <ul>
-        <li><a href="#rules">Rules</a>
-          <ul>
-            <li><a href="#preprocessor">Preprocessor</a></li>
-            <li><a href="#declarations-and-initialization">Declarations and initialization</a></li>
-            <li><a href="#expressions">Expressions</a></li>
-            <li><a href="#integers">Integers</a></li>
-            <li><a href="#floating-point">Floating point</a></li>
-            <li><a href="#arrays">Arrays</a></li>
-            <li><a href="#characters-and-strings">Characters and strings</a></li>
-            <li><a href="#memory-management">Memory Management</a></li>
-            <li><a href="#input-and-output">Input and output</a></li>
-            <li><a href="#environment">Environment</a></li>
-            <li><a href="#signals">Signals</a></li>
-            <li><a href="#error-handling">Error handling</a></li>
-            <li><a href="#concurrency">Concurrency</a></li>
-            <li><a href="#miscellaneous">Miscellaneous</a></li>
-            <li><a href="#posix">POSIX</a></li>
-            <li><a href="#microsoft-windows">Microsoft windows</a></li>
-          </ul>
-        </li>
-        <li><a href="#recommendations">Recommendations</a>
-          <ul>
-            <li><a href="#preprocessor-1">Preprocessor</a></li>
-            <li><a href="#declarations-and-initialization-1">Declarations and initialization</a></li>
-            <li><a href="#expressions-1">Expressions</a></li>
-            <li><a href="#integers-1">Integers</a></li>
-            <li><a href="#floating-point-1">Floating point</a></li>
-            <li><a href="#arrays-1">Arrays</a></li>
-            <li><a href="#characters-and-strings-1">Characters and strings</a></li>
-            <li><a href="#memory-management-1">Memory management</a></li>
-            <li><a href="#input-and-output-1">Input and output</a></li>
-            <li><a href="#environment-1">Environment</a></li>
-            <li><a href="#signals-1">Signals</a></li>
-            <li><a href="#error-handling-1">Error handling</a></li>
-            <li><a href="#application-programming-interfaces">Application programming interfaces</a></li>
-            <li><a href="#concurrency-1">Concurrency</a></li>
-            <li><a href="#miscellaneous-1">Miscellaneous</a></li>
-            <li><a href="#posix-1">POSIX</a></li>
-            <li><a href="#microsoft-windows-1">Microsoft windows</a></li>
-          </ul>
-        </li>
+        <li><a href="#预处理器">预处理器</a></li>
+        <li><a href="#声明与初始化">声明与初始化</a></li>
+        <li><a href="#表达式">表达式</a></li>
+        <li><a href="#整数">整数</a></li>
+        <li><a href="#浮点数">浮点数</a></li>
+        <li><a href="#数组">数组</a></li>
+        <li><a href="#字符与字符串">字符与字符串</a></li>
+        <li><a href="#内存管理">内存管理</a></li>
+        <li><a href="#输入输出">输入输出</a></li>
+        <li><a href="#环境">环境</a></li>
+        <li><a href="#信号">信号</a></li>
+        <li><a href="#错误处理">错误处理</a></li>
+        <li><a href="#并发">并发</a></li>
+        <li><a href="#杂项">杂项</a></li>
+        <li><a href="#posix-扩展">POSIX 扩展</a></li>
+        <li><a href="#微软-windows-扩展">微软 Windows 扩展</a></li>
+      </ul>
+    </li>
+    <li><a href="#建议">建议</a>
+      <ul>
+        <li><a href="#预处理器-1">预处理器</a></li>
+        <li><a href="#声明与初始化-1">声明与初始化</a></li>
+        <li><a href="#表达式-1">表达式</a></li>
+        <li><a href="#整数-1">整数</a></li>
+        <li><a href="#浮点数-1">浮点数</a></li>
+        <li><a href="#数组-1">数组</a></li>
+        <li><a href="#字符与字符串-1">字符与字符串</a></li>
+        <li><a href="#内存管理-1">内存管理</a></li>
+        <li><a href="#输入输出-1">输入输出</a></li>
+        <li><a href="#环境-1">环境</a></li>
+        <li><a href="#信号-1">信号</a></li>
+        <li><a href="#错误处理-1">错误处理</a></li>
+        <li><a href="#应用程序编程接口">应用程序编程接口</a></li>
+        <li><a href="#并发-1">并发</a></li>
+        <li><a href="#杂项-1">杂项</a></li>
+        <li><a href="#posix-扩展-1">POSIX 扩展</a></li>
+        <li><a href="#微软-windows-扩展-1">微软 Windows 扩展</a></li>
       </ul>
     </li>
   </ul>
@@ -199,319 +191,318 @@ Declarations and initialization [Rule DCL30-C] Declare objects with appropriate 
 <p><a href="https://ww2.mathworks.cn/help/bugfinder/cert-c-rules-and-recommendations.html?lang=en" target="_blank" rel="noopener noreffer ">https://ww2.mathworks.cn/help/bugfinder/cert-c-rules-and-recommendations.html?lang=en</a></p>
 </blockquote>
 <hr>
-<h2 id="english-version">English Version</h2>
-<h3 id="rules">Rules</h3>
-<h4 id="preprocessor">Preprocessor</h4>
-<p>[Rule PRE30-C] Do not create a universal character name through concatenation.</p>
-<p>[Rule PRE31-C] Avoid side effects in arguments to unsafe macros.</p>
-<p>[Rule PRE32-C] Do not use preprocessor directives in invocations of function-like macros.</p>
+<h2 id="规则">规则</h2>
+<h3 id="预处理器">预处理器</h3>
+<p>[规则 PRE30-C] 禁止通过宏拼接创建通用字符名。</p>
+<p>[规则 PRE31-C] 避免在不安全宏的参数中引入副作用。</p>
+<p>[规则 PRE32-C] 禁止在类函数宏的调用中使用预处理指令。</p>
 <hr>
-<h4 id="declarations-and-initialization">Declarations and initialization</h4>
-<p>[Rule DCL30-C] Declare objects with appropriate storage durations.</p>
-<p>[Rule DCL31-C] Declare identifiers before using them.</p>
-<p>[Rule DCL36-C] Do not declare an identifier with conflicting linkage classifications.</p>
-<p>[Rule DCL37-C] Do not declare or define a reserved identifier.</p>
-<p>[Rule DCL38-C] Use the correct syntax when declaring a flexible array member.</p>
-<p>[Rule DCL39-C] Avoid information leakage in structure padding.</p>
-<p>[Rule DCL40-C] Do not create incompatible declarations of the same function or object.</p>
-<p>[Rule DCL41-C] Do not declare variables inside a switch statement before the first case label.</p>
+<h3 id="声明与初始化">声明与初始化</h3>
+<p>[规则 DCL30-C] 为对象声明合适的存储期。</p>
+<p>[规则 DCL31-C] 标识符使用前必须先声明。</p>
+<p>[规则 DCL36-C] 禁止为同一个标识符声明冲突的链接属性。</p>
+<p>[规则 DCL37-C] 禁止声明或定义保留标识符。</p>
+<p>[规则 DCL38-C] 声明柔性数组成员时使用正确的语法。</p>
+<p>[规则 DCL39-C] 避免结构体填充带来的信息泄露。</p>
+<p>[规则 DCL40-C] 禁止为同一个函数或对象创建不兼容的声明。</p>
+<p>[规则 DCL41-C] 禁止在 <code>switch</code> 语句中第一个 <code>case</code> 标签之前声明变量。</p>
 <hr>
-<h4 id="expressions">Expressions</h4>
-<p>[Rule EXP30-C] Do not depend on the order of evaluation for side effects.</p>
-<p>[Rule EXP32-C] Do not access a volatile object through a nonvolatile reference.</p>
-<p>[Rule EXP33-C] Do not read uninitialized memory.</p>
-<p>[Rule EXP34-C] Do not dereference null pointers.</p>
-<p>[Rule EXP35-C] Do not modify objects with temporary lifetime.</p>
-<p>[Rule EXP36-C] Do not cast pointers into more strictly aligned pointer types.</p>
-<p>[Rule EXP37-C] Call functions with the correct number and type of arguments.</p>
-<p>[Rule EXP39-C] Do not access a variable through a pointer of an incompatible type.</p>
-<p>[Rule EXP40-C] Do not modify constant objects.</p>
-<p>[Rule EXP42-C] Do not compare padding data.</p>
-<p>[Rule EXP43-C] Avoid undefined behavior when using restrict-qualified pointers.</p>
-<p>[Rule EXP44-C] Do not rely on side effects in operands to sizeof, _Alignof, or _Generic.</p>
-<p>[Rule EXP45-C] Do not perform assignments in selection statements.</p>
-<p>[Rule EXP46-C] Do not use a bitwise operator with a Boolean-like operand.</p>
-<p>[Rule EXP47-C] Do not call va_arg with an argument of the incorrect type.</p>
+<h3 id="表达式">表达式</h3>
+<p>[规则 EXP30-C] 不要依赖带副作用表达式的求值顺序。</p>
+<p>[规则 EXP32-C] 禁止通过非 <code>volatile</code> 引用访问 <code>volatile</code> 对象。</p>
+<p>[规则 EXP33-C] 禁止读取未初始化的内存。</p>
+<p>[规则 EXP34-C] 禁止解引用空指针。</p>
+<p>[规则 EXP35-C] 禁止修改具有临时生存期的对象。</p>
+<p>[规则 EXP36-C] 禁止将指针强制转换为对齐要求更严格的指针类型。</p>
+<p>[规则 EXP37-C] 调用函数时传入正确数量和类型的参数。</p>
+<p>[规则 EXP39-C] 禁止通过类型不兼容的指针访问变量。</p>
+<p>[规则 EXP40-C] 禁止修改常量对象。</p>
+<p>[规则 EXP42-C] 禁止对结构体填充数据进行比较操作。</p>
+<p>[规则 EXP43-C] 使用 <code>restrict</code> 限定的指针时，避免引发未定义行为。</p>
+<p>[规则 EXP44-C] 不要依赖 <code>sizeof</code>、<code>_Alignof</code> 或 <code>_Generic</code> 操作数中的副作用。</p>
+<p>[规则 EXP45-C] 禁止在选择语句中执行赋值操作。</p>
+<p>[规则 EXP46-C] 禁止对类布尔操作数使用位运算符。</p>
+<p>[规则 EXP47-C] 调用 <code>va_arg</code> 时，禁止传入类型不正确的参数。</p>
 <hr>
-<h4 id="integers">Integers</h4>
-<p>[Rule INT30-C] Ensure that unsigned integer operations do not wrap.</p>
-<p>[Rule INT31-C] Ensure that integer conversions do not result in lost or misinterpreted data.</p>
-<p>[Rule INT32-C] Ensure that operations on signed integers do not result in overflow.</p>
-<p>[Rule INT33-C] Ensure that division and remainder operations do not result in divide-by-zero errors.</p>
-<p>[Rule INT34-C] Do not shift an expression by a negative number of bits or by greater than or equal to the number of bits that exist in the operand.</p>
-<p>[Rule INT35-C] Use correct integer precisions.</p>
-<p>[Rule INT36-C] Converting a pointer to integer or integer to pointer.</p>
+<h3 id="整数">整数</h3>
+<p>[规则 INT30-C] 确保无符号整数运算不会发生回绕。</p>
+<p>[规则 INT31-C] 确保整数转换不会导致数据丢失或被错误解读。</p>
+<p>[规则 INT32-C] 确保有符号整数运算不会发生溢出。</p>
+<p>[规则 INT33-C] 确保除法和取余运算不会引发除零错误。</p>
+<p>[规则 INT34-C] 禁止对表达式执行负数位数的移位，或移位位数大于等于操作数本身的位宽。</p>
+<p>[规则 INT35-C] 使用正确的整数精度。</p>
+<p>[规则 INT36-C] 规范指针与整数之间的相互转换。</p>
 <hr>
-<h4 id="floating-point">Floating point</h4>
-<p>[Rule FLP30-C] Do not use floating-point variables as loop counters.</p>
-<p>[Rule FLP32-C] Prevent or detect domain and range errors in math functions.</p>
-<p>[Rule FLP34-C] Ensure that floating-point conversions are within range of the new type.</p>
-<p>[Rule FLP36-C] Preserve precision when converting integral values to floating-point type.</p>
-<p>[Rule FLP37-C] Do not use object representations to compare floating-point values.</p>
+<h3 id="浮点数">浮点数</h3>
+<p>[规则 FLP30-C] 禁止使用浮点型变量作为循环计数器。</p>
+<p>[规则 FLP32-C] 预防并检测数学函数中的定义域与值域错误。</p>
+<p>[规则 FLP34-C] 确保浮点数转换后的值在目标类型的取值范围内。</p>
+<p>[规则 FLP36-C] 整数值转换为浮点类型时，需保证精度不丢失。</p>
+<p>[规则 FLP37-C] 禁止通过对象的内存表示来比较浮点数值。</p>
 <hr>
-<h4 id="arrays">Arrays</h4>
-<p>[Rule ARR30-C] Do not form or use out-of-bounds pointers or array subscripts.</p>
-<p>[Rule ARR32-C] Ensure size arguments for variable length arrays are in a valid range.</p>
-<p>[Rule ARR36-C] Do not subtract or compare two pointers that do not refer to the same array.</p>
-<p>[Rule ARR37-C] Do not add or subtract an integer to a pointer to a non-array object.</p>
-<p>[Rule ARR38-C] Guarantee that library functions do not form invalid pointers.</p>
-<p>[Rule ARR39-C] Do not add or subtract a scaled integer to a pointer.</p>
+<h3 id="数组">数组</h3>
+<p>[规则 ARR30-C] 禁止生成或使用越界的指针或数组下标。</p>
+<p>[规则 ARR32-C] 确保变长数组的长度参数处于有效范围内。</p>
+<p>[规则 ARR36-C] 禁止对不指向同一数组的两个指针进行相减或比较操作。</p>
+<p>[规则 ARR37-C] 禁止对非数组对象的指针执行整数加减操作。</p>
+<p>[规则 ARR38-C] 确保库函数不会生成无效指针。</p>
+<p>[规则 ARR39-C] 禁止对指针执行缩放后的整数加减操作。</p>
 <hr>
-<h4 id="characters-and-strings">Characters and strings</h4>
-<p>[Rule STR30-C] Do not attempt to modify string literals.</p>
-<p>[Rule STR31-C] Guarantee that storage for strings has sufficient space for character data and the null terminator.</p>
-<p>[Rule STR32-C] Do not pass a non-null-terminated character sequence to a library function that expects a string.</p>
-<p>[Rule STR34-C] Cast characters to unsigned char before converting to larger integer sizes.</p>
-<p>[Rule STR37-C] Arguments to character-handling functions must be representable as an unsigned char.</p>
-<p>[Rule STR38-C] Do not confuse narrow and wide character strings and functions.</p>
+<h3 id="字符与字符串">字符与字符串</h3>
+<p>[规则 STR30-C] 禁止尝试修改字符串字面量。</p>
+<p>[规则 STR31-C] 确保字符串的存储空间足以容纳字符数据和空终止符。</p>
+<p>[规则 STR32-C] 禁止将非空终止的字符序列传入期望字符串参数的库函数。</p>
+<p>[规则 STR34-C] 字符转换为更大的整数类型前，需先强制转换为 <code>unsigned char</code> 类型。</p>
+<p>[规则 STR37-C] 字符处理函数的参数必须能以 <code>unsigned char</code> 类型表示。</p>
+<p>[规则 STR38-C] 不要混淆窄字符、宽字符字符串及其对应的处理函数。</p>
 <hr>
-<h4 id="memory-management">Memory Management</h4>
-<p>[Rule MEM30-C] Do not access freed memory.</p>
-<p>[Rule MEM31-C] Free dynamically allocated memory when no longer needed.</p>
-<p>[Rule MEM33-C] Allocate and copy structures containing a flexible array member dynamically.</p>
-<p>[Rule MEM34-C] Only free memory allocated dynamically.</p>
-<p>[Rule MEM35-C] Allocate sufficient memory for an object.</p>
-<p>[Rule MEM36-C] Do not modify the alignment of objects by calling realloc().</p>
+<h3 id="内存管理">内存管理</h3>
+<p>[规则 MEM30-C] 禁止访问已释放的内存。</p>
+<p>[规则 MEM31-C] 动态分配的内存不再使用时需及时释放。</p>
+<p>[规则 MEM33-C] 对包含柔性数组成员的结构体，需使用动态方式进行分配和拷贝。</p>
+<p>[规则 MEM34-C] 仅释放动态分配的内存。</p>
+<p>[规则 MEM35-C] 为对象分配足够的内存空间。</p>
+<p>[规则 MEM36-C] 禁止通过调用 <code>realloc()</code> 修改对象的内存对齐属性。</p>
 <hr>
-<h4 id="input-and-output">Input and output</h4>
-<p>[Rule FIO30-C] Exclude user input from format strings.</p>
-<p>[Rule FIO32-C] Do not perform operations on devices that are only appropriate for files.</p>
-<p>[Rule FIO34-C] Distinguish between characters read from a file and EOF or WEOF.</p>
-<p>[Rule FIO37-C] Do not assume that fgets() or fgetws() returns a nonempty string when successful.</p>
-<p>[Rule FIO38-C] Do not copy a FILE object.</p>
-<p>[Rule FIO39-C] Do not alternately input and output from a stream without an intervening flush or positioning call.</p>
-<p>[Rule FIO40-C] Reset strings on fgets() or fgetws() failure.</p>
-<p>[Rule FIO41-C] Do not call getc(), putc(), getwc(), or putwc() with a stream argument that has side effects.</p>
-<p>[Rule FIO42-C] Close files when they are no longer needed.</p>
-<p>[Rule FIO44-C] Only use values for fsetpos() that are returned from fgetpos().</p>
-<p>[Rule FIO45-C] Avoid TOCTOU race conditions while accessing files.</p>
-<p>[Rule FIO46-C] Do not access a closed file.</p>
-<p>[Rule FIO47-C] Use valid format strings.</p>
+<h3 id="输入输出">输入输出</h3>
+<p>[规则 FIO30-C] 禁止将用户输入内容嵌入格式字符串。</p>
+<p>[规则 FIO32-C] 禁止对设备执行仅适用于普通文件的操作。</p>
+<p>[规则 FIO34-C] 区分从文件读取的字符与 <code>EOF</code>、<code>WEOF</code>。</p>
+<p>[规则 FIO37-C] 不要假定 <code>fgets()</code> 或 <code>fgetws()</code> 调用成功时一定会返回非空字符串。</p>
+<p>[规则 FIO38-C] 禁止拷贝 <code>FILE</code> 对象。</p>
+<p>[规则 FIO39-C] 对流交替执行输入和输出操作时，中间必须插入刷新或定位操作。</p>
+<p>[规则 FIO40-C] <code>fgets()</code> 或 <code>fgetws()</code> 调用失败时，需重置相关字符串。</p>
+<p>[规则 FIO41-C] 调用 <code>getc()</code>、<code>putc()</code>、<code>getwc()</code> 或 <code>putwc()</code> 时，流参数禁止引入副作用。</p>
+<p>[规则 FIO42-C] 文件不再使用时需及时关闭。</p>
+<p>[规则 FIO44-C] <code>fsetpos()</code> 仅能使用 <code>fgetpos()</code> 返回的位置值。</p>
+<p>[规则 FIO45-C] 访问文件时，避免出现时间检查 - 时间使用（<code>TOCTOU</code>）竞态条件。</p>
+<p>[规则 FIO46-C] 禁止访问已关闭的文件。</p>
+<p>[规则 FIO47-C] 使用合法的格式字符串。</p>
 <hr>
-<h4 id="environment">Environment</h4>
-<p>[Rule ENV30-C] Do not modify the object referenced by the return value of certain functions.</p>
-<p>[Rule ENV31-C] Do not rely on an environment pointer following an operation that may invalidate it.</p>
-<p>[Rule ENV32-C] All exit handlers must return normally.</p>
-<p>[Rule ENV33-C] Do not call system().</p>
-<p>[Rule ENV34-C] Do not store pointers returned by certain functions.</p>
+<h3 id="环境">环境</h3>
+<p>[规则 ENV30-C] 禁止修改特定函数返回值所指向的对象。</p>
+<p>[规则 ENV31-C] 环境指针在执行可能使其失效的操作后，禁止继续依赖该指针。</p>
+<p>[规则 ENV32-C] 所有退出处理程序必须正常返回。</p>
+<p>[规则 ENV33-C] 禁止调用 <code>system()</code> 函数。</p>
+<p>[规则 ENV34-C] 禁止存储特定函数返回的指针。</p>
 <hr>
-<h4 id="signals">Signals</h4>
-<p>[Rule SIG30-C] Call only asynchronous-safe functions within signal handlers.</p>
-<p>[Rule SIG31-C] Do not access shared objects in signal handlers.</p>
-<p>[Rule SIG34-C] Do not call signal() from within interruptible signal handlers.</p>
-<p>[Rule SIG35-C] Do not return from a computational exception signal handler.</p>
+<h3 id="信号">信号</h3>
+<p>[规则 SIG30-C] 信号处理函数内仅能调用异步安全函数。</p>
+<p>[规则 SIG31-C] 信号处理函数内禁止访问共享对象。</p>
+<p>[规则 SIG34-C] 禁止在可中断的信号处理函数内调用 <code>signal()</code> 函数。</p>
+<p>[规则 SIG35-C] 计算异常信号的处理函数禁止正常返回。</p>
 <hr>
-<h4 id="error-handling">Error handling</h4>
-<p>[Rule ERR30-C] Set errno to zero before calling a library function known to set errno, and check errno only after the function returns a value indicating failure.</p>
-<p>[Rule ERR32-C] Do not rely on indeterminate values of errno.</p>
-<p>[Rule ERR33-C] Detect and handle standard library errors.</p>
-<p>[Rule ERR34-C] Detect errors when converting a string to a number.</p>
+<h3 id="错误处理">错误处理</h3>
+<p>[规则 ERR30-C] 调用会设置 <code>errno</code> 的库函数前，需将 <code>errno</code> 置零；仅当函数返回值表明调用失败后，再检查 <code>errno</code> 的值。</p>
+<p>[规则 ERR32-C] 不要依赖 <code>errno</code> 的不确定值。</p>
+<p>[规则 ERR33-C] 检测并处理标准库函数的错误。</p>
+<p>[规则 ERR34-C] 字符串转换为数值时，需检测并处理转换错误。</p>
 <hr>
-<h4 id="concurrency">Concurrency</h4>
-<p>[Rule CON30-C] Clean up thread-specific storage.</p>
-<p>[Rule CON31-C] Do not destroy a mutex while it is locked.</p>
-<p>[Rule CON32-C] Prevent data races when accessing bit fields from multiple threads.</p>
-<p>[Rule CON33-C] Avoid race conditions when using library functions.</p>
-<p>[Rule CON34-C] Declare objects shared between threads with appropriate storage durations.</p>
-<p>[Rule CON35-C] Avoid deadlock by locking in a predefined order.</p>
-<p>[Rule CON36-C] Wrap functions that can spuriously wake up in a loop.</p>
-<p>[Rule CON37-C] Do not call signal() in a multithreaded program.</p>
-<p>[Rule CON38-C] Preserve thread safety and liveness when using condition variables.</p>
-<p>[Rule CON39-C] Do not join or detach a thread that was previously joined or detached.</p>
-<p>[Rule CON40-C] Do not refer to an atomic variable twice in an expression.</p>
-<p>[Rule CON41-C] Wrap functions that can fail spuriously in a loop.</p>
-<p>[Rule CON43-C] Do not allow data races in multithreaded code.</p>
+<h3 id="并发">并发</h3>
+<p>[规则 CON30-C] 及时清理线程本地存储。</p>
+<p>[规则 CON31-C] 禁止销毁处于锁定状态的互斥锁。</p>
+<p>[规则 CON32-C] 多线程环境下访问位域时，需预防数据竞争。</p>
+<p>[规则 CON33-C] 使用库函数时，避免出现竞态条件。</p>
+<p>[规则 CON34-C] 为线程间共享的对象声明合适的存储期。</p>
+<p>[规则 CON35-C] 按预定义顺序加锁，避免死锁。</p>
+<p>[规则 CON36-C] 将可能发生虚假唤醒的函数包裹在循环中。</p>
+<p>[规则 CON37-C] 多线程程序中禁止调用 <code>signal()</code> 函数。</p>
+<p>[规则 CON38-C] 使用条件变量时，需保证线程安全性与活性。</p>
+<p>[规则 CON39-C] 禁止对已执行连接或分离操作的线程，再次执行连接或分离操作。</p>
+<p>[规则 CON40-C] 禁止在一个表达式中对原子变量引用两次。</p>
+<p>[规则 CON41-C] 将可能发生虚假失败的函数包裹在循环中。</p>
+<p>[规则 CON43-C] 多线程代码中禁止出现数据竞争。</p>
 <hr>
-<h4 id="miscellaneous">Miscellaneous</h4>
-<p>[Rule MSC30-C] Do not use the rand() function for generating pseudorandom numbers.</p>
-<p>[Rule MSC32-C] Properly seed pseudorandom number generators.</p>
-<p>[Rule MSC33-C] Do not pass invalid data to the asctime() function.</p>
-<p>[Rule MSC37-C] Ensure that control never reaches the end of a non-void function.</p>
-<p>[Rule MSC38-C] Do not treat a predefined identifier as an object if it might only be implemented as a macro.</p>
-<p>[Rule MSC39-C] Do not call va_arg() on a va_list that has an indeterminate value.</p>
-<p>[Rule MSC40-C] Do not violate constraints.</p>
-<p>[Rule MSC41-C] Never hard code sensitive information.</p>
+<h3 id="杂项">杂项</h3>
+<p>[规则 MSC30-C] 禁止使用 <code>rand()</code> 函数生成伪随机数。</p>
+<p>[规则 MSC32-C] 为伪随机数生成器设置正确的种子。</p>
+<p>[规则 MSC33-C] 禁止向 <code>asctime()</code> 函数传入非法数据。</p>
+<p>[规则 MSC37-C] 确保控制流永远不会到达非 <code>void</code> 函数的末尾。</p>
+<p>[规则 MSC38-C] 若预定义标识符可能仅以宏的形式实现，禁止将其当作对象处理。</p>
+<p>[规则 MSC39-C] 禁止对值不确定的 <code>va_list</code> 调用 <code>va_arg()</code>。</p>
+<p>[规则 MSC40-C] 禁止违反语言约束。</p>
+<p>[规则 MSC41-C] 严禁硬编码敏感信息。</p>
 <hr>
-<h4 id="posix">POSIX</h4>
-<p>[Rule POS30-C] Use the readlink() function properly.</p>
-<p>[Rule POS34-C] Do not call putenv() with a pointer to an automatic variable as the argument.</p>
-<p>[Rule POS35-C] Avoid race conditions while checking for the existence of a symbolic link.</p>
-<p>[Rule POS36-C] Observe correct revocation order while relinquishing privileges.</p>
-<p>[Rule POS37-C] Ensure that privilege relinquishment is successful.</p>
-<p>[Rule POS38-C] Beware of race conditions when using fork and file descriptors.</p>
-<p>[Rule POS39-C] Use the correct byte ordering when transferring data between systems.</p>
-<p>[Rule POS44-C] Do not use signals to terminate threads.</p>
-<p>[Rule POS47-C] Do not use threads that can be canceled asynchronously.</p>
-<p>[Rule POS48-C] Do not unlock or destroy another POSIX thread&rsquo;s mutex.</p>
-<p>[Rule POS49-C] When data must be accessed by multiple threads, provide a mutex and guarantee no adjacent data is also accessed.</p>
-<p>[Rule POS50-C] Declare objects shared between POSIX threads with appropriate storage durations.</p>
-<p>[Rule POS51-C] Avoid deadlock with POSIX threads by locking in predefined order.</p>
-<p>[Rule POS52-C] Do not perform operations that can block while holding a POSIX lock.</p>
-<p>[Rule POS53-C] Do not use more than one mutex for concurrent waiting operations on a condition variable.</p>
-<p>[Rule POS54-C] Detect and handle POSIX library errors.</p>
+<h3 id="posix-扩展">POSIX 扩展</h3>
+<p>[规则 POS30-C] 正确使用 <code>readlink()</code> 函数。</p>
+<p>[规则 POS34-C] 禁止将自动变量的指针作为参数传入 <code>putenv()</code> 函数。</p>
+<p>[规则 POS35-C] 检查符号链接是否存在时，避免出现竞态条件。</p>
+<p>[规则 POS36-C] 放弃权限时，需遵循正确的撤销顺序。</p>
+<p>[规则 POS37-C] 确保权限放弃操作执行成功。</p>
+<p>[规则 POS38-C] 使用 <code>fork</code> 与文件描述符时，警惕竞态条件。</p>
+<p>[规则 POS39-C] 系统间传输数据时，使用正确的字节序。</p>
+<p>[规则 POS44-C] 禁止使用信号终止线程。</p>
+<p>[规则 POS47-C] 禁止使用可被异步取消的线程。</p>
+<p>[规则 POS48-C] 禁止解锁或销毁其他 <code>POSIX</code> 线程的互斥锁。</p>
+<p>[规则 POS49-C] 当数据需要被多个线程访问时，需提供互斥锁，并确保不会访问相邻数据。</p>
+<p>[规则 POS50-C] 为 <code>POSIX</code> 线程间共享的对象声明合适的存储期。</p>
+<p>[规则 POS51-C] <code>POSIX</code> 线程按预定义顺序加锁，避免死锁。</p>
+<p>[规则 POS52-C] 持有 <code>POSIX</code> 锁期间，禁止执行可能发生阻塞的操作。</p>
+<p>[规则 POS53-C] 条件变量上的并发等待操作，禁止使用超过一个互斥锁。</p>
+<p>[规则 POS54-C] 检测并处理 <code>POSIX</code> 库函数的错误。</p>
 <hr>
-<h4 id="microsoft-windows">Microsoft windows</h4>
-<p>[Rule WIN30-C] Properly pair allocation and deallocation functions.</p>
+<h3 id="微软-windows-扩展">微软 Windows 扩展</h3>
+<p>[规则 WIN30-C] 正确配对内存分配与释放函数。</p>
 <hr>
-<h3 id="recommendations">Recommendations</h3>
-<h4 id="preprocessor-1">Preprocessor</h4>
-<p>[Rec. PRE00-C] Prefer inline or static functions to function-like macros.</p>
-<p>[Rec. PRE01-C] Use parentheses within macros around parameter names.</p>
-<p>[Rec. PRE02-C] Macro replacement lists should be parenthesized.</p>
-<p>[Rec. PRE03-C] Prefer typedefs to defines for encoding non-pointer type.</p>
-<p>[Rec. PRE04-C] Do not reuse a standard header file name.</p>
-<p>[Rec. PRE05-C] Understand macro replacement when concatenating tokens or performing stringification.</p>
-<p>[Rec. PRE06-C] Enclose header files in an inclusion guard.</p>
-<p>[Rec. PRE07-C] Avoid using repeated question marks.</p>
-<p>[Rec. PRE08-C] Guarantee that header file names are unique.</p>
-<p>[Rec. PRE09-C] Do not replace secure functions with deprecated or obsolescent functions.</p>
-<p>[Rec. PRE10-C] Wrap multistatement macros in a do-while loop.</p>
-<p>[Rec. PRE11-C] Do not conclude macro definitions with a semicolon.</p>
-<p>[Rec. PRE12-C] Do not define unsafe macros.</p>
+<h2 id="建议">建议</h2>
+<h3 id="预处理器-1">预处理器</h3>
+<p>[建议 PRE00-C] 优先使用内联函数或静态函数，而非类函数宏。</p>
+<p>[建议 PRE01-C] 宏内的参数名称需用括号包裹。</p>
+<p>[建议 PRE02-C] 宏的替换列表需用括号包裹。</p>
+<p>[建议 PRE03-C] 编码非指针类型时，优先使用 <code>typedef</code> 而非 <code>define</code>。</p>
+<p>[建议 PRE04-C] 不要复用标准头文件的名称。</p>
+<p>[建议 PRE05-C] 理解令牌拼接或字符串化操作时的宏替换规则。</p>
+<p>[建议 PRE06-C] 头文件需使用包含保护宏包裹。</p>
+<p>[建议 PRE07-C] 避免使用连续的问号。</p>
+<p>[建议 PRE08-C] 确保头文件名具有唯一性。</p>
+<p>[建议 PRE09-C] 不要用已弃用或过时的函数替换安全函数。</p>
+<p>[建议 PRE10-C] 多语句宏需用 <code>do-while</code> 循环包裹。</p>
+<p>[建议 PRE11-C] 宏定义的末尾不要加分号。</p>
+<p>[建议 PRE12-C] 不要定义不安全的宏。</p>
 <hr>
-<h4 id="declarations-and-initialization-1">Declarations and initialization</h4>
-<p>[Rec. DCL00-C] Const-qualify immutable objects.</p>
-<p>[Rec. DCL01-C] Do not reuse variable names in subscopes.</p>
-<p>[Rec. DCL02-C] Use visually distinct identifiers.</p>
-<p>[Rec. DCL03-C] Use a static assertion to test the value of a constant expression.</p>
-<p>[Rec. DCL04-C] Do not declare more than one variable per declaration.</p>
-<p>[Rec. DCL05-C] Use typedefs of non-pointer types only.</p>
-<p>[Rec. DCL06-C] Use meaningful symbolic constants to represent literal values.</p>
-<p>[Rec. DCL07-C] Include the appropriate type information in function declarators.</p>
-<p>[Rec. DCL09-C] Declare functions that return errno with a return type of errno_t.</p>
-<p>[Rec. DCL20-C] Explicitly specify void when a function accepts no arguments.</p>
-<p>[Rec. DCL10-C] Maintain the contract between the writer and caller of variadic functions.</p>
-<p>[Rec. DCL11-C] Understand the type issues associated with variadic functions.</p>
-<p>[Rec. DCL12-C] Implement abstract data types using opaque types.</p>
-<p>[Rec. DCL13-C] Declare function parameters that are pointers to values not changed by the function as const.</p>
-<p>[Rec. DCL15-C] Declare file-scope objects or functions that do not need external linkage as static.</p>
-<p>[Rec. DCL16-C] Use &lsquo;L,&rsquo; not &rsquo;l,&rsquo; to indicate a long value.</p>
-<p>[Rec. DCL18-C] Do not begin integer constants with 0 when specifying a decimal value.</p>
-<p>[Rec. DCL19-C] Minimize the scope of variables and functions.</p>
-<p>[Rec. DCL21-C] Understand the storage of compound literals.</p>
-<p>[Rec. DCL22-C] Use volatile for data that cannot be cached.</p>
-<p>[Rec. DCL23-C] Guarantee that mutually visible identifiers are unique.</p>
+<h3 id="声明与初始化-1">声明与初始化</h3>
+<p>[建议 DCL00-C] 对不可变对象添加 <code>const</code> 限定。</p>
+<p>[建议 DCL01-C] 不要在子作用域中复用变量名。</p>
+<p>[建议 DCL02-C] 使用视觉上易于区分的标识符。</p>
+<p>[建议 DCL03-C] 使用静态断言检测常量表达式的值。</p>
+<p>[建议 DCL04-C] 一条声明语句仅声明一个变量。</p>
+<p>[建议 DCL05-C] 仅对非指针类型使用 <code>typedef</code>。</p>
+<p>[建议 DCL06-C] 使用有意义的符号常量表示字面量值。</p>
+<p>[建议 DCL07-C] 函数声明符中需包含完整的类型信息。</p>
+<p>[建议 DCL09-C] 返回 <code>errno</code> 的函数，需将返回值类型声明为 <code>errno_t</code>。</p>
+<p>[建议 DCL20-C] 函数无参数时，需显式指定参数列表为 <code>void</code>。</p>
+<p>[建议 DCL10-C] 维护可变参数函数的实现者与调用者之间的契约。</p>
+<p>[建议 DCL11-C] 理解可变参数函数相关的类型问题。</p>
+<p>[建议 DCL12-C] 使用不透明类型实现抽象数据类型。</p>
+<p>[建议 DCL13-C] 函数参数中，指向不会被函数修改的值的指针，需声明为 <code>const</code>。</p>
+<p>[建议 DCL15-C] 不需要外部链接的文件作用域对象或函数，需声明为 <code>static</code>。</p>
+<p>[建议 DCL16-C] 使用大写的 &lsquo;<code>L</code>&rsquo; 而非小写的 &lsquo;<code>l</code>&rsquo; 标识长整型数值。</p>
+<p>[建议 DCL18-C] 表示十进制数值时，整数常量不要以 <code>0</code> 开头。</p>
+<p>[建议 DCL19-C] 最小化变量和函数的作用域。</p>
+<p>[建议 DCL21-C] 理解复合字面量的存储规则。</p>
+<p>[建议 DCL22-C] 对无法被缓存的数据使用 <code>volatile</code> 限定。</p>
+<p>[建议 DCL23-C] 确保相互可见的标识符具有唯一性。</p>
 <hr>
-<h4 id="expressions-1">Expressions</h4>
-<p>[Rec. EXP00-C] Use parentheses for precedence of operation.</p>
-<p>[Rec. EXP02-C] Be aware of the short-circuit behavior of the logical AND and OR operators.</p>
-<p>[Rec. EXP03-C] Do not assume the size of a structure is the sum of the sizes of its members.</p>
-<p>[Rec. EXP05-C] Do not cast away a const qualification.</p>
-<p>[Rec. EXP07-C] Do not diminish the benefits of constants by assuming their values in expressions.</p>
-<p>[Rec. EXP08-C] Ensure pointer arithmetic is used correctly.</p>
-<p>[Rec. EXP09-C] Use sizeof to determine the size of a type or variable.</p>
-<p>[Rec. EXP10-C] Do not depend on the order of evaluation of subexpressions or the order in which side effects take place.</p>
-<p>[Rec. EXP11-C] Do not make assumptions regarding the layout of structures with bit-fields.</p>
-<p>[Rec. EXP12-C] Do not ignore values returned by functions.</p>
-<p>[Rec. EXP13-C] Treat relational and equality operators as if they were nonassociative.</p>
-<p>[Rec. EXP15-C] Do not place a semicolon on the same line as an if, for, or while statement.</p>
-<p>[Rec. EXP16-C] Do not compare function pointers to constant values.</p>
-<p>[Rec. EXP19-C] Use braces for the body of an if, for, or while statement.</p>
-<p>[Rec. EXP20-C] Perform explicit tests to determine success, true and false, and equality.</p>
+<h3 id="表达式-1">表达式</h3>
+<p>[建议 EXP00-C] 使用括号明确运算符的优先级。</p>
+<p>[建议 EXP02-C] 注意逻辑与、逻辑或运算符的短路行为。</p>
+<p>[建议 EXP03-C] 不要假定结构体的大小等于其所有成员大小的总和。</p>
+<p>[建议 EXP05-C] 不要去除指针的 <code>const</code> 限定。</p>
+<p>[建议 EXP07-C] 不要在表达式中假定常量的值，避免削弱常量的作用。</p>
+<p>[建议 EXP08-C] 确保指针运算的使用符合规范。</p>
+<p>[建议 EXP09-C] 使用 <code>sizeof</code> 运算符获取类型或变量的大小。</p>
+<p>[建议 EXP10-C] 不要依赖子表达式的求值顺序，以及副作用发生的顺序。</p>
+<p>[建议 EXP11-C] 不要对带位域的结构体的内存布局做任何假定。</p>
+<p>[建议 EXP12-C] 不要忽略函数的返回值。</p>
+<p>[建议 EXP13-C] 将关系运算符和相等性运算符视为非结合性运算符处理。</p>
+<p>[建议 EXP15-C] 不要将分号与 <code>if</code>、<code>for</code> 或 <code>while</code> 语句写在同一行。</p>
+<p>[建议 EXP16-C] 不要将函数指针与常量值进行比较。</p>
+<p>[建议 EXP19-C] <code>if</code>、<code>for</code> 或 <code>while</code> 语句的循环体需使用大括号包裹。</p>
+<p>[建议 EXP20-C] 通过显式测试判断操作成功与否、布尔值真假以及数值相等性。</p>
 <hr>
-<h4 id="integers-1">Integers</h4>
-<p>[Rec. INT00-C] Understand the data model used by your implementation(s).</p>
-<p>[Rec. INT02-C] Understand integer conversion rules.</p>
-<p>[Rec. INT04-C] Enforce limits on integer values originating from tainted sources.</p>
-<p>[Rec. INT07-C] Use only explicitly signed or unsigned char type for numeric values.</p>
-<p>[Rec. INT08-C] Verify that all integer values are in range.</p>
-<p>[Rec. INT09-C] Ensure enumeration constants map to unique values.</p>
-<p>[Rec. INT10-C] Do not assume a positive remainder when using the % operator.</p>
-<p>[Rec. INT12-C] Do not make assumptions about the type of a plain int bit-field when used in an expression.</p>
-<p>[Rec. INT13-C] Use bitwise operators only on unsigned operands.</p>
-<p>[Rec. INT14-C] Avoid performing bitwise and arithmetic operations on the same data.</p>
-<p>[Rec. INT16-C] Do not make assumptions about representation of signed integers.</p>
-<p>[Rec. INT17-C] Define integer constants in an implementation-independent manner.</p>
-<p>[Rec. INT18-C] Evaluate integer expressions in a larger size before comparing or assigning to that size.</p>
+<h3 id="整数-1">整数</h3>
+<p>[建议 INT00-C] 理解开发环境所使用的数据模型。</p>
+<p>[建议 INT02-C] 理解整数转换规则。</p>
+<p>[建议 INT04-C] 对来自污染源的整数值强制做范围限制。</p>
+<p>[建议 INT07-C] 数值型字符仅使用显式的 <code>signed</code> 或 <code>unsigned char</code> 类型。</p>
+<p>[建议 INT08-C] 校验所有整数值都在有效范围内。</p>
+<p>[建议 INT09-C] 确保枚举常量映射到唯一的值。</p>
+<p>[建议 INT10-C] 使用 <code>%</code> 运算符时，不要假定余数一定为正。</p>
+<p>[建议 INT12-C] 不要对表达式中普通 <code>int</code> 类型位域的类型做任何假定。</p>
+<p>[建议 INT13-C] 位运算符仅作用于无符号操作数。</p>
+<p>[建议 INT14-C] 避免对同一数据同时执行位运算和算术运算。</p>
+<p>[建议 INT16-C] 不要对有符号整数的二进制表示做任何假定。</p>
+<p>[建议 INT17-C] 以与实现无关的方式定义整数常量。</p>
+<p>[建议 INT18-C] 整数表达式在比较或赋值前，先在更大的类型宽度中完成求值。</p>
 <hr>
-<h4 id="floating-point-1">Floating point</h4>
-<p>[Rec. FLP00-C] Understand the limitations of floating-point numbers.</p>
-<p>[Rec. FLP02-C] Avoid using floating-point numbers when precise computation is needed.</p>
-<p>[Rec. FLP03-C] Detect and handle floating-point errors.</p>
-<p>[Rec. FLP06-C] Convert integers to floating point for floating-point operations.</p>
+<h3 id="浮点数-1">浮点数</h3>
+<p>[建议 FLP00-C] 理解浮点数的运算局限性。</p>
+<p>[建议 FLP02-C] 需要精确计算的场景，避免使用浮点数。</p>
+<p>[建议 FLP03-C] 检测并处理浮点数运算错误。</p>
+<p>[建议 FLP06-C] 执行浮点运算前，先将整数转换为浮点类型。</p>
 <hr>
-<h4 id="arrays-1">Arrays</h4>
-<p>[Rec. ARR01-C] Do not apply the sizeof operator to a pointer when taking the size of an array.</p>
-<p>[Rec. ARR02-C] Explicitly specify array bounds, even if implicitly defined by an initializer.</p>
+<h3 id="数组-1">数组</h3>
+<p>[建议 ARR01-C] 获取数组大小时，不要对指针使用 <code>sizeof</code> 运算符。</p>
+<p>[建议 ARR02-C] 即使初始化列表已隐式定义了数组边界，也需显式指定。</p>
 <hr>
-<h4 id="characters-and-strings-1">Characters and strings</h4>
-<p>[Rec. STR00-C] Represent characters using an appropriate type.</p>
-<p>[Rec. STR02-C] Sanitize data passed to complex subsystems.</p>
-<p>[Rec. STR03-C] Do not inadvertently truncate a string.</p>
-<p>[Rec. STR06-C] Do not assume that strtok() leaves the parse string unchanged.</p>
-<p>[Rec. STR07-C] Use the bounds-checking interfaces for string manipulation.</p>
-<p>[Rec. STR10-C] Do not concatenate different type of string literals.</p>
-<p>[Rec. STR11-C] Do not specify the bound of a character array initialized with a string literal.</p>
+<h3 id="字符与字符串-1">字符与字符串</h3>
+<p>[建议 STR00-C] 使用合适的类型表示字符。</p>
+<p>[建议 STR02-C] 对传入复杂子系统的数据进行无害化处理。</p>
+<p>[建议 STR03-C] 避免无意中截断字符串。</p>
+<p>[建议 STR06-C] 不要假定 <code>strtok()</code> 不会修改解析的原字符串。</p>
+<p>[建议 STR07-C] 字符串操作优先使用带边界检查的接口。</p>
+<p>[建议 STR10-C] 不要拼接不同类型的字符串字面量。</p>
+<p>[建议 STR11-C] 用字符串字面量初始化字符数组时，不要指定数组长度。</p>
 <hr>
-<h4 id="memory-management-1">Memory management</h4>
-<p>[Rec. MEM00-C] Allocate and free memory in the same module, at the same level of abstraction.</p>
-<p>[Rec. MEM01-C] Store a new value in pointers immediately after free().</p>
-<p>[Rec. MEM02-C] Immediately cast the result of a memory allocation function call into a pointer to the allocated type.</p>
-<p>[Rec. MEM03-C] Clear sensitive information stored in reusable resources.</p>
-<p>[Rec. MEM04-C] Beware of zero-length allocations.</p>
-<p>[Rec. MEM05-C] Avoid large stack allocations.</p>
-<p>[Rec. MEM06-C] Ensure that sensitive data is not written out to disk.</p>
-<p>[Rec. MEM11-C] Do not assume infinite heap space.</p>
-<p>[Rec. MEM12-C] Consider using a goto chain when leaving a function on error when using and releasing resources.</p>
+<h3 id="内存管理-1">内存管理</h3>
+<p>[建议 MEM00-C] 内存的分配与释放需在同一模块、同一抽象层级中执行。</p>
+<p>[建议 MEM01-C] 指针指向的内存被释放后，立即为指针赋新值。</p>
+<p>[建议 MEM02-C] 内存分配函数的返回值，需立即强制转换为对应分配类型的指针。</p>
+<p>[建议 MEM03-C] 清除可复用资源中存储的敏感信息。</p>
+<p>[建议 MEM04-C] 警惕长度为 <code>0</code> 的内存分配操作。</p>
+<p>[建议 MEM05-C] 避免在栈上分配大块内存。</p>
+<p>[建议 MEM06-C] 确保敏感数据不会被写入磁盘。</p>
+<p>[建议 MEM11-C] 不要假定堆空间是无限的。</p>
+<p>[建议 MEM12-C] 函数执行出错需要释放资源并退出时，可考虑使用 <code>goto</code> 链处理。</p>
 <hr>
-<h4 id="input-and-output-1">Input and output</h4>
-<p>[Rec. FIO02-C] Canonicalize path names originating from tainted sources.</p>
-<p>[Rec. FIO03-C] Do not make assumptions about fopen() and file creation.</p>
-<p>[Rec. FIO06-C] Create files with appropriate access permissions.</p>
-<p>[Rec. FIO08-C] Take care when calling remove() on an open file.</p>
-<p>[Rec. FIO10-C] Take care when using the rename() function.</p>
-<p>[Rec. FIO11-C] Take care when specifying the mode parameter of fopen().</p>
-<p>[Rec. FIO21-C] Do not create temporary files in shared directories.</p>
-<p>[Rec. FIO24-C] Do not open a file that is already open.</p>
+<h3 id="输入输出-1">输入输出</h3>
+<p>[建议 FIO02-C] 对来自污染源的路径名进行规范化处理。</p>
+<p>[建议 FIO03-C] 不要对 <code>fopen()</code> 的行为和文件创建逻辑做任何假定。</p>
+<p>[建议 FIO06-C] 创建文件时设置合适的访问权限。</p>
+<p>[建议 FIO08-C] 对已打开的文件调用 <code>remove()</code> 时需谨慎。</p>
+<p>[建议 FIO10-C] 使用 <code>rename()</code> 函数时需谨慎。</p>
+<p>[建议 FIO11-C] 指定 <code>fopen()</code> 的 <code>mode</code> 参数时需谨慎。</p>
+<p>[建议 FIO21-C] 不要在共享目录中创建临时文件。</p>
+<p>[建议 FIO24-C] 不要打开已处于打开状态的文件。</p>
 <hr>
-<h4 id="environment-1">Environment</h4>
-<p>[Rec. ENV01-C] Do not make assumptions about the size of an environment variable.</p>
+<h3 id="环境-1">环境</h3>
+<p>[建议 ENV01-C] 不要对环境变量的大小做任何假定。</p>
 <hr>
-<h4 id="signals-1">Signals</h4>
-<p>[Rec. SIG02-C] Avoid using signals to implement normal functionality.</p>
+<h3 id="信号-1">信号</h3>
+<p>[建议 SIG02-C] 避免使用信号实现常规业务功能。</p>
 <hr>
-<h4 id="error-handling-1">Error handling</h4>
-<p>[Rec. ERR00-C] Adopt and implement a consistent and comprehensive error-handling policy.</p>
-<p>[Rec. ERR01-C] Use ferror() rather than errno to check for FILE stream errors.</p>
-<p>[Rec. ERR06-C] Understand the termination behavior of assert() and abort().</p>
-<p>[Rec. ERR07-C] Prefer functions that support error checking over equivalent functions that don&rsquo;t.</p>
+<h3 id="错误处理-1">错误处理</h3>
+<p>[建议 ERR00-C] 采纳并实现一套统一、完善的错误处理策略。</p>
+<p>[建议 ERR01-C] 检查 <code>FILE</code> 流错误时，优先使用 <code>ferror()</code> 而非 <code>errno</code>。</p>
+<p>[建议 ERR06-C] 理解 <code>assert()</code> 和 <code>abort()</code> 的程序终止行为。</p>
+<p>[建议 ERR07-C] 优先使用支持错误检查的函数，而非功能等价但无错误检查的函数。</p>
 <hr>
-<h4 id="application-programming-interfaces">Application programming interfaces</h4>
-<p>[Rec. API01-C] Avoid laying out strings in memory directly before sensitive data.</p>
-<p>[Rec. API02-C] Functions that read or write to or from an array should take an argument to specify the source or target size.</p>
-<p>[Rec. API04-C] Provide a consistent and usable error-checking mechanism.</p>
-<p>[Rec. API05-C] Use conformant array parameters.</p>
+<h3 id="应用程序编程接口">应用程序编程接口</h3>
+<p>[建议 API01-C] 避免在内存中将字符串紧挨着敏感数据排布。</p>
+<p>[建议 API02-C] 对数组进行读写操作的函数，需传入参数指定源或目标数组的大小。</p>
+<p>[建议 API04-C] 提供一套统一、易用的错误检查机制。</p>
+<p>[建议 API05-C] 使用兼容数组参数。</p>
 <hr>
-<h4 id="concurrency-1">Concurrency</h4>
-<p>[Rec. CON01-C] Acquire and release synchronization primitives in the same module, at the same level of abstraction.</p>
-<p>[Rec. CON05-C] Do not perform operations that can block while holding a lock.</p>
+<h3 id="并发-1">并发</h3>
+<p>[建议 CON01-C] 同步原语的获取与释放需在同一模块、同一抽象层级中执行。</p>
+<p>[建议 CON05-C] 持有锁期间，禁止执行可能发生阻塞的操作。</p>
 <hr>
-<h4 id="miscellaneous-1">Miscellaneous</h4>
-<p>[Rec. MSC00-C] Compile cleanly at high warning levels.</p>
-<p>[Rec. MSC01-C] Strive for logical completeness.</p>
-<p>[Rec. MSC04-C] Use comments consistently and in a readable fashion.</p>
-<p>[Rec. MSC05-C] Do not manipulate time_t typed values directly.</p>
-<p>[Rec. MSC06-C] Beware of compiler optimizations.</p>
-<p>[Rec. MSC12-C] Detect and remove code that has no effect or is never executed.</p>
-<p>[Rec. MSC13-C] Detect and remove unused values.</p>
-<p>[Rec. MSC15-C] Do not depend on undefined behavior.</p>
-<p>[Rec. MSC17-C] Finish every set of statements associated with a case label with a break statement.</p>
-<p>[Rec. MSC18-C] Be careful while handling sensitive data, such as passwords, in program code.</p>
-<p>[Rec. MSC20-C] Do not use a switch statement to transfer control into a complex block.</p>
-<p>[Rec. MSC21-C] Use robust loop termination conditions.</p>
-<p>[Rec. MSC22-C] Use the setjmp(), longjmp() facility securely.</p>
-<p>[Rec. MSC24-C] Do not use deprecated or obsolescent functions.</p>
+<h3 id="杂项-1">杂项</h3>
+<p>[建议 MSC00-C] 在高警告级别下实现无警告编译。</p>
+<p>[建议 MSC01-C] 保证代码逻辑的完整性。</p>
+<p>[建议 MSC04-C] 统一使用注释，保证注释的可读性。</p>
+<p>[建议 MSC05-C] 不要直接操作 <code>time_t</code> 类型的值。</p>
+<p>[建议 MSC06-C] 警惕编译器优化带来的潜在问题。</p>
+<p>[建议 MSC12-C] 检测并移除无效果或永远不会执行的代码。</p>
+<p>[建议 MSC13-C] 检测并移除未使用的变量值。</p>
+<p>[建议 MSC15-C] 不要依赖未定义行为。</p>
+<p>[建议 MSC17-C] 每个 <code>case</code> 标签对应的语句块末尾，都必须有 <code>break</code> 语句。</p>
+<p>[建议 MSC18-C] 程序代码中处理密码等敏感数据时需格外谨慎。</p>
+<p>[建议 MSC20-C] 不要使用 <code>switch</code> 语句将控制流转移到复杂语句块内部。</p>
+<p>[建议 MSC21-C] 使用健壮的循环终止条件。</p>
+<p>[建议 MSC22-C] 安全使用 <code>setjmp()</code>、<code>longjmp()</code> 机制。</p>
+<p>[建议 MSC24-C] 不要使用已弃用或过时的函数。</p>
 <hr>
-<h4 id="posix-1">POSIX</h4>
-<p>[Rec. POS04-C] Avoid using PTHREAD_MUTEX_NORMAL type mutex locks.</p>
-<p>[Rec. POS05-C] Limit access to files by creating a jail.</p>
+<h3 id="posix-扩展-1">POSIX 扩展</h3>
+<p>[建议 POS04-C] 避免使用 <code>PTHREAD_MUTEX_NORMAL</code> 类型的互斥锁。</p>
+<p>[建议 POS05-C] 通过创建沙箱限制对文件的访问。</p>
 <hr>
-<h4 id="microsoft-windows-1">Microsoft windows</h4>
-<p>[Rec. WIN00-C] Be specific when dynamically loading libraries.</p>
-<p>[Rec. WIN01-C] Do not forcibly terminate execution.</p>
-<p>[Rec. WIN02-C] Restrict privileges when spawning child processes.</p>
-<p>[Rec. WIN03-C] Understand HANDLE inheritance.</p>
-<p>[Rec. WIN04-C] Consider encrypting function pointers.</p>
+<h3 id="微软-windows-扩展-1">微软 Windows 扩展</h3>
+<p>[建议 WIN00-C] 动态加载库时需明确指定库名。</p>
+<p>[建议 WIN01-C] 不要强制终止程序执行。</p>
+<p>[建议 WIN02-C] 创建子进程时需限制其权限。</p>
+<p>[建议 WIN03-C] 理解句柄继承的机制。</p>
+<p>[建议 WIN04-C] 考虑对函数指针进行加密处理。</p>
 <hr>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
