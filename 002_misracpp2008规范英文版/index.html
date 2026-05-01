@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Misra C&#43;&#43; 2008 规范 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/002_misracpp2008%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="Misra C&#43;&#43; 2008 规范">
+  <meta property="og:description" content="Misra Cpp 2008 Language independent issues Unnecessary constructs Rule 0-1-1	(Required)	A project shall not contain unreachable code.
+Rule 0-1-2	(Required)	A project shall not contain infeasible paths.
+Rule 0-1-3	(Required)	A project shall not contain unused variables.
+Rule 0-1-4	(Required)	A project shall not contain non-volatile POD variables having only one use.
+Rule 0-1-5	(Required)	A project shall not contain unused type declarations.
+Rule 0-1-6	(Required)	A project shall not contain instances of non- volatile variables being given values that are never subsequently used.">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-04-19T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-04-19T10:00:00+08:00">
+    <meta property="article:tag" content="MisraCpp">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="Misra C&#43;&#43; 2008 规范">
+  <meta name="twitter:description" content="Misra Cpp 2008 Language independent issues Unnecessary constructs Rule 0-1-1	(Required)	A project shall not contain unreachable code.
+Rule 0-1-2	(Required)	A project shall not contain infeasible paths.
+Rule 0-1-3	(Required)	A project shall not contain unused variables.
+Rule 0-1-4	(Required)	A project shall not contain non-volatile POD variables having only one use.
+Rule 0-1-5	(Required)	A project shall not contain unused type declarations.
+Rule 0-1-6	(Required)	A project shall not contain instances of non- volatile variables being given values that are never subsequently used.">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/002_misracpp2008%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/012_misracpp2008%E8%A7%84%E8%8C%83/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/005_certcpp%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Misra C++ 2008 规范",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/002_misracpp2008%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "MisraCpp","wordcount":  4293 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/002_misracpp2008%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88\/","datePublished": "2026-04-19T09:00:00+08:00","dateModified": "2026-04-19T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/002_misracpp2008%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/002_misracpp2008%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Misra C++ 2008 规范</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/misracpp/"><i class="far fa-folder" aria-hidden="true"></i>MisraCpp</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-04-19">2026-04-19</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 4293 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 9 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#language-independent-issues">Language independent issues</a>
+      <ul>
+        <li><a href="#unnecessary-constructs">Unnecessary constructs</a></li>
+        <li><a href="#storage">Storage</a></li>
+        <li><a href="#runtime-failures">Runtime failures</a></li>
+        <li><a href="#arithmetic">Arithmetic</a></li>
+      </ul>
+    </li>
+    <li><a href="#general">General</a>
+      <ul>
+        <li><a href="#language">Language</a></li>
+      </ul>
+    </li>
+    <li><a href="#lexical-conventions">Lexical conventions</a>
+      <ul>
+        <li><a href="#character-sets">Character sets</a></li>
+        <li><a href="#trigraph-sequences">Trigraph sequences</a></li>
+        <li><a href="#alternative-tokens">Alternative tokens</a></li>
+        <li><a href="#comments">Comments</a></li>
+        <li><a href="#identifiers">Identifiers</a></li>
+        <li><a href="#literals">Literals</a></li>
+      </ul>
+    </li>
+    <li><a href="#basic-concepts">Basic concepts</a>
+      <ul>
+        <li><a href="#declarations-and-definitions">Declarations and definitions</a></li>
+        <li><a href="#one-definition-rule">One Definition Rule</a></li>
+        <li><a href="#declarative-regions-and-scope">Declarative regions and scope</a></li>
+        <li><a href="#name-lookup">Name lookup</a></li>
+        <li><a href="#types">Types</a></li>
+      </ul>
+    </li>
+    <li><a href="#standard-conversions">Standard conversions</a>
+      <ul>
+        <li><a href="#integral-promotions">Integral promotions</a></li>
+        <li><a href="#pointer-conversions">Pointer conversions</a></li>
+      </ul>
+    </li>
+    <li><a href="#expressions">Expressions</a>
+      <ul>
+        <li><a href="#primary-expressions">Primary expressions</a></li>
+        <li><a href="#postfix-expressions">Postfix expressions</a></li>
+        <li><a href="#unary-expressions">Unary expressions</a></li>
+        <li><a href="#shift-operators">Shift operators</a></li>
+        <li><a href="#logical-and-operator">Logical AND operator</a></li>
+        <li><a href="#assignment-operators">Assignment operators</a></li>
+        <li><a href="#comma-operator">Comma operator</a></li>
+        <li><a href="#constant-expressions">Constant expressions</a></li>
+      </ul>
+    </li>
+    <li><a href="#statements">Statements</a>
+      <ul>
+        <li><a href="#expression-statement">Expression statement</a></li>
+        <li><a href="#compound-statement">Compound statement</a></li>
+        <li><a href="#selection-statements">Selection statements</a></li>
+      </ul>
+    </li>
+    <li><a href="#iteration-statements">Iteration statements</a>
+      <ul>
+        <li><a href="#the-for-statement">The for statement</a></li>
+        <li><a href="#jump-statements">Jump statements</a></li>
+      </ul>
+    </li>
+    <li><a href="#declarations">Declarations</a>
+      <ul>
+        <li><a href="#specifiers">Specifiers</a></li>
+        <li><a href="#enumeration-declarations">Enumeration declarations</a></li>
+        <li><a href="#namespaces">Namespaces</a></li>
+        <li><a href="#the-asm-declaration">The asm declaration</a></li>
+        <li><a href="#linkage-specifications">Linkage specifications</a></li>
+      </ul>
+    </li>
+    <li><a href="#declarators">Declarators</a>
+      <ul>
+        <li><a href="#general-1">General</a></li>
+        <li><a href="#meaning-of-declarators">Meaning of declarators</a></li>
+        <li><a href="#function-definitions">Function definitions</a></li>
+        <li><a href="#initializers">Initializers</a></li>
+      </ul>
+    </li>
+    <li><a href="#classes">Classes</a>
+      <ul>
+        <li><a href="#member-functions">Member functions</a></li>
+        <li><a href="#unions">Unions</a></li>
+        <li><a href="#bit-fields">Bit-fields</a></li>
+      </ul>
+    </li>
+    <li><a href="#derived-classes">Derived classes</a>
+      <ul>
+        <li><a href="#multiple-base-classes">Multiple base classes</a></li>
+        <li><a href="#member-name-lookup">Member name lookup</a></li>
+        <li><a href="#virtual-functions">Virtual functions</a></li>
+      </ul>
+    </li>
+    <li><a href="#member-access-control">Member access control</a>
+      <ul>
+        <li><a href="#general-2">General</a></li>
+      </ul>
+    </li>
+    <li><a href="#special-member-functions">Special member functions</a>
+      <ul>
+        <li><a href="#constructors">Constructors</a></li>
+        <li><a href="#copying-class-objects">Copying class objects</a></li>
+      </ul>
+    </li>
+    <li><a href="#templates">Templates</a>
+      <ul>
+        <li><a href="#template-declarations">Template declarations</a></li>
+        <li><a href="#name-resolution">Name resolution</a></li>
+        <li><a href="#template-instantiation-and-specialization">Template instantiation and specialization</a></li>
+        <li><a href="#function-template-specialization">Function template specialization</a></li>
+      </ul>
+    </li>
+    <li><a href="#exception-handling">Exception handling</a>
+      <ul>
+        <li><a href="#general-3">General</a></li>
+        <li><a href="#throwing-an-exception">Throwing an exception</a></li>
+        <li><a href="#handling-an-exception">Handling an exception</a></li>
+        <li><a href="#exception-specifications">Exception specifications</a></li>
+        <li><a href="#special-functions">Special functions</a></li>
+      </ul>
+    </li>
+    <li><a href="#preprocessing-directives">Preprocessing directives</a>
+      <ul>
+        <li><a href="#general-4">General</a></li>
+        <li><a href="#conditional-inclusion">Conditional inclusion</a></li>
+        <li><a href="#source-file-inclusion">Source file inclusion</a></li>
+        <li><a href="#macro-replacement">Macro replacement</a></li>
+        <li><a href="#pragma-directive">Pragma directive</a></li>
+      </ul>
+    </li>
+    <li><a href="#library-introduction">Library introduction</a>
+      <ul>
+        <li><a href="#general-5">General</a></li>
+      </ul>
+    </li>
+    <li><a href="#language-support-library">Language support library</a>
+      <ul>
+        <li><a href="#general-6">General</a></li>
+        <li><a href="#implementation-properties">Implementation properties</a></li>
+        <li><a href="#dynamic-memory-management">Dynamic memory management</a></li>
+        <li><a href="#other-runtime-support">Other runtime support</a></li>
+      </ul>
+    </li>
+    <li><a href="#diagnostics-library">Diagnostics library</a>
+      <ul>
+        <li><a href="#error-numbers">Error numbers</a></li>
+      </ul>
+    </li>
+    <li><a href="#inputoutput-library">Input/output library</a>
+      <ul>
+        <li><a href="#general-7">General</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="misra-cpp-2008">Misra Cpp 2008</h1>
+<hr>
+<h2 id="language-independent-issues">Language independent issues</h2>
+<h3 id="unnecessary-constructs">Unnecessary constructs</h3>
+<p>Rule 0-1-1	(Required)	A project shall not contain unreachable code.</p>
+<p>Rule 0-1-2	(Required)	A project shall not contain infeasible paths.</p>
+<p>Rule 0-1-3	(Required)	A project shall not contain unused variables.</p>
+<p>Rule 0-1-4	(Required)	A project shall not contain non-volatile POD variables having only one use.</p>
+<p>Rule 0-1-5	(Required)	A project shall not contain unused type declarations.</p>
+<p>Rule 0-1-6	(Required)	A project shall not contain instances of non- volatile variables being given values that are never subsequently used.</p>
+<p>Rule 0-1-7	(Required)	The value returned by a function having a non-void return type that is not an overloaded operator shall always be used.</p>
+<p>Rule 0-1-8	(Required)	All functions with void return type shall have external side effect(s).</p>
+<p>Rule 0-1-9	(Required)	There shall be no dead code.</p>
+<p>Rule 0-1-10	(Required)	Every defined function shall be called at least once.</p>
+<p>Rule 0-1-11	(Required)	There shall be no unused parameters (named or unnamed) in non-virtual functions.</p>
+<p>Rule 0-1-12	(Required)	There shall be no unused parameters (named or unnamed) in the set of parameters for a virtual function and all the functions that override it.</p>
+<h3 id="storage">Storage</h3>
+<p>Rule 0-2-1	(Required)	An object shall not be assigned to an overlapping object.</p>
+<h3 id="runtime-failures">Runtime failures</h3>
+<p>Rule 0-3-1	(Document)	Minimization of run-time failures shall be ensured by the use of at least one of:</p>
+<ol>
+<li>
+<p>static analysis tools/techniques;</p>
+</li>
+<li>
+<p>dynamic analysis tools/techniques;</p>
+</li>
+<li>
+<p>explicit coding of checks to handle run-time faults.</p>
+</li>
+</ol>
+<p>Rule 0-3-2	(Required)	If a function generates error information, then that error information shall be tested.</p>
+<h3 id="arithmetic">Arithmetic</h3>
+<p>Rule 0-4-1	(Document)	Use of scaled-integer or fixed-point arithmetic shall be documented.</p>
+<p>Rule 0-4-2	(Document)	Use of floating-point arithmetic shall be documented.</p>
+<p>Rule 0-4-3	(Document)	Floating-point implementations shall comply with a defined floating-point standard.</p>
+<hr>
+<h2 id="general">General</h2>
+<h3 id="language">Language</h3>
+<p>Rule 1-0-1	(Required)	All code shall conform to ISO/IEC 14882:2003 &ldquo;The C++ Standard Incorporating Technical Corrigendum 1&rdquo;.</p>
+<p>Rule 1-0-2	(Required)	Multiple compilers shall only be used if they have a common, defined interface.</p>
+<p>Rule 1-0-3	(Document)	The implementation of integer division in the chosen compiler shall be determined and documented.</p>
+<hr>
+<h2 id="lexical-conventions">Lexical conventions</h2>
+<h3 id="character-sets">Character sets</h3>
+<p>Rule 2-2-1	(Document)	The character set and the corresponding encoding shall be documented.</p>
+<h3 id="trigraph-sequences">Trigraph sequences</h3>
+<p>Rule 2-3-1	(Required)	Trigraphs shall not be used.</p>
+<h3 id="alternative-tokens">Alternative tokens</h3>
+<p>Rule 2-5-1	(Advisory)	Digraphs should not be used.</p>
+<h3 id="comments">Comments</h3>
+<p>Rule 2-7-1	(Required)	The character sequence /* shall not be used within a C-style comment.</p>
+<p>Rule 2-7-2	(Required)	Sections of code shall not be &ldquo;commented out&rdquo; using C-style comments.</p>
+<p>Rule 2-7-3	(Advisory)	Sections of code should not be &ldquo;commented out&rdquo; using C++ comments.</p>
+<h3 id="identifiers">Identifiers</h3>
+<p>Rule 2-10-1	(Required)	Different identifiers shall be typographically unambiguous.</p>
+<p>Rule 2-10-2	(Required)	Identifiers declared in an inner scope shall not hide an identifier declared in an outer scope.</p>
+<p>Rule 2-10-3	(Required)	A typedef name (including qualification, if any) shall be a unique identifier.</p>
+<p>Rule 2-10-4	(Required)	A class, union or enum name (including qualification, if any) shall be a unique identifier.</p>
+<p>Rule 2-10-5	(Required)	The identifier name of a non-member object or function with static storage duration should not be reused.</p>
+<p>Rule 2-10-6	(Required)	If an identifier refers to a type, it shall not also refer to an object or a function in the same scope.</p>
+<h3 id="literals">Literals</h3>
+<p>Rule 2-13-1	(Required)	Only those escape sequences that are defined in ISO/IEC 14882:2003 shall be used.</p>
+<p>Rule 2-13-2	(Required)	Octal constants (other than zero) and octal escape sequences (other than &ldquo;\0&rdquo;) shall not be used.</p>
+<p>Rule 2-13-3	(Required)	A &ldquo;U &quot; suffix shall be applied to all octal or hexadecimal integer literals of unsigned type.</p>
+<p>Rule 2-13-4	(Required)	Literal suffixes shall be upper case.</p>
+<p>Rule 2-13-5	(Required)	Narrow and wide string literals shall not be concatenated.</p>
+<hr>
+<h2 id="basic-concepts">Basic concepts</h2>
+<h3 id="declarations-and-definitions">Declarations and definitions</h3>
+<p>Rule 3-1-1	(Required)	It shall be possible to include any header file in multiple translation units without violating the One Definition Rule.</p>
+<p>Rule 3-1-2	(Required)	Functions shall not be declared at block scope.</p>
+<p>Rule 3-1-3	(Required)	When an array is declared, its size shall either be stated explicitly or defined implicitly by initialization.</p>
+<h3 id="one-definition-rule">One Definition Rule</h3>
+<p>Rule 3-2-1	(Required)	All declarations of an object or function shall have compatible types.</p>
+<p>Rule 3-2-2	(Required)	The One Definition Rule shall not be violated.</p>
+<p>Rule 3-2-3	(Required)	A type, object or function that is used in multiple translation units shall be declared in one and only one file.</p>
+<p>Rule 3-2-4	(Required)	An identifier with external linkage shall have exactly one definition.</p>
+<h3 id="declarative-regions-and-scope">Declarative regions and scope</h3>
+<p>Rule 3-3-1	(Required)	Objects or functions with external linkage shall be declared in a header file.</p>
+<p>Rule 3-3-2	(Required)	If a function has internal linkage then all re-declarations shall include the static storage class specifier.</p>
+<h3 id="name-lookup">Name lookup</h3>
+<p>Rule 3-4-1	(Required)	An identifier declared to be an object or type shall be defined in a block that minimizes its visibility.</p>
+<h3 id="types">Types</h3>
+<p>Rule 3-9-1	(Required)	The types used for an object, a function return type, or a function parameter shall be token-for-token identical in all declarations and re-declarations.</p>
+<p>Rule 3-9-2	(Advisory)	typedefs that indicate size and signedness should be used in place of the basic numerical types.</p>
+<p>Rule 3-9-3	(Required)	The underlying bit representations of floating-point values shall not be used.</p>
+<hr>
+<h2 id="standard-conversions">Standard conversions</h2>
+<h3 id="integral-promotions">Integral promotions</h3>
+<p>Rule 4-5-1	(Required)	Expressions with type bool shall not be used as operands to built-in operators other than the assignment operator =, the logical operators &amp;&amp;, ||, !, the equality operators == and !=, the unary &amp; operator, and the conditional operator.</p>
+<p>Rule 4-5-2	(Required)	Expressions with type enum shall not be used as operands to built-in operators other than the subscript operator [ ], the assignment operator =, the equality operators == and !=, the unary &amp; operator, and the relational operators &lt;, &lt;=, &gt;, &gt;=.</p>
+<p>Rule 4-5-3	(Required)	Expressions with type (plain) char and wchar_t shall not be used as operands to built-in operators other than the assignment operator =, the equality operators == and !=, and the unary &amp; operator.</p>
+<h3 id="pointer-conversions">Pointer conversions</h3>
+<p>Rule 4-10-1	(Required)	NULL shall not be used as an integer value.</p>
+<p>Rule 4-10-2	(Required)	Literal zero (0) shall not be used as the null-pointer-constant.</p>
+<hr>
+<h2 id="expressions">Expressions</h2>
+<h3 id="primary-expressions">Primary expressions</h3>
+<p>Rule 5-0-1	(Required)	The value of an expression shall be the same under any order of evaluation that the standard permits.</p>
+<p>Rule 5-0-2	(Advisory)	Limited dependence should be placed on C++ operator precedence rules in expressions.</p>
+<p>Rule 5-0-3	(Required)	A cvalue expression shall not be implicitly converted to a different underlying type.</p>
+<p>Rule 5-0-4	(Required)	An implicit integral conversion shall not change the signedness of the underlying type.</p>
+<p>Rule 5-0-5	(Required)	There shall be no implicit floating-integral conversions.</p>
+<p>Rule 5-0-6	(Required)	An implicit integral or floating-point conversion shall not reduce the size of the underlying type.</p>
+<p>Rule 5-0-7	(Required)	There shall be no explicit floating-integral conversions of a cvalue expression.</p>
+<p>Rule 5-0-8	(Required)	An explicit integral or floating-point conversion shall not increase the size of the underlying type of a cvalue expression.</p>
+<p>Rule 5-0-9	(Required)	An explicit integral conversion shall not change the signedness of the underlying type of a cvalue expression.</p>
+<p>Rule 5-0-10	(Required)	If the bitwise operators ~ and &laquo; are applied to an operand with an underlying type of unsigned char or unsigned short, the result shall be immediately cast to the underlying type of the operand.</p>
+<p>Rule 5-0-11	(Required)	The plain char type shall only be used for the storage and use of character values.</p>
+<p>Rule 5-0-12	(Required)	Signed char and unsigned char type shall only be used for the storage and use of numeric values.</p>
+<p>Rule 5-0-13	(Required)	The condition of an if-statement and the condition of an iteration-statement shall have type bool.</p>
+<p>Rule 5-0-14	(Required)	The first operand of a conditional-operator shall have type bool.</p>
+<p>Rule 5-0-15	(Required)	Array indexing shall be the only form of pointer arithmetic.</p>
+<p>Rule 5-0-16	(Required)	A pointer operand and any pointer resulting from pointer arithmetic using that operand shall both address elements of the same array.</p>
+<p>Rule 5-0-17	(Required)	Subtraction between pointers shall only be applied to pointers that address elements of the same array.</p>
+<p>Rule 5-0-18	(Required)	&gt;, &gt;=, &lt;, &lt;= shall not be applied to objects of pointer type, except where they point to the same array.</p>
+<p>Rule 5-0-19	(Required)	The declaration of objects shall contain no more than two levels of pointer indirection.</p>
+<p>Rule 5-0-20	(Required)	Non-constant operands to a binary bitwise operator shall have the same underlying type.</p>
+<p>Rule 5-0-21	(Required)	Bitwise operators shall only be applied to operands of unsigned underlying type.</p>
+<h3 id="postfix-expressions">Postfix expressions</h3>
+<p>Rule 5-2-1	(Required)	Each operand of a logical &amp;&amp; or || shall be a postfix-expression.</p>
+<p>Rule 5-2-2	(Required)	A pointer to a virtual base class shall only be cast to a pointer to a derived class by means of dynamic_cast.</p>
+<p>Rule 5-2-3	(Advisory)	Casts from a base class to a derived class should not be performed on polymorphic types.</p>
+<p>Rule 5-2-4	(Required)	C-style casts (other than void casts) and functional notation casts (other than explicit constructor calls) shall not be used.</p>
+<p>Rule 5-2-5	(Required)	A cast shall not remove any const or volatile qualification from the type of a pointer or reference.</p>
+<p>Rule 5-2-6	(Required)	A cast shall not convert a pointer to a function to any other pointer type, including a pointer to function type.</p>
+<p>Rule 5-2-7	(Required)	An object with pointer type shall not be converted to an unrelated pointer type, either directly or indirectly.</p>
+<p>Rule 5-2-8	(Required)	An object with integer type or pointer to void type shall not be converted to an object with pointer type.</p>
+<p>Rule 5-2-9	(Advisory)	A cast should not convert a pointer type to an integral type.</p>
+<p>Rule 5-2-10	(Advisory)	The increment (++) and decrement (&ndash;) operators should not be mixed with other operators in an expression.</p>
+<p>Rule 5-2-11	(Required)	The comma operator, &amp;&amp; operator and the || operator shall not be overloaded.</p>
+<p>Rule 5-2-12	(Required)	An identifier with array type passed as a function argument shall not decay to a pointer.</p>
+<h3 id="unary-expressions">Unary expressions</h3>
+<p>Rule 5-3-1	(Required)	Each operand of the ! operator, the logical &amp;&amp; or the logical || operators shall have type bool.</p>
+<p>Rule 5-3-2	(Required)	The unary minus operator shall not be applied to an expression whose underlying type is unsigned.</p>
+<p>Rule 5-3-3	(Required)	The unary &amp; operator shall not be overloaded.</p>
+<p>Rule 5-3-4	(Required)	Evaluation of the operand to the sizeof operator shall not contain side effects.</p>
+<h3 id="shift-operators">Shift operators</h3>
+<p>Rule 5-8-1	(Required)	The right hand operand of a shift operator shall lie between zero and one less than the width in bits of the underlying type of the left hand operand.</p>
+<h3 id="logical-and-operator">Logical AND operator</h3>
+<p>Rule 5-14-1	(Required)	The right hand operand of a logical &amp;&amp; or || operator shall not contain side effects.</p>
+<h3 id="assignment-operators">Assignment operators</h3>
+<p>Rule 5-17-1	(Required)	The semantic equivalence between a binary operator and its assignment operator form shall be preserved.</p>
+<h3 id="comma-operator">Comma operator</h3>
+<p>Rule 5-18-1	(Required)	The comma operator shall not be used.</p>
+<h3 id="constant-expressions">Constant expressions</h3>
+<p>Rule 5-19-1	(Advisory)	Evaluation of constant unsigned integer expressions should not lead to wrap-around.</p>
+<hr>
+<h2 id="statements">Statements</h2>
+<h3 id="expression-statement">Expression statement</h3>
+<p>Rule 6-2-1	(Required)	Assignment operators shall not be used in sub-expressions.</p>
+<p>Rule 6-2-2	(Required)	Floating-point expressions shall not be directly or indirectly tested for equality or inequality.</p>
+<p>Rule 6-2-3	(Required)	Before preprocessing, a null statement shall only occur on a line by itself; it may be followed by a comment, provided that the first character following the null statement is a white-space character.</p>
+<h3 id="compound-statement">Compound statement</h3>
+<p>Rule 6-3-1	(Required)	The statement forming the body of a switch, while, do &hellip; while or for statement shall be a compound statement.</p>
+<h3 id="selection-statements">Selection statements</h3>
+<p>Rule 6-4-1	(Required)	An if ( condition ) construct shall be followed by a compound statement. The else keyword shall be followed by either a compound statement, or another if statement.</p>
+<p>Rule 6-4-2	(Required)	All if - else if constructs shall be terminated with an else clause.</p>
+<p>Rule 6-4-3	(Required)	A switch statement shall be a well-formed switch statement.</p>
+<p>Rule 6-4-4	(Required)	A switch-label shall only be used when the most closely-enclosing compound statement is the body of a switch statement.</p>
+<p>Rule 6-4-5	(Required)	An unconditional throw or break statement shall terminate every non-empty switch-clause.</p>
+<p>Rule 6-4-6	(Required)	The final clause of a switch statement shall be the default-clause.</p>
+<p>Rule 6-4-7	(Required)	The condition of a switch statement shall not have bool type.</p>
+<p>Rule 6-4-8	(Required)	Every switch statement shall have at least one case-clause.</p>
+<hr>
+<h2 id="iteration-statements">Iteration statements</h2>
+<h3 id="the-for-statement">The for statement</h3>
+<p>Rule 6-5-1	(Required)	A for loop shall contain a single loop-counter which shall not have floating type.</p>
+<p>Rule 6-5-2	(Required)	If loop-counter is not modified by &ndash; or ++, then, within condition, the loop-counter shall only be used as an operand to &lt;=, &lt;, &gt; or &gt;=.</p>
+<p>Rule 6-5-3	(Required)	The loop-counter shall not be modified within condition or statement.</p>
+<p>Rule 6-5-4	(Required)	The loop-counter shall be modified by one of: &ndash;, ++, -=n, or +=n; where n remains constant for the duration of the loop.</p>
+<p>Rule 6-5-5	(Required)	A loop-control-variable other than the loop-counter shall not be modified within condition or expression.</p>
+<p>Rule 6-5-6	(Required)	A loop-control-variable other than the loop-counter which is modified in statement shall have type bool.</p>
+<h3 id="jump-statements">Jump statements</h3>
+<p>Rule 6-6-1	(Required)	Any label referenced by a goto statement shall be declared in the same block, or in a block enclosing the goto statement.</p>
+<p>Rule 6-6-2	(Required)	The goto statement shall jump to a label declared later in the same function body.</p>
+<p>Rule 6-6-3	(Required)	The continue statement shall only be used within a well-formed for loop.</p>
+<p>Rule 6-6-4	(Required)	For any iteration statement there shall be no more than one break or goto statement used for loop termination.</p>
+<p>Rule 6-6-5	(Required)	A function shall have a single point of exit at the end of the function.</p>
+<hr>
+<h2 id="declarations">Declarations</h2>
+<h3 id="specifiers">Specifiers</h3>
+<p>Rule 7-1-1	(Required)	A variable which is not modified shall be const qualified.</p>
+<p>Rule 7-1-2	(Required)	A pointer or reference parameter in a function shall be declared as pointer to const or reference to const if the corresponding object is not modified.</p>
+<p>Rule 7-1-3	(Required)	An expression with enum underlying type shall only have values corresponding to the enumerators of the enumeration.</p>
+<h3 id="enumeration-declarations">Enumeration declarations</h3>
+<p>Rule 7-2-1	(Required)	An expression with enum underlying type shall only have values corresponding to the enumerators of the enumeration.</p>
+<h3 id="namespaces">Namespaces</h3>
+<p>Rule 7-3-1	(Required)	The global namespace shall only contain main, namespace declarations and extern &ldquo;C&rdquo; declarations.</p>
+<p>Rule 7-3-2	(Required)	The identifier main shall not be used for a function other than the global function main.</p>
+<p>Rule 7-3-3	(Required)	There shall be no unnamed namespaces in header files.</p>
+<p>Rule 7-3-4	(Required)	Using-directives shall not be used.</p>
+<p>Rule 7-3-5	(Required)	Multiple declarations for an identifier in the same namespace shall not straddle a using-declaration for that identifier.</p>
+<p>Rule 7-3-6	(Required)	Using-directives and using-declarations (excluding class scope or function scope using-declarations) shall not be used in header files.</p>
+<h3 id="the-asm-declaration">The asm declaration</h3>
+<p>Rule 7-4-1	(Document)	All usage of assembler shall be documented.</p>
+<p>Rule 7-4-2	(Required)	Assembler instructions shall only be introduced using the asm declaration.</p>
+<p>Rule 7-4-3	(Required)	Assembly language shall be encapsulated and isolated.</p>
+<h3 id="linkage-specifications">Linkage specifications</h3>
+<p>Rule 7-5-1	(Required)	A function shall not return a reference or a pointer to an automatic variable (including parameters), defined within the function.</p>
+<p>Rule 7-5-2	(Required)	The address of an object with automatic storage shall not be assigned to another object that may persist after the first object has ceased to exist.</p>
+<p>Rule 7-5-3	(Required)	A function shall not return a reference or a pointer to a parameter that is passed by reference or const reference.</p>
+<p>Rule 7-5-4	(Advisory)	Functions should not call themselves, either directly or indirectly.</p>
+<hr>
+<h2 id="declarators">Declarators</h2>
+<h3 id="general-1">General</h3>
+<p>Rule 8-0-1	(Required)	An init-declarator-list or a member-declarator-list shall consist of a single init-declarator or member-declarator respectively.</p>
+<h3 id="meaning-of-declarators">Meaning of declarators</h3>
+<p>Rule 8-3-1	(Required)	Parameters in an overriding virtual function shall either use the same default arguments as the function they override, or else shall not specify any default arguments.</p>
+<h3 id="function-definitions">Function definitions</h3>
+<p>Rule 8-4-1	(Required)	Functions shall not be defined using the ellipsis notation.</p>
+<p>Rule 8-4-2	(Required)	The identifiers used for the parameters in a re-declaration of a function shall be identical to those in the declaration.</p>
+<p>Rule 8-4-3	(Required)	All exit paths from a function with non-void return type shall have an explicit return statement with an expression.</p>
+<p>Rule 8-4-4	(Required)	A function identifier shall either be used to call the function or it shall be preceded by &amp;.</p>
+<h3 id="initializers">Initializers</h3>
+<p>Rule 8-5-1	(Required)	All variables shall have a defined value before they are used.</p>
+<p>Rule 8-5-2	(Required)	Braces shall be used to indicate and match the structure in the non-zero initialization of arrays and structures.</p>
+<p>Rule 8-5-3	(Required)	In an enumerator list, the = construct shall not be used to explicitly initialize members other than the first, unless all items are explicitly initialized.</p>
+<hr>
+<h2 id="classes">Classes</h2>
+<h3 id="member-functions">Member functions</h3>
+<p>Rule 9-3-1	(Required)	Const member functions shall not return non-const pointers or references to class-data.</p>
+<p>Rule 9-3-2	(Required)	Member functions shall not return non-const handles to class-data.</p>
+<p>Rule 9-3-3	(Required)	If a member function can be made static then it shall be made static, otherwise if it can be made const then it shall be made const.</p>
+<h3 id="unions">Unions</h3>
+<p>Rule 9-5-1	(Required)	Unions shall not be used.</p>
+<h3 id="bit-fields">Bit-fields</h3>
+<p>Rule 9-6-1	(Required)	When the absolute positioning of bits representing a bit-field is required, then the behaviour and packing of bit-fields shall be documented.</p>
+<p>Rule 9-6-2	(Required)	Bit-fields shall be either bool type or an explicitly unsigned or signed integral type.</p>
+<p>Rule 9-6-3	(Required)	Bit-fields shall not have enum type.</p>
+<p>Rule 9-6-4	(Required)	Named bit-fields with signed integer type shall have a length of more than one bit.</p>
+<hr>
+<h2 id="derived-classes">Derived classes</h2>
+<h3 id="multiple-base-classes">Multiple base classes</h3>
+<p>Rule 10-1-1	(Advisory)	Classes should not be derived from virtual bases.</p>
+<p>Rule 10-1-2	(Required)	A base class shall only be declared virtual if it is used in a diamond hierarchy.</p>
+<p>Rule 10-1-3	(Required)	An accessible base class shall not be both virtual and non-virtual in the same hierarchy.</p>
+<h3 id="member-name-lookup">Member name lookup</h3>
+<p>Rule 10-2-1	(Advisory)	All accessible entity names within a multiple inheritance hierarchy should be unique.</p>
+<h3 id="virtual-functions">Virtual functions</h3>
+<p>Rule 10-3-1	(Required)	There shall be no more than one definition of each virtual function on each path through the inheritance hierarchy.</p>
+<p>Rule 10-3-2	(Required)	Each overriding virtual function shall be declared with the virtual keyword.</p>
+<p>Rule 10-3-3	(Required)	A virtual function shall only be overridden by a pure virtual function if it is itself declared as pure virtual.</p>
+<hr>
+<h2 id="member-access-control">Member access control</h2>
+<h3 id="general-2">General</h3>
+<p>Rule 11-0-1	(Required)	Member data in non-POD class types shall be private.</p>
+<hr>
+<h2 id="special-member-functions">Special member functions</h2>
+<h3 id="constructors">Constructors</h3>
+<p>Rule 12-1-1	(Required)	An object-s dynamic type shall not be used from the body of its constructor or destructor.</p>
+<p>Rule 12-1-2	(Advisory)	All constructors of a class should explicitly call a constructor for all of its immediate base classes and all virtual base classes.</p>
+<p>Rule 12-1-3	(Required)	All constructors that are callable with a single argument of fundamental type shall be declared explicit.</p>
+<h3 id="copying-class-objects">Copying class objects</h3>
+<p>Rule 12-8-1	(Required)	A copy constructor shall only initialize its base classes and the non-static members of the class of which it is a member.</p>
+<p>Rule 12-8-2	(Required)	The copy assignment operator shall be declared protected or private in an abstract class.</p>
+<hr>
+<h2 id="templates">Templates</h2>
+<h3 id="template-declarations">Template declarations</h3>
+<p>Rule 14-5-1	(Required)	A non-member generic function shall only be declared in a namespace that is not an associated namespace.</p>
+<p>Rule 14-5-2	(Required)	A copy constructor shall be declared when there is a template constructor with a single parameter that is a generic parameter.</p>
+<p>Rule 14-5-3	(Required)	A copy assignment operator shall be declared when there is a template assignment operator with a parameter that is a generic parameter.</p>
+<h3 id="name-resolution">Name resolution</h3>
+<p>Rule 14-6-1	(Required)	In a class template with a dependent base, any name that may be found in that dependent base shall be referred to using a qualified-id or this-&gt;</p>
+<p>Rule 14-6-2	(Required)	The function chosen by overload resolution shall resolve to a function declared previously in the translation unit.</p>
+<h3 id="template-instantiation-and-specialization">Template instantiation and specialization</h3>
+<p>Rule 14-7-1	(Required)	All class templates, function templates, class template member functions and class template static members shall be instantiated at least once.</p>
+<p>Rule 14-7-2	(Required)	For any given template specialization, an explicit instantiation of the template with the template- arguments used in the specialization shall not render the program ill-formed.</p>
+<p>Rule 14-7-3	(Required)	All partial and explicit specializations for a template shall be declared in the same file as the declaration of their primary template.</p>
+<h3 id="function-template-specialization">Function template specialization</h3>
+<p>Rule 14-8-1	(Required)	Overloaded function templates shall not be explicitly specialized.</p>
+<p>Rule 14-8-2	(Advisory)	The viable function set for a function call should either contain no function specializations, or only contain function specializations.</p>
+<hr>
+<h2 id="exception-handling">Exception handling</h2>
+<h3 id="general-3">General</h3>
+<p>Rule 15-0-1	(Document)	Exceptions shall only be used for error handling.</p>
+<p>Rule 15-0-2	(Advisory)	An exception object should not have pointer type.</p>
+<p>Rule 15-0-3	(Required)	Control shall not be transferred into a try or catch block using a goto or a switch statement.</p>
+<h3 id="throwing-an-exception">Throwing an exception</h3>
+<p>Rule 15-1-1	(Required)	The assignment-expression of a throw statement shall not itself cause an exception to be thrown.</p>
+<p>Rule 15-1-2	(Required)	NULL shall not be thrown explicitly.</p>
+<p>Rule 15-1-3	(Required)	An empty throw (throw;) shall only be used in the compound-statement of a catch handler.</p>
+<h3 id="handling-an-exception">Handling an exception</h3>
+<p>Rule 15-3-1	(Required)	Exceptions shall be raised only after start-up and before termination of the program.</p>
+<p>Rule 15-3-2	(Advisory)	There should be at least one exception handler to catch all otherwise unhandled exceptions</p>
+<p>Rule 15-3-3	(Required)	Handlers of a function-try-block implementation of a class constructor or destructor shall not reference non- static members from this class or its bases.</p>
+<p>Rule 15-3-4	(Required)	Each exception explicitly thrown in the code shall have a handler of a compatible type in all call paths that could lead to that point.</p>
+<p>Rule 15-3-5	(Required)	A class type exception shall always be caught by reference.</p>
+<p>Rule 15-3-6	(Required)	Where multiple handlers are provided in a single try-catch statement or function-try-block for a derived class and some or all of its bases, the handlers shall be ordered most-derived to base class.</p>
+<p>Rule 15-3-7	(Required)	Where multiple handlers are provided in a single try-catch statement or function-try-block, any ellipsis (catch-all) handler shall occur last.</p>
+<h3 id="exception-specifications">Exception specifications</h3>
+<p>Rule 15-4-1	(Required)	If a function is declared with an exception-specification, then all declarations of the same function (in other translation units) shall be declared with the same set of type-ids.</p>
+<h3 id="special-functions">Special functions</h3>
+<p>Rule 15-5-1	(Required)	A class destructor shall not exit with an exception.</p>
+<p>Rule 15-5-2	(Required)	Where a function-s declaration includes an exception- specification, the function shall only be capable of throwing exceptions of the indicated type(s).</p>
+<p>Rule 15-5-3	(Required)	The terminate() function shall not be called implicitly.</p>
+<hr>
+<h2 id="preprocessing-directives">Preprocessing directives</h2>
+<h3 id="general-4">General</h3>
+<p>Rule 16-0-1	(Required)	#include directives in a file shall only be preceded by other preprocessor directives or comments.</p>
+<p>Rule 16-0-2	(Required)	Macros shall only be #define-d or #undef-d in the global namespace.</p>
+<p>Rule 16-0-3	(Required)	#undef shall not be used.</p>
+<p>Rule 16-0-4	(Required)	Function-like macros shall not be defined.</p>
+<p>Rule 16-0-5	(Required)	Arguments to a function-like macro shall not contain tokens that look like preprocessing directives.</p>
+<p>Rule 16-0-6	(Required)	In the definition of a function-like macro, each instance of a parameter shall be enclosed in parentheses, unless it is used as the operand of # or ##.</p>
+<p>Rule 16-0-7	(Required)	Undefined macro identifiers shall not be used in #if or #elif preprocessor directives, except as operands to the defined operator.</p>
+<p>Rule 16-0-8	(Required)	If the # token appears as the first token on a line, then it shall be immediately followed by a preprocessing token.</p>
+<h3 id="conditional-inclusion">Conditional inclusion</h3>
+<p>Rule 16-1-1	(Required)	The defined preprocessor operator shall only be used in one of the two standard forms.</p>
+<p>Rule 16-1-2	(Required)	All #else, #elif and #endif preprocessor directives shall reside in the same file as the #if or #ifdef directive to which they are related.</p>
+<h3 id="source-file-inclusion">Source file inclusion</h3>
+<p>Rule 16-2-1	(Required)	The pre-processor shall only be used for file inclusion and include guards.</p>
+<p>Rule 16-2-2	(Required)	C++ macros shall only be used for include guards, type qualifiers, or storage class specifiers.</p>
+<p>Rule 16-2-3	(Required)	Include guards shall be provided.</p>
+<p>Rule 16-2-4	(Required)	The &lsquo;, &ldquo;, /* or // characters shall not occur in a header file name.</p>
+<p>Rule 16-2-5	(Advisory)	The \ character should not occur in a header file name.</p>
+<p>Rule 16-2-6	(Required)	The #include directive shall be followed by either a <filename> or &ldquo;filename&rdquo; sequence.</p>
+<h3 id="macro-replacement">Macro replacement</h3>
+<p>Rule 16-3-1	(Required)	There shall be at most one occurrence of the # or ## operators in a single macro definition.</p>
+<p>Rule 16-3-2	(Advisory)	The # and ## operators should not be used.</p>
+<h3 id="pragma-directive">Pragma directive</h3>
+<p>Rule 16-6-1	(Document)	All uses of the #pragma directive shall be documented.</p>
+<hr>
+<h2 id="library-introduction">Library introduction</h2>
+<h3 id="general-5">General</h3>
+<p>Rule 17-0-1	(Required)	Reserved identifiers, macros and functions in the standard library shall not be defined, redefined or undefined.</p>
+<p>Rule 17-0-2	(Required)	The names of standard library macros and objects shall not be reused.</p>
+<p>Rule 17-0-3	(Required)	The names of standard library functions shall not be overridden.</p>
+<p>Rule 17-0-4	(Document)	All library code shall conform to MISRA C++.</p>
+<p>Rule 17-0-5	(Document)	The setjmp macro and the longjmp function shall not be used.</p>
+<hr>
+<h2 id="language-support-library">Language support library</h2>
+<h3 id="general-6">General</h3>
+<p>Rule 18-0-1	(Required)	The C library shall not be used.</p>
+<p>Rule 18-0-2	(Required)	The library functions atof, atoi and atol from library <cstdlib> shall not be used.</p>
+<p>Rule 18-0-3	(Required)	The library functions abort, exit, getenv and system from library <cstdlib> shall not be used.</p>
+<p>Rule 18-0-4	(Required)	The time handling functions of library <ctime> shall not be used.</p>
+<p>Rule 18-0-5	(Required)	The unbounded functions of library <cstring> shall not be used.</p>
+<h3 id="implementation-properties">Implementation properties</h3>
+<p>Rule 18-2-1	(Required)	The macro offsetof shall not be used.</p>
+<h3 id="dynamic-memory-management">Dynamic memory management</h3>
+<p>Rule 18-4-1	(Required)	Dynamic heap memory allocation shall not be used.</p>
+<h3 id="other-runtime-support">Other runtime support</h3>
+<p>Rule 18-7-1	(Required)	The signal handling facilities of <csignal> shall not be used.</p>
+<hr>
+<h2 id="diagnostics-library">Diagnostics library</h2>
+<h3 id="error-numbers">Error numbers</h3>
+<p>Rule 19-3-1	(Required)	The error indicator errno shall not be used.</p>
+<hr>
+<h2 id="inputoutput-library">Input/output library</h2>
+<h3 id="general-7">General</h3>
+<p>Rule 27-0-1	(Required)	The stream input/output library <cstdio> shall not be used.</p>
+<hr>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-04-19</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/002_misracpp2008%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/misracpp/">MisraCpp</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/012_misracpp2008%E8%A7%84%E8%8C%83/" class="prev" rel="prev" title="Misra C&#43;&#43; 2008 规范"><i class="fas fa-angle-left" aria-hidden="true"></i>Misra C++ 2008 规范</a>
+            <a href="/blog/005_certcpp%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/" class="next" rel="next" title="CERT C&#43;&#43; 规范英文版">CERT C++ 规范英文版<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>
