@@ -7,7 +7,7 @@
         <title>C&#43;&#43; 编码规范 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_googlecpp%E7%BC%96%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
   <meta property="og:site_name" content="LoveIt">
   <meta property="og:title" content="C&#43;&#43; 编码规范">
-  <meta property="og:description" content="C&#43;&#43; 编码规范 本文基于Google官方最新C&#43;&#43; Style Guide（2025版，目标C&#43;&#43;20标准）编写，完整覆盖规范的核心设计哲学、强制规则与工程最佳实践，是工业界最具影响力的C&#43;&#43;工程化编码标准。">
+  <meta property="og:description" content="C&#43;&#43; 编码规范 本文基于Google C&#43;&#43; Style Guide编写，完整覆盖规范的核心设计哲学、强制规则与工程最佳实践，是工业界最具影响力的C&#43;&#43;工程化编码标准。">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -18,7 +18,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
   <meta name="twitter:title" content="C&#43;&#43; 编码规范">
-  <meta name="twitter:description" content="C&#43;&#43; 编码规范 本文基于Google官方最新C&#43;&#43; Style Guide（2025版，目标C&#43;&#43;20标准）编写，完整覆盖规范的核心设计哲学、强制规则与工程最佳实践，是工业界最具影响力的C&#43;&#43;工程化编码标准。">
+  <meta name="twitter:description" content="C&#43;&#43; 编码规范 本文基于Google C&#43;&#43; Style Guide编写，完整覆盖规范的核心设计哲学、强制规则与工程最佳实践，是工业界最具影响力的C&#43;&#43;工程化编码标准。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -34,7 +34,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/zhengqijun0121.github.io\/blog\/001_googlecpp%E7%BC%96%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/"
-        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "","wordcount":  5822 ,
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "","wordcount":  7048 ,
         "url": "https:\/\/zhengqijun0121.github.io\/blog\/001_googlecpp%E7%BC%96%E7%A0%81%E9%A3%8E%E6%A0%BC%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93\/","datePublished": "2026-04-05T09:00:00+08:00","dateModified": "2026-04-05T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
@@ -125,8 +125,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">C++ 编码规范</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/"><i class="far fa-folder" aria-hidden="true"></i>Categories</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-04-05">2026-04-05</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 5822 字&nbsp;
-                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 12 分钟&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-04-05">2026-04-05</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 7048 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 15 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>目录</span>
@@ -166,15 +166,28 @@
     <li><a href="#6-google-奇技">6. Google 奇技</a></li>
     <li><a href="#7-命名规则">7. 命名规则</a>
       <ul>
-        <li><a href="#71-文件名">7.1 文件名</a></li>
-        <li><a href="#72-类名">7.2 类名</a></li>
-        <li><a href="#73-函数名">7.3 函数名</a></li>
-        <li><a href="#74-变量名">7.4 变量名</a></li>
-        <li><a href="#命名补充规则">命名补充规则</a></li>
+        <li><a href="#71-文件命名">7.1 文件命名</a></li>
+        <li><a href="#72-类型命名">7.2 类型命名</a></li>
+        <li><a href="#73-变量命名">7.3 变量命名</a></li>
+        <li><a href="#74-函数命名">7.4 函数命名</a></li>
+        <li><a href="#75-命名空间命名">7.5 命名空间命名</a></li>
+        <li><a href="#76-枚举命名">7.6 枚举命名</a></li>
+        <li><a href="#77-宏命名">7.7 宏命名</a></li>
+        <li><a href="#78-特例命名">7.8 特例命名</a></li>
       </ul>
     </li>
     <li><a href="#8-注释">8. 注释</a></li>
-    <li><a href="#9-代码格式化规则">9. 代码格式化规则</a></li>
+    <li><a href="#9-代码格式化规则">9. 代码格式化规则</a>
+      <ul>
+        <li><a href="#91-行长度">9.1 行长度</a></li>
+        <li><a href="#92-字符编码">9.2 字符编码</a></li>
+        <li><a href="#93-缩进">9.3 缩进</a></li>
+        <li><a href="#94-函数声明与定义">9.4 函数声明与定义</a></li>
+        <li><a href="#95-lambda-表达式">9.5 Lambda 表达式</a></li>
+        <li><a href="#96-函数调用">9.6 函数调用</a></li>
+        <li><a href="#97-列表初始化">9.7 列表初始化</a></li>
+      </ul>
+    </li>
     <li><a href="#九注释规范">九、注释规范</a>
       <ul>
         <li><a href="#91-核心原则">9.1 核心原则</a></li>
@@ -193,7 +206,7 @@
   </ul>
 </nav></div>
             </div><div class="content" id="content"><h1 id="c-编码规范">C++ 编码规范</h1>
-<p>本文基于<strong>Google官方最新C++ Style Guide</strong>（2025版，目标C++20标准）编写，完整覆盖规范的核心设计哲学、强制规则与工程最佳实践，是工业界最具影响力的C++工程化编码标准。</p>
+<p>本文基于<strong>Google C++ Style Guide</strong>编写，完整覆盖规范的核心设计哲学、强制规则与工程最佳实践，是工业界最具影响力的C++工程化编码标准。</p>
 <h2 id="1-头文件">1. 头文件</h2>
 <p>头文件的正确使用直接决定代码的编译效率、可读性和依赖管理，核心规则如下：</p>
 <h3 id="11-基础要求">1.1 基础要求</h3>
@@ -371,7 +384,7 @@ Standard: c++17</code></pre></div>
 <ul>
 <li><strong>短小聚焦</strong>：函数长度建议不超过 <code>40</code> 行，过长的函数必须拆分为更小的子函数，保证逻辑可理解、可测试。</li>
 <li><strong>参数顺序</strong>：输入参数在前，输出参数在后；输入参数优先使用<code>const T&amp;</code>常量引用，输出参数必须使用指针<code>T*</code>，明确标识可修改语义。
-示例：<code>void Parse(const std::string&amp; input, int* output);</code></li>
+示例：<code>void Parse(const std::string&amp; input，int* output);</code></li>
 <li>禁止使用默认函数参数，避免重载决议歧义、API兼容问题。</li>
 <li>函数重载仅当所有重载版本语义完全一致时使用，保证读者无需查看定义即可理解调用行为。</li>
 <li>函数返回值：禁止忽略有状态的返回值（如<code>absl::Status</code>），必须做错误处理。</li>
@@ -384,6 +397,7 @@ Standard: c++17</code></pre></div>
 </ul>
 <hr>
 <h2 id="6-google-奇技">6. Google 奇技</h2>
+<hr>
 <h2 id="7-命名规则">7. 命名规则</h2>
 <p>命名规则是规范中最核心的一致性约束，<strong>见名知意+无歧义</strong>是核心原则，不同类型的实体有严格的命名区分。</p>
 <table>
@@ -458,22 +472,232 @@ Standard: c++17</code></pre></div>
       </tr>
   </tbody>
 </table>
-<h3 id="71-文件名">7.1 文件名</h3>
-<h3 id="72-类名">7.2 类名</h3>
-<h3 id="73-函数名">7.3 函数名</h3>
-<h3 id="74-变量名">7.4 变量名</h3>
-<h3 id="命名补充规则">命名补充规则</h3>
-<ol>
-<li>名称必须表意清晰，禁止无意义缩写，仅允许通用缩写（如<code>i</code>作为循环索引、<code>fqdn</code>、<code>rpc</code>），禁止通过删字母缩写（如<code>cstmr_id</code>替代<code>customer_id</code>）。</li>
-<li>全局变量必须极少使用，命名需加项目前缀，避免冲突；禁止在头文件中定义全局变量。</li>
-<li>宏定义必须尽量避免，优先使用内联函数、枚举、const常量；必须使用时，仅在<code>.cc</code>文件内定义，用后立即<code>#undef</code>，禁止在头文件中导出宏。</li>
-</ol>
+<h3 id="71-文件命名">7.1 文件命名</h3>
+<ul>
+<li>文件名要全部小写，单词之间使用下划线连接。</li>
+</ul>
+<h3 id="72-类型命名">7.2 类型命名</h3>
+<ul>
+<li>类型名称的每个单词首字母均大写，不包含下划线。</li>
+<li>类型包括类、结构体、类型定义 (typedef 或 using)、枚举、类型模板参数。</li>
+</ul>
+<h3 id="73-变量命名">7.3 变量命名</h3>
+<ul>
+<li>变量 (包括函数参数) 和数据成员名一律小写，单词之间用下划线连接。</li>
+</ul>
+<p><strong>普通变量</strong></p>
+<p>举例:</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">string</span> <span class="n">table_name</span><span class="p">;</span>  <span class="c1">// 好 - 用下划线.
+</span></span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="n">tablename</span><span class="p">;</span>   <span class="c1">// 好 - 全小写.
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="n">tableName</span><span class="p">;</span>  <span class="c1">// 差 - 混合大小写
+</span></span></span></code></pre></div></div>
+<p><strong>类成员变量</strong></p>
+<p>不管是静态的还是非静态的，类数据成员都可以和普通变量一样，但要接下划线.</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">TableInfo</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">string</span> <span class="n">table_name_</span><span class="p">;</span>  <span class="c1">// 好 - 后加下划线.
+</span></span></span><span class="line"><span class="cl">    <span class="n">string</span> <span class="n">tablename_</span><span class="p">;</span>   <span class="c1">// 好.
+</span></span></span><span class="line"><span class="cl">    <span class="k">static</span> <span class="n">Pool</span><span class="o">&lt;</span><span class="n">TableInfo</span><span class="o">&gt;*</span> <span class="n">pool_</span><span class="p">;</span>  <span class="c1">// 好.
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></div></div>
+<p><strong>结构体变量</strong></p>
+<p>不管是静态的还是非静态的，结构体数据成员都可以和普通变量一样，不用像类那样接下划线:</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">UrlTableProperties</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">num_entries</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">static</span> <span class="n">Pool</span><span class="o">&lt;</span><span class="n">UrlTableProperties</span><span class="o">&gt;*</span> <span class="n">pool</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></div></div>
+<p><strong>常量</strong></p>
+<p>声明为 <code>constexpr</code> 或 <code>const</code> 的变量，或在程序运行期间其值始终保持不变的，命名时以 <code>k</code> 开头，大小写混合。例如:</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">int</span> <span class="n">kDaysInAWeek</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span></span></span></code></pre></div></div>
+<h3 id="74-函数命名">7.4 函数命名</h3>
+<ul>
+<li>常规函数使用大小写混合，取值和设值函数则要求与变量名匹配:</li>
+</ul>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">MyExcitingFunction</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">MyExcitingMethod</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">my_exciting_member_variable</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">set_my_exciting_member_variable</span><span class="p">();</span></span></span></code></pre></div></div>
+<ul>
+<li>对于首字母缩写的单词，更倾向于将它们视作一个单词进行首字母大写。写作 <code>StartRpc()</code> 而非 <code>StartRPC()</code>。</li>
+</ul>
+<h3 id="75-命名空间命名">7.5 命名空间命名</h3>
+<ul>
+<li>命名空间使用小写字母，单词间用下划线分隔。</li>
+<li>对于 <code>internal</code> 命名空间，一般为内部实现使用。</li>
+</ul>
+<h3 id="76-枚举命名">7.6 枚举命名</h3>
+<ul>
+<li>枚举的命名应当和 <strong>常量</strong> 或 <strong>宏</strong> 一致: <code>kEnumName</code> 或是 <code>ENUM_NAME</code></li>
+<li>单独的枚举值应该优先采用 <strong>常量</strong> 的命名方式. 但 <strong>宏</strong> 方式的命名也可以接受。</li>
+</ul>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">enum</span> <span class="nc">UrlTableErrors</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">kOK</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">kErrorOutOfMemory</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">kErrorMalformedInput</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">enum</span> <span class="nc">AlternateUrlTableErrors</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OK</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">OUT_OF_MEMORY</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MALFORMED_INPUT</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></div></div>
+<h3 id="77-宏命名">7.7 宏命名</h3>
+<ul>
+<li>宏命名采用全大写的方式，单词之间使用下划线分割。</li>
+</ul>
+<h3 id="78-特例命名">7.8 特例命名</h3>
+<ul>
+<li>如果命名的实体与已有 <code>C/C++</code> 实体相似，可参考现有命名策略.</li>
+</ul>
+<hr>
 <h2 id="8-注释">8. 注释</h2>
+<ul>
+<li>注释虽然写起来很痛苦，但对保证代码可读性至关重要。</li>
+<li>注释固然很重要，但最好的代码应当本身就是文档. 有意义的类型名和变量名，要远胜过要用注释解释的含糊不清的名字。</li>
+<li>可以使用 <code>//</code> 或 <code>/* */</code> 注释，但是需要统一。</li>
+<li>在每个文件头添加一个版权声明。</li>
+</ul>
+<hr>
 <h2 id="9-代码格式化规则">9. 代码格式化规则</h2>
 <p>格式化规则的核心是保证视觉一致性，所有规则可通过<code>clang-format</code>工具自动化落地。</p>
+<h3 id="91-行长度">9.1 行长度</h3>
+<ul>
+<li>每一行代码字符数不超过 <code>120</code>。</li>
+</ul>
+<h3 id="92-字符编码">9.2 字符编码</h3>
+<ul>
+<li>尽量不使用非 <code>ASCII</code> 字符，使用时必须使用 <code>UTF-8</code> 编码.</li>
+</ul>
+<h3 id="93-缩进">9.3 缩进</h3>
+<ul>
+<li>只使用空格，每次缩进 <code>4</code> 个空格。</li>
+<li>禁止使用 <code>Tab</code> 字符。</li>
+</ul>
+<h3 id="94-函数声明与定义">9.4 函数声明与定义</h3>
+<ul>
+<li>返回类型和函数名在同一行，参数也尽量放在同一行，如果放不下就对形参分行，分行方式与 函数调用 一致.</li>
+</ul>
+<p>函数看上去像这样:</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">ReturnType</span> <span class="n">ClassName</span><span class="o">::</span><span class="n">FunctionName</span><span class="p">(</span><span class="n">Type</span> <span class="n">par_name1</span><span class="err">，</span><span class="n">Type</span> <span class="n">par_name2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DoSomething</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<p>如果同一行文本太多，放不下所有参数:</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">ReturnType</span> <span class="n">ClassName</span><span class="o">::</span><span class="n">ReallyLongFunctionName</span><span class="p">(</span><span class="n">Type</span> <span class="n">par_name1</span><span class="err">，</span><span class="n">Type</span> <span class="n">par_name2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                             <span class="n">Type</span> <span class="n">par_name3</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DoSomething</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<p>甚至连第一个参数都放不下:</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">ReturnType</span> <span class="n">LongClassName</span><span class="o">::</span><span class="n">ReallyReallyReallyLongFunctionName</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Type</span> <span class="n">par_name1</span><span class="err">，</span> <span class="c1">// 8 space indent
+</span></span></span><span class="line"><span class="cl">        <span class="n">Type</span> <span class="n">par_name2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Type</span> <span class="n">par_name3</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">DoSomething</span><span class="p">();</span>  <span class="c1">// 4 space indent
+</span></span></span><span class="line"><span class="cl">    <span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+<p>注意以下几点:</p>
+<ul>
+<li>使用好的参数名。</li>
+<li>只有在参数未被使用或者其用途非常明显时，才能省略参数名。</li>
+<li>如果返回类型和函数名在一行放不下，分行。</li>
+<li>如果返回类型与函数声明或定义分行了，不要缩进。</li>
+<li>左圆括号总是和函数名在同一行。</li>
+<li>函数名和左圆括号间永远没有空格。</li>
+<li>圆括号与参数间没有空格。</li>
+<li>左大括号总在最后一个参数同一行的末尾处，不另起新行。</li>
+<li>右大括号总是单独位于函数最后一行，或者与左大括号同一行。</li>
+<li>右圆括号和左大括号间总是有一个空格。</li>
+<li>所有形参应尽可能对齐。</li>
+<li>缺省缩进为 4 个空格。</li>
+<li>换行后的参数保持 8 个空格的缩进。</li>
+</ul>
+<h3 id="95-lambda-表达式">9.5 Lambda 表达式</h3>
+<ul>
+<li>Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获列表同理，表项用逗号隔开。</li>
+<li>若用引用捕获，在变量名和 <code>&amp;</code> 之间不留空格.</li>
+</ul>
+<h3 id="96-函数调用">9.6 函数调用</h3>
+<ul>
+<li>要么一行写完函数调用，要么在圆括号里对参数分行，要么参数另起一行且缩进四格。如果没有其它顾虑的话，尽可能精简行数，比如把多个参数适当地放在同一行里。</li>
+</ul>
+<p>函数调用遵循如下形式：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">retval</span> <span class="o">=</span> <span class="n">DoSomething</span><span class="p">(</span><span class="n">argument1</span><span class="err">，</span><span class="n">argument2</span><span class="err">，</span><span class="n">argument3</span><span class="p">);</span></span></span></code></pre></div></div>
+<p>如果同一行放不下，可断为多行，后面每一行都和第一个实参对齐，左圆括号后和右圆括号前不要留空格：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">retval</span> <span class="o">=</span> <span class="n">DoSomething</span><span class="p">(</span><span class="n">averyveryveryverylongargument1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                          <span class="n">argument2</span><span class="err">，</span><span class="n">argument3</span><span class="p">);</span></span></span></code></pre></div></div>
+<p>参数也可以放在次行，缩进四格：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(...)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">...</span>
+</span></span><span class="line"><span class="cl">    <span class="p">...</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(...)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">DoSomething</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">argument1</span><span class="err">，</span><span class="n">argument2</span><span class="err">，</span> <span class="c1">// 4 空格缩进
+</span></span></span><span class="line"><span class="cl">            <span class="n">argument3</span><span class="err">，</span><span class="n">argument4</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span></span></span></code></pre></div></div>
+<h3 id="97-列表初始化">9.7 列表初始化</h3>
 <ol>
-<li><strong>行长度</strong>：每行代码最多80个字符，仅注释中的长URL、不可拆分的字符串字面量、头文件保护宏、include语句可例外。</li>
-<li><strong>缩进</strong>：每个嵌套块使用<strong>2个空格</strong>缩进，绝对禁止使用Tab字符，编辑器需设置Tab自动转为空格。</li>
 <li><strong>大括号</strong>：
 <ul>
 <li>所有控制流语句（<code>if</code>/<code>else</code>/<code>for</code>/<code>while</code>/<code>switch</code>）必须使用大括号，即使单行语句也不例外，杜绝Apple goto fail类漏洞。</li>
@@ -589,7 +813,7 @@ Standard: c++17</code></pre></div>
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.160.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

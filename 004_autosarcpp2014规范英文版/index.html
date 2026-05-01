@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>AUTOSAR C&#43;&#43; 2014 规范英文版 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/004_autosarcpp2014%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="AUTOSAR C&#43;&#43; 2014 规范英文版">
+  <meta property="og:description" content="AUTOSAR Cpp 2014 规范英文版 https://ww2.mathworks.cn/help/bugfinder/autosar-c-14.html?lang=en
+中文版
+Language independent issues [Rule A0-1-1] A project shall not contain instances of non-volatile variables being given values that are not subsequently used.
+[Rule A0-1-2] The value returned by a function having a non-void return type that is not an overloaded operator shall be used.
+[Rule A0-1-3] Every function defined in an anonymous namespace, or static function with internal linkage, or private member function shall be used.">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-04-19T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-04-19T10:00:00+08:00">
+    <meta property="article:tag" content="AUTOSAR">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="AUTOSAR C&#43;&#43; 2014 规范英文版">
+  <meta name="twitter:description" content="AUTOSAR Cpp 2014 规范英文版 https://ww2.mathworks.cn/help/bugfinder/autosar-c-14.html?lang=en
+中文版
+Language independent issues [Rule A0-1-1] A project shall not contain instances of non-volatile variables being given values that are not subsequently used.
+[Rule A0-1-2] The value returned by a function having a non-void return type that is not an overloaded operator shall be used.
+[Rule A0-1-3] Every function defined in an anonymous namespace, or static function with internal linkage, or private member function shall be used.">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/004_autosarcpp2014%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/005_certcpp%E8%A7%84%E8%8C%83/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/014_autosarcpp2014%E8%A7%84%E8%8C%83/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "AUTOSAR C++ 2014 规范英文版",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/004_autosarcpp2014%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "AUTOSAR","wordcount":  6375 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/004_autosarcpp2014%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88\/","datePublished": "2026-04-19T09:00:00+08:00","dateModified": "2026-04-19T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/004_autosarcpp2014%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/004_autosarcpp2014%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">AUTOSAR C++ 2014 规范英文版</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/autosar/"><i class="far fa-folder" aria-hidden="true"></i>AUTOSAR</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-04-19">2026-04-19</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 6375 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 13 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#language-independent-issues">Language independent issues</a></li>
+    <li><a href="#general-principles">General principles</a></li>
+    <li><a href="#lexical-conventions">Lexical conventions</a></li>
+    <li><a href="#basic-concepts">Basic concepts</a></li>
+    <li><a href="#standard-conventions">Standard conventions</a></li>
+    <li><a href="#expressions">Expressions</a></li>
+    <li><a href="#statements">Statements</a></li>
+    <li><a href="#declarations">Declarations</a></li>
+    <li><a href="#declarators">Declarators</a></li>
+    <li><a href="#classes">Classes</a></li>
+    <li><a href="#derived-classes">Derived classes</a></li>
+    <li><a href="#member-access-control">Member access control</a></li>
+    <li><a href="#special-member-functions">Special member functions</a></li>
+    <li><a href="#overriding">Overriding</a></li>
+    <li><a href="#templates">Templates</a></li>
+    <li><a href="#exception-handling">Exception handling</a></li>
+    <li><a href="#preprocessing-directives">Preprocessing directives</a></li>
+    <li><a href="#library-introduction">Library Introduction</a></li>
+    <li><a href="#language-support-library">Language support library</a></li>
+    <li><a href="#diagnostics-library">Diagnostics library</a></li>
+    <li><a href="#genaral-utilities-library">Genaral utilities library</a></li>
+    <li><a href="#strings-library">Strings library</a></li>
+    <li><a href="#containers-library">Containers library</a></li>
+    <li><a href="#algorithms-library">Algorithms library</a></li>
+    <li><a href="#ramdom-number-generation">Ramdom number generation</a></li>
+    <li><a href="#inputoutput-library">Input/output library</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="autosar-cpp-2014-规范英文版">AUTOSAR Cpp 2014 规范英文版</h1>
+<blockquote>
+<p><a href="https://ww2.mathworks.cn/help/bugfinder/autosar-c-14.html?lang=en" target="_blank" rel="noopener noreffer ">https://ww2.mathworks.cn/help/bugfinder/autosar-c-14.html?lang=en</a></p>
+</blockquote>
+<p><strong><a href="./014_AutosarCpp2014%e8%a7%84%e8%8c%83.md" rel="">中文版</a></strong></p>
+<hr>
+<h2 id="language-independent-issues">Language independent issues</h2>
+<p>[Rule A0-1-1] A project shall not contain instances of non-volatile variables being given values that are not subsequently used.</p>
+<p>[Rule A0-1-2] The value returned by a function having a <code>non-void</code> return type that is not an overloaded operator shall be used.</p>
+<p>[Rule A0-1-3] Every function defined in an anonymous namespace, or static function with internal linkage, or private member function shall be used.</p>
+<p>[Rule A0-1-4] There shall be no unused named parameters in <code>non-virtual</code> functions.</p>
+<p>[Rule A0-1-5] There shall be no unused named parameters in the set of parameters for a virtual function and all the functions that override it.</p>
+<p>[Rule A0-1-6] There should be no unused type declarations.</p>
+<p>[Rule A0-4-2] Type <code>long double</code> shall not be used.</p>
+<p>[Rule A0-4-4] Range, domain and pole errors shall be checked when using math functions.</p>
+<p>[Rule M0-1-1] A project shall not contain unreachable code.</p>
+<p>[Rule M0-1-2] A project shall not contain infeasible paths.</p>
+<p>[Rule M0-1-3] A project shall not contain unused variables.</p>
+<p>[Rule M0-1-4] A project shall not contain non-volatile <code>POD</code> variables having only one use.</p>
+<p>[Rule M0-1-8] All functions with <code>void</code> return type shall have external side effect(s).</p>
+<p>[Rule M0-1-9] There shall be no dead code.</p>
+<p>[Rule M0-1-10] Every defined function should be called at least once.</p>
+<p>[Rule M0-2-1] An object shall not be assigned to an overlapping object.</p>
+<p>[Rule M0-3-2] If a function generates error information, then that error information shall be tested.</p>
+<hr>
+<h2 id="general-principles">General principles</h2>
+<p>[Rule A1-1-1] All code shall conform to <code>ISO/IEC 14882:2014</code> - Programming Language C++ and shall not use deprecated features.</p>
+<hr>
+<h2 id="lexical-conventions">Lexical conventions</h2>
+<p>[Rule A2-3-1] Only those characters specified in the <code>C++</code> Language Standard basic source character set shall be used in the source code.</p>
+<p>[Rule A2-5-1] Trigraphs shall not be used.</p>
+<p>[Rule A2-5-2] Digraphs shall not be used.</p>
+<p>[Rule A2-7-1] The character <code>\</code> shall not occur as a last character of a <code>C++</code> comment.</p>
+<p>[Rule A2-7-2] Sections of code shall not be &ldquo;commented out&rdquo;.</p>
+<p>[Rule A2-7-3] All declarations of &ldquo;user-defined&rdquo; types, static and non-static data members, functions and methods shall be preceded by documentation.</p>
+<p>[Rule A2-8-1] A header file name should reflect the logical entity for which it provides declarations..</p>
+<p>[Rule A2-8-2] An implementation file name should reflect the logical entity for which it provides definitions..</p>
+<p>[Rule A2-10-1] An identifier declared in an inner scope shall not hide an identifier declared in an outer scope.</p>
+<p>[Rule A2-10-4] The identifier name of a non-member object with static storage duration or static function shall not be reused within a namespace.</p>
+<p>[Rule A2-10-5] An identifier name of a function with static storage duration or a non-member object with external or internal linkage should not be reused.</p>
+<p>[Rule A2-10-6] A class or enumeration name shall not be hidden by a variable, function or enumerator declaration in the same scope.</p>
+<p>[Rule A2-11-1] <code>Volatile</code> keyword shall not be used.</p>
+<p>[Rule A2-13-1] Only those escape sequences that are defined in <code>ISO/IEC 14882:2014</code> shall be used.</p>
+<p>[Rule A2-13-2] String literals with different encoding prefixes shall not be concatenated.</p>
+<p>[Rule A2-13-3] Type <code>wchar_t</code> shall not be used.</p>
+<p>[Rule A2-13-4] String literals shall not be assigned to <code>non-constant</code> pointers.</p>
+<p>[Rule A2-13-5] Hexadecimal constants should be uppercase.</p>
+<p>[Rule A2-13-6] Universal character names shall be used only inside character or string literals.</p>
+<p>[Rule M2-7-1] The character sequence <code>/*</code> shall not be used within a <code>C-style</code> comment.</p>
+<p>[Rule M2-10-1] Different identifiers shall be typographically unambiguous.</p>
+<p>[Rule M2-13-2] Octal constants (other than zero) and octal escape sequences (other than &ldquo;<code>\0</code>&rdquo; ) shall not be used.</p>
+<p>[Rule M2-13-3] A &ldquo;<code>U</code>&rdquo; suffix shall be applied to all octal or hexadecimal integer literals of unsigned type.</p>
+<p>[Rule M2-13-4] Literal suffixes shall be upper case.</p>
+<hr>
+<h2 id="basic-concepts">Basic concepts</h2>
+<p>[Rule A3-1-1] It shall be possible to include any header file in multiple translation units without violating the One Definition Rule.</p>
+<p>[Rule A3-1-2] Header files, that are defined locally in the project, shall have a file name extension of one of: <code>.h</code>, <code>.hpp</code> or <code>.hxx</code>.</p>
+<p>[Rule A3-1-3] Implementation files, that are defined locally in the project, should have a file name extension of &ldquo;<code>.cpp</code>&rdquo;.</p>
+<p>[Rule A3-1-4] When an array with external linkage is declared, its size shall be stated explicitly.</p>
+<p>[Rule A3-1-5] A function definition shall only be placed in a class definition if (1) the function is intended to be inlined (2) it is a member function template (3) it is a member function of a class template.</p>
+<p>[Rule A3-1-6] Trivial accessor and mutator functions should be inlined.</p>
+<p>[Rule A3-3-1] Objects or functions with external linkage (including members of named namespaces) shall be declared in a header file.</p>
+<p>[Rule A3-3-2] Static and thread-local objects shall be constant-initialized.</p>
+<p>[Rule A3-8-1] An object shall not be accessed outside of its lifetime.</p>
+<p>[Rule A3-9-1] Fixed width integer types from <code>&lt;cstdint&gt;</code>, indicating the size and signedness, shall be used in place of the basic numerical types.</p>
+<p>[Rule M3-1-2] Functions shall not be declared at block scope.</p>
+<p>[Rule M3-2-1] All declarations of an object or function shall have compatible types.</p>
+<p>[Rule M3-2-2] The One Definition Rule shall not be violated.</p>
+<p>[Rule M3-2-3] A type, object or function that is used in multiple translation units shall be declared in one and only one file.</p>
+<p>[Rule M3-2-4] An identifier with external linkage shall have exactly one definition.</p>
+<p>[Rule M3-3-2] If a function has internal linkage then all re-declarations shall include the <code>static</code> storage class specifier.</p>
+<p>[Rule M3-4-1] An identifier declared to be an object or type shall be defined in a block that minimizes its visibility.</p>
+<p>[Rule M3-9-1] The types used for an object, a function return type, or a function parameter shall be token-for-token identical in all declarations and re-declarations.</p>
+<p>[Rule M3-9-3] The underlying bit representations of floating-point values shall not be used.</p>
+<hr>
+<h2 id="standard-conventions">Standard conventions</h2>
+<p>[Rule A4-5-1] Expressions with type <code>enum</code> or <code>enum class</code> shall not be used as operands to built-in and overloaded operators other than the subscript operator <code>[]</code>, the assignment operator <code>=</code>, the equality operators <code>==</code> and <code>!=</code>, the unary <code>&amp;</code> operator, and the relational operators <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>.</p>
+<p>[Rule A4-7-1] An integer expression shall not lead to data loss.</p>
+<p>[Rule A4-10-1] Only <code>nullptr</code> literal shall be used as the null-pointer-constraint.</p>
+<p>[Rule M4-5-1] Expressions with type <code>bool</code> shall not be used as operands to built-in operators other than the assignment operator <code>=</code>, the logical operators <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>, the equality operators <code>==</code> and <code>!=</code>, the unary <code>&amp;</code> operator, and the conditional operator.</p>
+<p>[Rule M4-5-3] Expressions with type (plain) char and wchar_t shall not be used as operands to built-in operators other than the assignment operator =, the equality operators == and ! =, and the unary &amp; operator.</p>
+<p>[Rule M4-10-1] <code>NULL</code> shall not be used as an integer value.</p>
+<p>[Rule M4-10-2] Literal zero (<code>0</code>) shall not be used as the null-pointer-constant.</p>
+<hr>
+<h2 id="expressions">Expressions</h2>
+<p>[Rule A5-0-1] The value of an expression shall be the same under any order of evaluation that the standard permits.</p>
+<p>[Rule A5-0-2] The condition of an <code>if-statement</code> and the condition of an iteration statement shall have type <code>bool</code>.</p>
+<p>[Rule A5-0-3] The declaration of objects shall contain no more than two levels of pointer indirection.</p>
+<p>[Rule A5-0-4] Pointer arithmetic shall not be used with pointers to <code>non-final</code> classes.</p>
+<p>[Rule A5-1-1] Literal values shall not be used apart from type initialization, otherwise symbolic names shall be used instead.</p>
+<p>[Rule A5-1-2] Variables shall not be implicitly captured in a <code>lambda</code> expression.</p>
+<p>[Rule A5-1-3] Parameter list (possibly empty) shall be included in every <code>lambda</code> expression.</p>
+<p>[Rule A5-1-4] A <code>lambda</code> expression object shall not outlive any of its reference-captured objects.</p>
+<p>[Rule A5-1-6] Return type of a non-void return type <code>lambda</code> expression should be explicitly specified.</p>
+<p>[Rule A5-1-7] A <code>lambda</code> shall not be an operand to <code>decltype</code> or <code>typeid</code>.</p>
+<p>[Rule A5-1-8] Lambda expressions should not be defined inside another <code>lambda</code> expression.</p>
+<p>[Rule A5-1-9] Identical unnamed <code>lambda</code> expressions shall be replaced with a named function or a named <code>lambda</code> expression.</p>
+<p>[Rule A5-2-1] <code>dynamic_cast</code> should not be used.</p>
+<p>[Rule A5-2-2] Traditional <code>C-style</code> casts shall not be used.</p>
+<p>[Rule A5-2-3] A cast shall not remove any <code>const</code> or <code>volatile</code> qualification from the type of a pointer or reference.</p>
+<p>[Rule A5-2-4] <code>reinterpret_cast</code> shall not be used.</p>
+<p>[Rule A5-2-5] An array or container shall not be accessed beyond its range.</p>
+<p>[Rule A5-2-6] The operands of a logical <code>&amp;&amp;</code> or <code>||</code> shall be parenthesized if the operands contain binary operators.</p>
+<p>[Rule A5-3-1] Evaluation of the operand to the <code>typeid</code> operator shall not contain side effects.</p>
+<p>[Rule A5-3-2] Null pointers shall not be dereferenced.</p>
+<p>[Rule A5-3-3] Pointers to incomplete class types shall not be deleted.</p>
+<p>[Rule A5-5-1] A pointer to member shall not access non-existent class members.</p>
+<p>[Rule A5-6-1] The right hand operand of the integer division or remainder operators shall not be equal to zero.</p>
+<p>[Rule A5-10-1] A pointer to member virtual function shall only be tested for equality with null-pointer-constant.</p>
+<p>[Rule A5-16-1] The ternary conditional operator shall not be used as a sub-expression.</p>
+<p>[Rule M5-0-2] Limited dependence should be placed on <code>C++</code> operator precedence rules in expressions.</p>
+<p>[Rule M5-0-3] A cvalue expression shall not be implicitly converted to a different underlying type.</p>
+<p>[Rule M5-0-4] An implicit integral conversion shall not change the signedness of the underlying type.</p>
+<p>[Rule M5-0-5] There shall be no implicit floating-integral conversions.</p>
+<p>[Rule M5-0-6] An implicit integral or floating-point conversion shall not reduce the size of the underlying type.</p>
+<p>[Rule M5-0-7] There shall be no explicit floating-integral conversions of a cvalue expression.</p>
+<p>[Rule M5-0-8] An explicit integral or floating-point conversion shall not increase the size of the underlying type of a cvalue expression.</p>
+<p>[Rule M5-0-9] An explicit integral conversion shall not change the signedness of the underlying type of a cvalue expression.</p>
+<p>[Rule M5-0-10] If the bitwise operators <code>~</code> and <code>&lt;&lt;</code> are applied to an operand with an underlying type of <code>unsigned char</code> or <code>unsigned short</code>, the result shall be immediately cast to the underlying type of the operand.</p>
+<p>[Rule M5-0-11] The plain <code>char</code> type shall only be used for the storage and use of character values.</p>
+<p>[Rule M5-0-12] <code>Signed char</code> and <code>unsigned char</code> type shall only be used for the storage and use of numeric values.</p>
+<p>[Rule M5-0-14] The first operand of a conditional-operator shall have type <code>bool</code>.</p>
+<p>[Rule M5-0-15] Array indexing shall be the only form of pointer arithmetic.</p>
+<p>[Rule M5-0-16] A pointer operand and any pointer resulting from pointer arithmetic using that operand shall both address elements of the same array.</p>
+<p>[Rule M5-0-17] Subtraction between pointers shall only be applied to pointers that address elements of the same array.</p>
+<p>[Rule M5-0-18] <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code> shall not be applied to objects of pointer type, except where they point to the same array.</p>
+<p>[Rule M5-0-20] Non-constant operands to a binary bitwise operator shall have the same underlying type.</p>
+<p>[Rule M5-0-21] Bitwise operators shall only be applied to operands of unsigned underlying type.</p>
+<p>[Rule M5-2-2] A pointer to a virtual base class shall only be cast to a pointer to a derived class by means of <code>dynamic_cast</code>.</p>
+<p>[Rule M5-2-3] Casts from a base class to a derived class should not be performed on polymorphic types.</p>
+<p>[Rule M5-2-6] A cast shall not convert a pointer to a function to any other pointer type, including a pointer to function type.</p>
+<p>[Rule M5-2-8] An object with integer type or pointer to <code>void</code> type shall not be converted to an object with pointer type.</p>
+<p>[Rule M5-2-9] A cast shall not convert a pointer type to an integral type.</p>
+<p>[Rule M5-2-10] The increment (<code>++</code>) and decrement (<code>--</code>) operators shall not be mixed with other operators in an expression.</p>
+<p>[Rule M5-2-11] The comma operator, <code>&amp;&amp;</code> operator and the <code>||</code> operator shall not be overloaded.</p>
+<p>[Rule M5-2-12] An identifier with array type passed as a function argument shall not decay to a pointer.</p>
+<p>[Rule M5-3-1] Each operand of the <code>!</code> operator, the logical <code>&amp;&amp;</code> or the logical <code>||</code> operators shall have type bool.</p>
+<p>[Rule M5-3-2] The unary minus operator shall not be applied to an expression whose underlying type is unsigned.</p>
+<p>[Rule M5-3-3] The unary <code>&amp;</code> operator shall not be overloaded.</p>
+<p>[Rule M5-3-4] Evaluation of the operand to the <code>sizeof</code> operator shall not contain side effects.</p>
+<p>[Rule M5-8-1] The right hand operand of a shift operator shall lie between <code>zero</code> and one less than the width in bits of the underlying type of the left hand operand.</p>
+<p>[Rule M5-14-1] The right hand operand of a logical <code>&amp;&amp;</code>, <code>||</code> operators shall not contain side effects.</p>
+<p>[Rule M5-18-1] The comma operator shall not be used.</p>
+<p>[Rule M5-19-1] Evaluation of constant unsigned integer expressions shall not lead to wrap-around.</p>
+<hr>
+<h2 id="statements">Statements</h2>
+<p>[Rule A6-2-1] Move and copy assignment operators shall either move or respectively copy base classes and data members of a class, without any side effects.</p>
+<p>[Rule A6-2-2] Expression statements shall not be explicit calls to constructors of temporary objects only.</p>
+<p>[Rule A6-4-1] A <code>switch</code> statement shall have at least two <code>case-clauses</code>, distinct from the <code>default</code> label.</p>
+<p>[Rule A6-5-1] A <code>for-loop</code> that loops through all elements of the container and does not use its <code>loop-counter</code> shall not be used.</p>
+<p>[Rule A6-5-2] A <code>for</code> loop shall contain a single <code>loop-counter</code> which shall not have floating-point type.</p>
+<p>[Rule A6-5-3] <code>Do</code> statements should not be used.</p>
+<p>[Rule A6-5-4] <code>For-init-statement</code> and expression should not perform actions other than loop-counter initialization and modification.</p>
+<p>[Rule A6-6-1] The <code>goto</code> statement shall not be used.</p>
+<p>[Rule M6-2-1] Assignment operators shall not be used in sub-expressions.</p>
+<p>[Rule M6-2-2] Floating-point expressions shall not be directly or indirectly tested for equality or inequality.</p>
+<p>[Rule M6-2-3] Before preprocessing, a null statement shall only occur on a line by itself; it may be followed by a comment, provided that the first character following the null statement is a white-space character.</p>
+<p>[Rule M6-3-1] The statement forming the body of a <code>switch</code>, <code>while</code>, <code>do ... while</code> or <code>for</code> statement shall be a compound statement.</p>
+<p>[Rule M6-4-1] An <code>if</code> ( condition ) construct shall be followed by a compound statement. The <code>else</code> keyword shall be followed by either a compound statement, or another <code>if</code> statement.</p>
+<p>[Rule M6-4-2] All <code>if ... else if</code> constructs shall be terminated with an <code>else</code> clause.</p>
+<p>[Rule M6-4-3] A <code>switch</code> statement shall be a well-formed <code>switch</code> statement.</p>
+<p>[Rule M6-4-4] A <code>switch-label</code> shall only be used when the most closely-enclosing compound statement is the body of a <code>switch</code> statement.</p>
+<p>[Rule M6-4-5] An unconditional <code>throw</code> or <code>break</code> statement shall terminate every non-empty <code>switch-clause</code>.</p>
+<p>[Rule M6-4-6] The final clause of a switch statement shall be the default-clause.</p>
+<p>[Rule M6-4-7] The condition of a switch statement shall not have bool type.</p>
+<p>[Rule M6-5-2] If loop-counter is not modified by <code>--</code> or <code>++</code>, then, within condition, the loop-counter shall only be used as an operand to <code>&lt;=</code>, <code>&lt;</code>, <code>&gt;</code> or <code>&gt;=</code>.</p>
+<p>[Rule M6-5-3] The loop-counter shall not be modified within condition or statement.</p>
+<p>[Rule M6-5-4] The loop-counter shall be modified by one of: <code>--</code>, <code>++</code>, <code>-=n</code>, or <code>+=n</code>; where <code>n</code> remains constant for the duration of the loop.</p>
+<p>[Rule M6-5-5] A loop-control-variable other than the loop-counter shall not be modified within condition or expression.</p>
+<p>[Rule M6-5-6] A loop-control-variable other than the loop-counter which is modified in statement shall have type <code>bool</code>.</p>
+<p>[Rule M6-6-1] Any label referenced by a <code>goto</code> statement shall be declared in the same block, or in a block enclosing the <code>goto</code> statement.</p>
+<p>[Rule M6-6-2] The <code>goto</code> statement shall jump to a label declared later in the same function body.</p>
+<p>[Rule M6-6-3] The <code>continue</code> statement shall only be used within a well-formed <code>for</code> loop.</p>
+<hr>
+<h2 id="declarations">Declarations</h2>
+<p>[Rule A7-1-1] <code>Constexpr</code> or <code>const</code> specifiers shall be used for immutable data declaration.</p>
+<p>[Rule A7-1-2] The <code>constexpr</code> specifier shall be used for values that can be determined at compile time.</p>
+<p>[Rule A7-1-3] <code>CV-qualifiers</code> shall be placed on the right hand side of the type that is a <code>typedef</code> or a <code>using</code> name.</p>
+<p>[Rule A7-1-4] The <code>register</code> keyword shall not be used.</p>
+<p>[Rule A7-1-5] The <code>auto</code> specifier shall not be used apart from following cases: (1) to declare that a variable has the same type as return type of a function call, (2) to declare that a variable has the same type as initializer of non-fundamental type, (3) to declare parameters of a generic <code>lambda</code> expression, (4) to declare a function template using trailing return type syntax.</p>
+<p>[Rule A7-1-6] The <code>typedef</code> specifier shall not be used.</p>
+<p>[Rule A7-1-7] Each expression statement and identifier declaration shall be placed on a separate line.</p>
+<p>[Rule A7-1-8] A non-type specifier shall be placed before a type specifier in a declaration.</p>
+<p>[Rule A7-1-9] A <code>class</code>, <code>structure</code>, or <code>enumeration</code> shall not be declared in the definition of its type.</p>
+<p>[Rule A7-2-1] An expression with enum underlying type shall only have values corresponding to the enumerators of the enumeration.</p>
+<p>[Rule A7-2-2] Enumeration underlying type shall be explicitly defined.</p>
+<p>[Rule A7-2-3] Enumerations shall be declared as scoped <code>enum classes</code>.</p>
+<p>[Rule A7-2-4] In an enumeration, either (1) none, (2) the first or (3) all enumerators shall be initialized.</p>
+<p>[Rule A7-3-1] All overloads of a function shall be visible from where it is called.</p>
+<p>[Rule A7-5-1] A function shall not return a reference or a pointer to a parameter that is passed by reference to <code>const</code>.</p>
+<p>[Rule A7-5-2] Functions shall not call themselves, either directly or indirectly.</p>
+<p>[Rule A7-6-1] Functions declared with the <code>[[noreturn]]</code> attribute shall not return.</p>
+<p>[Rule M7-1-2] A pointer or reference parameter in a function shall be declared as pointer to <code>const</code> or reference to <code>const</code> if the corresponding object is not modified.</p>
+<p>[Rule M7-3-1] The global namespace shall only contain <code>main</code>, namespace declarations and <code>extern &quot;C&quot;</code> declarations.</p>
+<p>[Rule M7-3-2] The identifier <code>main</code> shall not be used for a function other than the global function <code>main</code>.</p>
+<p>[Rule M7-3-3] There shall be no unnamed namespaces in header files.</p>
+<p>[Rule M7-3-4] <code>Using-directives</code> shall not be used.</p>
+<p>[Rule M7-3-6] <code>Using-directives</code> and <code>using-declarations</code> (excluding class scope or function scope <code>using-declarations</code>) shall not be used in header files.</p>
+<p>[Rule A7-4-1] The <code>asm</code> declaration shall not be used.</p>
+<p>[Rule M7-4-2] Assembler instructions shall only be introduced using the <code>asm</code> declaration.</p>
+<p>[Rule M7-4-3] Assembly language shall be encapsulated and isolated.</p>
+<p>[Rule M7-5-1] A function shall not return a reference or a pointer to an automatic variable (including parameters), defined within the function.</p>
+<p>[Rule M7-5-2] The address of an object with automatic storage shall not be assigned to another object that may persist after the first object has ceased to exist.</p>
+<hr>
+<h2 id="declarators">Declarators</h2>
+<p>[Rule A8-2-1] When declaring function templates, the trailing return type syntax shall be used if the return type depends on the type of parameters.</p>
+<p>[Rule A8-4-1] Functions shall not be defined using the ellipsis notation.</p>
+<p>[Rule A8-4-2] All exit paths from a function with <code>non-void</code> return type shall have an explicit return statement with an expression.</p>
+<p>[Rule A8-4-3] Common ways of passing parameters should be used..</p>
+<p>[Rule A8-4-4] Multiple output values from a function should be returned as a struct or tuple.</p>
+<p>[Rule A8-4-5] &ldquo;consume&rdquo; parameters declared as <code>X &amp;&amp;</code> shall always be moved from.</p>
+<p>[Rule A8-4-6] &ldquo;forward&rdquo; parameters declared as <code>T &amp;&amp;</code> shall always be forwarded.</p>
+<p>[Rule A8-4-7] &ldquo;in&rdquo; parameters for &ldquo;cheap to copy&rdquo; types shall be passed by value.</p>
+<p>[Rule A8-4-8] Output parameters shall not be used.</p>
+<p>[Rule A8-4-9] &ldquo;in-out&rdquo; parameters declared as <code>T &amp;</code> shall be modified.</p>
+<p>[Rule A8-4-10] A parameter shall be passed by reference if it can&rsquo;t be <code>NULL</code>.</p>
+<p>[Rule A8-4-11] A smart pointer shall only be used as a parameter type if it expresses lifetime semantics.</p>
+<p>[Rule A8-4-12] A <code>std::unique_ptr</code> shall be passed to a function as: (1) a copy to express the function assumes ownership (2) an lvalue reference to express that the function replaces the managed object.</p>
+<p>[Rule A8-4-13] A <code>std::shared_ptr</code> shall be passed to a function as: (1) a copy to express the function shares ownership (2) an lvalue reference to express that the function replaces the managed object (3) a <code>const</code> lvalue reference to express that the function retains a reference count.</p>
+<p>[Rule A8-4-14] Interfaces shall be precisely and strongly typed.</p>
+<p>[Rule A8-5-0] All memory shall be initialized before it is read.</p>
+<p>[Rule A8-5-1] In an initialization list, the order of initialization shall be following: (1) virtual base classes in depth and left to right order of the inheritance graph, (2) direct base classes in left to right order of inheritance list, (3) non-static data members in the order they were declared in the class definition.</p>
+<p>[Rule A8-5-2] Braced-initialization <code>{}</code>, without equals sign, shall be used for variable initialization.</p>
+<p>[Rule A8-5-4] If a class has a user-declared constructor that takes a parameter of type <code>std::initializer_list</code>, then it shall be the only constructor apart from special member function constructors.</p>
+<p>[Rule A8-5-3] A variable of type <code>auto</code> shall not be initialized using <code>{}</code> or <code>={}</code> braced-initialization.</p>
+<p>[Rule M8-0-1] An init-declarator-list or a member-declarator-list shall consist of a single init-declarator or member-declarator respectively.</p>
+<p>[Rule M8-3-1] Parameters in an overriding virtual function shall either use the same default arguments as the function they override, or else shall not specify any default arguments.</p>
+<p>[Rule M8-4-2] The identifiers used for the parameters in a re-declaration of a function shall be identical to those in the declaration.</p>
+<p>[Rule M8-4-4] A function identifier shall either be used to call the function or it shall be preceded by <code>&amp;</code>.</p>
+<p>[Rule M8-5-2] Braces shall be used to indicate and match the structure in the non-zero initialization of arrays and structures.</p>
+<hr>
+<h2 id="classes">Classes</h2>
+<p>[Rule A9-3-1] Member functions shall not return <code>non-constant</code> &ldquo;raw&rdquo; pointers or references to private or protected data owned by the class.</p>
+<p>[Rule A9-5-1] <code>Unions</code> shall not be used.</p>
+<p>[Rule A9-6-1] Data types used for interfacing with hardware or conforming to communication protocols shall be trivial, standard-layout and only contain members of types with defined sizes.</p>
+<p>[Rule M9-3-1] <code>Const</code> member functions shall not return <code>non-const</code> pointers or references to class-data.</p>
+<p>[Rule M9-3-3] If a member function can be made <code>static</code> then it shall be made <code>static</code>, otherwise if it can be made <code>const</code> then it shall be made <code>const</code>.</p>
+<p>[Rule M9-6-4] Named bit-fields with signed integer type shall have a length of more than <code>one bit</code>.</p>
+<hr>
+<h2 id="derived-classes">Derived classes</h2>
+<p>[Rule A10-1-1] Class shall not be derived from more than one base class which is not an interface class.</p>
+<p>[Rule A10-2-1] <code>Non-virtual</code> public or protected member functions shall not be redefined in derived classes.</p>
+<p>[Rule A10-3-1] Virtual function declaration shall contain exactly one of the three specifiers: (1) <code>virtual</code>, (2) <code>override</code>, (3) <code>final</code>.</p>
+<p>[Rule A10-3-2] Each overriding virtual function shall be declared with the <code>override</code> or <code>final</code> specifier.</p>
+<p>[Rule A10-3-3] Virtual functions shall not be introduced in a final class.</p>
+<p>[Rule A10-3-5] A user-defined assignment operator shall not be virtual.</p>
+<p>[Rule A10-4-1] Hierarchies should be based on interface classes.</p>
+<p>[Rule M10-1-1] Classes should not be derived from virtual bases.</p>
+<p>[Rule M10-1-2] A base class shall only be declared virtual if it is used in a diamond hierarchy.</p>
+<p>[Rule M10-1-3] An accessible base class shall not be both virtual and non-virtual in the same hierarchy.</p>
+<p>[Rule M10-2-1] All accessible entity names within a multiple inheritance hierarchy should be unique.</p>
+<p>[Rule M10-3-3] A virtual function shall only be overridden by a pure virtual function if it is itself declared as pure virtual.</p>
+<hr>
+<h2 id="member-access-control">Member access control</h2>
+<p>[Rule A11-0-1] A <code>non-POD</code> type should be defined as class.</p>
+<p>[Rule A11-0-2] A type defined as <code>struct</code> shall: (1) provide only public data members, (2) not provide any special member functions or methods, (3) not be a base of another struct or class, (4) not inherit from another struct or class.</p>
+<p>[Rule A11-3-1] Friend declarations shall not be used.</p>
+<p>[Rule M11-0-1] Member data in <code>non-POD</code> class types shall be private.</p>
+<hr>
+<h2 id="special-member-functions">Special member functions</h2>
+<p>[Rule A12-0-1] If a class declares a copy or move operation, or a destructor, either via &ldquo;<code>=default</code>&rdquo;, &ldquo;<code>=delete</code>&rdquo;, or via a user-provided declaration, then all others of these five special member functions shall be declared as well.</p>
+<p>[Rule A12-0-2] Bitwise operations and operations that assume data representation in memory shall not be performed on objects.</p>
+<p>[Rule A12-1-1] Constructors shall explicitly initialize all virtual base classes, all direct non-virtual base classes and all non-static data members.</p>
+<p>[Rule A12-1-2] Both <code>NSDMI</code> and a non-static member initializer in a constructor shall not be used in the same type.</p>
+<p>[Rule A12-1-3] If all user-defined constructors of a class initialize data members with constant values that are the same across all constructors, then data members shall be initialized using <code>NSDMI</code> instead.</p>
+<p>[Rule A12-1-4] All constructors that are callable with a single argument of fundamental type shall be declared <code>explicit</code>.</p>
+<p>[Rule A12-1-5] Common class initialization for non-constant members shall be done by a delegating constructor.</p>
+<p>[Rule A12-1-6] Derived classes that do not need further explicit initialization and require all the constructors from the base class shall use inheriting constructors.</p>
+<p>[Rule A12-4-1] Destructor of a base class shall be public virtual, public override or protected non-virtual.</p>
+<p>[Rule A12-4-2] If a public destructor of a class is non-virtual, then the class should be declared <code>final</code>.</p>
+<p>[Rule A12-6-1] All class data members that are initialized by the constructor shall be initialized using member initializers.</p>
+<p>[Rule A12-7-1] If the behavior of a user-defined special member function is identical to implicitly defined special member function, then it shall be defined &ldquo;=default&rdquo; or be left undefined.</p>
+<p>[Rule A12-8-1] Move and copy constructors shall move and respectively copy base classes and data members of a class, without any side effects.</p>
+<p>[Rule A12-8-2] User-defined copy and move assignment operators should use user-defined no-throw <code>swap</code> function.</p>
+<p>[Rule A12-8-3] Moved-from object shall not be read-accessed.</p>
+<p>[Rule A12-8-4] Move constructor shall not initialize its class members and base classes using copy semantics.</p>
+<p>[Rule A12-8-5] A copy assignment and a move assignment operators shall handle self-assignment.</p>
+<p>[Rule A12-8-6] Copy and move constructors and copy assignment and move assignment operators shall be declared protected or defined &ldquo;<code>=delete</code>&rdquo; in base class.</p>
+<p>[Rule A12-8-7] Assignment operators should be declared with the ref-qualifier <code>&amp;</code>.</p>
+<p>[Rule M12-1-1] An object&rsquo;s dynamic type shall not be used from the body of its constructor or destructor.</p>
+<hr>
+<h2 id="overriding">Overriding</h2>
+<p>[Rule A13-1-2] User defined suffixes of the user defined literal operators shall start with underscore followed by one or more letters.</p>
+<p>[Rule A13-1-3] User defined literals operators shall only perform conversion of passed parameters.</p>
+<p>[Rule A13-2-1] An assignment operator shall return a reference to &ldquo;<code>this</code>&rdquo;.</p>
+<p>[Rule A13-2-2] A binary arithmetic operator and a bitwise operator shall return a &ldquo;<code>prvalue</code>&rdquo;.</p>
+<p>[Rule A13-2-3] A relational operator shall return a boolean value.</p>
+<p>[Rule A13-3-1] A function that contains &ldquo;forwarding reference&rdquo; as its argument shall not be overloaded.</p>
+<p>[Rule A13-5-1] If &ldquo;<code>operator[]</code>&rdquo; is to be overloaded with a <code>non-const</code> version, <code>const</code> version shall also be implemented.</p>
+<p>[Rule A13-5-2] All user-defined conversion operators shall be defined <code>explicit</code>.</p>
+<p>[Rule A13-5-3] User-defined conversion operators should not be used.</p>
+<p>[Rule A13-5-4] If two opposite operators are defined, one shall be defined in terms of the other.</p>
+<p>[Rule A13-5-5] Comparison operators shall be non-member functions with identical parameter types and <code>noexcept</code>.</p>
+<p>[Rule A13-6-1] Digit sequences separators <code>'</code> shall only be used as follows: (1) for decimal, every <code>3</code> digits, (2) for hexadecimal, every <code>2</code> digits, (3) for binary, every <code>4</code> digits.</p>
+<hr>
+<h2 id="templates">Templates</h2>
+<p>[Rule A14-1-1] A template should check if a specific template argument is suitable for this template.</p>
+<p>[Rule A14-5-1] A template constructor shall not participate in overload resolution for a single argument of the enclosing class type.</p>
+<p>[Rule A14-5-2] Class members that are not dependent on template class parameters should be defined in a separate base class.</p>
+<p>[Rule A14-5-3] A non-member generic operator shall only be declared in a namespace that does not contain class (struct) type, enum type or union type declarations.</p>
+<p>[Rule A14-7-1] A type used as a template argument shall provide all members that are used by the template.</p>
+<p>[Rule A14-7-2] Template specialization shall be declared in the same file (1) as the primary template (2) as a user-defined type, for which the specialization is declared.</p>
+<p>[Rule A14-8-2] Explicit specializations of function templates shall not be used.</p>
+<p>[Rule M14-5-3] A copy assignment operator shall be declared when there is a template assignment operator with a parameter that is a generic parameter.</p>
+<p>[Rule M14-6-1] In a class template with a dependent base, any name that may be found in that dependent base shall be referred to using a <code>qualified-id</code> or <code>this-&gt;</code>.</p>
+<hr>
+<h2 id="exception-handling">Exception handling</h2>
+<p>[Rule A15-0-2] At least the basic guarantee for exception safety shall be provided for all operations. In addition, each function may offer either the strong guarantee or the nothrow guarantee.</p>
+<p>[Rule A15-0-3] Exception safety guarantee of a called function shall be considered.</p>
+<p>[Rule A15-0-7] Exception handling mechanism shall guarantee a deterministic worst-case time execution time.</p>
+<p>[Rule A15-1-1] Only instances of types derived from <code>std::exception</code> should be thrown.</p>
+<p>[Rule A15-1-2] An exception object shall not be a pointer.</p>
+<p>[Rule A15-1-3] All thrown exceptions should be unique.</p>
+<p>[Rule A15-1-4] If a function exits with an exception, then before a throw, the function shall place all objects/resources that the function constructed in valid states or it shall delete them..</p>
+<p>[Rule A15-1-5] Exceptions shall not be thrown across execution boundaries.</p>
+<p>[Rule A15-2-1] Constructors that are not <code>noexcept</code> shall not be invoked before program startup.</p>
+<p>[Rule A15-2-2] If a constructor is not <code>noexcept</code> and the constructor cannot finish object initialization, then it shall deallocate the object&rsquo;s resources and it shall throw an exception.</p>
+<p>[Rule A15-3-3] Main function and a task <code>main</code> function shall catch at least: base class exceptions from all third-party libraries used, <code>std::exception</code> and all otherwise unhandled exceptions.</p>
+<p>[Rule A15-3-4] Catch-all (ellipsis and <code>std::exception</code>) handlers shall be used only in (a) <code>main</code>, (b) task main functions, (c) in functions that are supposed to isolate independent components and (d) when calling third-party code that uses exceptions not according to <code>AUTOSAR C++14</code> guidelines.</p>
+<p>[Rule A15-3-5] A class type exception shall be caught by reference or <code>const</code> reference.</p>
+<p>[Rule A15-4-1] Dynamic exception-specification shall not be used.</p>
+<p>[Rule A15-4-2] If a function is declared to be <code>noexcept</code>, <code>noexcept(true)</code> or <code>noexcept(&lt;true condition&gt;)</code>, then it shall not exit with an exception.</p>
+<p>[Rule A15-4-3] The <code>noexcept</code> specification of a function shall either be identical across all translation units, or identical or more restrictive between a virtual member function and an overrider.</p>
+<p>[Rule A15-4-4] A declaration of non-throwing function shall contain <code>noexcept</code> specification.</p>
+<p>[Rule A15-4-5] Checked exceptions that could be thrown from a function shall be specified together with the function declaration and they shall be identical in all function declarations and for all its overriders.</p>
+<p>[Rule A15-5-1] All user-provided class destructors, deallocation functions, move constructors, move assignment operators and swap functions shall not exit with an exception. A <code>noexcept</code> exception specification shall be added to these functions as appropriate.</p>
+<p>[Rule A15-5-2] Program shall not be abruptly terminated. In particular, an implicit or explicit invocation of <code>std::abort()</code>, <code>std::quick_exit()</code>, <code>std::_Exit()</code>, <code>std::terminate()</code> shall not be done.</p>
+<p>[Rule A15-5-3] The <code>std::terminate()</code> function shall not be called implicitly.</p>
+<p>[Rule M15-0-3] Control shall not be transferred into a <code>try</code> or <code>catch</code> block using a <code>goto</code> or a <code>switch</code> statement.</p>
+<p>[Rule M15-1-1] The assignment-expression of a <code>throw</code> statement shall not itself cause an exception to be thrown.</p>
+<p>[Rule M15-1-2] <code>NULL</code> shall not be thrown explicitly.</p>
+<p>[Rule M15-1-3] An empty throw (<code>throw;</code>) shall only be used in the compound statement of a <code>catch</code> handler.</p>
+<p>[Rule M15-3-1] Exceptions shall be raised only after startup and before termination.</p>
+<p>[Rule M15-3-3] Handlers of a <code>function-try-block</code> implementation of a class constructor or destructor shall not reference non-static members from this class or its bases.</p>
+<p>[Rule M15-3-4] Each exception explicitly thrown in the code shall have a handler of a compatible type in all call paths that could lead to that point.</p>
+<p>[Rule M15-3-6] Where multiple handlers are provided in a single <code>try-catch</code> statement or <code>function-try-block</code> for a derived class and some or all of its bases, the handlers shall be ordered most-derived to base class.</p>
+<p>[Rule M15-3-7] Where multiple handlers are provided in a single <code>try-catch</code> statement or <code>function-try-block</code>, any ellipsis (catch-all) handler shall occur last.</p>
+<hr>
+<h2 id="preprocessing-directives">Preprocessing directives</h2>
+<p>[Rule A16-0-1] The preprocessor shall only be used for unconditional and conditional file inclusion and include guards, and using specific directives.</p>
+<p>[Rule A16-2-1] The <code>'</code>, <code>&quot;</code>, <code>/*</code>, <code>//</code>, <code>\</code> characters shall not occur in a header file name or in <code>#include</code> directive.</p>
+<p>[Rule A16-2-2] There shall be no unused <code>include</code> directives.</p>
+<p>[Rule A16-2-3] An <code>include</code> directive shall be added explicitly for every symbol used in a file.</p>
+<p>[Rule A16-6-1] <code>#error</code> directive shall not be used.</p>
+<p>[Rule A16-7-1] The <code>#pragma</code> directive shall not be used.</p>
+<p>[Rule M16-0-1] <code>#include</code> directives in a file shall only be preceded by other preprocessor directives or comments.</p>
+<p>[Rule M16-0-2] Macros shall only be <code>#define</code>&rsquo;d or <code>#undef</code>&rsquo;d in the global namespace.</p>
+<p>[Rule M16-0-5] Arguments to a function-like macro shall not contain tokens that look like pre-processing directives.</p>
+<p>[Rule M16-0-6] In the definition of a function-like macro, each instance of a parameter shall be enclosed in parentheses, unless it is used as the operand of <code>#</code> or <code>##</code>.</p>
+<p>[Rule M16-0-7] Undefined macro identifiers shall not be used in <code>#if</code> or <code>#elif</code> pre-processor directives, except as operands to the <code>defined</code> operator.</p>
+<p>[Rule M16-0-8] If the <code>#</code> token appears as the first token on a line, then it shall be immediately followed by a preprocessing token.</p>
+<p>[Rule M16-1-1] The <code>defined</code> pre-processor operator shall only be used in one of the two standard forms.</p>
+<p>[Rule M16-1-2] All <code>#else</code>, <code>#elif</code> and <code>#endif</code> pre-processor directives shall reside in the same file as the <code>#if</code> or <code>#ifdef</code> directive to which they are related.</p>
+<p>[Rule M16-2-3] Include guards shall be provided.</p>
+<p>[Rule M16-3-1] There shall be at most one occurrence of the <code>#</code> or <code>##</code> operators in a single macro definition.</p>
+<p>[Rule M16-3-2] The <code>#</code> and <code>##</code> operators should not be used.</p>
+<hr>
+<h2 id="library-introduction">Library Introduction</h2>
+<p>[Rule A17-0-1] Reserved identifiers, macros and functions in the <code>C++</code> standard library shall not be defined, redefined or undefined.</p>
+<p>[Rule A17-1-1] Use of the <code>C</code> Standard Library shall be encapsulated and isolated.</p>
+<p>[Rule A17-6-1] Non-standard entities shall not be added to standard namespaces.</p>
+<p>[Rule M17-0-2] The names of standard library macros and objects shall not be reused.</p>
+<p>[Rule M17-0-3] The names of standard library functions shall not be overridden.</p>
+<p>[Rule M17-0-5] The <code>setjmp</code> macro and the <code>longjmp</code> function shall not be used.</p>
+<hr>
+<h2 id="language-support-library">Language support library</h2>
+<p>[Rule A18-0-1] The <code>C</code> library facilities shall only be accessed through <code>C++</code> library headers.</p>
+<p>[Rule A18-0-2] The error state of a conversion from string to a numeric value shall be checked.</p>
+<p>[Rule A18-0-3] The library <code>&lt;clocale&gt; (locale.h)</code> and the <code>setlocale</code> function shall not be used.</p>
+<p>[Rule A18-1-1] <code>C-style</code> arrays shall not be used.</p>
+<p>[Rule A18-1-2] The <code>std::vector&lt;bool&gt;</code> specialization shall not be used.</p>
+<p>[Rule A18-1-3] The <code>std::auto_ptr</code> shall not be used.</p>
+<p>[Rule A18-1-4] A pointer pointing to an element of an array of objects shall not be passed to a smart pointer of single object type.</p>
+<p>[Rule A18-1-6] All <code>std::hash</code> specializations for user-defined types shall have a <code>noexcept</code> function call operator.</p>
+<p>[Rule A18-5-1] Functions <code>malloc</code>, <code>calloc</code>, <code>realloc</code> and <code>free</code> shall not be used.</p>
+<p>[Rule A18-5-2] Non-placement <code>new</code> or <code>delete</code> expressions shall not be used.</p>
+<p>[Rule A18-5-3] The form of <code>delete</code> operator shall match the form of <code>new</code> operator used to allocate the memory.</p>
+<p>[Rule A18-5-4] If a project has sized or unsized version of <code>operator 'delete'</code> globally defined, then both sized and unsized versions shall be defined.</p>
+<p>[Rule A18-5-5] Memory management functions shall ensure the following: (a) deterministic behavior resulting with the existence of worst-case execution time, (b) avoiding memory fragmentation, (c) avoid running out of memory, (d) avoiding mismatched allocations or deallocations, (e) no dependence on non-deterministic calls to kernel.</p>
+<p>[Rule A18-5-7] If non-real-time implementation of dynamic memory management functions is used in the project, then memory shall only be allocated and deallocated during non-real-time program phases.</p>
+<p>[Rule A18-5-8] Objects that do not outlive a function shall have automatic storage duration.</p>
+<p>[Rule A18-5-9] Custom implementations of dynamic memory allocation and deallocation functions shall meet the semantic requirements specified in the corresponding &ldquo;Required behaviour&rdquo; clause from the <code>C++</code> Standard.</p>
+<p>[Rule A18-5-10] Placement <code>new</code> shall be used only with properly aligned pointers to sufficient storage capacity.</p>
+<p>[Rule A18-5-11] &ldquo;<code>operator new</code>&rdquo; and &ldquo;<code>operator delete</code>&rdquo; shall be defined together.</p>
+<p>[Rule A18-9-1] The <code>std::bind</code> shall not be used.</p>
+<p>[Rule A18-9-2] Forwarding values to other functions shall be done via: (1) <code>std::move</code> if the value is an rvalue reference, (2) <code>std::forward</code> if the value is forwarding reference.</p>
+<p>[Rule A18-9-3] The <code>std::move</code> shall not be used on objects declared const or const&amp;.</p>
+<p>[Rule A18-9-4] An argument to <code>std::forward</code> shall not be subsequently used.</p>
+<p>[Rule M18-0-3] The library functions <code>abort</code>, <code>exit</code>, <code>getenv</code> and <code>system</code> from library <code>&lt;cstdlib&gt;</code> shall not be used.</p>
+<p>[Rule M18-0-4] The time handling functions of library <code>&lt;ctime&gt;</code> shall not be used.</p>
+<p>[Rule M18-0-5] The unbounded functions of library <code>&lt;cstring&gt;</code> shall not be used.</p>
+<p>[Rule M18-2-1] The macro <code>offsetof</code> shall not be used.</p>
+<p>[Rule M18-7-1] The signal handling facilities of <code>&lt;csignal&gt;</code> shall not be used.</p>
+<hr>
+<h2 id="diagnostics-library">Diagnostics library</h2>
+<p>[Rule M19-3-1] The error indicator <code>errno</code> shall not be used.</p>
+<hr>
+<h2 id="genaral-utilities-library">Genaral utilities library</h2>
+<p>[Rule A20-8-1] An already-owned pointer value shall not be stored in an unrelated smart pointer.</p>
+<p>[Rule A20-8-2] A <code>std::unique_ptr</code> shall be used to represent exclusive ownership.</p>
+<p>[Rule A20-8-3] A <code>std::shared_ptr</code> shall be used to represent shared ownership.</p>
+<p>[Rule A20-8-4] A <code>std::unique_ptr</code> shall be used over <code>std::shared_ptr</code> if ownership sharing is not required.</p>
+<p>[Rule A20-8-5] <code>std::make_unique</code> shall be used to construct objects owned by <code>std::unique_ptr</code>.</p>
+<p>[Rule A20-8-6] <code>std::make_shared</code> shall be used to construct objects owned by <code>std::shared_ptr</code>.</p>
+<p>[Rule A20-8-7] A <code>std::weak_ptr</code> shall be used to represent temporary shared ownership.</p>
+<hr>
+<h2 id="strings-library">Strings library</h2>
+<p>[Rule A21-8-1] Arguments to character-handling functions shall be representable as an <code>unsigned char</code>.</p>
+<hr>
+<h2 id="containers-library">Containers library</h2>
+<p>[Rule A23-0-1] An iterator shall not be implicitly converted to <code>const_iterator</code>.</p>
+<p>[Rule A23-0-2] Elements of a container shall only be accessed via valid references, iterators, and pointers.</p>
+<hr>
+<h2 id="algorithms-library">Algorithms library</h2>
+<p>[Rule A25-1-1] Non-static data members or captured values of predicate function objects that are state related to this object&rsquo;s identity shall not be copied.</p>
+<p>[Rule A25-4-1] Ordering predicates used with associative containers and <code>STL</code> sorting and related algorithms shall adhere to a strict weak ordering relation.</p>
+<hr>
+<h2 id="ramdom-number-generation">Ramdom number generation</h2>
+<p>[Rule A26-5-1] Pseudorandom numbers shall not be generated using <code>std::rand()</code>.</p>
+<p>[Rule A26-5-2] Random number engines shall not be default-initialized.</p>
+<hr>
+<h2 id="inputoutput-library">Input/output library</h2>
+<p>[Rule A27-0-1] Inputs from independent components shall be validated..</p>
+<p>[Rule A27-0-2] A <code>C-style</code> string shall guarantee sufficient space for data and the null terminator.</p>
+<p>[Rule A27-0-3] Alternate input and output operations on a file stream shall not be used without an intervening flush or positioning call.</p>
+<p>[Rule A27-0-4] <code>C-style</code> strings shall not be used.</p>
+<p>[Rule M27-0-1] The stream input/output library <code>&lt;cstdio&gt;</code> shall not be used.</p>
+<hr>
+<p><strong><a href="./014_AutosarCpp2014%e8%a7%84%e8%8c%83.md" rel="">中文版</a></strong></p>
+<hr>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-04-19</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/004_autosarcpp2014%E8%A7%84%E8%8C%83%E8%8B%B1%E6%96%87%E7%89%88/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/autosar/">AUTOSAR</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/005_certcpp%E8%A7%84%E8%8C%83/" class="prev" rel="prev" title="CERT C&#43;&#43; 规范"><i class="fas fa-angle-left" aria-hidden="true"></i>CERT C++ 规范</a>
+            <a href="/blog/014_autosarcpp2014%E8%A7%84%E8%8C%83/" class="next" rel="next" title="AUTOSAR C&#43;&#43; 2014 规范">AUTOSAR C++ 2014 规范<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

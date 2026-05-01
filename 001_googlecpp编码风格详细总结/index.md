@@ -3,7 +3,7 @@
 
 # C++ 编码规范
 
-本文基于**Google官方最新C++ Style Guide**（2025版，目标C++20标准）编写，完整覆盖规范的核心设计哲学、强制规则与工程最佳实践，是工业界最具影响力的C++工程化编码标准。
+本文基于**Google C++ Style Guide**编写，完整覆盖规范的核心设计哲学、强制规则与工程最佳实践，是工业界最具影响力的C++工程化编码标准。
 
 ## 1. 头文件
 
@@ -173,7 +173,7 @@ namespace foo {
 
 - **短小聚焦**：函数长度建议不超过 `40` 行，过长的函数必须拆分为更小的子函数，保证逻辑可理解、可测试。
 - **参数顺序**：输入参数在前，输出参数在后；输入参数优先使用`const T&`常量引用，输出参数必须使用指针`T*`，明确标识可修改语义。
-  示例：`void Parse(const std::string& input, int* output);`
+  示例：`void Parse(const std::string& input，int* output);`
 - 禁止使用默认函数参数，避免重载决议歧义、API兼容问题。
 - 函数重载仅当所有重载版本语义完全一致时使用，保证读者无需查看定义即可理解调用行为。
 - 函数返回值：禁止忽略有状态的返回值（如`absl::Status`），必须做错误处理。
@@ -188,6 +188,7 @@ namespace foo {
 
 ## 6. Google 奇技
 
+----
 
 ## 7. 命名规则
 
@@ -206,30 +207,226 @@ namespace foo {
 | 命名空间名 | 全小写+下划线 | `foo_bar`、`google_base` | `FooBar`、`FOO_BAR` |
 | 模板参数 | 大驼峰（类型参数）/ 全小写（非类型参数） | `typename T`、`int MaxSize` | `typename t`、`int max_size` |
 
-### 7.1 文件名
+### 7.1 文件命名
 
-### 7.2 类名
+- 文件名要全部小写，单词之间使用下划线连接。
 
-### 7.3 函数名
+### 7.2 类型命名
 
-### 7.4 变量名
+- 类型名称的每个单词首字母均大写，不包含下划线。
+- 类型包括类、结构体、类型定义 (typedef 或 using)、枚举、类型模板参数。
 
+### 7.3 变量命名
 
-### 命名补充规则
-1.  名称必须表意清晰，禁止无意义缩写，仅允许通用缩写（如`i`作为循环索引、`fqdn`、`rpc`），禁止通过删字母缩写（如`cstmr_id`替代`customer_id`）。
-2.  全局变量必须极少使用，命名需加项目前缀，避免冲突；禁止在头文件中定义全局变量。
-3.  宏定义必须尽量避免，优先使用内联函数、枚举、const常量；必须使用时，仅在`.cc`文件内定义，用后立即`#undef`，禁止在头文件中导出宏。
+- 变量 (包括函数参数) 和数据成员名一律小写，单词之间用下划线连接。
+
+**普通变量**
+
+举例:
+
+```cpp
+string table_name;  // 好 - 用下划线.
+string tablename;   // 好 - 全小写.
+
+string tableName;  // 差 - 混合大小写
+```
+
+**类成员变量**
+
+不管是静态的还是非静态的，类数据成员都可以和普通变量一样，但要接下划线.
+
+```cpp
+class TableInfo {
+private:
+    string table_name_;  // 好 - 后加下划线.
+    string tablename_;   // 好.
+    static Pool<TableInfo>* pool_;  // 好.
+};
+```
+
+**结构体变量**
+
+不管是静态的还是非静态的，结构体数据成员都可以和普通变量一样，不用像类那样接下划线:
+
+```cpp
+struct UrlTableProperties {
+    string name;
+    int num_entries;
+    static Pool<UrlTableProperties>* pool;
+};
+```
+
+**常量**
+
+声明为 `constexpr` 或 `const` 的变量，或在程序运行期间其值始终保持不变的，命名时以 `k` 开头，大小写混合。例如:
+
+```cpp
+const int kDaysInAWeek = 7;
+```
+
+### 7.4 函数命名
+
+- 常规函数使用大小写混合，取值和设值函数则要求与变量名匹配:
+
+```cpp
+void MyExcitingFunction();
+void MyExcitingMethod();
+void my_exciting_member_variable();
+void set_my_exciting_member_variable();
+```
+
+- 对于首字母缩写的单词，更倾向于将它们视作一个单词进行首字母大写。写作 `StartRpc()` 而非 `StartRPC()`。
+
+### 7.5 命名空间命名
+
+- 命名空间使用小写字母，单词间用下划线分隔。
+- 对于 `internal` 命名空间，一般为内部实现使用。
+
+### 7.6 枚举命名
+
+- 枚举的命名应当和 **常量** 或 **宏** 一致: `kEnumName` 或是 `ENUM_NAME`
+- 单独的枚举值应该优先采用 **常量** 的命名方式. 但 **宏** 方式的命名也可以接受。
+
+```cpp
+enum UrlTableErrors {
+    kOK = 0,
+    kErrorOutOfMemory,
+    kErrorMalformedInput,
+};
+
+enum AlternateUrlTableErrors {
+    OK = 0,
+    OUT_OF_MEMORY = 1,
+    MALFORMED_INPUT = 2,
+};
+```
+
+### 7.7 宏命名
+
+- 宏命名采用全大写的方式，单词之间使用下划线分割。
+
+### 7.8 特例命名
+
+- 如果命名的实体与已有 `C/C++` 实体相似，可参考现有命名策略.
+
+----
 
 ## 8. 注释
 
+- 注释虽然写起来很痛苦，但对保证代码可读性至关重要。
+- 注释固然很重要，但最好的代码应当本身就是文档. 有意义的类型名和变量名，要远胜过要用注释解释的含糊不清的名字。
+- 可以使用 `//` 或 `/* */` 注释，但是需要统一。
+- 在每个文件头添加一个版权声明。
 
+----
 
 ## 9. 代码格式化规则
 
 格式化规则的核心是保证视觉一致性，所有规则可通过`clang-format`工具自动化落地。
-1.  **行长度**：每行代码最多80个字符，仅注释中的长URL、不可拆分的字符串字面量、头文件保护宏、include语句可例外。
-2.  **缩进**：每个嵌套块使用**2个空格**缩进，绝对禁止使用Tab字符，编辑器需设置Tab自动转为空格。
-3.  **大括号**：
+
+### 9.1 行长度
+
+- 每一行代码字符数不超过 `120`。
+
+### 9.2 字符编码
+
+- 尽量不使用非 `ASCII` 字符，使用时必须使用 `UTF-8` 编码.
+
+### 9.3 缩进
+
+- 只使用空格，每次缩进 `4` 个空格。
+- 禁止使用 `Tab` 字符。
+
+### 9.4 函数声明与定义
+
+- 返回类型和函数名在同一行，参数也尽量放在同一行，如果放不下就对形参分行，分行方式与 函数调用 一致.
+
+函数看上去像这样:
+
+```cpp
+ReturnType ClassName::FunctionName(Type par_name1，Type par_name2) {
+    DoSomething();
+    ...
+}
+```
+
+如果同一行文本太多，放不下所有参数:
+
+```cpp
+ReturnType ClassName::ReallyLongFunctionName(Type par_name1，Type par_name2,
+                                             Type par_name3) {
+    DoSomething();
+    ...
+}
+```
+
+甚至连第一个参数都放不下:
+
+```cpp
+ReturnType LongClassName::ReallyReallyReallyLongFunctionName(
+        Type par_name1， // 8 space indent
+        Type par_name2,
+        Type par_name3) {
+    DoSomething();  // 4 space indent
+    ...
+}
+```
+
+注意以下几点:
+- 使用好的参数名。
+- 只有在参数未被使用或者其用途非常明显时，才能省略参数名。
+- 如果返回类型和函数名在一行放不下，分行。
+- 如果返回类型与函数声明或定义分行了，不要缩进。
+- 左圆括号总是和函数名在同一行。
+- 函数名和左圆括号间永远没有空格。
+- 圆括号与参数间没有空格。
+- 左大括号总在最后一个参数同一行的末尾处，不另起新行。
+- 右大括号总是单独位于函数最后一行，或者与左大括号同一行。
+- 右圆括号和左大括号间总是有一个空格。
+- 所有形参应尽可能对齐。
+- 缺省缩进为 4 个空格。
+- 换行后的参数保持 8 个空格的缩进。
+
+### 9.5 Lambda 表达式
+
+- Lambda 表达式对形参和函数体的格式化和其他函数一致; 捕获列表同理，表项用逗号隔开。
+- 若用引用捕获，在变量名和 `&` 之间不留空格.
+
+### 9.6 函数调用
+
+- 要么一行写完函数调用，要么在圆括号里对参数分行，要么参数另起一行且缩进四格。如果没有其它顾虑的话，尽可能精简行数，比如把多个参数适当地放在同一行里。
+
+函数调用遵循如下形式：
+
+```cpp
+bool retval = DoSomething(argument1，argument2，argument3);
+```
+
+如果同一行放不下，可断为多行，后面每一行都和第一个实参对齐，左圆括号后和右圆括号前不要留空格：
+
+```cpp
+bool retval = DoSomething(averyveryveryverylongargument1,
+                          argument2，argument3);
+```
+
+参数也可以放在次行，缩进四格：
+
+```cpp
+if (...) {
+    ...
+    ...
+    if (...) {
+        DoSomething(
+            argument1，argument2， // 4 空格缩进
+            argument3，argument4);
+    }
+```
+
+### 9.7 列表初始化
+
+
+
+1.  **大括号**：
     - 所有控制流语句（`if`/`else`/`for`/`while`/`switch`）必须使用大括号，即使单行语句也不例外，杜绝Apple goto fail类漏洞。
     - 大括号使用「K&R风格」：左大括号不换行，与语句同行；右大括号单独一行；else与前一个if的右大括号同行。
     示例：
@@ -240,13 +437,13 @@ namespace foo {
         DoOtherThing();
     }
     ```
-4.  **空格规则**：
+2.  **空格规则**：
     - 条件语句的括号与条件之间留1个空格，函数名与参数括号之间无空格。
     - 二元运算符（`=`/`+`/`-`/`*`/`/`/`<`/`>`等）两侧各留1个空格。
     - 预处理指令`#include`/`#define`后留1个空格，无额外缩进。
-5.  **指针与引用**：`*`和`&`紧贴类型名，而非变量名。示例：`const std::string& input`、`int* output`。
-6.  **换行规则**：函数参数过长时，每个参数单独换行，与左括号对齐；表达式过长时，在运算符前换行，保证可读性。
-7.  **编码**：源文件使用UTF-8编码，非ASCII字符必须极少使用，且必须使用UTF-8格式，禁止使用`wchar_t`/`char16_t`/`char32_t`（Windows API交互除外）。
+3.  **指针与引用**：`*`和`&`紧贴类型名，而非变量名。示例：`const std::string& input`、`int* output`。
+4.  **换行规则**：函数参数过长时，每个参数单独换行，与左括号对齐；表达式过长时，在运算符前换行，保证可读性。
+5.  **编码**：源文件使用UTF-8编码，非ASCII字符必须极少使用，且必须使用UTF-8格式，禁止使用`wchar_t`/`char16_t`/`char32_t`（Windows API交互除外）。
 
 ## 九、注释规范
 ### 9.1 核心原则
