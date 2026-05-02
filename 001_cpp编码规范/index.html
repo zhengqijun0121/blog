@@ -7,7 +7,8 @@
         <title>C&#43;&#43; 编码规范 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_cpp%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/">
   <meta property="og:site_name" content="LoveIt">
   <meta property="og:title" content="C&#43;&#43; 编码规范">
-  <meta property="og:description" content="C&#43;&#43; 编码规范 本文基于Google C&#43;&#43; Style Guide编写，完整覆盖规范的核心设计哲学、强制规则与工程最佳实践，是工业界最具影响力的C&#43;&#43;工程化编码标准。">
+  <meta property="og:description" content="C&#43;&#43; 编码规范 本文基于 Google C&#43;&#43; Style Guide 编写，通过规范 C&#43;&#43; 的代码风格，提高代码的可读性，可维护性，可扩展性，同时保证 C&#43;&#43; 语言的新特性得以高效使用。
+1. 项目结构 1.1 模块目录 模块目录结构如下：">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -18,7 +19,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
   <meta name="twitter:title" content="C&#43;&#43; 编码规范">
-  <meta name="twitter:description" content="C&#43;&#43; 编码规范 本文基于Google C&#43;&#43; Style Guide编写，完整覆盖规范的核心设计哲学、强制规则与工程最佳实践，是工业界最具影响力的C&#43;&#43;工程化编码标准。">
+  <meta name="twitter:description" content="C&#43;&#43; 编码规范 本文基于 Google C&#43;&#43; Style Guide 编写，通过规范 C&#43;&#43; 的代码风格，提高代码的可读性，可维护性，可扩展性，同时保证 C&#43;&#43; 语言的新特性得以高效使用。
+1. 项目结构 1.1 模块目录 模块目录结构如下：">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -34,7 +36,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/zhengqijun0121.github.io\/blog\/001_cpp%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83\/"
-        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "","wordcount":  7048 ,
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "","wordcount":  7292 ,
         "url": "https:\/\/zhengqijun0121.github.io\/blog\/001_cpp%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83\/","datePublished": "2026-04-05T09:00:00+08:00","dateModified": "2026-04-05T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
@@ -125,7 +127,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">C++ 编码规范</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/"><i class="far fa-folder" aria-hidden="true"></i>Categories</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-04-05">2026-04-05</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 7048 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-04-05">2026-04-05</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 7292 字&nbsp;
                 <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 15 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
@@ -134,27 +136,34 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#1-头文件">1. 头文件</a>
+    <li><a href="#1-项目结构">1. 项目结构</a>
       <ul>
-        <li><a href="#11-基础要求">1.1 基础要求</a></li>
-        <li><a href="#12-头文件保护宏">1.2 头文件保护宏</a></li>
-        <li><a href="#13-前置声明">1.3 前置声明</a></li>
-        <li><a href="#14-内联函数">1.4 内联函数</a></li>
-        <li><a href="#15-头文件包含顺序与格式">1.5 头文件包含顺序与格式</a></li>
+        <li><a href="#11-模块目录">1.1 模块目录</a></li>
+        <li><a href="#12-版权保护">1.2 版权保护</a></li>
+        <li><a href="#13-构建系统">1.3 构建系统</a></li>
       </ul>
     </li>
-    <li><a href="#2-作用域">2. 作用域</a>
+    <li><a href="#2-头文件">2. 头文件</a>
       <ul>
-        <li><a href="#41-命名空间核心规则">4.1 命名空间核心规则</a></li>
-        <li><a href="#42-变量作用域规则">4.2 变量作用域规则</a></li>
+        <li><a href="#21-自给自足原则">2.1 自给自足原则</a></li>
+        <li><a href="#22-头文件保护">2.2 头文件保护</a></li>
+        <li><a href="#23-前置声明">2.3 前置声明</a></li>
+        <li><a href="#24-内联函数">2.4 内联函数</a></li>
+        <li><a href="#25-头文件包含顺序与格式">2.5 头文件包含顺序与格式</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-作用域">3. 作用域</a>
+      <ul>
+        <li><a href="#31-命名空间核心规则">3.1 命名空间核心规则</a></li>
+        <li><a href="#32-变量作用域规则">3.2 变量作用域规则</a></li>
       </ul>
     </li>
     <li><a href="#4-类">4. 类</a>
       <ul>
-        <li><a href="#51-核心设计原则">5.1 核心设计原则</a></li>
-        <li><a href="#52-构造函数规则">5.2 构造函数规则</a></li>
-        <li><a href="#53-成员声明顺序">5.3 成员声明顺序</a></li>
-        <li><a href="#54-其他类规则">5.4 其他类规则</a></li>
+        <li><a href="#41-核心设计原则">4.1 核心设计原则</a></li>
+        <li><a href="#42-构造函数规则">4.2 构造函数规则</a></li>
+        <li><a href="#43-成员声明顺序">4.3 成员声明顺序</a></li>
+        <li><a href="#44-其他类规则">4.4 其他类规则</a></li>
       </ul>
     </li>
     <li><a href="#6-函数">6. 函数</a>
@@ -188,7 +197,7 @@
         <li><a href="#97-列表初始化">9.7 列表初始化</a></li>
       </ul>
     </li>
-    <li><a href="#九注释规范">九、注释规范</a>
+    <li><a href="#9-注释规范">9. 注释规范</a>
       <ul>
         <li><a href="#91-核心原则">9.1 核心原则</a></li>
         <li><a href="#92-注释分类与规则">9.2 注释分类与规则</a></li>
@@ -206,17 +215,69 @@
   </ul>
 </nav></div>
             </div><div class="content" id="content"><h1 id="c-编码规范">C++ 编码规范</h1>
-<p>本文基于<strong>Google C++ Style Guide</strong>编写，完整覆盖规范的核心设计哲学、强制规则与工程最佳实践，是工业界最具影响力的C++工程化编码标准。</p>
-<h2 id="1-头文件">1. 头文件</h2>
-<p>头文件的正确使用直接决定代码的编译效率、可读性和依赖管理，核心规则如下：</p>
-<h3 id="11-基础要求">1.1 基础要求</h3>
+<p>本文基于 <strong>Google C++ Style Guide</strong> 编写，通过规范 <code>C++</code> 的代码风格，提高代码的可读性，可维护性，可扩展性，同时保证 <code>C++</code> 语言的新特性得以高效使用。</p>
+<hr>
+<h2 id="1-项目结构">1. 项目结构</h2>
+<h3 id="11-模块目录">1.1 模块目录</h3>
+<p>模块目录结构如下：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">.
+</span></span><span class="line"><span class="cl">├── CMakeLists.txt          <span class="c1"># 模块编译文件</span>
+</span></span><span class="line"><span class="cl">├── example                 <span class="c1"># 模块示例代码</span>
+</span></span><span class="line"><span class="cl">├── files                   <span class="c1"># 模块配置文件</span>
+</span></span><span class="line"><span class="cl">│   ├── cmake               <span class="c1"># 模块编译配置文件</span>
+</span></span><span class="line"><span class="cl">│   └── config              <span class="c1"># 模块功能配置文件</span>
+</span></span><span class="line"><span class="cl">├── include                 <span class="c1"># 模块头文件</span>
+</span></span><span class="line"><span class="cl">├── package.xml             <span class="c1"># 模块描述文件</span>
+</span></span><span class="line"><span class="cl">├── src                     <span class="c1"># 模块源代码</span>
+</span></span><span class="line"><span class="cl">├── <span class="nb">test</span>                    <span class="c1"># 模块测试代码</span>
+</span></span><span class="line"><span class="cl">└── .gitignore              <span class="c1"># git 忽略文件</span></span></span></code></pre></div></div>
+<h3 id="12-版权保护">1.2 版权保护</h3>
+<p>项目默认使用 <code>MIT</code> 协议，所有源代码都必须包含版权声明。</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-cpp">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cm">/******************************************************************************
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Copyright &lt;YEAR&gt; &lt;COPYRIGHT HOLDER&gt;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Permission is hereby granted, free of charge, to any person obtaining a copy
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * of this software and associated documentation files (the “Software”), to
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * deal in the Software without restriction, including without limitation the
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * sell copies of the Software, and to permit persons to whom the Software is
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * furnished to do so, subject to the following conditions:
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * The above copyright notice and this permission notice shall be included in
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * all copies or substantial portions of the Software.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * IN THE SOFTWARE.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> ******************************************************************************/</span></span></span></code></pre></div></div>
+<h3 id="13-构建系统">1.3 构建系统</h3>
+<p>每个模块均使用 <code>CMake</code> 作为构建系统，并且至少在模块根目录实现一个 <code>CMakeLists.txt</code> 文件。</p>
+<hr>
+<h2 id="2-头文件">2. 头文件</h2>
 <ul>
 <li>每个 <code>.cpp</code> 实现文件原则上必须对应一个关联的 <code>.h</code> 头文件，例外仅为单元测试、测试程序、仅含 <code>main()</code> 函数的小型文件。</li>
-<li>头文件必须是<strong>自包含的（Self-contained）</strong>，用户无需额外引入其他头文件即可正常使用其提供的接口。</li>
+</ul>
+<h3 id="21-自给自足原则">2.1 自给自足原则</h3>
+<ul>
+<li>头文件必须是<strong>自包含的</strong>，用户无需额外引入其他头文件即可正常使用其提供的接口。</li>
 <li>禁止在头文件中定义具名命名空间的 <code>static</code> 变量/函数，禁止使用 <code>using namespace xxx;</code>（尤其是 <code>using namespace std;</code>），避免全局命名空间污染。</li>
 </ul>
-<h3 id="12-头文件保护宏">1.2 头文件保护宏</h3>
-<p>必须使用 <code>#define</code> 头文件保护机制，防止头文件被重复包含，格式为：<code>&lt;PROJECT&gt;_&lt;PATH&gt;_&lt;FILE&gt;_H_</code></p>
+<h3 id="22-头文件保护">2.2 头文件保护</h3>
+<p>必须使用 <code>#define</code> 头文件保护机制，防止头文件被重复包含，格式为：<code>&lt;PROJECT&gt;_&lt;PATH&gt;_&lt;FILE&gt;_H_</code>。</p>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
     <div class="code-header language-cpp">
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
@@ -232,19 +293,19 @@
 <ul>
 <li>禁止使用 <code>#pragma once</code> 等非标准编译器扩展。</li>
 </ul>
-<h3 id="13-前置声明">1.3 前置声明</h3>
+<h3 id="23-前置声明">2.3 前置声明</h3>
 <p><strong>优先使用<code>#include</code>引入完整头文件，尽量避免前置声明</strong>。仅在无依赖风险的极特殊场景可使用，核心原因：</p>
 <ul>
 <li>前置声明会隐藏依赖关系，头文件修改时无法触发依赖代码的重编译，引发静默的语义变更。</li>
 <li>前置声明<code>std</code>命名空间的符号会导致未定义行为。</li>
 <li>函数/模板的前置声明会限制API的兼容变更（如参数类型加宽、新增默认模板参数）。</li>
 </ul>
-<h3 id="14-内联函数">1.4 内联函数</h3>
+<h3 id="24-内联函数">2.4 内联函数</h3>
 <ul>
 <li>仅当函数体极短（通常1-10行）、性能敏感且无复杂逻辑时，才允许在头文件中定义内联函数，必须显式标记 <code>inline</code> 保证ODR（单一定义规则）安全。</li>
 <li>禁止在头文件内联定义析构函数、虚函数，其隐式生成的代码往往比表面更复杂，易导致代码膨胀。</li>
 </ul>
-<h3 id="15-头文件包含顺序与格式">1.5 头文件包含顺序与格式</h3>
+<h3 id="25-头文件包含顺序与格式">2.5 头文件包含顺序与格式</h3>
 <p>包含顺序必须严格遵循以下分组，每组之间用空行分隔，同组内按字母序排序：</p>
 <ol>
 <li>关联头文件（当前<code>.cpp</code>对应的<code>.h</code>文件，优先保证头文件自包含性）</li>
@@ -254,7 +315,7 @@
 <li>项目内其他头文件（如 <code>&quot;base/common.h&quot;</code>）</li>
 </ol>
 <ul>
-<li>标准库/系统头文件使用尖括号 <code>&lt;&gt;</code>，项目内头文件使用双引号<code>&quot;&quot;</code>，禁止使用<code>.</code>/<code>..</code>相对路径别名。</li>
+<li>标准库/系统头文件使用尖括号 <code>&lt;&gt;</code>，项目内头文件使用双引号 <code>&quot;&quot;</code>，禁止使用 <code>.</code>/<code>..</code> 相对路径别名。</li>
 </ul>
 <p>示例：</p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -274,7 +335,7 @@
 </span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;base/basictypes.h&#34;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;foo/server/bar.h&#34;</span></span></span></code></pre></div></div>
-<p><code>.clang-format</code> 文件内容如下所示：</p>
+<p><code>VSCode</code> 可以使用 <code>clang-format</code> 进行代码格式化，其中 <code>.clang-format</code> 配置文件内容如下所示：</p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
     <div class="code-header language-yaml">
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
@@ -308,14 +369,15 @@
 </span></span></span><span class="line"><span class="cl"><span class="nt">IndentCaseLabels</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="nt">IndentWidth</span><span class="p">:</span><span class="w"> </span><span class="m">4</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="nt">Standard</span><span class="p">:</span><span class="w"> </span><span class="l">c++17</span></span></span></code></pre></div></div>
-<h2 id="2-作用域">2. 作用域</h2>
-<h3 id="41-命名空间核心规则">4.1 命名空间核心规则</h3>
+<hr>
+<h2 id="3-作用域">3. 作用域</h2>
+<h3 id="31-命名空间核心规则">3.1 命名空间核心规则</h3>
 <ul>
-<li>除极少数例外，所有代码必须置于命名空间 <code>demo</code> 中，顶层命名空间必须基于项目名全局唯一，禁止污染全局命名空间。</li>
-<li>命名空间名称使用<strong>全小写+下划线（snake_case）</strong> 命名。</li>
-<li>禁止使用 <code>using namespace xxx;</code> 的 using 指令，仅允许在 <code>.cpp</code> 文件内使用 <code>using ::foo::bar;</code> 的有限using声明，禁止在头文件中使用。</li>
-<li>禁止使用内联命名空间（inline namespaces）。</li>
-<li><code>.cpp</code> 文件中，无需对外暴露的辅助函数/变量，优先使用<strong>匿名命名空间</strong>封装，实现内部链接，禁止在头文件中使用匿名命名空间。</li>
+<li>除极少数例外，所有代码必须置于命名空间 <code>maybe</code> 中，顶层命名空间必须基于项目名全局唯一，禁止污染全局命名空间。</li>
+<li>命名空间名称使用 <strong>全小写+下划线（snake_case）</strong> 命名。</li>
+<li>禁止使用 <code>using namespace xxx;</code> 的 <code>using</code> 指令，仅允许在源文件内使用 <code>using ::foo::bar;</code> 的有限 <code>using</code> 声明，禁止在头文件中使用。</li>
+<li>禁止使用内联命名空间。</li>
+<li>源文件中，无需对外暴露的辅助函数/变量，优先使用<strong>匿名命名空间</strong>封装，实现内部链接，禁止在头文件中使用匿名命名空间。</li>
 </ul>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
     <div class="code-header language-cpp">
@@ -332,30 +394,30 @@
 </span></span><span class="line"><span class="cl"><span class="c1">// 对外暴露的代码
 </span></span></span><span class="line"><span class="cl"><span class="p">}</span>  <span class="c1">// namespace foo
 </span></span></span></code></pre></div></div>
-<h3 id="42-变量作用域规则">4.2 变量作用域规则</h3>
+<h3 id="32-变量作用域规则">3.2 变量作用域规则</h3>
 <ul>
 <li>局部变量：在函数内尽可能晚声明，就近初始化，禁止在循环头外声明循环变量；允许在 <code>if</code>/<code>while</code>/<code>for</code> 语句中声明变量，限制其作用域。</li>
-<li>静态/全局变量：禁止使用非POD类型的静态/全局变量，避免跨编译单元的初始化顺序未定义问题；静态变量必须保证线程安全。</li>
+<li>静态/全局变量：禁止使用非 <code>POD</code> 类型的静态/全局变量，避免跨编译单元的初始化顺序未定义问题；静态变量必须保证线程安全。</li>
 <li>禁止使用全局函数，优先将非成员函数置于命名空间中，禁止仅为了分组静态成员而创建类。</li>
 <li>成员变量：类的非静态数据成员必须设为 <code>private</code>，仅常量成员可例外；测试夹具类的成员变量仅在 <code>.cpp</code> 文件内可设为 <code>protected</code>。</li>
 </ul>
 <hr>
 <h2 id="4-类">4. 类</h2>
-<h3 id="51-核心设计原则">5.1 核心设计原则</h3>
+<h3 id="41-核心设计原则">4.1 核心设计原则</h3>
 <ul>
-<li><strong>优先组合，而非继承</strong>：仅当满足「is-a」关系时使用继承，且必须使用<code>public</code>继承，禁止使用私有/保护继承，禁止虚继承（除非极特殊场景）。</li>
-<li><strong>单一职责</strong>：一个类应只负责一件事，公有API数量尽量精简，不超过7个为宜。</li>
-<li><strong>struct与class的边界</strong>：<code>struct</code>仅用于纯数据聚合（无私有成员、无自定义构造函数、无虚函数、无继承）；只要包含行为（方法），必须使用<code>class</code>。</li>
+<li><strong>优先组合，而非继承</strong>：仅当满足「<code>is-a</code>」关系时使用继承，且必须使用 <code>public</code> 继承，禁止使用私有/保护继承，禁止虚继承（除非极特殊场景）。</li>
+<li><strong>单一职责</strong>：一个类应只负责一件事，公有 <code>API</code> 数量尽量精简，不超过 <code>7</code> 个为宜。</li>
+<li><strong><code>struct</code> 与 <code>class</code> 的边界</strong>：<code>struct</code>仅用于纯数据聚合（无私有成员、无自定义构造函数、无虚函数、无继承）；只要包含行为（方法），必须使用<code>class</code>。</li>
 </ul>
-<h3 id="52-构造函数规则">5.2 构造函数规则</h3>
+<h3 id="42-构造函数规则">4.2 构造函数规则</h3>
 <ul>
-<li>单参数构造函数必须加<code>explicit</code>关键字，禁止隐式类型转换。</li>
+<li>单参数构造函数必须加 <code>explicit</code> 关键字，禁止隐式类型转换。</li>
 <li>禁止在构造函数中执行复杂、可能失败、会引发副作用的初始化逻辑；若初始化可能失败，使用工厂函数替代。</li>
 <li>禁止在构造函数中调用虚函数，避免未定义行为。</li>
 <li>委托构造函数、继承构造函数仅在简化代码、无歧义时使用。</li>
-<li>对于可拷贝/移动的类，要么显式定义拷贝/移动构造函数和赋值运算符，要么显式用<code>=delete</code>禁用，要么完全不定义（使用编译器默认生成）。</li>
+<li>对于可拷贝/移动的类，要么显式定义拷贝/移动构造函数和赋值运算符，要么显式用 <code>=delete</code> 禁用，要么完全不定义（使用编译器默认生成）。</li>
 </ul>
-<h3 id="53-成员声明顺序">5.3 成员声明顺序</h3>
+<h3 id="43-成员声明顺序">4.3 成员声明顺序</h3>
 <p>类内成员必须严格按以下顺序声明，空的区段可省略：</p>
 <ol>
 <li><code>public:</code>区段 → <code>protected:</code>区段 → <code>private:</code>区段（对外接口优先，隐藏实现细节）</li>
@@ -372,11 +434,11 @@
 </ul>
 </li>
 </ol>
-<h3 id="54-其他类规则">5.4 其他类规则</h3>
+<h3 id="44-其他类规则">4.4 其他类规则</h3>
 <ul>
-<li>虚函数必须显式标记<code>override</code>或<code>final</code>，禁止重复写<code>virtual</code>关键字。</li>
+<li>虚函数必须显式标记 <code>override</code> 或 <code>final</code>，禁止重复写 <code>virtual</code> 关键字。</li>
 <li>友元仅用于类与其紧密关联的类/函数，禁止滥用友元打破封装。</li>
-<li>禁止将类的大方法内联定义在类声明中，仅极短、性能敏感的 trivial 方法可内联。</li>
+<li>禁止将类的大方法内联定义在类声明中，仅极短、性能敏感的 <code>trivial</code> 方法可内联。</li>
 </ul>
 <hr>
 <h2 id="6-函数">6. 函数</h2>
@@ -385,9 +447,9 @@
 <li><strong>短小聚焦</strong>：函数长度建议不超过 <code>40</code> 行，过长的函数必须拆分为更小的子函数，保证逻辑可理解、可测试。</li>
 <li><strong>参数顺序</strong>：输入参数在前，输出参数在后；输入参数优先使用<code>const T&amp;</code>常量引用，输出参数必须使用指针<code>T*</code>，明确标识可修改语义。
 示例：<code>void Parse(const std::string&amp; input，int* output);</code></li>
-<li>禁止使用默认函数参数，避免重载决议歧义、API兼容问题。</li>
+<li>禁止使用默认函数参数，避免重载决议歧义、API 兼容问题。</li>
 <li>函数重载仅当所有重载版本语义完全一致时使用，保证读者无需查看定义即可理解调用行为。</li>
-<li>函数返回值：禁止忽略有状态的返回值（如<code>absl::Status</code>），必须做错误处理。</li>
+<li>函数返回值：禁止忽略有状态的返回值（如 <code>absl::Status</code>），必须做错误处理。</li>
 </ul>
 <h3 id="62-特殊函数规则">6.2 特殊函数规则</h3>
 <ul>
@@ -418,24 +480,24 @@
       </tr>
       <tr>
           <td style="text-align: left">类型名（类、结构体、枚举、类型别名）</td>
-          <td style="text-align: left">大驼峰（PascalCase），首字母大写，无下划线</td>
+          <td style="text-align: left">大驼峰（PascalCase）</td>
           <td style="text-align: left"><code>FooBar</code>、<code>UrlTable</code>、<code>Status</code></td>
           <td style="text-align: left"><code>fooBar</code>、<code>foo_bar</code></td>
       </tr>
       <tr>
-          <td style="text-align: left">函数名（普通函数、类成员函数）</td>
+          <td style="text-align: left">函数名</td>
           <td style="text-align: left">大驼峰（PascalCase）</td>
           <td style="text-align: left"><code>DoSomething()</code>、<code>GetValue()</code></td>
           <td style="text-align: left"><code>doSomething()</code>、<code>do_something()</code></td>
       </tr>
       <tr>
-          <td style="text-align: left">变量（局部变量、函数参数、全局变量）</td>
+          <td style="text-align: left">变量（局部变量、全局变量）</td>
           <td style="text-align: left">全小写+下划线（snake_case）</td>
           <td style="text-align: left"><code>user_name</code>、<code>buffer_size</code></td>
           <td style="text-align: left"><code>userName</code>、<code>UserName</code></td>
       </tr>
       <tr>
-          <td style="text-align: left">类私有/保护成员变量</td>
+          <td style="text-align: left">类成员变量</td>
           <td style="text-align: left">全小写+下划线，<strong>必须以下划线结尾</strong></td>
           <td style="text-align: left"><code>buffer_size_</code>、<code>user_name_</code></td>
           <td style="text-align: left"><code>m_bufferSize</code>、<code>buffer_size</code></td>
@@ -459,7 +521,7 @@
           <td style="text-align: left"><code>my_macro</code>、<code>MY_MACRO</code></td>
       </tr>
       <tr>
-          <td style="text-align: left">命名空间名</td>
+          <td style="text-align: left">命名空间</td>
           <td style="text-align: left">全小写+下划线</td>
           <td style="text-align: left"><code>foo_bar</code>、<code>google_base</code></td>
           <td style="text-align: left"><code>FooBar</code>、<code>FOO_BAR</code></td>
@@ -492,10 +554,10 @@
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
-    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">string</span> <span class="n">table_name</span><span class="p">;</span>  <span class="c1">// 好 - 用下划线.
-</span></span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="n">tablename</span><span class="p">;</span>   <span class="c1">// 好 - 全小写.
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">string</span> <span class="n">table_name</span><span class="p">;</span>  <span class="c1">// 好 - 用下划线
+</span></span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="n">tablename</span><span class="p">;</span>   <span class="c1">// 好 - 全小写
 </span></span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="n">tableName</span><span class="p">;</span>  <span class="c1">// 差 - 混合大小写
+</span></span><span class="line"><span class="cl"><span class="n">string</span> <span class="n">tableName</span><span class="p">;</span>   <span class="c1">// 差 - 混合大小写
 </span></span></span></code></pre></div></div>
 <p><strong>类成员变量</strong></p>
 <p>不管是静态的还是非静态的，类数据成员都可以和普通变量一样，但要接下划线.</p>
@@ -506,9 +568,9 @@
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
     </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">TableInfo</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">string</span> <span class="n">table_name_</span><span class="p">;</span>  <span class="c1">// 好 - 后加下划线.
-</span></span></span><span class="line"><span class="cl">    <span class="n">string</span> <span class="n">tablename_</span><span class="p">;</span>   <span class="c1">// 好.
-</span></span></span><span class="line"><span class="cl">    <span class="k">static</span> <span class="n">Pool</span><span class="o">&lt;</span><span class="n">TableInfo</span><span class="o">&gt;*</span> <span class="n">pool_</span><span class="p">;</span>  <span class="c1">// 好.
+</span></span><span class="line"><span class="cl">    <span class="n">string</span> <span class="n">table_name_</span><span class="p">;</span>  <span class="c1">// 好 - 后加下划线
+</span></span></span><span class="line"><span class="cl">    <span class="n">string</span> <span class="n">tablename_</span><span class="p">;</span>   <span class="c1">// 好
+</span></span></span><span class="line"><span class="cl">    <span class="k">static</span> <span class="n">Pool</span><span class="o">&lt;</span><span class="n">TableInfo</span><span class="o">&gt;*</span> <span class="n">pool_</span><span class="p">;</span>  <span class="c1">// 好
 </span></span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></div></div>
 <p><strong>结构体变量</strong></p>
 <p>不管是静态的还是非静态的，结构体数据成员都可以和普通变量一样，不用像类那样接下划线:</p>
@@ -590,7 +652,7 @@
 </ul>
 <hr>
 <h2 id="9-代码格式化规则">9. 代码格式化规则</h2>
-<p>格式化规则的核心是保证视觉一致性，所有规则可通过<code>clang-format</code>工具自动化落地。</p>
+<p>格式化规则的核心是保证视觉一致性，所有规则可通过 <code>clang-format</code> 工具自动化落地。</p>
 <h3 id="91-行长度">9.1 行长度</h3>
 <ul>
 <li>每一行代码字符数不超过 <code>120</code>。</li>
@@ -606,7 +668,7 @@
 </ul>
 <h3 id="94-函数声明与定义">9.4 函数声明与定义</h3>
 <ul>
-<li>返回类型和函数名在同一行，参数也尽量放在同一行，如果放不下就对形参分行，分行方式与 函数调用 一致.</li>
+<li>返回类型和函数名在同一行，参数也尽量放在同一行，如果放不下就对形参分行，分行方式与函数调用一致.</li>
 </ul>
 <p>函数看上去像这样:</p>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
@@ -726,7 +788,8 @@
 <li><strong>换行规则</strong>：函数参数过长时，每个参数单独换行，与左括号对齐；表达式过长时，在运算符前换行，保证可读性。</li>
 <li><strong>编码</strong>：源文件使用UTF-8编码，非ASCII字符必须极少使用，且必须使用UTF-8格式，禁止使用<code>wchar_t</code>/<code>char16_t</code>/<code>char32_t</code>（Windows API交互除外）。</li>
 </ol>
-<h2 id="九注释规范">九、注释规范</h2>
+<hr>
+<h2 id="9-注释规范">9. 注释规范</h2>
 <h3 id="91-核心原则">9.1 核心原则</h3>
 <p>注释必须解释**「为什么这么做」<strong>，而非</strong>「代码做了什么」**；代码本身应能清晰表达「做什么」，无需冗余注释复述代码逻辑。</p>
 <h3 id="92-注释分类与规则">9.2 注释分类与规则</h3>
@@ -746,6 +809,7 @@
 示例：<code>// TODO(bug 123456): 移除该兼容逻辑，2026Q4后所有客户端已支持新接口</code></li>
 <li><strong>禁用注释</strong>：禁止注释掉的代码（死代码），直接删除；禁止无意义的吐槽、梗、个人标记类注释。</li>
 </ol>
+<hr>
 <h2 id="十核心特性管控与最佳实践">十、核心特性管控与最佳实践</h2>
 <h3 id="101-类型与类型转换">10.1 类型与类型转换</h3>
 <ul>
@@ -776,6 +840,7 @@
 <li>禁止使用线程局部存储<code>thread_local</code>，除非极特殊场景。</li>
 <li>优先使用标准库的互斥量、条件变量，禁止无锁编程（除非性能收益可验证，且有充分的测试）。</li>
 </ul>
+<hr>
 <h2 id="十一其他重要规则">十一、其他重要规则</h2>
 <ol>
 <li><strong>包容性语言</strong>：代码命名、注释中必须使用包容性语言，禁止使用带有歧视、冒犯性的术语（如master/slave、blacklist/whitelist），使用性别中立的语言。</li>
@@ -783,6 +848,7 @@
 <li><strong>可移植性</strong>：代码需考虑编译器、平台的可移植性，避免依赖编译器未定义行为、平台专属特性。</li>
 <li><strong>测试友好</strong>：代码设计需保证可测试性，核心逻辑必须可单元测试，禁止在核心逻辑中硬编码依赖。</li>
 </ol>
+<hr>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">

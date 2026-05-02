@@ -3,21 +3,76 @@
 
 # C++ 编码规范
 
-本文基于**Google C++ Style Guide**编写，完整覆盖规范的核心设计哲学、强制规则与工程最佳实践，是工业界最具影响力的C++工程化编码标准。
+本文基于 **Google C++ Style Guide** 编写，通过规范 `C++` 的代码风格，提高代码的可读性，可维护性，可扩展性，同时保证 `C++` 语言的新特性得以高效使用。
 
-## 1. 头文件
+----
 
-头文件的正确使用直接决定代码的编译效率、可读性和依赖管理，核心规则如下：
+## 1. 项目结构
 
-### 1.1 基础要求
+### 1.1 模块目录
+
+模块目录结构如下：
+
+```bash
+.
+├── CMakeLists.txt          # 模块编译文件
+├── example                 # 模块示例代码
+├── files                   # 模块配置文件
+│   ├── cmake               # 模块编译配置文件
+│   └── config              # 模块功能配置文件
+├── include                 # 模块头文件
+├── package.xml             # 模块描述文件
+├── src                     # 模块源代码
+├── test                    # 模块测试代码
+└── .gitignore              # git 忽略文件
+```
+
+### 1.2 版权保护
+
+项目默认使用 `MIT` 协议，所有源代码都必须包含版权声明。
+
+```cpp
+/******************************************************************************
+ * Copyright <YEAR> <COPYRIGHT HOLDER>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the “Software”), to
+ * deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ ******************************************************************************/
+```
+
+### 1.3 构建系统
+
+每个模块均使用 `CMake` 作为构建系统，并且至少在模块根目录实现一个 `CMakeLists.txt` 文件。
+
+----
+
+## 2. 头文件
 
 - 每个 `.cpp` 实现文件原则上必须对应一个关联的 `.h` 头文件，例外仅为单元测试、测试程序、仅含 `main()` 函数的小型文件。
-- 头文件必须是**自包含的（Self-contained）**，用户无需额外引入其他头文件即可正常使用其提供的接口。
+
+### 2.1 自给自足原则
+
+- 头文件必须是**自包含的**，用户无需额外引入其他头文件即可正常使用其提供的接口。
 - 禁止在头文件中定义具名命名空间的 `static` 变量/函数，禁止使用 `using namespace xxx;`（尤其是 `using namespace std;`），避免全局命名空间污染。
 
-### 1.2 头文件保护宏
+### 2.2 头文件保护
 
-必须使用 `#define` 头文件保护机制，防止头文件被重复包含，格式为：`<PROJECT>_<PATH>_<FILE>_H_`
+必须使用 `#define` 头文件保护机制，防止头文件被重复包含，格式为：`<PROJECT>_<PATH>_<FILE>_H_`。
 
 ```cpp
 #ifndef FOO_BAR_BAZ_H_
@@ -30,19 +85,19 @@
 
 - 禁止使用 `#pragma once` 等非标准编译器扩展。
 
-### 1.3 前置声明
+### 2.3 前置声明
 
 **优先使用`#include`引入完整头文件，尽量避免前置声明**。仅在无依赖风险的极特殊场景可使用，核心原因：
 - 前置声明会隐藏依赖关系，头文件修改时无法触发依赖代码的重编译，引发静默的语义变更。
 - 前置声明`std`命名空间的符号会导致未定义行为。
 - 函数/模板的前置声明会限制API的兼容变更（如参数类型加宽、新增默认模板参数）。
 
-### 1.4 内联函数
+### 2.4 内联函数
 
 - 仅当函数体极短（通常1-10行）、性能敏感且无复杂逻辑时，才允许在头文件中定义内联函数，必须显式标记 `inline` 保证ODR（单一定义规则）安全。
 - 禁止在头文件内联定义析构函数、虚函数，其隐式生成的代码往往比表面更复杂，易导致代码膨胀。
 
-### 1.5 头文件包含顺序与格式
+### 2.5 头文件包含顺序与格式
 
 包含顺序必须严格遵循以下分组，每组之间用空行分隔，同组内按字母序排序：
 1. 关联头文件（当前`.cpp`对应的`.h`文件，优先保证头文件自包含性）
@@ -51,9 +106,10 @@
 4. 第三方库头文件（如 `<boost/shared_ptr.hpp>`、`<gtest/gtest.h>`）
 5. 项目内其他头文件（如 `"base/common.h"`）
 
-- 标准库/系统头文件使用尖括号 `<>`，项目内头文件使用双引号`""`，禁止使用`.`/`..`相对路径别名。
+- 标准库/系统头文件使用尖括号 `<>`，项目内头文件使用双引号 `""`，禁止使用 `.`/`..` 相对路径别名。
 
 示例：
+
 ```cpp
 #include "foo/server/fooserver.h"
 
@@ -69,7 +125,7 @@
 #include "foo/server/bar.h"
 ```
 
-`.clang-format` 文件内容如下所示：
+`VSCode` 可以使用 `clang-format` 进行代码格式化，其中 `.clang-format` 配置文件内容如下所示：
 
 ```yaml
 ---
@@ -102,15 +158,17 @@ IndentWidth: 4
 Standard: c++17
 ```
 
-## 2. 作用域
+----
 
-### 4.1 命名空间核心规则
+## 3. 作用域
 
-- 除极少数例外，所有代码必须置于命名空间 `demo` 中，顶层命名空间必须基于项目名全局唯一，禁止污染全局命名空间。
-- 命名空间名称使用**全小写+下划线（snake_case）** 命名。
-- 禁止使用 `using namespace xxx;` 的 using 指令，仅允许在 `.cpp` 文件内使用 `using ::foo::bar;` 的有限using声明，禁止在头文件中使用。
-- 禁止使用内联命名空间（inline namespaces）。
-- `.cpp` 文件中，无需对外暴露的辅助函数/变量，优先使用**匿名命名空间**封装，实现内部链接，禁止在头文件中使用匿名命名空间。
+### 3.1 命名空间核心规则
+
+- 除极少数例外，所有代码必须置于命名空间 `maybe` 中，顶层命名空间必须基于项目名全局唯一，禁止污染全局命名空间。
+- 命名空间名称使用 **全小写+下划线（snake_case）** 命名。
+- 禁止使用 `using namespace xxx;` 的 `using` 指令，仅允许在源文件内使用 `using ::foo::bar;` 的有限 `using` 声明，禁止在头文件中使用。
+- 禁止使用内联命名空间。
+- 源文件中，无需对外暴露的辅助函数/变量，优先使用**匿名命名空间**封装，实现内部链接，禁止在头文件中使用匿名命名空间。
 
 ```cpp
 // .cpp文件示例
@@ -124,10 +182,10 @@ namespace foo {
 }  // namespace foo
 ```
 
-### 4.2 变量作用域规则
+### 3.2 变量作用域规则
 
 - 局部变量：在函数内尽可能晚声明，就近初始化，禁止在循环头外声明循环变量；允许在 `if`/`while`/`for` 语句中声明变量，限制其作用域。
-- 静态/全局变量：禁止使用非POD类型的静态/全局变量，避免跨编译单元的初始化顺序未定义问题；静态变量必须保证线程安全。
+- 静态/全局变量：禁止使用非 `POD` 类型的静态/全局变量，避免跨编译单元的初始化顺序未定义问题；静态变量必须保证线程安全。
 - 禁止使用全局函数，优先将非成员函数置于命名空间中，禁止仅为了分组静态成员而创建类。
 - 成员变量：类的非静态数据成员必须设为 `private`，仅常量成员可例外；测试夹具类的成员变量仅在 `.cpp` 文件内可设为 `protected`。
 
@@ -135,19 +193,22 @@ namespace foo {
 
 ## 4. 类
 
-### 5.1 核心设计原则
-- **优先组合，而非继承**：仅当满足「is-a」关系时使用继承，且必须使用`public`继承，禁止使用私有/保护继承，禁止虚继承（除非极特殊场景）。
-- **单一职责**：一个类应只负责一件事，公有API数量尽量精简，不超过7个为宜。
-- **struct与class的边界**：`struct`仅用于纯数据聚合（无私有成员、无自定义构造函数、无虚函数、无继承）；只要包含行为（方法），必须使用`class`。
+### 4.1 核心设计原则
 
-### 5.2 构造函数规则
-- 单参数构造函数必须加`explicit`关键字，禁止隐式类型转换。
+- **优先组合，而非继承**：仅当满足「`is-a`」关系时使用继承，且必须使用 `public` 继承，禁止使用私有/保护继承，禁止虚继承（除非极特殊场景）。
+- **单一职责**：一个类应只负责一件事，公有 `API` 数量尽量精简，不超过 `7` 个为宜。
+- **`struct` 与 `class` 的边界**：`struct`仅用于纯数据聚合（无私有成员、无自定义构造函数、无虚函数、无继承）；只要包含行为（方法），必须使用`class`。
+
+### 4.2 构造函数规则
+
+- 单参数构造函数必须加 `explicit` 关键字，禁止隐式类型转换。
 - 禁止在构造函数中执行复杂、可能失败、会引发副作用的初始化逻辑；若初始化可能失败，使用工厂函数替代。
 - 禁止在构造函数中调用虚函数，避免未定义行为。
 - 委托构造函数、继承构造函数仅在简化代码、无歧义时使用。
-- 对于可拷贝/移动的类，要么显式定义拷贝/移动构造函数和赋值运算符，要么显式用`=delete`禁用，要么完全不定义（使用编译器默认生成）。
+- 对于可拷贝/移动的类，要么显式定义拷贝/移动构造函数和赋值运算符，要么显式用 `=delete` 禁用，要么完全不定义（使用编译器默认生成）。
 
-### 5.3 成员声明顺序
+### 4.3 成员声明顺序
+
 类内成员必须严格按以下顺序声明，空的区段可省略：
 1.  `public:`区段 → `protected:`区段 → `private:`区段（对外接口优先，隐藏实现细节）
 2.  每个区段内的顺序：
@@ -160,10 +221,11 @@ namespace foo {
     - 所有其他成员函数（静态/非静态、友元函数）
     - 所有其他数据成员（静态/非静态）
 
-### 5.4 其他类规则
-- 虚函数必须显式标记`override`或`final`，禁止重复写`virtual`关键字。
+### 4.4 其他类规则
+
+- 虚函数必须显式标记 `override` 或 `final`，禁止重复写 `virtual` 关键字。
 - 友元仅用于类与其紧密关联的类/函数，禁止滥用友元打破封装。
-- 禁止将类的大方法内联定义在类声明中，仅极短、性能敏感的 trivial 方法可内联。
+- 禁止将类的大方法内联定义在类声明中，仅极短、性能敏感的 `trivial` 方法可内联。
 
 -----
 
@@ -174,9 +236,9 @@ namespace foo {
 - **短小聚焦**：函数长度建议不超过 `40` 行，过长的函数必须拆分为更小的子函数，保证逻辑可理解、可测试。
 - **参数顺序**：输入参数在前，输出参数在后；输入参数优先使用`const T&`常量引用，输出参数必须使用指针`T*`，明确标识可修改语义。
   示例：`void Parse(const std::string& input，int* output);`
-- 禁止使用默认函数参数，避免重载决议歧义、API兼容问题。
+- 禁止使用默认函数参数，避免重载决议歧义、API 兼容问题。
 - 函数重载仅当所有重载版本语义完全一致时使用，保证读者无需查看定义即可理解调用行为。
-- 函数返回值：禁止忽略有状态的返回值（如`absl::Status`），必须做错误处理。
+- 函数返回值：禁止忽略有状态的返回值（如 `absl::Status`），必须做错误处理。
 
 ### 6.2 特殊函数规则
 
@@ -197,14 +259,14 @@ namespace foo {
 | 实体类型 | 命名规则 | 正确示例 | 错误示例 |
 | :---   | :--- | :--- | :--- |
 | 文件名 | 全小写+下划线（优先）/短横线 | `my_class.h`、`http_server.cc` | `MyClass.h`、`myClass.cc` |
-| 类型名（类、结构体、枚举、类型别名） | 大驼峰（PascalCase），首字母大写，无下划线 | `FooBar`、`UrlTable`、`Status` | `fooBar`、`foo_bar` |
-| 函数名（普通函数、类成员函数） | 大驼峰（PascalCase） | `DoSomething()`、`GetValue()` | `doSomething()`、`do_something()` |
-| 变量（局部变量、函数参数、全局变量） | 全小写+下划线（snake_case） | `user_name`、`buffer_size` | `userName`、`UserName` |
-| 类私有/保护成员变量 | 全小写+下划线，**必须以下划线结尾** | `buffer_size_`、`user_name_` | `m_bufferSize`、`buffer_size` |
+| 类型名（类、结构体、枚举、类型别名） | 大驼峰（PascalCase） | `FooBar`、`UrlTable`、`Status` | `fooBar`、`foo_bar` |
+| 函数名 | 大驼峰（PascalCase） | `DoSomething()`、`GetValue()` | `doSomething()`、`do_something()` |
+| 变量（局部变量、全局变量） | 全小写+下划线（snake_case） | `user_name`、`buffer_size` | `userName`、`UserName` |
+| 类成员变量 | 全小写+下划线，**必须以下划线结尾** | `buffer_size_`、`user_name_` | `m_bufferSize`、`buffer_size` |
 | 常量（const/constexpr，全局/类内） | `k`开头 + 大驼峰 | `kMaxBufferSize`、`kDaysInWeek` | `MAX_BUFFER_SIZE`、`max_buffer_size` |
 | 枚举值 | 同常量规则，`k`开头 + 大驼峰 | `kErrorOk`、`kErrorNotFound` | `ERROR_OK`、`error_ok` |
 | 宏定义 | 全大写+下划线，必须带项目前缀 | `PROJECT_MY_MACRO` | `my_macro`、`MY_MACRO` |
-| 命名空间名 | 全小写+下划线 | `foo_bar`、`google_base` | `FooBar`、`FOO_BAR` |
+| 命名空间 | 全小写+下划线 | `foo_bar`、`google_base` | `FooBar`、`FOO_BAR` |
 | 模板参数 | 大驼峰（类型参数）/ 全小写（非类型参数） | `typename T`、`int MaxSize` | `typename t`、`int max_size` |
 
 ### 7.1 文件命名
@@ -225,10 +287,10 @@ namespace foo {
 举例:
 
 ```cpp
-string table_name;  // 好 - 用下划线.
-string tablename;   // 好 - 全小写.
+string table_name;  // 好 - 用下划线
+string tablename;   // 好 - 全小写
 
-string tableName;  // 差 - 混合大小写
+string tableName;   // 差 - 混合大小写
 ```
 
 **类成员变量**
@@ -238,9 +300,9 @@ string tableName;  // 差 - 混合大小写
 ```cpp
 class TableInfo {
 private:
-    string table_name_;  // 好 - 后加下划线.
-    string tablename_;   // 好.
-    static Pool<TableInfo>* pool_;  // 好.
+    string table_name_;  // 好 - 后加下划线
+    string tablename_;   // 好
+    static Pool<TableInfo>* pool_;  // 好
 };
 ```
 
@@ -322,7 +384,7 @@ enum AlternateUrlTableErrors {
 
 ## 9. 代码格式化规则
 
-格式化规则的核心是保证视觉一致性，所有规则可通过`clang-format`工具自动化落地。
+格式化规则的核心是保证视觉一致性，所有规则可通过 `clang-format` 工具自动化落地。
 
 ### 9.1 行长度
 
@@ -339,7 +401,7 @@ enum AlternateUrlTableErrors {
 
 ### 9.4 函数声明与定义
 
-- 返回类型和函数名在同一行，参数也尽量放在同一行，如果放不下就对形参分行，分行方式与 函数调用 一致.
+- 返回类型和函数名在同一行，参数也尽量放在同一行，如果放不下就对形参分行，分行方式与函数调用一致.
 
 函数看上去像这样:
 
@@ -445,7 +507,10 @@ if (...) {
 4.  **换行规则**：函数参数过长时，每个参数单独换行，与左括号对齐；表达式过长时，在运算符前换行，保证可读性。
 5.  **编码**：源文件使用UTF-8编码，非ASCII字符必须极少使用，且必须使用UTF-8格式，禁止使用`wchar_t`/`char16_t`/`char32_t`（Windows API交互除外）。
 
-## 九、注释规范
+----
+
+## 9. 注释规范
+
 ### 9.1 核心原则
 注释必须解释**「为什么这么做」**，而非**「代码做了什么」**；代码本身应能清晰表达「做什么」，无需冗余注释复述代码逻辑。
 
@@ -461,6 +526,8 @@ if (...) {
 6.  **TODO注释**：必须使用全大写`TODO`，后跟责任人/BUG ID/设计文档链接，以及明确的修复时间/触发事件，禁止无明确上下文的TODO。
     示例：`// TODO(bug 123456): 移除该兼容逻辑，2026Q4后所有客户端已支持新接口`
 7.  **禁用注释**：禁止注释掉的代码（死代码），直接删除；禁止无意义的吐槽、梗、个人标记类注释。
+
+----
 
 ## 十、核心特性管控与最佳实践
 ### 10.1 类型与类型转换
@@ -488,10 +555,13 @@ if (...) {
 - 禁止使用线程局部存储`thread_local`，除非极特殊场景。
 - 优先使用标准库的互斥量、条件变量，禁止无锁编程（除非性能收益可验证，且有充分的测试）。
 
+----
+
 ## 十一、其他重要规则
 1.  **包容性语言**：代码命名、注释中必须使用包容性语言，禁止使用带有歧视、冒犯性的术语（如master/slave、blacklist/whitelist），使用性别中立的语言。
 2.  **预处理宏**：尽量避免使用宏，禁止使用宏定义C++ API、类结构、函数；必须使用时，名称必须全局唯一，带项目前缀。
 3.  **可移植性**：代码需考虑编译器、平台的可移植性，避免依赖编译器未定义行为、平台专属特性。
 4.  **测试友好**：代码设计需保证可测试性，核心逻辑必须可单元测试，禁止在核心逻辑中硬编码依赖。
 
+----
 
