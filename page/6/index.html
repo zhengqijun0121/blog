@@ -120,6 +120,39 @@
         alt="/blog/images/avatar.webp"
         title="/blog/images/avatar.webp" width="528" height="560" /></a></div><h1 class="home-title">Hello World</h1><div class="home-subtitle"><div id="id-1" class="typeit"></div></div></div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
+        <a href="/blog/002_docker%E4%BD%BF%E7%94%A8buildx%E6%9E%84%E5%BB%BA%E5%A4%9A%E5%B9%B3%E5%8F%B0%E9%95%9C%E5%83%8F/">Docker 使用 buildx 构建多平台镜像</a>
+    </h1><div class="post-meta"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-publish">发布于 <time datetime="2022-11-06">2022-11-06</time></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/docker/"><i class="far fa-folder" aria-hidden="true"></i>Docker</a></span></div><div class="content"><h2 id="docker">Docker</h2>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt-get install git</span></span></code></pre></div></div>
+<h2 id="git-配置文件">git 配置文件</h2>
+<p><code>git</code> 配置文件有三个：</p>
+<ol>
+<li><code>/etc/gitconfig</code> 是系统级配置文件，使用 <code>git config --system</code> 命令进行修改。</li>
+<li><code>~/.gitconfig</code> 或 <code>~/.config/git/config</code> 是用户级配置文件，使用 <code>git config --global</code> 命令进行修改。</li>
+<li><code>local_dir/.git/config</code> 是仓库级配置文件，使用 <code>git config --local</code> 命令进行修改。</li>
+</ol>
+<h3 id="设置用户信息">设置用户信息</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ git config --global user.name <span class="s2">&#34;username&#34;</span>
+</span></span><span class="line"><span class="cl">$ git config --global user.email username@example.com</span></span></code></pre></div></div>
+<h3 id="设置-git-默认编辑器">设置 git 默认编辑器</h3>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git config --global core.editor emacs</span></span></code></pre></div></div></div><div class="post-footer">
+        <a href="/blog/002_docker%E4%BD%BF%E7%94%A8buildx%E6%9E%84%E5%BB%BA%E5%A4%9A%E5%B9%B3%E5%8F%B0%E9%95%9C%E5%83%8F/">阅读全文</a><div class="post-tags">
+                <i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/docker/">Docker</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
         <a href="/blog/999_todolist/">计划事项</a>
     </h1><div class="post-meta"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-publish">发布于 <time datetime="2022-11-01">2022-11-01</time></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/todo/"><i class="far fa-folder" aria-hidden="true"></i>TODO</a></span></div><div class="content"><p>未来我要去做的事有。。。</p></div><div class="post-footer">
         <a href="/blog/999_todolist/">阅读全文</a><div class="post-tags">
@@ -527,19 +560,6 @@ dependencies {
 <p>核心区别是：时序电路的输出不仅取决于当时的输入值，而且还与电路过去的状态有关；任意时刻的输出仅仅取决于该时刻的输入，与电路原来的状态无关。</p></div><div class="post-footer">
         <a href="/blog/002_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80/">阅读全文</a><div class="post-tags">
                 <i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/961/">961</a>,&nbsp;<a href="/blog/tags/cs/">计算机系统</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/blog/001_%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/">数据结构与算法分析</a>
-    </h1><div class="post-meta"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-publish">发布于 <time datetime="2020-06-12">2020-06-12</time></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/961/"><i class="far fa-folder" aria-hidden="true"></i>961</a></span></div><div class="content"><h2 id="一栈stack队列queue和向量vector">一、栈（Stack）、队列（Queue）和向量（Vector）</h2>
-<h3 id="链表">链表</h3>
-<h4 id="单链表">单链表</h4>
-<h4 id="双向链表">双向链表</h4>
-<h4 id="环形链表">环形链表</h4>
-<h4 id="带哨兵节点的链表">带哨兵节点的链表</h4>
-<h3 id="栈">栈</h3>
-<h4 id="栈的基本概念">栈的基本概念</h4>
-<p>栈(stack)是限制插入和删除只能在一个位置上进行的表，该位置是表的末端，叫作栈的顶(top)．栈也叫做LIFO(后进先出)表．</p></div><div class="post-footer">
-        <a href="/blog/001_%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/">阅读全文</a><div class="post-tags">
-                <i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/961/">961</a>,&nbsp;<a href="/blog/tags/dsa/">数据结构与算法</a></div></div>
 </article><ul class="pagination"><li class="page-item ">
                     <span class="page-link">
                         <a href="/blog/">1</a>
