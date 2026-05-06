@@ -5,7 +5,7 @@
 
 ---
 
-[SWS_CORE_90003]{草案} ⌈以 `ARA` 开头的 `C/C++` 符号保留给 `AUTOSAR` 使用。⌋(RS_AP_00111)
+[SWS_CORE_90003]{草案} ⌈以 `ARA` 开头的 `C/C++` 符号保留给 `AUTOSAR` 使用。⌋
 
 自适应平台通常避免使用 `C/C++` 预处理器宏。但如果未来某个时间点引入了宏，所有此类宏都将以 `ARA` 为前缀。因此，平台供应商不应定义任何以此为前缀的符号（包括宏和 `C/C++` 符号），以免与标准未来新增内容发生冲突。
 
@@ -54,19 +54,19 @@ C语言中的错误码有以下几种形式：
 
 第7.2.1.1节（"操作失败的类型"）中定义的各类操作失败，需采用不同的方式处理。
 
-[SWS_CORE_00002] 错误的处理 ⌈错误应作为 `ara::core::Result` 或 `ara::core::Future` 的实例从函数返回。⌋(RS_AP_00142, RS_AP_00139, RS_AP_00128)
+[SWS_CORE_00002] 错误的处理 ⌈错误应作为 `ara::core::Result` 或 `ara::core::Future` 的实例从函数返回。⌋
 
 [SWS_CORE_00003] 违规的处理 ⌈如果检测到违规，应将其发生记录为 `FATAL` 级别的日志消息（如果自适应平台相应功能集群启用了日志功能），然后通过以下两种方式之一终止操作：
 - 抛出一个非 `ara::core::Exception` 子类的异常
 - 通过调用 `ara::core::Abort` 显式异常终止进程
 
-⌋(RS_AP_00142)
+⌋
 
-[SWS_CORE_00004] 损坏的处理 ⌈如果检测到损坏，应以实现定义的方式导致进程异常终止。⌋(RS_AP_00142)
+[SWS_CORE_00004] 损坏的处理 ⌈如果检测到损坏，应以实现定义的方式导致进程异常终止。⌋
 
 注：根据实现检测损坏并通过清理资源做出响应的能力，终止可以是异常终止，也可以是正常的失败终止。
 
-[SWS_CORE_00005] 默认分配失败的处理 ⌈"默认分配失败"应与违规同等处理。⌋(RS_AP_00142)
+[SWS_CORE_00005] 默认分配失败的处理 ⌈"默认分配失败"应与违规同等处理。⌋
 
 注：自定义分配器的错误不适用于此定义。
 
@@ -98,7 +98,7 @@ else if (ec == AnotherEnum::another_error)
 
 这种频繁创建临时 `ara::core::ErrorCode` 实例的操作预计非常快速，不会产生明显的运行时开销。这通常通过将 `ara::core::ErrorCode` 设计为字面量类型来保证。
 
-[SWS_CORE_10300]{草案} 错误码类型属性 ⌈ `ara::core::ErrorCode` 类应是 `C++11` 标准 [5] 第 3.9 - 10 节 [`basic.types`] 定义的字面量类型。⌋(RS_AP_00130)
+[SWS_CORE_10300]{草案} 错误码类型属性 ⌈ `ara::core::ErrorCode` 类应是 `C++11` 标准 [5] 第 3.9 - 10 节 [`basic.types`] 定义的字面量类型。⌋
 
 ##### 7.2.1.3.2 ErrorDomain
 
@@ -120,7 +120,7 @@ else if (ec == AnotherEnum::another_error)
 
 由于 `ara::core::ErrorDomain` 子类预计会在常量（即编译时）表达式中被隐式引用（通常涉及 `ara::core::ErrorCode`），因此它们也应是字面量类型。
 
-[SWS_CORE_10400]{草案} 错误域类型属性 ⌈`ara::core::ErrorDomain` 类及其所有子类应是 `C++11` 标准[5]第3.9-10节[basic.types]定义的字面量类型。⌋(RS_AP_00130)
+[SWS_CORE_10400]{草案} 错误域类型属性 ⌈`ara::core::ErrorDomain` 类及其所有子类应是 `C++11` 标准[5]第3.9-10节[basic.types]定义的字面量类型。⌋
 
 ##### 7.2.1.3.3 Result
 
@@ -163,7 +163,7 @@ ara::core::Result用于从同步函数调用返回值或错误，而ara::core::F
 
 所有这些都不应定义在 `ara::core` 命名空间中，而应定义在"目标"命名空间中。
 
-[SWS_CORE_10999]{草案} 自定义错误域作用域 ⌈错误域子类及其对应的枚举、异常基类、全局访问器函数和 `MakeErrorCode` 重载，应定义在为其指定的软件模块所在的同一个命名空间中。⌋(RS_AP_00130)
+[SWS_CORE_10999]{草案} 自定义错误域作用域 ⌈错误域子类及其对应的枚举、异常基类、全局访问器函数和 `MakeErrorCode` 重载，应定义在为其指定的软件模块所在的同一个命名空间中。⌋
 
 注：这有助于确保 `C++` 的 `ADL`（参数依赖查找）机制按照本标准其他部分的预期工作。
 
@@ -175,13 +175,13 @@ ara::core::Result用于从同步函数调用返回值或错误，而ara::core::F
 
 错误条件枚举描述了新软件模块的所有已知错误条件。它应具有足够细的粒度，以允许用户区分可能需要以不同方式处理的错误条件。
 
-[SWS_CORE_10900]{草案} 错误条件枚举类型 ⌈每个错误域应定义一个基类型为 `ara::core::ErrorDomain::CodeType` 的强类型枚举类，包含该错误域的所有错误条件。⌋(RS_AP_00130)
+[SWS_CORE_10900]{草案} 错误条件枚举类型 ⌈每个错误域应定义一个基类型为 `ara::core::ErrorDomain::CodeType` 的强类型枚举类，包含该错误域的所有错误条件。⌋
 
-[SWS_CORE_10901]{草案} 错误条件枚举命名 ⌈错误域的错误条件枚举应遵循命名方案 `<SN>Errc`，其中 `<SN>` 是 `ApApplicationErrorDomain` 的短名称。⌋(RS_AP_00130)
+[SWS_CORE_10901]{草案} 错误条件枚举命名 ⌈错误域的错误条件枚举应遵循命名方案 `<SN>Errc`，其中 `<SN>` 是 `ApApplicationErrorDomain` 的短名称。⌋
 
-[SWS_CORE_10902]{草案} 错误条件枚举内容 ⌈错误域的错误条件枚举不应包含任何表示成功的值。⌋(RS_AP_00130)
+[SWS_CORE_10902]{草案} 错误条件枚举内容 ⌈错误域的错误条件枚举不应包含任何表示成功的值。⌋
 
-[SWS_CORE_10903]{草案} 错误条件枚举编号 ⌈错误域的错误条件枚举应保留数字 `0` 未分配。⌋(RS_AP_00130)
+[SWS_CORE_10903]{草案} 错误条件枚举编号 ⌈错误域的错误条件枚举应保留数字 `0` 未分配。⌋
 
 ###### 7.2.1.6.2 异常基类
 
@@ -189,59 +189,59 @@ ara::core::Result用于从同步函数调用返回值或错误，而ara::core::F
 
 软件模块可以定义其他异常类型，但所有这些类型都应派生自此基类型。
 
-[SWS_CORE_10910]{草案} 错误域异常基类型 ⌈每个错误域应定义一个异常基类型，该类型是 `ara::core::Exception` 的子类。⌋(RS_AP_00130)
+[SWS_CORE_10910]{草案} 错误域异常基类型 ⌈每个错误域应定义一个异常基类型，该类型是 `ara::core::Exception` 的子类。⌋
 
-[SWS_CORE_10911]{草案} 错误域异常基类型命名 ⌈[SWS_CORE_10910]指定的所有错误域异常基类型应遵循命名方案 `<SN>Exception`，其中 `<SN>` 是 `ApApplicationErrorDomain` 的短名称。⌋(RS_AP_00130)
+[SWS_CORE_10911]{草案} 错误域异常基类型命名 ⌈[SWS_CORE_10910]指定的所有错误域异常基类型应遵循命名方案 `<SN>Exception`，其中 `<SN>` 是 `ApApplicationErrorDomain` 的短名称。⌋
 
-[SWS_CORE_10912]{草案} 错误域异常类型层次结构 ⌈软件模块定义的所有其他异常类型都应将[SWS_CORE_10910]指定的异常基类型作为基类。⌋(RS_AP_00130)
+[SWS_CORE_10912]{草案} 错误域异常类型层次结构 ⌈软件模块定义的所有其他异常类型都应将[SWS_CORE_10910]指定的异常基类型作为基类。⌋
 
 ###### 7.2.1.6.3 错误域子类
 
 然后，创建一个派生自ara::core::ErrorDomain的新类，并覆盖所有纯虚成员函数。除此之外，还需要在其作用域中定义一个名为Errc的类型别名（指向错误条件枚举），以及另一个名为Exception的类型别名（指向该新错误域的异常基类）。
 
-[SWS_CORE_10930]{草案} 错误域子类类型 ⌈每个错误域应定义一个公共派生自ara::core::ErrorDomain的类类型。⌋(RS_AP_00130)
+[SWS_CORE_10930]{草案} 错误域子类类型 ⌈每个错误域应定义一个公共派生自ara::core::ErrorDomain的类类型。⌋
 
-[SWS_CORE_10931]{草案} 错误域子类命名 ⌈ara::core::ErrorDomain的所有子类应遵循命名方案<SN>ErrorDomain，其中<SN>是ApApplicationErrorDomain的短名称。⌋(RS_AP_00130)
+[SWS_CORE_10931]{草案} 错误域子类命名 ⌈ara::core::ErrorDomain的所有子类应遵循命名方案<SN>ErrorDomain，其中<SN>是ApApplicationErrorDomain的短名称。⌋
 
-[SWS_CORE_10932]{草案} 错误域子类不可扩展性 ⌈ara::core::ErrorDomain的所有子类应声明为final。⌋(RS_AP_00130, RS_AP_00140)
+[SWS_CORE_10932]{草案} 错误域子类不可扩展性 ⌈ara::core::ErrorDomain的所有子类应声明为final。⌋
 
-[SWS_CORE_10933]{草案} 错误域子类Errc符号 ⌈ara::core::ErrorDomain的所有子类应在其作用域中包含一个名为Errc的类型别名，指向[SWS_CORE_10900]定义的错误条件枚举。⌋(RS_AP_00130)
+[SWS_CORE_10933]{草案} 错误域子类Errc符号 ⌈ara::core::ErrorDomain的所有子类应在其作用域中包含一个名为Errc的类型别名，指向[SWS_CORE_10900]定义的错误条件枚举。⌋
 
-[SWS_CORE_10934]{草案} 错误域子类Exception符号 ⌈ara::core::ErrorDomain的所有子类应在其作用域中包含一个名为Exception的类型别名，指向[SWS_CORE_10910]定义的异常基类型。⌋(RS_AP_00130)
+[SWS_CORE_10934]{草案} 错误域子类Exception符号 ⌈ara::core::ErrorDomain的所有子类应在其作用域中包含一个名为Exception的类型别名，指向[SWS_CORE_10910]定义的异常基类型。⌋
 
 所有错误域子类都可以在常量表达式中使用，参见[SWS_CORE_10400]。特别是，这意味着错误域子类可以定义为constexpr全局变量。
 
 为了进一步简化错误域的使用，要求错误域子类的所有成员函数都是noexcept的，但ErrorDomain::ThrowAsException是明显的例外。
 
-[SWS_CORE_10950]{草案} 错误域子类成员函数属性 ⌈除了ara::core::ErrorDomain::ThrowAsException之外，所有错误域子类的所有公共成员函数都应是noexcept的。⌋(RS_AP_00130)
+[SWS_CORE_10950]{草案} 错误域子类成员函数属性 ⌈除了ara::core::ErrorDomain::ThrowAsException之外，所有错误域子类的所有公共成员函数都应是noexcept的。⌋
 
 虚成员函数ErrorDomain::Name()返回ApApplicationErrorDomain的短名称，主要用于日志记录目的。
 
-[SWS_CORE_10951]{草案} 错误域子类短名称获取 ⌈错误域的Name()成员函数的返回值应等于ApApplicationErrorDomain的短名称。⌋(RS_AP_00130)
+[SWS_CORE_10951]{草案} 错误域子类短名称获取 ⌈错误域的Name()成员函数的返回值应等于ApApplicationErrorDomain的短名称。⌋
 
 每个错误域都有一个用于确定错误域相等性的标识符。自适应平台预定义的错误域具有标准化标识符。应用特定的错误域应确保其标识符在系统范围内唯一。
 
-[SWS_CORE_10952]{草案} 错误域子类唯一标识符获取 ⌈错误域的Id()成员函数的返回值应是遵循[SWS_CORE_00010]定义规则的唯一标识符。⌋(RS_AP_00130)
+[SWS_CORE_10952]{草案} 错误域子类唯一标识符获取 ⌈错误域的Id()成员函数的返回值应是遵循[SWS_CORE_00010]定义规则的唯一标识符。⌋
 
 错误域可以将ErrorCode转换为异常。
 
-[SWS_CORE_10953]{草案} 将错误码作为异常抛出 ⌈错误域子类实现的ErrorDomain::ThrowAsException函数抛出的异常类型，应派生自该错误域子类中[SWS_CORE_10934]定义的Exception类型别名。⌋(RS_AP_00130)
+[SWS_CORE_10953]{草案} 将错误码作为异常抛出 ⌈错误域子类实现的ErrorDomain::ThrowAsException函数抛出的异常类型，应派生自该错误域子类中[SWS_CORE_10934]定义的Exception类型别名。⌋
 
 ###### 7.2.1.6.4 全局错误域子类访问器函数
 
 需要为新的错误域类定义一个全局访问器函数。对于错误域类MyErrorDomain，访问器函数命名为GetMyErrorDomain。该访问器函数返回该类的单个全局实例的引用。该访问器函数应完全支持constexpr；这反过来意味着错误域子类也应支持constexpr构造（参见[SWS_CORE_10400]）。
 
-[SWS_CORE_10980]{草案} 错误域子类访问器函数 ⌈对于ara::core::ErrorDomain的所有子类，都应存在一个全局constexpr函数，返回其单例实例的const引用。⌋(RS_AP_00130)
+[SWS_CORE_10980]{草案} 错误域子类访问器函数 ⌈对于ara::core::ErrorDomain的所有子类，都应存在一个全局constexpr函数，返回其单例实例的const引用。⌋
 
-[SWS_CORE_10981]{草案} 错误域子类访问器函数命名 ⌈所有ara::core::ErrorDomain子类访问器函数应遵循命名方案Get<SN>ErrorDomain，其中<SN>是ApApplicationErrorDomain的短名称。⌋(RS_AP_00130)
+[SWS_CORE_10981]{草案} 错误域子类访问器函数命名 ⌈所有ara::core::ErrorDomain子类访问器函数应遵循命名方案Get<SN>ErrorDomain，其中<SN>是ApApplicationErrorDomain的短名称。⌋
 
-[SWS_CORE_10982]{草案} 错误域子类访问器函数 ⌈所有ara::core::ErrorDomain子类访问器函数的返回类型应为const ErrorDomain&。⌋(RS_AP_00130)
+[SWS_CORE_10982]{草案} 错误域子类访问器函数 ⌈所有ara::core::ErrorDomain子类访问器函数的返回类型应为const ErrorDomain&。⌋
 
 ###### 7.2.1.6.5 全局 `MakeErrorCode` 重载
 
 最后，需要定义一个全局工厂函数MakeErrorCode，该函数由ara::core::ErrorCode类的便捷构造函数隐式使用。该工厂函数将使用错误域子类的全局访问器函数，并调用ara::core::ErrorCode类的类型擦除构造函数。
 
-[SWS_CORE_10990]{草案} 新错误域的MakeErrorCode重载 ⌈对于ara::core::ErrorDomain的所有子类，都应存在一个全局函数MakeErrorCode的constexpr重载，用于为ara::core::ErrorDomain子类错误条件范围内的给定错误条件值创建ara::core::ErrorCode实例。⌋(RS_AP_00130)
+[SWS_CORE_10990]{草案} 新错误域的MakeErrorCode重载 ⌈对于ara::core::ErrorDomain的所有子类，都应存在一个全局函数MakeErrorCode的constexpr重载，用于为ara::core::ErrorDomain子类错误条件范围内的给定错误条件值创建ara::core::ErrorCode实例。⌋
 
 [SWS_CORE_10991]{草案} MakeErrorCode重载签名 ⌈全局函数MakeErrorCode的所有重载应具有以下签名：
 
@@ -249,7 +249,7 @@ ara::core::Result用于从同步函数调用返回值或错误，而ara::core::F
 constexpr ErrorCode MakeErrorCode(<SN>Errc code, ErrorDomain::SupportDataType data) noexcept;
 ```
 
-其中 `<SN>` 是ApApplicationErrorDomain的短名称。⌋(RS_AP_00130)
+其中 `<SN>` 是ApApplicationErrorDomain的短名称。⌋
 
 ###### 7.2.1.6.6 C++伪代码示例
 
@@ -295,15 +295,15 @@ constexpr ara::core::ErrorCode MakeErrorCode(<SN>Errc code, ara::core::ErrorDoma
 
 用户指定ID的最高位设置为0，可以使用剩余的63位来保证唯一性。最高位设置为1的ID保留给AUTOSAR和栈供应商使用。
 
-[SWS_CORE_00010]{草案} 错误域标识符 ⌈所有错误域都应具有一个系统范围内唯一的标识符，该标识符表示为64位无符号整数值。⌋(RS_AP_00130)
+[SWS_CORE_00010]{草案} 错误域标识符 ⌈所有错误域都应具有一个系统范围内唯一的标识符，该标识符表示为64位无符号整数值。⌋
 
-[SWS_CORE_00011]{草案} AUTOSAR错误域范围 ⌈第63位设置为1且第62位设置为0的错误域标识符保留给AUTOSAR定义的错误域。⌋(RS_AP_00130)
+[SWS_CORE_00011]{草案} AUTOSAR错误域范围 ⌈第63位设置为1且第62位设置为0的错误域标识符保留给AUTOSAR定义的错误域。⌋
 
-[SWS_CORE_00016]{草案} 供应商定义错误域范围 ⌈高32位（即第63位至第32位）等于0xc000'0000的错误域标识符保留给供应商特定的错误域。第31位至第16位保存供应商的数字标识符，第15位至第0位可供每个供应商用于错误域标识符。⌋(RS_AP_00130)
+[SWS_CORE_00016]{草案} 供应商定义错误域范围 ⌈高32位（即第63位至第32位）等于0xc000'0000的错误域标识符保留给供应商特定的错误域。第31位至第16位保存供应商的数字标识符，第15位至第0位可供每个供应商用于错误域标识符。⌋
 
-[SWS_CORE_00013] Future错误域 ⌈应为所有源自ara::core::Future和ara::core::Promise类交互的错误定义一个错误域ara::core::FutureErrorDomain。其短名称应为Future，标识符为0x8000'0000'0000'0013。⌋(RS_AP_00130)
+[SWS_CORE_00013] Future错误域 ⌈应为所有源自ara::core::Future和ara::core::Promise类交互的错误定义一个错误域ara::core::FutureErrorDomain。其短名称应为Future，标识符为0x8000'0000'0000'0013。⌋
 
-[SWS_CORE_00014] Core错误域 ⌈应为所有源自ara::core非Future/Promise设施的错误定义一个错误域ara::core::CoreErrorDomain。其短名称应为Core，标识符为0x8000'0000'0000'0014。⌋(RS_AP_00130)
+[SWS_CORE_00014] Core错误域 ⌈应为所有源自ara::core非Future/Promise设施的错误定义一个错误域ara::core::CoreErrorDomain。其短名称应为Core，标识符为0x8000'0000'0000'0014。⌋
 
 ### 7.2.2 异步信号安全
 
@@ -321,15 +321,15 @@ POSIX标准[7]定义了一组保证异步信号安全的函数；所有不在此
 
 与std::abort类似，调用ara::core::Abort旨在异常且立即终止当前进程，不执行栈展开，也不调用静态对象的析构函数。
 
-[SWS_CORE_12402]{草案} Abort的"不返回"属性 ⌈ara::core::Abort函数不应返回给其调用者。⌋(RS_AP_00130)
+[SWS_CORE_12402]{草案} Abort的"不返回"属性 ⌈ara::core::Abort函数不应返回给其调用者。⌋
 
-[SWS_CORE_12403]{草案} 显式操作终止的日志记录 ⌈除非为此应用程序停用了日志功能，否则调用ara::core::Abort应导致通过ara::log输出一条FATAL级别的日志消息，该消息应包含传递给函数的字符串参数。⌋(RS_AP_00130)
+[SWS_CORE_12403]{草案} 显式操作终止的日志记录 ⌈除非为此应用程序停用了日志功能，否则调用ara::core::Abort应导致通过ara::log输出一条FATAL级别的日志消息，该消息应包含传递给函数的字符串参数。⌋
 
-[SWS_CORE_12407]{草案} 显式操作终止的线程安全性 ⌈当一个ara::core::Abort调用正在进行时，其他对该函数的调用应阻塞调用线程。⌋(RS_AP_00130)
+[SWS_CORE_12407]{草案} 显式操作终止的线程安全性 ⌈当一个ara::core::Abort调用正在进行时，其他对该函数的调用应阻塞调用线程。⌋
 
 ara::core::Abort提供了一种向系统添加"钩子"的方法，通过调用ara::core::SetAbortHandler实现，类似于std::atexit允许为std::exit机制安装回调的方式。然而，与std::atexit不同，ara::core::SetAbortHandler只能设置一个处理程序。
 
-[SWS_CORE_12404]{草案} 终止处理程序的调用 ⌈调用ara::core::Abort时，如果已设置终止处理程序，则应在按照[SWS_CORE_12403]输出日志消息之后调用该处理程序。⌋(RS_AP_00130)
+[SWS_CORE_12404]{草案} 终止处理程序的调用 ⌈调用ara::core::Abort时，如果已设置终止处理程序，则应在按照[SWS_CORE_12403]输出日志消息之后调用该处理程序。⌋
 
 #### 7.2.3.1
 
@@ -347,9 +347,9 @@ ara::core::Abort提供了一种向系统添加"钩子"的方法，通过调用ar
 
 如果终止处理程序返回，或者根本没有定义终止处理程序，则ara::core::Abort的最终操作是调用std::abort。
 
-[SWS_CORE_12405]{草案} 无终止处理程序时的最终操作 ⌈如果没有通过ara::core::SetAbortHandler安装自定义ara::core::AbortHandler，则ara::core::Abort的实现应调用std::abort()。⌋(RS_AP_00130)
+[SWS_CORE_12405]{草案} 无终止处理程序时的最终操作 ⌈如果没有通过ara::core::SetAbortHandler安装自定义ara::core::AbortHandler，则ara::core::Abort的实现应调用std::abort()。⌋
 
-[SWS_CORE_12406]{草案} 终止处理程序返回时的最终操作 ⌈如果已通过ara::core::SetAbortHandler安装了自定义ara::core::AbortHandler且该处理程序返回，则ara::core::Abort的实现应调用std::abort()。⌋(RS_AP_00130)
+[SWS_CORE_12406]{草案} 终止处理程序返回时的最终操作 ⌈如果已通过ara::core::SetAbortHandler安装了自定义ara::core::AbortHandler且该处理程序返回，则ara::core::Abort的实现应调用std::abort()。⌋
 
 #### 7.2.3.2 SIGABRT信号处理程序
 
@@ -373,11 +373,11 @@ SIGABRT处理程序提供的这种"第二步"影响机制，允许已经处理�
 
 从概念上讲，`ara::core::InstanceSpecifier` 可以理解为有效元模型路径的字符串表示的包装器。它设计为可以通过工厂方法ara::core::InstanceSpecifier::Create从字符串表示构造（提供无异常解决方案），也可以直接使用构造函数构造（如果字符串表示无效，可能会抛出异常）。
 
-[SWS_CORE_10200] 有效的实例说明符表示 ⌈有效实例说明符的内容由以"/"分隔的模型元素名称列表组成，从可执行文件开始，到实例说明符所应用的相应PortPrototype结束。⌋(RS_AP_00130)
+[SWS_CORE_10200] 有效的实例说明符表示 ⌈有效实例说明符的内容由以"/"分隔的模型元素名称列表组成，从可执行文件开始，到实例说明符所应用的相应PortPrototype结束。⌋
 
-[SWS_CORE_10201] 元模型路径验证 ⌈InstanceSpecifier类的构造机制应拒绝根据[SWS_CORE_10200]定义的语法规则在语法上无效的元模型路径。⌋(RS_AP_00130)
+[SWS_CORE_10201] 元模型路径验证 ⌈InstanceSpecifier类的构造机制应拒绝根据[SWS_CORE_10200]定义的语法规则在语法上无效的元模型路径。⌋
 
-[SWS_CORE_10202] 实例说明符对象的构造 ⌈应提供可能抛出和不抛出两种形式的InstanceSpecifier对象构造API。⌋(RS_AP_00130)
+[SWS_CORE_10202] 实例说明符对象的构造 ⌈应提供可能抛出和不抛出两种形式的InstanceSpecifier对象构造API。⌋
 
 #### 7.2.4.2 派生自基础C++标准的类型
 
@@ -385,7 +385,7 @@ SIGABRT处理程序提供的这种"第二步"影响机制，允许已经处理�
 
 有些类型已经包含在C++11标准[5]中；然而，自适应平台在ara::core命名空间中重新定义了行为几乎相同的类型。这样做的原因是std类型的内存分配行为通常不适合汽车应用。因此，ara::core中的类型定义了自己的内存分配行为，并进行了其他必要的适配，包括关于异常抛出的适配。
 
-[SWS_CORE_00040]{草案} 源自C++标准类的错误 ⌈对于下文根据C++标准相应类指定的ara::core中的类，C++11标准[5]、C++17标准[10]或C++20标准草案[11]中规定会抛出任何异常的所有函数，在抛出异常时都被规定为导致违规。⌋(RS_AP_00130)
+[SWS_CORE_00040]{草案} 源自C++标准类的错误 ⌈对于下文根据C++标准相应类指定的ara::core中的类，C++11标准[5]、C++17标准[10]或C++20标准草案[11]中规定会抛出任何异常的所有函数，在抛出异常时都被规定为导致违规。⌋
 
 此类数据类型的示例包括：数组、向量、映射和字符串。
 
@@ -398,7 +398,7 @@ ara::core::Array几乎等同于std::array，std::array的大多数类型属性�
 以下是与std::array的预期差异：
 - 省略了std::array::at（以避免强制异常处理）
 
-[SWS_CORE_11200]{草案} 数组基础行为 ⌈ara::core::Array及其所有成员函数和支持构造的行为应与C++14标准[4]头文件<array>中的行为相同，本文档中指定的差异除外。⌋(RS_AP_00130)
+[SWS_CORE_11200]{草案} 数组基础行为 ⌈ara::core::Array及其所有成员函数和支持构造的行为应与C++14标准[4]头文件<array>中的行为相同，本文档中指定的差异除外。⌋
 
 ##### 7.2.4.2.2 SteadyClock
 
@@ -432,9 +432,9 @@ C++ std::chrono库定义了多个标准时钟。其中包括std::chrono::steady_
 
 ara::core::SteadyClock的属性意味着，如果std::chrono::steady_clock::period等同于std::nano，且std::chrono::steady_clock::rep是64位有符号整数类型（如std::int64_t），则std::chrono::steady_clock的类型别名是ara::core::SteadyClock的符合实现。
 
-[SWS_CORE_11800]{草案} 稳态时钟类型要求 ⌈ara::core::SteadyClock类应满足C++11标准[5]中TrivialClock的要求。⌋(RS_AP_00130)
+[SWS_CORE_11800]{草案} 稳态时钟类型要求 ⌈ara::core::SteadyClock类应满足C++11标准[5]中TrivialClock的要求。⌋
 
-[SWS_CORE_11801]{草案} 稳态时钟的纪元 ⌈ara::core::SteadyClock的纪元应为系统启动时间。⌋(RS_AP_00130)
+[SWS_CORE_11801]{草案} 稳态时钟的纪元 ⌈ara::core::SteadyClock的纪元应为系统启动时间。⌋
 
 #### 7.2.4.3 派生自较新C++标准的类型
 
@@ -450,27 +450,27 @@ ara::core::SteadyClock的属性意味着，如果std::chrono::steady_clock::peri
 
 与C++17标准[10]中的std::byte不同，ara::core::Byte是否可以用于类型别名而不触发未定义行为由实现定义。
 
-[SWS_CORE_10100] ara::core::Byte的类型属性 ⌈`ara::core::Byte` 类型不应是整数类型。特别是，`std::is_integral<ara::core::Byte>::value` 的值应为0。⌋(RS_AP_00130)
+[SWS_CORE_10100] ara::core::Byte的类型属性 ⌈`ara::core::Byte` 类型不应是整数类型。特别是，`std::is_integral<ara::core::Byte>::value` 的值应为0。⌋
 
-[SWS_CORE_10101] ara::core::Byte类型的大小 ⌈`ara::core::Byte` 类型实例的大小（通过 `sizeof(ara::core::Byte)` 确定）应为 `1` 字节。⌋(RS_AP_00130)
+[SWS_CORE_10101] ara::core::Byte类型的大小 ⌈`ara::core::Byte` 类型实例的大小（通过 `sizeof(ara::core::Byte)` 确定）应为 `1` 字节。⌋
 
-[SWS_CORE_10102] ara::core::Byte类型的值范围 ⌈`ara::core::Byte` 类型实例的值应限制在 `[0..std::numeric_limits<unsigned char>::max()]` 范围内。⌋(RS_AP_00130)
+[SWS_CORE_10102] ara::core::Byte类型的值范围 ⌈`ara::core::Byte` 类型实例的值应限制在 `[0..std::numeric_limits<unsigned char>::max()]` 范围内。⌋
 
-[SWS_CORE_10103] ara::core::Byte实例的创建 ⌈ara::core::Byte类型的实例应可以通过花括号初始化语法从整数类型创建。这种初始化也应可以在常量表达式中调用。如果初始化器值超出ara::core::Byte类型的值范围（参见[SWS_CORE_10102]），则行为未定义。⌋(RS_AP_00130)
+[SWS_CORE_10103] ara::core::Byte实例的创建 ⌈ara::core::Byte类型的实例应可以通过花括号初始化语法从整数类型创建。这种初始化也应可以在常量表达式中调用。如果初始化器值超出ara::core::Byte类型的值范围（参见[SWS_CORE_10102]），则行为未定义。⌋
 
-[SWS_CORE_10104] 默认构造的ara::core::Byte实例 ⌈ara::core::Byte类型的实例应可以在不提供初始化器值的情况下构造。这样的变量定义不应产生运行时开销，且实例的值应具有不确定的内容。⌋(RS_AP_00130)
+[SWS_CORE_10104] 默认构造的ara::core::Byte实例 ⌈ara::core::Byte类型的实例应可以在不提供初始化器值的情况下构造。这样的变量定义不应产生运行时开销，且实例的值应具有不确定的内容。⌋
 
-[SWS_CORE_10105] ara::core::Byte类型的析构函数 ⌈ara::core::Byte类型的析构函数应是平凡的。⌋(RS_AP_00130)
+[SWS_CORE_10105] ara::core::Byte类型的析构函数 ⌈ara::core::Byte类型的析构函数应是平凡的。⌋
 
-[SWS_CORE_10106] 从其他类型的隐式转换 ⌈ara::core::Byte类型不应允许从任何其他类型进行隐式转换。⌋(RS_AP_00130)
+[SWS_CORE_10106] 从其他类型的隐式转换 ⌈ara::core::Byte类型不应允许从任何其他类型进行隐式转换。⌋
 
-[SWS_CORE_10107] 到其他类型的隐式转换 ⌈ara::core::Byte类型不应允许到任何其他类型的隐式转换，包括bool。⌋(RS_AP_00130)
+[SWS_CORE_10107] 到其他类型的隐式转换 ⌈ara::core::Byte类型不应允许到任何其他类型的隐式转换，包括bool。⌋
 
-[SWS_CORE_10108] 到unsigned char的转换 ⌈ara::core::Byte类型应允许通过static_cast<>表达式转换为unsigned char。这种转换也应可以在常量表达式中调用。⌋(RS_AP_00130)
+[SWS_CORE_10108] 到unsigned char的转换 ⌈ara::core::Byte类型应允许通过static_cast<>表达式转换为unsigned char。这种转换也应可以在常量表达式中调用。⌋
 
-[SWS_CORE_10109] ara::core::Byte的相等比较 ⌈ara::core::Byte类型应可以与其他ara::core::Byte类型的实例进行相等比较。这种比较也应可以在常量表达式中调用。⌋(RS_AP_00130)
+[SWS_CORE_10109] ara::core::Byte的相等比较 ⌈ara::core::Byte类型应可以与其他ara::core::Byte类型的实例进行相等比较。这种比较也应可以在常量表达式中调用。⌋
 
-[SWS_CORE_10110] ara::core::Byte的不等比较 ⌈ara::core::Byte类型应可以与其他ara::core::Byte类型的实例进行不等比较。这种比较也应可以在常量表达式中调用。⌋(RS_AP_00130)
+[SWS_CORE_10110] ara::core::Byte的不等比较 ⌈ara::core::Byte类型应可以与其他ara::core::Byte类型的实例进行不等比较。这种比较也应可以在常量表达式中调用。⌋
 
 ---
 

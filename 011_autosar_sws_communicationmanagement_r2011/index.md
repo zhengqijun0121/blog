@@ -100,7 +100,7 @@ ARA API的设计遵循以下原则：
     - 对于向后兼容的接口或行为变更，主版本号不变，次版本号加 `1`
 2. 服务接口的契约版本映射到服务接口部署版本。同一服务接口可进行多次映射，生成多个服务接口部署版本。根据文献[6]中的[constr_1723]要求，这种映射应确保在每个 `VLAN` 上的标识唯一性。
 
-**[SWS_CM_99003]{草案}** ⌈服务发现应根据用于服务连接的网络绑定，评估服务接口部署版本的向后兼容性。⌋（RS_CM_00500, RS_CM_00501, RS_CM_00700）
+**[SWS_CM_99003]{草案}** ⌈服务发现应根据用于服务连接的网络绑定，评估服务接口部署版本的向后兼容性。⌋
 
 ----
 
@@ -108,9 +108,9 @@ ARA API的设计遵循以下原则：
 
 本节规定了 `ara::com` 中端到端（`E2E`）通信保护在事件处理中的集成方式。
 
-**[SWS_CM_90402]{草案}** ⌈受 `E2E` 保护的事件，其选项应在 `End2EndEventProtectionProps` 和 `E2EProfileConfiguration` 中配置。⌋（RS_E2E_08540）
+**[SWS_CM_90402]{草案}** ⌈受 `E2E` 保护的事件，其选项应在 `End2EndEventProtectionProps` 和 `E2EProfileConfiguration` 中配置。⌋
 
-**[SWS_CM_90433]{草案}** ⌈本节中提及的 `E2E` 函数 `E2E_protect` 和 `E2E_check` 应满足文献[7]中定义的E2E保护要求，并符合文献[4]中的E2E保护协议规范（特别是[PRS_E2E_00323]）。⌋（RS_E2E_08540, RS_CM_00223）
+**[SWS_CM_90433]{草案}** ⌈本节中提及的 `E2E` 函数 `E2E_protect` 和 `E2E_check` 应满足文献[7]中定义的E2E保护要求，并符合文献[4]中的E2E保护协议规范（特别是[PRS_E2E_00323]）。⌋
 
 对于属于特定 `ServiceProxy`/`ServiceSkeleton` 类的每个具体事件类，都有对应的 `E2E Data ID`（例如，基于服务ID、服务实例ID和事件ID的组合生成）。
 
@@ -122,31 +122,31 @@ ARA API的设计遵循以下原则：
 
 #### 7.2.2 发布者
 
-**[SWS_CM_90453]{草案}** ⌈对于受 `E2E` 保护的事件，`E2E` 保护应在 `Send` 的上下文中执行。⌋（RS_CM_00223, RS_E2E_08540）
+**[SWS_CM_90453]{草案}** ⌈对于受 `E2E` 保护的事件，`E2E` 保护应在 `Send` 的上下文中执行。⌋
 
 图7.5展示了发布者端E2E保护涉及的组件交互概览。
 
 **图7.5：E2E发布者**
 
-**[SWS_CM_90430]{草案}** ⌈对于受E2E保护的事件，`Send` 应序列化样本数据，并根据相应网络绑定的规则（例如，SOME/IP 网络绑定情况下的[SWS_CM_10291]）添加协议头，生成序列化数据。⌋（RS_CM_00223, RS_E2E_08540）
+**[SWS_CM_90430]{草案}** ⌈对于受E2E保护的事件，`Send` 应序列化样本数据，并根据相应网络绑定的规则（例如，SOME/IP 网络绑定情况下的[SWS_CM_10291]）添加协议头，生成序列化数据。⌋
 
 从 `E2E` 保护角度看，该序列化数据包含非保护部分和待保护部分（参见[PRS_E2E_USE_00236]和[PRS_E2E_USE_00741]）。
 
-**[SWS_CM_90401]{草案}** ⌈对于受 `E2E` 保护的事件，应根据[PRS_E2E_00323]对待保护的序列化数据（作为 `serializedData` 参数传递给 `E2E_protect`）调用 `E2E_protect`。⌋（RS_E2E_08540）
+**[SWS_CM_90401]{草案}** ⌈对于受 `E2E` 保护的事件，应根据[PRS_E2E_00323]对待保护的序列化数据（作为 `serializedData` 参数传递给 `E2E_protect`）调用 `E2E_protect`。⌋
 
-**[SWS_CM_90403]{草案}** ⌈对于受 `E2E` 保护的事件，应将 `End2EndEventProtectionProps.dataId`作为 `dataID` 参数传递给 `E2E_protect`。⌋（RS_E2E_08540）
+**[SWS_CM_90403]{草案}** ⌈对于受 `E2E` 保护的事件，应将 `End2EndEventProtectionProps.dataId`作为 `dataID` 参数传递给 `E2E_protect`。⌋
 
-**[SWS_CM_90404]{草案}** ⌈对于受 `E2E` 保护的事件，在 `SOME/IP` 序列化情况下，应将 `E2E header` 添加到消息中。如果相应网络绑定的协议规范对 `E2E header` 的位置有约束（例如，`SOME/IP` 网络绑定情况下的[PRS_SOMEIP_00941]），则应遵守这些约束。⌋（RS_E2E_08540）
+**[SWS_CM_90404]{草案}** ⌈对于受 `E2E` 保护的事件，在 `SOME/IP` 序列化情况下，应将 `E2E header` 添加到消息中。如果相应网络绑定的协议规范对 `E2E header` 的位置有约束（例如，`SOME/IP` 网络绑定情况下的[PRS_SOMEIP_00941]），则应遵守这些约束。⌋
 
 #### 7.2.3 订阅者 - GetNewSamples
 
-**[SWS_CM_90406]{草案}** ⌈对于受 `E2E` 保护的事件，`E2E` 校验应在 `GetNewSamples` 的上下文中执行。⌋（RS_CM_00223, RS_E2E_08540）
+**[SWS_CM_90406]{草案}** ⌈对于受 `E2E` 保护的事件，`E2E` 校验应在 `GetNewSamples` 的上下文中执行。⌋
 
 图7.6展示了订阅者端 E2E 校验涉及的组件交互概览。
 
 **图7.6：E2E订阅者**
 
-**[SWS_CM_90407]{草案}** ⌈对于受 `E2E` 保护的事件，`GetNewSamples` 应首先获取上次调用该函数后未被提取的所有序列化数据集合。⌋（RS_CM_00224, RS_E2E_08540）
+**[SWS_CM_90407]{草案}** ⌈对于受 `E2E` 保护的事件，`GetNewSamples` 应首先获取上次调用该函数后未被提取的所有序列化数据集合。⌋
 
 从 `E2E` 保护角度看，该序列化数据包含非保护部分和待保护部分（参见[PRS_E2E_USE_00236]和[PRS_E2E_USE_00741]）。
 
@@ -154,31 +154,31 @@ ARA API的设计遵循以下原则：
 
 对于受 `E2E` 保护的事件，如果接收到一个或多个样本的序列化数据，则对每个样本执行以下步骤：
 
-**[SWS_CM_90408]{草案}** ⌈对于给定的受 `E2E` 保护样本，`GetNewSamples` 应处理样本序列化数据中的非 `E2E header`（如果存在）。⌋（RS_CM_00224, RS_E2E_08540）
+**[SWS_CM_90408]{草案}** ⌈对于给定的受 `E2E` 保护样本，`GetNewSamples` 应处理样本序列化数据中的非 `E2E header`（如果存在）。⌋
 
-**[SWS_CM_90410]{草案}** ⌈对于给定的受 `E2E` 保护样本，应根据[RS_E2E_08540]和[PRS_E2E_00323]对受保护的序列化数据（作为 `serializedData` 参数传递给 `E2E_check`）调用 `E2E_check`。⌋（RS_E2E_08540）
+**[SWS_CM_90410]{草案}** ⌈对于给定的受 `E2E` 保护样本，应根据[RS_E2E_08540]和[PRS_E2E_00323]对受保护的序列化数据（作为 `serializedData` 参数传递给 `E2E_check`）调用 `E2E_check`。⌋
 
-**[SWS_CM_90454]{草案}** ⌈对于给定的受 `E2E` 保护样本，应将 `End2EndEventProtectionProps.dataId` 作为 `dataID` 参数传递给 `E2E_check`。⌋（RS_E2E_08540）
+**[SWS_CM_90454]{草案}** ⌈对于给定的受 `E2E` 保护样本，应将 `End2EndEventProtectionProps.dataId` 作为 `dataID` 参数传递给 `E2E_check`。⌋
 
-**[SWS_CM_90411]{草案}** ⌈作为返回值，对于给定的受E2E保护样本，`E2E_check` 应提供一个结果（根据文献[4]的[PRS_E2E_00322]定义的 `e2eResult`），包含 `SMState`（根据文献[4]的[PRS_E2E_00322]定义的 `e2eState`）和 `ProfileCheckStatus`（根据文献[4]的[PRS_E2E_00322]定义的 `e2eStatus`）两个元素。⌋（RS_E2E_08540, RS_E2E_08534）
+**[SWS_CM_90411]{草案}** ⌈作为返回值，对于给定的受E2E保护样本，`E2E_check` 应提供一个结果（根据文献[4]的[PRS_E2E_00322]定义的 `e2eResult`），包含 `SMState`（根据文献[4]的[PRS_E2E_00322]定义的 `e2eState`）和 `ProfileCheckStatus`（根据文献[4]的[PRS_E2E_00322]定义的 `e2eStatus`）两个元素。⌋
 
-**[SWS_CM_90455]{草案}** ⌈对于给定的受 `E2E` 保护样本，应从序列化数据中移除 `E2E header`。⌋（RS_E2E_08540）
+**[SWS_CM_90455]{草案}** ⌈对于给定的受 `E2E` 保护样本，应从序列化数据中移除 `E2E header`。⌋
 
-**[SWS_CM_90412]{草案}** ⌈对于给定的受 `E2E` 保护样本，`GetNewSamples` 应根据相应网络绑定的规则（例如，`SOME/IP` 网络绑定情况下的[SWS_CM_10294]）反序列化处理后的序列化数据，生成反序列化样本。⌋（RS_CM_00224, RS_E2E_08540）
+**[SWS_CM_90412]{草案}** ⌈对于给定的受 `E2E` 保护样本，`GetNewSamples` 应根据相应网络绑定的规则（例如，`SOME/IP` 网络绑定情况下的[SWS_CM_10294]）反序列化处理后的序列化数据，生成反序列化样本。⌋
 
-**[SWS_CM_90413]{草案}** ⌈对于给定的受 `E2E` 保护样本，`GetNewSamples` 应将 `ProfileCheckStatus` 存储在 `SamplePtr` 中，并在该特定受 `E2E` 保护事件的事件类中更新/覆盖全局 `SMState`。⌋（RS_CM_00224, RS_E2E_08540, RS_E2E_08534）
+**[SWS_CM_90413]{草案}** ⌈对于给定的受 `E2E` 保护样本，`GetNewSamples` 应将 `ProfileCheckStatus` 存储在 `SamplePtr` 中，并在该特定受 `E2E` 保护事件的事件类中更新/覆盖全局 `SMState`。⌋
 
 ##### 7.2.3.2 情况2 - 无序列化样本
 
 对于受E2E保护的事件，如果未接收到任何序列化数据，处理步骤更简单，E2E保护将作为超时检测机制工作。
 
-**[SWS_CM_90415]{草案}** ⌈应根据[RS_E2E_08540]和[PRS_E2E_00323]对空样本（即向`E2E_check`传递空指针作为`serializedData`参数）调用`E2E_check`。⌋（RS_E2E_08540）
+**[SWS_CM_90415]{草案}** ⌈应根据[RS_E2E_08540]和[PRS_E2E_00323]对空样本（即向`E2E_check`传递空指针作为`serializedData`参数）调用`E2E_check`。⌋
 
-**[SWS_CM_90456]{草案}** ⌈应将`End2EndEventProtectionProps.dataId`作为`dataID`参数传递给`E2E_check`。⌋（RS_E2E_08540）
+**[SWS_CM_90456]{草案}** ⌈应将`End2EndEventProtectionProps.dataId`作为`dataID`参数传递给`E2E_check`。⌋
 
-**[SWS_CM_90416]{草案}** ⌈作为返回值，对于给定的空样本，`E2E_check`应提供一个结果（根据文献[4]的[PRS_E2E_00322]定义的`e2eResult`），包含`SMState`（根据文献[4]的[PRS_E2E_00322]定义的`e2eState`）和`ProfileCheckStatus`（根据文献[4]的[PRS_E2E_00322]定义的`e2eStatus`）两个元素。⌋（RS_E2E_08540, RS_E2E_08534）
+**[SWS_CM_90416]{草案}** ⌈作为返回值，对于给定的空样本，`E2E_check`应提供一个结果（根据文献[4]的[PRS_E2E_00322]定义的`e2eResult`），包含`SMState`（根据文献[4]的[PRS_E2E_00322]定义的`e2eState`）和`ProfileCheckStatus`（根据文献[4]的[PRS_E2E_00322]定义的`e2eStatus`）两个元素。⌋
 
-**[SWS_CM_90417]{草案}** ⌈`GetNewSamples`应在该特定受E2E保护事件的事件类中更新/覆盖全局`SMState`。⌋（RS_CM_00224, RS_E2E_08540, RS_E2E_08534）
+**[SWS_CM_90417]{草案}** ⌈`GetNewSamples`应在该特定受E2E保护事件的事件类中更新/覆盖全局`SMState`。⌋
 
 #### 7.2.4 订阅者 - 可调用对象f
 
@@ -186,11 +186,11 @@ ARA API的设计遵循以下原则：
 
 #### 7.2.5 订阅者 - E2E信息访问
 
-**[SWS_CM_90457]{草案}** ⌈每个`SamplePtr`应提供`GetProfileCheckStatus`方法，用于访问每个样本的`ProfileCheckStatus`（参见[SWS_CM_90420]）。⌋（RS_CM_00224, RS_E2E_08540）
+**[SWS_CM_90457]{草案}** ⌈每个`SamplePtr`应提供`GetProfileCheckStatus`方法，用于访问每个样本的`ProfileCheckStatus`（参见[SWS_CM_90420]）。⌋
 
-**[SWS_CM_10475]{草案}** ⌈应为特定`ServiceProxy`类的每个事件类提供`GetSMState`方法。⌋（RS_CM_00224, RS_E2E_08534）
+**[SWS_CM_10475]{草案}** ⌈应为特定`ServiceProxy`类的每个事件类提供`GetSMState`方法。⌋
 
-**[SWS_CM_90431]{草案}** ⌈`GetSMState`方法应提供对特定事件类全局`SMState`的访问，该状态由上次调用`GetNewSamples`时最后一次执行的`E2E_check`函数确定（参见[SWS_CM_90417]）。⌋（RS_CM_00224, RS_E2E_08534）
+**[SWS_CM_90431]{草案}** ⌈`GetSMState`方法应提供对特定事件类全局`SMState`的访问，该状态由上次调用`GetNewSamples`时最后一次执行的`E2E_check`函数确定（参见[SWS_CM_90417]）。⌋
 
 ```C++
 
@@ -203,9 +203,9 @@ ara::com::e2e::SMState GetSMState() const noexcept;
 
 本节规定了`ara::com`中端到端（E2E）通信保护在方法处理中的集成方式，包括方法请求的E2E通信保护，以及任何类型方法响应（正常响应或错误响应）的E2E通信保护。
 
-**[SWS_CM_10460]{草案}** ⌈受E2E保护的方法，其选项应在`End2EndMethodProtectionProps`和`E2EProfileConfiguration`中配置。⌋（RS_CM_00400, RS_E2E_08540）
+**[SWS_CM_10460]{草案}** ⌈受E2E保护的方法，其选项应在`End2EndMethodProtectionProps`和`E2EProfileConfiguration`中配置。⌋
 
-**[SWS_CM_90485]{草案}** ⌈本节中提及的E2E函数`E2E_protect`和`E2E_check`应满足文献[7]中定义的E2E保护要求，并符合文献[4]中的E2E保护协议规范（特别是[PRS_E2E_00828]）。⌋（RS_CM_00400, RS_E2E_08541, RS_CM_00223）
+**[SWS_CM_90485]{草案}** ⌈本节中提及的E2E函数`E2E_protect`和`E2E_check`应满足文献[7]中定义的E2E保护要求，并符合文献[4]中的E2E保护协议规范（特别是[PRS_E2E_00828]）。⌋
 
 对于属于特定`ServiceProxy`类的每个具体方法类（[SWS_CM_00196]），以及属于特定`ServiceSkeleton`类的每个提供方法（参见[SWS_CM_00191]），都有对应的E2E数据ID（例如，基于服务ID、服务实例ID和方法ID的组合生成）。
 
@@ -223,7 +223,7 @@ ara::com::e2e::SMState GetSMState() const noexcept;
 
 #### 7.3.2 服务方法请求的E2E保护（客户端）
 
-**[SWS_CM_10462]{草案}** ⌈对于受E2E保护的方法，请求消息的E2E保护应在相应服务方法的方法类`operator()`的上下文中执行（参见[SWS_CM_00196]）。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_10462]{草案}** ⌈对于受E2E保护的方法，请求消息的E2E保护应在相应服务方法的方法类`operator()`的上下文中执行（参见[SWS_CM_00196]）。⌋
 
 图7.7展示了客户端端方法请求E2E保护涉及的组件交互概览。
 
@@ -231,31 +231,31 @@ ara::com::e2e::SMState GetSMState() const noexcept;
 
 ##### 7.3.2.1 负载序列化
 
-**[SWS_CM_90458]{草案}** ⌈对于受E2E保护的方法请求，`operator()`应序列化方法的输入和输入输出参数，并根据相应网络绑定的规则（例如，SOME/IP网络绑定情况下的[SWS_CM_10301]）添加协议头，生成序列化数据。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90458]{草案}** ⌈对于受E2E保护的方法请求，`operator()`应序列化方法的输入和输入输出参数，并根据相应网络绑定的规则（例如，SOME/IP网络绑定情况下的[SWS_CM_10301]）添加协议头，生成序列化数据。⌋
 
 从E2E保护角度看，该序列化数据包含非保护部分和待保护部分（参见[PRS_E2E_USE_00236]和[PRS_E2E_USE_00741]）。
 
 ##### 7.3.2.2 负载的E2E保护
 
-**[SWS_CM_90479]{草案}** ⌈对于受 `E2E` 保护的方法请求，应根据[RS_E2E_08541]、[PRS_E2E_00323]和[PRS_E2E_00828]对待保护的序列化数据（作为 `serializedData` 参数传递给 `E2E_protect`）调用 `E2E_protect`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90479]{草案}** ⌈对于受 `E2E` 保护的方法请求，应根据[RS_E2E_08541]、[PRS_E2E_00323]和[PRS_E2E_00828]对待保护的序列化数据（作为 `serializedData` 参数传递给 `E2E_protect`）调用 `E2E_protect`。⌋
 
-**[SWS_CM_10463]{草案}** ⌈对于受 `E2E` 保护的方法请求，应将 `End2EndMethodProtectionProps.dataId` 作为 `dataID` 参数传递给 `E2E_protect`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_10463]{草案}** ⌈对于受 `E2E` 保护的方法请求，应将 `End2EndMethodProtectionProps.dataId` 作为 `dataID` 参数传递给 `E2E_protect`。⌋
 
-**[SWS_CM_90486]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受 `E2E` 保护方法请求，应将`End2EndMethodProtectionProps.sourceId` 作为 `sourceID` 参数传递给 `E2E_protect`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90486]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受 `E2E` 保护方法请求，应将`End2EndMethodProtectionProps.sourceId` 作为 `sourceID` 参数传递给 `E2E_protect`。⌋
 
-**[SWS_CM_90487]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受 `E2E` 保护方法请求，应将 `STD_MESSAGETYPE_REQUEST(0)` 作为 `messageType` 参数传递给 `E2E_protect`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90487]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受 `E2E` 保护方法请求，应将 `STD_MESSAGETYPE_REQUEST(0)` 作为 `messageType` 参数传递给 `E2E_protect`。⌋
 
-**[SWS_CM_90488]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受 `E2E` 保护方法请求，应将 `STD_MESSAGERESULT_OK(0)` 作为 `messageResult` 参数传递给 `E2E_protect`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90488]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受 `E2E` 保护方法请求，应将 `STD_MESSAGERESULT_OK(0)` 作为 `messageResult` 参数传递给 `E2E_protect`。⌋
 
-**[SWS_CM_10464]{草案}** ⌈对于受 `E2E` 保护的方法请求，应将 `E2E header` 添加到消息中。如果相应网络绑定的协议规范对 `E2E header` 的位置有约束（例如，`SOME/IP` 网络绑定情况下的[PRS_SOMEIP_00941]），则应遵守这些约束。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_10464]{草案}** ⌈对于受 `E2E` 保护的方法请求，应将 `E2E header` 添加到消息中。如果相应网络绑定的协议规范对 `E2E header` 的位置有约束（例如，`SOME/IP` 网络绑定情况下的[PRS_SOMEIP_00941]），则应遵守这些约束。⌋
 
 #### 7.3.3 服务方法请求的 E2E 校验（服务端）
 
-**[SWS_CM_10466]{草案}** ⌈对于受 `E2E` 保护的方法请求，如果 `MethodCallProcessingMode` 设置为 `kEventSingleThread`，则 `E2E` 校验应在 `ServiceSkeleton` 的消息接收上下文中执行。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_10466]{草案}** ⌈对于受 `E2E` 保护的方法请求，如果 `MethodCallProcessingMode` 设置为 `kEventSingleThread`，则 `E2E` 校验应在 `ServiceSkeleton` 的消息接收上下文中执行。⌋
 
-**[SWS_CM_10468]{草案}** ⌈对于受 `E2E` 保护的方法请求，如果 `MethodCallProcessingMode` 设置为`kPoll`，则 `E2E` 校验应在 `ServiceSkeleton` 的 `ProcessNextMethodCall` 上下文中执行。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_10468]{草案}** ⌈对于受 `E2E` 保护的方法请求，如果 `MethodCallProcessingMode` 设置为`kPoll`，则 `E2E` 校验应在 `ServiceSkeleton` 的 `ProcessNextMethodCall` 上下文中执行。⌋
 
-**[SWS_CM_10467]{草案}** ⌈如果向使用 `E2E` 保护方法的服务的 `ServiceSkeleton` 命名构造函数传递了 `kEvent` 的 `MethodCallProcessingMode`（参见[SWS_CM_10436]或[SWS_CM_10435]），则在 `Create()` 命名构造函数的结果中应返回错误码 `kWrongMethodCallProcessingMode`。如果启用了日志记录，应记录该错误。⌋（RS_CM_00402, RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_10467]{草案}** ⌈如果向使用 `E2E` 保护方法的服务的 `ServiceSkeleton` 命名构造函数传递了 `kEvent` 的 `MethodCallProcessingMode`（参见[SWS_CM_10436]或[SWS_CM_10435]），则在 `Create()` 命名构造函数的结果中应返回错误码 `kWrongMethodCallProcessingMode`。如果启用了日志记录，应记录该错误。⌋
 
 **注：受E2E保护的方法不支持设置为 `kEvent` 的方法调用处理模式。**
 
@@ -269,33 +269,33 @@ ara::com::e2e::SMState GetSMState() const noexcept;
 
 对于受E2E保护的方法请求，如果存在序列化数据，则执行以下步骤：
 
-**[SWS_CM_90459]{草案}** ⌈对于给定的受 `E2E` 保护方法请求，应处理方法请求序列化数据中的非 `E2E header` （如果存在）。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90459]{草案}** ⌈对于给定的受 `E2E` 保护方法请求，应处理方法请求序列化数据中的非 `E2E header` （如果存在）。⌋
 
-**[SWS_CM_90480]{草案}** ⌈对于给定的受 `E2E` 保护方法请求，应根据[RS_E2E_08541]、[PRS_E2E_00323]和[PRS_E2E_00828]对受保护的序列化数据（作为`serializedData`参数传递给`E2E_check`）调用`E2E_check`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90480]{草案}** ⌈对于给定的受 `E2E` 保护方法请求，应根据[RS_E2E_08541]、[PRS_E2E_00323]和[PRS_E2E_00828]对受保护的序列化数据（作为`serializedData`参数传递给`E2E_check`）调用`E2E_check`。⌋
 
-**[SWS_CM_90460]{草案}** ⌈对于给定的受 `E2E` 保护方法请求，应将 `End2EndMethodProtectionProps.dataId` 作为 `dataID` 参数传递给 `E2E_check`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90460]{草案}** ⌈对于给定的受 `E2E` 保护方法请求，应将 `End2EndMethodProtectionProps.dataId` 作为 `dataID` 参数传递给 `E2E_check`。⌋
 
-**[SWS_CM_90489]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法请求，应将一个用于存储`sourceID`的变量引用作为`sourceID`参数传递给`E2E_check`。`E2E_check`应将 `E2E header` 中包含的E2E源ID提取到该变量中。提取的`sourceID`应被存储，以便在后续响应负载的 `E2E` 保护中使用（参见[SWS_CM_90492]）。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90489]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法请求，应将一个用于存储`sourceID`的变量引用作为`sourceID`参数传递给`E2E_check`。`E2E_check`应将 `E2E header` 中包含的E2E源ID提取到该变量中。提取的`sourceID`应被存储，以便在后续响应负载的 `E2E` 保护中使用（参见[SWS_CM_90492]）。⌋
 
-**[SWS_CM_90490]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法请求，应将`STD_MESSAGETYPE_REQUEST (0)`作为`messageType`参数传递给`E2E_protect`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90490]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法请求，应将`STD_MESSAGETYPE_REQUEST (0)`作为`messageType`参数传递给`E2E_protect`。⌋
 
-**[SWS_CM_90491]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受 `E2E` 保护方法请求，应将`STD_MESSAGERESULT_OK (0)`作为`messageResult`参数传递给`E2E_protect`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90491]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受 `E2E` 保护方法请求，应将`STD_MESSAGERESULT_OK (0)`作为`messageResult`参数传递给`E2E_protect`。⌋
 
-**[SWS_CM_90461]{草案}** ⌈作为返回值，对于给定的受E2E保护方法请求，`E2E_check`应提供一个结果（根据文献[4]的[PRS_E2E_00322]定义的`e2eResult`），包含`SMState`（根据文献[4]的[PRS_E2E_00322]定义的`e2eState`）和`ProfileCheckStatus`（根据文献[4]的[PRS_E2E_00322]定义的`e2eStatus`）两个元素。⌋（RS_E2E_08541, RS_E2E_08534）
+**[SWS_CM_90461]{草案}** ⌈作为返回值，对于给定的受E2E保护方法请求，`E2E_check`应提供一个结果（根据文献[4]的[PRS_E2E_00322]定义的`e2eResult`），包含`SMState`（根据文献[4]的[PRS_E2E_00322]定义的`e2eState`）和`ProfileCheckStatus`（根据文献[4]的[PRS_E2E_00322]定义的`e2eStatus`）两个元素。⌋
 
-**[SWS_CM_90462]{草案}** ⌈对于给定的受 `E2E` 保护方法请求，应从序列化数据中移除 `E2E header`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90462]{草案}** ⌈对于给定的受 `E2E` 保护方法请求，应从序列化数据中移除 `E2E header`。⌋
 
 ##### 7.3.3.2 负载反序列化
 
 如果`E2E_check`调用（根据[SWS_CM_90459]）表明请求消息的E2E校验成功，则继续处理请求消息。
 
-**[SWS_CM_90463]{草案}** ⌈对于给定的受E2E保护方法请求，应根据相应网络绑定的规则（例如，SOME/IP网络绑定情况下的[SWS_CM_10304]）反序列化处理后的序列化数据，生成方法调用的反序列化输入和输入输出参数。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90463]{草案}** ⌈对于给定的受E2E保护方法请求，应根据相应网络绑定的规则（例如，SOME/IP网络绑定情况下的[SWS_CM_10304]）反序列化处理后的序列化数据，生成方法调用的反序列化输入和输入输出参数。⌋
 
 ##### 7.3.3.3 E2E错误通知
 
 如果`E2E_check`调用（根据[SWS_CM_90459]）表明请求消息的E2E校验失败，服务器应用可通过E2E错误处理程序获得通知。
 
-**[SWS_CM_10470]{草案} E2E错误处理程序 - 存在性** ⌈`ServiceSkeleton`应提供一个虚拟的`E2EErrorHandler`方法，参数包括错误码、数据ID和消息计数器。该`E2EErrorHandler`函数应具有空实现，可由实际的`ServiceSkeleton`实现重写。`E2EErrorHandler`实现无需支持重入。
+**[SWS_CM_10470]{草案} E2E错误处理程序 - 存在性** ⌈`ServiceSkeleton`应提供一个虚拟的`E2EErrorHandler`方法，参数包括错误码、数据ID和消息计数器。该`E2EErrorHandler`函数应具有空实现，可由实际的`ServiceSkeleton`实现重写。`E2EErrorHandler`实现无需支持重入。⌋
 
 ```C++
 virtual void E2EErrorHandler(
@@ -305,27 +305,25 @@ virtual void E2EErrorHandler(
 ) {};
 ```
 
-⌋（RS_CM_00401, RS_CM_00402）
-
-**[SWS_CM_90464]{草案} E2E错误处理程序 - 调用** ⌈当`E2E_check`报告E2E错误时，通信管理软件应在单独的线程中调用`E2EErrorHandler`。⌋（RS_CM_00401, RS_CM_00402）
+**[SWS_CM_90464]{草案} E2E错误处理程序 - 调用** ⌈当`E2E_check`报告E2E错误时，通信管理软件应在单独的线程中调用`E2EErrorHandler`。⌋
 
 **[SWS_CM_10471]{草案} E2E错误处理程序 - 调用参数** ⌈当有新的请求消息可用时，调用`E2EErrorHandler`应使用以下参数：
 - `errorCode`应设置为[SWS_CM_90411]中获得的`ProfileCheckStatus`
 - `dataID`应设置为`End2EndMethodProtectionProps.dataId`
 - `messageCounter`应设置为接收到的请求消息的E2E计数器
 
-⌋（RS_CM_00223, RS_CM_00401, RS_CM_00402）
+⌋
 
 **[SWS_CM_90465]{草案} E2E错误处理程序 - 调用参数** ⌈当没有新的请求消息可用时，调用`E2EErrorHandler`应使用以下参数：
 - `errorCode`应设置为`kNotAvailable`
 - `dataID`应设置为0
 - `messageCounter`应设置为0
 
-⌋（RS_CM_00401, RS_CM_00402）
+⌋
 
 #### 7.3.4 服务方法响应的E2E保护（服务器）
 
-**[SWS_CM_90481]{草案}** ⌈对于受E2E保护的方法，响应消息的E2E保护应在服务方法执行完成后（根据[SWS_CM_90480]E2E校验成功的情况），或E2E错误处理程序执行完成后（根据[SWS_CM_90480]E2E校验失败的情况）执行。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90481]{草案}** ⌈对于受E2E保护的方法，响应消息的E2E保护应在服务方法执行完成后（根据[SWS_CM_90480]E2E校验成功的情况），或E2E错误处理程序执行完成后（根据[SWS_CM_90480]E2E校验失败的情况）执行。⌋
 
 图7.10展示了服务器端方法响应E2E保护涉及的组件交互概览。
 
@@ -333,41 +331,41 @@ virtual void E2EErrorHandler(
 
 ##### 7.3.4.1 E2E错误响应负载序列化
 
-**[SWS_CM_10472]{草案} E2E错误响应** ⌈如果`E2E_check`（根据[SWS_CM_90480]）报告E2E错误，应根据所使用的网络绑定（例如，SOME/IP情况下的[SWS_CM_10312]）向客户端发送错误响应消息。⌋（RS_CM_00223, RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_10472]{草案} E2E错误响应** ⌈如果`E2E_check`（根据[SWS_CM_90480]）报告E2E错误，应根据所使用的网络绑定（例如，SOME/IP情况下的[SWS_CM_10312]）向客户端发送错误响应消息。⌋
 
-**[SWS_CM_90466]{草案} E2E错误响应的负载** ⌈该错误响应消息的负载应包含一个错误域为`ara::com::e2e::E2EErrorDomain`的`ara::core::ErrorCode`。该`ara::core::ErrorCode`的值应设置为[SWS_CM_90421]中规定的`E2E_check`对应的错误值。该错误码的序列化以及可能的协议头添加应根据所使用的网络绑定执行（例如，SOME/IP情况下的[SWS_CM_10312]和[SWS_CM_10428]）。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90466]{草案} E2E错误响应的负载** ⌈该错误响应消息的负载应包含一个错误域为`ara::com::e2e::E2EErrorDomain`的`ara::core::ErrorCode`。该`ara::core::ErrorCode`的值应设置为[SWS_CM_90421]中规定的`E2E_check`对应的错误值。该错误码的序列化以及可能的协议头添加应根据所使用的网络绑定执行（例如，SOME/IP情况下的[SWS_CM_10312]和[SWS_CM_10428]）。⌋
 
 ##### 7.3.4.2 响应负载序列化
 
-**[SWS_CM_90467]{草案} 正常响应或应用错误响应的负载** ⌈对于受E2E保护的方法，应序列化方法的输入输出和输出参数或应用错误，并根据相应网络绑定的规则（例如，SOME/IP网络绑定情况下的[SWS_CM_10312]）添加协议头，生成序列化数据。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90467]{草案} 正常响应或应用错误响应的负载** ⌈对于受E2E保护的方法，应序列化方法的输入输出和输出参数或应用错误，并根据相应网络绑定的规则（例如，SOME/IP网络绑定情况下的[SWS_CM_10312]）添加协议头，生成序列化数据。⌋
 
 从E2E通信保护角度看，该序列化数据包含非保护部分和待保护部分（参见[PRS_E2E_USE_00236]和[PRS_E2E_USE_00741]）。
 
 ##### 7.3.4.3 响应负载的E2E保护
 
-**[SWS_CM_90468]{草案}** ⌈对于受E2E保护的方法响应，应根据[RS_E2E_08541]、[PRS_E2E_00323]和[PRS_E2E_00828]对待保护的序列化数据（作为`serializedData`参数传递给`E2E_protect`）调用`E2E_protect`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90468]{草案}** ⌈对于受E2E保护的方法响应，应根据[RS_E2E_08541]、[PRS_E2E_00323]和[PRS_E2E_00828]对待保护的序列化数据（作为`serializedData`参数传递给`E2E_protect`）调用`E2E_protect`。⌋
 
-**[SWS_CM_10469]{草案}** ⌈对于受E2E保护的方法响应，应将`End2EndMethodProtectionProps.dataId`作为`dataID`参数传递给`E2E_protect`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_10469]{草案}** ⌈对于受E2E保护的方法响应，应将`End2EndMethodProtectionProps.dataId`作为`dataID`参数传递给`E2E_protect`。⌋
 
 **注：** 这与相应方法请求中包含的`dataID`相同。
 
-**[SWS_CM_90492]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，应将存储的`sourceID`（根据[SWS_CM_90489]提取）作为`sourceID`参数传递给`E2E_protect`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90492]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，应将存储的`sourceID`（根据[SWS_CM_90489]提取）作为`sourceID`参数传递给`E2E_protect`。⌋
 
-**[SWS_CM_90493]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，应将`STD_MESSAGETYPE_RESPONSE (1)`作为`messageType`参数传递给`E2E_protect`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90493]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，应将`STD_MESSAGETYPE_RESPONSE (1)`作为`messageType`参数传递给`E2E_protect`。⌋
 
-**[SWS_CM_90494]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，在正常响应情况下（即既不是应用错误响应消息也不是E2E错误响应消息），应将`STD_MESSAGERESULT_OK (0)`作为`messageResult`参数传递给`E2E_protect`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90494]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，在正常响应情况下（即既不是应用错误响应消息也不是E2E错误响应消息），应将`STD_MESSAGERESULT_OK (0)`作为`messageResult`参数传递给`E2E_protect`。⌋
 
-**[SWS_CM_90495]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，在错误响应情况下（即无论是应用错误响应消息还是E2E错误响应消息），应将`STD_MESSAGERESULT_ERROR (1)`作为`messageResult`参数传递给`E2E_protect`。⌋（RS_CM_00401, RS_E2E_08541）
+**[SWS_CM_90495]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，在错误响应情况下（即无论是应用错误响应消息还是E2E错误响应消息），应将`STD_MESSAGERESULT_ERROR (1)`作为`messageResult`参数传递给`E2E_protect`。⌋
 
-**[SWS_CM_90469]{草案}** ⌈对于受E2E保护的方法响应，应将相应方法请求中包含的E2E计数器作为调用`E2E_protect`时的E2E计数器。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90469]{草案}** ⌈对于受E2E保护的方法响应，应将相应方法请求中包含的E2E计数器作为调用`E2E_protect`时的E2E计数器。⌋
 
 **注：** 方法响应携带与相应方法请求相同的`dataID`和E2E计数器，以简化多客户端场景并允许客户端监控E2E计数器。
 
-**[SWS_CM_90470]{草案}** ⌈对于受E2E保护的方法响应，应将E2E保护头添加到消息中。如果相应网络绑定的协议规范对E2E保护头的位置有约束（例如，SOME/IP网络绑定情况下的[PRS_SOMEIP_00941]），则应遵守这些约束。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90470]{草案}** ⌈对于受E2E保护的方法响应，应将E2E保护头添加到消息中。如果相应网络绑定的协议规范对E2E保护头的位置有约束（例如，SOME/IP网络绑定情况下的[PRS_SOMEIP_00941]），则应遵守这些约束。⌋
 
 #### 7.3.5 服务方法响应的E2E校验（客户端）
 
-**[SWS_CM_90471]{草案}** ⌈对于受E2E保护的方法响应，E2E校验应在`ServiceProxy`的消息接收上下文中执行。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90471]{草案}** ⌈对于受E2E保护的方法响应，E2E校验应在`ServiceProxy`的消息接收上下文中执行。⌋
 
 图7.11展示了客户端端方法响应E2E校验涉及的组件交互概览。
 
@@ -377,43 +375,43 @@ virtual void E2EErrorHandler(
 
 对于受E2E保护的方法响应，如果存在序列化数据，则执行以下步骤：
 
-**[SWS_CM_90472]{草案}** ⌈对于给定的受E2E保护方法响应，应处理方法响应序列化数据中的非E2E保护头（如果存在）。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90472]{草案}** ⌈对于给定的受E2E保护方法响应，应处理方法响应序列化数据中的非E2E保护头（如果存在）。⌋
 
-**[SWS_CM_90473]{草案}** ⌈对于给定的受E2E保护方法响应，应根据[RS_E2E_08541]、[PRS_E2E_00323]和[PRS_E2E_00828]对受保护的序列化数据（作为`serializedData`参数传递给`E2E_check`）调用`E2E_check`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90473]{草案}** ⌈对于给定的受E2E保护方法响应，应根据[RS_E2E_08541]、[PRS_E2E_00323]和[PRS_E2E_00828]对受保护的序列化数据（作为`serializedData`参数传递给`E2E_check`）调用`E2E_check`。⌋
 
-**[SWS_CM_90474]{草案}** ⌈对于给定的受E2E保护方法响应，应将`End2EndMethodProtectionProps.dataId`作为`dataID`参数传递给`E2E_check`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90474]{草案}** ⌈对于给定的受E2E保护方法响应，应将`End2EndMethodProtectionProps.dataId`作为`dataID`参数传递给`E2E_check`。⌋
 
-**[SWS_CM_10465]{草案}** ⌈受E2E保护的方法响应，其响应消息应携带与请求消息相同的E2E计数器值。如果E2E计数器不同，应丢弃该响应消息（不进行任何进一步处理）。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_10465]{草案}** ⌈受E2E保护的方法响应，其响应消息应携带与请求消息相同的E2E计数器值。如果E2E计数器不同，应丢弃该响应消息（不进行任何进一步处理）。⌋
 
 **实现提示：** E2E计数器可从`E2E_Protect()`/`E2E_Check()`函数的结果状态中提取。
 
-**[SWS_CM_90496]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，应将`End2EndMethodProtectionProps.sourceId`作为`sourceID`参数传递给`E2E_check`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90496]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，应将`End2EndMethodProtectionProps.sourceId`作为`sourceID`参数传递给`E2E_check`。⌋
 
-**[SWS_CM_90497]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，应将`STD_MESSAGETYPE_RESPONSE (1)`作为`messageType`参数传递给`E2E_check`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90497]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，应将`STD_MESSAGETYPE_RESPONSE (1)`作为`messageType`参数传递给`E2E_check`。⌋
 
-**[SWS_CM_90498]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，在正常响应情况下（即既不是应用错误响应消息也不是E2E错误响应消息），应将`STD_MESSAGERESULT_OK (0)`作为`messageResult`参数传递给`E2E_check`。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90498]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，在正常响应情况下（即既不是应用错误响应消息也不是E2E错误响应消息），应将`STD_MESSAGERESULT_OK (0)`作为`messageResult`参数传递给`E2E_check`。⌋
 
-**[SWS_CM_90499]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，在错误响应情况下（即无论是应用错误响应消息还是E2E错误响应消息），应将`STD_MESSAGERESULT_ERROR (1)`作为`messageResult`参数传递给`E2E_check`。⌋（RS_CM_00401, RS_E2E_08541）
+**[SWS_CM_90499]{草案}** ⌈对于使用 `P04m` 或 `P07m` 配置文件的受E2E保护方法响应，在错误响应情况下（即无论是应用错误响应消息还是E2E错误响应消息），应将`STD_MESSAGERESULT_ERROR (1)`作为`messageResult`参数传递给`E2E_check`。⌋
 
-**[SWS_CM_90478]{草案}** ⌈作为返回值，对于给定的受E2E保护方法响应，`E2E_check`应提供一个结果（根据文献[4]的[PRS_E2E_00322]定义的`e2eResult`），包含`SMState`（根据文献[4]的[PRS_E2E_00322]定义的`e2eState`）和`ProfileCheckStatus`（根据文献[4]的[PRS_E2E_00322]定义的`e2eStatus`）两个元素。⌋（RS_E2E_08541, RS_E2E_08534）
+**[SWS_CM_90478]{草案}** ⌈作为返回值，对于给定的受E2E保护方法响应，`E2E_check`应提供一个结果（根据文献[4]的[PRS_E2E_00322]定义的`e2eResult`），包含`SMState`（根据文献[4]的[PRS_E2E_00322]定义的`e2eState`）和`ProfileCheckStatus`（根据文献[4]的[PRS_E2E_00322]定义的`e2eStatus`）两个元素。⌋
 
-**[SWS_CM_90482]{草案}** ⌈应使用`E2E_check`根据[SWS_CM_90478]提供的结果中的`SMState`元素，更新/覆盖特定`ServiceProxy`类的特定方法类中的全局`SMState`。⌋（RS_CM_00400, RS_E2E_08541, RS_E2E_08534）
+**[SWS_CM_90482]{草案}** ⌈应使用`E2E_check`根据[SWS_CM_90478]提供的结果中的`SMState`元素，更新/覆盖特定`ServiceProxy`类的特定方法类中的全局`SMState`。⌋
 
-**[SWS_CM_90475]{草案}** ⌈对于给定的受E2E保护方法响应，应从序列化数据中移除E2E保护头。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90475]{草案}** ⌈对于给定的受E2E保护方法响应，应从序列化数据中移除E2E保护头。⌋
 
 ##### 7.3.5.2 负载反序列化
 
 如果`E2E_check`调用（根据[SWS_CM_90473]）表明响应消息的E2E校验成功，则继续处理响应消息。
 
-**[SWS_CM_90476]{草案}** ⌈对于给定的受E2E保护方法响应，应根据相应网络绑定的规则（例如，SOME/IP网络绑定情况下的[SWS_CM_10316]和[SWS_CM_10429]）反序列化处理后的序列化数据，生成方法调用的反序列化输入输出和输出参数，或反序列化的应用错误。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90476]{草案}** ⌈对于给定的受E2E保护方法响应，应根据相应网络绑定的规则（例如，SOME/IP网络绑定情况下的[SWS_CM_10316]和[SWS_CM_10429]）反序列化处理后的序列化数据，生成方法调用的反序列化输入输出和输出参数，或反序列化的应用错误。⌋
 
-**[SWS_CM_10473]{草案} E2E错误响应的处理** ⌈（因服务器端检测到请求中的E2E错误而发送的）E2E错误响应消息的处理方式，应与根据所使用网络绑定接收和处理任何其他错误响应消息的方式相同（例如，SOME/IP网络绑定情况下的[SWS_CM_10429]）。⌋（RS_CM_00223, RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_10473]{草案} E2E错误响应的处理** ⌈（因服务器端检测到请求中的E2E错误而发送的）E2E错误响应消息的处理方式，应与根据所使用网络绑定接收和处理任何其他错误响应消息的方式相同（例如，SOME/IP网络绑定情况下的[SWS_CM_10429]）。⌋
 
 ##### 7.3.5.3 E2E错误通知
 
 如果`E2E_check`调用（根据[SWS_CM_90473]）表明响应消息的E2E校验失败，客户端应用应通过以下方式获得通知：
 
-**[SWS_CM_90477]{草案} E2E错误返回码** ⌈对于给定的受E2E保护方法响应，如果E2E校验失败，应根据[SWS_CM_90421]构造一个错误域为`ara::com::e2e::E2EErrorDomain`、值为[SWS_CM_90478]中获得的`ProfileCheckStatus`的`ara::core::ErrorCode`。该`ara::core::ErrorCode`应作为参数传递给`Promise`的`SetError()`方法。⌋（RS_CM_00400, RS_E2E_08541）
+**[SWS_CM_90477]{草案} E2E错误返回码** ⌈对于给定的受E2E保护方法响应，如果E2E校验失败，应根据[SWS_CM_90421]构造一个错误域为`ara::com::e2e::E2EErrorDomain`、值为[SWS_CM_90478]中获得的`ProfileCheckStatus`的`ara::core::ErrorCode`。该`ara::core::ErrorCode`应作为参数传递给`Promise`的`SetError()`方法。⌋
 
 正常响应和应用错误响应的处理（根据[SWS_CM_90476]），结合E2E错误响应的处理（根据[SWS_CM_10473]），以及响应消息中检测到的E2E错误的显式通知（根据[SWS_CM_90477]），最终将生成一个`ara::core::Result`，包含以下三种情况之一：
 - 无任何错误时，包含服务器操作的正确输出
@@ -421,9 +419,9 @@ virtual void E2EErrorHandler(
 - 如果服务器端检测到请求消息中的E2E错误，且客户端端未检测到响应消息中的E2E错误，则包含错误域为`ara::com::e2e::E2EErrorDomain`、值为服务器端`E2E_check`调用结果的`ProfileCheckStatus`的`ara::core::ErrorCode`
 - 如果客户端端检测到响应消息中的E2E错误，则包含错误域为`ara::com::e2e::E2EErrorDomain`、值为客户端端`E2E_check`调用结果的`ProfileCheckStatus`的`ara::core::ErrorCode`
 
-**[SWS_CM_90483]{草案}** ⌈应为特定`ServiceProxy`类的每个方法类提供`GetSMState`方法。⌋（RS_E2E_08534）
+**[SWS_CM_90483]{草案}** ⌈应为特定`ServiceProxy`类的每个方法类提供`GetSMState`方法。⌋
 
-**[SWS_CM_90484]{草案}** ⌈`GetSMState`方法应提供对特定方法类全局`SMState`的访问，该状态由上次接收方法响应时最后一次执行的`E2E_check`函数确定（参见[SWS_CM_90482]）。⌋（RS_E2E_08534）
+**[SWS_CM_90484]{草案}** ⌈`GetSMState`方法应提供对特定方法类全局`SMState`的访问，该状态由上次接收方法响应时最后一次执行的`E2E_check`函数确定（参见[SWS_CM_90482]）。⌋
 
 ```C++
 
