@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>AUTOSAR_SWS_AdaptiveCore - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/013_autosar_sws_adaptivecore_r2011/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="AUTOSAR_SWS_AdaptiveCore">
+  <meta property="og:description" content="Oh My Blog">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-05-06T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-05-06T10:00:00+08:00">
+    <meta property="article:tag" content="AUTOSAR">
+    <meta property="article:tag" content="AUTOSAR AP">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="AUTOSAR_SWS_AdaptiveCore">
+  <meta name="twitter:description" content="Oh My Blog">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/013_autosar_sws_adaptivecore_r2011/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/001_manjaro%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/014_autosar_sws_logandtrace_r2011/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "AUTOSAR_SWS_AdaptiveCore",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/013_autosar_sws_adaptivecore_r2011\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "AUTOSAR, AUTOSAR AP","wordcount":  17710 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/013_autosar_sws_adaptivecore_r2011\/","datePublished": "2026-05-06T09:00:00+08:00","dateModified": "2026-05-06T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/013_autosar_sws_adaptivecore_r2011/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/013_autosar_sws_adaptivecore_r2011/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">AUTOSAR_SWS_AdaptiveCore</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/autosar/"><i class="far fa-folder" aria-hidden="true"></i>AUTOSAR</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-05-06">2026-05-06</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 17710 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 36 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#7-需求规范">7 需求规范</a>
+      <ul>
+        <li><a href="#71-适用于所有功能集群的通用需求">7.1 适用于所有功能集群的通用需求</a></li>
+        <li><a href="#72-功能规范">7.2 功能规范</a></li>
+        <li><a href="#721-错误处理">7.2.1 错误处理</a>
+          <ul>
+            <li><a href="#7211-非成功操作的类型">7.2.1.1 非成功操作的类型</a></li>
+            <li><a href="#7212-c与c中的传统错误处理">7.2.1.2 C与C++中的传统错误处理</a></li>
+            <li><a href="#7213-自适应平台中非成功操作的处理方式">7.2.1.3 自适应平台中非成功操作的处理方式</a>
+              <ul>
+                <li><a href="#72131-errorcode">7.2.1.3.1 ErrorCode</a></li>
+                <li><a href="#72132-errordomain">7.2.1.3.2 ErrorDomain</a></li>
+                <li><a href="#72133-result">7.2.1.3.3 Result</a></li>
+                <li><a href="#72134-future与promise">7.2.1.3.4 Future与Promise</a></li>
+              </ul>
+            </li>
+            <li><a href="#7214-errorcode与异常的双重机制">7.2.1.4 ErrorCode与异常的双重机制</a></li>
+            <li><a href="#7215-异常层级结构">7.2.1.5 异常层级结构</a></li>
+            <li><a href="#7216-创建新的错误域">7.2.1.6 创建新的错误域</a>
+              <ul>
+                <li><a href="#72161-错误条件枚举">7.2.1.6.1 错误条件枚举</a></li>
+                <li><a href="#72162-异常基类">7.2.1.6.2 异常基类</a></li>
+                <li><a href="#72163-errordomain子类">7.2.1.6.3 ErrorDomain子类</a></li>
+                <li><a href="#72164-全局errordomain子类访问器函数">7.2.1.6.4 全局ErrorDomain子类访问器函数</a></li>
+                <li><a href="#72165-全局makeerrorcode重载">7.2.1.6.5 全局MakeErrorCode重载</a></li>
+                <li><a href="#72166-c伪代码示例">7.2.1.6.6 C++伪代码示例</a></li>
+              </ul>
+            </li>
+            <li><a href="#7217-autosar错误域">7.2.1.7 AUTOSAR错误域</a></li>
+          </ul>
+        </li>
+        <li><a href="#722-异步信号安全">7.2.2 异步信号安全</a></li>
+        <li><a href="#723-显式操作终止">7.2.3 显式操作终止</a>
+          <ul>
+            <li><a href="#7231-aborthandler">7.2.3.1 AbortHandler</a></li>
+            <li><a href="#7232-sigabrt信号处理函数">7.2.3.2 SIGABRT信号处理函数</a></li>
+          </ul>
+        </li>
+        <li><a href="#724-高级数据类型">7.2.4 高级数据类型</a>
+          <ul>
+            <li><a href="#7241-autosar自定义类型">7.2.4.1 AUTOSAR自定义类型</a>
+              <ul>
+                <li><a href="#72411-instancespecifier实例说明符">7.2.4.1.1 InstanceSpecifier（实例说明符）</a></li>
+              </ul>
+            </li>
+            <li><a href="#7242-基于c基础标准派生的类型">7.2.4.2 基于C++基础标准派生的类型</a>
+              <ul>
+                <li><a href="#72421-array">7.2.4.2.1 Array</a></li>
+                <li><a href="#72422-steadyclock稳态时钟">7.2.4.2.2 SteadyClock（稳态时钟）</a></li>
+                <li><a href="#724221-术语定义">7.2.4.2.2.1 术语定义</a></li>
+                <li><a href="#724222-自适应平台中的时钟">7.2.4.2.2.2 自适应平台中的时钟</a></li>
+              </ul>
+            </li>
+            <li><a href="#7243-基于新版c标准派生的类型">7.2.4.3 基于新版C++标准派生的类型</a>
+              <ul>
+                <li><a href="#72431-aracorebyte">7.2.4.3.1 ara::core::Byte</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="autosar_sws_adaptivecore">AUTOSAR_SWS_AdaptiveCore</h1>
+<hr>
+<h2 id="7-需求规范">7 需求规范</h2>
+<h3 id="71-适用于所有功能集群的通用需求">7.1 适用于所有功能集群的通用需求</h3>
+<p>本节的目标是定义一套适用于自适应平台所有功能集群的通用基础需求。该部分为规范补充了通用约束内容，平台供应商必须严格遵守。</p>
+<p>[SWS_CORE_90001] 头文件包含目录结构</p>
+<p>「所有引用ARA库的头文件中，#include指令必须按照以下格式编写：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;ara/fc/header.h&#34;</span></span></span></code></pre></div></div>
+<p>其中，路径首个元素必须为<code>ara</code>；<code>fc</code>为实现侧已安装头文件的剩余目录路径，且必须以功能集群的短名开头；<code>header.h</code>为对应头文件的文件名。」</p>
+<p>（对应需求：RS_AP_00116、RS_AP_00111）</p>
+<p>功能集群的短名定义见参考文献[3]。</p>
+<p>示例：执行管理（短名<code>exec</code>）提供了ExecutionClient类，可通过以下方式引入：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;ara/exec/execution_client.h&#34;</span></span></span></code></pre></div></div>
+<p>根据参考文献[4《C++14标准》]第16.2.7节的建议，必须使用<code>&quot;...&quot;</code>形式的#include语句。</p>
+<p>[SWS_CORE_90002] 防止头文件重复包含</p>
+<p>「所有公共头文件必须通过具备系统级全局唯一性的头文件保护宏，防止被重复包含。」</p>
+<p>（对应需求：RS_AP_00111）</p>
+<p>尽管绝对的唯一性通常无法保证，但通过规范、长字符的符号命名规则，可大幅降低命名冲突的概率。</p>
+<p>对于ara命名空间及其子命名空间内符号相关的所有头文件，实现侧应采用以下头文件保护宏命名规则：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-Plain">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">ARA_&lt;PATH&gt;_H_</span></span></code></pre></div></div>
+<p>其中，<code>&lt;PATH&gt;</code>为头文件在实现侧已安装目录中的相对路径名，以功能集群名称开头（省略文件扩展名）；路径中的所有层级均以下划线<code>_</code>分隔，且仅可使用ASCII字符集的大写字母。</p>
+<p>示例：通过<code>#include &quot;ara/log/logger.h&quot;</code>引入的头文件，其保护宏应定义为<code>ARA_LOG_LOGGER_H_</code>。</p>
+<hr>
+<p>[SWS_CORE_90003]【草案】「以ARA开头的C/C++符号，均为AUTOSAR预留使用。」</p>
+<p>自适应平台原则上避免使用C/C++预处理器宏。但如果后续版本中引入宏定义，所有此类宏均会以ARA为前缀。因此，平台供应商不得定义任何带有此前缀的符号（包括宏与C/C++原生符号），避免与标准后续新增内容产生冲突。</p>
+<h3 id="72-功能规范">7.2 功能规范</h3>
+<p>本节描述本功能集群引入的核心概念，其中重点阐述错误处理机制。</p>
+<h3 id="721-错误处理">7.2.1 错误处理</h3>
+<h4 id="7211-非成功操作的类型"><a href="7.2.1.1" rel="">7.2.1.1</a> 非成功操作的类型</h4>
+<p>在自适应平台API的实现执行过程中，可能会检测到各类异常状况，需要对其进行处理和/或上报。根据异常的性质，自适应平台将非成功操作分为以下类型：</p>
+<ul>
+<li>
+<p><strong>错误（Error）</strong>：假定无缺陷的API函数无法完成其规范定义的功能，通常由无效和/或非预期的输入数据导致（即数据本身可能合法，但接收时机不符合预期）。此类错误被认定为<strong>可恢复</strong>。</p>
+</li>
+<li>
+<p><strong>违例（Violation）</strong>：应用框架内部状态的前置条件或后置条件校验失败，等同于自适应平台体系中的断言失败。此类违例被认定为<strong>不可恢复</strong>。</p>
+</li>
+<li>
+<p><strong>数据损坏（Corruption）</strong>：系统资源发生损坏，例如栈溢出、堆溢出，或硬件内存故障（甚至包括检测到的比特翻转）。此类数据损坏被认定为<strong>不可恢复</strong>。</p>
+</li>
+<li>
+<p><strong>默认内存分配失败</strong>：框架的默认内存分配机制无法满足内存申请请求。</p>
+</li>
+</ul>
+<p>违例与数据损坏通常可能发生在框架开发阶段、新功能集成调试过程中，而应用开发者在正常使用中不会遇到此类问题；除非系统环境出现严重故障（如硬件故障导致的数据损坏）、资源需求的基础假设被违背（违例），或用户使用了供应商不支持的框架配置（违例）。</p>
+<h4 id="7212-c与c中的传统错误处理"><a href="7.2.1.2" rel="">7.2.1.2</a> C与C++中的传统错误处理</h4>
+<p>C语言主要依赖错误码实现各类错误处理。尽管C语言也提供了setjmp/longjmp机制实现“非本地跳转”，但该方式极少用于错误处理，核心原因是难以可靠避免资源泄漏。</p>
+<p>C语言中的错误码主要分为三类：</p>
+<ul>
+<li>返回值</li>
+<li>输出型参数</li>
+<li>错误单例（如全局变量errno）</li>
+</ul>
+<p>C语言中的错误码通常为纯int类型变量，属于底层实现，不具备任何类型安全能力。</p>
+<p>C++从C语言继承了这套错误处理方式（很大程度上是因为C++标准库包含了C标准库），同时也引入了异常机制作为错误传播的替代方案。异常机制具备诸多优势，因此C++标准库通常采用异常进行错误传播。</p>
+<p>尽管异常具备诸多优势，错误码在C++中仍被广泛使用，甚至在标准库中也不例外。部分原因是为了保证与C语言的二进制兼容性，但更多新建库仍优先选择错误码而非异常，核心原因包括：</p>
+<ul>
+<li>
+<p>使用异常时，难以对程序的控制流进行分析</p>
+</li>
+<li>
+<p>异常的运行时开销远高于错误码（无论是整体开销，还是仅异常触发时的开销）</p>
+</li>
+</ul>
+<p>第一个问题同时影响人工代码评审与静态代码分析工具。由于异常本质上是一种隐式控制流，一个表面上仅包含单条return语句的C++函数，实际上可能因异常触发产生多个额外的函数返回路径。这不仅会增加人工代码评审的难度，也会提升静态代码分析工具的分析难度。</p>
+<p>第二个问题在安全关键软件开发场景中更为关键。C++异常的规范定义，给希望产品通过安全关键软件开发认证的C++编译器厂商带来了显著挑战。事实上，通过汽车安全完整性等级（ASIL）认证的C++编译器，通常完全不支持异常机制。异常机制的一个核心问题是：C++标准定义的异常处理，隐含了动态内存分配的使用，而动态内存分配通常具备不可预测、甚至无上限的执行耗时。这使得当前异常机制不适用于汽车行业的部分安全关键软件开发。</p>
+<hr>
+<h4 id="7213-自适应平台中非成功操作的处理方式"><a href="7.2.1.3" rel="">7.2.1.3</a> 自适应平台中非成功操作的处理方式</h4>
+<p><a href="7.2.1.1" rel="">7.2.1.1</a>节（非成功操作的类型）中定义的各类非成功操作，需采用差异化的处理方式。</p>
+<p>[SWS_CORE_00002] 错误的处理</p>
+<p>「错误必须以ara::core::Result或ara::core::Future实例的形式，从函数中返回。」</p>
+<p>（对应需求：RS_AP_00142、RS_AP_00139、RS_AP_00128）</p>
+<p>[SWS_CORE_00003] 违例的处理</p>
+<p>「检测到违例时，必须将其作为致命（FATAL）级别日志消息进行记录（若自适应平台对应功能集群已启用日志功能），随后必须通过以下两种方式之一立即终止操作：</p>
+<ul>
+<li>
+<p>抛出非ara::core::Exception子类的异常</p>
+</li>
+<li>
+<p>通过调用ara::core::Abort显式异常终止进程」</p>
+</li>
+</ul>
+<p>（对应需求：RS_AP_00142）</p>
+<p>[SWS_CORE_00004] 数据损坏的处理</p>
+<p>「检测到数据损坏时，必须以实现定义的方式，导致进程非成功终止。」</p>
+<p>（对应需求：RS_AP_00142）</p>
+<p>注：根据实现侧检测到数据损坏后、通过资源清理进行响应的能力，终止方式可以是异常终止，也可以是正常的非成功终止。</p>
+<p>[SWS_CORE_00005] 默认内存分配失败的处理</p>
+<p>「“默认内存分配失败”必须按照与违例相同的方式处理。」</p>
+<p>（对应需求：RS_AP_00142）</p>
+<p>注：自定义分配器的错误不适用于本定义。</p>
+<p>针对错误的处理，规范定义了一系列辅助数据类型，将在后续小节中详细说明。</p>
+<h5 id="72131-errorcode"><a href="7.2.1.3" rel="">7.2.1.3</a>.1 ErrorCode</h5>
+<p>顾名思义，ara::core::ErrorCode是错误码的一种实现形式；但它是一个类类型，以std::error_code为基础进行轻量化设计，因此相比传统C API使用的简单错误码，能够支持更复杂的错误处理能力。ErrorCode实例始终包含一个底层错误码值，以及一个对应错误域的引用。</p>
+<p>错误码值通常为强类型枚举类型。当存入ara::core::ErrorCode时，会通过类型擦除转换为整型，处理方式与C风格错误码类似。错误域引用定义了该错误码值的适用上下文，从而提供了一定程度的类型安全保障。</p>
+<p>ara::core::ErrorCode还包含一个支持数据值，自适应平台的实现方可通过该字段，提供与错误相关的厂商自定义附加数据。</p>
+<p>ara::core::ErrorCode实例通常不直接创建，仅通过ara::core::Result::FromError函数的转发形式创建。</p>
+<p>ara::core::ErrorCode不受限于任何已知的错误域集合。其内部对枚举的类型擦除机制，保证了它作为非模板类型，能够承载来自任意域的任意错误。</p>
+<hr>
+<p>但两个ara::core::ErrorCode实例的相等性比较，仅会判断错误码值与错误域引用是否一致；支持数据值成员不会纳入相等性校验。这是由ara::core::ErrorCode实例的常规使用场景决定的，典型校验场景如下：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="mi">1</span> <span class="n">ErrorCode</span> <span class="n">ec</span> <span class="o">=</span> <span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="mi">2</span> <span class="k">if</span> <span class="p">(</span><span class="n">ec</span> <span class="o">==</span> <span class="n">MyEnum</span><span class="o">::</span><span class="n">some_error</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="mi">3</span>   <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="mi">4</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ec</span> <span class="o">==</span> <span class="n">AnotherEnum</span><span class="o">::</span><span class="n">another_error</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="mi">5</span>   <span class="c1">// ...
+</span></span></span></code></pre></div></div>
+<p>上述每一次比较，都会为比较运算符右侧的枚举值创建一个临时的ara::core::ErrorCode对象，再将ec与该临时对象进行比较。而这种自动创建的实例，自然不会包含任何有意义的支持数据值。</p>
+<p>规范预期，这种临时ara::core::ErrorCode实例的频繁创建，运行时开销极低，不会产生可感知的性能影响。这一点通常通过将ara::core::ErrorCode定义为字面量类型来保证。</p>
+<p>[SWS_CORE_10300]【草案】ErrorCode类型属性</p>
+<p>「ara::core::ErrorCode类必须为字面量类型，定义见参考文献[5《C++11标准》]第3.9-10节[basic.types]。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<h5 id="72132-errordomain"><a href="7.2.1.3" rel="">7.2.1.3</a>.2 ErrorDomain</h5>
+<p>ara::core::ErrorDomain是所有具体错误域的抽象基类，由功能集群甚至自适应应用定义。该类以std::error_category为基础设计，但与后者存在显著差异。</p>
+<p>每个错误域都关联一套错误码枚举，以及一个关联的异常基类。这两者通常与ara::core::ErrorDomain子类定义在同一命名空间中。为了实现对这些关联类型的标准化访问，需在ara::core::ErrorDomain子类中，通过标准化名称定义类型别名。这使得ErrorDomain子类成为该错误域所有相关数据的根定义。</p>
+<p>错误域的唯一性通过唯一标识符定义。AUTOSAR定义的错误域使用标准化标识符；用户自定义错误域也必须定义唯一标识符。</p>
+<p>ara::core::ErrorDomain类定义要求，该唯一标识符必须为64位无符号整型（std::uint64_t）。其取值范围足够大，即使标准UUID为128位，也可采用类UUID的生成模式生成64位唯一ID。创建新错误域时（无论是AUTOSAR定义还是用户定义），必须生成一个对应ID代表该错误域。每个错误域ID的唯一性与标准化是强制要求，因为调用方与被调用方（可能位于不同电子控制单元ECU）之间的错误信息交互，完全基于该ID实现。</p>
+<p>基于上述身份标识定义，每个ara::core::ErrorDomain子类通常仅需存在一个单例实例。尽管可以通过调用构造函数创建子类的新实例，但推荐的访问方式是调用其全局访问器函数。例如，访问ara::core::FutureErrorDomain错误域类，需调用ara::core::GetFutureErrorDomain函数；在任意进程空间内，该函数始终返回该类同一个全局实例的引用。</p>
+<hr>
+<p>对于在ARXML中建模的错误域（ApApplicationErrorDomain类型），C++语言绑定会为每个ApApplicationErrorDomain生成对应的C++类。该C++类为ara::core::ErrorDomain的子类，且名称遵循标准化规则。</p>
+<p>ara::core预定义了两个错误域：</p>
+<ol>
+<li>CoreErrorDomain：包含ara::core功能集群中，非Future/Promise相关功能返回的错误集合</li>
+<li>FutureErrorDomain：包含与std::future_errc定义等效的错误</li>
+</ol>
+<p>应用开发者通常不会直接与ara::core::ErrorDomain类及其子类交互，绝大多数访问均通过ara::core::ErrorCode完成。</p>
+<p>由于ara::core::ErrorDomain子类需要在常量表达式（即编译期表达式）中被隐式引用（通常与ara::core::ErrorCode相关），因此它们必须为字面量类型。</p>
+<p>[SWS_CORE_10400]【草案】ErrorDomain类型属性</p>
+<p>「ara::core::ErrorDomain类及其所有子类，必须为字面量类型，定义见参考文献[5《C++11标准》]第3.9-10节[basic.types]。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<h5 id="72133-result"><a href="7.2.1.3" rel="">7.2.1.3</a>.3 Result</h5>
+<p>ara::core::Result类型遵循C++提案p0786[6]中的“值或错误”概念。它要么包含一个值（值类型），要么包含一个错误（错误类型）。值类型与错误类型均为ara::core::Result的模板参数，基于模板特性，值与错误可以是任意类型。但错误类型的默认值为ara::core::ErrorCode，且自适应平台全体系均应保持该默认配置。</p>
+<p>ara::core::Result作为“包装类型”，实现了基于ara::core::ErrorCode的无异常API设计与C++异常机制的衔接。由于ara::core::ErrorCode与特定域的异常类型之间存在直接映射关系，ara::core::Result可通过调用ValueOrThrow成员函数，将其内部封装的ara::core::ErrorCode转换为对应的异常类型。</p>
+<h5 id="72134-future与promise"><a href="7.2.1.3" rel="">7.2.1.3</a>.4 Future与Promise</h5>
+<p>ara::core::Future及其配套类ara::core::Promise，以std::future和std::promise为基础建模，并进行了适配改造以支持与ara::core::Result的交互。与<a href="7.2.1.3" rel="">7.2.1.3</a>.3节描述的ara::core::Result类似，ara::core::Future类要么包含一个值，要么包含一个错误（但Future必须先进入“就绪”状态）。</p>
+<p>ara::core::Promise类进行了两处核心改造：移除了Promise::set_exception接口，新增了Promise::SetError接口作为替代。针对ara::core::Future，新增了GetResult成员函数，其功能与Future::get类似，但永远不会抛出异常，而是返回一个ara::core::Result实例。</p>
+<p>因此，作为返回值类型的ara::core::Future，与ara::core::Result一样，支持双模式错误处理：既可以通过Future::get实现基于异常的处理，也可以通过Future::GetResult实现无异常的处理。</p>
+<p>ara::core::Result用于同步函数调用的返回值/错误返回，而ara::core::Future用于异步函数调用的返回值/错误返回。</p>
+<hr>
+<h4 id="7214-errorcode与异常的双重机制"><a href="7.2.1.4" rel="">7.2.1.4</a> ErrorCode与异常的双重机制</h4>
+<p>通过上述类的组合使用，自适应平台的所有API均可支持基于异常、或无异常的错误处理工作流。但任何API函数都不会通过直接抛出异常的方式处理错误，而是始终以ara::core::Result或ara::core::Future返回值的形式返回错误码。调用方可随后将错误转换为异常，通常通过调用ara::core::Result::ValueOrThrow成员函数实现。</p>
+<p>当使用完全不支持异常的C++编译器时（或通过编译选项禁用了异常，如g++的-fno-exceptions选项），所有API函数仍保持原有行为。唯一的差异是，ara::core::Result::ValueOrThrow接口将无定义——该成员函数仅在编译器支持异常时才会被定义。</p>
+<h4 id="7215-异常层级结构"><a href="7.2.1.5" rel="">7.2.1.5</a> 异常层级结构</h4>
+<p>自适应平台为标准中定义的所有异常，定义了基类ara::core::Exception。该异常的构造函数必须传入ara::core::ErrorCode对象，与std::system_error构造时需传入std::error_code参数的设计类似。</p>
+<p>在该异常基类之下，还定义了一层异常基类，每个错误域对应一个。</p>
+<p>对于在ARXML中建模的错误域，C++语言绑定除了会生成<a href="7.2.1.3" rel="">7.2.1.3</a>.2节描述的ErrorDomain子类外，还会生成对应的异常类。该异常类同样遵循标准化命名规则：ApApplicationErrorDomain的短名+“Exception”后缀（以此与ErrorDomain子类本身区分），且与对应ErrorDomain子类定义在同一命名空间中。</p>
+<h4 id="7216-创建新的错误域"><a href="7.2.1.6" rel="">7.2.1.6</a> 创建新的错误域</h4>
+<p>任何与自适应平台现有模块存在显著逻辑隔离的新软件模块，都应定义一个或多个专属错误域。</p>
+<p>一个完整的错误域包含以下组成部分：</p>
+<ul>
+<li>
+<p>错误条件枚举</p>
+</li>
+<li>
+<p>异常基类</p>
+</li>
+<li>
+<p>ara::core::ErrorDomain子类</p>
+</li>
+<li>
+<p>全局ErrorDomain子类访问器函数</p>
+</li>
+<li>
+<p>全局MakeErrorCode函数重载</p>
+</li>
+</ul>
+<p>上述所有组成部分，均不应定义在ara::core命名空间中，而应定义在对应业务模块的命名空间内。</p>
+<p>[SWS_CORE_10999]【草案】自定义错误域的命名空间范围</p>
+<p>「ErrorDomain子类、对应的枚举、异常基类、全局访问器函数以及MakeErrorCode重载，必须与它们所服务的软件模块定义在同一命名空间中。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>注：该要求用于保证C++的参数依赖查找（ADL）机制，能够按照本标准其他部分的预期正常工作。</p>
+<p>按照本节规范定义的错误域，可直接适配ApApplicationErrorDomain模型元素。</p>
+<p>本节中，字符序列<code>&lt;SN&gt;</code>为ApApplicationErrorDomain短名的占位符。</p>
+<hr>
+<h5 id="72161-错误条件枚举"><a href="7.2.1.6" rel="">7.2.1.6</a>.1 错误条件枚举</h5>
+<p>错误条件枚举描述了新软件模块的所有已知错误条件。枚举的粒度应合理细化，使用户能够区分需要差异化处理的不同错误条件。</p>
+<p>[SWS_CORE_10900]【草案】错误条件枚举类型</p>
+<p>「每个错误域必须定义一个强类型枚举类（enum class）作为错误条件枚举，其底层类型为ara::core::ErrorDomain::CodeType，包含该错误域的所有错误条件。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10901]【草案】错误条件枚举命名规则</p>
+<p>「错误域的错误条件枚举，必须遵循<code>&lt;SN&gt;Errc</code>的命名规则，其中<code>&lt;SN&gt;</code>为ApApplicationErrorDomain的短名。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10902]【草案】错误条件枚举内容约束</p>
+<p>「错误域的错误条件枚举，不得包含任何表示成功的取值。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10903]【草案】错误条件枚举数值约束</p>
+<p>「错误域的错误条件枚举，必须保留0值不分配。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<h5 id="72162-异常基类"><a href="7.2.1.6" rel="">7.2.1.6</a>.2 异常基类</h5>
+<p>作为错误条件枚举的配套定义，必须为该错误域定义一个异常基类。该异常基类用于将ara::core::ErrorCode对象转换为异常。</p>
+<p>软件模块可定义额外的异常类型，但所有额外异常类型都必须继承自该基类。</p>
+<p>[SWS_CORE_10910]【草案】错误域异常基类型</p>
+<p>「每个错误域必须定义一个异常基类型，且该类型必须为ara::core::Exception的子类。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10911]【草案】错误域异常基类型命名规则</p>
+<p>「本规范[SWS_CORE_10910]定义的所有错误域异常基类型，必须遵循<code>&lt;SN&gt;Exception</code>的命名规则，其中<code>&lt;SN&gt;</code>为ApApplicationErrorDomain的短名。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10912]【草案】错误域异常类型层级约束</p>
+<p>「软件模块定义的所有额外异常类型，必须以[SWS_CORE_10910]定义的异常基类型为基类。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<hr>
+<h5 id="72163-errordomain子类"><a href="7.2.1.6" rel="">7.2.1.6</a>.3 ErrorDomain子类</h5>
+<p>需创建一个继承自ara::core::ErrorDomain的新类，并重写所有纯虚成员函数。除此之外，还必须在类作用域内，为错误条件枚举定义名为Errc的类型别名，同时为该新错误域的异常基类定义名为Exception的类型别名。</p>
+<p>[SWS_CORE_10930]【草案】ErrorDomain子类类型约束</p>
+<p>「每个错误域必须定义一个公共同继承自ara::core::ErrorDomain的类类型。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10931]【草案】ErrorDomain子类命名规则</p>
+<p>「ara::core::ErrorDomain的所有子类，必须遵循<code>&lt;SN&gt;ErrorDomain</code>的命名规则，其中<code>&lt;SN&gt;</code>为ApApplicationErrorDomain的短名。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10932]【草案】ErrorDomain子类不可扩展约束</p>
+<p>「ara::core::ErrorDomain的所有子类，必须使用final修饰（不可被继承）。」</p>
+<p>（对应需求：RS_AP_00130、RS_AP_00140）</p>
+<p>[SWS_CORE_10933]【草案】ErrorDomain子类Errc符号定义</p>
+<p>「ara::core::ErrorDomain的所有子类，必须在其类作用域内定义名为Errc的类型别名，指向[SWS_CORE_10900]定义的错误条件枚举。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10934]【草案】ErrorDomain子类Exception符号定义</p>
+<p>「ara::core::ErrorDomain的所有子类，必须在其类作用域内定义名为Exception的类型别名，指向[SWS_CORE_10910]定义的异常基类型。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>所有ErrorDomain子类均可在常量表达式中使用，详见[SWS_CORE_10400]。尤其需要说明的是，ErrorDomain子类可被定义为constexpr全局变量。</p>
+<p>为了简化错误域的使用，ErrorDomain子类的所有成员函数都必须声明为noexcept，唯一例外是ErrorDomain::ThrowAsException函数。</p>
+<p>[SWS_CORE_10950]【草案】ErrorDomain子类成员函数属性</p>
+<p>「除ara::core::ErrorDomain::ThrowAsException外，所有ErrorDomain子类的所有公共成员函数，必须声明为noexcept。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>ErrorDomain::Name()虚成员函数返回ApApplicationErrorDomain的短名，主要用于日志记录。</p>
+<p>[SWS_CORE_10951]【草案】ErrorDomain子类短名获取</p>
+<p>「错误域Name()成员函数的返回值，必须与ApApplicationErrorDomain的短名一致。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<hr>
+<p>每个错误域都拥有一个标识符，用于判断错误域的相等性。自适应平台预定义的错误域使用标准化标识符，应用自定义错误域必须保证其标识符具备系统级全局唯一性。</p>
+<p>[SWS_CORE_10952]【草案】ErrorDomain子类唯一标识符获取</p>
+<p>「错误域Id()成员函数的返回值，必须为符合[SWS_CORE_00010]规则的唯一标识符。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>ErrorDomain可将ErrorCode转换为异常。</p>
+<p>[SWS_CORE_10953]【草案】ErrorCode作为异常抛出</p>
+<p>「ErrorDomain子类的ErrorDomain::ThrowAsException实现所抛出的异常类型，必须继承自该ErrorDomain子类通过[SWS_CORE_10934]定义的Exception类型别名。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<h5 id="72164-全局errordomain子类访问器函数"><a href="7.2.1.6" rel="">7.2.1.6</a>.4 全局ErrorDomain子类访问器函数</h5>
+<p>必须为新的错误域类定义一个全局访问器函数。对于MyErrorDomain错误域类，其访问器函数命名为GetMyErrorDomain。该访问器函数返回该类单个全局实例的引用，且必须完全支持constexpr特性；这也意味着对应的ErrorDomain子类必须支持constexpr构造（详见[SWS_CORE_10400]）。</p>
+<p>[SWS_CORE_10980]【草案】ErrorDomain子类访问器函数定义</p>
+<p>「对于ara::core::ErrorDomain的所有子类，必须定义一个全局constexpr函数，返回其单例实例的const引用。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10981]【草案】ErrorDomain子类访问器函数命名规则</p>
+<p>「ara::core::ErrorDomain所有子类的访问器函数，必须遵循<code>Get&lt;SN&gt;ErrorDomain</code>的命名规则，其中<code>&lt;SN&gt;</code>为ApApplicationErrorDomain的短名。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10982]【草案】ErrorDomain子类访问器函数返回值约束</p>
+<p>「ara::core::ErrorDomain所有子类的访问器函数，返回值类型必须为const ErrorDomain&amp;。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<h5 id="72165-全局makeerrorcode重载"><a href="7.2.1.6" rel="">7.2.1.6</a>.5 全局MakeErrorCode重载</h5>
+<p>最后，必须定义一个全局工厂函数MakeErrorCode的重载，该函数会被ara::core::ErrorCode类的便捷构造函数隐式调用。该工厂函数将使用ErrorDomain子类的全局访问器函数，调用ara::core::ErrorCode类的类型擦除构造函数。</p>
+<hr>
+<p>[SWS_CORE_10990]【草案】新错误域的MakeErrorCode重载定义</p>
+<p>「对于ara::core::ErrorDomain的所有子类，必须定义全局函数MakeErrorCode的constexpr重载，用于为ara::core::ErrorDomain子类错误条件范围内的指定错误值，创建对应的ara::core::ErrorCode实例。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10991]【草案】MakeErrorCode重载函数签名</p>
+<p>「全局函数MakeErrorCode的所有重载，必须遵循以下函数签名：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">constexpr</span> <span class="n">ErrorCode</span> <span class="nf">MakeErrorCode</span><span class="p">(</span><span class="o">&lt;</span><span class="n">SN</span><span class="o">&gt;</span><span class="n">Errc</span> <span class="n">code</span><span class="p">,</span> <span class="n">ErrorDomain</span><span class="o">::</span><span class="n">SupportDataType</span> <span class="n">data</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span></span></span></code></pre></div></div>
+<p>其中<code>&lt;SN&gt;</code>为ApApplicationErrorDomain的短名。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<h5 id="72166-c伪代码示例"><a href="7.2.1.6" rel="">7.2.1.6</a>.6 C++伪代码示例</h5>
+<p>以下C++伪代码展示了上述所有定义的组合实现方式：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">namespace</span> <span class="n">my</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">enum</span> <span class="k">class</span> <span class="err">&lt;</span><span class="nc">SN</span><span class="o">&gt;</span><span class="nl">Errc</span> <span class="p">:</span> <span class="n">ara</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">ErrorDomain</span><span class="o">::</span><span class="n">CodeType</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="err">&lt;</span><span class="nc">SN</span><span class="o">&gt;</span><span class="nl">Exception</span> <span class="p">:</span> <span class="k">public</span> <span class="n">ara</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">Exception</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">SN</span><span class="o">&gt;</span><span class="n">Exception</span><span class="p">(</span><span class="n">ara</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">ErrorCode</span> <span class="n">err</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="err">&lt;</span><span class="nc">SN</span><span class="o">&gt;</span><span class="n">ErrorDomain</span> <span class="k">final</span> <span class="o">:</span> <span class="k">public</span> <span class="n">ara</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">ErrorDomain</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="n">Errc</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">SN</span><span class="o">&gt;</span><span class="n">Errc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="n">Exception</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">SN</span><span class="o">&gt;</span><span class="n">Exception</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">constexpr</span> <span class="o">&lt;</span><span class="n">SN</span><span class="o">&gt;</span><span class="n">ErrorDomain</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="nf">Name</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="k">override</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="nf">Message</span><span class="p">(</span><span class="n">ara</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">ErrorDomain</span><span class="o">::</span><span class="n">CodeType</span> <span class="n">errorCode</span><span class="p">)</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="k">override</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="nf">ThrowAsException</span><span class="p">(</span><span class="k">const</span> <span class="n">ara</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">ErrorCode</span><span class="o">&amp;</span> <span class="n">errorCode</span><span class="p">)</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">constexpr</span> <span class="k">const</span> <span class="n">ara</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">ErrorDomain</span><span class="o">&amp;</span> <span class="n">Get</span><span class="o">&lt;</span><span class="n">SN</span><span class="o">&gt;</span><span class="n">ErrorDomain</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">constexpr</span> <span class="n">ara</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">ErrorCode</span> <span class="n">MakeErrorCode</span><span class="p">(</span><span class="o">&lt;</span><span class="n">SN</span><span class="o">&gt;</span><span class="n">Errc</span> <span class="n">code</span><span class="p">,</span> <span class="n">ara</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">ErrorDomain</span><span class="o">::</span><span class="n">SupportDataType</span> <span class="n">data</span><span class="p">)</span> <span class="k">noexcept</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="c1">// namespace my
+</span></span></span></code></pre></div></div>
+<h4 id="7217-autosar错误域"><a href="7.2.1.7" rel="">7.2.1.7</a> AUTOSAR错误域</h4>
+<p>唯一错误域标识符的完整取值范围，被划分为AUTOSAR定义ID范围、厂商定义ID范围，以及用户定义ID范围三部分。</p>
+<p>用户定义ID的最高位为0，剩余63位可用于保证唯一性；最高位为1的ID，为AUTOSAR与平台厂商预留使用。</p>
+<hr>
+<p>[SWS_CORE_00010]【草案】错误域标识符定义</p>
+<p>「所有错误域必须具备一个系统级全局唯一的标识符，标识符类型为64位无符号整型。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_00011]【草案】AUTOSAR错误域取值范围</p>
+<p>「第63位为1、第62位为0的错误域标识符，为AUTOSAR定义的错误域预留使用。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_00016]【草案】厂商定义错误域取值范围</p>
+<p>「高32位（第63位至第32位）等于0xc000'0000的错误域标识符，为厂商特定错误域预留使用。其中第31位至第16位存储厂商的数字标识符，第15位至第0位可由各厂商自行分配错误域标识符。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_00013] Future错误域定义</p>
+<p>「必须为ara::core::Future与ara::core::Promise类交互产生的所有错误，定义ara::core::FutureErrorDomain错误域。其短名为Future，标识符为0x8000'0000'0000'0013。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_00014] Core错误域定义</p>
+<p>「必须为ara::core中非Future/Promise相关功能产生的错误，定义ara::core::CoreErrorDomain错误域。其短名为Core，标识符为0x8000'0000'0000'0014。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<h3 id="722-异步信号安全">7.2.2 异步信号安全</h3>
+<p>异步信号安全函数，是指可以在POSIX信号处理函数中被安全调用的函数。</p>
+<p>参考文献[7《POSIX标准》]定义了一套保证异步信号安全的函数；所有不在该列表中的函数，均应被认定为不适合在信号处理函数中调用，包括所有ARA API。因为规范未定义（且通常无法确定）这些API内部会调用哪些其他函数（无论是来自POSIX、其他标准还是自定义实现）。</p>
+<p>除非另有明确规定，在信号处理函数中使用任何ARA API，都会导致应用程序出现未定义行为。</p>
+<h3 id="723-显式操作终止">7.2.3 显式操作终止</h3>
+<p>当API函数的实现检测到违例时，[SWS_CORE_00003]要求必须立即终止该操作。规范提供了两种实现方式：（若实现支持C++异常）抛出特定类型的异常，或调用ara::core::Abort。</p>
+<hr>
+<p>调用ara::core::Abort会触发显式操作终止，通常会导致参考文献[8]中定义的非预期终止。本节定义该机制的行为规范。</p>
+<p>与std::abort类似，调用ara::core::Abort的目的是立即异常终止当前进程，不执行栈展开，也不调用静态对象的析构函数。</p>
+<p>[SWS_CORE_12402]【草案】Abort的“不返回”属性</p>
+<p>「ara::core::Abort函数不得返回到其调用方。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_12403]【草案】显式操作终止的日志记录</p>
+<p>「除非应用已关闭日志功能，调用ara::core::Abort必须通过ara::log输出一条致命（FATAL）级别的日志消息，消息中必须包含传入该函数的字符串参数。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_12407]【草案】显式操作终止的线程安全</p>
+<p>「当一个ara::core::Abort调用正在执行时，其他对该函数的调用必须阻塞调用线程。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>ara::core::Abort提供了系统钩子注入能力，可通过调用ara::core::SetAbortHandler实现，与std::atexit允许为std::exit机制安装回调函数的设计类似。但与std::atexit不同的是，ara::core::SetAbortHandler仅允许设置一个处理函数。</p>
+<p>[SWS_CORE_12404]【草案】AbortHandler的调用时机</p>
+<p>「调用ara::core::Abort时，若已设置AbortHandler，必须在按照[SWS_CORE_12403]输出日志消息后，调用该AbortHandler。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<h4 id="7231-aborthandler"><a href="7.2.3.1" rel="">7.2.3.1</a> AbortHandler</h4>
+<p>该处理函数可通过ara::core::SetAbortHandler安装。当ara::core::Abort被调用时，该处理函数会被依次执行，函数内可执行任意操作，最终执行语句必须为以下四种核心选择之一：</p>
+<ol>
+<li>
+<p>终止进程</p>
+</li>
+<li>
+<p>从函数调用中返回</p>
+</li>
+<li>
+<p>进入无限循环，延迟函数返回</p>
+</li>
+<li>
+<p>执行非本地跳转操作，如std::longjmp</p>
+</li>
+</ol>
+<p>强烈不建议使用包括std::longjmp在内的非本地跳转操作，MISRA规范、AUTOSAR C++14编码规范以及绝大多数其他编码规范，也明确禁止该类操作。</p>
+<p>同样，也不建议通过进入无限循环的方式延迟函数返回；尽管这也能实现“触发违例的操作被终止”的预期目标，但代价是会导致调用线程“失效”，并可能加剧已出现违例的软件的不稳定性。</p>
+<hr>
+<p>对于终止进程的AbortHandler，强烈建议通过调用std::abort实现。这能保证执行管理能够将该非预期终止，正确识别为异常终止。</p>
+<p>若AbortHandler执行后返回，或未定义任何AbortHandler，ara::core::Abort的最终动作是调用std::abort。</p>
+<p>[SWS_CORE_12405]【草案】无AbortHandler时的最终动作</p>
+<p>「若未通过ara::core::SetAbortHandler安装自定义ara::core::AbortHandler，ara::core::Abort的实现必须调用std::abort()。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_12406]【草案】AbortHandler返回后的最终动作</p>
+<p>「若已通过ara::core::SetAbortHandler安装了自定义ara::core::AbortHandler，且该处理函数执行后返回，ara::core::Abort的实现必须调用std::abort()。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<h4 id="7232-sigabrt信号处理函数"><a href="7.2.3.2" rel="">7.2.3.2</a> SIGABRT信号处理函数</h4>
+<p>除了ara::core::AbortHandler之外（或作为替代方案），应用程序也可以通过安装SIGABRT信号的处理函数，影响该终止机制。</p>
+<p>SIGABRT信号处理函数与ara::core::AbortHandler具备相同的动作选择：终止进程、从函数调用返回、进入无限循环延迟返回、执行非本地跳转操作。同时也适用相同的约束：应避免非本地跳转操作与无限循环。</p>
+<p>若SIGABRT信号处理函数不返回，通常应通过SIGABRT信号异常终止。为了避免进入无限循环，应先通过std::signal(SIGABRT, SIG_DFL)恢复SIGABRT的默认处置方式，再通过std::raise(SIGABRT)重新触发SIGABRT信号。</p>
+<p>SIGABRT信号处理函数提供的“二级影响能力”，使得已经在处理SIGSEGV、SIGFPE等其他同步信号的应用程序，能够以统一的方式处理SIGABRT信号。</p>
+<h3 id="724-高级数据类型">7.2.4 高级数据类型</h3>
+<h4 id="7241-autosar自定义类型"><a href="7.2.4.1" rel="">7.2.4.1</a> AUTOSAR自定义类型</h4>
+<h5 id="72411-instancespecifier实例说明符"><a href="7.2.4.1" rel="">7.2.4.1</a>.1 InstanceSpecifier（实例说明符）</h5>
+<p>ara::core::InstanceSpecifier实例，用于标识AUTOSAR元模型中的服务端口原型实例，因此被用于ara::com API及其他模块中。详细描述与背景信息，详见参考文献[9]第6.1节（实例标识符）与第9.4.4节（基于ara::com的应用代码中元模型标识符的使用）。</p>
+<p>从概念上，可将ara::core::InstanceSpecifier理解为合法元模型路径的字符串表示的包装类型。它支持两种构造方式：</p>
+<ol>
+<li>
+<p>通过工厂方法ara::core::InstanceSpecifier::Create从字符串构造，提供无异常的实现方案</p>
+</li>
+<li>
+<p>直接使用构造函数构造，若字符串表示无效，可能会抛出异常</p>
+</li>
+</ol>
+<hr>
+<p>[SWS_CORE_10200] 合法的InstanceSpecifier表示格式</p>
+<p>「合法InstanceSpecifier的内容，是以<code>/</code>分隔的模型元素名称列表，路径从可执行文件（Executable）起始，到InstanceSpecifier对应的端口原型（PortPrototype）结束。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10201] 元模型路径校验</p>
+<p>「InstanceSpecifier类的构造机制，必须拒绝不符合[SWS_CORE_10200]定义的语法规则的元模型路径。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10202] InstanceSpecifier对象的构造方式</p>
+<p>「InstanceSpecifier对象的构造API，必须同时提供可能抛出异常的版本与无异常的版本。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<h4 id="7242-基于c基础标准派生的类型"><a href="7.2.4.2" rel="">7.2.4.2</a> 基于C++基础标准派生的类型</h4>
+<p>除了上一节提到的AUTOSAR自定义数据类型，自适应平台还包含一系列通用数据类型与辅助函数。</p>
+<p>部分类型已在参考文献[5《C++11标准》]中定义；但自适应平台在ara::core命名空间中，重新定义了行为几乎完全一致的类型。核心原因是std类型的内存分配行为，通常不符合汽车场景的使用需求。因此，ara::core中的对应类型重新定义了内存分配行为，并进行了其他必要的适配改造，包括异常抛出相关的规则调整。</p>
+<p>[SWS_CORE_00040]【草案】C++标准类衍生的错误处理规则</p>
+<p>「对于下文基于C++标准对应类定义的ara::core中的类，参考文献[5《C++11标准》]、[10《C++17标准》]或[11《C++20标准草案》]中规定会抛出异常的所有函数，当触发异常场景时，均被定义为违例（Violation）。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>该类数据类型的典型示例包括：Array、Vector、Map与String。</p>
+<h5 id="72421-array"><a href="7.2.4.2" rel="">7.2.4.2</a>.1 Array</h5>
+<p>本节描述ara::core::Array类型，该类型为封装固定大小数组的容器。</p>
+<p>ara::core::Array与std::array的行为几乎完全一致，std::array的绝大多数类型属性均适用于ara::core::Array。</p>
+<p>设计上与std::array的核心差异为：</p>
+<ul>
+<li>移除了std::array::at接口（避免强制的异常处理）</li>
+</ul>
+<p>[SWS_CORE_11200]【草案】Array基础行为规范</p>
+<p>「ara::core::Array及其所有成员函数、配套结构，必须与参考文献[4《C++14标准》]中<array>头文件的定义行为一致，本文档明确规定的差异除外。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<hr>
+<h5 id="72422-steadyclock稳态时钟"><a href="7.2.4.2" rel="">7.2.4.2</a>.2 SteadyClock（稳态时钟）</h5>
+<h5 id="724221-术语定义"><a href="7.2.4.2" rel="">7.2.4.2</a>.2.1 术语定义</h5>
+<p>C++ std::chrono库定义了一系列用于处理时间与时长的概念和类型。其中一个核心概念是“时钟”，它能够生成特定“时间点”的快照。本文档中，针对时钟与时间点，区分以下三个核心属性：分辨率、精度与准度。</p>
+<ul>
+<li><strong>分辨率</strong>：指时钟的测量数据类型能够表达的最小增量。</li>
+</ul>
+<p>对于POSIX的clock_gettime API对应的时钟，其API通过struct timespec结构体的tv_nsec字段定义，分辨率固定为纳秒。</p>
+<p>对于C++ std::chrono API的时钟，分辨率是可变的。</p>
+<ul>
+<li>
+<p><strong>精度</strong>：指时钟的计时器能够测量的最小时间间隔。精度为实现定义，取决于物理硬件与操作系统的属性和能力。</p>
+</li>
+<li>
+<p><strong>准度</strong>：指时钟上报值与真实值的偏差程度。</p>
+</li>
+</ul>
+<p>除此之外，纪元（epoch）也是时钟的一个重要属性，它定义了时钟可生成的时间范围的基准点。用于测量日历时间的时钟，通常使用“Unix时间”，即从“Unix纪元”（1970-01-01 00:00:00 UTC）开始计算的秒数（不含闰秒）。</p>
+<p>而更注重高精度的时钟，通常与日历时间无关，其生成的时间戳为系统上电时间的偏移量。</p>
+<h5 id="724222-自适应平台中的时钟"><a href="7.2.4.2" rel="">7.2.4.2</a>.2.2 自适应平台中的时钟</h5>
+<p>C++ std::chrono库定义了多个标准时钟，其中包括std::chrono::steady_clock，它代表单调时钟，其时间点严格递增，且 tick 间隔固定。</p>
+<p>但C++标准并未对该时钟的分辨率、精度与准度提出任何强制要求。分辨率的未定义特性，会给应用开发者带来一定困难，不过这些问题通常可通过约定通用（或最低）分辨率解决。而精度与准度，始终取决于硬件与操作系统的物理属性。</p>
+<p>自适应平台定义的ara::core::SteadyClock，是兼容std::chrono规范的时钟，具备纳秒级分辨率，底层数据类型为std::int64_t。其精度与准度仍为实现定义，可作为具体平台的特性参数给出。其纪元为ECU的上电时间。基于这些属性，ara::core::SteadyClock生成的时间戳，在纪元后292年内不会发生溢出。</p>
+<p>它是自适应平台的标准时钟，绝大多数计时场景均应使用该时钟。</p>
+<p>ara::core::SteadyClock的属性意味着：若std::chrono::steady_clock的period等同于std::nano，且std::chrono::steady_clock::rep为std::int64_t等64位有符号整型，则将std::chrono::steady_clock定义为类型别名，是ara::core::SteadyClock的合规实现。</p>
+<hr>
+<p>[SWS_CORE_11800]【草案】SteadyClock类型要求</p>
+<p>「ara::core::SteadyClock类必须满足参考文献[5《C++11标准》]中定义的平凡时钟（TrivialClock）要求。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_11801]【草案】SteadyClock的纪元</p>
+<p>「ara::core::SteadyClock的纪元必须为系统启动时间。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<h4 id="7243-基于新版c标准派生的类型"><a href="7.2.4.3" rel="">7.2.4.3</a> 基于新版C++标准派生的类型</h4>
+<p>此类类型已在新版C++标准中定义或被提案纳入，自适应平台将其纳入ara::core命名空间中，通常是因为清单（Manifest）的特定结构需要依赖这些类型。</p>
+<p>该类数据类型的典型示例包括：Optional、StringView、Span与Variant。</p>
+<h5 id="72431-aracorebyte"><a href="7.2.4.3" rel="">7.2.4.3</a>.1 ara::core::Byte</h5>
+<p>ara::core::Byte是用于承载机器“字节”数据的类型，它是独立于其他所有类型的专属类型。</p>
+<p>本节的定义经过严谨设计，既支持将C++17标准中的std::byte作为合规实现，也支持仅通过C++11特性实现基于类的版本。</p>
+<p>与C++17标准中的std::byte不同，ara::core::Byte是否支持在不触发未定义行为的前提下进行类型别名化，为实现定义。</p>
+<p>[SWS_CORE_10100] ara::core::Byte的类型属性</p>
+<p>「ara::core::Byte类型不得为整型。特别地，std::is_integral<a href="ara::core::Byte" rel="">ara::core::Byte</a>::value的取值必须为0。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10101] ara::core::Byte类型的大小</p>
+<p>「ara::core::Byte类型实例的大小（通过sizeof(ara::core::Byte)获取）必须为1字节。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10102] ara::core::Byte类型的取值范围</p>
+<p>「ara::core::Byte类型实例的取值，必须限定在[0..std::numeric_limits<unsigned char>::max()]范围内。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10103] ara::core::Byte实例的创建</p>
+<p>「必须支持通过列表初始化语法，从整型创建ara::core::Byte类型实例。该初始化过程必须支持在常量表达式中调用。若初始化值超出ara::core::Byte类型的取值范围（见[SWS_CORE_10102]），行为未定义。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<hr>
+<p>[SWS_CORE_10104] 默认构造的ara::core::Byte实例</p>
+<p>「必须支持无初始值的ara::core::Byte类型实例构造。该变量定义不得产生任何运行时开销，且实例的值为未确定内容。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10105] ara::core::Byte类型的析构函数</p>
+<p>「ara::core::Byte类型的析构函数必须为平凡析构函数。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10106] 其他类型的隐式转换入</p>
+<p>「ara::core::Byte类型不得支持从任何其他类型的隐式转换。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10107] 向其他类型的隐式转换出</p>
+<p>「ara::core::Byte类型不得支持向任何其他类型（包括bool）的隐式转换。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10108] 向unsigned char的转换</p>
+<p>「必须支持通过static_cast&lt;&gt;表达式，将ara::core::Byte类型转换为unsigned char。该转换过程必须支持在常量表达式中调用。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10109] ara::core::Byte的相等性比较</p>
+<p>「必须支持ara::core::Byte类型实例之间的相等性比较。该比较操作必须支持在常量表达式中调用。」</p>
+<p>（对应需求：RS_AP_00130）</p>
+<p>[SWS_CORE_10110] ara::core::Byte的非相等性比较</p>
+<p>「必须支持ara::core::Byte类型实例之间的非相等性比较。该比较操作必须支持在常量表达式中调用。」</p>
+<hr></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-05-06</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/013_autosar_sws_adaptivecore_r2011/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/autosar/">AUTOSAR</a>,&nbsp;<a href="/blog/tags/autosar-ap/">AUTOSAR AP</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/001_manjaro%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85/" class="prev" rel="prev" title="Manjaro 系统安装"><i class="fas fa-angle-left" aria-hidden="true"></i>Manjaro 系统安装</a>
+            <a href="/blog/014_autosar_sws_logandtrace_r2011/" class="next" rel="next" title="AUTOSAR_SWS_LogAndTrace">AUTOSAR_SWS_LogAndTrace<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

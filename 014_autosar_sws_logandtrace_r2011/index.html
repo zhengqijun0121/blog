@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>AUTOSAR_SWS_LogAndTrace - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/014_autosar_sws_logandtrace_r2011/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="AUTOSAR_SWS_LogAndTrace">
+  <meta property="og:description" content="Oh My Blog">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-05-07T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-05-07T10:00:00+08:00">
+    <meta property="article:tag" content="AUTOSAR">
+    <meta property="article:tag" content="AUTOSAR AP">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="AUTOSAR_SWS_LogAndTrace">
+  <meta name="twitter:description" content="Oh My Blog">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/014_autosar_sws_logandtrace_r2011/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/013_autosar_sws_adaptivecore_r2011/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "AUTOSAR_SWS_LogAndTrace",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/014_autosar_sws_logandtrace_r2011\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "AUTOSAR, AUTOSAR AP","wordcount":  9570 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/014_autosar_sws_logandtrace_r2011\/","datePublished": "2026-05-07T09:00:00+08:00","dateModified": "2026-05-07T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/014_autosar_sws_logandtrace_r2011/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/014_autosar_sws_logandtrace_r2011/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">AUTOSAR_SWS_LogAndTrace</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/autosar/"><i class="far fa-folder" aria-hidden="true"></i>AUTOSAR</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-05-07">2026-05-07</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 9570 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 20 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#7-功能规范">7 功能规范</a>
+      <ul>
+        <li><a href="#71-功能集群生命周期">7.1 功能集群生命周期</a>
+          <ul>
+            <li><a href="#711-启动">7.1.1 启动</a></li>
+            <li><a href="#712-关闭">7.1.2 关闭</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#72-必要参数与初始化">7.2 必要参数与初始化</a>
+      <ul>
+        <li><a href="#用户应用标识规则">用户应用标识规则</a></li>
+        <li><a href="#日志上下文规则">日志上下文规则</a></li>
+        <li><a href="#721-应用id">7.2.1 应用ID</a>
+          <ul>
+            <li><a href="#7211-应用描述">7.2.1.1 应用描述</a></li>
+          </ul>
+        </li>
+        <li><a href="#722-默认日志级别">7.2.2 默认日志级别</a></li>
+        <li><a href="#723-日志模式">7.2.3 日志模式</a>
+          <ul>
+            <li><a href="#7231-日志文件路径">7.2.3.1 日志文件路径</a></li>
+          </ul>
+        </li>
+        <li><a href="#724-上下文id">7.2.4 上下文ID</a></li>
+        <li><a href="#725-上下文描述">7.2.5 上下文描述</a></li>
+        <li><a href="#726-日志框架的初始化">7.2.6 日志框架的初始化</a></li>
+      </ul>
+    </li>
+    <li><a href="#73-日志消息">7.3 日志消息</a>
+      <ul>
+        <li><a href="#731-非建模消息">7.3.1 非建模消息</a></li>
+        <li><a href="#732-建模消息">7.3.2 建模消息</a>
+          <ul>
+            <li><a href="#7321-api设计原理">7.3.2.1 API设计原理</a></li>
+            <li><a href="#7322-日志消息模型">7.3.2.2 日志消息模型</a></li>
+            <li><a href="#7323-使用方法">7.3.2.3 使用方法</a>
+              <ul>
+                <li><a href="#logstream对象的变量存储方式">LogStream对象的变量存储方式</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#74-转换函数">7.4 转换函数</a></li>
+    <li><a href="#75-日志与追踪时间戳">7.5 日志与追踪时间戳</a></li>
+    <li><a href="#76-日志与追踪数据丢失防护">7.6 日志与追踪数据丢失防护</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="autosar_sws_logandtrace">AUTOSAR_SWS_LogAndTrace</h1>
+<hr>
+<h2 id="7-功能规范">7 功能规范</h2>
+<p>本规范定义了日志与追踪模块所定义的C++日志API的使用方法。自适应应用可通过这些函数将日志消息转发至各类接收器，例如网络、串行总线、控制台或文件系统。</p>
+<p>本模块提供以下核心功能：</p>
+<ol>
+<li>日志框架的初始化方法（见7.3节）</li>
+<li>将十进制数值转换为十六进制或二进制数值的工具方法（见7.4节）</li>
+<li>日志消息的自动时间戳功能（见7.5节）</li>
+<li>日志与追踪的网络带宽限制功能（见7.6节）</li>
+</ol>
+<p>自适应应用与功能集群可通过调用<code>ara::core::Initialize()</code>或<code>ara::core::Deinitialize()</code>，对所有具备直接ARA接口的功能集群（例如日志框架）执行启动（见7.1.1节）与关闭（见7.1.2节）操作。</p>
+<h3 id="71-功能集群生命周期">7.1 功能集群生命周期</h3>
+<h4 id="711-启动">7.1.1 启动</h4>
+<p>为完成日志框架的初始化，必须向日志框架提供必填信息。这些信息提取自应用执行清单与AUTOSAR元模型。执行清单中的<code>Executable.loggingBehavior</code>参数定义了是否需要初始化日志功能。在使用任何<code>ara::log</code> API前，必须通过<code>ara::core::Initialize</code>完成日志框架的初始化，未执行该操作将导致未定义行为。</p>
+<p>[SWS_LOG_00001] 在日志框架具备处理能力之前（例如尚未与守护进程建立通信）产生的日志消息，必须进入队列缓存。队列大小由<code>LogAndTraceInstantiation.queueSize</code>定义。若超出队列容量，最早的条目将被丢弃。（对应需求：RS_LT_00003、RS_LT_00052）</p>
+<h4 id="712-关闭">7.1.2 关闭</h4>
+<p>[SWS_LOG_00122] {草案} 当调用<code>ara::core::Deinitialize()</code>时，日志框架必须确保不再建立新的客户端连接。（对应需求：RS_LT_00003）</p>
+<p>[SWS_LOG_00123] {草案} 当调用<code>ara::core::Deinitialize()</code>时，若已连接客户端，日志框架必须确保缓冲区中所有剩余消息可被客户端采集。（对应需求：RS_LT_00003）</p>
+<h2 id="72-必要参数与初始化">7.2 必要参数与初始化</h2>
+<h3 id="用户应用标识规则">用户应用标识规则</h3>
+<p>为了能够区分系统内（例如单个电子控制单元ECU，乃至整车范围内）不同应用实例的日志，系统内的每个应用进程都必须具备唯一的ID与描述信息。</p>
+<h3 id="日志上下文规则">日志上下文规则</h3>
+<p>为了能够区分同一应用进程内不同逻辑模块的日志，必须为应用进程内的每个上下文分配唯一的ID与描述信息。每个应用进程可配置任意数量的上下文，但至少需包含一个默认上下文。</p>
+<p>日志与追踪功能集群的机器级专属配置项集中在<code>LogAndTraceInstantiation</code>中定义。使用日志框架的应用进程，必须通过应用执行清单提供以下配置信息：</p>
+<ul>
+<li>
+<p>应用ID</p>
+</li>
+<li>
+<p>应用描述</p>
+</li>
+<li>
+<p>默认日志级别（若未在清单中设置，将使用预定义的默认值）</p>
+</li>
+<li>
+<p>日志模式</p>
+</li>
+<li>
+<p>日志文件路径（仅当日志模式配置为文件输出时必填）</p>
+</li>
+</ul>
+<p>使用日志框架的应用进程会为每个上下文创建一个日志实例。上下文在日志实例创建时定义，需提供以下信息：</p>
+<ul>
+<li>
+<p>上下文ID</p>
+</li>
+<li>
+<p>上下文描述</p>
+</li>
+<li>
+<p>默认日志级别（若未在清单中设置，将使用预定义的默认值）</p>
+</li>
+</ul>
+<h3 id="721-应用id">7.2.1 应用ID</h3>
+<p>应用ID是用于将生成的日志信息与其所属的用户应用进行关联的标识符。应用ID以字符串形式传入，其长度可能受日志框架的具体实现（即日志后端）限制。为了能够将接收到的日志信息与来源明确对应，建议在单个ECU内为应用分配唯一的应用ID。应用ID无需在跨ECU场景下保持唯一，因为ECU ID会作为区分标识。</p>
+<p>系统集成商需承担整体责任，确保每个应用进程实例具备唯一的应用ID。通过在清单中定义该数值，集成商可执行一致性校验。<code>DltLogChannel</code>中的<code>applicationId</code>用于标识应用实例，并会作为应用ID填入日志与追踪消息中。</p>
+<p>注：应用ID是每个应用进程的唯一标识，这意味着若同一个应用进程被多次启动，每个实例都必须拥有专属的ID。</p>
+<h4 id="7211-应用描述"><a href="7.2.1.1" rel="">7.2.1.1</a> 应用描述</h4>
+<p>由于应用ID的长度可能很短，可额外提供描述性文本。该描述以字符串形式传入，其最大长度由具体实现决定。<code>DltLogChannel</code>中的<code>applicationDescription</code>是可选配置项，用于为应用ID补充描述性文本说明。</p>
+<h3 id="722-默认日志级别">7.2.2 默认日志级别</h3>
+<p>日志严重级别代表日志消息的严重程度，具体级别定义见7.3节。<code>DltLogChannel</code>中的<code>logTraceDefaultLogLevel</code>定义了应用实例的初始日志上报级别。</p>
+<p>每条发起的日志消息都需配备对应的严重级别。默认日志严重级别通过应用配置按应用进程维度设置，其作用是作为上报过滤器：只有严重级别高于或等于该阈值的日志消息，才会被日志框架处理，其余消息将被忽略。</p>
+<p>默认日志严重级别是指定应用进程的初始配置上报级别，同时支持按上下文维度覆盖该配置。</p>
+<p>应用进程全局的日志上报级别必须支持运行时调整，具体实现由底层日志后端决定，例如可通过DLT Viewer等日志客户端进行远程配置。上下文级别的上报级别也遵循该规则。</p>
+<p>相较于按上下文设置默认日志严重级别，采用应用全局初始默认日志严重级别的设计依据如下：</p>
+<ul>
+<li>
+<p>简化API使用。否则用户必须在使用API前，为每个日志分组单独定义上下文默认日志严重级别。</p>
+</li>
+<li>
+<p>支持在运行时对日志消息进行上下文维度的隔离。</p>
+</li>
+</ul>
+<h3 id="723-日志模式">7.2.3 日志模式</h3>
+<p>根据日志框架的具体实现，传入的日志信息可通过不同方式处理，日志消息的目标接收器可以是控制台输出、文件系统中的文件，或是通信总线。系统集成商负责在机器清单中配置该信息。本规范同时提供了直接API，支持在开发阶段动态修改该数值。</p>
+<p>在AUTOSAR元模型中，<code>logTraceLogMode</code>与本文描述的日志模式为同一概念，更多信息参见参考文献[3]。<code>LogAndTraceInstantiation</code>下<code>DltLogChannel</code>中的<code>logTraceLogMode</code>，定义了日志消息的转发目标。</p>
+<p>图7.1 日志模式</p>
+<p>（图示说明：执行清单配置日志模式，机器清单配置网络、日志存储等参数，日志与追踪功能集群的LT后端将日志分发至开发用文件、控制台、持久化日志文件、网络端LT日志查看器等目标）</p>
+<p>如图所示，当日志模式配置为使用日志后端时，该后端的相关配置将集中在机器清单中统一管理。例如，可将日志后端配置为本地存储日志信息，该配置会保存在机器专属清单中。此外，日志消息的以太网输出通道，通过<code>PlatformModuleEthernetEndpointConfiguration</code>进行配置，该配置项由<code>LogAndTraceInstantiation</code>通过<code>DltLogChannel</code>以<code>endpointConfiguration</code>角色进行聚合。</p>
+<h4 id="7231-日志文件路径"><a href="7.2.3.1" rel="">7.2.3.1</a> 日志文件路径</h4>
+<p>当日志模式设置为文件输出时，必须提供目标目录路径。<code>DltLogChannel</code>中的<code>logTraceFilePath</code>定义了日志信息写入的目标文件。该配置项仅用于开发、集成与原型验证场景，不适用于量产环境。</p>
+<h3 id="724-上下文id">7.2.4 上下文ID</h3>
+<p>上下文ID是用于在应用进程范围内对日志信息进行逻辑分组的标识符。上下文ID以字符串形式传入，其长度可能受日志后端的具体实现限制。上下文ID在单个应用进程范围内必须唯一，由开发人员负责分配，该信息无需在清单中建模。上下文ID无需在多个不同应用进程间保持唯一，因为应用ID会作为区分标识。</p>
+<p>注：需特别注意库组件的场景。库组件由应用进程调用，因此运行在应用进程的上下文范围内，从库中执行的日志操作，最终会归属到父应用进程的日志范围内。为了将库的内部日志与应用进程日志、同进程内其他库的日志区分开，每个库可能需要在系统范围内预留专属的上下文ID——至少当该库会被多个应用进程使用时，必须遵循该要求。</p>
+<h3 id="725-上下文描述">7.2.5 上下文描述</h3>
+<p>由于上下文ID的长度可能很短，必须额外提供描述性文本。该上下文描述以字符串形式传入，其最大长度由具体实现决定。</p>
+<h3 id="726-日志框架的初始化">7.2.6 日志框架的初始化</h3>
+<p>应用ID与描述信息用于标识日志信息，并将其与对应的进程进行关联；日志模式与接收器信息则定义了日志信息的路由目标，可选目标包括控制台、文件系统或通信总线。</p>
+<p>从应用进程的视角来看，当应用进程注册一个日志上下文时，日志框架完成初始化并创建对应的日志器实例，这些上下文用于对日志信息进行逻辑聚类。</p>
+<p>[SWS_LOG_00002] {草案} 当日志框架或底层系统内部发生任何错误时，设计原则为不干扰应用进程，静默丢弃相关函数调用。为此，相关接口既不定义返回值，也不会抛出异常。（对应需求：RS_LT_00003）</p>
+<p>[SWS_LOG_00004] {草案} 应用执行清单必须为日志框架的初始化提供以下信息：</p>
+<ul>
+<li>
+<p>唯一的应用ID</p>
+</li>
+<li>
+<p>应用描述</p>
+</li>
+<li>
+<p>默认日志严重级别</p>
+</li>
+<li>
+<p>日志模式</p>
+</li>
+<li>
+<p>目录路径（仅当日志模式设置为<code>LogMode::kFile</code>时必填）</p>
+</li>
+</ul>
+<p>（对应需求：RS_LT_00003、RS_LT_00047、RS_LT_00048）</p>
+<p>注：根据日志框架的具体实现，可能并非所有特性都被支持，因此部分配置属性可能不会被使用。</p>
+<p>[SWS_LOG_00005] <code>CreateLogger()</code>函数必须在日志框架内部创建一个日志器上下文实例，并将其以引用形式返回给调用的应用。在处理任何日志消息前，必须至少存在一个可用的日志器上下文。（对应需求：RS_LT_00003、RS_LT_00050）</p>
+<p>注：上下文与日志框架之间的强所属关系，可确保相关资源的正确管理。该设计的核心逻辑是：一旦上下文向日志后端完成注册，其生命周期必须得到保障，直至应用进程终止。</p>
+<p>[SWS_LOG_00006] 调用<code>CreateLogger()</code>时，必须提供以下参数：</p>
+<ul>
+<li>
+<p>上下文ID</p>
+</li>
+<li>
+<p>上下文描述</p>
+</li>
+<li>
+<p>日志严重级别（可选参数，默认值为<code>LogLevel::kWarn</code>）</p>
+</li>
+</ul>
+<p>（对应需求：RS_LT_00003、RS_LT_00050）</p>
+<p>[SWS_LOG_00007] 应用进程必须可通过<code>IsLogEnabled()</code>函数，检查指定的日志严重级别是否处于启用配置。该机制可节省日志信息准备过程中消耗的CPU与内存资源，因为未启用级别的日志信息后续会被日志框架直接过滤。（对应需求：RS_LT_00003、RS_LT_00045）</p>
+<h2 id="73-日志消息">7.3 日志消息</h2>
+<p>日志消息通常可输出至不同的目标端，日志与追踪功能集群支持以下日志输出目标：</p>
+<ul>
+<li>
+<p>控制台</p>
+</li>
+<li>
+<p>本地文件系统中的文件</p>
+</li>
+<li>
+<p>网络</p>
+</li>
+</ul>
+<p>本节的大部分内容均基于消息输出至网络的场景展开，因为该场景需要额外考虑网络负载最小化的需求。</p>
+<p>日志与追踪功能集群提供两类核心的日志消息类型：<strong>建模消息</strong>与<strong>非建模消息</strong>。两类消息均支持向单条日志消息中添加一个或多个参数，不包含任何参数的日志消息无实际意义，会被直接丢弃。</p>
+<p>非建模消息是传统的日志消息组织方式：消息的所有参数都会被添加到内部消息缓冲区，最终被序列化后输出至控制台/文件，或通过网络发送，消息的所有内容都会通过网络传输。在DLT协议中，这类消息被称为“详细模式（verbose）”消息。</p>
+<p>建模消息的设计目标是降低网络流量，其核心是不在网络中传输消息中固定不变的静态内容。顾名思义，这些静态内容会被预先定义在应用的ARXML模型中。在DLT协议中，这类消息被称为“非详细模式（non-verbose）”消息。日志查看器应用可通过结合模型中的静态内容与接收到的消息中的动态内容，还原并展示完整的日志消息。</p>
+<p>非建模消息主要用于开发阶段，因为此时建模消息所需的信息可能尚未完备。但非建模消息会产生较高的网络负载，因此在量产系统中，建模消息通常是更优选择。</p>
+<p><code>ara::log</code>功能集群支持在单个应用中同时定义和使用建模消息与非建模消息。</p>
+<h3 id="731-非建模消息">7.3.1 非建模消息</h3>
+<p><code>ara::log</code>功能集群定义了一套基于建造者模式设计的API，用于构建非建模消息。<code>ara::log::Logger::WithLevel</code>成员函数用于创建<code>ara::log::LogStream</code>对象，随后可向该对象中填充消息内容（即消息参数）。除了<code>ara::log::Logger::WithLevel</code>，规范还为每个支持的日志级别，分别提供了独立的成员函数用于创建<code>ara::log::LogStream</code>对象。</p>
+<p>可通过调用对应参数类型的<code>operator&lt;&lt;</code>重载函数，向详细模式消息中添加参数，示例如下：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="p">.</span><span class="n">WithLevel</span><span class="p">(</span><span class="n">LogLevel</span><span class="o">::</span><span class="n">kInfo</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;text&#34;</span> <span class="o">&lt;&lt;</span> <span class="mf">4.2</span><span class="p">;</span></span></span></code></pre></div></div>
+<p><code>ara::log</code>功能集群为所有C++算术类型、布尔类型、字符串类型，以及多种<code>ara::core</code>类型，定义了对应的<code>operator&lt;&lt;</code>重载函数。应用自定义的数据类型，也可通过实现适配的<code>operator&lt;&lt;</code>重载函数，支持日志输出。</p>
+<p>由于应用模型支持为参数添加属性注解，<code>ara::log</code>的非建模消息API也支持该能力。特定类型的参数可被添加“名称”属性，部分类型还可额外添加“单位”属性，示例如下：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="p">.</span><span class="n">WithLevel</span><span class="p">(</span><span class="n">LogLevel</span><span class="o">::</span><span class="n">kInfo</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;&lt;</span> <span class="n">Arg</span><span class="p">(</span><span class="s">&#34;text&#34;</span><span class="p">,</span> <span class="s">&#34;identifier&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;&lt;</span> <span class="n">Arg</span><span class="p">(</span><span class="mf">4.2</span><span class="p">,</span> <span class="s">&#34;velocity&#34;</span><span class="p">,</span> <span class="s">&#34;m/s&#34;</span><span class="p">);</span></span></span></code></pre></div></div>
+<p>上述示例中，字符串参数“text”被添加了名为“identifier”的“名称”属性；双精度浮点参数4.2被添加了名为“velocity”的“名称”属性，以及单位“m/s”。仅<code>ara::log</code> API支持的部分内置类型可设置这些属性，具体包括：所有算术类型、布尔类型、字符串类型，以及原始数据块。</p>
+<p>非建模消息还可包含日志调用点在源代码中的位置信息。可通过调用<code>ara::log::LogStream::WithLocation</code>成员函数，传入调用点的文件名与行号实现该能力，这些信息通常来自编译器预定义的<code>__FILE__</code>与<code>__LINE__</code>宏，示例如下：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">WithLevel</span><span class="p">(</span><span class="n">LogLevel</span><span class="o">::</span><span class="n">kInfo</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">.</span><span class="n">WithLocation</span><span class="p">(</span><span class="n">__FILE__</span><span class="p">,</span> <span class="n">__LINE__</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="p">...;</span></span></span></code></pre></div></div>
+<p>该能力最便捷的实现方式是基于<code>ara::log</code>封装宏接口，但自适应平台中暂未定义相关标准宏。</p>
+<h3 id="732-建模消息">7.3.2 建模消息</h3>
+<h4 id="7321-api设计原理"><a href="7.3.2.1" rel="">7.3.2.1</a> API设计原理</h4>
+<p><code>ara::log</code>功能集群定义了一个统一的成员函数<code>ara::log::Logger::Log</code>，用于发送建模消息。与非建模消息API不同，该函数是单调用接口，即通过一次函数调用，将所有参数传递给日志器实例，并完成消息生成与发送所需的全部操作。</p>
+<p>该设计的优势在于：对于最终不会被输出的建模消息（因消息的日志级别未达到配置的阈值），其运行时开销可被降至极低。完成参数传递与函数调用后，仅需通过一条if语句检查日志级别阈值，若未达到阈值则直接返回。而非建模消息API即使最终会丢弃消息，也需要执行多次函数调用来构建消息对象，产生额外开销。</p>
+<h4 id="7322-日志消息模型"><a href="7.3.2.2" rel="">7.3.2.2</a> 日志消息模型</h4>
+<p>所有建模消息均以<code>DltMessage</code>的形式定义，<code>DltMessage</code>由系统引用的<code>DltMessageCollectionSet</code>进行聚合。每个<code>DltMessage</code>包含：在单个ECU内必须唯一的<code>messageId</code>、标识日志级别的<code>messageTypeInfo</code>，以及可选的<code>messageSourceFile</code>（消息源文件）与<code>messageLineNumber</code>（消息行号）。<code>DltMessage</code>聚合了有序的<code>DltArgument</code>列表，而<code>DltArgument</code>会以<code>networkRepresentation</code>角色关联一个<code>SwDataDefProps</code>对象。日志消息参数的名称取自<code>DltArgument</code>的<code>shortName</code>，参数的类型与单位则取自<code>SwDataDefProps</code>。</p>
+<p><strong>设计阶段</strong>：<code>DltMessage</code>会被分配至<code>DltLogChannelDesign</code>，后者通过<code>DltLogChannelDesignToProcessDesignMapping</code>映射到<code>ProcessDesign</code>，最终关联到可执行文件<code>Executable</code>，完成与应用的绑定。</p>
+<p><strong>部署阶段</strong>：<code>DltLogChannel</code>会引用设计阶段的<code>DltLogChannelDesign</code>，并继承设计阶段定义的<code>DltMessage</code>。<code>DltLogChannel</code>通过<code>DltLogChannelToProcessMapping</code>引用可执行文件对应的<code>Process</code>，完成与应用的映射。所有<code>DltLogChannel</code>均由ECU的<code>LogAndTraceInstantiation</code>聚合，该对象包含<code>dltEcuId</code>、<code>queueSize</code>，以及标识是否启用会话ID的<code>sessionIdSupport</code>信息。</p>
+<p><code>DltLogChannel</code>包含<code>applicationId</code>、<code>contextId</code>，以及对应的<code>applicationDescription</code>与<code>contextDescription</code>；它可关联<code>ServiceInstanceToPortPrototypeMapping</code>，此时来自该端口的日志消息将使用该<code>DltLogChannel</code>的<code>contextId</code>。</p>
+<p><code>DltLogChannel</code>还包含<code>sessionId</code>，以及<code>nonVerboseMode</code>配置项（用于标识是否将建模消息以非建模消息的详细模式发送）。此外，<code>DltLogChannel</code>还包含：设置日志消息初始阈值的<code>logTraceDefaultLogLevel</code>、配置日志消息目标的<code>logTraceLogMode</code>，以及文件输出模式下的<code>logTraceFilePath</code>。</p>
+<h4 id="7323-使用方法"><a href="7.3.2.3" rel="">7.3.2.3</a> 使用方法</h4>
+<p>该C++ API的使用，依赖配套工具的支持：工具会扫描源代码中的建模日志消息调用点，并按需生成带唯一ID的对应符号。</p>
+<p>框架必须扫描所有源代码，查找<code>ara::log::Logger::Log</code>成员函数的调用点，并生成与该函数调用第一个入参匹配的符号。</p>
+<p>例如，若清单的ARXML描述包含以下内容：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-XML">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-XML" data-lang="XML"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;DLT-MESSAGE-COLLECTION-SET&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;DLT-MESSAGES&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;SHORT-NAME&gt;</span>DltMessages<span class="nt">&lt;/SHORT-NAME&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;DLT-MESSAGE&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;SHORT-NAME&gt;</span>SpeedMsg<span class="nt">&lt;/SHORT-NAME&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/DLT-MESSAGE&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;/DLT-MESSAGES&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/DLT-MESSAGE-COLLECTION-SET&gt;</span></span></span></code></pre></div></div>
+<p>且源代码中包含以下代码：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Logger</span><span class="o">&amp;</span> <span class="n">logger</span> <span class="o">=</span> <span class="p">...;</span>
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="n">SpeedMsg</span><span class="p">,</span> <span class="mf">4.2</span><span class="p">);</span></span></span></code></pre></div></div>
+<p>则框架会定义一个名为<code>SpeedMsg</code>的全局<code>constexpr</code>变量，其类型由具体实现定义。该变量包含消息的建模相关信息（如参数类型、日志级别），使<code>ara::log</code>的实现能够校验传入<code>ara::log::Logger::Log</code>的参数数量与类型，是否与对应消息的模型匹配。</p>
+<p>消息变量的定义会通过<code>ara/log/logger.h</code>头文件对外暴露。</p>
+<h5 id="logstream对象的变量存储方式">LogStream对象的变量存储方式</h5>
+<p>日志API还支持另一种使用方式：将<code>ara::log::LogStream</code>对象存储为本地命名变量。与临时对象的区别在于，该对象不会在语句结束时离开作用域，只要变量存在，对象就保持有效且可复用，因此可通过多行代码向其填充数据。</p>
+<p>若要让日志框架处理消息缓冲区的内容，必须调用<code>ara::log::LogStream::Flush</code>方法；否则缓冲区内容会在对象销毁时（即变量在函数块结束离开作用域时）才会被处理。</p>
+<p><strong>性能说明</strong>：</p>
+<p>由于<code>ara::log::LogStream</code>对象不再按单条消息创建，而是可被多条消息复用，因此对象创建的开销仅需按日志级别支付一次。该方式对实际性能的影响程度，取决于日志框架的具体实现。而该使用方式的核心设计目标，是提供多行代码的建造者模式能力。</p>
+<p>注：强烈建议不要在多线程应用中持有全局的<code>ara::log::LogStream</code>对象，因为这种场景下，日志API将无法再保障并发访问的安全性。</p>
+<p><strong>使用示例</strong>：</p>
+<div class="code-block code-line-numbers" style="counter-reset: code-block 0">
+    <div class="code-header language-C&#43;&#43;">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 基础用法
+</span></span></span><span class="line"><span class="cl"><span class="n">Logger</span><span class="o">&amp;</span> <span class="n">ctx0</span> <span class="o">=</span> <span class="n">CreateLogger</span><span class="p">(</span><span class="s">&#34;CTX0&#34;</span><span class="p">,</span> <span class="s">&#34;Context Description CTX0&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">ctx0</span><span class="p">.</span><span class="n">LogInfo</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Some log information&#34;</span> <span class="o">&lt;&lt;</span> <span class="mi">123</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 本地存储LogStream对象的用法
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 传入的参数会被缓存，直至调用Flush()或对象离开创建时的作用域才会被处理
+</span></span></span><span class="line"><span class="cl"><span class="n">Logger</span><span class="o">&amp;</span> <span class="n">ctx1</span> <span class="o">=</span> <span class="n">CreateLogger</span><span class="p">(</span><span class="s">&#34;CTX1&#34;</span><span class="p">,</span> <span class="s">&#34;Context Description CTX1&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">LogStream</span> <span class="n">localLogInfo</span> <span class="o">=</span> <span class="n">ctx1</span><span class="p">.</span><span class="n">LogInfo</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">localLogInfo</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Some log information&#34;</span> <span class="o">&lt;&lt;</span> <span class="mi">123</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">localLogInfo</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Some other information&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">localLogInfo</span><span class="p">.</span><span class="n">Flush</span><span class="p">();</span> <span class="c1">// 触发日志处理
+</span></span></span><span class="line"><span class="cl"><span class="n">localLogInfo</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;a new message...&#34;</span> <span class="o">&lt;&lt;</span> <span class="mi">456</span><span class="p">;</span> <span class="c1">// 复用对象写入新消息
+</span></span></span></code></pre></div></div>
+<p><strong>异常安全性</strong>：所有<code>Log*()</code>接口均设计为保证不抛出异常，该原则适用于整个日志API。</p>
+<p><strong>换行处理</strong>：为提升使用便捷性，日志框架会自动为日志消息追加换行符。</p>
+<p><strong>多负载参数处理</strong>：当单条消息包含多个负载参数时，控制台输出场景下，各负载参数之间会以单个空格分隔。</p>
+<p>[SWS_LOG_00008] {草案} 要发起致命（Fatal）级别的日志消息，必须调用<code>ara::log::Logger::LogFatal</code> API。该API返回一个<code>ara::log::LogStream</code>对象，需通过流插入运算符<code>&lt;&lt;</code>向其传入参数。（对应需求：RS_LT_00003、RS_LT_00049）</p>
+<p>[SWS_LOG_00009] {草案} 要发起错误（Error）级别的日志消息，必须调用<code>ara::log::Logger::LogError</code> API。该API返回一个<code>ara::log::LogStream</code>对象，需通过流插入运算符<code>&lt;&lt;</code>向其传入参数。（对应需求：RS_LT_00003、RS_LT_00049）</p>
+<p>[SWS_LOG_00010] {草案} 要发起警告（Warning）级别的日志消息，必须调用<code>ara::log::Logger::LogWarn</code> API。该API返回一个<code>ara::log::LogStream</code>对象，需通过流插入运算符<code>&lt;&lt;</code>向其传入参数。（对应需求：RS_LT_00003、RS_LT_00049）</p>
+<p>[SWS_LOG_00011] {草案} 要发起信息（Info）级别的日志消息，必须调用<code>ara::log::Logger::LogInfo</code> API。该API返回一个<code>ara::log::LogStream</code>对象，需通过流插入运算符<code>&lt;&lt;</code>向其传入参数。（对应需求：RS_LT_00003、RS_LT_00049）</p>
+<p>[SWS_LOG_00012] {草案} 要发起调试（Debug）级别的日志消息，必须调用<code>ara::log::Logger::LogDebug</code> API。该API返回一个<code>ara::log::LogStream</code>对象，需通过流插入运算符<code>&lt;&lt;</code>向其传入参数。（对应需求：RS_LT_00003、RS_LT_00049）</p>
+<p>[SWS_LOG_00013] {草案} 要发起详细（Verbose）级别的日志消息，必须调用<code>ara::log::Logger::LogVerbose</code> API。该API返回一个<code>ara::log::LogStream</code>对象，需通过流插入运算符<code>&lt;&lt;</code>向其传入参数。（对应需求：RS_LT_00003、RS_LT_00049）</p>
+<p>[SWS_LOG_00130] {草案} 要写入日志级别由程序运行时动态决定的日志消息，必须调用<code>Logger::WithLevel(LogLevel logLevel)</code> API。（对应需求：RS_LT_00003、RS_LT_00049）</p>
+<h2 id="74-转换函数">7.4 转换函数</h2>
+<p>在部分场景下，需要将整型数值以十六进制或二进制格式而非十进制格式展示。</p>
+<p>为此，规范定义了以下函数，用于将输入的十进制数值转换为十六进制或二进制格式。</p>
+<p>[SWS_LOG_00120] {草案} 必须提供专用转换函数，用于将正十进制数值转换为十六进制或二进制格式的字符串。（对应需求：RS_LT_00003、RS_LT_00046）</p>
+<p>[SWS_LOG_00015] {草案} 必须提供专用转换函数，用于将十进制数值转换为十六进制或二进制格式的字符串；对于负数，转换结果的最高位必须设置为'1&rsquo;。（对应需求：RS_LT_00003、RS_LT_00046）</p>
+<p>[SWS_LOG_00016] {草案} <code>HexFormat()</code>函数必须具备将十进制整型数值转换为十六进制格式字符串的能力。（对应需求：RS_LT_00003、RS_LT_00046）</p>
+<p>[SWS_LOG_00017] {草案} <code>BinFormat()</code>函数必须具备将十进制整型数值转换为二进制格式字符串的能力。（对应需求：RS_LT_00003、RS_LT_00046）</p>
+<h2 id="75-日志与追踪时间戳">7.5 日志与追踪时间戳</h2>
+<p>日志与追踪信息通过总线无关的LT协议进行传输。</p>
+<p>只要消息以扩展头部格式发送，LT协议就支持在每条发送的消息中包含时间戳（更多信息参见参考文献[5]）。</p>
+<p>同步时间基由时间同步功能集群提供，自适应应用通过<code>now()</code>方法从时间同步模块获取当前时间（更多信息参见参考文献[6]）。</p>
+<p>根据需求[TPS_MANI_03162] ，参考时间基来源于机器清单中的<code>timeBaseResource</code>。</p>
+<p>[SWS_LOG_00082] 日志与追踪模块必须能够访问同步时间基，必须通过<code>LogAndTraceInstantiation</code>中的<code>timeBaseResource</code>属性标识所使用的时间基。（对应需求：RS_LT_00003、RS_LT_00017）</p>
+<p>[SWS_LOG_00083] 若清单配置中，日志与追踪模块未引用任何时间基资源，则不得传输任何时间戳信息。（对应需求：RS_LT_00003、RS_LT_00017）</p>
+<p>[SWS_LOG_00091] {草案} 当调用<code>CreateLogger()</code>函数时，日志与追踪模块必须发送一条消息：若使用的是本地时间基，消息内容为“local time base used”；若使用的是全局同步时间基，消息内容为“global time base used”。（对应需求：RS_LT_00003、RS_LT_00017）</p>
+<h2 id="76-日志与追踪数据丢失防护">7.6 日志与追踪数据丢失防护</h2>
+<p>[SWS_LOG_00095] {草案} 当日志与追踪模块同时接收到多个自适应应用产生的高负载追踪信息时，必须在内部对该数据进行缓存，防止数据在持续传输过程中丢失。（对应需求：RS_LT_00003、RS_LT_00030）</p>
+<hr></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-05-07</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/014_autosar_sws_logandtrace_r2011/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/autosar/">AUTOSAR</a>,&nbsp;<a href="/blog/tags/autosar-ap/">AUTOSAR AP</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/013_autosar_sws_adaptivecore_r2011/" class="prev" rel="prev" title="AUTOSAR_SWS_AdaptiveCore"><i class="fas fa-angle-left" aria-hidden="true"></i>AUTOSAR_SWS_AdaptiveCore</a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>
