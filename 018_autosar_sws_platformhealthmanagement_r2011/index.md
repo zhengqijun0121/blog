@@ -29,7 +29,7 @@
 
 功能组内本地监督的状态汇总为对应的全局监督状态。
 
-**[SWS_PHM_00100] (草案) 全局监督范围** —— 平台健康管理应为一个功能组支持一个或少数几个全局监督。(RS_HM_09237, RS_HM_09249)
+**[SWS_PHM_00100] (草案) 全局监督范围** —— 平台健康管理应为一个功能组支持一个或少数几个全局监督。
 
 ### 7.3 健康通道监督
 
@@ -50,7 +50,7 @@
 
 初始化后的健康状态由配置容器 `HealthStatusInitValue` 控制。该参数可以为每个健康通道在配置中设置一次。
 
-**[SWS_PHM_00010] (草案) 未初始化的健康通道** —— 如果容器 `HealthStatusInitValue` 不存在或者健康通道尚未具有初始值，则平台健康管理应将相应的健康状态视为未定义，并且在相应健康通道首次更新之前不使用它。(RS_PHM_09255, RS_HM_09249)
+**[SWS_PHM_00010] (草案) 未初始化的健康通道** —— 如果容器 `HealthStatusInitValue` 不存在或者健康通道尚未具有初始值，则平台健康管理应将相应的健康状态视为未定义，并且在相应健康通道首次更新之前不使用它。
 
 #### 7.3.2 健康通道的配置
 
@@ -80,27 +80,27 @@
 
 根据 ISO 26262，必须确保在发生安全相关故障后触发反应。因此，平台健康管理必须确保状态管理接收到故障通知。平台健康管理会监控 `RecoveryHandler` 的返回，并设置一个可配置的超时时间。如果在可配置的重试次数后状态管理仍未从 `RecoveryHandler` 正常返回，则 PHM 将通过错误触发或停止触发受服务的看门狗来采取自身的应对措施。
 
-**[SWS_PHM_00101] (草案) 因监督失败通知状态管理** —— 如果通过 `RecoveryNotificationToPPortPrototypeMapping` 映射的全局监督状态切换到 `GLOBAL_STATUS_STOPPED`，平台健康管理应通过方法 `RecoveryHandler` 通知状态管理。参数 `executionError` 应包含相应的功能组和当前的 `ProcessExecutionError`。参数 `supervision` 应包含导致状态转换为 `GLOBAL_STATUS_STOPPED` 的监督类型。(RS_HM_09159, RS_HM_09249)
+**[SWS_PHM_00101] (草案) 因监督失败通知状态管理** —— 如果通过 `RecoveryNotificationToPPortPrototypeMapping` 映射的全局监督状态切换到 `GLOBAL_STATUS_STOPPED`，平台健康管理应通过方法 `RecoveryHandler` 通知状态管理。参数 `executionError` 应包含相应的功能组和当前的 `ProcessExecutionError`。参数 `supervision` 应包含导致状态转换为 `GLOBAL_STATUS_STOPPED` 的监督类型。
 
 *注：全局监督对应于整个或部分功能组，即为每个全局监督始终报告相同的功能组。`ProcessExecutionError` 在 `StartupConfig` 中定义，因此 `executionError.executionError` 取决于当前使用的 `StartupConfig`。*
 
-**[SWS_PHM_00102] (草案) 因健康状态通知状态管理** —— 如果健康通道的健康状态发生切换，并且需要状态管理做出反应（即对于相应的 `PhmHealthChannelStatus.statusId`，`PhmHealthChannelStatus.triggersRecoveryNotification` 等于 `true`），则平台健康管理应通过方法 `RecoveryHandler` 通知状态管理。参数 `healthStatusId` 应从 `ReportHealthStatus` 方法传递过来。(RS_HM_09159, RS_HM_09249, RS_PHM_09255)
+**[SWS_PHM_00102] (草案) 因健康状态通知状态管理** —— 如果健康通道的健康状态发生切换，并且需要状态管理做出反应（即对于相应的 `PhmHealthChannelStatus.statusId`，`PhmHealthChannelStatus.triggersRecoveryNotification` 等于 `true`），则平台健康管理应通过方法 `RecoveryHandler` 通知状态管理。参数 `healthStatusId` 应从 `ReportHealthStatus` 方法传递过来。
 
 这意味着是否需要反应的信息必须为平台健康管理进行配置。
 
-**[SWS_PHM_00103] (草案) 通知状态管理的超时监控** —— 如果在向状态管理发送故障通知后，在 `RecoveryNotification.recoveryNotificationTimeout` 之前未收到状态管理的确认，平台健康管理应重新发送通知。此过程最多重复 `RecoveryNotification.recoveryNotificationRetry` 次。(RS_HM_09159, RS_HM_09249)
+**[SWS_PHM_00103] (草案) 通知状态管理的超时监控** —— 如果在向状态管理发送故障通知后，在 `RecoveryNotification.recoveryNotificationTimeout` 之前未收到状态管理的确认，平台健康管理应重新发送通知。此过程最多重复 `RecoveryNotification.recoveryNotificationRetry` 次。
 
-**[SWS_PHM_00104] (草案) 通知状态管理超时的反应** —— 如果在连续 `RecoveryNotification.recoveryNotificationRetry` 次通知后，在 `RecoveryNotification.recoveryNotificationTimeout` 之前仍未收到状态管理的确认，平台健康管理应错误触发或停止触发受服务的看门狗。(RS_HM_09159, RS_HM_09249, RS_HM_09226)
+**[SWS_PHM_00104] (草案) 通知状态管理超时的反应** —— 如果在连续 `RecoveryNotification.recoveryNotificationRetry` 次通知后，在 `RecoveryNotification.recoveryNotificationTimeout` 之前仍未收到状态管理的确认，平台健康管理应错误触发或停止触发受服务的看门狗。
 
-**[SWS_PHM_01147] (草案) 启用处理器** —— 当调用 `Offer` 时，平台健康管理应启用对 `RecoveryHandler` 的潜在调用。(RS_HM_09159)
+**[SWS_PHM_01147] (草案) 启用处理器** —— 当调用 `Offer` 时，平台健康管理应启用对 `RecoveryHandler` 的潜在调用。
 
-**[SWS_PHM_01148] (草案) 禁用处理器** —— 当调用 `StopOffer` 时，平台健康管理应禁用对 `RecoveryHandler` 的调用。(RS_HM_09159)
+**[SWS_PHM_01148] (草案) 禁用处理器** —— 当调用 `StopOffer` 时，平台健康管理应禁用对 `RecoveryHandler` 的调用。
 
 #### 7.5.2 通过看门狗的恢复操作
 
 平台健康管理拥有与硬件看门狗的唯一接口。因此，看门狗监督平台健康管理，而 PHM 可以通过停止触发或发送错误触发来启动看门狗的反应。由于这种反应通常意味着机器复位，因此会影响所有功能，应仅在必要时作为最后手段使用，以确保免于干扰。需要看门狗反应的故障是状态管理和执行管理中的监督故障，因为在这些情况下，第 7.5.1 节描述的通过状态管理的恢复操作不可行。
 
-**[SWS_PHM_00105] (草案) 执行管理或状态管理故障的恢复操作** —— 如果与状态管理或执行管理相对应的全局监督状态切换到 `GLOBAL_STATUS_STOPPED`，平台健康管理应错误触发或停止触发受服务的看门狗。(RS_HM_09249, RS_HM_09226)
+**[SWS_PHM_00105] (草案) 执行管理或状态管理故障的恢复操作** —— 如果与状态管理或执行管理相对应的全局监督状态切换到 `GLOBAL_STATUS_STOPPED`，平台健康管理应错误触发或停止触发受服务的看门狗。
 
 #### 7.5.3 配置参数
 
