@@ -69,7 +69,7 @@ make install
 
 安装完成之后，可以看到 `_install` 文件夹，里面有 Busybox 的可执行文件。
 
-## 制作最小根文件系统
+## 制作 ext4 格式最小根文件系统
 
 1. 创建一个 4G 的文件，用于制作最小根文件系统。
 
@@ -271,5 +271,31 @@ sudo qemu-system-aarch64 -M virt -cpu cortex-a72 -smp 2 -m 2G -nographic -kernel
 
 -----
 
+## 设置共享目录
+
+`qemu-system-aarch64` 命令启动时添加参数 `-fsdev local,security_model=passthrough,id=fsdev0,path=$(pwd)/shared -device virtio-9p-pci,id=fs0,fsdev=fsdev0,mount_tag=hostshare`，将当前目录下的 shared 目录作为共享目录。
+
+启动完整命令如下：
+
+```bash
+qemu-system-aarch64 -M virt -cpu cortex-a72 -smp 2 -m 2G -nographic \
+    -kernel Image -drive file=rootfs.img,format=raw \
+    -append "root=/dev/vda rw console=ttyAMA0" \
+    -fsdev local,security_model=passthrough,id=fsdev0,path=$(pwd)/shared \
+    -device virtio-9p-pci,id=fs0,fsdev=fsdev0,mount_tag=host
+```
+
+Linux 启动成功之后，在 Linux 环境内执行挂载命令。
+
+```bash
+mkdir -p /mnt/shared
+mount -t 9p -o trans=virtio,version=9p2000.L hostshare /mnt/shared
+```
+
+然后就可以在 Linux 环境内访问共享目录了。
+
+-----
+
+## 制作 initramfs 格式根文件系统
 
 

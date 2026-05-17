@@ -35,7 +35,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/zhengqijun0121.github.io\/blog\/101_qemu%E5%90%AF%E5%8A%A8arm64%E7%89%88%E6%9C%AC%E6%9C%80%E5%B0%8F%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F\/"
-        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "develop","wordcount":  1327 ,
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "develop","wordcount":  1513 ,
         "url": "https:\/\/zhengqijun0121.github.io\/blog\/101_qemu%E5%90%AF%E5%8A%A8arm64%E7%89%88%E6%9C%AC%E6%9C%80%E5%B0%8F%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F\/","datePublished": "2026-05-17T17:00:00+08:00","dateModified": "2026-05-17T18:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
@@ -126,8 +126,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">qemu 启动 arm64 版本最小根文件系统</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/develop/"><i class="far fa-folder" aria-hidden="true"></i>开发环境</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-05-17">2026-05-17</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 1327 字&nbsp;
-                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-05-17">2026-05-17</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 1513 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>目录</span>
@@ -137,8 +137,10 @@
   <ul>
     <li><a href="#下载-linux-内核源码和-busybox-源码">下载 Linux 内核源码和 Busybox 源码</a></li>
     <li><a href="#编译-linux-内核源码和-busybox-源码">编译 Linux 内核源码和 Busybox 源码</a></li>
-    <li><a href="#制作最小根文件系统">制作最小根文件系统</a></li>
+    <li><a href="#制作-ext4-格式最小根文件系统">制作 ext4 格式最小根文件系统</a></li>
     <li><a href="#使用-qemu-启动最小根文件系统">使用 qemu 启动最小根文件系统</a></li>
+    <li><a href="#设置共享目录">设置共享目录</a></li>
+    <li><a href="#制作-initramfs-格式根文件系统">制作 initramfs 格式根文件系统</a></li>
   </ul>
 </nav></div>
             </div><div class="content" id="content"><h1 id="qemu-启动-arm64-版本最小根文件系统">qemu 启动 arm64 版本最小根文件系统</h1>
@@ -207,7 +209,7 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># 安装 Busybox</span>
 </span></span><span class="line"><span class="cl">make install</span></span></code></pre></div></div>
 <p>安装完成之后，可以看到 <code>_install</code> 文件夹，里面有 Busybox 的可执行文件。</p>
-<h2 id="制作最小根文件系统">制作最小根文件系统</h2>
+<h2 id="制作-ext4-格式最小根文件系统">制作 ext4 格式最小根文件系统</h2>
 <ol>
 <li>创建一个 4G 的文件，用于制作最小根文件系统。</li>
 </ol>
@@ -432,7 +434,31 @@
 </span></span><span class="line"><span class="cl"><span class="o">[</span>    0.513611<span class="o">]</span> ehci-pci: EHCI PCI platform driver
 </span></span><span class="line"><span class="cl"><span class="o">[</span>    0.513829<span class="o">]</span> ehci-platform: EHCI generic platform driver
 </span></span><span class="line"><span class="cl"><span class="o">[</span>root@arm64 /<span class="o">]</span><span class="c1">#</span></span></span></code></pre></div></div>
-<hr></div><div class="post-footer" id="post-footer">
+<hr>
+<h2 id="设置共享目录">设置共享目录</h2>
+<p><code>qemu-system-aarch64</code> 命令启动时添加参数 <code>-fsdev local,security_model=passthrough,id=fsdev0,path=$(pwd)/shared -device virtio-9p-pci,id=fs0,fsdev=fsdev0,mount_tag=hostshare</code>，将当前目录下的 shared 目录作为共享目录。</p>
+<p>启动完整命令如下：</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">qemu-system-aarch64 -M virt -cpu cortex-a72 -smp <span class="m">2</span> -m 2G -nographic <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -kernel Image -drive <span class="nv">file</span><span class="o">=</span>rootfs.img,format<span class="o">=</span>raw <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -append <span class="s2">&#34;root=/dev/vda rw console=ttyAMA0&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -fsdev local,security_model<span class="o">=</span>passthrough,id<span class="o">=</span>fsdev0,path<span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/shared <span class="se">\
+</span></span></span><span class="line"><span class="cl">    -device virtio-9p-pci,id<span class="o">=</span>fs0,fsdev<span class="o">=</span>fsdev0,mount_tag<span class="o">=</span>host</span></span></code></pre></div></div>
+<p>Linux 启动成功之后，在 Linux 环境内执行挂载命令。</p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-bash">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir -p /mnt/shared
+</span></span><span class="line"><span class="cl">mount -t 9p -o <span class="nv">trans</span><span class="o">=</span>virtio,version<span class="o">=</span>9p2000.L hostshare /mnt/shared</span></span></code></pre></div></div>
+<p>然后就可以在 Linux 环境内访问共享目录了。</p>
+<hr>
+<h2 id="制作-initramfs-格式根文件系统">制作 initramfs 格式根文件系统</h2></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
