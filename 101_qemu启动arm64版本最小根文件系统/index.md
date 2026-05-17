@@ -226,7 +226,7 @@ echo "tmpfs           /tmp            tmpfs       defaults    0       0" | sudo 
 
 sudo umount rootfs
 
-echo "sudo qemu-system-aarch64 -M virt -cpu cortex-a72 -smp 2 -m 2G -nographic -kernel \$(pwd)/Image -drive file=\$(pwd)/rootfs.img,format=raw -append \"root=/dev/vda rw console=ttyAMA0 \"" > start.sh
+echo "sudo qemu-system-aarch64 -M virt -cpu cortex-a72 -smp 2 -m 2G -nographic -kernel \$(pwd)/Image -drive file=\$(pwd)/rootfs.img,format=raw -append \"root=/dev/vda rw console=ttyAMA0\"" > start.sh
 
 echo "sudo kill -9 \$(pidof qemu-system-aarch64)" > stop.sh
 
@@ -235,7 +235,7 @@ chmod a+x start.sh stop.sh
 echo "rootfs.img creation completed, please execute start.sh to run!"
 ```
 
-## 使用 qemu 启动最小根文件系统
+## 使用 qemu 启动 ext4 格式最小根文件系统
 
 使用命令行启动
 
@@ -271,6 +271,193 @@ sudo qemu-system-aarch64 -M virt -cpu cortex-a72 -smp 2 -m 2G -nographic -kernel
 
 -----
 
+## 制作 initramfs 格式根文件系统
+
+1. 创建必要系统文件
+
+```bash
+mkdir -p rootfs/{dev,etc/init.d,home,lib,mnt,proc,root,sys,tmp,usr}
+```
+
+2. 使用 `cp` 命令将 Busybox 的安装文件复制到根文件系统中。
+
+```bash
+cp -rf _install/* rootfs/
+```
+
+3. 使用 `cp` 命令将库文件复制到根文件系统中。
+
+```bash
+cp -rf /lib/gcc/aarch64-linux-gnu/11/* rootfs/lib/
+cp -rf /lib/aarch64-linux-gnu/ld-linux-aarch64.so.1 rootfs/lib/
+cp -rf /lib/aarch64-linux-gnu/libm.so* rootfs/lib/
+cp -rf /lib/aarch64-linux-gnu/libc.so* rootfs/lib/
+cp -rf /lib/aarch64-linux-gnu/libresolv.so* rootfs/lib/
+```
+
+4. 添加系统配置文件
+
+4.1 添加 `etc/inittab` 文件，用于启动内核。
+
+```bash
+::sysinit:/etc/init.d/rcS
+::respawn:-/bin/sh
+::restart:/sbin/init
+::ctrlaltdel:/sbin/reboot
+```
+
+4.2 添加 `etc/init.d/rcS` 文件，用于启动 Busybox。
+
+```bash
+#!/bin/sh
+
+/bin/mount -a
+/sbin/mdev -s
+
+ifconfig eth0 192.168.1.121
+```
+
+4.3 添加 `etc/profile` 文件，用于设置环境变量。
+
+```bash
+#!/bin/sh
+
+export USER=root
+export HOSTNAME=arm64
+export HOME=root
+export PS1="[$USER@$HOSTNAME \w]\# "
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+export LD_LIBRARY_PATH=/lib:/usr/lib
+```
+
+4.4 添加 `etc/fstab` 文件，用于挂载文件系统。
+
+```bash
+# <file system> <mount point>   <type>      <options>   <dump>  <pass>
+proc            /proc           proc        defaults    0       0
+sysfs           /sys            sysfs       defaults    0       0
+devtmpfs        /dev            devtmpfs    defaults    0       0
+tmpfs           /tmp            tmpfs       defaults    0       0
+```
+
+制作完成之后，可以使用 `chroot` 命令进入根文件系统验证。
+
+```bash
+sudo chroot rootfs/ /bin/sh
+```
+
+如果进入成功，则说明制作成功。接下来卸载根文件系统镜像即可！
+
+
+或者直接使用脚本创建最小根文件系统，qemu-arm64.sh 脚本内容如下：
+
+```bash
+#!/bin/bash
+
+if [[ ! -f $(pwd)/busybox-1.36.1.tar.bz2 ]]; then
+    wget https://busybox.net/downloads/busybox-1.36.1.tar.bz2
+    tar -xf busybox-1.36.1.tar.bz2
+fi
+
+if [[ ! -f $(pwd)/linux-5.15.99.tar.xz ]]; then
+    wget https://mirrors.aliyun.com/linux-kernel/v5.x/linux-5.15.99.tar.xz
+    tar -xf linux-5.15.99.tar.xz
+fi
+
+if [[ -f $(pwd)/rootfs.cpio.gz ]]; then
+    rm -rf rootfs.cpio.gz
+    rm -rf rootfs start.sh stop.sh
+fi
+
+mkdir rootfs
+mkdir -p rootfs/{dev,etc/init.d,home,lib,mnt,proc,root,sys,tmp,usr}
+cp -rf busybox-1.36.1/_install/* rootfs/
+cp -rf /lib/gcc/aarch64-linux-gnu/11/* rootfs/lib/
+cp -rf /lib/aarch64-linux-gnu/ld-linux-aarch64.so.1 rootfs/lib/
+cp -rf /lib/aarch64-linux-gnu/libm.so* rootfs/lib/
+cp -rf /lib/aarch64-linux-gnu/libc.so* rootfs/lib/
+cp -rf /lib/aarch64-linux-gnu/libresolv.so* rootfs/lib/
+
+# etc/inittab
+echo "::sysinit:/etc/init.d/rcS" | tee rootfs/etc/inittab > /dev/null
+echo "::respawn:-/bin/sh" | tee -a rootfs/etc/inittab > /dev/null
+echo "::restart:/sbin/init" | tee -a rootfs/etc/inittab > /dev/null
+echo "::ctrlaltdel:/sbin/reboot" | tee -a rootfs/etc/inittab > /dev/null
+
+# etc/init.d/rcS
+echo "#!/bin/sh" | tee rootfs/etc/init.d/rcS > /dev/null
+echo "" | tee -a rootfs/etc/init.d/rcS > /dev/null
+echo "/bin/mount -a" | tee -a rootfs/etc/init.d/rcS > /dev/null
+echo "/sbin/mdev -s" | tee -a rootfs/etc/init.d/rcS > /dev/null
+echo "" | tee -a rootfs/etc/init.d/rcS > /dev/null
+echo "ifconfig eth0 192.168.1.121" | tee -a rootfs/etc/init.d/rcS > /dev/null
+
+# etc/profile
+
+echo "#!/bin/sh" | tee rootfs/etc/profile > /dev/null
+echo "" | tee -a rootfs/etc/profile > /dev/null
+echo "export USER=root" | tee -a rootfs/etc/profile > /dev/null
+echo "export HOSTNAME=arm64" | tee -a rootfs/etc/profile > /dev/null
+echo "export HOME=root" | tee -a rootfs/etc/profile > /dev/null
+echo "export PS1=\"[\$USER@\$HOSTNAME \w]\# \"" | tee -a rootfs/etc/profile > /dev/null
+echo "export PATH=/bin:/sbin:/usr/bin:/usr/sbin" | tee -a rootfs/etc/profile > /dev/null
+echo "export LD_LIBRARY_PATH=/lib:/usr/lib" | tee -a rootfs/etc/profile > /dev/null
+
+# etc/fstab
+echo "# <file system> <mount point>   <type>      <options>   <dump>  <pass>" | tee rootfs/etc/fstab > /dev/null
+echo "proc            /proc           proc        defaults    0       0" | tee -a rootfs/etc/fstab > /dev/null
+echo "sysfs           /sys            sysfs       defaults    0       0" | tee -a rootfs/etc/fstab > /dev/null
+echo "devtmpfs        /dev            devtmpfs    defaults    0       0" | tee -a rootfs/etc/fstab > /dev/null
+echo "tmpfs           /tmp            tmpfs       defaults    0       0" | tee -a rootfs/etc/fstab > /dev/null
+
+cd rootfs
+find . | cpio -H newc -o | gzip -9 > ../rootfs.cpio.gz
+cd ..
+
+echo "sudo qemu-system-aarch64 -M virt -cpu cortex-a72 -smp 2 -m 2G -nographic -kernel \$(pwd)/Image -initrd \$(pwd)/rootfs.cpio.gz -append \"root=/dev/ram rdinit=/sbin/init console=ttyAMA0\"" > start.sh
+
+echo "sudo kill -9 \$(pidof qemu-system-aarch64)" > stop.sh
+
+chmod a+x start.sh stop.sh
+
+echo "rootfs.img creation completed, please execute start.sh to run!"
+```
+
+## 使用 qemu 启动 initramfs 根文件系统
+
+使用命令行启动
+
+```bash
+sudo qemu-system-aarch64 -M virt -nographic -m size=2G -cpu cortex-a72 -smp 2 -kernel $(pwd)/Image -initrd $(pwd)/rootfs.cpio.gz -append "root=/dev/ram rdinit=/sbin/init console=ttyAMA0"
+```
+
+命令行参数解析：
+- `-M virt`: 使用 virt 架构
+- `-nographic`: 不显示图形界面
+- `-m size=2G`: 使用 2G 内存
+- `-cpu cortex-a72`: 使用 cortex-a72 架构
+- `-smp 2`: 使用 2 个 CPU 核
+- `-kernel $(pwd)/Image`: 使用 Image 内核
+- `-initrd $(pwd)/rootfs.cpio.gz`: 使用 rootfs.cpio.gz 根文件系统镜像
+- `-append "root=/dev/ram rdinit=/sbin/init console=ttyAMA0"`: 启动参数，root=/dev/ram 表示根文件系统在 /dev/ram 设备中，rdinit=/sbin/init 启动 /sbin/init 脚本，console=ttyAMA0 输出到 ttyAMA0 设备
+
+当启动成功之后，会显示 Linux 启动界面。
+
+```bash
+[    1.415698] 9pnet: Installing 9P2000 support
+[    1.415955] Key type dns_resolver registered
+[    1.416852] Loading compiled-in X.509 certificates
+[    1.423567] input: gpio-keys as /devices/platform/gpio-keys/input/input0
+[    1.429642] ALSA device list:
+[    1.429750]   No soundcards found.
+[    1.431676] uart-pl011 9000000.pl011: no DMA platform data
+[    1.463351] Freeing unused kernel memory: 6208K
+[    1.463974] Run /sbin/init as init process
+[root@arm64 /]#
+```
+
+-----
+
 ## 设置共享目录
 
 `qemu-system-aarch64` 命令启动时添加参数 `-fsdev local,security_model=passthrough,id=fsdev0,path=$(pwd)/shared -device virtio-9p-pci,id=fs0,fsdev=fsdev0,mount_tag=hostshare`，将当前目录下的 shared 目录作为共享目录。
@@ -279,8 +466,8 @@ sudo qemu-system-aarch64 -M virt -cpu cortex-a72 -smp 2 -m 2G -nographic -kernel
 
 ```bash
 qemu-system-aarch64 -M virt -cpu cortex-a72 -smp 2 -m 2G -nographic \
-    -kernel Image -drive file=rootfs.img,format=raw \
-    -append "root=/dev/vda rw console=ttyAMA0" \
+    -kernel $(pwd)/Image -initrd $(pwd)/rootfs.cpio.gz \
+    -append "root=/dev/ram rdinit=/sbin/init console=ttyAMA0" \
     -fsdev local,security_model=passthrough,id=fsdev0,path=$(pwd)/shared \
     -device virtio-9p-pci,id=fs0,fsdev=fsdev0,mount_tag=host
 ```
@@ -295,7 +482,4 @@ mount -t 9p -o trans=virtio,version=9p2000.L hostshare /mnt/shared
 然后就可以在 Linux 环境内访问共享目录了。
 
 -----
-
-## 制作 initramfs 格式根文件系统
-
 
