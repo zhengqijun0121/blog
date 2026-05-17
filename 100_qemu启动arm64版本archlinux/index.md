@@ -64,7 +64,7 @@ qemu-img create -f raw rootfs.img 4G
 2. 使用 `mkfs.ext4` 命令创建 ext4 文件系统。
 
 ```bash
-mkkfs.ext4 rootfs.img
+mkfs.ext4 rootfs.img
 ```
 
 3. 使用 `mount` 命令挂载根文件系统镜像。
@@ -155,7 +155,7 @@ sudo qemu-system-aarch64 -M virt -cpu cortex-a72 -smp 2 -m 2G -nographic -kernel
 
 当启动成功之后，会显示 archlinux 的登陆界面。
 
-```
+```bash
 Welcome to Arch Linux ARM!
 
 Arch Linux ARM 5.15.99 (ttyAMA0)
