@@ -1,7 +1,9 @@
-# 
+# AUTOSAR_TR_AdaptivePlatformReleaseOverriew_R2011
 
 
-1 引言
+<!-- more -->
+
+# 1 引言
 
 ### 1.1 本文档范围
 

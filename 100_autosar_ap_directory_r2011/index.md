@@ -1,12 +1,13 @@
-# 
+# AUTOSAR AP R2011 阅读指南
+
 
 阅读 AUTOSAR Adaptive Platform (AP) 的官方文档，合适的方法和顺序至关重要。这份指南可以帮你理清头绪，高效入门。
 
-<!-- more -->  
+<!-- more -->
 
 ## 📚 第一站：整体框架和设计哲学
 
-- AUTOSAR_EXP_PlatformDesign：阅读AP文档的极佳起点。它提供了AP设计的全局概览和所有关键概念，像一张“藏宝图”指引后续的深入方向。
+- [AUTOSAR_EXP_PlatformDesign]()：阅读AP文档的极佳起点。它提供了AP设计的全局概览和所有关键概念，像一张“藏宝图”指引后续的深入方向。
 - AUTOSAR_EXP_SWArchitecture：详细拆解AP的软件架构。
 - AUTOSAR_TR_AdaptivePlatformReleaseOverview：对AP某个特定版本的“发行说明”，快速了解该版本包含的所有文档、功能和特性。
 - AUTOSAR_RS_Main：AUTOSAR的顶层“总纲”文档，读起来会比较枯燥，建议在建立框架后略读，了解顶层需求。
