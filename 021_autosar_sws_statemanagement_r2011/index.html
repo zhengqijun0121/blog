@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>AUTOSAR_SWS_StateManagement_R2011 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/021_autosar_sws_statemanagement_r2011/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="AUTOSAR_SWS_StateManagement_R2011">
+  <meta property="og:description" content="Oh My Blog">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-05-14T09:00:00+08:00">
+    <meta property="article:modified_time" content="2026-05-14T10:00:00+08:00">
+    <meta property="article:tag" content="AUTOSAR">
+    <meta property="article:tag" content="AUTOSAR AP">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="AUTOSAR_SWS_StateManagement_R2011">
+  <meta name="twitter:description" content="Oh My Blog">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/021_autosar_sws_statemanagement_r2011/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/020_autosar_sws_timesynchronization_r2011/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "AUTOSAR_SWS_StateManagement_R2011",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/021_autosar_sws_statemanagement_r2011\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "AUTOSAR, AUTOSAR AP","wordcount":  10292 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/021_autosar_sws_statemanagement_r2011\/","datePublished": "2026-05-14T09:00:00+08:00","dateModified": "2026-05-14T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/021_autosar_sws_statemanagement_r2011/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/021_autosar_sws_statemanagement_r2011/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">AUTOSAR_SWS_StateManagement_R2011</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/autosar/"><i class="far fa-folder" aria-hidden="true"></i>AUTOSAR</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-05-14">2026-05-14</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 10292 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 21 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#7-功能规范">7 功能规范</a>
+      <ul>
+        <li><a href="#71-状态管理职责">7.1 状态管理职责</a>
+          <ul>
+            <li><a href="#711-机器状态">7.1.1 机器状态</a>
+              <ul>
+                <li><a href="#7111-启动">7.1.1.1 启动</a></li>
+                <li><a href="#7112-关闭">7.1.1.2 关闭</a></li>
+                <li><a href="#7113-重启">7.1.1.3 重启</a></li>
+                <li><a href="#712-功能组状态">7.1.2 功能组状态</a></li>
+                <li><a href="#713-状态管理架构">7.1.3 状态管理架构</a></li>
+              </ul>
+            </li>
+            <li><a href="#72-状态管理和自适应平台应用程序">7.2 状态管理和自适应（平台）应用程序</a>
+              <ul>
+                <li><a href="#721-状态管理与自适应应用程序之间的交互">7.2.1 状态管理与自适应应用程序之间的交互</a></li>
+                <li><a href="#7221-自适应平台应用程序的电源模式">7.2.2.1 自适应（平台）应用程序的电源模式</a></li>
+                <li><a href="#7222-自适应平台应用程序的诊断复位">7.2.2.2 自适应（平台）应用程序的诊断复位</a></li>
+              </ul>
+            </li>
+            <li><a href="#73-与平台健康管理的交互">7.3 与平台健康管理的交互</a></li>
+            <li><a href="#74-与自适应诊断的交互">7.4 与自适应诊断的交互</a></li>
+            <li><a href="#75-与更新和配置管理的交互">7.5 与更新和配置管理的交互</a></li>
+            <li><a href="#76-与网络管理的交互">7.6 与网络管理的交互</a></li>
+            <li><a href="#77-与执行管理的交互">7.7 与执行管理的交互</a></li>
+            <li><a href="#78-虚拟化分层环境中的状态管理">7.8 虚拟化/分层环境中的状态管理</a></li>
+            <li><a href="#79-状态管理生命周期">7.9 状态管理生命周期</a>
+              <ul>
+                <li><a href="#791-启动">7.9.1 启动</a></li>
+                <li><a href="#793-重启">7.9.3 重启</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="autosar_sws_statemanagement">AUTOSAR_SWS_StateManagement</h1>
+<hr>
+<h2 id="7-功能规范">7 功能规范</h2>
+<p>请注意，下一章中的语义尚未完全指定。</p>
+<p>状态管理是自适应平台服务中包含的一个功能集群。状态管理负责操作状态管理的所有方面，包括处理传入事件、对这些事件/请求进行优先级排序以设置相应的内部状态。当被配置为具有写访问权限的自适应平台应用程序或自适应应用程序更改状态管理提供的“Trigger”字段的值时，会发出传入事件。状态管理可以由一个或多个状态机组成，这些状态机根据项目需求可能具有不同程度的松散耦合。</p>
+<p>此外，作为状态管理内部状态的一部分，只要有诊断或更新会话处于活动状态，状态管理就负责不关闭系统。状态管理使用特定于项目的超时来监督关闭预防。</p>
+<p>根据当前内部状态，状态管理可能决定请求功能组或机器状态进入特定状态，方法是使用执行管理的接口。</p>
+<p>状态管理负责通过网络管理启用和禁用（部分）网络。网络管理提供 ara::com 字段（NetworkHandle），每个字段代表一组（部分）网络。状态管理可以根据功能组状态影响这些字段，反之亦然，可以根据网络管理的 NetworkHandle 字段的值将功能组设置为已定义状态。</p>
+<p>自适应应用程序和自适应平台应用程序可以注册到状态管理提供的“Notifier”字段的事件。它们可以根据字段中提供的值更改其内部行为。自适应应用程序和自适应平台应用程序可以通过写入状态管理提供的“Trigger”字段来影响状态管理的内部状态。</p>
+<p>本章描述了状态管理的功能行为以及与状态管理交互的其他自适应平台应用程序的关系。</p>
+<p>第 7.1 节涵盖了状态管理的核心运行时职责，包括启动应用程序。第 7.2 节描述了如何根据状态管理提供的“Notifier”字段影响自适应应用程序和自适应平台应用程序的行为，以及它们如何通过使用提供的“Trigger”字段影响状态管理的内部状态。第 7.4 节涵盖了与自适应诊断相关的几个主题，包括关闭预防和执行不同的复位类型。</p>
+<p>第 7.5 节描述了更新和配置管理如何与状态管理交互。
+第 7.6 节记录了网络管理提供的支持，用于根据功能组状态停用/激活（部分）网络，反之亦然。
+第 7.7 节描述了如何使用执行管理来更改功能组状态或机器状态。
+第 7.8 节介绍了状态管理如何在虚拟化/分层环境中工作。</p>
+<h3 id="71-状态管理职责">7.1 状态管理职责</h3>
+<p>状态管理是负责确定当前内部状态，并通过向执行管理请求来启动功能组和机器状态转换的功能集群。</p>
+<p>状态管理是接收任何可能影响状态管理内部状态的操作事件的中心点。状态管理负责评估这些事件，并根据以下内容做出决策：</p>
+<ul>
+<li>事件类型（基于项目特定需求在项目特定实现中定义）</li>
+<li>事件优先级（基于项目特定需求在项目特定实现中定义）</li>
+<li>应用程序标识符（此版本不支持应用程序标识符。正在与 FT-SEC 讨论是否可以由身份和访问管理提供此类标识符）。</li>
+</ul>
+<p>如果状态管理的内部状态发生变化，则可以向执行管理请求将功能组或机器状态设置为新的功能组状态。</p>
+<p>功能组的状态更改请求可以由多个自适应平台应用程序发出：</p>
+<ul>
+<li>平台健康管理，用于触发错误恢复，例如激活后备功能。</li>
+<li>自适应诊断，用于将系统切换到不同的诊断状态并发出系统复位。</li>
+<li>更新和配置管理，用于将系统切换到可以更新软件或配置以及验证更新的状态。</li>
+<li>网络管理，用于协调所需的功能和网络状态。这不是网络管理的主动请求。网络管理提供多组 NetworkHandle 字段，状态管理注册并响应网络管理发出的这些字段的变化。</li>
+</ul>
+<p>最终是否执行任何效果由状态管理的内部逻辑基于项目特定需求决定。</p>
+<p>自适应应用程序可以通过 ara::com 接口提供自己的属性或事件，状态管理订阅该接口以触发状态管理内部事件。由于状态管理功能是关键性的，必须保护来自其他自适应应用程序的访问，例如通过身份和访问管理。</p>
+<p>状态管理应受到平台健康管理的监控和监督。</p>
+<ul>
+<li>状态管理提供 ara::com 字段作为接口，以提供有关其当前内部状态的信息</li>
+</ul>
+<p>状态管理负责处理以下状态：</p>
+<ul>
+<li>机器状态，参见 7.1.1</li>
+<li>功能组状态，参见 7.1.2</li>
+</ul>
+<h4 id="711-机器状态">7.1.1 机器状态</h4>
+<p>机器状态是一种特定类型的功能组状态（见 7.1.2）。机器状态和所有其他功能组状态由状态管理功能集群确定和请求，见 7.1.3。活动状态集受到评估为状态管理内部状态的整车事件和模式的显著影响。</p>
+<p>功能组状态（包括机器状态）定义了当前运行的建模进程集。每个应用程序可以在其执行清单中声明其建模进程必须在哪些功能组状态下运行。</p>
+<p>从初始状态 Startup 到状态管理请求初始运行状态 Driving 的启动序列如图 7.1 所示（示例 Driving 功能组状态不是强制功能组状态）。</p>
+<p>图 7.1：启动序列 - 从 Startup 到初始运行状态 Driving</p>
+<p>图 7.2 展示了到机器状态 StateXYZ 的任意状态更改序列。在此，收到状态更改请求后，执行管理终止正在运行的建模进程，然后启动在新状态下活动的建模进程，然后向状态管理确认状态更改。</p>
+<p>图 7.2：状态更改序列 - 转换到机器状态 StateXYZ</p>
+<h5 id="7111-启动">7.1.1.1 启动</h5>
+<p>执行管理将由状态管理控制，因此它不应自行执行任何功能组状态更改。这对系统配置产生了一些期望。配置应确保状态管理在每个机器状态（包括 Startup、Shutdown 和 Restart）中运行。需要上述期望以确保始终有一个软件实体可以引入机器当前状态的变化。例如，如果系统集成商未配置状态管理在启动机器状态下启动，则机器将永远无法转换到任何其他状态，并将永远停滞在该状态。这也适用于任何其他未配置状态管理的机器状态。</p>
+<h5 id="7112-关闭">7.1.1.2 关闭</h5>
+<p>如 7.1.1.1 中所述，AUTOSAR 假定状态管理将被配置为在 Shutdown 中运行。状态转换不是简单的系统更改，可能因多种原因而失败。每当发生这种情况时，您可能希望状态管理仍然存活，以便可以报告错误并等待进一步指令。请注意，此状态的真正目的是以干净的方式关闭机器（包括状态管理）。不幸的是，这意味着在某个时刻，状态管理将不再可用，并且无法再报告错误。这些错误将以实现特定的方式处理。</p>
+<h5 id="7113-重启">7.1.1.3 重启</h5>
+<p>如 7.1.1.1 中所述，AUTOSAR 假定状态管理将被配置为在 Restart 中运行。这样做的原因与 7.1.1.2 相同。</p>
+<h5 id="712-功能组状态">7.1.2 功能组状态</h5>
+<p>如果同一台机器上安装了多组功能上连贯的应用程序，机器状态机制不足以单独控制这些功能集群，特别是当它们必须以交错的生命周期启动和终止时。在这种情况下，需要许多不同的机器状态来覆盖活动功能集群的所有可能组合。</p>
+<p>为了支持这种用例，可以配置额外的功能组和功能组状态。其他可能需要启动和终止单个建模进程组的用例包括诊断和错误恢复。</p>
+<p>通常，机器状态用于控制机器生命周期（启动/关闭/重启）和平台级应用程序的建模进程，而其他功能组状态则单独控制属于功能上连贯的用户级应用程序组的建模进程。</p>
+<p>[SWS_SM_00001]{草案} 可用的功能组（状态）[状态管理应从机器清单中获取可用的功能组及其潜在状态，以设置特定于功能组的状态管理。]</p>
+<p>建模进程在其执行清单中引用它们希望执行的状态。一个状态可以是任何功能组状态，包括机器状态。详细信息参见 [8]，尤其是“模式相关的启动配置”章节和“功能组”章节。</p>
+<p>如图 7.2 所示的任意状态更改序列适用于任何功能组的状态更改——只需将“MachineState”替换为功能组的名称。收到状态更改请求后，执行管理终止不再需要的建模进程，然后启动在新功能组状态下活动的建模进程，然后向状态管理确认状态更改。</p>
+<p>从执行管理的角度来看，功能组是相互独立的实体，互不影响。然而，从状态管理的角度来看，这可能并不总是正确的。考虑一个简单的用例：</p>
+<p>机器关闭。从执行管理的角度来看，状态管理（在某个时间点）将请求机器状态转换到 Shutdown 状态。配置在该特定状态下运行的建模进程之一将启动操作系统/硬件关闭，机器将断电。但是从状态管理的角度来看，您需要评估请求机器状态转换到 Shutdown 状态是否有效。即使评估为肯定且机器可以断电，项目特定需求可能要求我们在开始断电序列之前将所有可用的功能组切换到 Off 状态。出于这个原因，我们正在考虑功能组之间依赖关系的存在。请注意，目前这些依赖关系是实现特定的，并且可由集成商配置（即，除非集成商更改，否则所有功能组都是独立的）。</p>
+<p>系统可能包含用于变体处理的校准数据。这可能包括机器清单中配置的一些功能组不打算在此系统上执行。因此，状态管理必须评估校准数据以收集关于未配置给系统变体的功能组的信息。</p>
+<p>[SWS_SM_00005]{草案} 功能组校准支持 [状态管理应从校准数据接收关于已停用功能组的信息。]</p>
+<p>校准数据的存储和接收是实现特定的。</p>
+<p>[SWS_SM_00006]{草案} 功能组校准支持 [状态管理应拒绝自适应应用程序和自适应平台应用程序更改未配置在此变体中运行的功能组的状态的请求。]</p>
+<h5 id="713-状态管理架构">7.1.3 状态管理架构</h5>
+<p>状态管理是负责确定当前活动功能组状态集（包括机器状态）并通过向执行管理请求启动状态转换的功能集群。执行管理执行状态转换并根据当前状态控制实际运行的建模进程集。</p>
+<p>状态管理是可以请求新功能组状态以及仲裁请求（包括协调来自不同来源的冲突请求）的中心点。仲裁可能需要考虑额外的数据和事件。</p>
+<p>状态管理功能是高度项目特定的，AUTOSAR 决定不像经典平台的 BswM 那样为自适应平台指定功能。计划仅指定一组基本服务接口，并将实际仲裁逻辑封装到项目特定代码（例如库）中，</p>
+<p>该代码可以插入到状态管理框架中，并在框架和仲裁逻辑之间具有标准化接口，以便代码可以在不同平台上重用。</p>
+<p>仲裁逻辑代码可以单独开发或（部分）基于标准化配置参数生成。</p>
+<p>状态管理、自适应平台应用程序和自适应应用程序之间交互的概述如图 7.3 所示。</p>
+<center>图 7.3：状态管理架构</center>
+<h4 id="72-状态管理和自适应平台应用程序">7.2 状态管理和自适应（平台）应用程序</h4>
+<h5 id="721-状态管理与自适应应用程序之间的交互">7.2.1 状态管理与自适应应用程序之间的交互</h5>
+<p>一些自适应应用程序，包括自适应平台应用程序，可能需要与状态管理进行交互。为此，状态管理提供了一个带有“Notifier”（参见第 9.2.2 节）</p>
+<p>字段的服务接口，每个自适应应用程序都可以订阅该字段，从而在状态管理的内部状态发生变化时得到通知。当自适应应用程序识别到变化时，它可以执行相应的操作。</p>
+<p>相反，每个自适应应用程序都可以通过写入状态管理提供的“Trigger”字段来影响状态管理的行为。因此，自适应应用程序必须被配置为具有对状态管理字段的写访问权限。</p>
+<p>状态管理提供第三个服务接口，其中两个字段都可用：“Trigger”和“Notifier”。提供此组合字段的意图是，每当“Trigger”字段发生变化时，在状态管理执行由“Trigger”变化引发的操作后，“Notifier”字段也会发生变化。</p>
+<p>[SWS_SM_00020]{草案} 内部状态传播 [状态管理应有多个“Notifier”字段实例，这些实例反映状态管理的内部状态，以便应用程序可以获取状态管理的状态。]</p>
+<p>[SWS_SM_00021]{草案} 内部状态影响 [状态管理应有多个“Trigger”字段实例，这些实例影响状态管理的内部状态，以便应用程序可以影响状态管理的状态。]</p>
+<p>请注意，所提供字段的类型（以及内容）是项目特定的。</p>
+<p>状态管理和自适应应用程序之间非同步行为的交互概述如图 7.4 所示。</p>
+<center>图 7.4：非同步的应用程序状态处理</center>
+<p>7.2.2 跨多个自适应应用程序的同步</p>
+<p>AUTOSAR 自适应平台中的某些场景可能需要更复杂的处理，其中状态管理内部状态的变化最终只有在相关建模进程进入由状态管理触发的专用“状态”时才能执行。</p>
+<p>这些触发器可能针对不同的进程集，具体取决于要实现的功能。状态管理目前看到两个不同的用例：</p>
+<ul>
+<li>针对机器中所有正在运行的建模进程的电源模式</li>
+<li>针对诊断复位原因的正在运行的建模进程</li>
+</ul>
+<p>为了能够灵活地处理不同的建模进程组，引入了一种称为 CommunicationGroups 的新通信模式（参见 SWS CommunicationManagement [1]）。</p>
+<p>该模式定义了一种复合服务，为服务器和客户端提供代理和骨架。</p>
+<p>使用这种方法，服务器可以：</p>
+<ul>
+<li>广播消息给组内所有客户端</li>
+<li>发送消息给组内特定客户端</li>
+<li>获取组内所有客户端的列表</li>
+<li>接收组内所有客户端的回复</li>
+</ul>
+<p>因此，客户端可以：</p>
+<ul>
+<li>接收来自服务器的消息</li>
+<li>向服务器发送回复</li>
+</ul>
+<p>请注意，客户端必须回复每个服务器请求，无论客户端能否满足该请求。</p>
+<p>为了对消息和回复有一致的理解，这些将被定义为模板，工具将生成相应的代理和骨架（详情参见 SWS CommunicationManagement）。</p>
+<p>因此，状态管理作为（多个）CommunicationGroups 的服务器，可以向组内的所有客户端发送消息，并可以检查：</p>
+<ul>
+<li>所有客户端是否都回复了请求</li>
+<li>所有客户端是否都发送了预期的答复</li>
+</ul>
+<p>如果任何客户端没有回复或没有回复预期的答复，状态管理可以通过直接处理行为不当的客户端来重试以达到请求的状态。当客户端仍然没有回复（或没有回复预期的</p>
+<p>回复）时，状态管理可以执行进一步的项目特定操作。由于 CommunicationGroups 的异步特性，状态管理需要使用项目特定的超时来监督来自所有客户端的答复的接收。</p>
+<p>状态管理和自适应应用程序之间同步行为的交互概述如图 7.5 所示。</p>
+<center>图 7.5：电源模式作为同步应用程序状态处理的示例</center>
+<h5 id="7221-自适应平台应用程序的电源模式">7.2.2.1 自适应（平台）应用程序的电源模式</h5>
+<p>电源模式旨在影响系统中所有进程的内部行为。目前，支持三种模式，但本文档的未来版本可能会引入更多模式。</p>
+<p>模式定义如下：</p>
+<ul>
+<li>“On”：接收到此电源模式的建模进程行为正常，如同由 ExecutionManagement 生成一样。它用于“撤销”其他电源模式请求。刚刚生成的建模进程应该像请求了“On”电源模式一样行为。</li>
+<li>“Suspend”：此电源模式旨在作为信号通知建模进程系统已挂起（例如，挂起到 RAM 或磁盘）。必要操作的实现（例如，将驱动程序设置为专有模式等）将是项目特定的，并且可能取决于环境（例如，使用的操作系统）。</li>
+<li>“Off”：接收到此电源模式的建模进程行为就像从 Execution Management 接收到 SIGTERM 一样，除了退出之外。</li>
+</ul>
+<p>此电源模式用于实现所谓的“晚唤醒”，即在正在进行的关闭过程中发现新的唤醒原因（例如，短期低电压）。当发现新的唤醒原因时，将向建模进程发送“On”请求，以便它们可以立即继续“正常”工作，而无需再次生成（例如，从文件系统）。刚刚接收到“Off”电源模式（并执行了必要操作）然后从 Execution Management 接收到 SIGTERM 的建模进程，可以更快地执行其关闭，因为它已经完成了准备退出所需的所有步骤。</p>
+<p>支持电源模式的建模进程在被 Execution Management 生成进入“Running”状态时，其行为应如同收到了“On”请求，以保持与不支持电源模式的建模进程的兼容性。</p>
+<center>图 7.6：自适应（平台）应用程序的电源模式</center>
+<p>请注意，支持“Off”或“Suspend”或同时支持这两种电源模式的建模进程，也支持“On”电源模式。</p>
+<p>电源模式的服务接口、定义的消息和回复可以在 9.2.5.1 服务接口和 9.1.1 类型定义中找到。</p>
+<h5 id="7222-自适应平台应用程序的诊断复位">7.2.2.2 自适应（平台）应用程序的诊断复位</h5>
+<p>诊断复位服务是为自适应诊断的诊断复位功能提供的。其背后的原理是改变建模进程的行为，而无需终止和重启它们。此服务旨在影响由诊断地址寻址的建模进程。受影响的是所有建模进程还是仅子集取决于系统设计。因此，建议通过 IAM 限制对此服务的访问。</p>
+<p>自适应（平台）应用程序对请求本身的反应是项目特定的。</p>
+<p>关于自适应诊断和状态管理完整交互的详细信息可以在 7.4 与自适应诊断的交互中找到。</p>
+<p>诊断复位的服务接口、定义的消息和回复可以在 9.2.5.2 服务接口和 9.1.2 类型定义中找到。</p>
+<p>请注意，此接口仅为状态管理开发人员提供实现诊断复位用例项目特定需求的手段。</p>
+<h4 id="73-与平台健康管理的交互">7.3 与平台健康管理的交互</h4>
+<p>平台健康管理负责通过本地监控监督被监督实体，并检查健康通道的状态。本地监控的故障将累积到全局监控中。全局监控的范围是单个功能组（或其一部分）。详细信息参见 SWS PlatformHealthManagement[4]。一旦全局监控进入停止状态或健康通道包含与状态管理相关的信息，平台健康管理将通过平台健康管理器提供的 C++ API 通知状态管理。C++ 接口作为具有虚函数的类提供，这些函数必须由状态管理实现。</p>
+<p>当状态管理收到来自平台健康管理的通知时，它可以评估通知中的信息并启动项目特定的操作以从故障中恢复（例如，请求执行管理将功能组切换到另一个功能组状态，请求执行管理重启机器等）。</p>
+<p>注意：平台健康管理使用可配置的超时来监控 RecoverHandler() 的返回。如果在可配置的重试次数后，状态管理仍然没有从 RecoveryHandler() 正常返回，平台健康管理将通过错误触发或停止触发服务看门狗来执行自己的对策。</p>
+<h4 id="74-与自适应诊断的交互">7.4 与自适应诊断的交互</h4>
+<p>自适应诊断负责诊断、配置和复位诊断地址。诊断地址和软件集群之间的关系是项目特定的。自适应诊断和状态管理之间的接口由自适应诊断作为 C++ API 提供。该接口作为具有虚函数的类提供，这些函数必须由状态管理实现。</p>
+<p>在处理任何诊断请求期间，有必要防止系统关闭。</p>
+<p>[SWS_SM_00100]{草案} 防止因诊断会话而关闭 [状态管理在处理来自自适应诊断的请求期间不应关闭系统。]</p>
+<p>从自适应诊断的角度来看，必须执行几种不同的复位类型以满足自适应诊断的功能。由于复位类型（在 ISO 14229-1 中定义）的解释：</p>
+<ul>
+<li>hardReset</li>
+<li>keyOffOnReset</li>
+<li>softReset</li>
+<li>customReset</li>
+</ul>
+<p>由每个 OEM 不同完成，部分复位功能必须由状态管理委托给自适应应用程序和自适应平台应用程序。</p>
+<p>“keyOffOnReset”可能由状态管理的内部逻辑转换为停止和启动与请求的诊断地址相关的功能组。</p>
+<p>“softReset”可能由状态管理的内部逻辑转换为请求（与请求的诊断地址相关的功能组内的）建模进程执行内部功能，而无需终止并重新启动它们。为此，状态管理在 CommunicationGroup 范围内提供服务接口。所有支持此功能的建模进程必须使用从 9.1.2 中提供的消息和回复消息定义生成的 ara::com 方法和字段。</p>
+<p>[SWS_SM_00101]{草案} 诊断复位 [状态管理应实现接收来自自适应诊断的诊断地址复位请求的方法。状态管理应执行特定复位类型的项目特定操作。]</p>
+<p>此功能是项目特定的。因此，正确的映射必须由项目特定代码完成。</p>
+<p>状态管理是系统中可以请求机器复位的中心点。因此，状态管理必须跟踪复位原因，并在重新生成时复位持久化的复位原因。</p>
+<p>[SWS_SM_00103]{草案} 诊断复位最后原因 [状态管理应提供在机器复位执行前持久化复位类型的功能。]</p>
+<p>[SWS_SM_00104]{草案} 诊断复位最后原因检索 [当状态管理被生成时，状态管理应读出最后持久化的复位原因。此复位原因必须通过 C++ 接口向自适应诊断提供。]</p>
+<p>[SWS_SM_00105]{草案} 诊断复位最后原因复位 [状态管理应在读出当前值后立即复位最后持久化的复位原因。]</p>
+<h4 id="75-与更新和配置管理的交互">7.5 与更新和配置管理的交互</h4>
+<p>更新和配置管理负责安装、移除或更新软件集群作为最小可更新实体。为了使更新和配置管理能够实现其功能，状态管理提供服务接口（参见 9.2.4）供更新和配置管理使用。</p>
+<p>请注意，系统集成商必须通过配置身份和访问管理将此接口的使用限制于更新和配置管理。</p>
+<p>第一步，更新和配置管理将询问状态管理是否允许执行更新。该决定将取决于机器（或整车）的当前状态，并且必须以项目特定方式完成。</p>
+<p>[SWS_SM_00203]{草案} 启动更新会话 [状态管理应向更新和配置管理提供接口，以检查是否可以执行更新。]</p>
+<p>一旦状态管理允许更新，状态管理必须防止系统关闭。</p>
+<p>[SWS_SM_00200]{草案} 防止在更新会话期间关闭 [状态管理在活动更新会话期间不应关闭系统。]</p>
+<p>[SWS_SM_00201]{草案} 关闭预防的监督 [当状态管理在活动更新会话期间不应关闭系统时。状态管理应使用项目特定的超时来监督更新会话的持续时间，以便系统不会永远运行。]</p>
+<p>此外，状态管理必须持久化有关正在进行更新会话的信息，以便在机器重启（无论重启是否预期）后，更新和配置管理可以继续更新。为了以一致的方式继续更新，需要只有少数功能组将被设置为有意义的功能组状态（项目特定）。至少更新和配置管理必须处于运行状态。</p>
+<p>[SWS_SM_00204]{草案} 持久化会话状态 [状态管理应持久化有关正在进行更新会话的信息，以便在任何类型的机器复位后可以读出。]</p>
+<p>在某些情况下，需要更新和配置管理发出机器复位（预期复位），例如，当状态管理、平台健康管理或执行管理等功能集群受到更新影响时。这必须由状态管理支持。至少，这可以通过向执行管理请求机器状态重启来简单实现。</p>
+<p>[SWS_SM_00202]{草案} 复位执行 [状态管理应实现一个接口，以从更新和配置管理请求机器复位]</p>
+<p>当没有更多的更新操作需要执行时，更新和配置管理必须通知状态管理，以便状态管理现在可以清除有关正在进行的更新的信息，并可以继续其常规工作，将功能组设置为有意义的功能组状态。</p>
+<p>[SWS_SM_00205]{草案} 停止更新会话 [状态管理应向更新和配置管理提供接口，以便它可以通知状态管理更新会话已结束。]</p>
+<p>在更新过程中，根据软件集群是安装、移除还是更新，最多会有三个不同的步骤。这些步骤何时以及是否完成还取决于先前步骤的成功或失败。为了支持更新和配置管理请求这些步骤，状态管理提供了三个不同的接口：</p>
+<p>[SWS_SM_00206]{草案} 准备更新 [状态管理应向更新和配置管理提供接口，以便它可以请求状态管理对给定要更新的功能组进行准备]</p>
+<p>[SWS_SM_00207]{草案} 准备验证 [状态管理应向更新和配置管理提供接口，以便它可以请求状态管理对给定的功能组进行验证]</p>
+<p>[SWS_SM_00208]{草案} 准备回滚 [状态管理应向更新和配置管理提供接口，以便它可以请求状态管理对给定的要回滚的功能组进行准备。]</p>
+<p>为了更新软件集群，更新和配置管理将在第一步调用 PrepareUpdate 接口。状态管理将至少将作为参数给出的所有功能组设置为 Off 状态。下一步，更新和配置管理将执行实际的更新（例如，交换可执行文件、更改清单等）。下一步，更新和配置管理使用 VerifyUpdate 请求状态管理执行更新验证。因此，状态管理将至少将作为参数给出的所有功能组设置为 Verify 状态。如果任何功能组无法设置为请求的功能组状态，则这些请求将向更新和配置管理报告为失败。如果在状态管理授予更新权限之前调用这些函数之一，也会报告失败。</p>
+<p>当这些步骤中的任何一个失败时，更新和配置管理可以决定恢复先前的更改。因此，更新和配置管理使用 PrepareRollback 函数，其中状态管理将至少将作为参数给出的所有功能组设置为 Off 状态。</p>
+<p>当移除软件集群时，更新和配置管理永远不会调用 VerifyUpdate 和 PrepareRollback。相反，当新的软件集群安装到机器中时，永远不会调用 PrepareUpdate。</p>
+<p>有关更新过程的更多详细信息，请参见 [7] 中的序列图和描述。</p>
+<h4 id="76-与网络管理的交互">7.6 与网络管理的交互</h4>
+<p>为了在不同 ECU 之间可移植，自适应应用程序不应需要知道哪些网络需要实现其功能，因为在不同的 ECU 上，网络可能配置不同。为了控制多个自适应应用程序的网络可用性，状态管理通过服务接口与网络管理进行交互。</p>
+<p>网络管理提供多个 NetworkHandle 实例，每个实例代表一组（部分）网络。</p>
+<p>NetworkHandle 在机器清单中定义，并在其中分配给功能组状态。</p>
+<p>状态管理、网络管理和自适应应用程序之间交互的概述如图 7.8 所示。</p>
+<p>图 7.7：通过“Trigger”切换网络状态</p>
+<p>[SWS_SM_00300]{草案} NetworkHandle 配置 [状态管理应从机器清单接收有关 NetworkHandle 及其关联的功能组状态的信息。]</p>
+<p>每当（部分）网络从外部请求被激活或停用，并且这组（部分）网络由机器清单中的 NetworkHandle 表示时，网络管理将更改相应 NetworkHandle 的值。状态管理会收到更改通知，因为它已注册到所有可用的 NetworkHandle 字段。当状态管理识别到字段值的变化时，它将相应的功能组设置为机器清单中为该 NetworkHandle 配置的功能组状态。</p>
+<p>[SWS_SM_00301]{草案} NetworkHandle 注册 [状态管理应注册网络管理提供的、机器清单中可用的所有 NetworkHandle。]</p>
+<p>[SWS_SM_00302]{草案} NetworkHandle 到功能组状态 [当状态管理识别到 NetworkHandle 值的变化时，它应将功能组设置为机器清单中为该 NetworkHandle 配置的相应功能组状态。]</p>
+<p>反之，当功能组必须更改其功能组状态，并且机器清单中存在此功能组状态与 NetworkHandle 之间的关联时，状态管理应更改 NetworkHandle 的值。网络管理将识别到此更改，并相应地更改（部分）网络的状态以匹配 NetworkHandle。</p>
+<p>[SWS_SM_00303]{草案} 功能组状态到 NetworkHandle [当功能组更改其功能组状态，并且机器清单中存在与此功能组状态关联的 NetworkHandle 时，状态管理应更改 NetworkHandle 的值。]</p>
+<p>可能需要功能组在其状态保持更长时间，即使导致其活动的（部分）网络集已关闭，或者某个（部分）网络比导致其活动的功能组切换到 Off 状态的时间更长。这称为“后运行”。相应的超时值必须在机器清单中配置。</p>
+<p>[SWS_SM_00304]{草案} 网络后运行 [状态管理应支持“后运行”手段，以关闭相关的功能组或（部分）网络。此“后运行”的超时值必须从例如机器清单中读取。]</p>
+<h4 id="77-与执行管理的交互">7.7 与执行管理的交互</h4>
+<p>执行管理用于执行功能组状态更改。更改机器状态或功能组状态的决策可能来自状态管理内部（基于状态管理的状态或其他项目特定需求），也可能由外部自适应应用程序向状态管理请求。</p>
+<p>状态管理、执行管理和自适应应用程序之间交互的概述如图 7.8 所示。</p>
+<center>图 7.8：通过“Trigger”切换功能组状态</center>
+<p>[SWS_SM_00400]{草案} 执行管理 [状态管理应使用执行管理的 API 来更改机器状态或功能组的状态。] 执行管理可能由于多种原因（例如，二进制文件损坏）无法执行请求的功能组状态更改。执行管理返回请求的结果。
+[SWS_SM_00401]{草案} 执行管理结果 [状态管理应评估对执行管理请求的结果。根据结果，状态管理可以执行项目特定的操作]
+[SWS_SM_00402]{草案} 功能组状态更改结果 [状态管理应通过其服务接口提供基于向执行管理发出的功能组状态更改请求结果的功能组状态]</p>
+<h4 id="78-虚拟化分层环境中的状态管理">7.8 虚拟化/分层环境中的状态管理</h4>
+<p>在虚拟化环境中的 ECU 上，可能运行多个机器。每个虚拟机可能包含一个 AUTOSAR 自适应平台。因此，每个虚拟机都包含状态管理。为了协调控制多个虚拟机，必须有一个虚拟机来监督整个 ECU 状态。这不仅适用于虚拟化环境，也适用于分层环境。</p>
+<p>[SWS_SM_00500]{草案} 虚拟化/分层状态管理 [状态管理应能够注册到监督状态管理实例的“Trigger”字段，以接收有关整个 ECU 状态的信息。]</p>
+<p>[SWS_SM_00501]{草案} 虚拟化/分层状态管理内部状态 [状态管理应实现根据来自监督状态管理实例的信息计算其内部状态的方法。]</p>
+<h4 id="79-状态管理生命周期">7.9 状态管理生命周期</h4>
+<h5 id="791-启动">7.9.1 启动</h5>
+<p>状态管理生命周期完全依赖于机器状态。详细信息参见 7.1.1.1</p>
+<p>7.9.2 关闭
+状态管理生命周期完全依赖于机器状态。详细信息参见 7.1.1.2</p>
+<h5 id="793-重启">7.9.3 重启</h5>
+<p>状态管理生命周期完全依赖于机器状态。详细信息参见 7.1.1.3</p>
+<hr></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-05-14</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/021_autosar_sws_statemanagement_r2011/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/autosar/">AUTOSAR</a>,&nbsp;<a href="/blog/tags/autosar-ap/">AUTOSAR AP</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/020_autosar_sws_timesynchronization_r2011/" class="prev" rel="prev" title="AUTOSAR_SWS_TimeSynchronization_R2011"><i class="fas fa-angle-left" aria-hidden="true"></i>AUTOSAR_SWS_TimeSynchronization_R2011</a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

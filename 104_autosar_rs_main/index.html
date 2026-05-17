@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title> - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/104_autosar_rs_main/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="LoveIt">
+  <meta property="og:description" content="1 文档范围 每个合作伙伴都已承诺 AUTOSAR 的总体项目目标（PO）。这些目标列在 AUTOSAR 标准信息包 V3.3 或后续文档中。AUTOSAR 标准信息包是开发合作伙伴关系的官方沟通文件。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="LoveIt">
+  <meta name="twitter:description" content="1 文档范围 每个合作伙伴都已承诺 AUTOSAR 的总体项目目标（PO）。这些目标列在 AUTOSAR 标准信息包 V3.3 或后续文档中。AUTOSAR 标准信息包是开发合作伙伴关系的官方沟通文件。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/104_autosar_rs_main/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/105_/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/103_autosar_tr_adaptiveplatformreleaseoverriew/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/104_autosar_rs_main\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","wordcount":  8489 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/104_autosar_rs_main\/","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/104_autosar_rs_main/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/104_autosar_rs_main/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX"></h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="0001-01-01">0001-01-01</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 8489 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 17 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#21-使用的约定">2.1 使用的约定</a></li>
+    <li><a href="#22-缩略语和缩写">2.2 缩略语和缩写</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#41-功能需求">4.1 功能需求</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#411-rs_main_00001-autosar-应为嵌入式实时系统提供一个软件平台">4.1.1 [RS_Main_00001] AUTOSAR 应为嵌入式实时系统提供一个软件平台</a></li>
+            <li><a href="#412-rs_main_00060-autosar-应提供一个用于应用间通信的标准软件接口">4.1.2 [RS_Main_00060] AUTOSAR 应提供一个用于应用间通信的标准软件接口</a></li>
+            <li><a href="#413-rs_main_00653-autosar-应提供独立于平台的车辆-vfb-通信的抽象描述">4.1.3 [RS_Main_00653] AUTOSAR 应提供独立于平台的车辆 VFB 通信的抽象描述</a></li>
+            <li><a href="#414-rs_main_00140-autosar-应为应用提供独立于网络的通信机制">4.1.4 [RS_Main_00140] AUTOSAR 应为应用提供独立于网络的通信机制</a></li>
+            <li><a href="#415-rs_main_00230-autosar-应支持包括网关在内的网络拓扑">4.1.5 [RS_Main_00230] AUTOSAR 应支持包括网关在内的网络拓扑</a></li>
+            <li><a href="#416-rs_main_00260-autosar-应在运行时提供用于生产和服务的诊断手段">4.1.6 [RS_Main_00260] AUTOSAR 应在运行时提供用于生产和服务的诊断手段</a></li>
+            <li><a href="#417-rs_main_00280-autosar-应支持标准化的汽车通信协议">4.1.7 [RS_Main_00280] AUTOSAR 应支持标准化的汽车通信协议</a></li>
+            <li><a href="#418-rs_main_00460-autosar-应标准化在应用ecu-和系统级别组织模式管理的方法">4.1.8 [RS_Main_00460] AUTOSAR 应标准化在应用、ECU 和系统级别组织模式管理的方法</a></li>
+            <li><a href="#419-rs_main_00491-autosar-应提供日志记录手段">4.1.9 [RS_Main_00491] AUTOSAR 应提供日志记录手段</a></li>
+            <li><a href="#4110-rs_main_00510-autosar-应支持安全的车载通信">4.1.10 [RS_Main_00510] AUTOSAR 应支持安全的车载通信</a></li>
+            <li><a href="#4111-rs_main_01001-autosar-应支持-ecu-内部通信">4.1.11 [RS_Main_01001] AUTOSAR 应支持 ECU 内部通信</a></li>
+            <li><a href="#4112-rs_main_00652-autosar-应支持基于信号的通信和面向服务的通信之间的转换">4.1.12 [RS_Main_00652] AUTOSAR 应支持基于信号的通信和面向服务的通信之间的转换</a></li>
+            <li><a href="#4113-rs_main_00700-autosar-应符合-iso-14229-2">4.1.13 [RS_Main_00700] AUTOSAR 应符合 ISO 14229-2</a></li>
+          </ul>
+        </li>
+        <li><a href="#42-非功能需求">4.2 非功能需求</a>
+          <ul>
+            <li><a href="#421-rs_main_00010-autosar-应支持安全相关系统的开发">4.2.1 [RS_Main_00010] AUTOSAR 应支持安全相关系统的开发</a></li>
+            <li><a href="#422-rs_main_00011-autosar-应支持可靠系统的开发">4.2.2 [RS_Main_00011] AUTOSAR 应支持可靠系统的开发</a></li>
+            <li><a href="#423-rs_main_00012-autosar-应提供一个支持高可用系统开发的软件平台">4.2.3 [RS_Main_00012] AUTOSAR 应提供一个支持高可用系统开发的软件平台</a></li>
+            <li><a href="#424-rs_main_00030-autosar-应支持安全相关系统的开发过程">4.2.4 [RS_Main_00030] AUTOSAR 应支持安全相关系统的开发过程</a></li>
+            <li><a href="#425-rs_main_00080-autosar-应提供描述应用软件组件模型的手段">4.2.5 [RS_Main_00080] AUTOSAR 应提供描述应用软件组件模型的手段</a></li>
+            <li><a href="#426-rs_main_00120-autosar-应提供确保-autosar-实现icc1-级别在应用层rte和总线级别互操作性的手段">4.2.6 [RS_Main_00120] AUTOSAR 应提供确保 AUTOSAR 实现（ICC1 级别）在应用层（RTE）和总线级别互操作性的手段</a></li>
+            <li><a href="#427-rs_main_00127-autosar-应提供通用测试用例">4.2.7 [RS_Main_00127] AUTOSAR 应提供通用测试用例</a></li>
+            <li><a href="#428-rs_main_00160-autosar-应提供描述整个系统接口的手段">4.2.8 [RS_Main_00160] AUTOSAR 应提供描述整个系统接口的手段</a></li>
+            <li><a href="#429-rs_main_00161-autosar-应提供一种统一的方式来描述部署到自适应和或经典平台的软件系统">4.2.9 [RS_Main_00161] AUTOSAR 应提供一种统一的方式来描述部署到自适应和/或经典平台的软件系统</a></li>
+            <li><a href="#4210-rs_main_00190-autosar-应支持与非-autosar-软件的标准互操作性">4.2.10 [RS_Main_00190] AUTOSAR 应支持与非 AUTOSAR 软件的标准互操作性</a></li>
+            <li><a href="#4211-rs_main_00200-autosar-规范应允许资源高效的实现">4.2.11 [RS_Main_00200] AUTOSAR 规范应允许资源高效的实现</a></li>
+            <li><a href="#4212-rs_main_00250-autosar-方法论应提供典型角色和活动的预定义">4.2.12 [RS_Main_00250] AUTOSAR 方法论应提供典型角色和活动的预定义</a></li>
+            <li><a href="#4212-rs_main_00250-autosar-方法论应提供典型角色和活动的预定义-1">4.2.12 [RS_Main_00250] AUTOSAR 方法论应提供典型角色和活动的预定义</a></li>
+            <li><a href="#4213-rs_main_00300-autosar-应提供数据交换格式以支持大型公司内部和公司间开发组的工作分担">4.2.13 [RS_Main_00300] AUTOSAR 应提供数据交换格式以支持大型公司内部和公司间开发组的工作分担</a></li>
+            <li><a href="#4214-rs_main_00320-autosar-应提供指定系统开发的格式">4.2.14 [RS_Main_00320] AUTOSAR 应提供指定系统开发的格式</a></li>
+            <li><a href="#4215-rs_main_00340-autosar-应支持持续的时序需求分析">4.2.15 [RS_Main_00340] AUTOSAR 应支持持续的时序需求分析</a></li>
+            <li><a href="#4216-rs_main_00350-autosar-规范应是可分析的并支持相应的方法来证明安全相关属性的实现">4.2.16 [RS_Main_00350] AUTOSAR 规范应是可分析的，并支持相应的方法来证明安全相关属性的实现</a></li>
+            <li><a href="#4217-rs_main_00360-autosar-应支持变体管理">4.2.17 [RS_Main_00360] AUTOSAR 应支持变体管理</a></li>
+            <li><a href="#4218-rs_main_00480-autosar-应支持实现的测试">4.2.18 [RS_Main_00480] AUTOSAR 应支持实现的测试</a></li>
+            <li><a href="#4219-rs_main_00500-autosar-应提供命名约定">4.2.19 [RS_Main_00500] AUTOSAR 应提供命名约定</a></li>
+            <li><a href="#4220-rs_main_00507-autosar-应在形式化模型描述中反映软件系统开发的各个阶段">4.2.20 [RS_Main_00507] AUTOSAR 应在形式化模型描述中反映软件系统开发的各个阶段</a></li>
+            <li><a href="#4221-rs_main_00514-autosar-应支持安全系统的开发">4.2.21 [RS_Main_00514] AUTOSAR 应支持安全系统的开发</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-平台级别候选">4.3 平台级别候选</a>
+          <ul>
+            <li><a href="#431-rs_main_00002-autosar-应为高性能计算平台提供一个软件平台">4.3.1 [RS_Main_00002] AUTOSAR 应为高性能计算平台提供一个软件平台</a></li>
+            <li><a href="#432-rs_main_00400-autosar-应提供一个分层的软件架构">4.3.2 [RS_Main_00400] AUTOSAR 应提供一个分层的软件架构</a></li>
+            <li><a href="#433-rs_main_00150-autosar-应支持-autosar-应用软件的部署和重新分配">4.3.3 [RS_Main_00150] AUTOSAR 应支持 AUTOSAR 应用软件的部署和重新分配</a></li>
+            <li><a href="#434-rs_main_00410-autosar-应提供应用软件常用例程的规范以支持共享和优化">4.3.4 [RS_Main_00410] AUTOSAR 应提供应用软件常用例程的规范以支持共享和优化</a></li>
+            <li><a href="#435-rs_main_00501-autosar-应支持冗余概念">4.3.5 [RS_Main_00501] AUTOSAR 应支持冗余概念</a></li>
+            <li><a href="#436-rs_main_00511-autosar-应支持虚拟化">4.3.6 [RS_Main_00511] AUTOSAR 应支持虚拟化</a></li>
+            <li><a href="#437-rs_main_00420-autosar-应使用既定的软件标准并整合基础软件功能的事实标准">4.3.7 [RS_Main_00420] AUTOSAR 应使用既定的软件标准并整合基础软件功能的事实标准</a></li>
+            <li><a href="#437-rs_main_00420-autosar-应使用既定的软件标准并整合基础软件功能的事实标准-1">4.3.7 [RS_Main_00420] AUTOSAR 应使用既定的软件标准并整合基础软件功能的事实标准</a></li>
+            <li><a href="#438-rs_main_00440-autosar-应标准化对非易失性存储器的访问">4.3.8 [RS_Main_00440] AUTOSAR 应标准化对非易失性存储器的访问</a></li>
+            <li><a href="#439-rs_main_00445-autosar-应标准化对加密特定硬件和软件的访问">4.3.9 [RS_Main_00445] AUTOSAR 应标准化对加密特定硬件和软件的访问</a></li>
+            <li><a href="#4310-rs_main_00170-autosar-应提供对-ecu-数据和服务的安全访问">4.3.10 [RS_Main_00170] AUTOSAR 应提供对 ECU 数据和服务的安全访问</a></li>
+            <li><a href="#4311-rs_main_00650-autosar-应支持数据和软件的上传和下载">4.3.11 [RS_Main_00650] AUTOSAR 应支持数据和软件的上传和下载</a></li>
+            <li><a href="#4312-rs_main_00261-autosar-应提供标定手段">4.3.12 [RS_Main_00261] AUTOSAR 应提供标定手段</a></li>
+            <li><a href="#4313-rs_main_00026-autosar-应支持执行软件之间的高速高带宽通信">4.3.13 [RS_Main_00026] AUTOSAR 应支持执行软件之间的高速高带宽通信</a></li>
+            <li><a href="#4314-rs_main_01002-autosar-应支持面向服务的通信">4.3.14 [RS_Main_01002] AUTOSAR 应支持面向服务的通信</a></li>
+            <li><a href="#4315-rs_main_01003-autosar-应支持面向数据的通信">4.3.15 [RS_Main_01003] AUTOSAR 应支持面向数据的通信</a></li>
+            <li><a href="#4316-rs_main_01025-autosar-应支持在目标板和板载上进行软件调试">4.3.16 [RS_Main_01025] AUTOSAR 应支持在目标板和板载上进行软件调试</a></li>
+            <li><a href="#4316-rs_main_01025-autosar-应支持在目标板和板载上进行软件调试-1">4.3.16 [RS_Main_01025] AUTOSAR 应支持在目标板和板载上进行软件调试</a></li>
+            <li><a href="#4317-rs_main_01026-autosar-应支持在目标板和板载上进行跟踪和性能分析">4.3.17 [RS_Main_01026] AUTOSAR 应支持在目标板和板载上进行跟踪和性能分析</a></li>
+            <li><a href="#4318-rs_main_00513-autosar-应支持不同编程语言的语言绑定">4.3.18 [RS_Main_00513] AUTOSAR 应支持不同编程语言的语言绑定</a></li>
+            <li><a href="#4319-rs_main_00503-autosar-应支持在运行时更改通信和应用软件">4.3.19 [RS_Main_00503] AUTOSAR 应支持在运行时更改通信和应用软件。</a></li>
+            <li><a href="#4320-rs_main_01004-autosar-应支持无线车外通信的标准">4.3.20 [RS_Main_01004] AUTOSAR 应支持无线车外通信的标准</a></li>
+            <li><a href="#4321-rs_main_01008-autosar-应提供与车外实体的安全通信">4.3.21 [RS_Main_01008] AUTOSAR 应提供与车外实体的安全通信</a></li>
+            <li><a href="#4321-rs_main_01008-autosar-应提供与车外实体的安全通信-1">4.3.21 [RS_Main_01008] AUTOSAR 应提供与车外实体的安全通信</a></li>
+            <li><a href="#4322-rs_main_01005-autosar-应动态建立通信路径">4.3.22 [RS_Main_01005] AUTOSAR 应动态建立通信路径</a></li>
+            <li><a href="#4323-rs_main_01007-autosar-通信应保证通信的服务质量">4.3.23 [RS_Main_01007] AUTOSAR 通信应保证通信的服务质量</a></li>
+            <li><a href="#4324-rs_main_00049-autosar-应提供一个用于运行多个应用的执行管理">4.3.24 [RS_Main_00049] AUTOSAR 应提供一个用于运行多个应用的执行管理</a></li>
+            <li><a href="#4325-rs_main_00050-autosar-应向应用提供一个执行框架以实现并发的应用内部控制流">4.3.25 [RS_Main_00050] AUTOSAR 应向应用提供一个执行框架以实现并发的应用内部控制流</a></li>
+            <li><a href="#4326-rs_main_00106-autosar-应提供在不重新编译平台基础的情况下使用新-swc-扩展软件的可能性">4.3.26 [RS_Main_00106] AUTOSAR 应提供在不重新编译平台基础的情况下使用新 SWC 扩展软件的可能性</a></li>
+            <li><a href="#4327-rs_main_00100-autosar-应提供标准化的基础软件">4.3.27 [RS_Main_00100] AUTOSAR 应提供标准化的基础软件</a></li>
+            <li><a href="#4328-rs_main_00430-autosar-应支持成熟的汽车通信标准">4.3.28 [RS_Main_00430] AUTOSAR 应支持成熟的汽车通信标准</a></li>
+            <li><a href="#4329-rs_main_00435-autosar-应支持汽车微控制器">4.3.29 [RS_Main_00435] AUTOSAR 应支持汽车微控制器</a></li>
+            <li><a href="#4330-rs_main_00450-autosar-应标准化对通用-io-的访问">4.3.30 [RS_Main_00450] AUTOSAR 应标准化对通用 I/O 的访问</a></li>
+            <li><a href="#4331-rs_main_00651-autosar-应支持将-canlin-和-flexray-镜像到-canflexray以太网或专有网络">4.3.31 [RS_Main_00651] AUTOSAR 应支持将 CAN、LIN 和 FlexRay 镜像到 CAN、FlexRay、以太网或专有网络</a></li>
+            <li><a href="#4332-rs_main_00180-autosar-应提供在共享开发过程中保护知识产权的机制">4.3.32 [RS_Main_00180] AUTOSAR 应提供在共享开发过程中保护知识产权的机制</a></li>
+            <li><a href="#4333-rs_main_00301-autosar-应指定数据交换的配置文件以支持大型公司内部和公司间开发组的工作分担">4.3.33 [RS_Main_00301] AUTOSAR 应指定数据交换的配置文件，以支持大型公司内部和公司间开发组的工作分担</a></li>
+            <li><a href="#4334-rs_main_00310-autosar-应支持层次化的应用软件设计方法">4.3.34 [RS_Main_00310] AUTOSAR 应支持层次化的应用软件设计方法</a></li>
+            <li><a href="#4335-rs_main_00270-autosar-应提供针对新版本的缓解策略">4.3.35 [RS_Main_00270] AUTOSAR 应提供针对新版本的缓解策略</a></li>
+            <li><a href="#4336-rs_main_00121-验收测试应最小化测试工作和测试成本">4.3.36 [RS_Main_00121] 验收测试应最小化测试工作和测试成本</a></li>
+            <li><a href="#4337-rs_main_00122-验收测试应测试同一-autosar-版本在一个车辆网络中的-bsw-实现的互操作性">4.3.37 [RS_Main_00122] 验收测试应测试同一 AUTOSAR 版本在一个车辆网络中的 BSW 实现的互操作性</a></li>
+            <li><a href="#4338-rs_main_00123-验收测试应测试车辆网络中-bsw-实现的互操作性">4.3.38 [RS_Main_00123] 验收测试应测试车辆网络中 BSW 实现的互操作性</a></li>
+            <li><a href="#4339-rs_main_00124-验收测试应测试-bsw-实现与应用的互操作性">4.3.39 [RS_Main_00124] 验收测试应测试 BSW 实现与应用的互操作性</a></li>
+            <li><a href="#4340-rs_main_00125-验收测试应提供测量-bsw-实现成熟度的方法">4.3.40 [RS_Main_00125] 验收测试应提供测量 BSW 实现成熟度的方法</a></li>
+            <li><a href="#4341-rs_main_00128-验收测试应涵盖共同商定的-autosar-需求子集">4.3.41 [RS_Main_00128] 验收测试应涵盖共同商定的 AUTOSAR 需求子集</a></li>
+            <li><a href="#4342-rs_main_00490-autosar-过程应符合-iso26262">4.3.42 [RS_Main_00490] AUTOSAR 过程应符合 ISO26262</a></li>
+            <li><a href="#4343-rs_main_00512-autosar-应支持时间同步">4.3.43 [RS_Main_00512] AUTOSAR 应支持时间同步</a></li>
+            <li><a href="#4344-rs_main_00285-autosar-应支持智能交通系统的协议">4.3.44 [RS_Main_00285] AUTOSAR 应支持智能交通系统的协议</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="1-文档范围">1 文档范围</h1>
+<p>每个合作伙伴都已承诺 AUTOSAR 的总体项目目标（PO）。这些目标列在 AUTOSAR 标准信息包 V3.3 或后续文档中。AUTOSAR 标准信息包是开发合作伙伴关系的官方沟通文件。</p>
+<p>这些目标不能直接使用，需要进行细化以生成具体的技术需求。为此，建立了 AUTOSAR 主要需求作为推导这些具体需求的基础。</p>
+<p>本文档的目标是定义 AUTOSAR 的主要需求，包括其与 AUTOSAR 目标的关联。术语 AUTOSAR 用作开发合作伙伴关系和技术产品 AUTomotive Open System ARchitecture 的同义词。</p>
+<p>自 FO R1.5.0 起，需求规范遵循未来引入 RS_Platform 文档的初步结构。RS_Main 级别的需求包含在第 4.1 章功能需求和第 4.2 章非功能需求中。第 4.3 章平台级别候选中的平台级别需求需要在 FO 1.5.0 之后进行评估。</p>
+<h1 id="2-如何阅读本文档">2 如何阅读本文档</h1>
+<p>每个需求都有一个唯一标识符，前缀为“RS_Main_”（代表“Main Requirement”）。对于任何审阅注释、评论或问题，请引用此唯一 ID，而不是章节或页码！</p>
+<h2 id="21-使用的约定">2.1 使用的约定</h2>
+<p>以下用于表达义务的词语形式应用于表示需求。本文档中的关键词“必须”、“禁止”、“要求”、“应”、“不应”、“应当”、“不应当”、“推荐”、“可以”和“可选”应基于互联网工程任务组（IETF）的解释如下。</p>
+<p>请注意，使用这些词的文档的需求级别会修改这些词的强制程度。</p>
+<ul>
+<li><strong>必须</strong>：此词或形容词“法律要求”表示由于法律问题，该定义是规范的绝对要求。</li>
+<li><strong>禁止</strong>：此短语表示由于法律问题，该定义是规范的绝对禁止。</li>
+<li><strong>应</strong>：此短语或形容词“要求”表示该定义是规范的绝对要求。</li>
+<li><strong>不应</strong>：此短语表示该定义是规范的绝对禁止。</li>
+<li><strong>应当</strong>：此词或形容词“推荐”表示在特定情况下可能存在忽略特定项目的有效理由，但在选择不同方案之前必须充分理解并仔细权衡全部影响。</li>
+<li><strong>不应当</strong>：此短语或短语“不推荐”表示在特定情况下，可能存在特定行为可接受甚至有用的有效理由，但在实施任何带有此标签描述的行为之前，应充分理解全部影响并仔细权衡具体情况。</li>
+<li><strong>可以</strong>：此词或形容词“可选”表示一个项目是真正可选的。一个供应商可能选择包含该项目，因为特定市场需求需要它，或者供应商认为它能增强产品，而另一个供应商可能省略同一项目。不包含特定选项的实现应准备好与包含该选项的另一实现进行互操作，尽管功能可能有所减弱。同样，包含特定选项的实现应准备好与不包含该选项的另一实现进行互操作（当然，除了该选项提供的功能）。</li>
+</ul>
+<h2 id="22-缩略语和缩写">2.2 缩略语和缩写</h2>
+<p>本文档中使用的所有缩略语和缩写都包含在官方 AUTOSAR 术语表 [Glossary] 中。相关解释请参阅该文档。</p>
+<h1 id="3-需求追溯">3 需求追溯</h1>
+<p>下表引用了 [RS_ProjectObjectives] 中规范的需求，并链接到这些需求的实现。</p>
+<table>
+  <thead>
+      <tr>
+          <th>需求</th>
+          <th>描述</th>
+          <th>由&hellip;满足</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>RS_PO_00001</td>
+          <td>AUTOSAR 应支持软件的可移植性。</td>
+          <td>RS_Main_00060, RS_Main_00100, RS_Main_00120, RS_Main_00122, RS_Main_00123, RS_Main_00124, RS_Main_00130, RS_Main_00140, RS_Main_00150, RS_Main_00270, RS_Main_00310, RS_Main_00400, RS_Main_00410, RS_Main_00440, RS_Main_00445, RS_Main_00450, RS_Main_00460, RS_Main_00480, RS_Main_00507, RS_Main_00513, RS_Main_00652, RS_Main_01001, RS_Main_01002, RS_Main_01003</td>
+      </tr>
+      <tr>
+          <td>RS_PO_00002</td>
+          <td>AUTOSAR 应支持对不同架构和硬件变体的可扩展性。</td>
+          <td>RS_Main_00060, RS_Main_00121, RS_Main_00122, RS_Main_00123, RS_Main_00124, RS_Main_00130, RS_Main_00140, RS_Main_00200, RS_Main_00230, RS_Main_00310, RS_Main_00360, RS_Main_00400, RS_Main_00511, RS_Main_00653, RS_Main_01001, RS_Main_01005</td>
+      </tr>
+      <tr>
+          <td>RS_PO_00003</td>
+          <td>AUTOSAR 应是领域无关的。</td>
+          <td>RS_Main_00001, RS_Main_00002, RS_Main_00190, RS_Main_00280, RS_Main_00285, RS_Main_00410, RS_Main_00653</td>
+      </tr>
+      <tr>
+          <td>RS_PO_00004</td>
+          <td>AUTOSAR 应定义汽车软件的开放架构。</td>
+          <td>RS_Main_00001, RS_Main_00002, RS_Main_00049, RS_Main_00050, RS_Main_00080, RS_Main_00106, RS_Main_00120, RS_Main_00170, RS_Main_00260, RS_Main_00261, RS_Main_00280, RS_Main_00285, RS_Main_00320, RS_Main_00410, RS_Main_00430, RS_Main_00440, RS_Main_00445, RS_Main_00450, RS_Main_00460, RS_Main_00510, RS_Main_00513, RS_Main_00650, RS_Main_00653, RS_Main_00700, RS_Main_01004, RS_Main_01008</td>
+      </tr>
+      <tr>
+          <td>RS_PO_00005</td>
+          <td>AUTOSAR 应支持可信系统的开发。</td>
+          <td>RS_Main_00010, RS_Main_00011, RS_Main_00012, RS_Main_00030, RS_Main_00170, RS_Main_00260, RS_Main_00261, RS_Main_00280, RS_Main_00285, RS_Main_00340, RS_Main_00350, RS_Main_00435, RS_Main_00480, RS_Main_00490, RS_Main_00491, RS_Main_00501, RS_Main_00503, RS_Main_00510, RS_Main_00512, RS_Main_00514, RS_Main_00650, RS_Main_00651, RS_Main_00700, RS_Main_01007</td>
+      </tr>
+      <tr>
+          <td>RS_PO_00007</td>
+          <td>AUTOSAR 应使合作伙伴之间能够协作。</td>
+          <td>RS_Main_00060, RS_Main_00080, RS_Main_00100, RS_Main_00106, RS_Main_00120, RS_Main_00121, RS_Main_00122, RS_Main_00123, RS_Main_00124, RS_Main_00125, RS_Main_00127, RS_Main_00128, RS_Main_00160, RS_Main_00161, RS_Main_00180, RS_Main_00250, RS_Main_00300, RS_Main_00301, RS_Main_00310, RS_Main_00320, RS_Main_00400, RS_Main_00420, RS_Main_00480, RS_Main_00500, RS_Main_00651, RS_Main_01025, RS_Main_01026</td>
+      </tr>
+      <tr>
+          <td>RS_PO_00009</td>
+          <td>AUTOSAR 应支持适用的国际汽车标准和最新技术。</td>
+          <td>RS_Main_00011, RS_Main_00012, RS_Main_00026, RS_Main_00030, RS_Main_00170, RS_Main_00260, RS_Main_00261, RS_Main_00280, RS_Main_00285, RS_Main_00350, RS_Main_00420, RS_Main_00430, RS_Main_00435, RS_Main_00490, RS_Main_00507, RS_Main_00512, RS_Main_00652, RS_Main_00700</td>
+      </tr>
+      <tr>
+          <td>RS_PO_00010</td>
+          <td>-</td>
+          <td>RS_Main_00285</td>
+      </tr>
+  </tbody>
+</table>
+<h1 id="4-需求规范">4 需求规范</h1>
+<h2 id="41-功能需求">4.1 功能需求</h2>
+<h4 id="411-rs_main_00001-autosar-应为嵌入式实时系统提供一个软件平台">4.1.1 [RS_Main_00001] AUTOSAR 应为嵌入式实时系统提供一个软件平台</h4>
+<table>
+<tr><td rowspan="2">Type:<br>Description:Valid</td><td>AUTOSAR shall provide a software platform called AUTOSAR Classic Platform, which targets the domain of real-time systems.<br>Rationale:<br>Real time systems are divided into hard and soft real time systems. Hard real time systems always have to deliver the correct result in the given time whereas from soft real time systems it is demanded that they compute the correct answer in a given time in a dedicated average.Use Case:Drive and brake by wire systems</td></tr>
+<tr><td>Applies to:CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>[RS_PO_00003,RS_PO_00004)</p>
+<h4 id="412-rs_main_00060-autosar-应提供一个用于应用间通信的标准软件接口">4.1.2 [RS_Main_00060] AUTOSAR 应提供一个用于应用间通信的标准软件接口</h4>
+<table>
+<tr><td rowspan="2">Type:<br>Description:Valid</td><td>As the interface definition for applications is a prerequisite for reuse of software AUTOSAR shall provide such a standardized interface.<td rowspan="2">Rationale:From an application point of view the interface to other AUTOSAR Application Software of one AUTOSAR Platform shall be identical, independent whether the Application Software is located on the same or on another ECU.Application Software development independent from the underlying communication system.</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>[RS_PO_00001,RS_PO_00002,RS_PO_00007) [RS_Main_00130] AUTOSAR 应提供硬件抽象</p>
+<table>
+<tr><td rowspan="2">Type:<br>Description:Valid</td><td>AUTOSAR shall provide an abstraction from hardware characteristics. This abstraction shall only be accessible to</td></tr>
+</table>
+<p>1RS_PO_00001,RS_PO_00002)</p>
+<h4 id="413-rs_main_00653-autosar-应提供独立于平台的车辆-vfb-通信的抽象描述">4.1.3 [RS_Main_00653] AUTOSAR 应提供独立于平台的车辆 VFB 通信的抽象描述</h4>
+<table>
+<tr><td rowspan="2">Type:Draft<br>Description:</td><td>AUTOSAR shall provide a means to abstractly model the vehicle VFB, independent of Classic, Adaptive of Non-AUTOSAR platforms.<br>Rationale:To enable pure design of vehicle VFB communications – whilst allowing deferral of platform (Classic, Adaptive, Offboard) selection<br>Use Case:Separation of views on the system<br>Requirement decomposition and traceability<br>Functional derivation and traceability</td></tr>
+<tr><td>Applies to:CP, AP, FO<br>Dependencies:RS_Main_00080, RS_Main_00161, RS_Main_00507<br>Supporting Material:Draft</td></tr>
+</table>
+<p>RS_PO_00002,RS_PO_00003,RS_PO_00004)</p>
+<h4 id="414-rs_main_00140-autosar-应为应用提供独立于网络的通信机制">4.1.4 [RS_Main_00140] AUTOSAR 应为应用提供独立于网络的通信机制</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall support the development of Application Software independent from the implemented communication protocol.<br>Rationale:Independency from the underlying communication protocol is a prerequisite to support the reallocation of Application Software across ECUs that belong to the same Platform type.<br>Use Case:Reallocation of Application Software from ECU A with CAN communication to ECU B with FlexRay communication.</td></tr>
+<tr><td>Applies to:CP, AP, FO<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<h4 id="415-rs_main_00230-autosar-应支持包括网关在内的网络拓扑">4.1.5 [RS_Main_00230] AUTOSAR 应支持包括网关在内的网络拓扑</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall support E/E architecture with different in-vehicle network technologies. Interconnection of these networks via gateways, bridges, or repeaters shall be supported.<br>Rationale:ECUs communicate via different communication systems.<br>Use Case:Support of today&#x27;s network topologies of E/E-architectures in series production.</td></tr>
+<tr><td>Applies to:CP, AP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00002)</p>
+<h4 id="416-rs_main_00260-autosar-应在运行时提供用于生产和服务的诊断手段">4.1.6 [RS_Main_00260] AUTOSAR 应在运行时提供用于生产和服务的诊断手段</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall support diagnostic standards (OBD and ISO14229) and communication protocols (UDS) to allow diagnostic access to the ECUs.<br>Rationale:Standardized diagnostic access is required for field service and admission.<br>Use Case:Perform diagnosis of Application Software or ECUs during maintenance of the car.</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00004,RS_PO_00005,RS_PO_00009)</p>
+<h4 id="417-rs_main_00280-autosar-应支持标准化的汽车通信协议">4.1.7 [RS_Main_00280] AUTOSAR 应支持标准化的汽车通信协议</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall support the communication between platforms defined by AUTOSAR and platforms defined by other parties.<br>Rationale:Automotive networks consist of multiple communication partners which are placed both in ECUs inside the vehicle and offboard systems outside of the vehicle. They are running different software platforms, defined by</td></tr>
+</table>
+<p>1RS_PO_00003,RS_PO_00004,RS_PO_00005,RS_PO_00009)</p>
+<h4 id="418-rs_main_00460-autosar-应标准化在应用ecu-和系统级别组织模式管理的方法">4.1.8 [RS_Main_00460] AUTOSAR 应标准化在应用、ECU 和系统级别组织模式管理的方法</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall provide a method to configure mode management mechanisms for Application Software to control or react on modes of the ECU or vehicle.<br>Rationale:The behavior of Application Software highly depends on the overall mode of the ECU. Therefore the method of mode management has to be standardized to achieve the same behavior if Application Software is allocated on another ECU.<br>Use Case:Degradation of application functionality in certain power modes.</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>RS_PO_00001,RS_PO_00004</p>
+<h4 id="419-rs_main_00491-autosar-应提供日志记录手段">4.1.9 [RS_Main_00491] AUTOSAR 应提供日志记录手段</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall provide a unified way to monitor, distribute or store application-internal information at runtime. This shall be possible without knowing anything about the ECU internal memory usage/addressing.<br>Rationale:For development purpose additional meta information about the current status or current variable values of an application might be needed.<br>Use Case:Provide current values of application-internal variables, provide information of the current state of an application&#x27;s state machine.</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:--</td></tr>
+</table>
+<h4 id="4110-rs_main_00510-autosar-应支持安全的车载通信">4.1.10 [RS_Main_00510] AUTOSAR 应支持安全的车载通信</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall provide means to check data authenticity, data integrity, optionally confidentiality and data freshness in inter ECU communication.<br>Rationale:Dependable systems rely on authentic and trustworthy exchange of information between ECUs. Protecting and assuring data authenticity, data integrity and data freshness in inter ECU communication allows for the development of secure and safe systems by using the AUTOSAR platform. Confidentiality ensures privacy of data.<br>Use Case:Protection of on-board communication against manipulation or eavesdropping.</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00004,RS_PO_00005)</p>
+<h4 id="4111-rs_main_01001-autosar-应支持-ecu-内部通信">4.1.11 [RS_Main_01001] AUTOSAR 应支持 ECU 内部通信</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR communication shall support intra ECU communication.<br>Rationale:A SWC should be able to communicate with each another SWC within the same ECU.<br>Use Case:Several SWCs send signals to each other to exchange algorithm data.</td></tr>
+<tr><td>Applies to:CP, AP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00002,RS_PO_00001)</p>
+<h4 id="4112-rs_main_00652-autosar-应支持基于信号的通信和面向服务的通信之间的转换">4.1.12 [RS_Main_00652] AUTOSAR 应支持基于信号的通信和面向服务的通信之间的转换</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall support the translation between signal-based and service-oriented communication.<br>Rationale:Adaptive Platform restricts communication to Service-oriented communication, the rest of the vehicle however still</td></tr>
+</table>
+<p>1(RS_PO_00001,RS_PO_00009)</p>
+<h4 id="4113-rs_main_00700-autosar-应符合-iso-14229-2">4.1.13 [RS_Main_00700] AUTOSAR 应符合 ISO 14229-2</h4>
+<table>
+<tr><td rowspan="2">Type:Draft<br>Description:</td><td>AUTOSAR shall be compliant to the UDS session layer as defined in ISO 14229-2.<br>Rationale:The diagnostic in AUTOSAR shall be the central service handler for UDS diagnostics<br>Use Case:Interaction with UDS compliant tester.</td></tr>
+<tr><td>Applies to:CP, AP, FO<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>[RS_PO_00004,RS_PO_00005,RS_PO_00009)</p>
+<h3 id="42-非功能需求">4.2 非功能需求</h3>
+<h4 id="421-rs_main_00010-autosar-应支持安全相关系统的开发">4.2.1 [RS_Main_00010] AUTOSAR 应支持安全相关系统的开发</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR Platforms shall support commonly used safety mechanisms. This includes but is not limited to:<br>· Mechanisms to ensure freedom of interference for Adaptive Applications, Functional Cluster, Software Components and Basic Software Modules<br>· Safe inter ECU communication<br>· Measures to implement fail operational systems<br>· Templates to support the configuration and documentation of safety relevant aspects<br>However, it cannot ensure safety for systems. This is to be ensured on system level.<br>Rationale:Facilitate the development of safety related systems by using</td></tr>
+</table>
+<p>AUTOSAR platforms. Platforms designed for the support of safety related systems are needed for safety related ECUs like digital engine control units and electronic power steering systems.</p>
+<table>
+<tr><td>Use Case:Driver temporarily/partially passes responsibility for driving task to vehicle (ADAS/HAD)<br>OEM provides safety or security related software for installation onto vehicle<br>High availability, fail-operational systems</td></tr>
+<tr><td>Applies to:<br>Dependencies:<br>Supporting Material:CP, AP<br>--<br>--</td></tr>
+</table>
+<p>J(RS_PO_00005)</p>
+<h4 id="422-rs_main_00011-autosar-应支持可靠系统的开发">4.2.2 [RS_Main_00011] AUTOSAR 应支持可靠系统的开发</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall provide mechanisms for error handling in order to support the development of reliable systems.<br>Rationale:Reliability is one of the important characteristics to achieve safety.<br>Use Case:Reduction of repair time of a vehicle in field service.</td></tr>
+<tr><td>Applies to:CP, AP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00005,RS_PO_00009)</p>
+<h4 id="423-rs_main_00012-autosar-应提供一个支持高可用系统开发的软件平台">4.2.3 [RS_Main_00012] AUTOSAR 应提供一个支持高可用系统开发的软件平台</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>Availability of the Adaptive Platform is defined as the probability that platform services will operate satisfactorily at a given point in time. It excludes both preventive and corrective maintenance downtime. Availability is limited to normal runtime behavior (excluding e.g. software update)<br>Rationale:Facilitate the development of highly available systems by using AUTOSAR platforms.<br>Use Case:Highly available systems are required for automated driving applications.</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00005,RS_PO_00009)</p>
+<h4 id="424-rs_main_00030-autosar-应支持安全相关系统的开发过程">4.2.4 [RS_Main_00030] AUTOSAR 应支持安全相关系统的开发过程</h4>
+<table>
+<tr><td rowspan="2">Type: Description:Valid</td><td>To develop safety related automotive systems all processes applied need to follow the corresponding requirements given in ISO26262. AUTOSAR shall support development processes for safety related systems by providing according exchange formats (e.g. for requirements tracing) and concepts.<br>Rationale:Automotive software is in many cases safety related. Therefore dedicated development processes have to be followed. AUTOSAR shall support the users to apply these standards<td rowspan="2">Use Case: Applies to: Dependencies: Supporting Material:Development of brake assist, highly automated drivingAP, CP, FO--ISO26262</td></tr>
+</table>
+<p>J(RS_PO_00005,RS_PO_00009)</p>
+<h4 id="425-rs_main_00080-autosar-应提供描述应用软件组件模型的手段">4.2.5 [RS_Main_00080] AUTOSAR 应提供描述应用软件组件模型的手段</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall provide a formal description of Application Software for the Adaptive Platform as well as the Classic Platform. This description together with source code and/or object code forms an AUTOSAR Application Software.<br>Rationale:Software reuse is one of the major aims of AUTOSAR.<td rowspan="2">Use Case: Applies to: Dependencies: Supporting Material:Momentum control in different ECUs.AP, CP, FO----</td></tr>
+</table>
+<p>J(RS_PO_00004,RS_PO_00007)</p>
+<h4 id="426-rs_main_00120-autosar-应提供确保-autosar-实现icc1-级别在应用层rte和总线级别互操作性的手段">4.2.6 [RS_Main_00120] AUTOSAR 应提供确保 AUTOSAR 实现（ICC1 级别）在应用层（RTE）和总线级别互操作性的手段</h4>
+<table>
+<tr><td rowspan="2">Type: Description:Valid</td><td>AUTOSAR shall provide specified test cases and the essential test methodology to ensure interoperability on application (RTE side) and bus level for BSW on ICC1 level (Black Box Test). These specified test cases and its related methodology shall be developed to test implementations of AUTOSAR basic software.</td></tr>
+<tr><td>Rationale:Acceptance tests are strongly needed to provide evidence that a product complies with the AUTOSAR specification i.e. to ensure a certain behavior of the regarded elements at the interfaces to application and communication busses.<br>Use Case:Integration of the infrastructure SW into a specific ECU, bring it into the E/E- architecture without backlashes on the system. Example from real world:<br>Integration of BSW stack (ICC1 level) to applications and the ECU infrastructure without difficulties.<br>Support test of any ICC implementations (from ICC1 to ICC3).<br>Reuse of the same test specification even when the ICC3 specification details change</td></tr>
+<tr><td>Applies to:TC<br>Dependencies:--<br>Supporting Material:--<br>Tested Items:--</td></tr>
+</table>
+<p>[RS_PO_00001, RS_PO_00004, RS_PO_00007)</p>
+<h4 id="427-rs_main_00127-autosar-应提供通用测试用例">4.2.7 [RS_Main_00127] AUTOSAR 应提供通用测试用例</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>As test cases are executed on implementation level they limit a possible generic verification by partners.<br>Rationale:AUTOSAR test cases should create an implementation space that is includes a possible solution.<br>Use Case:Testability should be independent from the partners implementation.</td></tr>
+<tr><td>Applies to:TC<br>Dependencies:--<br>Supporting Material:--<br>Tested Items:--</td></tr>
+</table>
+<p>[RS_PO_00007]</p>
+<h4 id="428-rs_main_00160-autosar-应提供描述整个系统接口的手段">4.2.8 [RS_Main_00160] AUTOSAR 应提供描述整个系统接口的手段</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>Well-defined interfaces are the key for exchangeability, reusability and the basis for the freedom of interference. Decomposition on interface level is essential for an appropriate clustering and partitioning in the AUTOSAR Application Software.<br>Rationale:Principle: &quot;divide and conquer&quot; which is a key success factor in the development of large systems.<br>Use Case:Development of large interconnected software systems with</td></tr>
+</table>
+<p>a high degree of reuse, such as driving assistance systems.</p>
+<table>
+<tr><td>Applies to:AP, CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00007)</p>
+<h4 id="429-rs_main_00161-autosar-应提供一种统一的方式来描述部署到自适应和或经典平台的软件系统">4.2.9 [RS_Main_00161] AUTOSAR 应提供一种统一的方式来描述部署到自适应和/或经典平台的软件系统</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>A comprehensive software model shall capture all elements of a distributed software system. The definition of functionality shall be independent from the final assignment to platforms and ECUs.<br>Rationale:The allocation of software to platforms shall be a subsequent step after the overall definition of functionality.<br>Use Case:Development of large software systems being deployed on mixed platforms.</td></tr>
+<tr><td>Applies to:CP, AP, FO<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00007)</p>
+<h4 id="4210-rs_main_00190-autosar-应支持与非-autosar-软件的标准互操作性">4.2.10 [RS_Main_00190] AUTOSAR 应支持与非 AUTOSAR 软件的标准互操作性</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>Reuse of existing legacy software shall be supported by AUTOSAR. Integration of legacy software in an ECU compliant to AUTOSAR shall be supported.<br>Rationale:Independent of the target the code has to be compatible to legacy implementation on protocol level.<br>Use Case:Reuse of existing driver software for a new ECU that is developed according to AUTOSAR. Communication with non-AUTOSAR software systems.</td></tr>
+<tr><td>Applies to:CP, AP, FO<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00003)</p>
+<h4 id="4211-rs_main_00200-autosar-规范应允许资源高效的实现">4.2.11 [RS_Main_00200] AUTOSAR 规范应允许资源高效的实现</h4>
+<table>
+<tr><td rowspan="2">Type:Valid</td></tr>
+</table>
+<h4 id="4212-rs_main_00250-autosar-方法论应提供典型角色和活动的预定义">4.2.12 [RS_Main_00250] AUTOSAR 方法论应提供典型角色和活动的预定义</h4>
+<table>
+<tr><td>Description:</td><td>AUTOSAR specifications shall allow efficient implementations with respect to<br>• RAM<br>• ROM, Flash<br>• Computing Power<br>• Bus bandwidth</td></tr>
+<tr><td>Rationale:</td><td>Limited resources like flash, RAM, computing power characterize automotive microcontrollers.</td></tr>
+<tr><td>Use Case:</td><td>Integration of the AUTOSAR platform and a single application in a typical 16-bit automotive microcontroller.</td></tr>
+<tr><td>Applies to:</td><td>CP</td></tr>
+<tr><td>Dependencies:</td><td>--</td></tr>
+<tr><td>Supporting Material:</td><td>--</td></tr>
+</table>
+<p>J(RS_PO_00002)</p>
+<h4 id="4212-rs_main_00250-autosar-方法论应提供典型角色和活动的预定义-1">4.2.12 [RS_Main_00250] AUTOSAR 方法论应提供典型角色和活动的预定义</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>The definition and description of roles and activities in the design methodology should support a work-share model.<br>Rationale:As AUTOSAR enables work-share on different positions and activities it shall provide a common understanding of roles and activities.<br>Use Case:Share activities like AUTOSAR configuration and Application Software partitioning between software integrator and software architect.</td></tr>
+<tr><td>Applies to:AP, CP, FO<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00007)</p>
+<h4 id="4213-rs_main_00300-autosar-应提供数据交换格式以支持大型公司内部和公司间开发组的工作分担">4.2.13 [RS_Main_00300] AUTOSAR 应提供数据交换格式以支持大型公司内部和公司间开发组的工作分担</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall support the work-share in large development projects via well-defined exchange formats.<br>Rationale:A typical AUTOSAR system is expected to carry a huge number of signals per vehicle.<br>To develop vehicle descriptions a good organization of work-share is needed. To support such organizations, well defined concepts for information exchange are required.<br>Use Case:Data sharing between OEM and 1st Tier supplier.</td></tr>
+<tr><td>Applies to:AP, CP, FO</td></tr>
+</table>
+<h4 id="4214-rs_main_00320-autosar-应提供指定系统开发的格式">4.2.14 [RS_Main_00320] AUTOSAR 应提供指定系统开发的格式</h4>
+<table>
+<tr><td rowspan="2">Type: Description:Valid</td><td>In AUTOSAR it shall be possible to describe all requirements of Application Software to their platform environment. This enables the integrator to provide the Application Software in such an environment on an ECU.<br>Rationale:The AUTOSAR format will include system, ECU and SW specification and is necessary for the ECU integration process.<br>Use Case:OEM designs an Application Software and a Supplier will integrate these AUTOSAR Software Applications on an ECU.</td></tr>
+<tr><td>Applies to:AP, CP, FO<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00004,RS_PO_00007)</p>
+<h4 id="4215-rs_main_00340-autosar-应支持持续的时序需求分析">4.2.15 [RS_Main_00340] AUTOSAR 应支持持续的时序需求分析</h4>
+<table>
+<tr><td rowspan="2">Type: Description:Valid</td><td>AUTOSAR shall support observation, assessment and methodology of timing requirements throughout the development cycle.<br>Rationale:Application Software has specific timing requirements which have to follow the common methodology in order to provide reliable and comparable information towards timing.<br>Use Case:Real time control of today&#x27;s gasoline injection system.</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00005)</p>
+<h4 id="4216-rs_main_00350-autosar-规范应是可分析的并支持相应的方法来证明安全相关属性的实现">4.2.16 [RS_Main_00350] AUTOSAR 规范应是可分析的，并支持相应的方法来证明安全相关属性的实现</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>To achieve safety-related properties an adequate software architectural design and implementation matching the safety</td></tr>
+</table>
+<p>1(RS_PO_00005, RS_PO_00009)</p>
+<h4 id="4217-rs_main_00360-autosar-应支持变体管理">4.2.17 [RS_Main_00360] AUTOSAR 应支持变体管理</h4>
+<p>requirements is required and has to be demonstrated. Such demonstration can be done by safety analyses, therefore. AUTOSAR specifications shall be analyzable accordingly. Corresponding analysis methods shall be applicable to the development artifacts specified by AUTOSAR.</p>
+<table>
+<tr><td>Rationale:</td><td>In the context of the safety-related developments a confirmation that design and implementation are adequately safe is required.</td></tr>
+<tr><td>Use Case:</td><td>--</td></tr>
+<tr><td>Applies to:</td><td>AP, CP, FO</td></tr>
+<tr><td>Dependencies:</td><td>--</td></tr>
+<tr><td>Supporting Material:</td><td>ISO26262</td></tr>
+</table>
+<p>(RS_PO_00002)</p>
+<table>
+<tr><td rowspan="2">Type:<br>Description:Valid</td><td>Variant management is introduced on vehicle level and is required to check compatibility of Application Software in different vehicle versions and release states.<br>Rationale:In today&#x27;s automotive development and production it is possible to reach many different variants for one vehicle platform. This also affects the AUTOSAR Application Software variants.<br>Use Case:Integration of Application Software on different ECUs and/or E/E-architectures.</td></tr>
+<tr><td>Applies to:AP, CP, FO<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<h4 id="4218-rs_main_00480-autosar-应支持实现的测试">4.2.18 [RS_Main_00480] AUTOSAR 应支持实现的测试</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall support the testability of compliant implementations and tools.<br>Rationale:Testing of implementations is required by software development, software maturity and software safety standards.<br>Use Case:Tool interoperability tests and/or test of AUTOSAR Basic Software implementations.</td></tr>
+<tr><td>Applies to:AP, CP, TC<br>Dependencies:--<br>Supporting Material:ISO26262</td></tr>
+</table>
+<p>(RS_PO_00001,RS_PO_00005,RS_PO_00007)</p>
+<h4 id="4219-rs_main_00500-autosar-应提供命名约定">4.2.19 [RS_Main_00500] AUTOSAR 应提供命名约定</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall define naming conventions for internal and external symbols created and used by the standard.<br>Rationale:Naming conventions shall be defined in specification documents to achieve a standardized and consistent documentation. This is good documentary practice, helps for better understanding, reduces ambiguities and improves cooperation<br>Use Case:Work-share models between OEM and supplier.<br>Development of AUTOSAR specifications.</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00007)</p>
+<h4 id="4220-rs_main_00507-autosar-应在形式化模型描述中反映软件系统开发的各个阶段">4.2.20 [RS_Main_00507] AUTOSAR 应在形式化模型描述中反映软件系统开发的各个阶段</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall reflect the stages of a software development process and define templates how information at these stages can be exchanged between the different parties. As blueprint for such development processes AUTOSAR shall consider existing standards like ISO26262 and Automotive SPICE.<br>Rationale:During the development of a vehicle, software system at different process steps information is exchanged between the various partners. AUTOSAR shall refine the formats and state criteria for completeness of the exchanged information to capture general requirements on the progress of development.<br>Use Case:OEM provides safety or security related software for installation onto vehicle<br>OEM provides additional QM software for installation onto vehicle<br>Developer performs agile development of vehicle functions Methodology and exchange formats</td></tr>
+<tr><td>Applies to:AP, CP, FO<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00001,RS_PO_00009)</p>
+<h4 id="4221-rs_main_00514-autosar-应支持安全系统的开发">4.2.21 [RS_Main_00514] AUTOSAR 应支持安全系统的开发</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall specify an automotive security approach defining security mechanisms and properties.<br>Rationale:The security properties which shall be supported by AUTOSAR include authenticity, confidentiality, integrity and non-repudiation.<br>Use Case:Protect after sales feature activation and data usage via appropriate security mechanisms.<br>Manage initialization, derivation and distribution of cryptographic material.<br>Store security related events for on-board and off-board forensic analysis.</td></tr>
+<tr><td>Applies to:CP, AP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00005)</p>
+<h3 id="43-平台级别候选">4.3 平台级别候选</h3>
+<h4 id="431-rs_main_00002-autosar-应为高性能计算平台提供一个软件平台">4.3.1 [RS_Main_00002] AUTOSAR 应为高性能计算平台提供一个软件平台</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall provide a software platform called AUTOSAR Adaptive Platform, which targets the domain of automotive applications with high demands regarding computing power and memory.<br>Rationale:Advanced automotive applications require a huge amount of ressources (computing power and memory). To develop efficiently such systems a software platform with different characteristics as required for RS_Main_00001 is required e.g. different scheduling strategies, dynamic memory management etc.<br>Use Case:Development of applications for automated driving and advanced driving assistance systems</td></tr>
+<tr><td>Applies to:AP, FO<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00003,RS_PO_00004)</p>
+<h4 id="432-rs_main_00400-autosar-应提供一个分层的软件架构">4.3.2 [RS_Main_00400] AUTOSAR 应提供一个分层的软件架构</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall provide a software architecture, which distinguishes between Application Software, a Runtime Environment and Basic Software.<br>Rationale:The Runtime Environment defines a standardized programming interface for the Application Software. This enables the reallocation and reuse of Software Components.<br>Use Case:Relocation of yaw rate control from one ECU to another.</td></tr>
+<tr><td>Applies to:CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00001,RS_PO_00002,RS_PO_00007)</p>
+<h4 id="433-rs_main_00150-autosar-应支持-autosar-应用软件的部署和重新分配">4.3.3 [RS_Main_00150] AUTOSAR 应支持 AUTOSAR 应用软件的部署和重新分配</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall develop means to enable reallocation of AUTOSAR Application Software at the following points in time:<br>·Design-time: During development of the ECUs (AP, CP)<br>·Run-time: Time between start-up and shut-down of the software stack (AP)<br>·Life-time: Time after start of production (AP, CP)<br>Rationale:Enable the reallocation of Application Software to different ECUs.<br>Use Case:·OEM provides safety or security related software for installation onto vehicle<br>·OEM provides additional QM software for installation onto vehicle<br>·Developer performs agile development of vehicle functions<br>·Reallocation of yaw rate control from one ECU to another at development-time<br>·Optimization of overall system architecture.<br>·Update of (single) Adaptive Application or update of specific configurations over the air</td></tr>
+<tr><td>Applies to:AP, CP (with limitation)<br>Dependencies:RS_Main_00140, RS_Main_00141<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00001)</p>
+<h4 id="434-rs_main_00410-autosar-应提供应用软件常用例程的规范以支持共享和优化">4.3.4 [RS_Main_00410] AUTOSAR 应提供应用软件常用例程的规范以支持共享和优化</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall support the development of Application Software by providing standardized libraries with commonly used functions.<br>Rationale:Share routines between different Applications.<br>Use of optimized routines by Applications integrated in different ECUs.<br>Relocation of SW component from ECU A to ECU B with a different microcontroller.</td></tr>
+<tr><td>Applies to:CP, AP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00001,RS_PO_00003,RS_PO_00004)</p>
+<h4 id="435-rs_main_00501-autosar-应支持冗余概念">4.3.5 [RS_Main_00501] AUTOSAR 应支持冗余概念</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>In engineering, redundancy is the duplication of critical components or functionalities of a system with the intention of increasing reliability of the system. AUTOSAR shall support the freedom of interference according to ISO26262.<br>Rationale:Use-Cases like highly automated driving require a high system reliability.<br>Use Case:Driver temporarily/partially passes responsibility for driving task to vehicle.</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:ISO26262<br>Supporting Material:http://en.wikipedia.org/wiki/Redundancy (engineering)<br>http://en.wikipedia.org/wiki/Active redundancy</td></tr>
+</table>
+<p>J(RS_PO_00005)</p>
+<h4 id="436-rs_main_00511-autosar-应支持虚拟化">4.3.6 [RS_Main_00511] AUTOSAR 应支持虚拟化</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall support virtualization in a way that it can be hosted and executed as a guest operating system in a virtualized environment.<br>Rationale:It shall be possible to run AUTOSAR on top of existing</td></tr>
+</table>
+<h4 id="437-rs_main_00420-autosar-应使用既定的软件标准并整合基础软件功能的事实标准">4.3.7 [RS_Main_00420] AUTOSAR 应使用既定的软件标准并整合基础软件功能的事实标准</h4>
+<p>hypervisor solutions.</p>
+<table>
+<tr><td>Use Case:</td><td>Development of ECUs which contain infotainment as well as control functionality</td></tr>
+<tr><td>Applies to:</td><td>CP, AP</td></tr>
+<tr><td>Dependencies:</td><td>--</td></tr>
+<tr><td>Supporting Material:</td><td>--</td></tr>
+</table>
+<p>J(RS_PO_00002)</p>
+<h4 id="437-rs_main_00420-autosar-应使用既定的软件标准并整合基础软件功能的事实标准-1">4.3.7 [RS_Main_00420] AUTOSAR 应使用既定的软件标准并整合基础软件功能的事实标准</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>The different solutions for basic software functionalities shall be consolidated to a single standard. Whenever possible AUTOSAR shall make use of existing standards provided that they meet the given requirements.<br>Rationale:Historically, OEMs and the major Tier1 suppliers have created proprietary standard core solutions, with partly different functionality. To achieve a common standard, which is accepted and used by all of the participating partners these solutions shall be consolidated by AUTOSAR. If an agreed common solution supported by OEMs and Tier 1 already exists, this solution shall be adopted by AUTOSAR in order to ease reuse of existing software.<br>Use Case:Operating System in AUTOSAR ECUs. Partial Networking. Network Management. POSIX</td></tr>
+<tr><td>Applies to:CP, AP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00007,RS_PO_00009)</p>
+<h4 id="438-rs_main_00440-autosar-应标准化对非易失性存储器的访问">4.3.8 [RS_Main_00440] AUTOSAR 应标准化对非易失性存储器的访问</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>An important software functionality is the access to non-volatile memory. AUTOSAR shall support read and write access to non-volatile memory.<br>Rationale:Application Software needs to store data, which is available after a restart.<br>Use Case:Storage of error codes</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00001,RS_PO_00004)</p>
+<h4 id="439-rs_main_00445-autosar-应标准化对加密特定硬件和软件的访问">4.3.9 [RS_Main_00445] AUTOSAR 应标准化对加密特定硬件和软件的访问</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>The AUTOSAR platforms shall support access to crypto and security related Hardware and define Software to access those.<br>Rationale:Software Components need to encrypt, authenticate and store data in a secure memory for protection against malicious entities.<br>Use Case:Security</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00001,RS_PO_00004)</p>
+<h4 id="4310-rs_main_00170-autosar-应提供对-ecu-数据和服务的安全访问">4.3.10 [RS_Main_00170] AUTOSAR 应提供对 ECU 数据和服务的安全访问</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall provide secured access to ECU data and services by secure authentication of external ECU users. For this mechanisms access control decisions need to be enforced.<br>Rationale:Secure access and authentication mechanisms are required for prevention of unauthorized access.<br>Use Case:Secure V2X connection</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:To fulfill this requirement it is also necessary that the environment that is not standardized by AUTOSAR (e.g. bootloader) matches the same security requirements.<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00004, RS_PO_00005, RS_PO_00009)</p>
+<h4 id="4311-rs_main_00650-autosar-应支持数据和软件的上传和下载">4.3.11 [RS_Main_00650] AUTOSAR 应支持数据和软件的上传和下载</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall support standardized up- and download of data and software. For all kind of data exchange between off- and onboard artifacts mechanisms and methods shall be defined. These mechanisms and methods shall support common protocols used for data-transfer. Partial updates of the software shall be supported. Independent access control rules and policies apply.<br>Rationale:Up- and download of data and software is required for software updates using standardized mechanisms.<br>Use Case:Download of dedicated Software Components in ECU.</td></tr>
+<tr><td>Applies to:AP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00004,RS_PO_00005)</p>
+<h4 id="4312-rs_main_00261-autosar-应提供标定手段">4.3.12 [RS_Main_00261] AUTOSAR 应提供标定手段</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall provide a unified way for off- and onboard data calibration. The calibration data shall be accessible by Applications.</td></tr>
+</table>
+<h4 id="4313-rs_main_00026-autosar-应支持执行软件之间的高速高带宽通信">4.3.13 [RS_Main_00026] AUTOSAR 应支持执行软件之间的高速高带宽通信</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>The middleware shall support high speed and high bandwidth communication between executed SW.<br>Rationale:Requirements for communication speed and bandwidth have grown at a rapid pace in the past and continue to grow at an unbroken rate.<br>Use Case:High-bandwidth data like image or sensor data is exchanged between components within automotive networks.</td></tr>
+<tr><td>Applies to:CP, AP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00009)</p>
+<h4 id="4314-rs_main_01002-autosar-应支持面向服务的通信">4.3.14 [RS_Main_01002] AUTOSAR 应支持面向服务的通信</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall support service-oriented communication between applications independently of the location of the applications.<br>Rationale:Reuseability of services and dynamic configuration of communication paths.<br>Use Case:A parking assistant application wants to use camera and radar services.</td></tr>
+<tr><td>Applies to:AP<br>Dependencies:RS_Main_00150, RS_Main_00140<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00001)</p>
+<h4 id="4315-rs_main_01003-autosar-应支持面向数据的通信">4.3.15 [RS_Main_01003] AUTOSAR 应支持面向数据的通信</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall support data-oriented communication between applications. This means that applications are able to send data to all applications configured to receive the respective data.<br>Rationale:Transfer data to applications on other ECUs or on the same ECU.<br>Use Case:Send current vehicle speed over CAN bus to various</td></tr>
+</table>
+<h4 id="4316-rs_main_01025-autosar-应支持在目标板和板载上进行软件调试">4.3.16 [RS_Main_01025] AUTOSAR 应支持在目标板和板载上进行软件调试</h4>
+<p>applications.</p>
+<table>
+<tr><td>Applies to:</td><td>CP, AP</td></tr>
+<tr><td>Dependencies:</td><td>RS_Main_00150, RS_Main_00140</td></tr>
+<tr><td>Supporting Material:</td><td>--</td></tr>
+</table>
+<p>J(RS_PO_00001)</p>
+<h4 id="4316-rs_main_01025-autosar-应支持在目标板和板载上进行软件调试-1">4.3.16 [RS_Main_01025] AUTOSAR 应支持在目标板和板载上进行软件调试</h4>
+<table>
+<tr><td rowspan="2">Type:Draft<br>Description:</td><td>Each AUTOSAR module shall provide a standardized method and interface to enable debugging the software of AUTOSAR systems with awareness of the AUTOSAR architecture. Each part of the AUTOSAR software shall provide methods of obtaining internal state information to be used by debuggers.<br>Rationale:Debugging tools need internal information to visualize the state of the software. Components and modules implementing this requirement shall provide the necessary state information that can be used by internal and external tools.<br>Use Case:Debugging the software.</td></tr>
+<tr><td>Applies to:CP, AP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00007)</p>
+<h4 id="4317-rs_main_01026-autosar-应支持在目标板和板载上进行跟踪和性能分析">4.3.17 [RS_Main_01026] AUTOSAR 应支持在目标板和板载上进行跟踪和性能分析</h4>
+<table>
+<tr><td rowspan="2">Type:Draft<br>Description:</td><td>Each AUTOSAR module shall provide a standardized method and interface to enable tracing and profiling the software of AUTOSAR systems with awareness of the AUTOSAR architecture. Each part of the AUTOSAR software shall provide methods of obtaining event information to be used by trace analysis tools.<br>Rationale:Tracing and timing analysis tools need internal information to visualize and inspect the run-time behavior of the software. Components and modules implementing this requirement shall provide the necessary details and hooks that can be used by tools.<br>Use Case:Run-time tracing the software, profiling, timing measurement.</td></tr>
+<tr><td>Applies to:CP, AP<br>Dependencies:--</td></tr>
+</table>
+<p>1(RS_PO_00007)</p>
+<h4 id="4318-rs_main_00513-autosar-应支持不同编程语言的语言绑定">4.3.18 [RS_Main_00513] AUTOSAR 应支持不同编程语言的语言绑定</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>The AUTOSAR Adaptive Platform shall support the implementation of Application Software in different programming languages.<br>Rationale:Depending on the context and domain of a development project different programming languages might be appropriate. AUTOSAR shall support a variety of programming languages.<br>Use Case:Implementation of complex algorithms in C++ Implementation of safety relevant functionality in C</td></tr>
+<tr><td>Applies to:AP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00001,RS_PO_00004)</p>
+<h4 id="4319-rs_main_00503-autosar-应支持在运行时更改通信和应用软件">4.3.19 [RS_Main_00503] AUTOSAR 应支持在运行时更改通信和应用软件。</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>Advanced systems require dynamic allocation of AUTOSAR Applications and adaptations of the communication topology after development and production at life-time of the system AUTOSAR shall provide a technical possibility which provides these Software changes at runtime.<br>Rationale:Advanced driving assistance functions have to be updated (e.g. after development or production).<br>Use Case:Update of Application Software or update of configuration over the air</td></tr>
+<tr><td>Applies to:AP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00005)</p>
+<h4 id="4320-rs_main_01004-autosar-应支持无线车外通信的标准">4.3.20 [RS_Main_01004] AUTOSAR 应支持无线车外通信的标准</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR communication shall support standards for wireless off-board communication.<br>Rationale:To be compatible with off-board service providers, the AUTOSAR communication needs to support off-board</td></tr>
+</table>
+<h4 id="4321-rs_main_01008-autosar-应提供与车外实体的安全通信">4.3.21 [RS_Main_01008] AUTOSAR 应提供与车外实体的安全通信</h4>
+<p>communication standards.</p>
+<table>
+<tr><td>Use Case:</td><td>Services for automotive applications can be provided in cloud instances or vehicle backend</td></tr>
+<tr><td>Applies to:</td><td>AP</td></tr>
+<tr><td>Dependencies:</td><td>--</td></tr>
+<tr><td>Supporting Material:</td><td>--</td></tr>
+</table>
+<p>J(RS_PO_00004)</p>
+<h4 id="4321-rs_main_01008-autosar-应提供与车外实体的安全通信-1">4.3.21 [RS_Main_01008] AUTOSAR 应提供与车外实体的安全通信</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR communication shall provide secure communication with off-board entities.<br>Rationale:Data should be securely transferred between the vehicle and off-board entities to protect data integrity, privacy and prevent misuse.<br>Use Case:Purchasing applications or unlocking functionality through the headunit HMI should be safe and secure.</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00004)</p>
+<h4 id="4322-rs_main_01005-autosar-应动态建立通信路径">4.3.22 [RS_Main_01005] AUTOSAR 应动态建立通信路径</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR communication shall establish communication paths dynamically.<br>Rationale:The deployment of services can depend on many factors, changing several times during the development process or after release in the field.<br>Use Case:A service is selected based on availability of sensor data.</td></tr>
+<tr><td>Applies to:AP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00002)</p>
+<h4 id="4323-rs_main_01007-autosar-通信应保证通信的服务质量">4.3.23 [RS_Main_01007] AUTOSAR 通信应保证通信的服务质量</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR communication shall assure quality of service on communication</td></tr>
+</table>
+<p>1RS_PO_00004)</p>
+<table>
+<tr><td>Rationale:</td><td>Some applications are sensitive to delays in signal reception. Other applications may need guaranteed reception of certain signals for proper operation.</td></tr>
+<tr><td>Use Case:</td><td>An algorithm in the ESP needs data from the wheel sensors with low-latency and guaranteed reception.</td></tr>
+<tr><td>Applies to:</td><td>AP</td></tr>
+<tr><td>Dependencies:</td><td>--</td></tr>
+<tr><td>Supporting Material:</td><td>--</td></tr>
+</table>
+<h4 id="4324-rs_main_00049-autosar-应提供一个用于运行多个应用的执行管理">4.3.24 [RS_Main_00049] AUTOSAR 应提供一个用于运行多个应用的执行管理</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>The middleware shall provide an execution framework for adaptive SWCs.<br>Rationale:SWCs can be started and stopped based on application logic. To support this, the execution management should be able to facilitate lifecycle operations for numerous SWCs.<br>Use Case:The execution management starts all required SWCs at system initialization.</td></tr>
+<tr><td>Applies to:AP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>RS_PO_00004)</p>
+<h4 id="4325-rs_main_00050-autosar-应向应用提供一个执行框架以实现并发的应用内部控制流">4.3.25 [RS_Main_00050] AUTOSAR 应向应用提供一个执行框架以实现并发的应用内部控制流</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall provide an Execution Framework towards applications to implement concurrent application internal control flows.<br>Rationale:The execution framework must manage numerous running SWCs and handle their independent control flows.<br>Use Case:The execution framework starts several SWCs in an ordered manner.</td></tr>
+<tr><td>Applies to:AP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<h4 id="4326-rs_main_00106-autosar-应提供在不重新编译平台基础的情况下使用新-swc-扩展软件的可能性">4.3.26 [RS_Main_00106] AUTOSAR 应提供在不重新编译平台基础的情况下使用新 SWC 扩展软件的可能性</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>It shall be possible to extend AUTOSAR with new SWCs without recompiling the platform foundation<br>Rationale:To prevent unnecessary build time, individual SWCs should be able to be compiled independently without the need to recompile all other system software.<br>Use Case:A new SWC is introduced to an ECU implementation at a later point in time during the SW project.</td></tr>
+<tr><td>Applies to:AP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>I(RS_PO_00004,RS_PO_00007)</p>
+<h4 id="4327-rs_main_00100-autosar-应提供标准化的基础软件">4.3.27 [RS_Main_00100] AUTOSAR 应提供标准化的基础软件</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall provide a complete functional specification of the Basic Software including interfaces and behavioral description.<br>Rationale:To support reallocation of Software Components it is necessary that the Software Components can rely on identical services provided by the Basic Software. The Basic Software is a necessary stable foundation for implementing applications on multiple ECUs.<br>Use Case:Application Software shall be useable on multiple implementations of the Basic Software.</td></tr>
+<tr><td>Applies to:CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00001,RS_PO_00007)</p>
+<h4 id="4328-rs_main_00430-autosar-应支持成熟的汽车通信标准">4.3.28 [RS_Main_00430] AUTOSAR 应支持成熟的汽车通信标准</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR ECUs shall support common established communication systems. This includes at least but is not restricted to:<br>CAN,<br>LIN,<br>FlexRay,<br>Ethernet<br>Rationale:Automotive ECUs communicate over different standardized communication systems. These shall be supported by AUTOSAR.<br>Use Case:Implementation of distributed functionality e. g. driving assistance systems</td></tr>
+<tr><td>Applies to:CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00004,RS_PO_00009)</p>
+<h4 id="4329-rs_main_00435-autosar-应支持汽车微控制器">4.3.29 [RS_Main_00435] AUTOSAR 应支持汽车微控制器</h4>
+<p>J(RS_PO_00005,RS_PO_00009)</p>
+<h4 id="4330-rs_main_00450-autosar-应标准化对通用-io-的访问">4.3.30 [RS_Main_00450] AUTOSAR 应标准化对通用 I/O 的访问</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall support hardware features of commonly used automotive microcontrollers.<br>Rationale:Automotive ECUs use dedicated, highly integrated microcontrollers, which have to pass automotive qualification procedures. The AUTOSAR shall support the integrated features of these microcontrollers. These include, but are not limited to:<br>Digital I/O<br>Analog/Digital converter<br>Pulse-width modulation<br>Bus controllers for CAN, LIN, FlexRay, Ethernet<br>Multiprocessor architectures<br>Many core architectures<br>Memory protection units<br>Flash<br>Microprocessors<br>Use Case:Development of typical automotive control units [UC_AD1.4] Highly Automated Driving</td></tr>
+<tr><td>Applies to:CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>The AUTOSAR Basic Software shall support access to general purpose I/O.<br>Rationale:Software Components need to access application specific hardware (sensor and actuators)<br>Use Case:Temperature sensor for engine control.</td></tr>
+<tr><td>Applies to:CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>RS_PO_00001,RS_PO_00004</p>
+<h4 id="4331-rs_main_00651-autosar-应支持将-canlin-和-flexray-镜像到-canflexray以太网或专有网络">4.3.31 [RS_Main_00651] AUTOSAR 应支持将 CAN、LIN 和 FlexRay 镜像到 CAN、FlexRay、以太网或专有网络</h4>
+<table>
+<tr><td rowspan="2">Type:Draft<br>Description:</td><td>AUTOSAR shall support direct forwarding of CAN, LIN, and FlexRay frames from multiple source buses to a destination CAN or FlexRay bus, to Ethernet, or to a proprietary network (CDD). The destination can be a diagnostic connector (CAN(-FD) or Ethernet/DolP), an intermediate bus, or a CDD that represents a special bus or a bus controlled by a non-AUTOSAR application. The following forwardings shall be supported:<br>• LIN/CAN -> CAN<br>• LIN/CAN/CAN-FD -> CAN-FD<br>• LIN/CAN/CAN-FD/FlexRay -> FlexRay<br>• LIN/CAN/CAN-FD/FlexRay -> Ethernet<br>• LIN/CAN/CAN-FD/FlexRay -> CDD<br>Rationale:It is not always possible or sometimes just too complicated to connect an analysis tool directly to an internal network. Forwarding of internal communication to a diagnostic connector allows for observation of internal communication using an external tester.<br>Use Case:Debugging of internal networks without direct access from an analysis tool.</td></tr>
+<tr><td>Applies to:CP<br>Dependencies:--<br>Supporting Material:Concept 634 &quot;Bus Mirroring&quot;</td></tr>
+</table>
+<p>J(RS_PO_00005,RS_PO_00007)</p>
+<h4 id="4332-rs_main_00180-autosar-应提供在共享开发过程中保护知识产权的机制">4.3.32 [RS_Main_00180] AUTOSAR 应提供在共享开发过程中保护知识产权的机制</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>Integration of software of different suppliers requires exchange of software (especially source code) between the different parties involved.<br>Thus, AUTOSAR shall provide mechanisms to safeguard software.<br>AUTOSAR shall ensure a smooth integration process that at the same time protects intellectual property of the companies involved.<br>Rationale:Integration of third party solutions requires dealing with intellectual property issues.<br>Use Case:1) SW sale of split-screen software for navigation.<br>2) Integration of BSW modules of different suppliers.</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00007)</p>
+<h4 id="4333-rs_main_00301-autosar-应指定数据交换的配置文件以支持大型公司内部和公司间开发组的工作分担">4.3.33 [RS_Main_00301] AUTOSAR 应指定数据交换的配置文件，以支持大型公司内部和公司间开发组的工作分担</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall support the work-share in large development projects via the definition of common data exchange points and profiles which provide guidance with respect to completeness and correctness of data at these data exchange points.<br>Rationale:Smooth exchange of data between different stakeholders by improved tool interoperability. Avoid iterations due to incomplete data. Clear definition of a data exchange point for all stakeholders. Early identification of possible data exchange problems.<br>Use Case:Data sharing between OEM and 1st Tier supplier.</td></tr>
+<tr><td>Applies to:AP, CP, FO<br>Dependencies:RS_Main_00300, RS_Main_00250, RS_Main_00251<br>Supporting Material:--</td></tr>
+</table>
+<h4 id="4334-rs_main_00310-autosar-应支持层次化的应用软件设计方法">4.3.34 [RS_Main_00310] AUTOSAR 应支持层次化的应用软件设计方法</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR shall provide means to structure Application Software in a hierarchical way, so that only links to outside Software need to be treated / adapted / changed in the next hierarchical level.<br>Rationale:Objective is to allow each actor in the development chain to focus on the required level and tasks.<br>Use Case:Software development of an engine management system can only be achieved by using hierarchical strategies.</td></tr>
+<tr><td>Applies to:AP, CP, FO<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00001,RS_PO_00002,RS_PO_00007)</p>
+<h4 id="4335-rs_main_00270-autosar-应提供针对新版本的缓解策略">4.3.35 [RS_Main_00270] AUTOSAR 应提供针对新版本的缓解策略</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>Migration from AUTOSAR release n to release n+1 shall be supported. AUTOSAR shall provide migration strategies, how Software Components and ECUs of different release have to be adapted to interoperate.<br>Rationale:Compatibility ensures a long time usage of the AUTOSAR standard.<br>Use Case:Integration of ECU&#x27;s using infrastructure software of the latest AUTOSAR release in a network built from ECU&#x27;s using a former release.</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00001)</p>
+<h4 id="4336-rs_main_00121-验收测试应最小化测试工作和测试成本">4.3.36 [RS_Main_00121] 验收测试应最小化测试工作和测试成本</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>In order to avoid redundant test cycles and ease the reuse of test results for users of AUTOSAR standard, acceptance tests shall focus on reduction of test effort and test costs. Test concept shall address explicitly efficiency.<br>Rationale:Users of acceptance tests will typically use these tests for checking that a BSW implementation is mature enough to enter the user&#x27;s ECU software development process. Within this development process, there are usually more in-depth release tests in place.<br>The acceptance tests are thus not required to test the BSW in full depth and with full coverage and can therefore not replace release tests at OEMs or Tier1s.<br>Standard test ease the reuse of test results because they are commonly understood by different market partners (who use the test results / who implement the tests and who execute the tests).<br>Use Case:BSW handover into Development process<br>Selection of the standard tests needed for an application (where test results are required) / documentation of the standard test supported by a BSW implementation (where test results will be provided)</td></tr>
+<tr><td>Applies to:TC<br>Dependencies:--<br>Supporting Material:--<br>Tested Items:--</td></tr>
+</table>
+<p>J(RS_PO_00007,RS_PO_00002)</p>
+<h4 id="4337-rs_main_00122-验收测试应测试同一-autosar-版本在一个车辆网络中的-bsw-实现的互操作性">4.3.37 [RS_Main_00122] 验收测试应测试同一 AUTOSAR 版本在一个车辆网络中的 BSW 实现的互操作性</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>Acceptance tests shall ensure interoperability of BSW implementations of one AUTOSAR release in one vehicle network<br>Rationale:Sourcing and differences in lifecycles of ECUs require flexibility in the choice of BSW implementations<br>Use Case:Heterogenic vehicle networks of ECUs with different BSW implementations of the same AUTOSAR release</td></tr>
+<tr><td>Applies to:TC<br>Dependencies:--<br>Supporting Material:--<br>Tested Items:RS_Main_00230, RS_Main_00430, RS_Main_00260, RS_Main_00160, RS_Main_00360</td></tr>
+</table>
+<p>J(RS_PO_00001,RS_PO_00002,RS_PO_00007)</p>
+<h4 id="4338-rs_main_00123-验收测试应测试车辆网络中-bsw-实现的互操作性">4.3.38 [RS_Main_00123] 验收测试应测试车辆网络中 BSW 实现的互操作性</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>Acceptance tests shall test interoperability of BSW implementations in vehicle networks.<br>Rationale:BSW is supplied from various sources and suppliers<br>Use Case:heterogenic vehicle networks of ECUs from different suppliers and gateways</td></tr>
+<tr><td>Applies to:TC<br>Dependencies:--<br>Supporting Material:--<br>Tested Items:RS_Main_00210, RS_Main_00230, RS_Main_00430, RS_Main_00260, RS_Main_00160, RS_Main_00360, RS_Main_00270</td></tr>
+</table>
+<p>J(RS_PO_00001,RS_PO_00002,RS_PO_00007)</p>
+<h4 id="4339-rs_main_00124-验收测试应测试-bsw-实现与应用的互操作性">4.3.39 [RS_Main_00124] 验收测试应测试 BSW 实现与应用的互操作性</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>Acceptance tests shall test interoperability of BSW implementations to applications.<br>Rationale:Application development must be independent from the different BSW implementations. The application interfaces are the RTE with its interfaces and the BSW services.<br>Use Case:Strategic, abstract and generic application development<br>Support for different development cycles for applications and BSW implementations</td></tr>
+<tr><td>Applies to:TC<br>Dependencies:--<br>Supporting Material:--<br>Tested Items:RS_Main_00400, RS_Main_00150, RS_Main_00060, RS_Main_00410, RS_Main_00440, RS_Main_00460, RS_Main_00260, RS_Main_00160, RS_Main_00080, RS_Main_00320</td></tr>
+</table>
+<p>J(RS_PO_00001,RS_PO_00002,RS_PO_00007)</p>
+<h4 id="4340-rs_main_00125-验收测试应提供测量-bsw-实现成熟度的方法">4.3.40 [RS_Main_00125] 验收测试应提供测量 BSW 实现成熟度的方法</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>Acceptance tests shall provide a reference to measure maturity.<br>Rationale:An existing test specification provides verification for requirements that are available with the AUTOSAR software standard. A common set of test cases as a reference enables the verification in the software implementation.<br>Use Case:Reuse of standard tests during the qualification process of BSW implementation.</td></tr>
+<tr><td>Applies to:TC<br>Dependencies:--<br>Supporting Material:--<br>Tested Items:--</td></tr>
+</table>
+<p>J(RS_PO_00007)</p>
+<h4 id="4341-rs_main_00128-验收测试应涵盖共同商定的-autosar-需求子集">4.3.41 [RS_Main_00128] 验收测试应涵盖共同商定的 AUTOSAR 需求子集</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>Acceptance tests shall cover a commonly agreed subset of AUTOSAR requirements.<br>Rationale:By definition acceptance tests are designed from user perspective, the user decides to accept the BSW for further usage in projects.<br>The configurability of AUTOSAR requires focusing on the most used features.<br>Use Case:Specification and implementation effort focussed on the features or test cases with the highest market needs</td></tr>
+<tr><td>Applies to:TC<br>Dependencies:--<br>Supporting Material:--<br>Tested Items:--</td></tr>
+</table>
+<p>J(RS_PO_00007)</p>
+<h4 id="4342-rs_main_00490-autosar-过程应符合-iso26262">4.3.42 [RS_Main_00490] AUTOSAR 过程应符合 ISO26262</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>To develop safety related automotive systems all processes applied need to follow the corresponding requirements given in ISO26262. Accordingly the applicable process related requirements of ISO26262 have to be fulfilled by AUTOSAR processes.<br>Rationale:AUTOSAR shall support the development of systems according to the highest ASIL.<br>Use Case:Development of safety related automotive systems, e.g. to achieve high availability and fail-operational systems for highly automated driving</td></tr>
+<tr><td>Applies to:AP, CP<br>Dependencies:--<br>Supporting Material:ISO26262</td></tr>
+</table>
+<p>J(RS_PO_00005,RS_PO_00009)</p>
+<h4 id="4343-rs_main_00512-autosar-应支持时间同步">4.3.43 [RS_Main_00512] AUTOSAR 应支持时间同步</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>The AUTOSAR platforms shall support a time synchronization of ECUs with multiple timebases over automotive communication busses.<br>Rationale:A synchronized time between the ECUs in a vehicle is necessary.<br>Use Case:Time synchronized applications, vehicle-wide synchronized logging and sensor fusion</td></tr>
+<tr><td>Applies to:AP, CP, FO<br>Dependencies:--<br>Supporting Material:--</td></tr>
+</table>
+<p>J(RS_PO_00005,RS_PO_00009)</p>
+<h4 id="4344-rs_main_00285-autosar-应支持智能交通系统的协议">4.3.44 [RS_Main_00285] AUTOSAR 应支持智能交通系统的协议</h4>
+<table>
+<tr><td rowspan="2">Type:Valid<br>Description:</td><td>AUTOSAR communication shall support geo-networking, transport protocols and facility protocols for Vehicle-2-X applications as defined by ETSI</td></tr>
+</table>
+<p>1Rationale: Geo- networking (GN) and the basic transport protocol (BTP) are essential components of a V2X stack. The facilities (FAC) implement the functionality for reception and transmission of standardized V2X messages. V2X facilities also build the interface for vehicle specific applications. For the European market they especially support decoding, encoding and management of cooperative awareness messages. All protocols are accompanied by standardized mechanisms to secure privacy and maintain availability of the service in highly congested areas Use Case: Examples e.g. enhance traffic flow by provision of infrastructure messages (traffic lights ahead, &hellip;) to software components, implementation of standardized sending applications Applies to: CP, AP Dependencies: Supporting Material: EN 302 636, EN 302 636, ETSI TS 102 636- 3</p>
+<table>
+<tr><td>Rationale:</td><td>Geo-networking (GN) and the basic transport protocol (BTP) are essential components of a V2X stack.<br>The facilities (FAC) implement the functionality for reception and transmission of standardized V2X messages. V2X facilities also build the interface for vehicle specific applications. For the European market they especially support decoding, encoding and management of cooperative awareness messages.<br>All protocols are accompanied by standardized mechanisms to secure privacy and maintain availability of the service in highly congested areas</td></tr>
+<tr><td>Use Case:</td><td>Examples e.g. enhance traffic flow by provision of infrastructure messages (traffic lights ahead, ...) to software components, implementation of standardized sending applications</td></tr>
+<tr><td>Applies to:</td><td>CP, AP</td></tr>
+<tr><td>Dependencies:</td><td>--</td></tr>
+<tr><td>Supporting Material:</td><td>EN 302 636, EN 302 636, ETSI TS 102 636-3</td></tr>
+</table>
+<p>I(RS_PO_00003,RS_PO_00004,RS_PO_00005,RS_PO_00009,RS_PO_00010)</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 0001-01-01</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/104_autosar_rs_main/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/105_/" class="prev" rel="prev" title=""><i class="fas fa-angle-left" aria-hidden="true"></i></a>
+            <a href="/blog/103_autosar_tr_adaptiveplatformreleaseoverriew/" class="next" rel="next" title=""><i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

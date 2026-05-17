@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title> - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/103_autosar_tr_adaptiveplatformreleaseoverriew/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="LoveIt">
+  <meta property="og:description" content="1 引言
+1.1 本文档范围 本文档概述了 AUTOSAR 标准自适应平台版本 R20-11。
+1.2 术语与许可 1.2.1 术语声明 AUTOSAR 已识别出以往常用术语中可能被视为压迫性或种族主义的用语，例如 master/slave、black/white list，或在其他语境（如性别、年龄）中具有有害含义的术语。AUTOSAR 目前正计划与所有工作组讨论，从 R21-11 版本开始替换这些术语。AUTOSAR 承诺在未来版本中提供不含这些术语的所有规范文档。然而，由于 AUTOSAR 必须继续其运作，并且现有数千页的规范需要同时审查和更新，完全替换这些术语可能需要几个版本的时间。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="LoveIt">
+  <meta name="twitter:description" content="1 引言
+1.1 本文档范围 本文档概述了 AUTOSAR 标准自适应平台版本 R20-11。
+1.2 术语与许可 1.2.1 术语声明 AUTOSAR 已识别出以往常用术语中可能被视为压迫性或种族主义的用语，例如 master/slave、black/white list，或在其他语境（如性别、年龄）中具有有害含义的术语。AUTOSAR 目前正计划与所有工作组讨论，从 R21-11 版本开始替换这些术语。AUTOSAR 承诺在未来版本中提供不含这些术语的所有规范文档。然而，由于 AUTOSAR 必须继续其运作，并且现有数千页的规范需要同时审查和更新，完全替换这些术语可能需要几个版本的时间。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/103_autosar_tr_adaptiveplatformreleaseoverriew/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/104_autosar_rs_main/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/102_autosar_exp_swarchitecture/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/103_autosar_tr_adaptiveplatformreleaseoverriew\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","wordcount":  12344 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/103_autosar_tr_adaptiveplatformreleaseoverriew\/","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/103_autosar_tr_adaptiveplatformreleaseoverriew/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/103_autosar_tr_adaptiveplatformreleaseoverriew/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX"></h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="0001-01-01">0001-01-01</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 12344 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 25 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#11-本文档范围">1.1 本文档范围</a></li>
+        <li><a href="#12-术语与许可">1.2 术语与许可</a>
+          <ul>
+            <li><a href="#121-术语声明">1.2.1 术语声明</a></li>
+            <li><a href="#122-w3c-xml-schema-的使用">1.2.2 W3C XML schema 的使用</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#许可">许可</a></li>
+    <li><a href="#131-引言">1.3.1 引言</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#132-定义">1.3.2 定义</a></li>
+            <li><a href="#1331-自适应平台">1.3.3.1 自适应平台</a></li>
+            <li><a href="#1332-经典平台">1.3.3.2 经典平台</a></li>
+            <li><a href="#1333-基础">1.3.3.3 基础</a></li>
+            <li><a href="#134-标准之间的依赖关系">1.3.4 标准之间的依赖关系</a></li>
+            <li><a href="#135-与其他标准的依赖关系">1.3.5 与其他标准的依赖关系</a></li>
+          </ul>
+        </li>
+        <li><a href="#14-版本编号与生命周期">1.4 版本编号与生命周期</a>
+          <ul>
+            <li><a href="#141-平台版本号">1.4.1 平台版本号</a></li>
+            <li><a href="#142-内部版本号">1.4.2 内部版本号</a></li>
+            <li><a href="#143-主要版本的发布生命周期">1.4.3 主要版本的发布生命周期</a></li>
+            <li><a href="#145-autosar-schema-版本与对应内部-autosar-版本概览">1.4.5 AUTOSAR schema 版本与对应内部 AUTOSAR 版本概览</a></li>
+            <li><a href="#146-autosar-schema-版本与对应有效-autosar-版本概览">1.4.6 AUTOSAR schema 版本与对应有效 AUTOSAR 版本概览</a></li>
+            <li><a href="#151-发布策略">1.5.1 发布策略</a></li>
+            <li><a href="#152-通过软件实现并行验证规范">1.5.2 通过软件实现并行验证规范</a></li>
+            <li><a href="#153-规范深度">1.5.3 规范深度</a></li>
+          </ul>
+        </li>
+        <li><a href="#16-章节内容">1.6 章节内容</a></li>
+        <li><a href="#21-版本-r20-11">2.1 版本 R20-11</a>
+          <ul>
+            <li><a href="#211-概念">2.1.1 概念</a>
+              <ul>
+                <li><a href="#2111-引入的概念">2.1.1.1 引入的概念</a>
+                  <ul>
+                    <li><a href="#21111-车辆网络状态管理">2.1.1.1.1 车辆网络状态管理</a></li>
+                    <li><a href="#21112-iam-集成">2.1.1.1.2 IAM 集成</a></li>
+                    <li><a href="#21113-crypto-api">2.1.1.1.3 Crypto API</a></li>
+                    <li><a href="#21114-rs-safety">2.1.1.1.4 RS Safety</a></li>
+                    <li><a href="#21115-10base-t1s">2.1.1.1.5 10BASE-T1S</a></li>
+                    <li><a href="#21116-ad-传感器接口">2.1.1.1.6 AD 传感器接口</a></li>
+                    <li><a href="#21117-入侵检测系统管理器">2.1.1.1.7 入侵检测系统管理器</a></li>
+                    <li><a href="#21118-确定性同步">2.1.1.1.8 确定性同步</a></li>
+                    <li><a href="#21119-远程-ecu-身份与访问管理的静态配置">2.1.1.1.9 远程 ECU 身份与访问管理的静态配置</a></li>
+                    <li><a href="#211110-ara-通信组">2.1.1.1.10 ara 通信组</a></li>
+                  </ul>
+                </li>
+                <li><a href="#2112-概念的影响">2.1.1.2 概念的影响</a></li>
+                <li><a href="#2113-已验证的概念">2.1.1.3 已验证的概念</a></li>
+              </ul>
+            </li>
+            <li><a href="#212-规范">2.1.2 规范</a>
+              <ul>
+                <li><a href="#2121-新增规范">2.1.2.1 新增规范</a></li>
+                <li><a href="#2122-迁移的规范">2.1.2.2 迁移的规范</a></li>
+                <li><a href="#2123-淘汰的规范">2.1.2.3 淘汰的规范</a></li>
+                <li><a href="#2124-移除的规范">2.1.2.4 移除的规范</a></li>
+                <li><a href="#2125-重做的规范">2.1.2.5 重做的规范</a></li>
+                <li><a href="#2126-移动的规范部分">2.1.2.6 移动的规范部分</a></li>
+                <li><a href="#213-发布文档">2.1.3 发布文档</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#22-autosar-中的历史信息">2.2 AUTOSAR 中的历史信息</a></li>
+        <li><a href="#41-通信管理规范-uid-717-sws">4.1 通信管理规范 (UID 717, SWS)</a></li>
+        <li><a href="#42-执行管理规范-uid-721-sws">4.2 执行管理规范 (UID 721, SWS)</a></li>
+        <li><a href="#43-诊断规范-uid-723-sws">4.3 诊断规范 (UID 723, SWS)</a></li>
+        <li><a href="#44-自适应平台平台健康管理规范-uid-851-sws">4.4 自适应平台平台健康管理规范 (UID 851, SWS)</a></li>
+        <li><a href="#45-持久性规范-uid-858-sws">4.5 持久性规范 (UID 858, SWS)</a></li>
+        <li><a href="#46-自适应平台加密规范-uid-883-sws">4.6 自适应平台加密规范 (UID 883, SWS)</a></li>
+        <li><a href="#47-更新与配置管理规范-uid-888-sws">4.7 更新与配置管理规范 (UID 888, SWS)</a></li>
+        <li><a href="#48-网络管理规范-uid-898-sws">4.8 网络管理规范 (UID 898, SWS)</a></li>
+        <li><a href="#49-身份与访问管理规范-uid-900-sws">4.9 身份与访问管理规范 (UID 900, SWS)</a></li>
+        <li><a href="#410-自适应核心规范-uid-903-sws">4.10 自适应核心规范 (UID 903, SWS)</a></li>
+        <li><a href="#51-版本-r20-11">5.1 版本 R20-11</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>1 引言</p>
+<h3 id="11-本文档范围">1.1 本文档范围</h3>
+<p>本文档概述了 AUTOSAR 标准自适应平台版本 R20-11。</p>
+<h3 id="12-术语与许可">1.2 术语与许可</h3>
+<h4 id="121-术语声明">1.2.1 术语声明</h4>
+<p>AUTOSAR 已识别出以往常用术语中可能被视为压迫性或种族主义的用语，例如 master/slave、black/white list，或在其他语境（如性别、年龄）中具有有害含义的术语。AUTOSAR 目前正计划与所有工作组讨论，从 R21-11 版本开始替换这些术语。AUTOSAR 承诺在未来版本中提供不含这些术语的所有规范文档。然而，由于 AUTOSAR 必须继续其运作，并且现有数千页的规范需要同时审查和更新，完全替换这些术语可能需要几个版本的时间。</p>
+<h4 id="122-w3c-xml-schema-的使用">1.2.2 W3C XML schema 的使用</h4>
+<p>AUTOSAR XML Schema 需要 XML 命名空间定义文件 xml.xsd。</p>
+<p>本版本中多次出现 &ldquo;xml.xsd&rdquo; 文件。对于所有出现的情况，均适用 W3C 许可，该许可可在 <a href="https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document" target="_blank" rel="noopener noreffer ">https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document</a> 找到。</p>
+<h2 id="许可">许可</h2>
+<p>通过获取和/或复制本作品，您（被许可人）同意您已阅读、理解并将遵守以下条款和条件。</p>
+<p>允许复制、修改和分发本作品（无论是否修改），用于任何目的且免收版税，前提是您在本作品的所有副本或部分（包括修改）中包含以下内容：</p>
+<p>完整的本通知文本，位于再分发或衍生作品的用户可见位置。任何现有的知识产权免责声明、通知或条款和条件。如果没有，则应包含 W3C 软件和文档简短通知。新代码或文档中的版权声明，说明任何变更或修改，例如：&ldquo;本软件或文档包含从 [标题和 W3C 文档的 URI] 复制或衍生的材料。版权所有 © [年份] W3C® (MIT, ERCIM, Keio, Beihang)。&rdquo;</p>
+<p>===== 第 7 页 =====</p>
+<p>1.3 AUTOSAR 标准</p>
+<h2 id="131-引言">1.3.1 引言</h2>
+<p>AUTOSAR 通过其标准应对汽车软件开发中的广泛用例。这些用例有不同的要求，并导致不同的技术解决方案。</p>
+<p>将其成果打包成不同的“标准”，便于用户访问 AUTOSAR 解决方案，并允许 AUTOSAR 根据市场需求进行扩展。</p>
+<h4 id="132-定义">1.3.2 定义</h4>
+<p>AUTOSAR 标准是一组一致的 AUTOSAR 成果，它们在同一时间发布。AUTOSAR 成果可以是但不限于以下类型：</p>
+<ul>
+<li>文本说明</li>
+<li>文本规范</li>
+<li>测试规范</li>
+<li>源代码</li>
+<li>其他形式化或半形式化的文本格式（例如 ARXML、UML 模型、XML Schema）</li>
+</ul>
+<p>在发布时，AUTOSAR 确保依赖关系得到满足。</p>
+<p>===== 第 8 页 =====</p>
+<p>1.3.3 AUTOSAR 标准概述</p>
+<p>AUTOSAR 提供以下标准：</p>
+<table>
+  <thead>
+      <tr>
+          <th>标准</th>
+          <th>缩写</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>自适应平台</td>
+          <td>AP</td>
+      </tr>
+      <tr>
+          <td>经典平台</td>
+          <td>CP</td>
+      </tr>
+      <tr>
+          <td>基础</td>
+          <td>FO</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="1331-自适应平台">1.3.3.1 自适应平台</h4>
+<p>自适应平台是 AUTOSAR 针对高性能计算 ECU 的解决方案，用于构建与安全相关的系统，应用于高度自动化及自动驾驶等用例。</p>
+<h4 id="1332-经典平台">1.3.3.2 经典平台</h4>
+<p>经典平台是 AUTOSAR 针对具有硬实时和安全约束的嵌入式系统的解决方案。</p>
+<h4 id="1333-基础">1.3.3.3 基础</h4>
+<p>基础标准的目的是增强 AUTOSAR 平台之间的互操作性。</p>
+<p>基础包含 AP 和 CP 通用的通用工件，以确保：</p>
+<ul>
+<li>经典平台与自适应平台之间的兼容性</li>
+<li>非 AUTOSAR 平台与 AUTOSAR 平台之间的兼容性</li>
+</ul>
+<h4 id="134-标准之间的依赖关系">1.3.4 标准之间的依赖关系</h4>
+<p>经典平台和自适应平台的每个版本都依赖于特定版本的基础。具体依赖关系记录在第 1.4.6 节中。</p>
+<p>===== 第 9 页 =====</p>
+<center>图 1.1：AUTOSAR 标准依赖关系</center>
+<h4 id="135-与其他标准的依赖关系">1.3.5 与其他标准的依赖关系</h4>
+<p>本版本的自适应平台依赖于 R20-11 版本的基础标准，该标准：</p>
+<ul>
+<li>定义了自适应平台实现的协议</li>
+<li>包含项目目标以及派生自适应平台特性的公共需求</li>
+<li>包含同时适用于自适应平台和经典平台的公共规范部分</li>
+</ul>
+<p>这些依赖关系在各自规范的需求追溯信息中进一步细化。</p>
+<h3 id="14-版本编号与生命周期">1.4 版本编号与生命周期</h3>
+<h4 id="141-平台版本号">1.4.1 平台版本号</h4>
+<p>AUTOSAR 采用四位编号方案 Ryy-mm 来标识版本。标识符 &ldquo;yy&rdquo; 和 &ldquo;mm&rdquo; 表示发布的年份和月份，例如 R20-11 表示 2020 年 11 月的版本。</p>
+<h4 id="142-内部版本号">1.4.2 内部版本号</h4>
+<p>AUTOSAR 还为不同目的维护一个内部版本号（例如在经典平台的 BSW 模块中使用）。</p>
+<p>内部版本号用于所有平台，并沿用经典平台的版本号。在自适应平台中这是新引入的。在基础中，这导致以前的编号模式（例如 R1.5.0）停止使用。</p>
+<p>平台版本与对应内部版本号的映射列表见第 1.4.5 节。内部版本号采用三位编号方案 R<major>.<minor>.<revision> 来标识版本。其主要目的是将版本标识为：</p>
+<ul>
+<li><strong>主要版本</strong>：有效和草案规范部分可以向后不兼容地更改。</li>
+<li><strong>次要版本</strong>：有效规范部分只能向后兼容地更改。草案规范部分可以向后不兼容地更改。</li>
+<li><strong>修订版本</strong>：不包含扩展，仅包含向后兼容的错误修复。</li>
+</ul>
+<p>===== 第 10 页 =====</p>
+<h4 id="143-主要版本的发布生命周期">1.4.3 主要版本的发布生命周期</h4>
+<p>每个主要版本在其生命周期中经历四个连续阶段（基于内部版本编号方案示例）：</p>
+<ol>
+<li><strong>开发</strong>：从生命周期开始到初始发布（例如 R4.0.1）</li>
+<li><strong>演进</strong>：在初始发布之后，包含零个、一个或多个次要版本和/或修订版（例如 R4.0.2, R4.1.1）</li>
+<li><strong>维护</strong>：不再向主要版本添加新内容，仅提供对现有内容的维护，包含零个、一个或多个修订版（例如 R3.2.2）</li>
+<li><strong>问题通知</strong>：不再有修订版，仅提供零个、一个或多个问题通知（即已知问题列表的更新），直到生命周期结束。</li>
+</ol>
+<center>图 1.2：AUTOSAR 标准的生命周期模型</center>
+<p>===== 第 11 页 =====</p>
+<p>1.4.4 规范项与需求的生命周期状态</p>
+<p>规范项的生命周期状态位于规范项 ID 之后，用花括号括起来。状态包括：</p>
+<ul>
+<li><strong>{Valid}</strong>：表示相关实体是文档的有效部分。这是默认状态，如果没有为相关实体标注生命周期状态也适用。</li>
+<li><strong>{Draft}</strong>：表示相关实体是新引入的，但仍为试验性。该信息已发布，但可能发生变更，不保证向后兼容。</li>
+<li><strong>{Obsolete}</strong>：表示相关实体将在后续某个版本中被移除，恕不另行通知。</li>
+</ul>
+<p>需求的生命周期状态位于属性 &ldquo;type&rdquo; 中。状态与规范项状态相同。</p>
+<h4 id="145-autosar-schema-版本与对应内部-autosar-版本概览">1.4.5 AUTOSAR schema 版本与对应内部 AUTOSAR 版本概览</h4>
+<table>
+  <thead>
+      <tr>
+          <th>Schema 版本</th>
+          <th>平台版本</th>
+          <th>内部版本号</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>AUTOSAR_00048</td>
+          <td>R19-11</td>
+          <td>R4.5.0</td>
+      </tr>
+      <tr>
+          <td>AUTOSAR_00049</td>
+          <td>R20-11</td>
+          <td>R4.6.0</td>
+      </tr>
+  </tbody>
+</table>
+<p>根据 AUTOSAR 的发布生命周期，版本 R20-11 是一个次要版本。</p>
+<h4 id="146-autosar-schema-版本与对应有效-autosar-版本概览">1.4.6 AUTOSAR schema 版本与对应有效 AUTOSAR 版本概览</h4>
+<p>AUTOSAR schema 对基础没有影响。基础的发布列在此处仅为完整性。</p>
+<table>
+  <thead>
+      <tr>
+          <th>Schema 版本</th>
+          <th>经典平台版本</th>
+          <th>自适应平台版本</th>
+          <th>基础版本</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>AUTOSAR_00042</td>
+          <td>R4.3.0</td>
+          <td>R17-03</td>
+          <td>R1.1.0</td>
+      </tr>
+      <tr>
+          <td>AUTOSAR_00043</td>
+          <td>R4.3.0</td>
+          <td>R17-10</td>
+          <td>R1.2.0</td>
+      </tr>
+      <tr>
+          <td>AUTOSAR_00044</td>
+          <td>R4.3.1</td>
+          <td>R17-10</td>
+          <td>R1.3.0</td>
+      </tr>
+      <tr>
+          <td>AUTOSAR_00045</td>
+          <td>R4.3.1</td>
+          <td>R18-03</td>
+          <td>R1.4.0</td>
+      </tr>
+      <tr>
+          <td>AUTOSAR_00046</td>
+          <td>R4.4.0</td>
+          <td>R18-10</td>
+          <td>R1.5.0</td>
+      </tr>
+      <tr>
+          <td>AUTOSAR_00047</td>
+          <td>R4.4.0</td>
+          <td>R19-03</td>
+          <td>R1.5.1</td>
+      </tr>
+  </tbody>
+</table>
+<p>===== 第 12 页 =====</p>
+<p>1.5 自适应平台介绍</p>
+<p>AUTOSAR 自适应平台是针对基于微处理器的 ECU 的标准化平台，支持如高度自动化驾驶以及高速车内和车外通信等用例。</p>
+<p>自适应平台在多个方面与经典平台的标准化方法不同：</p>
+<ul>
+<li>通过软件实现并行验证规范</li>
+<li>规范功能集群而非模块</li>
+</ul>
+<h4 id="151-发布策略">1.5.1 发布策略</h4>
+<p>自适应平台已将其生命周期状态更改为 AUTOSAR 标准生命周期模型中的“演进”（如图 1.4.3 节所述）。自 R19-11 起，AUTOSAR 每年与经典平台和基础一起发布自适应平台。“演进”生命周期状态意味着自适应平台的用户对规范的某些部分享有向后兼容的保证。区分方式由第 1.4.4 节所述的需求和规范项的生命周期状态处理。</p>
+<h4 id="152-通过软件实现并行验证规范">1.5.2 通过软件实现并行验证规范</h4>
+<p>自适应平台通过 AUTOSAR 内部实现（自适应平台演示器）进行部分验证。该演示器对所有合作伙伴可用，并提供更多细节以理解自适应平台的基本概念。自适应平台演示器是自适应平台规范的一个示例性实现。基于演示器的任何进一步使用（例如在量产开发中）将由各合作伙伴负责。法律约束详见开发协议中的相关段落。</p>
+<p>对于当前版本，演示器软件实现仅经过非正式评审，没有严格的质量保证。AUTOSAR 正在显著提高质量保证，以确保项目所要求的质量标准。</p>
+<p>演示器提供了到规范的追溯性，以记录验证方面。</p>
+<p>===== 第 13 页 =====</p>
+<p>此外，AUTOSAR 开发了系统测试规范和实现，以支持针对 AUTOSAR 需求测试演示器实现。这些测试也是发布的一部分。</p>
+<center>图 1.3：AUTOSAR 自适应平台演示器概览</center>
+<h4 id="153-规范深度">1.5.3 规范深度</h4>
+<p>基于经典平台的开发历史，AUTOSAR 决定规范功能集群而非特定的软件架构，以便为实现者提供为标准特性寻找高效解决方案的选项。</p>
+<h3 id="16-章节内容">1.6 章节内容</h3>
+<p>本文档结构如下：</p>
+<ul>
+<li><strong>第 1 章</strong> 介绍 AUTOSAR 的发布策略、自适应平台及其标准化方法。</li>
+<li><strong>第 2 章</strong> 概述自上一版自适应平台以来的变更。</li>
+</ul>
+<p>===== 第 14 页 =====</p>
+<ul>
+<li><strong>第 3 章</strong> 包含构成版本 R20-11 的规范概览。本章根据 AUTOSAR 版本 R20-11 的集群进行组织。</li>
+<li><strong>第 4 章</strong> 包含已知技术缺陷的备注。</li>
+<li><strong>第 5 章</strong> 包含所有已发布规范的详细发布历史。</li>
+</ul>
+<p>===== 第 15 页 =====</p>
+<p>2 变更总结</p>
+<p>本章概述自上一版本 R19-11 以来所实现的变更。</p>
+<h3 id="21-版本-r20-11">2.1 版本 R20-11</h3>
+<p>在 R20-11 版本中引入了若干影响自适应平台的概念，从而为平台增加了功能。这些概念例如与安全相关（IAM 集成、Crypto API、SCREIAM）或与通信相关（10BASE-T1S、ara 通信组）。</p>
+<p>此外，一些概念针对经典平台和自适应平台，加强了两个平台之间的交互。这些概念涉及安全（入侵检测系统管理器）以及开发方法和机制（统一计时与追踪方法）。</p>
+<h4 id="211-概念">2.1.1 概念</h4>
+<h5 id="2111-引入的概念">2.1.1.1 引入的概念</h5>
+<p>以下 2.1.1.1.1 - 2.1.1.1.10 节中的概念已被引入。</p>
+<h6 id="21111-车辆网络状态管理">2.1.1.1.1 车辆网络状态管理</h6>
+<p>该概念扩展了现有的基于静态路由的 PNC 协调算法，增加动态学习额外路由的可能性。此学习作为 PNC 算法中的一个特殊阶段实现，可由应用程序或诊断触发。</p>
+<h6 id="21112-iam-集成">2.1.1.1.2 IAM 集成</h6>
+<p>AUTOSAR AP 的身份与访问管理通过概念“IAM 集成”应用于功能集群。对于每个实现受访问控制 API 的功能集群，通过概念部分引入相应的需求和建模元素。在 R20-11 版本中，引入了概念部分“平台健康管理”。</p>
+<p>已详细阐述并规范了从平台健康管理领域攻击场景分析中推导出的需求。未来的版本将引入更多的概念部分。</p>
+<p>===== 第 16 页 =====</p>
+<h6 id="21113-crypto-api">2.1.1.1.3 Crypto API</h6>
+<p>“Crypto API”概念描述了自适应功能集群加密（FC Crypto）及其 API（CryptoAPI）的功能和配置，该 API 是 AUTOSAR 自适应平台基础的一部分。此概念的目标是标准化一个软件 API，列出加密服务并为 AUTOSAR 应用程序提供接口。该概念提供了一种解决方案，允许 OEM 处理加密和/或签名数据，并验证 ECU、通信伙伴或服务。因此，FC Crypto 为应用程序和其他自适应 AUTOSAR 功能集群提供了一个标准化接口，提供加密及相关计算的操作。这些操作包括加密操作、密钥管理和证书处理。标准化接口由 CryptoAPI 暴露。</p>
+<h6 id="21114-rs-safety">2.1.1.1.4 RS Safety</h6>
+<p>“RS Safety”概念旨在为 AUTOSAR 自适应平台在需求规范（RS）文档中提供安全需求：RS Safety。以这种形式提供安全需求允许以通用方式从 RS Main 推导和细化安全需求：作为功能安全需求（FSR），并针对平台和各功能集群作为技术安全需求（TSR）。然后可以从功能集群的需求规范追溯到 RS Safety 中的 TSR。</p>
+<h6 id="21115-10base-t1s">2.1.1.1.5 10BASE-T1S</h6>
+<p>该概念引入了由 IEEE802.3cg 规定的以太网 10BASE-T1S 支持，并启用以太网网络中的总线拓扑。这种位于 OSI 模型第 1 层和第 2 层的新扩展将同时得到经典平台和自适应平台的支持。</p>
+<h6 id="21116-ad-传感器接口">2.1.1.1.6 AD 传感器接口</h6>
+<p>该概念旨在提供作为自适应平台服务的、定义良好的传感器服务接口，符合 ISO 23150 “道路车辆 — 传感器与自动驾驶功能数据融合单元之间的通信 — 逻辑接口”。涉及的传感器包括雷达、激光雷达、摄像头和超声波传感器。</p>
+<h6 id="21117-入侵检测系统管理器">2.1.1.1.7 入侵检测系统管理器</h6>
+<p>概念“入侵检测系统管理器”规范了一个基于 AUTOSAR 的入侵检测系统（IDS）的框架。这包括 BSW 组件“入侵检测系统管理器（IdsM）”和“自适应入侵检测系统管理器（Adaptive IdsM）”。</p>
+<p>===== 第 17 页 =====</p>
+<p>此外，还规范了基本软件模块的扩展，以便将安全事件报告给 IdsM。发布了一个用于通过车辆网络传输合格安全事件的协议规范。概念“入侵检测系统管理器”指定的安全提取模板允许在系统级别对 IDS 的属性进行建模。</p>
+<h6 id="21118-确定性同步">2.1.1.1.8 确定性同步</h6>
+<p>该概念扩展了自适应平台上使用确定性客户端 API 进行冗余执行的同步行为。它允许多个冗余进程以同步周期运行，这也使得能够将冗余执行与额外的软件锁步功能集成。</p>
+<h6 id="21119-远程-ecu-身份与访问管理的静态配置">2.1.1.1.9 远程 ECU 身份与访问管理的静态配置</h6>
+<p>该概念限制了运行 AUTOSAR 自适应平台且被攻破的通信节点的影响范围。目标是防止获得 ECU 控制权的攻击者超出 ECU 的预期功能。这一范式通过 SCREIAM 实现，即在接收方侧基于远程对等方的身份和预定义策略提供访问控制检查。</p>
+<h6 id="211110-ara-通信组">2.1.1.1.10 ara 通信组</h6>
+<p>该概念允许一组进程实现同步行为。通过使服务器能够向组内所有其他进程（客户端）广播消息并接收它们对此请求的应答来实现。消息和应答可以定义为模板，从中可以生成所有必要的方法和事件。</p>
+<p>StateManagement 基于通信组模式定义了 PowerModes，以实现 StateManagement 与所有运行中的 Autosar 自适应应用程序之间的同步行为，从而实现更灵活的下电行为。</p>
+<h5 id="2112-概念的影响">2.1.1.2 概念的影响</h5>
+<p>引入的概念对多个规范产生了影响。下表提供了详细概览。</p>
+<p>请注意，某些规范使用特殊文本格式标记：</p>
+<p><strong>粗体</strong>的规范是完全源于特定概念的新的规范。</p>
+<p>===== 第 18 页 =====</p>
+<p>（第18页主要为表格的格式定义行，此处省略重复的排版示意）</p>
+<p>===== 第 19 页 =====</p>
+<table>
+  <thead>
+      <tr>
+          <th>概念名称</th>
+          <th>规范全名</th>
+          <th>标准</th>
+          <th>概念生命周期</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Crypto API</td>
+          <td>自适应平台加密规范</td>
+          <td>自适应平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>Crypto API</td>
+          <td>加密需求</td>
+          <td>自适应平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>车辆网络状态管理</td>
+          <td>网络管理规范</td>
+          <td>自适应平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>车辆网络状态管理</td>
+          <td>UDP 网络管理规范</td>
+          <td>经典平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>车辆网络状态管理</td>
+          <td>网络管理接口规范</td>
+          <td>经典平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>车辆网络状态管理</td>
+          <td>FlexRay 网络管理规范</td>
+          <td>经典平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>车辆网络状态管理</td>
+          <td>通信管理器规范</td>
+          <td>经典平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>车辆网络状态管理</td>
+          <td>CAN 网络管理规范</td>
+          <td>经典平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>车辆网络状态管理</td>
+          <td>系统模板</td>
+          <td>经典平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>车辆网络状态管理</td>
+          <td>网络管理需求</td>
+          <td>经典平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>车辆网络状态管理</td>
+          <td>模式管理需求</td>
+          <td>经典平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>车辆网络状态管理</td>
+          <td>AUTOSAR 网络管理协议规范</td>
+          <td>基础</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>车辆网络状态管理</td>
+          <td>AUTOSAR 网络管理需求</td>
+          <td>基础</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>AD 传感器接口</td>
+          <td>传感器接口规范</td>
+          <td>自适应平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>AD 传感器接口</td>
+          <td>自动驾驶接口需求</td>
+          <td>自适应平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>远程 ECU 身份与访问管理的静态配置</td>
+          <td>清单规范</td>
+          <td>自适应平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>远程 ECU 身份与访问管理的静态配置</td>
+          <td>通信管理规范</td>
+          <td>自适应平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>远程 ECU 身份与访问管理的静态配置</td>
+          <td>通信管理需求</td>
+          <td>自适应平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>ara 通信组</td>
+          <td>通信管理需求</td>
+          <td>自适应平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>ara 通信组</td>
+          <td>通信管理规范</td>
+          <td>自适应平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>ara 通信组</td>
+          <td>清单规范</td>
+          <td>自适应平台</td>
+          <td>草案</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>入侵检测系统协议规范</td>
+          <td>基础</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>入侵检测系统需求</td>
+          <td>基础</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>安全提取模板需求</td>
+          <td>基础</td>
+          <td>部分验证</td>
+      </tr>
+  </tbody>
+</table>
+<p>===== 第 20 页 =====</p>
+<table>
+  <thead>
+      <tr>
+          <th>概念名称</th>
+          <th>规范全名</th>
+          <th>标准</th>
+          <th>概念生命周期</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>安全提取模板</td>
+          <td>基础</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>术语表</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>诊断提取模板需求</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>AUTOSAR 特性需求</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>Socket 适配器规范</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>分层软件架构</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>密钥管理器规范</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>安全板载通信规范</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>基本软件模块通用需求</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>基本软件模块通用规范</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>CAN 驱动规范</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>CAN 接口规范</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>诊断通信管理器规范</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>诊断事件管理器规范</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>以太网接口规范</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>入侵检测系统管理器规范</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>NVRAM 管理器规范</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>TCP/IP 协议栈规范</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>诊断提取模板</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>软件组件模板</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>基本软件模块列表</td>
+          <td>经典平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>清单规范需求</td>
+          <td>自适应平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>自适应平台入侵检测系统管理器规范</td>
+          <td>自适应平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>通信管理规范</td>
+          <td>自适应平台</td>
+          <td>部分验证</td>
+      </tr>
+      <tr>
+          <td>入侵检测系统管理器</td>
+          <td>自适应平台加密规范</td>
+          <td>自适应平台</td>
+          <td>部分验证</td>
+      </tr>
+  </tbody>
+</table>
+<p>===== 第 21 页 =====</p>
+<table>
+  <thead>
+      <tr>
+          <th>概念名称</th>
+          <th>规范全名</th>
+          <th>标准</th>
+          <th>概念生命周期</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>IdSM（入侵检测系统管理器）</td>
+          <td>清单规范</td>
+          <td>自适应平台</td>
+          <td>部分验证</td>
+      </tr>
+  </tbody>
+</table>
+<h5 id="2113-已验证的概念">2.1.1.3 已验证的概念</h5>
+<p>以下概念已被验证：</p>
+<ul>
+<li>Socket 网络绑定 for ARA::com</li>
+</ul>
+<h4 id="212-规范">2.1.2 规范</h4>
+<h5 id="2121-新增规范">2.1.2.1 新增规范</h5>
+<p>通过概念引入了以下新规范：</p>
+<ul>
+<li>自适应平台入侵检测系统管理器规范 (UID 978, SWS)</li>
+<li>自动驾驶接口需求 (UID 911, RS)</li>
+<li>传感器接口规范 (UID 912)</li>
+</ul>
+<p>除上述新增规范外，R20-11 还添加了以下文档：</p>
+<ul>
+<li>自适应平台软件架构说明 (UID 982, EXP)</li>
+<li>自适应平台软件架构决策说明 (UID 983, EXP)</li>
+<li>自适应平台时序扩展规范 (UID 968, TPS)</li>
+</ul>
+<h5 id="2122-迁移的规范">2.1.2.2 迁移的规范</h5>
+<p>在本版本中，以下规范已从 AUTOSAR 自适应平台移动到 AUTOSAR 基础标准：</p>
+<ul>
+<li>元模型 (UID 59, MMOD)</li>
+<li>元模型生成的 XML Schema (UID 230, MMOD)</li>
+<li>AUTOSAR XML Schema 的补充材料 (UID 649, TR)</li>
+<li>抽象平台规范 (UID 947, TPS)</li>
+</ul>
+<p>===== 第 22 页 =====</p>
+<p>自适应平台版本概览
+AUTOSAR AP R20-11</p>
+<h5 id="2123-淘汰的规范">2.1.2.3 淘汰的规范</h5>
+<p>以下规范在本版本中已设置为“淘汰”状态：</p>
+<ul>
+<li>在关键和安全相关系统中使用 C++14 语言的指南 (UID 839, RS)</li>
+</ul>
+<p>该规范将由 MISRA 在其未来版本中发布，但仍将被 AUTOSAR 使用。</p>
+<h5 id="2124-移除的规范">2.1.2.4 移除的规范</h5>
+<p>以下规范在本版本中已设置为“移除”状态：</p>
+<ul>
+<li>自适应平台通用规范 (UID 715, SWS)</li>
+</ul>
+<h5 id="2125-重做的规范">2.1.2.5 重做的规范</h5>
+<p>以下规范在 R19-11 中发生了根本性变化：</p>
+<ul>
+<li>无</li>
+</ul>
+<h5 id="2126-移动的规范部分">2.1.2.6 移动的规范部分</h5>
+<p>以下规范部分在 R20-11 中已移至其他文档：</p>
+<ul>
+<li>“核心类型规范”(UID 903, SWS) 已重命名为“自适应核心规范”(UID 903, SWS)。</li>
+<li>“自适应平台通用规范 (UID 715, SWS)”的内容已整合到“自适应核心规范”(UID 903, SWS) 中。</li>
+</ul>
+<h5 id="213-发布文档">2.1.3 发布文档</h5>
+<p>发布文档没有重大变化。</p>
+<h3 id="22-autosar-中的历史信息">2.2 AUTOSAR 中的历史信息</h3>
+<p>下图显示了变更文档的位置。
+变更文档将从 R20-11 开始对自适应平台可用。</p>
+<p>22 / 38
+文档 ID 782: AUTOSAR_TR_AdaptivePlatformReleaseOverview</p>
+<p>===== 第 23 页 =====</p>
+<center>图 2.1：AUTOSAR 中的历史信息</center>
+<p>===== 第 24 页 =====</p>
+<p>3 规范概览</p>
+<p>已发布的规范分为以下集群：</p>
+<ul>
+<li>发布文档</li>
+<li>通用</li>
+<li>方法与清单</li>
+<li>自适应基础</li>
+<li>自适应服务</li>
+</ul>
+<p>规范到这些集群的分配如下所示。</p>
+<table>
+  <thead>
+      <tr>
+          <th>长名称</th>
+          <th>文件名</th>
+          <th>生命周期变更</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>发布文档</strong></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>自适应平台版本概览</td>
+          <td>AUTOSAR_TR_AdaptivePlatformReleaseOverview</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>AUTOSAR 自适应平台规范哈希值</td>
+          <td>AUTOSAR_TR_AdaptivePlatformSpecificationHashes</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><strong>通用</strong></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>在自适应平台上使用并行处理技术的设计指南</td>
+          <td>AUTOSAR_EXP_ParallelProcessingGuidelines</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>自适应平台设计说明</td>
+          <td>AUTOSAR_EXP_PlatformDesign</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>自适应平台软件架构决策说明</td>
+          <td>AUTOSAR_EXP_SWArchitectureDecisions</td>
+          <td>初始发布</td>
+      </tr>
+      <tr>
+          <td>自适应平台软件架构说明</td>
+          <td>AUTOSAR_EXP_SWArchitecture</td>
+          <td>初始发布</td>
+      </tr>
+      <tr>
+          <td>安全概览说明</td>
+          <td>AUTOSAR_EXP_SafetyOverview</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>功能集群短名称</td>
+          <td>AUTOSAR_TR_FunctionalClusterShortnames</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>自适应平台特定通用需求</td>
+          <td>AUTOSAR_RS_General</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>在关键和安全相关系统中使用 C++14 语言的指南</td>
+          <td>AUTOSAR_RS_CPP14Guidelines</td>
+          <td>淘汰</td>
+      </tr>
+      <tr>
+          <td>使用自适应平台接口指南</td>
+          <td>AUTOSAR_EXP_AdaptivePlatformInterfacesGuidelines</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>自适应平台系统测试</td>
+          <td>AUTOSAR_TR_AdaptivePlatformSystemTests</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><strong>方法与清单</strong></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>AUTOSAR 自适应平台 M1 模型蓝图集合</td>
+          <td>AUTOSAR_MOD_AdaptivePlatformGeneralBlueprints</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>自适应平台方法</td>
+          <td>AUTOSAR_TR_AdaptiveMethodology</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>清单规范需求</td>
+          <td>AUTOSAR_RS_ManifestSpecification</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>清单规范</td>
+          <td>AUTOSAR_TPS_ManifestSpecification</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>自适应平台平台类型规范</td>
+          <td>AUTOSAR_SWS_AdaptivePlatformTypes</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<p>===== 第 25 页 =====</p>
+<table>
+  <thead>
+      <tr>
+          <th>长名称</th>
+          <th>文件名</th>
+          <th>生命周期变更</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>自适应平台时序扩展规范</td>
+          <td>AUTOSAR_TPS_AdaptivePlatformTimingExtensions</td>
+          <td>初始发布</td>
+      </tr>
+      <tr>
+          <td><strong>自适应基础</strong></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>ara::com API 说明</td>
+          <td>AUTOSAR_EXP_ARAComAPI</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>IPsec 实现指南说明</td>
+          <td>AUTOSAR_EXP_IPsecImplementationGuidelines</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>通信管理需求</td>
+          <td>AUTOSAR_RS_CommunicationManagement</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>加密需求</td>
+          <td>AUTOSAR_RS_Cryptography</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>执行管理需求</td>
+          <td>AUTOSAR_RS_ExecutionManagement</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>身份与访问管理需求</td>
+          <td>AUTOSAR_RS_IdentityAndAccessManagement</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>操作系统接口需求</td>
+          <td>AUTOSAR_RS_OperatingSystemInterface</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>持久性需求</td>
+          <td>AUTOSAR_RS_Persistency</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>自适应平台平台健康管理需求</td>
+          <td>AUTOSAR_RS_PlatformHealthManagement</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>自适应平台安全管理需求</td>
+          <td>AUTOSAR_RS_SecurityManagement</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>通信管理规范</td>
+          <td>AUTOSAR_SWS_CommunicationManagement</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>自适应平台加密规范</td>
+          <td>AUTOSAR_SWS_Cryptography</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>诊断规范</td>
+          <td>AUTOSAR_SWS_Diagnostics</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>执行管理规范</td>
+          <td>AUTOSAR_SWS_ExecutionManagement</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>身份与访问管理规范</td>
+          <td>AUTOSAR_SWS_IdentityAndAccessManagement</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>自适应平台入侵检测系统管理器规范</td>
+          <td>AUTOSAR_SWS_AdaptiveIntrusionDetectionSystemManager</td>
+          <td>初始发布</td>
+      </tr>
+      <tr>
+          <td>日志与追踪规范</td>
+          <td>AUTOSAR_SWS_LogAndTrace</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>操作系统接口规范</td>
+          <td>AUTOSAR_SWS_OperatingSystemInterface</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>持久性规范</td>
+          <td>AUTOSAR_SWS_Persistency</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>自适应平台平台健康管理规范</td>
+          <td>AUTOSAR_SWS_PlatformHealthManagement</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>RESTful 通信规范</td>
+          <td>AUTOSAR_SWS_REST</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>自适应核心规范</td>
+          <td>AUTOSAR_SWS_AdaptiveCore</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>自适应平台时间同步规范</td>
+          <td>AUTOSAR_SWS_TimeSynchronization</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><strong>自适应服务</strong></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>传感器接口说明</td>
+          <td>AUTOSAR_EXP_SensorInterfaces</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>状态管理需求</td>
+          <td>AUTOSAR_RS_StateManagement</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>自动驾驶接口需求</td>
+          <td>AUTOSAR_RS_AutomatedDrivingInterfaces</td>
+          <td>初始发布</td>
+      </tr>
+      <tr>
+          <td>更新与配置管理需求</td>
+          <td>AUTOSAR_RS_UpdateAndConfigManagement</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<p>===== 第 26 页 =====</p>
+<table>
+  <thead>
+      <tr>
+          <th>长名称</th>
+          <th>文件名</th>
+          <th>生命周期变更</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>网络管理规范</td>
+          <td>AUTOSAR_SWS_NetworkManagement</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>传感器接口规范</td>
+          <td>AUTOSAR_SWS_SensorInterfaces</td>
+          <td>初始发布</td>
+      </tr>
+      <tr>
+          <td>状态管理规范</td>
+          <td>AUTOSAR_SWS_StateManagement</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>更新与配置管理规范</td>
+          <td>AUTOSAR_SWS_UpdateAndConfigManagement</td>
+          <td></td>
+      </tr>
+  </tbody>
+</table>
+<p>表 3.1：规范概览</p>
+<p>===== 第 27 页 =====</p>
+<p>4 已知技术缺陷备注</p>
+<p>每个规范的技术缺陷（如果适用）在其各自规范目录后的“已知限制”章节中说明。</p>
+<p>以下技术缺陷需要提及，点击章节引用将带您到相应文档：</p>
+<p>表 4.1：已知技术缺陷概览</p>
+<table>
+  <thead>
+      <tr>
+          <th>文档 UID</th>
+          <th>长名称</th>
+          <th>文档类型</th>
+          <th>章节引用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>717</td>
+          <td>通信管理规范</td>
+          <td>SWS</td>
+          <td>4.1</td>
+      </tr>
+      <tr>
+          <td>721</td>
+          <td>执行管理规范</td>
+          <td>SWS</td>
+          <td>4.2</td>
+      </tr>
+      <tr>
+          <td>723</td>
+          <td>诊断规范</td>
+          <td>SWS</td>
+          <td>4.3</td>
+      </tr>
+      <tr>
+          <td>851</td>
+          <td>自适应平台平台健康管理规范</td>
+          <td>SWS</td>
+          <td>4.4</td>
+      </tr>
+      <tr>
+          <td>858</td>
+          <td>持久性规范</td>
+          <td>SWS</td>
+          <td>4.5</td>
+      </tr>
+      <tr>
+          <td>883</td>
+          <td>自适应平台加密规范</td>
+          <td>SWS</td>
+          <td>4.6</td>
+      </tr>
+      <tr>
+          <td>888</td>
+          <td>更新与配置管理规范</td>
+          <td>SWS</td>
+          <td>4.7</td>
+      </tr>
+      <tr>
+          <td>898</td>
+          <td>网络管理规范</td>
+          <td>SWS</td>
+          <td>4.8</td>
+      </tr>
+      <tr>
+          <td>900</td>
+          <td>身份与访问管理规范</td>
+          <td>SWS</td>
+          <td>4.9</td>
+      </tr>
+      <tr>
+          <td>903</td>
+          <td>自适应核心规范</td>
+          <td>SWS</td>
+          <td>4.10</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="41-通信管理规范-uid-717-sws">4.1 通信管理规范 (UID 717, SWS)</h3>
+<p>本文档的当前版本缺少一些功能，这些功能未在 SWS 通信管理文档中标准化和规定，但在 ara::com API 说明 [1] 中描述并在演示器代码中实现：</p>
+<p><strong>本地缓冲区溢出</strong></p>
+<p>目前未规定如果应用程序访问数据的速度慢于通过网络接收数据的速度，本地缓冲区满时会发生什么。</p>
+<p>关于 E2E 保护和可检测故障模式的一般限制在 [2] 中描述。此外，关于 E2E 保护的平台特定限制在章节“E2EForMethodsLimitations”中描述。</p>
+<p>以下关于 [3] 和 [4] 中描述的标签-长度-值序列化原则引入的可选性的限制适用：</p>
+<p><strong>可选方法参数</strong></p>
+<p>规范不支持可选方法参数的存在。</p>
+<p>===== 第 28 页 =====</p>
+<h3 id="42-执行管理规范-uid-721-sws">4.2 执行管理规范 (UID 721, SWS)</h3>
+<p>本文档中提到的以下功能在本版本中未完全规定：</p>
+<ul>
+<li>第 7.7 节“资源限制”和第 7.8 节“容错”的 [5]——这些章节在本版本中已扩展但仍不完整。特别是内容将在下一版本中扩展更多属性和形式化需求。</li>
+<li>第 7.6.4 节描述了冗余确定性执行所需的同步要求，这些要求在 7.6.2 中未详细说明。使用除 ara::com 以外的通信 API 的接口不在规范范围内。我们专注于当前版本的单个域同步，即冗余确定性执行在同一操作系统或 ECU 内。确定性同步的模型和配置以及与软件锁步交互的详细信息将在后续版本中规定。</li>
+<li>第 6.1 节详细列出了来自执行管理需求规范 [6] 但未在本规范中详细阐述的需求。这些需求在本文档中的存在确保了需求追溯的完整性，同时也表明了执行管理在 AUTOSAR 自适应平台未来版本中的演进方向。</li>
+</ul>
+<p>上述功能可能发生修改，并将在本文档的未来版本中考虑纳入。</p>
+<h3 id="43-诊断规范-uid-723-sws">4.3 诊断规范 (UID 723, SWS)</h3>
+<ul>
+<li>仅支持 [7] 中的调度器类型 1。</li>
+<li>服务 0x2A 不支持子功能 &lsquo;defineByMemoryAddress&rsquo;。</li>
+<li>服务 0x2C 不支持。</li>
+<li>OBD ISO 15031 和 WWH OBD ISO 27145 不被 DM 支持。</li>
+<li>软件集群/诊断服务器实例受 DM 接口支持但未详细规定。</li>
+<li>DoIP 边缘节点不被 DM 支持。</li>
+<li>以下 UDS 服务未由 DM 实现：
+<ul>
+<li>0x23 ReadMemoryByAddress</li>
+<li>0x24 ReadScalingDataByIdentifier</li>
+<li>0x2F InputOutputControlByIdentifier</li>
+<li>0x38 RequestFileTransfer</li>
+<li>0x3D WriteMemoryByAddress</li>
+</ul>
+</li>
+</ul>
+<p>===== 第 29 页 =====</p>
+<ul>
+<li>0x83 AccessTimingParameter</li>
+<li>0x84 SecuredDataTransmission</li>
+<li>0x87 LinkControl</li>
+</ul>
+<p>除非明确说明，否则 UDS 服务的子功能根据 ISO 14229-1 [8] 实现。</p>
+<p>UDS 镜像事件内存不被 DM 支持。因此，DM 不支持以下 UDS 服务：</p>
+<ul>
+<li>0x19 子功能 0x0F (reportMirrorMemoryDTCByStatusMask)</li>
+<li>0x19 子功能 0x10 (reportMirrorMemoryDTCExtDataRecordByDTCNumber)</li>
+<li>0x19 子功能 0x11 (reportNumberOfMirrorMemoryDTCByStatusMask)</li>
+</ul>
+<p>OBD/WWH OBD 不被 DM 支持。因此，DM 不支持以下 UDS 服务：</p>
+<ul>
+<li>0x19 子功能 0x05 (reportDTCStoredDataByRecordNumber)</li>
+<li>0x19 子功能 0x12 (reportNumberOfEmissionsOBDDTCByStatusMask)</li>
+<li>0x19 子功能 0x13 (reportEmissionsOBDDTCByStatusMask)</li>
+<li>0x19 子功能 0xA2 (reportWWHOBDDTCByMaskRecord)</li>
+<li>0x19 子功能 0x55 (reportWWHOBDDTCWithPermanentStatus)</li>
+</ul>
+<p>以下通用的 ReadDTCInformation UDS 服务也不支持：</p>
+<ul>
+<li>0x19 子功能 0x03 (reportDTCSnapshotIdentification)</li>
+<li>0x19 子功能 0x08 (reportDTCBySeverityMaskRecord)</li>
+<li>0x19 子功能 0x09 (reportSeverityInformationOfDTC)</li>
+<li>0x19 子功能 0x0B (reportFirstTestFailedDTC)</li>
+<li>0x19 子功能 0x0C (reportFirstConfirmedDTC)</li>
+<li>0x19 子功能 0x0D (reportMostRecentTestFailedDTC)</li>
+<li>0x19 子功能 0x0E (reportMostRecentConfirmedDTC)</li>
+<li>0x19 子功能 0x15 (reportDTCWithPermanentStatus)</li>
+<li>0x19 子功能 0x16 (reportDTCExtDataRecordByRecordNumber)</li>
+</ul>
+<p>事件内存：不支持事件/DTC 的运行时变体处理。</p>
+<p>===== 第 30 页 =====</p>
+<p>事件内存：组合事件的细节未规定。</p>
+<p>更改安全级别的尝试失败次数的持久存储：每次尝试计数器递增后，应持久化以在意外或有意复位后幸存。这里选择持久存储在 Adaptive Autosar 中是强制性的。</p>
+<h3 id="44-自适应平台平台健康管理规范-uid-851-sws">4.4 自适应平台平台健康管理规范 (UID 851, SWS)</h3>
+<ul>
+<li>本版本不支持级联（即，将监督状态、检查点或健康通道信息转发给 PHM 外部实体或另一个 PHM 实例）。</li>
+<li>本版本不完全支持与监督模式相关的平台健康管理配置。</li>
+<li>通知监督实体关于监督状态的 API 仅以轮询模式提供。本版本中无使用通知模式的 API。</li>
+<li>本版本未规定与诊断管理器的接口。</li>
+</ul>
+<h3 id="45-持久性规范-uid-858-sws">4.5 持久性规范 (UID 858, SWS)</h3>
+<p>尽管键值存储和文件存储可以配置为只写，但当前 API 始终允许读访问。即使使用 ara::per::FileStorage::OpenFileWriteOnly 打开文件，读访问也是可能的。</p>
+<h3 id="46-自适应平台加密规范-uid-883-sws">4.6 自适应平台加密规范 (UID 883, SWS)</h3>
+<p>当前版本的 Crypto API 规范中仍然缺少以下功能域和描述：</p>
+<p><strong>异步接口</strong></p>
+<p>目前仅有同步 API 规范，如果需要异步行为，应在消费者应用程序级别实现。可以通过使用专用执行线程处理长时间操作来实现。</p>
+<p><strong>完整的 X.509 证书支持，包括 OCSP 和 OCSP stapling</strong></p>
+<p>CryptoAPI 尚未提供客户端（ECU）端 X.509 证书管理的完整规范。当前版本的 Crypto API 仅指定了负责基本 X.509 功能以及相关加密算法使用的最小接口子集。当前 API 支持提取和解析 X.509 证书和证书请求的基本属性。计划在下一版本中通过额外的接口扩展 API 规范以完全支持 X.509 扩展。</p>
+<p>注意：当前 X.509 Provider API 的规范是初步的，可能会进行扩展和更改。</p>
+<p>===== 第 31 页 =====</p>
+<p><strong>证书对象格式</strong></p>
+<p>当前版本的 CryptoAPI 对众所周知的加密格式编码/解码的支持最小：仅要求 CryptoAPI 的任何实现支持 X.509 证书和证书签名请求的 DER 和 PEM 编码。对于其他加密对象，实现可以仅支持“原始”格式。计划在下一版本中通过统一的接口扩展 CryptoAPI，以将复杂对象编码/解码为标准格式。</p>
+<h3 id="47-更新与配置管理规范-uid-888-sws">4.7 更新与配置管理规范 (UID 888, SWS)</h3>
+<ul>
+<li>UCM 不负责启动更新过程。UCM 实现一个服务接口来完成此操作。该服务接口的用户有责任在执行按需软件更新程序之前验证车辆处于可更新状态。与车内其他 AUTOSAR 自适应平台或 AUTOSAR 经典平台通信也由用户负责。</li>
+<li>UCM 接收本地可用的软件包进行处理。软件包通常从 OEM 后端下载。软件包的下载必须由另一个应用程序完成，即 UCM 不管理到 OEM 后端的连接。在触发处理之前，必须使用提供的 ara::com 接口将软件包传输到 UCM。</li>
+<li>UCM 更新过程设计用于覆盖单 AUTOSAR 自适应平台的用例。UCM 可以更新自适应应用程序、AUTOSAR 自适应平台本身（包括所有功能集群）以及底层操作系统。</li>
+<li>UCM 不负责对所提供接口实施身份验证和访问控制。本文档目前未提供任何机密性保护机制以及针对拒绝服务攻击的措施。假设平台保留 UCM 与其用户之间交换参数的完整性。</li>
+<li>UCM 不支持对不支持 ARA::COM 或具有对齐诊断闪存序列支持的 UDS 的 ECU 进行更新。</li>
+</ul>
+<p>===== 第 32 页 =====</p>
+<h3 id="48-网络管理规范-uid-898-sws">4.8 网络管理规范 (UID 898, SWS)</h3>
+<ul>
+<li>自适应网络管理目前仅支持 UdpNM。</li>
+<li>自适应网络管理不允许节点检测（重复消息状态），仅处理传入请求。</li>
+<li>自适应网络管理不能配置为网络主协调器。</li>
+<li>自适应网络管理不支持使用 CBV 中的信息进行协调关闭。</li>
+<li>自适应网络管理不支持被动模式和被动启动。被动启动意味着节点已启动（即进入正常模式），但网络已被另一个节点唤醒。</li>
+<li>清单中没有第 7.3 节定义的将逻辑网络映射到位向量位置的建模部分。</li>
+<li>用户数据的更新和访问已被移除，因为到应用程序的服务接口已被移除。状态管理将控制网络请求/释放，并且需要澄清用户数据更改/指示是通过状态管理还是直接由应用程序完成。</li>
+</ul>
+<h3 id="49-身份与访问管理规范-uid-900-sws">4.9 身份与访问管理规范 (UID 900, SWS)</h3>
+<ul>
+<li>详细 API 将在未来版本中添加。</li>
+<li>目前仅限于 ara::com。</li>
+<li>对于其他功能集群，未来版本计划在策略执行点上实现。</li>
+</ul>
+<h3 id="410-自适应核心规范-uid-903-sws">4.10 自适应核心规范 (UID 903, SWS)</h3>
+<ul>
+<li>某些数据类型（Array, Map, Optional, String, StringView, Variant）的规范提到了“支持构造”，但缺乏对此术语精确范围的界定。</li>
+<li>某些数据类型（Map, Vector, String）的规范缺乏对内存分配行为的全面定义；目前仅描述为“实现定义”。</li>
+<li>“FunctionalSpecification”章节非正式地描述了一些行为，这些行为应以规范项的形式给出。</li>
+</ul>
+<p>===== 第 33 页 =====</p>
+<p>5 发布历史</p>
+<h3 id="51-版本-r20-11">5.1 版本 R20-11</h3>
+<table>
+  <thead>
+      <tr>
+          <th>名称</th>
+          <th>规范历史条目</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>自适应平台设计说明</td>
+          <td>· 状态管理、更新与配置管理、加密和安全方面有中等数量变更<br>· 执行管理、诊断、持久性、身份与访问管理有少量变更<br>· 架构逻辑视图有少量变更</td>
+      </tr>
+      <tr>
+          <td>自适应平台方法</td>
+          <td>· 编辑性变更（统一了术语 ECU 和 Machine 的使用）<br>· 移除了过时的基于信号的服务接口<br>· 移除了过时的附录“清单文件中使用的类”</td>
+      </tr>
+      <tr>
+          <td>清单规范需求</td>
+          <td>· 添加了原始数据流部署的需求</td>
+      </tr>
+      <tr>
+          <td>清单规范</td>
+          <td>· 重构了 Phm 的贡献<br>· 安全事件报告<br>· 支持加密操作<br>· 重构了诊断映射<br>· 小的修正/澄清/编辑性变更</td>
+      </tr>
+      <tr>
+          <td>自适应平台特定通用需求</td>
+          <td>· 添加了更多关于特殊成员函数的设计指南<br>· 添加了 C++14 支持</td>
+      </tr>
+      <tr>
+          <td>通信管理需求</td>
+          <td>· E2E 保护<br>  - 事件和方法<br>  - 到安全需求的可追溯性<br>· 服务唯一性：使用全限定服务 ID 提供服务<br>· 原始数据流需求设置为有效<br>· 通信组（草案）</td>
+      </tr>
+      <tr>
+          <td>通信管理规范</td>
+          <td>· 添加了 SecOC 行为、API 和新鲜度值管理到规范<br>· 为 ara::com API 标准化了 API 错误码<br>· 添加了唯一的 ErrorDomain 标识符<br>· 添加了命名构造函数方法<br>· 更新了对方法和事件的 E2E 支持<br>· 更新了原始数据流章节<br>· 向具有异步回调的 API 引入了可选的执行上下文参数<br>· 将 kCapabilityEnforcementError 更改为 kGrantEnforcementError<br>· 将“条目类型”字段的魔数移动到 PRS_SOMEIPSERVICE Discovery<br>· 编辑性变更</td>
+      </tr>
+  </tbody>
+</table>
+<p>===== 第 34 页 =====</p>
+<table>
+  <thead>
+      <tr>
+          <th>名称</th>
+          <th>规范历史条目</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>操作系统接口需求</td>
+          <td>· 向上追溯至 RS_Safety[1] 文档<br>· 澄清了执行管理的描述<br>· 将时间触发执行移至 RS_ExecutionManagement[2]</td>
+      </tr>
+      <tr>
+          <td>操作系统接口规范</td>
+          <td>· 向上追溯更新<br>· 澄清了执行管理的描述<br>· 移除了对“不可恢复状态”的未定义提及</td>
+      </tr>
+      <tr>
+          <td>执行管理需求</td>
+          <td>· 新增：RS_EM_00150</td>
+      </tr>
+      <tr>
+          <td>执行管理规范</td>
+          <td>· 进一步细化状态管理 API 及语义<br>· 更新流程生命周期（终止报告可选）<br>· 新增确定性同步支持<br>· EM-PHM 交互</td>
+      </tr>
+      <tr>
+          <td>诊断规范</td>
+          <td>· 文档质量改进和错误修复<br>· 纳入了质量范围评审结果<br>· 来自概念 DoIPExtension 的已验证需求<br>· 引入 UDS 服务 2A 和 2C</td>
+      </tr>
+      <tr>
+          <td>自适应平台版本概览</td>
+          <td>· 发布生命周期状态：R20-11 处于演进阶段，R20-11 取代 R19-11<br>· 无变更，因为文档已设为淘汰</td>
+      </tr>
+      <tr>
+          <td>在关键和安全相关系统中使用 C++14 语言的指南</td>
+          <td>· 添加实例说明符到实例标识符的转换<br>· 添加即发即忘方法<br>· 添加对 DDS 中字段的支持<br>· 添加服务版本控制<br>· 移除 ara::com 中的 ara::per 用法<br>· 添加对无效值的支持<br>· 使用新的 API 通过 SOME/IP 获取事件</td>
+      </tr>
+      <tr>
+          <td>功能集群通信管理的演示器设计</td>
+          <td>· 更新了已知限制<br>· 小的编辑性变更</td>
+      </tr>
+      <tr>
+          <td>功能集群诊断的演示器设计</td>
+          <td>· 无内容变更</td>
+      </tr>
+      <tr>
+          <td>ara::com API 说明</td>
+          <td>· 用正确的表述替换了术语“(非)受检异常”<br>· 澄清了“实例说明符”的使用和传递<br>· 移除了对“AUTOSAR_RS_CPP14Guidelines”的引用</td>
+      </tr>
+      <tr>
+          <td>自适应平台平台健康管理规范</td>
+          <td>· 将 PHM 的角色更改为通知状态管理的监视器，因此重做了逻辑和接口<br>· 为 PHM 集成身份与访问管理<br>· 将健康通道监督规范从基础移至自适应平台<br>· 重新引入了检查点和健康状态的枚举</td>
+      </tr>
+  </tbody>
+</table>
+<p>===== 第 35 页 =====</p>
+<table>
+  <thead>
+      <tr>
+          <th>名称</th>
+          <th>规范历史条目</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>自适应平台平台健康管理需求</td>
+          <td>· 新增 RS_PHM_09255, RS_PHM_09257, RS_PHM_09240, RS_PHM_09241（从基础移入）<br>· 移除了 RS_PHM_00110<br>· 需求追溯清理</td>
+      </tr>
+      <tr>
+          <td>日志与追踪规范</td>
+          <td>· 在第 7.3 节日志消息中引入了非建模消息和建模消息<br>· 引入了 Logger::WithLevel() API，用于记录消息并将 LogLevel 作为 API 参数传递<br>· 重构和编辑性变更</td>
+      </tr>
+      <tr>
+          <td>持久性需求</td>
+          <td>· 添加了对文件元数据的支持<br>· 添加了向上追溯到 RS Safety<br>· 适配了公共文档结构<br>· 添加了需求历史</td>
+      </tr>
+      <tr>
+          <td>持久性规范</td>
+          <td>· 替换了基于 POSIX 的文件访问 API，改进了错误处理和其他 API 的对称性<br>· 使用 Crypto API 完全支持加密和哈希冗余<br>· 向应用程序添加了关于安全相关问题的信息<br>· 改进了安装/更新和冗余</td>
+      </tr>
+      <tr>
+          <td>功能集群持久性的演示器设计</td>
+          <td>· 引入了 ara::per::if::Initialize 和 ara::per::if::Deinitialize<br>· 引入了处理 CppImplementationDataTypes 的机制<br>· 通过 ara::core::InstanceSpecifier 引入了存储位置标识</td>
+      </tr>
+      <tr>
+          <td>功能集群日志与追踪的演示器设计</td>
+          <td>· 移除了 InitLogging() 并实现了 ara::core::Initialize 的使用<br>· 重构和编辑性变更</td>
+      </tr>
+      <tr>
+          <td>功能集群短名称</td>
+          <td>· 将核心类型重命名为自适应核心</td>
+      </tr>
+      <tr>
+          <td>自适应平台平台类型规范</td>
+          <td>· 编辑性变更</td>
+      </tr>
+      <tr>
+          <td>RESTful 通信规范</td>
+          <td>· 无功能性变更</td>
+      </tr>
+      <tr>
+          <td>自适应平台时间同步规范</td>
+          <td>· TSYNC API 重新设计和需求更新<br>· 与 CP 和 RS 文档协调一致<br>· 文档适配新模板<br>· 术语澄清和清理</td>
+      </tr>
+      <tr>
+          <td>自适应平台安全管理需求</td>
+          <td>· 重写了 PEE 需求 [RS_SEC_05019]<br>· 添加了“约定”和“缩略语”章节<br>· 小的编辑性变更以符合 AUTOSAR RS 模板<br>· 修正了 [RS_SEC_05012] 中的拼写</td>
+      </tr>
+      <tr>
+          <td>自适应平台加密规范</td>
+          <td>· 重写文档以与 AUTOSAR 标准对齐<br>· 根据 WG-SEC 反馈更新了 Crypto API</td>
+      </tr>
+  </tbody>
+</table>
+<p>===== 第 36 页 =====</p>
+<table>
+  <thead>
+      <tr>
+          <th>名称</th>
+          <th>规范历史条目</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>在自适应平台上使用并行处理技术的设计指南</td>
+          <td>· 无内容变更</td>
+      </tr>
+      <tr>
+          <td>更新与配置管理需求</td>
+          <td>· 添加了到 RS SAFETY 文档的可追溯性</td>
+      </tr>
+      <tr>
+          <td>更新与配置管理规范</td>
+          <td>· 针对 UCM Master 的经典平台更新规范<br>· 重构了 UCM Master API<br>· 简化了 UCM Master 状态机<br>· 详细的升级活动历史信息</td>
+      </tr>
+      <tr>
+          <td>加密需求</td>
+          <td>· 移除：[RS_CRYPTO_02406]<br>· 更新：[RS_CRYPTO_02201]</td>
+      </tr>
+      <tr>
+          <td>自适应平台系统测试</td>
+          <td>· 为 CM、REST、EMO、DIAG、PER、IAM、UCM 和 CRYPTO 添加了测试用例<br>· 在测试用例中添加了指向相应测试配置的交叉引用链接<br>· 更新了 CRYPTO 的限制<br>· 移除了已属于 AUTOSAR 术语表的缩略词</td>
+      </tr>
+      <tr>
+          <td>功能集群更新与配置管理的演示器设计</td>
+          <td>· 改进了状态机实现<br>· 部分实现了车辆包管理器<br>· 将 UCM 和 VPM 的共享代码迁移到库中<br>· 重做了文档结构</td>
+      </tr>
+      <tr>
+          <td>安全概览说明</td>
+          <td>· 将功能和技术安全需求移至 RS_Safety<br>· 编辑性变更<br>· 更正了拼写和布局<br>· 更新了缩写表<br>· 更新了 AUTOSAR 自适应平台中已识别的安全工件</td>
+      </tr>
+      <tr>
+          <td>网络管理规范</td>
+          <td>· 若干质量改进<br>· 将 NetworkState 数据类型从 boot 更改为 NetworkStateType</td>
+      </tr>
+      <tr>
+          <td>身份与访问管理需求</td>
+          <td>· 能力重命名为意图<br>· 文档中反映了关于进程分离的架构变更</td>
+      </tr>
+      <tr>
+          <td>身份与访问管理规范</td>
+          <td>· 在自适应应用程序中引入了策略执行<br>· 为平台健康管理添加了 IAM</td>
+      </tr>
+      <tr>
+          <td>功能集群身份与访问管理的演示器设计</td>
+          <td>· 重构了访问管理器并移除了能力<br>· 为演示目的引入了单独的授权<br>· 使用执行管理器来识别进程</td>
+      </tr>
+  </tbody>
+</table>
+<p>===== 第 37 页 =====</p>
+<table>
+  <thead>
+      <tr>
+          <th>名称</th>
+          <th>规范历史条目</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>自适应核心规范</td>
+          <td>· 添加了关于“显式操作中止”的规范<br>· 添加了关于保留符号前缀的规范<br>· 添加了类 SteadyClock 的规范<br>· 添加了关于 ARA API 异步信号安全性的章节<br>· 用供应商定义的错误域扩展了错误域范围<br>· 添加了关于定义自己的错误域的规范<br>· 对 C++ 数据类型进行了各种扩展和修复<br>· 整合了 SWS_General 的内容<br>· 将文档重命名为“自适应核心”</td>
+      </tr>
+      <tr>
+          <td>功能集群 RESTful 的演示器设计</td>
+          <td>· 无内容变更</td>
+      </tr>
+      <tr>
+          <td>功能集群时间同步的演示器设计</td>
+          <td>· 已知限制章节清理</td>
+      </tr>
+      <tr>
+          <td>状态管理规范</td>
+          <td>· 更新了面向更新与配置管理的接口<br>· 更新了面向自适应诊断的接口<br>· 基于通信组引入了诊断复位<br>· 更新了面向平台健康管理的接口<br>· 将监督实体失败的错误反应移至状态管理<br>· 基于通信组引入了 PowerModes<br>· 移除了 RequestState 和 ReleaseRequest 接口</td>
+      </tr>
+      <tr>
+          <td>状态管理需求</td>
+          <td>· 无内容变更</td>
+      </tr>
+      <tr>
+          <td>自动驾驶接口需求</td>
+          <td>· 初始发布</td>
+      </tr>
+      <tr>
+          <td>传感器接口规范</td>
+          <td>· 初始发布</td>
+      </tr>
+      <tr>
+          <td>传感器接口说明</td>
+          <td>· 更新了第 5.3 节中支持的可选元素</td>
+      </tr>
+      <tr>
+          <td>功能集群平台健康管理的演示器设计</td>
+          <td>· 实现了 PHM 守护进程<br>· 引入了用于恢复和健康通道到 SM 的 API<br>· 健康监控（即第 7 章）从 ASWS_HM 移至 SWS_PHM</td>
+      </tr>
+      <tr>
+          <td>使用自适应平台接口指南</td>
+          <td>· 章节名称从“核心类型”更改为“自适应核心”，章节内有一些小的变更<br>· 状态管理章节有中等程度变更<br>· 持久性章节有少量变更</td>
+      </tr>
+      <tr>
+          <td>IPsec 实现指南说明</td>
+          <td>· 无内容变更<br>· 将文档状态从“最终”更改为“已发布”</td>
+      </tr>
+      <tr>
+          <td>自适应平台时序扩展规范</td>
+          <td>· 初始发布</td>
+      </tr>
+      <tr>
+          <td>自适应平台入侵检测系统管理器规范</td>
+          <td>· 初始发布</td>
+      </tr>
+      <tr>
+          <td>自适应平台软件架构说明</td>
+          <td>· 初始发布</td>
+      </tr>
+  </tbody>
+</table>
+<p>===== 第 38 页 =====</p>
+<p>表 5.1：发布历史</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 0001-01-01</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/103_autosar_tr_adaptiveplatformreleaseoverriew/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/104_autosar_rs_main/" class="prev" rel="prev" title=""><i class="fas fa-angle-left" aria-hidden="true"></i></a>
+            <a href="/blog/102_autosar_exp_swarchitecture/" class="next" rel="next" title=""><i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

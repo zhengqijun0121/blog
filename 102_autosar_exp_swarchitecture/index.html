@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title> - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/102_autosar_exp_swarchitecture/">
+  <meta property="og:site_name" content="LoveIt">
+  <meta property="og:title" content="LoveIt">
+  <meta property="og:description" content="1 引言 本文档为 AUTOSAR 自适应平台标准依据 [1, ISO/IEC 42010] 提供了软件架构概述，主要目标如下：
+识别 AUTOSAR 自适应平台的利益相关者及其关注点。 确定系统范围并提供 AUTOSAR 自适应平台的概要信息。 提供所用所有架构视角的定义，以及所有利益相关者关注点到这些视角的映射。 为此架构描述中使用的每个架构视角提供架构视图及其架构模型。 提供此架构描述内容之间的对应规则和对应关系。 在高层次上提供架构理由（对所做决策的解释、论证和推理）。更深入的决策记录见 [2, EXP_SWArchitecturalDecisions]。 记录架构描述中已知的不一致之处。 请注意，AUTOSAR 自适应平台标准是通过需求和软件规范文档定义的。这些文档故意不规定 AUTOSAR 自适应平台构建块之间的依赖关系和接口，以便为堆栈供应商在其解决方案设计中提供更多自由度。本文档描述了 AUTOSAR 自适应平台的原始架构设计，包括构建块之间应如何交互的细节。它是该标准实现应如何在内部工作的一个示例。然而，堆栈供应商可以自由选择其他设计，只要符合具有约束力的 AUTOSAR 自适应平台标准即可。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+  <meta name="twitter:title" content="LoveIt">
+  <meta name="twitter:description" content="1 引言 本文档为 AUTOSAR 自适应平台标准依据 [1, ISO/IEC 42010] 提供了软件架构概述，主要目标如下：
+识别 AUTOSAR 自适应平台的利益相关者及其关注点。 确定系统范围并提供 AUTOSAR 自适应平台的概要信息。 提供所用所有架构视角的定义，以及所有利益相关者关注点到这些视角的映射。 为此架构描述中使用的每个架构视角提供架构视图及其架构模型。 提供此架构描述内容之间的对应规则和对应关系。 在高层次上提供架构理由（对所做决策的解释、论证和推理）。更深入的决策记录见 [2, EXP_SWArchitecturalDecisions]。 记录架构描述中已知的不一致之处。 请注意，AUTOSAR 自适应平台标准是通过需求和软件规范文档定义的。这些文档故意不规定 AUTOSAR 自适应平台构建块之间的依赖关系和接口，以便为堆栈供应商在其解决方案设计中提供更多自由度。本文档描述了 AUTOSAR 自适应平台的原始架构设计，包括构建块之间应如何交互的细节。它是该标准实现应如何在内部工作的一个示例。然而，堆栈供应商可以自由选择其他设计，只要符合具有约束力的 AUTOSAR 自适应平台标准即可。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/102_autosar_exp_swarchitecture/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/103_autosar_tr_adaptiveplatformreleaseoverriew/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/101_autosar_exp_platformdesign/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/102_autosar_exp_swarchitecture\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","wordcount":  22911 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/102_autosar_exp_swarchitecture\/","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/102_autosar_exp_swarchitecture/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/102_autosar_exp_swarchitecture/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX"></h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="0001-01-01">0001-01-01</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 22911 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 46 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#11-目标">1.1 目标</a></li>
+    <li><a href="#12-范围">1.2 范围</a></li>
+    <li><a href="#13-文档结构">1.3 文档结构</a>
+      <ul>
+        <li><a href="#13-文档结构-1">1.3 文档结构</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#21-缩略语和缩写">2.1 缩略语和缩写</a></li>
+    <li><a href="#22-术语定义">2.2 术语定义</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#41-需求概述">4.1 需求概述</a></li>
+    <li><a href="#支持先进技术">支持先进技术</a></li>
+    <li><a href="#软件更新与配置">软件更新与配置</a></li>
+    <li><a href="#安全">安全</a></li>
+    <li><a href="#功能安全">功能安全</a></li>
+    <li><a href="#重用与互操作性">重用与互操作性</a></li>
+    <li><a href="#通信">通信</a></li>
+    <li><a href="#诊断">诊断</a></li>
+    <li><a href="#42-质量目标">4.2 质量目标</a></li>
+    <li><a href="#43-利益相关者">4.3 利益相关者</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#51-内部接口">5.1 内部接口</a></li>
+    <li><a href="#52-分布式工作">5.2 分布式工作</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#61-质量属性">6.1 质量属性</a>
+      <ul>
+        <li><a href="#611-autosar-自适应平台标准">6.1.1 AUTOSAR 自适应平台标准</a></li>
+        <li><a href="#功能适用性">功能适用性</a></li>
+        <li><a href="#性能效率">性能效率</a></li>
+        <li><a href="#兼容性">兼容性</a></li>
+        <li><a href="#可用性">可用性</a></li>
+        <li><a href="#可靠性">可靠性</a></li>
+      </ul>
+    </li>
+    <li><a href="#安全-1">安全</a></li>
+    <li><a href="#可维护性">可维护性</a></li>
+    <li><a href="#可移植性">可移植性</a>
+      <ul>
+        <li><a href="#612-autosar-自适应平台堆栈">6.1.2 AUTOSAR 自适应平台堆栈</a></li>
+        <li><a href="#兼容性-1">兼容性</a></li>
+        <li><a href="#可用性-1">可用性</a></li>
+        <li><a href="#可维护性-1">可维护性</a></li>
+        <li><a href="#可移植性-1">可移植性</a>
+          <ul>
+            <li><a href="#613-autosar-自适应应用">6.1.3 AUTOSAR 自适应应用</a></li>
+          </ul>
+        </li>
+        <li><a href="#可用性-2">可用性</a></li>
+        <li><a href="#可维护性-2">可维护性</a></li>
+        <li><a href="#可移植性-2">可移植性</a></li>
+      </ul>
+    </li>
+    <li><a href="#62-质量场景">6.2 质量场景</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#71-自适应应用">7.1 自适应应用</a></li>
+    <li><a href="#72-依赖">7.2 依赖</a>
+      <ul>
+        <li><a href="#721-加密提供者">7.2.1 加密提供者</a></li>
+        <li><a href="#722-操作系统">7.2.2 操作系统</a></li>
+        <li><a href="#723-看门狗">7.2.3 看门狗</a></li>
+      </ul>
+    </li>
+    <li><a href="#73-外部系统">7.3 外部系统</a>
+      <ul>
+        <li><a href="#731-autosar-自适应应用">7.3.1 AUTOSAR 自适应应用</a></li>
+        <li><a href="#732-autosar-经典平台">7.3.2 AUTOSAR 经典平台</a></li>
+        <li><a href="#733-第三方平台">7.3.3 第三方平台</a></li>
+        <li><a href="#734-诊断客户端">7.3.4 诊断客户端</a></li>
+        <li><a href="#735-后端">7.3.5 后端</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#81-架构方法">8.1 架构方法</a></li>
+    <li><a href="#82-分解策略">8.2 分解策略</a></li>
+    <li><a href="#83-技术">8.3 技术</a>
+      <ul>
+        <li><a href="#831-实现语言">8.3.1 实现语言</a></li>
+        <li><a href="#832-并行处理">8.3.2 并行处理</a></li>
+      </ul>
+    </li>
+    <li><a href="#84-设计原则">8.4 设计原则</a>
+      <ul>
+        <li><a href="#841-利用现有标准">8.4.1 利用现有标准</a>
+          <ul>
+            <li><a href="#842-solid-原则">8.4.2 SOLID 原则</a></li>
+            <li><a href="#8421-单一责任原则">8.4.2.1 单一责任原则</a></li>
+            <li><a href="#8422-接口隔离原则">8.4.2.2 接口隔离原则</a></li>
+            <li><a href="#8423-依赖倒置原则">8.4.2.3 依赖倒置原则</a></li>
+            <li><a href="#843-无环依赖原则">8.4.3 无环依赖原则</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#85-部署">8.5 部署</a></li>
+    <li><a href="#86-验证与确认">8.6 验证与确认</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#91-概述">9.1 概述</a>
+      <ul>
+        <li><a href="#911-构造型">9.1.1 构造型</a></li>
+      </ul>
+    </li>
+    <li><a href="#92-运行时">9.2 运行时</a>
+      <ul>
+        <li><a href="#921-执行管理">9.2.1 执行管理</a>
+          <ul>
+            <li><a href="#9211-职责">9.2.1.1 职责</a></li>
+            <li><a href="#9212-提供的接口">9.2.1.2 提供的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#deterministic-client-applicationinterface">Deterministic Client (applicationInterface)</a></li>
+    <li><a href="#execution-client-applicationinterface">Execution Client (applicationInterface)</a></li>
+    <li><a href="#state-client-restrictedapplicationinterface">State Client (restrictedApplicationInterface)</a></li>
+    <li><a href="#request-execution-info-internalinterface">Request Execution Info (internalInterface)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#9213-要求的接口">9.2.1.3 要求的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#multi-process-system-interface">Multi-Process System Interface</a>
+      <ul>
+        <li><a href="#922-状态管理">9.2.2 状态管理</a>
+          <ul>
+            <li><a href="#9221-职责">9.2.2.1 职责</a></li>
+            <li><a href="#9222-提供的接口">9.2.2.2 提供的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#function-group-state-internalinterface">Function Group State (internalInterface)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#9223-要求的接口">9.2.2.3 要求的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#execution-client">Execution Client</a></li>
+    <li><a href="#state-client">State Client</a></li>
+    <li><a href="#network-state">Network State</a></li>
+    <li><a href="#package-management">Package Management</a>
+      <ul>
+        <li><a href="#923-日志与追踪">9.2.3 日志与追踪</a>
+          <ul>
+            <li><a href="#9231-职责">9.2.3.1 职责</a></li>
+            <li><a href="#9232-提供的接口">9.2.3.2 提供的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#9233-要求的接口">9.2.3.3 要求的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#time-base-resource">Time Base Resource</a>
+      <ul>
+        <li><a href="#924-核心">9.2.4 核心</a>
+          <ul>
+            <li><a href="#9241-职责">9.2.4.1 职责</a></li>
+            <li><a href="#9242-提供的接口">9.2.4.2 提供的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#process-termination-applicationinterface">Process Termination (applicationInterface)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#9243-要求的接口">9.2.4.3 要求的接口</a></li>
+          </ul>
+        </li>
+        <li><a href="#925-操作系统接口">9.2.5 操作系统接口</a>
+          <ul>
+            <li><a href="#9251-职责">9.2.5.1 职责</a></li>
+            <li><a href="#9252-提供的接口">9.2.5.2 提供的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#operating-system-interface-applicationinterface">Operating System Interface (applicationInterface)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#9253-要求的接口">9.2.5.3 要求的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#single-process-posix-api">Single-Process POSIX API</a>
+      <ul>
+        <li><a href="#93-通信">9.3 通信</a></li>
+        <li><a href="#931-通信管理">9.3.1 通信管理</a>
+          <ul>
+            <li><a href="#9311-职责">9.3.1.1 职责</a></li>
+            <li><a href="#9312-提供的接口">9.3.1.2 提供的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#service-interface-applicationinterface">Service Interface (applicationInterface)</a></li>
+    <li><a href="#raw-data-interface-applicationinterface">Raw Data Interface (applicationInterface)</a></li>
+    <li><a href="#service-registry-applicationinterface">Service Registry (applicationInterface)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#9313-要求的接口">9.3.1.3 要求的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#logger">Logger</a></li>
+    <li><a href="#tcpip-stack">TCP/IP Stack</a></li>
+    <li><a href="#operating-system-interface">Operating System Interface</a></li>
+    <li><a href="#crypto-application-interface">Crypto Application Interface</a></li>
+    <li><a href="#manifest-accessor">Manifest Accessor</a></li>
+    <li><a href="#policy-decision-point">Policy Decision Point</a>
+      <ul>
+        <li><a href="#932-网络管理">9.3.2 网络管理</a>
+          <ul>
+            <li><a href="#9321-职责">9.3.2.1 职责</a></li>
+            <li><a href="#9322-提供的接口">9.3.2.2 提供的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#network-state-restrictedapplicationinterface">Network State (restrictedApplicationInterface)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#9323-要求的接口">9.3.2.3 要求的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#tcpip-stack-1">TCP/IP Stack</a>
+      <ul>
+        <li><a href="#933-时间同步">9.3.3 时间同步</a>
+          <ul>
+            <li><a href="#9331-职责">9.3.3.1 职责</a></li>
+            <li><a href="#9332-提供的接口">9.3.3.2 提供的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#time-base-resource-applicationinterface">Time Base Resource (applicationInterface)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#9333-要求的接口">9.3.3.3 要求的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#tcpip-stack-2">TCP/IP Stack</a>
+      <ul>
+        <li><a href="#94-存储">9.4 存储</a>
+          <ul>
+            <li><a href="#941-持久性">9.4.1 持久性</a></li>
+            <li><a href="#9411-职责">9.4.1.1 职责</a></li>
+            <li><a href="#9412-提供的接口">9.4.1.2 提供的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#file-storage-applicationinterface">File Storage (applicationInterface)</a></li>
+    <li><a href="#key-value-storage-applicationinterface">Key-Value Storage (applicationInterface)</a></li>
+    <li><a href="#redundancy-handling-applicationinterface">Redundancy Handling (applicationInterface)</a></li>
+    <li><a href="#data-management-applicationinterface">Data Management (applicationInterface)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#9413-要求的接口">9.4.1.3 要求的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#crypto-stack">Crypto Stack</a></li>
+    <li><a href="#non-volatile-storage">Non-volatile Storage</a>
+      <ul>
+        <li><a href="#95-安全">9.5 安全</a></li>
+        <li><a href="#951-密码学">9.5.1 密码学</a>
+          <ul>
+            <li><a href="#9511-职责">9.5.1.1 职责</a></li>
+            <li><a href="#9512-提供的接口">9.5.1.2 提供的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#crypto-stack-applicationinterface">Crypto Stack (applicationInterface)</a></li>
+    <li><a href="#crypto-service-manager-internalinterface">Crypto Service Manager (internalInterface)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#9513-要求的接口">9.5.1.3 要求的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#crypto-provider">Crypto Provider</a></li>
+    <li><a href="#policy-decision-point-1">Policy Decision Point</a>
+      <ul>
+        <li><a href="#952-身份与访问管理">9.5.2 身份与访问管理</a>
+          <ul>
+            <li><a href="#9521-职责">9.5.2.1 职责</a></li>
+            <li><a href="#9522-提供的接口">9.5.2.2 提供的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#policy-decision-point-internalinterface">Policy Decision Point (internalInterface)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#9523-要求的接口">9.5.2.3 要求的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#manifest-accessor-1">Manifest Accessor</a>
+      <ul>
+        <li><a href="#96-功能安全">9.6 功能安全</a>
+          <ul>
+            <li><a href="#961-平台健康管理">9.6.1 平台健康管理</a></li>
+            <li><a href="#9611-职责">9.6.1.1 职责</a></li>
+            <li><a href="#9612-提供的接口">9.6.1.2 提供的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#machine-manager-restrictedapplicationinterface">Machine Manager (restrictedApplicationInterface)</a></li>
+    <li><a href="#supervised-entity-applicationinterface">Supervised Entity (applicationInterface)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#9613-要求的接口">9.6.1.3 要求的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#watchdog-driver">Watchdog Driver</a></li>
+    <li><a href="#request-execution-info">Request Execution Info</a>
+      <ul>
+        <li><a href="#97-配置">9.7 配置</a>
+          <ul>
+            <li><a href="#971-更新与配置管理">9.7.1 更新与配置管理</a></li>
+            <li><a href="#9711-职责">9.7.1.1 职责</a></li>
+            <li><a href="#9712-提供的接口">9.7.1.2 提供的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#package-management-applicationinterface">Package Management (applicationInterface)</a></li>
+    <li><a href="#vehicle-package-management-applicationinterface">Vehicle Package Management (applicationInterface)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#9713-要求的接口">9.7.1.3 要求的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#raw-data-interface">Raw Data Interface</a></li>
+    <li><a href="#crypto-stack-1">Crypto Stack</a></li>
+    <li><a href="#logger-1">Logger</a></li>
+    <li><a href="#function-group-state">Function Group State</a>
+      <ul>
+        <li><a href="#972-注册表">9.7.2 注册表</a>
+          <ul>
+            <li><a href="#9721-职责">9.7.2.1 职责</a></li>
+            <li><a href="#9722-提供的接口">9.7.2.2 提供的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#manifest-accessor-internalinterface">Manifest Accessor (internalInterface)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#9723-要求的接口">9.7.2.3 要求的接口</a></li>
+          </ul>
+        </li>
+        <li><a href="#98-诊断">9.8 诊断</a>
+          <ul>
+            <li><a href="#981-诊断管理">9.8.1 诊断管理</a></li>
+            <li><a href="#9811-职责">9.8.1.1 职责</a></li>
+            <li><a href="#9812-提供的接口">9.8.1.2 提供的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#diagnostic-interface-applicationinterface">Diagnostic Interface (applicationInterface)</a></li>
+    <li><a href="#uds-transport-protocol-api-platformextensioninterface">UDS Transport Protocol API (platformExtensionInterface)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#9813-要求的接口">9.8.1.3 要求的接口</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#file-storage">File Storage</a></li>
+    <li><a href="#tcpip-stack-3">TCP/IP Stack</a></li>
+    <li><a href="#logger-2">Logger</a></li>
+    <li><a href="#policy-decision-point-2">Policy Decision Point</a></li>
+    <li><a href="#crypto-stack-2">Crypto Stack</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#101-概述">10.1 概述</a></li>
+    <li><a href="#102-autosar-自适应应用运行时生命周期">10.2 AUTOSAR 自适应应用运行时生命周期</a>
+      <ul>
+        <li><a href="#1021-机器启动">10.2.1 机器启动</a></li>
+        <li><a href="#1022-机器关闭">10.2.2 机器关闭</a></li>
+        <li><a href="#1023-功能组状态转换">10.2.3 功能组状态转换</a></li>
+        <li><a href="#1024-故障恢复">10.2.4 故障恢复</a></li>
+      </ul>
+    </li>
+    <li><a href="#103-通信">10.3 通信</a></li>
+    <li><a href="#104-更新与配置管理">10.4 更新与配置管理</a>
+      <ul>
+        <li><a href="#1041-自适应应用的更新">10.4.1 自适应应用的更新</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#111-车辆软件部署">11.1 车辆软件部署</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#121-平台实体概览">12.1 平台实体概览</a></li>
+    <li><a href="#122-功能组">12.2 功能组</a></li>
+    <li><a href="#123-功能组状态">12.3 功能组状态</a></li>
+    <li><a href="#124-软件集群">12.4 软件集群</a></li>
+    <li><a href="#125-机器">12.5 机器</a></li>
+    <li><a href="#126-清单">12.6 清单</a></li>
+    <li><a href="#127-应用设计">12.7 应用设计</a></li>
+    <li><a href="#128-执行清单">12.8 执行清单</a></li>
+    <li><a href="#129-服务实例清单">12.9 服务实例清单</a></li>
+    <li><a href="#1210-机器清单">12.10 机器清单</a></li>
+    <li><a href="#1211-错误处理">12.11 错误处理</a></li>
+    <li><a href="#1212-可信平台">12.12 可信平台</a></li>
+    <li><a href="#1213-安全通信">12.13 安全通信</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#131-风险">13.1 风险</a>
+      <ul>
+        <li><a href="#1311-风险评估">13.1.1 风险评估</a></li>
+        <li><a href="#1312-风险列表">13.1.2 风险列表</a></li>
+      </ul>
+    </li>
+    <li><a href="#132-技术债务">13.2 技术债务</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="1-引言">1 引言</h1>
+<p>本文档为 AUTOSAR 自适应平台标准依据 [1, ISO/IEC 42010] 提供了软件架构概述，主要目标如下：</p>
+<ul>
+<li>识别 AUTOSAR 自适应平台的利益相关者及其关注点。</li>
+<li>确定系统范围并提供 AUTOSAR 自适应平台的概要信息。</li>
+<li>提供所用所有架构视角的定义，以及所有利益相关者关注点到这些视角的映射。</li>
+<li>为此架构描述中使用的每个架构视角提供架构视图及其架构模型。</li>
+<li>提供此架构描述内容之间的对应规则和对应关系。</li>
+<li>在高层次上提供架构理由（对所做决策的解释、论证和推理）。更深入的决策记录见 [2, EXP_SWArchitecturalDecisions]。</li>
+<li>记录架构描述中已知的不一致之处。</li>
+</ul>
+<p>请注意，AUTOSAR 自适应平台标准是通过需求和软件规范文档定义的。这些文档故意不规定 AUTOSAR 自适应平台构建块之间的依赖关系和接口，以便为堆栈供应商在其解决方案设计中提供更多自由度。本文档描述了 AUTOSAR 自适应平台的原始架构设计，包括构建块之间应如何交互的细节。它是该标准实现应如何在内部工作的一个示例。然而，堆栈供应商可以自由选择其他设计，只要符合具有约束力的 AUTOSAR 自适应平台标准即可。</p>
+<h2 id="11-目标">1.1 目标</h2>
+<p>本文档是 AUTOSAR 自适应平台依据 [1, ISO/IEC 42010] 的架构描述，主要目标如下：</p>
+<ul>
+<li>识别 AUTOSAR 自适应平台的利益相关者及其关注点。</li>
+<li>确定系统范围并提供 AUTOSAR 自适应平台的概要信息。</li>
+<li>提供所用所有架构视角的定义，以及所有利益相关者关注点到这些视角的映射。</li>
+<li>为此架构描述中使用的每个架构视角提供架构视图及其架构模型。</li>
+<li>提供此架构描述内容之间的对应规则和对应关系。</li>
+<li>在高层次上提供架构理由（对所做决策的解释、论证和推理）。更深入的决策记录见 [2, EXP_SWArchitecturalDecisions]。</li>
+<li>记录架构描述中已知的不一致之处。</li>
+</ul>
+<p>请注意，AUTOSAR 自适应平台标准是通过需求和软件规范文档定义的。这些文档故意不规定 AUTOSAR 自适应平台构建块之间的依赖关系和接口，以便为堆栈供应商在其解决方案设计中提供更多自由度。本文档描述了 AUTOSAR 自适应平台的原始架构设计，包括构建块之间应如何交互的细节。它是该标准实现应如何在内部工作的一个示例。然而，堆栈供应商可以自由选择其他设计，只要符合具有约束力的 AUTOSAR 自适应平台标准。</p>
+<h2 id="12-范围">1.2 范围</h2>
+<p>本说明性文档适用于 AUTOSAR 自适应平台。建议工作组成员、堆栈供应商和应用程序开发者阅读本文档以获取 AUTOSAR 自适应平台的概览。</p>
+<p>===== Page 7 =====</p>
+<h2 id="13-文档结构">1.3 文档结构</h2>
+<p>本文档组织如下。第 4 节概述了 AUTOSAR 自适应平台的主要需求、其架构的首要质量目标以及受其影响的利益相关者列表。第 5 节列出了约束设计和实现决策或开发过程决策的需求。</p>
+<p>第 6 节通过引入质量属性树以及最重要的质量场景，为发现 AUTOSAR 自适应平台架构中的权衡和敏感点奠定了基础。第 7 节概述了 AUTOSAR 自适应平台预期使用的系统上下文。</p>
+<p>第 8 节总结了塑造 AUTOSAR 自适应平台架构的基本决策和解决方案策略，例如技术决策或要使用的架构模式。</p>
+<p>第 9 节至第 11 节从不同视角解释了软件架构。首先，第 9 节解释了将 AUTOSAR 自适应平台分解为功能集群及其相互依赖关系。然后，第 10 节演示了如何使用 AUTOSAR 自适应平台中的功能集群实现主要用例。第 11 节展示了基于 AUTOSAR 自适应平台的应用程序可能部署的不同场景。</p>
+<p>第 12 节概述了 AUTOSAR 自适应平台使用的概念和模式。第 13 节列出并评估了与 AUTOSAR 自适应平台架构相关的风险和技术债务。</p>
+<h3 id="13-文档结构-1">1.3 文档结构</h3>
+<p>本文档组织如下。第 4 节概述了 AUTOSAR 自适应平台的主要需求、其架构的首要质量目标以及受其影响的利益相关者列表。第 5 节列出了约束设计和实现决策或开发过程决策的需求。</p>
+<p>第 6 节通过引入质量属性树以及最重要的质量场景，为发现 AUTOSAR 自适应平台架构中的权衡和敏感点奠定了基础。第 7 节概述了 AUTOSAR 自适应平台预期使用的系统上下文。</p>
+<p>第 8 节总结了塑造 AUTOSAR 自适应平台架构的基本决策和解决方案策略，例如技术决策或要使用的架构模式。</p>
+<p>第 9 节至第 11 节从不同视角解释了软件架构。首先，第 9 节解释了将 AUTOSAR 自适应平台分解为功能集群及其相互依赖关系。然后，第 10 节演示了如何使用 AUTOSAR 自适应平台中的功能集群实现主要用例。第 11 节展示了基于 AUTOSAR 自适应平台的应用程序可能部署的不同场景。</p>
+<p>第 12 节概述了 AUTOSAR 自适应平台使用的概念和模式。第 13 节列出并评估了与 AUTOSAR 自适应平台架构相关的风险和技术债务。</p>
+<p>===== Page 8 =====</p>
+<h1 id="2-术语和缩略语定义">2 术语和缩略语定义</h1>
+<h2 id="21-缩略语和缩写">2.1 缩略语和缩写</h2>
+<table>
+  <thead>
+      <tr>
+          <th>缩略语/缩写</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>DoIP</td>
+          <td>基于IP的诊断</td>
+      </tr>
+      <tr>
+          <td>POSIX</td>
+          <td>可移植操作系统接口</td>
+      </tr>
+      <tr>
+          <td>SecOC</td>
+          <td>AUTOSAR 安全板载通信</td>
+      </tr>
+      <tr>
+          <td>TLS</td>
+          <td>传输层安全协议</td>
+      </tr>
+      <tr>
+          <td>UML</td>
+          <td>统一建模语言</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="22-术语定义">2.2 术语定义</h2>
+<p>本节列出本文档特有的术语。AUTOSAR 通用术语列表见 [3, 术语表]。</p>
+<table>
+  <thead>
+      <tr>
+          <th>术语</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>功能集群</td>
+          <td>AUTOSAR 自适应平台内逻辑功能的组合。功能集群是构建块视图中的第二级抽象（参见第9章）。它们也是构成 AUTOSAR 自适应平台标准的各个规范文档的主题。</td>
+      </tr>
+      <tr>
+          <td>功能组</td>
+          <td>一组建模的进程。详见第12.2节。</td>
+      </tr>
+      <tr>
+          <td>线程</td>
+          <td>可由调度器独立管理的最小指令序列。一个进程内可以并发执行多个线程，共享内存等资源。</td>
+      </tr>
+      <tr>
+          <td>看门狗</td>
+          <td>监督 AUTOSAR 自适应平台执行的外部组件。详见第7.2.3节。</td>
+      </tr>
+  </tbody>
+</table>
+<p>===== Page 9 =====</p>
+<h1 id="3-相关文档">3 相关文档</h1>
+<p>本文档提供了 AUTOSAR 自适应平台架构的高层概述。它与 [4, RS_Main] 和 [5, RS_General] 中规定的 AUTOSAR 自适应平台通用需求，以及 [2, EXP_SWArchitecturalDecisions] 中记录的架构决策密切相关。</p>
+<p>架构的各个构建块（功能集群）在单独的文档中规定。每个功能集群定义一个或多个需求规范、一个或多个软件规范以及一个或多个说明性文档。有关 AUTOSAR 自适应平台标准的任何细节，请参考这些文档。</p>
+<p>===== Page 10 =====</p>
+<h1 id="4-概述与目标">4 概述与目标</h1>
+<p>在传统的汽车系统中，ECU 用于替代或增强机电系统。这些资源受限、深度嵌入的 ECU 通常通过基于输入信号（例如来自传感器）和来自连接到车辆网络的其他 ECU 的信息创建电输出信号（例如用于执行器）来执行基本控制功能。大部分控制软件是为目标车辆专门设计和实现的，在车辆寿命期间不会显著改变。AUTOSAR 经典平台标准满足了这些深度嵌入式系统的需求。</p>
+<p>近期和未来的车辆功能（如高度自动驾驶）将引入复杂且计算资源需求高的软件，这些软件应满足严格的安全、完整性和保密性要求。例如，此类软件执行环境感知和行为规划，并与外部后端和基础设施系统交互。车辆中的软件需要在车辆生命周期内定期更新，原因是外部系统的演进、功能的改进或增加，或安全问题。AUTOSAR 经典平台标准无法满足此类系统的需求。因此，AUTOSAR 规定了第二个软件平台，即 AUTOSAR 自适应平台。它提供高性能计算和通信机制，以及灵活的软件配置，例如支持空中软件更新。为 AUTOSAR 经典平台专门定义的特性（如访问电信号和汽车专用总线系统）可以集成到 AUTOSAR 自适应平台中，但不是标准化的重点。</p>
+<h2 id="41-需求概述">4.1 需求概述</h2>
+<p>本节概述了影响 AUTOSAR 自适应平台架构的基本需求。相应的需求标识符在方括号中给出。有关任何细节、理由或预期用例，请参阅 [4, RS_Main] 和 [5, RS_General]。</p>
+<h2 id="支持先进技术">支持先进技术</h2>
+<p>AUTOSAR 自适应平台旨在支持在先进硬件上的资源密集型（内存、CPU）应用程序。因此，AUTOSAR 自适应平台应支持高性能计算平台以及虚拟化环境。AUTOSAR 自适应平台应能够并行运行多个应用程序，每个应用程序具有并发的应用内部控制流。</p>
+<p>===== Page 11 =====</p>
+<h2 id="软件更新与配置">软件更新与配置</h2>
+<p>AUTOSAR 自适应平台应支持灵活的（配置）数据和软件更新。此处，AUTOSAR 自适应平台应支持此类更新包的上传和下载，以及运行时更改通信和应用程序软件。</p>
+<p>AUTOSAR 应提供统一的方式来描述部署到自适应和/或经典平台的软件系统。这种描述还应支持 AUTOSAR 应用软件的部署和重新分配，并应提供描述整个系统接口的方法。</p>
+<h2 id="安全">安全</h2>
+<p>AUTOSAR 自适应平台应支持开发安全的系统，具有对 ECU 数据和服务的安全访问，以及安全的板载通信。</p>
+<h2 id="功能安全">功能安全</h2>
+<p>AUTOSAR 自适应平台应支持开发与安全相关的系统，这些系统可靠且高可用。AUTOSAR 自适应平台规范应可分析，并支持相应展示安全相关属性实现的方法。</p>
+<h2 id="重用与互操作性">重用与互操作性</h2>
+<p>AUTOSAR 自适应平台应支持与非 AUTOSAR 软件的标准互操作性，以及 AUTOSAR 自适应应用程序在不同平台实现之间的（源代码）可移植性。此处，AUTOSAR 自适应平台应提供描述应用软件组件模型的方法，并支持不同编程语言的绑定。</p>
+<h2 id="通信">通信</h2>
+<p>AUTOSAR 自适应平台应支持标准化的汽车通信协议，用于支持不同网络拓扑的 ECU 内通信。</p>
+<p>===== Page 12 =====</p>
+<h2 id="诊断">诊断</h2>
+<p>AUTOSAR 自适应平台应在运行时为生产和维护目的提供诊断手段。</p>
+<h2 id="42-质量目标">4.2 质量目标</h2>
+<p>本节将在未来版本中列出架构的首要质量目标，这些目标的实现对主要利益相关者最为重要。请参阅第 6.1 节中当前未排优先级的质量属性列表。</p>
+<h2 id="43-利益相关者">4.3 利益相关者</h2>
+<p>本节列出了 AUTOSAR 自适应平台架构的利益相关者及其主要期望。</p>
+<p>表 4.1：利益相关者角色与期望表</p>
+<table>
+  <thead>
+      <tr>
+          <th>角色</th>
+          <th>期望</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>项目负责人</td>
+          <td>AUTOSAR 自适应平台中技术风险和技术债务的概览。</td>
+      </tr>
+      <tr>
+          <td>架构工作组</td>
+          <td>对 AUTOSAR 自适应平台目标和驱动力的简洁而透彻的文档。AUTOSAR 自适应平台标准原始架构设计的文档。AUTOSAR 自适应平台中已识别技术风险和技术债务的文档。</td>
+      </tr>
+      <tr>
+          <td>工作组</td>
+          <td>AUTOSAR 自适应平台架构的整合概览。跨越多个功能集群的用例的实现。AUTOSAR 自适应平台内部接口的使用。功能集群和接口设计的指南和模式。</td>
+      </tr>
+      <tr>
+          <td>堆栈开发者</td>
+          <td>AUTOSAR 自适应平台原始架构设计的整合概览。跨越多个功能集群的用例的实现。AUTOSAR 自适应平台内部接口的使用。</td>
+      </tr>
+      <tr>
+          <td>应用开发者</td>
+          <td>AUTOSAR 自适应平台构建块及其用途和提供功能的概览。AUTOSAR 自适应平台中使用概念的解释。</td>
+      </tr>
+  </tbody>
+</table>
+<p>===== Page 13 =====</p>
+<h1 id="5-架构约束">5 架构约束</h1>
+<p>AUTOSAR 是一个由汽车制造商、供应商、服务提供商以及汽车电子、半导体和软件行业公司组成的全球开发合作伙伴关系。AUTOSAR 标准化了 AUTOSAR 自适应平台汽车中间件。AUTOSAR 自适应平台不是一个具体的实现。与大多数标准一样，AUTOSAR 自适应平台标准为标准的实现者留有一定的自由度。一方面，更多的自由可以促进不同实现之间的竞争，并为用户提供更广泛的选择。另一方面，更严格的标准使得不同的实现（在标准化范围内）兼容和可互换。自然，这些属性是相互冲突的。通常由标准化组织来评估这些属性并定义所需的严格程度。</p>
+<p>AUTOSAR 经典平台在那种意义上是相当严格的，它指定了详细的分层软件架构，对其实现施加了许多约束。AUTOSAR 自适应平台采用了一种不那么严格的方法。这种不那么严格的方法对 AUTOSAR 自适应平台架构施加了如下所述的约束。</p>
+<h2 id="51-内部接口">5.1 内部接口</h2>
+<p>一个重要的架构约束是，只有预期由应用程序使用的接口或用于扩展 AUTOSAR 自适应平台功能的接口才应被标准化。AUTOSAR 自适应平台构建块之间的内部接口不应被标准化。这种方法为设计和优化 AUTOSAR 自适应平台堆栈的内部结构提供了很大的自由度。然而，它也对如何在本文件中定义和描述 AUTOSAR 自适应平台架构施加了约束。此外，这意味着可能无法使用来自不同 AUTOSAR 自适应平台堆栈供应商的不同功能集群。</p>
+<p>首先，内部接口的存在及其被其他构建块的使用在大多数情况下是一个建议，反映了标准作者的原始设计方法。本文件中描述的任何使用此类内部接口的交互也同样适用。</p>
+<p>其次，一些质量属性可能难以通过标准架构来普遍保证。额外的措施，如安全考虑，缺乏明确定义的输入，如数据流或相互依赖关系的规范。因此，在实现 AUTOSAR 自适应平台堆栈时，需要更全面的设计阶段。</p>
+<p>===== Page 14 =====</p>
+<h2 id="52-分布式工作">5.2 分布式工作</h2>
+<p>AUTOSAR 自适应平台的标准化是一个全球分布的工作。各个构建块由专门的工作组在单独的文档中规定，以便在这种分布式设置中实现扩展性。这影响了本文档描述 AUTOSAR 自适应平台架构的方式。</p>
+<p>首先，本文档仅在架构层面展示接口。本文档不规定接口的细节，如单个操作。这使本文档与实际规定各个构建块的文档之间的冗余和依赖关系保持在可管理的水平。另一个结果是，本文档中显示的交互也不是基于接口中规定的实际操作，而是同样基于架构层面。</p>
+<p>其次，本文档旨在通过定义解决常见问题的模式和概念，为工作组规定各个构建块提供指导。该指导应有助于从头构建一个统一且一致的标准。</p>
+<p>===== Page 15 =====</p>
+<h1 id="6-质量需求">6 质量需求</h1>
+<p>质量需求定义了 AUTOSAR 自适应平台利益相关者对于 AUTOSAR 自适应平台标准的质量及其属性的期望，这些属性指示质量因素是否得到满足。第 6.1 节首先列出质量属性，最终用于评估 AUTOSAR 自适应平台及其软件架构是否满足预期的质量因素。第 6.2 节随后提供质量场景，通过描述系统在特定情况下对刺激的反应，将质量属性可操作化并转化为可测量的量。</p>
+<h2 id="61-质量属性">6.1 质量属性</h2>
+<p>AUTOSAR 自适应平台有许多不同关注点的利益相关者。因此，本文档使用以下三个质量属性类别，对应于三个主要利益相关者群体，以使需求及其对架构的影响更易于理解：</p>
+<ul>
+<li>AUTOSAR 自适应平台标准：针对 AUTOSAR 标准本身的质量需求。这些需求可能直接影响 AUTOSAR 自适应平台的架构。</li>
+<li>AUTOSAR 自适应平台堆栈：针对 AUTOSAR 标准实现为 AUTOSAR 堆栈的质量需求。这些需求可能间接影响 AUTOSAR 自适应平台的架构。</li>
+<li>AUTOSAR 自适应应用：针对基于 AUTOSAR 堆栈的应用程序的质量需求。这些需求可能传递性地影响 AUTOSAR 自适应平台的架构。</li>
+</ul>
+<p>质量属性根据架构权衡分析方法组织为树，每个质量属性类别一棵树。这些树的叶子节点是各个质量属性。</p>
+<h3 id="611-autosar-自适应平台标准">6.1.1 AUTOSAR 自适应平台标准</h3>
+<h3 id="功能适用性">功能适用性</h3>
+<ul>
+<li>软件架构应反映项目目标，并成为所有规范的一致来源（此处：相对于项目目标的完整性；另见下面的可用性）。</li>
+<li>标准不应包含无法追溯到项目目标、变更请求或概念的元素。</li>
+</ul>
+<p>===== Page 16 =====</p>
+<ul>
+<li>标准应包含至少一个从每个项目目标、变更请求或概念派生的元素。</li>
+</ul>
+<h3 id="性能效率">性能效率</h3>
+<ul>
+<li>规范应允许运行时高效的实现。运行时效率指所有资源消耗：CPU、RAM、ROM。</li>
+</ul>
+<h3 id="兼容性">兼容性</h3>
+<ul>
+<li>标准在面对变化时应保留其元素的旧版本。</li>
+<li>标准应与已有标准（尤其是 AUTOSAR 经典平台）具有互操作性。已有标准指网络协议等。</li>
+<li>标准应仅在影响分析后采用已有标准的新版本。</li>
+</ul>
+<h3 id="可用性">可用性</h3>
+<ul>
+<li>标准的使用应尽可能简单，便于供应商和应用程序开发者。简单意味着：不需要太多材料和资源。</li>
+<li>不应破坏整体方法（避免一个标准中出现不同方法）。</li>
+<li>标准应包含其所有元素的应用程序示例代码。</li>
+<li>标准应包含其元素用例的文档。</li>
+<li>标准应记录其元素的语义。</li>
+<li>标准应记录其决策、后果和实现限制（针对堆栈和应用），包括其理由。</li>
+<li>标准的元素应易于正确使用，难以误用。</li>
+<li>标准应坚持已有标准，只要不损害功能需求。</li>
+<li>标准应尽可能稳定。</li>
+<li>AUTOSAR 标准不应是颠覆性变更，而应是演进式变更（例如，向后兼容性可能有帮助）。</li>
+<li>软件架构应反映项目目标，并成为所有规范的一致来源（此处：一致性；另见上述功能适用性）。</li>
+</ul>
+<h3 id="可靠性">可靠性</h3>
+<ul>
+<li>标准应将其元素按安全相关性分类（即，如果功能集群参与平台的安全关键操作，应予以标记）。</li>
+</ul>
+<p>===== Page 17 =====</p>
+<ul>
+<li>标准应规定其元素之间的控制流限制，以实现免于干扰。</li>
+<li>标准应包含用例驱动的安全场景论证，可用于构建安全案例。（这应有助于堆栈实现者获得认证，如果他们遵循标准。）</li>
+</ul>
+<h2 id="安全-1">安全</h2>
+<ul>
+<li>标准应规定其元素之间以及应用程序之间的数据流限制。</li>
+<li>标准应将其元素按安全敏感性分类（即，如果功能集群处理敏感数据，应予以标记）。</li>
+<li>标准应包含用例驱动的安全场景论证，可用于构建安全案例。（这应有助于堆栈实现者获得认证，如果他们遵循标准。）</li>
+</ul>
+<h2 id="可维护性">可维护性</h2>
+<ul>
+<li>应以高效的方式维护 AUTOSAR 自适应平台，同时不妨碍新技术的引入（高效指修改标准的工作量）。</li>
+<li>变更的影响集应可用。</li>
+<li>标准的结构应最小化变更影响。</li>
+<li>应能够删除/弃用标准的元素。</li>
+<li>应易于添加新特性/需求，而不破坏可维护性或需要重新设计软件架构。易于意味着快速、低工作量、仅局部变更且无重大副作用。</li>
+<li>标准各部分的成熟度应可见。</li>
+<li>流程应在变更过程非常早期阶段强制进行架构影响分析。</li>
+<li>流程应强制最小化变更，即不要多次添加类似功能。</li>
+</ul>
+<h2 id="可移植性">可移植性</h2>
+<ul>
+<li>应用程序应可在不同堆栈实现和不同机器之间移植。</li>
+<li>应可能将软件架构扩展到给定项目需求。</li>
+</ul>
+<p>===== Page 18 =====</p>
+<h3 id="612-autosar-自适应平台堆栈">6.1.2 AUTOSAR 自适应平台堆栈</h3>
+<h3 id="兼容性-1">兼容性</h3>
+<ul>
+<li>AUTOSAR 自适应平台堆栈实现应能够提供同一服务的多个版本。</li>
+<li>AUTOSAR 自适应平台堆栈实现的一个实例应能够与同一车辆内不同机器上的其他实例共存。</li>
+</ul>
+<h3 id="可用性-1">可用性</h3>
+<ul>
+<li>AUTOSAR 自适应平台堆栈实现应明确记录超出标准的应用程序开发限制。</li>
+</ul>
+<h3 id="可维护性-1">可维护性</h3>
+<ul>
+<li>AUTOSAR 自适应平台堆栈实现应可追溯到标准内容。</li>
+<li>AUTOSAR 自适应平台堆栈实现应支持同一服务的多个版本。</li>
+</ul>
+<h3 id="可移植性-1">可移植性</h3>
+<ul>
+<li>AUTOSAR 自适应平台堆栈应可移植到不同的定制硬件。</li>
+<li>AUTOSAR 自适应平台堆栈应提供替换部件的机制。</li>
+</ul>
+<h4 id="613-autosar-自适应应用">6.1.3 AUTOSAR 自适应应用</h4>
+<h3 id="可用性-2">可用性</h3>
+<ul>
+<li>无目标：应用程序开发者应能够为预定义的平台功能提供定制实现。</li>
+</ul>
+<h3 id="可维护性-2">可维护性</h3>
+<ul>
+<li>应用程序应明确声明它使用了标准的哪些部分。</li>
+</ul>
+<h3 id="可移植性-2">可移植性</h3>
+<ul>
+<li>完全基于 AUTOSAR 自适应平台（即无定制扩展）的应用程序应可移植到相同版本的另一 AUTOSAR 自适应平台堆栈，无需修改应用程序源代码（源代码兼容性）。</li>
+</ul>
+<p>===== Page 19 =====</p>
+<h2 id="62-质量场景">6.2 质量场景</h2>
+<p>目前尚未为 AUTOSAR 自适应平台定义质量场景。</p>
+<p>===== Page 20 =====</p>
+<h1 id="7-系统范围与上下文">7 系统范围与上下文</h1>
+<p>本章通过区分 AUTOSAR 自适应平台及其通信伙伴（例如外部系统），概述了 AUTOSAR 自适应平台的系统上下文。参考图 7.1，AUTOSAR 自适应平台有三类通信伙伴。</p>
+<center>图 7.1：AUTOSAR 自适应平台及其上下文概览</center>
+<p>AUTOSAR 自适应平台在概念上是一个中间件。AUTOSAR 自适应平台向自适应应用（参见第 7.1 节）提供超出底层操作系统、驱动程序和扩展（参见第 7.2 节）的服务。第 7.3 节描述了第三类，即通过 AUTOSAR 自适应平台与（自适应应用）通信的外部系统。</p>
+<h2 id="71-自适应应用">7.1 自适应应用</h2>
+<p>自适应应用构建在 AUTOSAR 自适应平台提供的功能之上。它们直接使用第 9 章详细描述的 AUTOSAR 自适应平台各个构建块提供的各种接口。</p>
+<p>===== Page 21 =====</p>
+<h2 id="72-依赖">7.2 依赖</h2>
+<h3 id="721-加密提供者">7.2.1 加密提供者</h3>
+<p>加密提供者是一个向 AUTOSAR 自适应平台提供加密例程和哈希函数实现的组件。</p>
+<h3 id="722-操作系统">7.2.2 操作系统</h3>
+<p>操作系统是 AUTOSAR 自适应平台用来提供其服务的主要组件。操作系统控制进程和线程，并提供进程间通信设施。操作系统还提供对网络接口、TCP/IP 等协议以及非易失性存储的访问。</p>
+<h3 id="723-看门狗">7.2.3 看门狗</h3>
+<p>看门狗是一个用于控制运行 AUTOSAR 自适应平台的机器的硬件看门狗的组件。</p>
+<h2 id="73-外部系统">7.3 外部系统</h2>
+<center>图 7.2：AUTOSAR 自适应平台与外部系统概览</center>
+<p>AUTOSAR 自适应平台支持在异构环境中运行的应用程序。本节列出了 AUTOSAR 自适应平台预期与之接口的外部系统。</p>
+<p>===== Page 22 =====</p>
+<h3 id="731-autosar-自适应应用">7.3.1 AUTOSAR 自适应应用</h3>
+<p>车辆中不同的机器上可能部署了许多自适应应用。因此，不在当前 AUTOSAR 自适应平台实例上运行的自适应应用对于该 AUTOSAR 自适应平台来说是一个外部系统。这样的自适应应用可以交换数据，例如传感器或状态信息。在整车软件更新期间，各个 AUTOSAR 自适应平台的更新可以由一个中央自适应应用协调，该应用使用 UCM 主附加组件。</p>
+<h3 id="732-autosar-经典平台">7.3.2 AUTOSAR 经典平台</h3>
+<p>AUTOSAR 经典平台是深度嵌入式应用（如传感器/执行器系统）的主要平台。自适应应用可能需要访问例如由 AUTOSAR 经典平台 ECU 提供的传感器数据，反之亦然。</p>
+<h3 id="733-第三方平台">7.3.3 第三方平台</h3>
+<p>除了 AUTOSAR 提供的两个平台（AUTOSAR 自适应平台和 AUTOSAR 经典平台）之外，车辆中可能还有基于不同平台的 ECU 和其他系统，它们需要通过 AUTOSAR 自适应平台与自适应应用通信。</p>
+<h3 id="734-诊断客户端">7.3.4 诊断客户端</h3>
+<p>诊断客户端使用 AUTOSAR 自适应平台提供的诊断服务。</p>
+<h3 id="735-后端">7.3.5 后端</h3>
+<p>后端系统提供用于下载的软件包，并通过更新与配置管理控制更新过程。</p>
+<p>===== Page 23 =====</p>
+<h1 id="8-解决方案策略">8 解决方案策略</h1>
+<p>AUTOSAR 自适应平台是一个汽车中间件标准。它不是具体的实现。AUTOSAR 自适应平台标准通过定义需要满足的需求和软件规范，但不规定如何实现，为其实现者留有一定的自由度。</p>
+<h2 id="81-架构方法">8.1 架构方法</h2>
+<p>为了支持复杂的应用程序，同时允许在处理分布和计算资源分配方面实现最大灵活性和可扩展性，AUTOSAR 自适应平台遵循面向服务架构的概念。在面向服务架构中，系统由一组服务组成，其中一个服务可以依次使用另一个服务，应用程序根据其需要可以使用一个或多个服务。面向服务架构通常表现出系统之系统的特征，AUTOSAR 自适应平台也具有此特征。例如，一个服务可以位于应用程序也运行的本地 ECU 上，或者位于也运行另一个 AP 实例的远程 ECU 上。应用程序代码在两种情况下是相同的——通信基础设施将处理差异，提供透明通信。另一种看待此架构的方式是分布式计算，通过某种形式的消息传递进行通信。总的来说，这些都代表了相同的概念。这种基于消息传递的通信架构也可以受益于快速和高带宽通信（如以太网）的兴起。</p>
+<h2 id="82-分解策略">8.2 分解策略</h2>
+<p>AUTOSAR 自适应平台架构的构建块在本文档中按照图 8.1 所示的模型逐步细化。顶层类别是从用户视角选择的，以概述 AUTOSAR 自适应平台提供哪些类型的功能。一个类别包含一个或多个功能集群。AUTOSAR 自适应平台的功能集群被定义为组合特定的、连贯的技术功能。功能集群本身指定一组接口和组件，以提供和实现该技术功能。构建块视图还包含基于它们使用的其他功能集群的接口的功能集群相互依赖信息。然而，请注意，这些相互依赖是建议而非严格规范，因为它们会约束实现。</p>
+<p>===== Page 24 =====</p>
+<center>图 8.1：构建块的类型模型</center>
+<h2 id="83-技术">8.3 技术</h2>
+<h3 id="831-实现语言">8.3.1 实现语言</h3>
+<p>C++ 是 AUTOSAR 自适应平台和自适应应用的编程语言选择。选择 C++ 是因为其更安全的编程模型（与 C 相比）以及存在可生成高度优化机器码的经过认证的编译器。这些属性对于安全关键和性能关键的实时应用（如典型的自适应应用）尤其重要，在这些领域，C++ 在软件行业和学术界已变得越来越流行。</p>
+<h3 id="832-并行处理">8.3.2 并行处理</h3>
+<p>尽管作为面向服务架构的 AUTOSAR 自适应平台设计固有地利用了并行处理，但（异构）多核处理器的进步提供了额外的机会。AUTOSAR 自适应平台旨在随着（异构）多核技术的发展扩展其功能和性能。硬件和平台接口规范是等式的一部分。然而，操作系统和虚拟机监控程序技术以及开发工具（例如自动并行化）的进步同样至关重要，应由 AUTOSAR 自适应平台提供商、软件行业和学术界来实现。</p>
+<h2 id="84-设计原则">8.4 设计原则</h2>
+<p>AUTOSAR 自适应平台的架构基于以下概述的几个设计原则。</p>
+<p>===== Page 25 =====</p>
+<h3 id="841-利用现有标准">8.4.1 利用现有标准</h3>
+<p>AUTOSAR 自适应平台旨在尽可能利用现有标准和规范。例如，AUTOSAR 自适应平台建立在现有的开放 C++ 标准（参见第 8.3.1 节）之上，以促进 AUTOSAR 自适应平台本身的更快开发，并从这些标准的生态系统中受益。因此，在开发 AUTOSAR 自适应平台规范时，一个关键重点是不随意引入现有标准已提供的替代功能。例如，不会仅仅因为现有标准提供了所需功能但接口表面上难以理解而随意引入新接口。</p>
+<h4 id="842-solid-原则">8.4.2 SOLID 原则</h4>
+<p>SOLID 原则是 AUTOSAR 设计原则的核心部分。虽然这五个原则都有效，但在本文档的抽象层次上，只有单一责任原则、接口隔离原则和依赖倒置原则是相关的。因此，下面将对它们进行详细阐述。</p>
+<h4 id="8421-单一责任原则">8.4.2.1 单一责任原则</h4>
+<p>单一责任原则指出，一个组件或类应负责软件提供的整体功能中的单一功能部分。该责任应被组件或类封装。组件或类（通过其接口）提供的服务应与其责任紧密对齐。</p>
+<p>单一责任原则最小化了需要更改其接口的原因（即对单一责任的变更）。因此，它最小化了对此类接口客户端的影响，并导致更可维护的架构（或代码）。</p>
+<h4 id="8422-接口隔离原则">8.4.2.2 接口隔离原则</h4>
+<p>接口隔离原则指出，不应强迫客户端依赖它们不使用的方法。作为接口隔离原则的结果，接口应被拆分以反映客户端的不同角色。</p>
+<p>与单一责任原则类似，接口的隔离减少了接口变更对隔离接口的客户端和提供者的影响。</p>
+<p>===== Page 26 =====</p>
+<h4 id="8423-依赖倒置原则">8.4.2.3 依赖倒置原则</h4>
+<p>依赖倒置原则指出，高层构建块不应依赖低层构建块。两者都应依赖抽象（例如接口）。此外，依赖倒置原则指出，抽象不应依赖细节。细节（例如具体实现）应依赖抽象。</p>
+<p>依赖倒置原则导致构建块实现的解耦。这对于扩展实现工作（参见第 5.2 节）和执行适当的集成测试非常重要。</p>
+<h4 id="843-无环依赖原则">8.4.3 无环依赖原则</h4>
+<p>无环依赖原则指出，构建块之间的依赖应形成有向无环图。</p>
+<p>无环依赖原则有助于识别参与的构建块，并推理错误传播和免于干扰。通常，它也减少了在测试、构建和部署等活动中需要考虑的构建块范围。</p>
+<h2 id="85-部署">8.5 部署</h2>
+<p>AUTOSAR 自适应平台支持应用程序的增量部署，其中资源和通信被动态管理，以减少软件开发和集成的工作量，实现短迭代周期。增量部署也支持探索性软件开发阶段。对于产品交付，AUTOSAR 自适应平台允许系统集成商谨慎限制动态行为，以降低不良或不利影响的风险，从而允许安全认证。应用程序的动态行为将受到执行清单（参见第 12.8 节）中所述约束的限制，例如，动态分配资源和通信路径仅允许以定义的方式、在配置的范围内进行。AUTOSAR 自适应平台的实现可以进一步移除生产使用的软件配置中的动态能力。减少动态行为的示例可能包括：</p>
+<ul>
+<li>预先确定服务发现过程</li>
+<li>仅将动态内存分配限制在启动阶段</li>
+<li>在基于优先级的调度之外采用公平调度策略</li>
+<li>将进程固定分配到 CPU 核心</li>
+<li>仅访问文件系统中预先存在的文件</li>
+</ul>
+<p>===== Page 27 =====</p>
+<ul>
+<li>对应用程序使用 AUTOSAR 自适应平台 API 的约束</li>
+<li>仅执行经过认证的代码</li>
+</ul>
+<h2 id="86-验证与确认">8.6 验证与确认</h2>
+<p>AUTOSAR 自适应平台标准使用该标准的专用实现（AUTOSAR 自适应平台演示器）来验证需求并确认各个软件规范所施加的（仍为抽象的）软件设计。</p>
+<p>===== Page 28 =====</p>
+<h1 id="9-构建块视图">9 构建块视图</h1>
+<p>本章通过描述高层构建块及其相互依赖关系，概述了 AUTOSAR 自适应平台的静态结构。请注意，AUTOSAR 自适应平台中功能集群之间接口的使用目前尚未标准化。某些方面，例如访问管理，也尚未完全纳入并标准化到所有功能集群中。</p>
+<h2 id="91-概述">9.1 概述</h2>
+<p>图 9.1 提供了 AUTOSAR 自适应平台中可用不同类别构建块的概述。后续章节将更详细地解释这些类别。</p>
+<center>图 9.1：AUTOSAR 自适应平台及其构建块概览</center>
+<h3 id="911-构造型">9.1.1 构造型</h3>
+<p>本章中呈现的 UML 图使用了一个 UML 轮廓，为元素和关系提供了更精确的语义。表 9.1 概述了该轮廓中的构造型及其语义。</p>
+<p>===== Page 29 =====</p>
+<p>表 9.1：构造型概览</p>
+<table>
+  <thead>
+      <tr>
+          <th>构造型</th>
+          <th>元类</th>
+          <th>语义</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>applicationInterface</td>
+          <td>接口</td>
+          <td>预期由自适应应用直接使用的接口。AUTOSAR 自适应平台内的组件也可以使用此类接口。</td>
+      </tr>
+      <tr>
+          <td>externalInterface</td>
+          <td>接口</td>
+          <td>由外部组件提供的接口。</td>
+      </tr>
+      <tr>
+          <td>internalInterface</td>
+          <td>接口</td>
+          <td>预期仅由 AUTOSAR 自适应平台本身的组件使用的接口。</td>
+      </tr>
+      <tr>
+          <td>platformExtensionInterface</td>
+          <td>接口</td>
+          <td>用于扩展 AUTOSAR 自适应平台功能的接口。此类接口不预期由自适应应用直接使用。</td>
+      </tr>
+      <tr>
+          <td>restrictedApplicationInterface</td>
+          <td>接口</td>
+          <td>仅限特定应用组件使用的 applicationInterface。这特别适用于状态管理使用的接口。状态管理被视为自适应应用的一部分。然而，状态管理对例如执行管理提供的接口的访问，这些接口不预期被自适应应用的任何其他部分使用。</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="92-运行时">9.2 运行时</h2>
+<center>图 9.2：运行时及其构建块概览</center>
+<p>===== Page 30 =====</p>
+<h3 id="921-执行管理">9.2.1 执行管理</h3>
+<center>图 9.3：执行管理概览</center>
+<h4 id="9211-职责">9.2.1.1 职责</h4>
+<p>执行管理负责控制 AUTOSAR 自适应平台和自适应应用的进程。也就是说，它根据功能组状态中的配置，使用操作系统的接口来启动、配置和停止进程。操作系统负责这些进程的运行时调度。执行管理执行的进程配置包括使用操作系统提供的资源组来限制其资源消耗（CPU 时间、内存）。</p>
+<p>执行管理是 AUTOSAR 自适应平台的入口点，在系统启动期间由操作系统启动。然后执行管理控制 AUTOSAR 自适应平台的启动和关闭（详见第 10.2.1 节）。执行管理可选地支持认证启动，在从信任锚启动时维护信任链。在认证启动期间，执行管理验证进程的真实性和完整性，如果检测到违规，将阻止其执行。通过这些机制，可以建立一个可信平台（参见第 12.12 节）。</p>
+<p>===== Page 31 =====</p>
+<h4 id="9212-提供的接口">9.2.1.2 提供的接口</h4>
+<h2 id="deterministic-client-applicationinterface">Deterministic Client (applicationInterface)</h2>
+<p>确定性客户端接口提供了运行周期性确定性执行的功能。</p>
+<p>确定性执行提供了一种机制，使得使用给定输入数据集的计算总是在有界时间内产生一致的输出。存在时间确定性和数据确定性的区别。时间确定性指输出总是在固定的截止时间前产生。数据确定性指从相同的输入数据集和内部状态总是生成相同的输出。在 AUTOSAR 自适应平台中，时间确定性必须通过提供足够的资源来处理。对数据确定性的支持由执行管理通过确定性客户端接口提供。</p>
+<p>如果使用软件锁步，执行管理与软件锁步框架交互，以确保冗余执行的进程行为一致。</p>
+<p>执行管理还与通信管理交互，以将数据处理与周期激活同步。</p>
+<h2 id="execution-client-applicationinterface">Execution Client (applicationInterface)</h2>
+<p>执行客户端接口为进程提供了向执行管理报告其执行状态的功能。</p>
+<h2 id="state-client-restrictedapplicationinterface">State Client (restrictedApplicationInterface)</h2>
+<p>状态客户端接口提供了请求进入功能组状态的功能。此接口预期仅由状态管理使用。</p>
+<p>状态管理确定在 AUTOSAR 自适应平台上运行的功能组的期望状态，并通过状态客户端接口请求相应的状态转换。执行管理将启动/停止进程以反映集成商所做的功能组状态配置，并将结果报告回状态管理。</p>
+<p>===== Page 32 =====</p>
+<h2 id="request-execution-info-internalinterface">Request Execution Info (internalInterface)</h2>
+<p>请求执行信息接口提供了检索有关进程和功能组状态信息的功能。</p>
+<h4 id="9213-要求的接口">9.2.1.3 要求的接口</h4>
+<h2 id="multi-process-system-interface">Multi-Process System Interface</h2>
+<p>执行管理应使用此接口通过操作系统启动、控制和停止进程。</p>
+<p>===== Page 33 =====</p>
+<h3 id="922-状态管理">9.2.2 状态管理</h3>
+<center>图 9.4：状态管理概览</center>
+<h4 id="9221-职责">9.2.2.1 职责</h4>
+<p>状态管理基于各种特定应用的输入，确定 AUTOSAR 自适应应用运行时的期望目标状态。该目标状态是在</p>
+<p>===== Page 34 =====</p>
+<p>AUTOSAR 自适应应用运行时上运行的所有功能组的功能组状态集合。状态管理委托执行管理将各个功能组切换到相应的功能组状态。</p>
+<p>状态管理是 AUTOSAR 自适应平台中一个独特的组件，因为它不是 AUTOSAR 自适应平台堆栈的一部分。状态管理的逻辑目前需要作为特定应用的代码实现，然后与 AUTOSAR 自适应平台堆栈进行配置和集成。</p>
+<h4 id="9222-提供的接口">9.2.2.2 提供的接口</h4>
+<h2 id="function-group-state-internalinterface">Function Group State (internalInterface)</h2>
+<p>（已过时）功能组状态接口提供了请求切换到功能组状态的功能。由于与更新和配置管理的兼容性原因，它仍包含在当前版本中。</p>
+<h4 id="9223-要求的接口">9.2.2.3 要求的接口</h4>
+<h2 id="execution-client">Execution Client</h2>
+<p>状态管理应使用执行客户端接口向执行管理报告其自身的执行状态。</p>
+<h2 id="state-client">State Client</h2>
+<p>状态管理应使用状态客户端接口请求转换到功能组状态。</p>
+<h2 id="network-state">Network State</h2>
+<p>状态管理应使用网络状态接口触发（部分）网络的激活和去激活，并订阅相应的激活和去激活事件。</p>
+<h2 id="package-management">Package Management</h2>
+<p>状态管理应使用包管理接口订阅更新和配置管理的状态更改。状态管理应使用此信息防止在更新会话进行时关闭 AUTOSAR 自适应应用运行时，并在应用更新后重新加载/重新启动应用和 AUTOSAR 自适应应用运行时的相关部分。</p>
+<p>===== Page 35 =====</p>
+<h3 id="923-日志与追踪">9.2.3 日志与追踪</h3>
+<center>图 9.5：日志与追踪概览</center>
+<h4 id="9231-职责">9.2.3.1 职责</h4>
+<p>日志与追踪提供了构建和记录不同严重级别消息的功能。自适应应用可以配置为将日志消息转发到各种接收器，例如网络、串行总线、控制台和非易失性存储。</p>
+<h4 id="9232-提供的接口">9.2.3.2 提供的接口</h4>
+<h1 id="logger-applicationinterface">Logger (applicationInterface)</h1>
+<p>记录器接口提供了记录文本消息的功能。</p>
+<p>===== Page 36 =====</p>
+<h4 id="9233-要求的接口">9.2.3.3 要求的接口</h4>
+<h2 id="time-base-resource">Time Base Resource</h2>
+<p>时间基准资源接口应用于确定日志消息的时间戳。</p>
+<h3 id="924-核心">9.2.4 核心</h3>
+<center>图 9.6：核心概览</center>
+<h4 id="9241-职责">9.2.4.1 职责</h4>
+<p>核心提供了 AUTOSAR 自适应应用运行时的初始化和去初始化以及进程终止的功能。</p>
+<h4 id="9242-提供的接口">9.2.4.2 提供的接口</h4>
+<h1 id="runtime-controller-applicationinterface">Runtime Controller (applicationInterface)</h1>
+<p>运行时控制器接口提供了 AUTOSAR 自适应应用运行时的初始化和去初始化功能。</p>
+<h2 id="process-termination-applicationinterface">Process Termination (applicationInterface)</h2>
+<p>进程终止接口提供了终止当前进程的功能。</p>
+<h4 id="9243-要求的接口">9.2.4.3 要求的接口</h4>
+<p>应用初始化器不需要任何标准化的接口。</p>
+<p>===== Page 37 =====</p>
+<h3 id="925-操作系统接口">9.2.5 操作系统接口</h3>
+<center>图 9.7：操作系统接口概览</center>
+<h4 id="9251-职责">9.2.5.1 职责</h4>
+<p>操作系统接口提供了实现多线程实时嵌入式应用的功能，并对应于 [9, POSIX PSE51 配置文件]。该配置文件支持创建可以在现代多核处理器上并行执行的线程，并控制其属性，如堆栈内存或其调度。此外，还提供了共享资源访问的原语，如信号量或内存锁。异步（实时）信号和消息传递支持进程间通信。提供高分辨率定时器和时钟以精确控制实时行为。还提供了一些输入/输出功能，但没有文件系统 API。</p>
+<p>POSIX PSE51 和操作系统接口不提供任何执行和控制进程的方法。AUTOSAR 自适应平台的进程完全由执行管理通过非标准化接口控制。</p>
+<p>请注意，典型的 AUTOSAR 自适应平台堆栈不会提供操作系统接口的实际实现，因为所有功能均已由编程语言的标准库（例如标准 C++ 库）提供。</p>
+<p>===== Page 38 =====</p>
+<h4 id="9252-提供的接口">9.2.5.2 提供的接口</h4>
+<h2 id="operating-system-interface-applicationinterface">Operating System Interface (applicationInterface)</h2>
+<p>操作系统接口供自适应应用用来创建、配置和控制多个具有实时保证支持的线程。</p>
+<h4 id="9253-要求的接口">9.2.5.3 要求的接口</h4>
+<h2 id="single-process-posix-api">Single-Process POSIX API</h2>
+<p>单进程 POSIX API 用于将线程的创建、配置和控制委托给操作系统。</p>
+<h3 id="93-通信">9.3 通信</h3>
+<center>图 9.8：通信及其构建块概览</center>
+<p>===== Page 39 =====</p>
+<h3 id="931-通信管理">9.3.1 通信管理</h3>
+<center>图 9.9：通信管理概览</center>
+<h4 id="9311-职责">9.3.1.1 职责</h4>
+<p>通信管理负责分布式实时嵌入式环境中应用程序之间所有级别的面向服务和原始通信。即进程内通信、进程间通信和机器间通信。后者也可以与 AUTOSAR 经典平台和第三方平台进行。通信路径可以在设计时、启动时和运行时建立。通信管理由一个处理代理和配置的通用部分以及用于服务提供者的（可能生成的）骨架和服务消费者的相应代理组成。</p>
+<p>===== Page 40 =====</p>
+<h4 id="9312-提供的接口">9.3.1.2 提供的接口</h4>
+<h2 id="service-interface-applicationinterface">Service Interface (applicationInterface)</h2>
+<p>服务接口用于面向服务的通信。</p>
+<p>一个服务由事件、字段和方法的组合组成。服务接口支持同步基于回调的通信（例如，服务方法调用）和异步通信（例如，字段更改、事件）。提供用于安全通信和服务质量的扩展。</p>
+<h2 id="raw-data-interface-applicationinterface">Raw Data Interface (applicationInterface)</h2>
+<p>原始数据接口提供了发送和接收原始数据流的功能。</p>
+<h2 id="service-registry-applicationinterface">Service Registry (applicationInterface)</h2>
+<p>服务注册表提供了在运行时注册和发现服务的功能。</p>
+<h4 id="9313-要求的接口">9.3.1.3 要求的接口</h4>
+<h2 id="logger">Logger</h2>
+<p>日志接口应用于记录例如失败的检查。</p>
+<h2 id="tcpip-stack">TCP/IP Stack</h2>
+<p>TCP/IP 协议栈接口应用于控制机器间通信的网络连接。</p>
+<h2 id="operating-system-interface">Operating System Interface</h2>
+<p>操作系统接口接口应用于控制进程内和进程间通信的连接。</p>
+<p>===== Page 41 =====</p>
+<h2 id="crypto-application-interface">Crypto Application Interface</h2>
+<p>加密应用接口应用于通信通道的端到端保护（完整性、真实性、机密性）。</p>
+<h2 id="manifest-accessor">Manifest Accessor</h2>
+<p>清单访问器应用于从清单读取服务配置。</p>
+<h2 id="policy-decision-point">Policy Decision Point</h2>
+<p>策略决策点接口应用于检查访问权限。</p>
+<h3 id="932-网络管理">9.3.2 网络管理</h3>
+<center>图 9.10：网络管理概览</center>
+<h4 id="9321-职责">9.3.2.1 职责</h4>
+<p>网络管理提供了请求和查询逻辑网络句柄的网络状态的功能，这些逻辑网络句柄可以映射到物理网络或部分网络。</p>
+<p>===== Page 42 =====</p>
+<h4 id="9322-提供的接口">9.3.2.2 提供的接口</h4>
+<h2 id="network-state-restrictedapplicationinterface">Network State (restrictedApplicationInterface)</h2>
+<p>网络状态接口用于请求和查询逻辑网络句柄的网络状态。预期仅由状态管理使用。</p>
+<h4 id="9323-要求的接口">9.3.2.3 要求的接口</h4>
+<h2 id="tcpip-stack-1">TCP/IP Stack</h2>
+<p>网络管理应使用底层 TCP/IP 协议栈的功能在物理网络上发送或接收网络管理消息。</p>
+<h3 id="933-时间同步">9.3.3 时间同步</h3>
+<center>图 9.11：时间同步概览</center>
+<h4 id="9331-职责">9.3.3.1 职责</h4>
+<p>时间同步在分布式应用中提供同步的时间信息。当需要关联分布式系统中不同事件时，无论是为了能够及时追踪这些事件还是在准确的时间点触发它们，不同应用和/或机器之间的同步时间信息至关重要。</p>
+<p>===== Page 43 =====</p>
+<h4 id="9332-提供的接口">9.3.3.2 提供的接口</h4>
+<h2 id="time-base-resource-applicationinterface">Time Base Resource (applicationInterface)</h2>
+<p>时间基准资源接口用于检索和更新时间信息。</p>
+<h4 id="9333-要求的接口">9.3.3.3 要求的接口</h4>
+<h2 id="tcpip-stack-2">TCP/IP Stack</h2>
+<p>TCP/IP 协议栈应用于通过网络执行同步。</p>
+<h3 id="94-存储">9.4 存储</h3>
+<center>图 9.12：存储及其构建块概览</center>
+<h4 id="941-持久性">9.4.1 持久性</h4>
+<center>图 9.13：持久性概览</center>
+<p>===== Page 44 =====</p>
+<h4 id="9411-职责">9.4.1.1 职责</h4>
+<p>持久性提供了向机器的非易失性存储中存储和检索信息的功能。</p>
+<p>持久性数据始终属于单个进程私有，并在启动和点火周期之间持久保存。没有可用的机制允许使用持久性在不同进程之间共享数据，以防止除了通信管理之外的第二条数据交换路径。然而，持久性支持来自同一应用上下文中同一进程的多个线程的并发访问。</p>
+<p>持久性提供存储数据的完整性，并提供错误检测和纠正方案。持久性还通过加密提供存储数据的机密性。</p>
+<p>持久性提供统计信息，例如已使用资源的数量。</p>
+<h4 id="9412-提供的接口">9.4.1.2 提供的接口</h4>
+<h2 id="file-storage-applicationinterface">File Storage (applicationInterface)</h2>
+<p>文件存储接口提供对可用于存储任意数据的普通文件的读写访问。</p>
+<h2 id="key-value-storage-applicationinterface">Key-Value Storage (applicationInterface)</h2>
+<p>键值存储接口提供对结构化为键值对的数据的读写访问。它支持字符串作为键，支持 AUTOSAR 自适应平台支持的所有原始类型作为值。除原始类型外，持久性还应存储由 ara::core::Vector<a href="ara::core::Byte" rel="">ara::core::Byte</a> 以及任意 CppImplementationDataTypes 给出的序列化二进制数据。</p>
+<h2 id="redundancy-handling-applicationinterface">Redundancy Handling (applicationInterface)</h2>
+<p>由于持久性支持数据的冗余存储，存储数据中的错误可以通过使用冗余存储的数据隐式修复。只有在此失败时，才会发生错误。冗余处理接口提供了一种方法来追踪是否已使用可用冗余修复了存储错误。</p>
+<p>===== Page 45 =====</p>
+<h2 id="data-management-applicationinterface">Data Management (applicationInterface)</h2>
+<p>数据管理接口提供了触发数据迁移（例如，在软件更新后）和数据重置的功能。</p>
+<h4 id="9413-要求的接口">9.4.1.3 要求的接口</h4>
+<h2 id="crypto-stack">Crypto Stack</h2>
+<p>加密协议栈接口应用于确保存储数据的完整性和机密性。</p>
+<h2 id="non-volatile-storage">Non-volatile Storage</h2>
+<p>非易失性存储接口应用于访问非易失性存储。</p>
+<h3 id="95-安全">9.5 安全</h3>
+<center>图 9.14：安全及其构建块概览</center>
+<p>===== Page 46 =====</p>
+<h3 id="951-密码学">9.5.1 密码学</h3>
+<center>图 9.15：密码学概览</center>
+<h4 id="9511-职责">9.5.1.1 职责</h4>
+<p>密码学提供了各种加密例程以确保数据的机密性，确保数据完整性（例如使用哈希），以及辅助功能，如密钥管理和随机数生成。密码学旨在支持将安全敏感操作和决策封装在单独的组件中，例如硬件安全模块。可以通过将密钥约束到特定用途（例如仅解密）或根据身份和访问管理报告限制密钥对单个应用程序的可用性，来提供对密钥和密钥使用的额外保护。</p>
+<p>根据应用支持，密码学还可用于在处理 TLS 和 SecOC 等加密协议时保护会话密钥和中间秘密。</p>
+<p>===== Page 47 =====</p>
+<h4 id="9512-提供的接口">9.5.1.2 提供的接口</h4>
+<h2 id="crypto-stack-applicationinterface">Crypto Stack (applicationInterface)</h2>
+<p>加密协议栈向自适应应用提供加密例程和辅助功能。</p>
+<h2 id="crypto-service-manager-internalinterface">Crypto Service Manager (internalInterface)</h2>
+<p>加密服务管理器提供用于访问管理和证书存储的内部功能。</p>
+<h4 id="9513-要求的接口">9.5.1.3 要求的接口</h4>
+<h2 id="crypto-provider">Crypto Provider</h2>
+<p>加密提供者应使用加密提供者接口访问由外部库或硬件驱动程序提供的加密例程和辅助功能的实际实现。</p>
+<h2 id="policy-decision-point-1">Policy Decision Point</h2>
+<p>加密提供者应使用策略决策点接口做出访问控制决策，例如在密钥上。</p>
+<p>===== Page 48 =====</p>
+<h3 id="952-身份与访问管理">9.5.2 身份与访问管理</h3>
+<center>图 9.16：身份与访问管理概览</center>
+<h4 id="9521-职责">9.5.2.1 职责</h4>
+<p>身份与访问管理检查对 AUTOSAR 自适应平台资源的访问，例如服务接口和功能集群。身份与访问管理因此为自适应应用引入访问控制，并防止攻击情况下的权限提升。此外，身份与访问管理使集成商能够在部署过程中提前验证自适应应用请求的资源访问权限。</p>
+<h4 id="9522-提供的接口">9.5.2.2 提供的接口</h4>
+<h2 id="policy-decision-point-internalinterface">Policy Decision Point (internalInterface)</h2>
+<p>策略决策点接口提供了做出访问控制决策的功能。</p>
+<p>===== Page 49 =====</p>
+<h4 id="9523-要求的接口">9.5.2.3 要求的接口</h4>
+<h2 id="manifest-accessor-1">Manifest Accessor</h2>
+<p>自适应应用的意图存储在应用清单中，需要由身份与访问管理提取。</p>
+<h3 id="96-功能安全">9.6 功能安全</h3>
+<center>图 9.17：功能安全及其构建块概览</center>
+<h4 id="961-平台健康管理">9.6.1 平台健康管理</h4>
+<center>图 9.18：平台健康管理概览</center>
+<p>===== Page 50 =====</p>
+<h4 id="9611-职责">9.6.1.1 职责</h4>
+<p>平台健康管理在安全关键设置中对进程执行（存活、逻辑和截止时间）监督，并向状态管理报告故障。平台健康管理还控制看门狗，看门狗反过来监督平台健康管理。</p>
+<p>存活监督检查被监督实体运行频率既不太高也不太低。截止时间监督检查被监督实体中的步骤是否在配置的最小和最大时间内执行。逻辑监督检查执行期间的控制流是否与设计的控制流匹配。所有类型的监督可以独立使用，并基于被监督实体报告的检查点进行。</p>
+<p>状态管理和执行管理是 AUTOSAR 自适应平台的基础功能集群，在任何情况下都需要正常运行。因此，平台健康管理应始终监督状态管理和执行管理的相应进程。这些进程中的监督失败应通过重置机器来恢复，因为正常的错误恢复方式（通过执行管理和状态管理）不再可靠。</p>
+<h4 id="9612-提供的接口">9.6.1.2 提供的接口</h4>
+<h2 id="machine-manager-restrictedapplicationinterface">Machine Manager (restrictedApplicationInterface)</h2>
+<p>机器管理器接口提供了触发机器重置的功能。</p>
+<h2 id="supervised-entity-applicationinterface">Supervised Entity (applicationInterface)</h2>
+<p>被监督实体接口提供了向平台健康管理报告检查点的功能，例如，已到达控制流中的某个里程碑。</p>
+<h4 id="9613-要求的接口">9.6.1.3 要求的接口</h4>
+<h2 id="watchdog-driver">Watchdog Driver</h2>
+<p>平台健康管理应使用看门狗驱动程序来控制看门狗。</p>
+<p>===== Page 51 =====</p>
+<h2 id="request-execution-info">Request Execution Info</h2>
+<p>平台健康管理应使用请求执行信息来检索有关活动进程和功能组状态的信息，并相应地启用/禁用其监督。</p>
+<h3 id="97-配置">9.7 配置</h3>
+<center>图 9.19：配置及其构建块概览</center>
+<h4 id="971-更新与配置管理">9.7.1 更新与配置管理</h4>
+<center>图 9.20：更新与配置管理概览</center>
+<p>===== Page 52 =====</p>
+<h4 id="9711-职责">9.7.1.1 职责</h4>
+<p>更新与配置管理负责以安全可靠的方式在 AUTOSAR 自适应平台上更新、安装、删除和记录软件。因此，更新与配置管理支持通过空中更新灵活更新软件及其配置。</p>
+<h4 id="9712-提供的接口">9.7.1.2 提供的接口</h4>
+<h2 id="package-management-applicationinterface">Package Management (applicationInterface)</h2>
+<p>包管理接口提供了下载、处理、激活和删除软件包的功能。此外，包管理向状态管理提供正在进行的更新的状态，以防止在更新和系统关闭过程中切换到不安全状态。</p>
+<h2 id="vehicle-package-management-applicationinterface">Vehicle Package Management (applicationInterface)</h2>
+<p>车辆包管理接口提供了下载、处理、激活和删除车辆包的功能方法。</p>
+<h4 id="9713-要求的接口">9.7.1.3 要求的接口</h4>
+<h2 id="raw-data-interface">Raw Data Interface</h2>
+<p>更新与配置管理应使用原始数据接口进行原始数据传输，例如软件包的传输。</p>
+<h2 id="crypto-stack-1">Crypto Stack</h2>
+<p>更新与配置管理应使用加密协议栈的功能检查软件包的完整性和真实性。</p>
+<h2 id="logger-1">Logger</h2>
+<p>更新与配置管理应使用日志接口写入日志消息。</p>
+<p>===== Page 53 =====</p>
+<h2 id="function-group-state">Function Group State</h2>
+<p>更新与配置管理应使用功能组状态接口将 AUTOSAR 自适应应用运行时置于应用软件更新前安全的状态。</p>
+<h3 id="972-注册表">9.7.2 注册表</h3>
+<center>图 9.21：注册表概览</center>
+<h4 id="9721-职责">9.7.2.1 职责</h4>
+<p>注册表是 AUTOSAR 自适应平台的一个内部组件，提供对清单中存储信息的访问。不预期由自适应应用直接使用。</p>
+<h4 id="9722-提供的接口">9.7.2.2 提供的接口</h4>
+<h2 id="manifest-accessor-internalinterface">Manifest Accessor (internalInterface)</h2>
+<p>清单访问器接口用于访问存储在清单中的数据，例如配置设置。</p>
+<h4 id="9723-要求的接口">9.7.2.3 要求的接口</h4>
+<p>该组件不需要任何标准化的接口。</p>
+<p>===== Page 54 =====</p>
+<h3 id="98-诊断">9.8 诊断</h3>
+<center>图 9.22：诊断及其构建块概览</center>
+<h4 id="981-诊断管理">9.8.1 诊断管理</h4>
+<center>图 9.23：诊断管理概览</center>
+<h4 id="9811-职责">9.8.1.1 职责</h4>
+<p>诊断管理负责处理在 AUTOSAR 自适应应用运行时中运行的各个进程产生的诊断事件。诊断管理根据呈现策略持久存储此类事件及其相关数据。诊断管理还通过标准化网络协议（ISO 14229-5 (UDSonIP)，基于 ISO 14229-1 (UDS) 和 ISO 13400-2 (DoIP)）为外部诊断客户端提供对诊断数据的访问。</p>
+<p>===== Page 55 =====</p>
+<h4 id="9812-提供的接口">9.8.1.2 提供的接口</h4>
+<h2 id="diagnostic-interface-applicationinterface">Diagnostic Interface (applicationInterface)</h2>
+<p>诊断接口提供了创建诊断事件并持久存储它们的功能。</p>
+<h2 id="uds-transport-protocol-api-platformextensioninterface">UDS Transport Protocol API (platformExtensionInterface)</h2>
+<p>UDS 传输协议 API 提供了使用 UDS 传输层实现（例如 OEM 特定实现）扩展 AUTOSAR 自适应平台的功能。</p>
+<h4 id="9813-要求的接口">9.8.1.3 要求的接口</h4>
+<h2 id="file-storage">File Storage</h2>
+<p>DM 应使用文件存储接口持久存储诊断数据。</p>
+<h2 id="tcpip-stack-3">TCP/IP Stack</h2>
+<p>TCP/IP 协议栈用于接受和控制来自使用 UDSonIP 协议的外部诊断客户端的网络连接。</p>
+<h2 id="logger-2">Logger</h2>
+<p>DM 应使用日志接口记录错误和诊断事件。</p>
+<h2 id="policy-decision-point-2">Policy Decision Point</h2>
+<p>DM 应使用策略决策点接口检查诊断客户端的访问权限。</p>
+<h2 id="crypto-stack-2">Crypto Stack</h2>
+<p>DM 应使用加密协议栈接口，例如，执行诊断会话的身份验证。</p>
+<p>===== Page 56 =====</p>
+<h1 id="10-运行时视图">10 运行时视图</h1>
+<p>本章展示了 AUTOSAR 自适应平台实现所选用例的原始设计方法。呈现的用例目前仅涵盖 AUTOSAR 自适应平台功能的一小部分。本文档的未来版本将添加更多用例。请注意，AUTOSAR 自适应平台的各个实现始终可以在内部选择不同的设计。因此，交互伙伴、消息类型及其顺序可能不同。</p>
+<h2 id="101-概述">10.1 概述</h2>
+<p>用例在后续章节中分类。第 10.2 节分组了控制 AUTOSAR 自适应应用运行时生命周期的用例。第 10.3 节列出了与外部系统通信的用例。第 10.4 节演示了如何安装自适应应用以及如何更新它们和 AUTOSAR 自适应应用运行时。</p>
+<h2 id="102-autosar-自适应应用运行时生命周期">10.2 AUTOSAR 自适应应用运行时生命周期</h2>
+<h3 id="1021-机器启动">10.2.1 机器启动</h3>
+<p>在机器启动期间，操作系统以特定于实现的方式执行初始化步骤。这些步骤包括启动与操作系统相关的任何中间件，包括设备驱动程序和处理低级中间件的服务。此外，执行管理作为 AUTOSAR 自适应应用运行时的入口点被启动。然后执行管理通过启动状态管理和平台健康管理进程来控制 AUTOSAR 自适应应用运行时的启动。</p>
+<p>在状态管理和平台健康管理启动后，状态管理通过请求执行管理转换到标准化的机器状态 Startup 来控制 AUTOSAR 自适应平台的初始化。在 AUTOSAR 自适应平台的其余部分初始化后，状态管理以相同方式向执行管理请求机器上其他功能组的特定于应用的状态。平台健康管理始终使用（可能是固定的）特定于实现的规则集监督执行管理和状态管理的进程。平台健康管理本身由看门狗监督。此外，平台健康管理根据机器清单中的配置监督应用进程。</p>
+<p>===== Page 57 =====</p>
+<h3 id="1022-机器关闭">10.2.2 机器关闭</h3>
+<p>关闭由状态管理在特定于应用的事件后请求。首先，应用功能组可能被带到相应的状态（未显示）。</p>
+<p>===== Page 58 =====</p>
+<p>之后，状态管理触发转换到 Shutdown 机器状态。关闭过程由执行管理控制。执行管理停止所有平台进程。然后，执行管理终止状态管理和平台健康管理进程，并请求关闭底层操作系统。</p>
+<center>图 10.2：AUTOSAR 自适应应用运行时的关闭</center>
+<h3 id="1023-功能组状态转换">10.2.3 功能组状态转换</h3>
+<p>基于其输入和内部状态，状态管理请求切换到另一个功能组状态。到新功能组状态的转换由执行管理控制。首先，终止所有在目标状态中不活动或具有不同启动配置的进程。后者也可能包括不同的启动依赖关系。然后，执行管理按照依赖关系施加的顺序启动所有进程。在状态转换期间，执行管理通知平台健康管理进程状态的任何变化。平台健康管理相应地调整其监督。</p>
+<p>===== Page 59 =====</p>
+<center>图 10.3：转换到另一个功能组状态</center>
+<h3 id="1024-故障恢复">10.2.4 故障恢复</h3>
+<p>如果平台健康管理在其监督的实体中检测到故障，它会通知执行管理监督失败。执行管理将受监督的进程映射到相应的功能组，并委托状态管理处理该功能组中的故障并执行恢复操作。状态管理是一个特定于应用的组件，根据其各种输入、内部状态等，可以决定采取哪些操作来从故障中恢复。主要有两种可能性：</p>
+<ul>
+<li>通过将功能组状态切换到另一个功能组状态来恢复（例如，降级）</li>
+<li>通过重新进入相同的功能组状态并实质上重启功能组中的所有进程来恢复</li>
+</ul>
+<p>===== Page 60 =====</p>
+<ul>
+<li>作为最后手段，建议平台健康管理重置机器</li>
+</ul>
+<center>图 10.4：故障恢复场景</center>
+<h2 id="103-通信">10.3 通信</h2>
+<p>AUTOSAR 自适应平台中的面向服务通信受到身份与访问管理的保护，该管理提供访问控制。所有服务请求由通信管理处理。通信管理使用执行管理确定发送者进程的自适应应用身份。然后，通信管理使用发送者身份和所调用服务的信息向身份与访问管理请求访问控制决策。通信管理通过根据访问被授予时转发请求给服务或访问被拒绝时丢弃请求来强制执行访问控制决策。</p>
+<p>===== Page 61 =====</p>
+<center>图 10.5：面向服务通信中的访问控制</center>
+<h2 id="104-更新与配置管理">10.4 更新与配置管理</h2>
+<h3 id="1041-自适应应用的更新">10.4.1 自适应应用的更新</h3>
+<p>当必须更新自适应应用时，应用的新版本首先必须传输到更新与配置管理实例。应用的状态以及更新与配置管理由状态管理监控。仅当没有其他东西在运行时（kIdle 状态），实际的更新过程才开始。</p>
+<p>然后，更新与配置管理接收信号以开始处理传输的数据。成功处理后，更新进入激活阶段，更新与配置管理检查传输的软件包中的依赖关系。成功激活后，自适应应用被重启，并且成功重启后，运行更新的软件。</p>
+<p>更新与配置管理的最后一步是通过清理和删除临时数据、旧软件版本或不再需要用于自适应应用执行的存储数据来完成更新过程。</p>
+<p>===== Page 62 =====</p>
+<center>图 10.6：自适应应用的成功更新</center>
+<p>===== Page 63 =====</p>
+<h1 id="11-部署视图">11 部署视图</h1>
+<p>本章概述了 AUTOSAR 自适应平台的示例性部署场景。由于 AUTOSAR 自适应平台在其部署中高度可配置，本节仅提供对支持部署的约束和相关部署场景的选择。</p>
+<h2 id="111-车辆软件部署">11.1 车辆软件部署</h2>
+<center>图 11.1：示例性车辆软件更新场景</center>
+<p>===== Page 64 =====</p>
+<p>更新与配置管理允许在 AUTOSAR 自适应平台和 AUTOSAR 经典平台上安装和更新软件。对于 AUTOSAR 自适应平台，更新与配置管理还允许删除软件。软件包可以从诊断客户端或特定的后端系统接收，用于空中更新。在车辆中，一个自适应应用扮演主控角色，控制车辆中的更新过程，并将单个软件包分发到车辆内的机器和 ECU。</p>
+<p>===== Page 65 =====</p>
+<h1 id="12-横切概念">12 横切概念</h1>
+<p>本节概述了 AUTOSAR 自适应平台中使用的横切概念和模式。</p>
+<h2 id="121-平台实体概览">12.1 平台实体概览</h2>
+<p>AUTOSAR 自适应平台定义了多个功能集群依赖的设计实体。图 12.1 提供了这些实体、其逻辑关系以及依赖它们的功能集群的概览。为简洁起见，此概览使用了相对于 [10, 清单规范] 中实际规范的简化和抽象。</p>
+<center>图 12.1：平台实体及其逻辑关系概览</center>
+<p>软件包是一个数字签名的包，可以通过更新与配置管理安装/卸载。一个软件包恰好包含一个软件集群（详见第 12.4 节）。软件集群引用一组可执行文件（和其他文件）。相应的可执行文件随后包含 AUTOSAR 自适应平台运行的机器的可执行代码。</p>
+<p>===== Page 66 =====</p>
+<p>此外，软件集群配置收集一组进程（参见第 12.4 节）和相关实体。一个进程引用一个可执行文件，并提供不同的启动配置值，例如参数、调度优先级和资源约束。一个进程的启动配置适用于一个或多个功能组状态。功能组状态属于一个功能组。</p>
+<p>在运行时，状态管理请求执行管理进入一个功能组状态。执行管理随后使用底层操作系统相应地终止和启动进程。</p>
+<p>对于安全关键系统，平台健康管理根据 PhmSupervision 中定义的规则（逻辑序列、截止时间）对进程执行监督。一个 PhmSupervision 引用多个监督检查点。在运行时，一个进程在其控制流中每当到达这样一个检查点时进行报告。</p>
+<h2 id="122-功能组">12.2 功能组</h2>
+<p>一个功能组（逻辑上）由一组提供特定功能的建模进程组成。例如，一个功能组可以是一个应用或一个服务。一个特殊的功能组是机器状态，它分组 AUTOSAR 自适应平台本身的进程。一个功能组包含一组功能组状态。</p>
+<h2 id="123-功能组状态">12.3 功能组状态</h2>
+<p>一个功能组状态定义了一个功能组的哪些进程使用什么配置参数应运行或不运行。机器状态（引用 AUTOSAR 自适应平台本身的进程）至少定义以下功能组状态：Off, Startup, Shutdown, 和 Restart。</p>
+<h2 id="124-软件集群">12.4 软件集群</h2>
+<p>一个软件集群配置引用一组建模的进程。这些进程（传递性地）被一个或多个功能组使用。在此，一个功能组及其关联实体应仅属于一个软件集群。换句话说，跨越多个软件集群的功能组是无效的。一个软件集群被打包到一个软件包中——由更新与配置管理的原子可安装/可更新单元。一个软件集群可能依赖于其他软件集群。此类依赖关系通过版本约束表达。一个软件集群还可以指定对子软件集群的结构依赖关系，以构建</p>
+<p>===== Page 67 =====</p>
+<p>更大的可安装单元。这种结构依赖层次结构的顶部称为根软件集群。请注意，软件集群仅用于配置部署方面。软件集群不是运行时实体。</p>
+<p>一个根软件集群可以指定诊断配置，特别是诊断地址。相比之下，子软件集群可能依赖于其根软件集群的诊断配置。诊断配置适用于（传递性地）包含在根软件集群及其子软件集群中的进程。这意味着，在运行时，由这些进程产生的任何诊断事件都将与该诊断地址关联。</p>
+<p>图 12.2 显示了一个应用设计期间的示例性软件集群。应用软件集群以与平台软件集群相同的方式建模/配置，通过定义具有功能组状态的功能组并将进程的启动配置关联到它们。</p>
+<p>软件集群充当应用设计期间的分组实体。因此，软件集群内的实体，特别是功能组，不需要在整个模型中具有唯一的（简单）名称，因为它们的路径仍然是唯一的。这允许独立设计软件集群，例如，由外部供应商设计。</p>
+<p>===== Page 68 =====</p>
+<center>图 12.2：应用设计期间的示例性软件集群</center>
+<p>从这样一个标准化模型，派生出用于运行时的等效特定于实现的执行管理配置（见图 12.3）。该配置指示执行管理在请求功能组状态时相应地启动和配置进程。在此，执行管理（逻辑上）合并所有已安装软件包贡献的配置。其他依赖清单中提供的配置的功能集群以相同方式合并所有已安装软件包贡献的配置。另请注意，软件集群没有对应的运行时实体（见图 12.3）。</p>
+<p>===== Page 69 =====</p>
+<center>图 12.3：示例性软件集群在运行时的影响</center>
+<p>与 AUTOSAR 自适应平台功能集群相关的所有进程应仅被 PLATFORM_CORE 或 PLATFORM 类别的软件集群引用。这允许独立于平台开发 APPLICATION_LAYER 类别的软件集群。</p>
+<p>如果一个功能集群可能需要多个逻辑实例（例如，诊断管理每个诊断地址有一个逻辑实例），功能集群的实现仍应使用单个物理（守护进程）进程。</p>
+<p>AUTOSAR 自适应平台供应商可以偏离此设计指南，但应提供额外的对策以保持自适应应用的可移植性。</p>
+<h2 id="125-机器">12.5 机器</h2>
+<p>AUTOSAR 自适应平台将其运行的硬件视为机器。其基本原理是无论使用何种虚拟化技术，都能实现一致的平台视图。机器可能是物理真实机器、全虚拟化机器、半虚拟化操作系统、操作系统级虚拟化容器或任何其他虚拟化环境。</p>
+<p>===== Page 70 =====</p>
+<p>在硬件上，可以有一台或多台机器，并且一台机器上只运行一个 AUTOSAR 自适应平台实例。通常假设此硬件包括单个芯片，承载单个或多个机器。然而，如果 AUTOSAR 自适应平台实现允许，多个芯片也可以形成一个单独的机器。</p>
+<h2 id="126-清单">12.6 清单</h2>
+<p>清单代表一种 AUTOSAR 模型描述，旨在支持 AUTOSAR 自适应平台产品的配置，并上传到 AUTOSAR 自适应平台产品，可能与其他工件（如包含清单适用的可执行代码的二进制文件）结合使用。请注意，一个典型自适应应用将使用多个不同但相互关联的清单。在此，各个清单贡献信息给完整的应用模型。例如，每个软件集群可以贡献一组自包含的清单来配置其功能。</p>
+<p>清单的使用仅限于 AUTOSAR 自适应平台。然而，这并不意味着在针对 AUTOSAR 自适应平台的开发项目中产生的所有 ARXML 都自动被视为清单。事实上，AUTOSAR 自适应平台在车辆项目中通常不是唯一使用的。典型的车辆很可能还配备了许多基于 AUTOSAR 经典平台开发的 ECU，因此整个车辆的系统设计将必须涵盖基于 AUTOSAR 经典平台构建的 ECU 和基于 AUTOSAR 自适应平台创建的机器。</p>
+<p>原则上，清单可以定义为概念上只有一个“清单”，所有部署方面都在此上下文中处理。但这似乎不太合适，因为很明显，与清单相关的模型元素在典型开发项目的完全不同的阶段存在相关性。</p>
+<p>这一方面被作为主要动机，除了应用设计之外，有必要将清单的定义细分为三个不同的部分：</p>
+<p><strong>应用设计</strong> 这种描述指定了为 AUTOSAR 自适应平台创建应用软件的所有设计相关方面。它不一定需要部署到自适应平台机器，但应用设计有助于在执行清单和服务实例清单中定义应用软件的部署。详见第 12.7 节。</p>
+<p><strong>执行清单</strong> 这种清单用于指定在 AUTOSAR 自适应平台上运行的应用的部署相关信息。执行清单与实际可执行代码捆绑在一起，以支持将可执行代码集成到机器上。详见第 12.8 节。</p>
+<p>===== Page 71 =====</p>
+<p><strong>服务实例清单</strong> 这种清单用于指定如何在底层传输协议的需求方面配置面向服务的通信。服务实例清单与实际实现面向服务通信相应使用的可执行代码捆绑在一起。详见第 12.9 节。</p>
+<p><strong>机器清单</strong> 这种清单应描述适用于配置运行 AUTOSAR 自适应平台的底层机器（即没有任何应用在运行）的部署相关内容。机器清单与用于建立 AUTOSAR 自适应平台实例的软件捆绑在一起。详见第 12.10 节。</p>
+<p>不同种类清单的定义（和使用）之间的时间划分导致在大多数情况下，将使用不同的物理文件来存储这三种清单的内容。除了应用设计和不同种类的清单，AUTOSAR 方法论还支持系统设计，可以在一个单一模型中描述将在系统中使用的两种 AUTOSAR 平台的软件组件。不同 AUTOSAR 平台的软件组件可以以面向服务的方式相互通信。但也可以描述信号到服务的映射，以在面向服务的通信和基于信号的通信之间建立桥梁。</p>
+<h2 id="127-应用设计">12.7 应用设计</h2>
+<p>应用设计描述了为 AUTOSAR AP 创建应用软件的所有设计相关建模。应用设计关注以下方面：</p>
+<ul>
+<li>用于软件设计和实现的信息分类的数据类型</li>
+<li>作为面向服务通信关键要素的服务接口</li>
+<li>定义应用如何访问面向服务的通信</li>
+<li>作为访问持久数据和文件的关键要素的持久性接口</li>
+<li>定义应用如何访问持久存储</li>
+<li>定义应用如何访问文件</li>
+<li>定义应用如何访问加密软件</li>
+<li>定义应用如何访问平台健康管理</li>
+<li>定义应用如何访问时间基准</li>
+<li>定义数据如何在网络上传输的序列化特性的序列化属性</li>
+<li>用于通过 REST 模式与 Web 服务通信的 REST 服务接口</li>
+<li>客户端和服务器能力的描述</li>
+<li>对应用进行分组以便于软件部署。</li>
+</ul>
+<p>应用设计中定义的工件独立于应用软件的特定部署，从而便于应用实现在不同部署场景下的重用。</p>
+<p>===== Page 72 =====</p>
+<h2 id="128-执行清单">12.8 执行清单</h2>
+<p>执行清单的目的是提供将应用实际部署到 AUTOSAR AP 所需的信息。总体思路是保持应用软件代码尽可能独立于部署场景，以增加应用软件可以在不同部署场景中被重用的机会。通过执行清单，控制应用的实例化，因此可以：</p>
+<ul>
+<li>在同一台机器上多次实例化相同的应用软件，或者</li>
+<li>将应用软件部署到多台机器并在每台机器上实例化应用软件。</li>
+</ul>
+<p>执行清单关注以下方面：</p>
+<ul>
+<li>启动配置，定义应如何启动应用实例。启动包括启动选项和访问角色的定义。每个启动可能依赖于机器状态和/或功能组状态。</li>
+<li>资源管理，特别是资源组分配。</li>
+</ul>
+<h2 id="129-服务实例清单">12.9 服务实例清单</h2>
+<p>在网络上实现面向服务的通信需要特定于所用通信技术的配置。由于通信基础设施在服务的提供者和请求者上应表现相同，服务的实现应在两侧兼容。</p>
+<p>服务实例清单关注以下方面：</p>
+<ul>
+<li>服务接口部署，定义如何在特定通信技术上表示服务。</li>
+</ul>
+<p>===== Page 73 =====</p>
+<ul>
+<li>服务实例部署，为特定的提供和请求的服务实例定义通信技术所需的凭证。</li>
+<li>E2E 保护的配置</li>
+<li>安全保护的配置</li>
+<li>日志与追踪的配置</li>
+</ul>
+<h2 id="1210-机器清单">12.10 机器清单</h2>
+<p>机器清单允许配置在特定硬件（机器）上运行的实际自适应平台实例。</p>
+<p>机器清单关注以下方面：</p>
+<ul>
+<li>网络连接的配置和为网络技术定义基本凭证（例如，对于以太网，这涉及设置静态 IP 地址或定义 DHCP）。</li>
+<li>服务发现技术的配置（例如，对于 SOME/IP，这涉及定义要使用的 IP 端口和 IP 多播地址）。</li>
+<li>所用机器状态的定义。</li>
+<li>所用功能组的定义。</li>
+<li>自适应平台功能集群实现的配置（例如，操作系统提供具有特定权限的操作系统用户列表）。</li>
+<li>加密平台模块的配置。</li>
+<li>平台健康管理的配置。</li>
+<li>时间同步的配置。</li>
+<li>可用硬件资源的文档（例如，有多少 RAM 可用；有多少处理器核心可用）。</li>
+</ul>
+<h2 id="1211-错误处理">12.11 错误处理</h2>
+<p>在运行时正确处理错误是构建安全和可靠系统的重要方面。AUTOSAR 自适应平台确实提供了在平台不同级别引发和处理此类错误的手段。</p>
+<p>平台健康管理在进程级别检测错误（逻辑控制流错误、错过截止时间和存活报告缺失），并根据清单中定义的规则执行恢复操作（例如降级）。执行管理检测进程的意外终止，并向状态管理报告以处理此类错误。</p>
+<p>===== Page 74 =====</p>
+<p>在执行自适应应用的进程期间，可能会检测到不同的异常情况，需要处理和/或报告。AUTOSAR 自适应平台内区分以下类型的失败操作：</p>
+<ul>
+<li><strong>错误</strong> 是 AUTOSAR 自适应应用运行时 API 函数无法履行其指定用途。错误通常是无效和/或意外输入数据的结果。错误被认为是可恢复的，因此应由应用程序处理。</li>
+<li><strong>违规</strong> 是 AUTOSAR 自适应应用运行时内部状态的前置或后置条件失败的结果。违规被认为是不可恢复的。</li>
+<li><strong>损坏</strong> 是系统资源损坏的结果，例如堆栈或堆溢出，或硬件内存缺陷（例如检测到的比特翻转）。损坏被认为是不可恢复的。</li>
+<li><strong>默认分配失败</strong> 是 AUTOSAR 自适应应用运行时的默认内存分配机制无法满足分配请求（例如，没有足够的可用内存）。</li>
+</ul>
+<p>预期 AUTOSAR 自适应平台的用户（即应用程序开发者）不会遇到违规或损坏，除非整个系统存在严重问题。例如，有缺陷的硬件可能导致损坏。如果关于资源需求的基本假设被违反，或者用户在供应商不支持的配置下运行 AUTOSAR 自适应应用运行时，可能会发生违规。</p>
+<h2 id="1212-可信平台">12.12 可信平台</h2>
+<p>为保证系统的正确功能，确保在 AUTOSAR 自适应平台上执行的代码未被更改（完整性）且具有合法来源（真实性）至关重要。保持此属性允许集成商构建可信平台。实现可信平台的系统的一个关键属性是信任锚。信任锚通常实现为存储在安全环境中的公钥，例如在不可修改的持久存储器中或在硬件安全模块中。系统设计者负责确保系统从信任锚开始启动，并且信任链一直保持到执行管理启动。根据系统设计者选择建立信任链的机制，整个系统（包括所有可执行文件）的完整性和真实性可以在系统启动期间进行检查。或者，系统设计者可能仅确保已执行的软件已通过完整性和真实性检查，并且执行管理在接管系统控制时负责继续信任链。在后一种情况下，系统集成者负责确保执行管理得到相应配置。</p>
+<p>===== Page 75 =====</p>
+<p>传递信任要求一个可信实体（使用可信功能）检查链下游的实体是真实的。信任锚（链中的第一个实体）被定义为真实的。这样一个信任链的例子可能如下所示：信任锚在引导加载程序启动之前对其进行身份验证。在引导过程的每个后续步骤中，应首先对将要启动的可执行文件进行身份验证，例如由先前启动的可执行文件或由某个外部实体（如硬件安全模块）进行。在操作系统的相关部分已真实启动后，它应以相同方式启动执行管理作为其首批进程之一，将信任传递给 AUTOSAR 自适应平台。然后，执行管理负责在启动自适应应用之前对它们进行身份验证。</p>
+<p>如上所述，如果真实性不是由信任锚（其本身被定义为真实的）的功能检查的，那么用于验证可执行文件真实性的功能本身也应在应用之前经过身份验证。例如，如果加密功能集群应用于验证可执行文件的真实性，那么加密功能集群本身应在使用前由某个可信实体进行身份验证。</p>
+<h2 id="1213-安全通信">12.13 安全通信</h2>
+<p>AUTOSAR 支持通过网络提供通信安全的不同协议。消息的完整性可以通过 [11, AUTOSAR E2E 库] 提供的端到端保护来确保。端到端保护假设安全相关的数据交换应在运行时受到保护，防止通信链路内故障的影响。此类故障包括随机硬件故障（例如收发器寄存器损坏）、干扰（例如电磁干扰）和通信协议栈中的系统性故障。端到端保护的配置通过服务实例清单在服务事件、方法和字段（通知器、获取和设置方法）级别进行。消息的机密性和真实性可以通过服务实例清单中在服务事件、方法和字段（通知器、获取和设置方法）级别为各个传输协议（例如 TLS、SecOC）进行专用配置来确保。</p>
+<p>===== Page 76 =====</p>
+<h1 id="13-风险与技术债务">13 风险与技术债务</h1>
+<p>本章在第 13.1 节中列出并评估了与 AUTOSAR 自适应平台整体架构相关的风险。这些风险通常可能导致 AUTOSAR 自适应平台的某些质量属性无法（完全）满足。第 13.2 节列出了可能影响 AUTOSAR 自适应平台可维护性的技术债务。</p>
+<h2 id="131-风险">13.1 风险</h2>
+<h3 id="1311-风险评估">13.1.1 风险评估</h3>
+<p>本文档根据严重性对风险进行分类。严重性是风险概率和影响的函数。概率分类如下：</p>
+<ul>
+<li>极低 - 概率低于千分之一</li>
+<li>低 - 概率在千分之一到百分之一之间</li>
+<li>中 - 概率在百分之一到百分之十之间</li>
+<li>高 - 概率在百分之十到百分之五十之间</li>
+<li>极高 - 概率超过百分之五十</li>
+</ul>
+<p>风险的影响分类如下：</p>
+<ul>
+<li>极低 - 最多一个质量场景需要额外付出显著努力才能满足</li>
+<li>低 - 超过一个质量场景需要额外付出显著努力才能满足</li>
+<li>中 - 最多一个质量场景未能满足，差距较小</li>
+<li>高 - 最多一个质量场景未能满足，差距较大</li>
+<li>极高 - 超过一个质量场景未能满足，差距较大</li>
+</ul>
+<p>风险的最终严重性根据表 13.1 计算。</p>
+<p>表 13.1：风险严重性</p>
+<table>
+  <thead>
+      <tr>
+          <th>影响 \ 概率</th>
+          <th>极低</th>
+          <th>低</th>
+          <th>中</th>
+          <th>高</th>
+          <th>极高</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>极低</td>
+          <td>低 (1)</td>
+          <td>低 (2)</td>
+          <td>低 (3)</td>
+          <td>中 (4)</td>
+          <td>中 (5)</td>
+      </tr>
+      <tr>
+          <td>低</td>
+          <td>低 (2)</td>
+          <td>中 (4)</td>
+          <td>中 (6)</td>
+          <td>高 (8)</td>
+          <td>高 (10)</td>
+      </tr>
+      <tr>
+          <td>中</td>
+          <td>低 (3)</td>
+          <td>中 (6)</td>
+          <td>高 (9)</td>
+          <td>高 (12)</td>
+          <td>高 (15)</td>
+      </tr>
+      <tr>
+          <td>高</td>
+          <td>中 (4)</td>
+          <td>高 (8)</td>
+          <td>高 (12)</td>
+          <td>极高 (16)</td>
+          <td>极高 (20)</td>
+      </tr>
+      <tr>
+          <td>极高</td>
+          <td>中 (5)</td>
+          <td>高 (10)</td>
+          <td>高 (15)</td>
+          <td>极高 (20)</td>
+          <td>极高 (25)</td>
+      </tr>
+  </tbody>
+</table>
+<p>===== Page 77 =====</p>
+<h3 id="1312-风险列表">13.1.2 风险列表</h3>
+<p>尚未识别出架构风险。</p>
+<h2 id="132-技术债务">13.2 技术债务</h2>
+<p>尚未识别出技术债务。</p>
+<p>===== Page 78 =====</p>
+<p>1 ISO 42010:2011 - 系统和软件工程 - 架构描述 <a href="http://www.iso.org" target="_blank" rel="noopener noreffer ">http://www.iso.org</a>
+2 自适应平台软件架构决策解释 AUTOSAR_EXP_SWArchitecturalDecisions
+3 术语表 AUTOSAR_TR_Glossary
+4 主要需求 AUTOSAR_RS_Main
+5 自适应平台特定通用需求 AUTOSAR_RS_General
+6 ATAMSM: 架构评估方法 <a href="https://resources.sei.cmu.edu/asset_files/TechnicalReport/2000_005_001_13706.pdf" target="_blank" rel="noopener noreffer ">https://resources.sei.cmu.edu/asset_files/TechnicalReport/2000_005_001_13706.pdf</a>
+7 敏捷软件开发：原则、模式与实践
+8 软件工程知识体系指南，3.0版 <a href="https://www.swebok.org" target="_blank" rel="noopener noreffer ">www.swebok.org</a>
+9 开放系统的 API 标准 <a href="http://www.opengroup.org/austin/papers/wp-apis.txt" target="_blank" rel="noopener noreffer ">http://www.opengroup.org/austin/papers/wp-apis.txt</a>
+10 清单规范 AUTOSAR_TPS_ManifestSpecification
+11 软件组件端到端通信保护库规范 AUTOSAR_SWS_E2ELibrary</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 0001-01-01</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/102_autosar_exp_swarchitecture/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/103_autosar_tr_adaptiveplatformreleaseoverriew/" class="prev" rel="prev" title=""><i class="fas fa-angle-left" aria-hidden="true"></i></a>
+            <a href="/blog/101_autosar_exp_platformdesign/" class="next" rel="next" title=""><i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>
