@@ -1,0 +1,20 @@
+# 力扣820. Short Encoding of Words（单词的压缩编码）
+
+
+## 力扣820. Short Encoding of Words（单词的压缩编码）
+
+计算最短的压缩编码长度.
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0820_单词的压缩编码/img/0820_单词的压缩编码-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

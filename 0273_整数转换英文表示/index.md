@@ -1,0 +1,20 @@
+# 力扣273. Integer to English Words（整数转换英文表示）
+
+
+## 力扣273. Integer to English Words（整数转换英文表示）
+
+将非负整数转换为英文单词表示。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0273_整数转换英文表示/img/0273-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

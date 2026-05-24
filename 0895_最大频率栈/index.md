@@ -1,0 +1,20 @@
+# 力扣895. Maximum Frequency Stack（最大频率栈）
+
+
+## 力扣895. Maximum Frequency Stack（最大频率栈）
+
+设计支持弹出最频繁元素的数据结构。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0895_最大频率栈/img/0895-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

@@ -1,0 +1,22 @@
+# 力扣725. Split Linked List in Parts（分隔链表）
+
+
+## 力扣725. Split Linked List in Parts（分隔链表）
+
+将链表分成 k 个连续的部分。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0725_分隔链表/img/0725-1-description.png)
+
+```
+输入：head = [1,2,3], k = 5
+输出：[[1],[2],[3],[],[]]
+解释：...
+```
+
+提示：
+- 链表中节点数目为 [0, 1000]
+- 0 <= Node.val <= 1000
+- 1 <= k <= 50
+

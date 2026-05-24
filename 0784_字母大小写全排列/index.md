@@ -1,0 +1,20 @@
+# 力扣784. Letter Case Permutation（字母大小写全排列）
+
+
+## 力扣784. Letter Case Permutation（字母大小写全排列）
+
+返回字符串所有可能的字母大小写排列。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0784_字母大小写全排列/img/0784-1-description.png)
+
+```
+输入：s = "a1b2"
+输出：["a1b2","a1B2","A1b2","A1B2"]
+解释：...
+```
+
+提示：
+- ...
+

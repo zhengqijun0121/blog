@@ -1,0 +1,20 @@
+# 力扣288. Unique Word Abbreviation（单词的唯一缩写）
+
+
+## 力扣288. Unique Word Abbreviation（单词的唯一缩写）
+
+判断单词的缩写是否唯一。会员题。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0288_单词的唯一缩写/img/0288-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

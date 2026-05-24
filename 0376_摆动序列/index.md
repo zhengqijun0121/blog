@@ -1,0 +1,20 @@
+# 力扣376. Wiggle Subsequence（摆动序列）
+
+
+## 力扣376. Wiggle Subsequence（摆动序列）
+
+找到最长摆动子序列的长度。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0376_摆动序列/img/0376-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

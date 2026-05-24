@@ -1,0 +1,20 @@
+# 力扣864. Shortest Path to Get All Keys（获取所有钥匙的最短路径）
+
+
+## 力扣864. Shortest Path to Get All Keys（获取所有钥匙的最短路径）
+
+获取所有钥匙的最短路径。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0864_获取所有钥匙的最短路径/img/0864-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

@@ -1,0 +1,19 @@
+# 力扣548. Split Array with Equal Sum（将数组分割成和相等的子数组）
+
+
+## 力扣548. Split Array with Equal Sum（将数组分割成和相等的子数组）
+
+判断是否能分割成三个子数组和相等。会员题。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0548_将数组分割成和相等的子数组/img/548-1-description.png)
+
+```
+输入：nums = [1,2,1,2,1,2,1]
+输出：true
+```
+
+提示：
+- 详见原题。
+

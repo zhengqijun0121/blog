@@ -1,0 +1,20 @@
+# 力扣977. Squares of a Sorted Array（有序数组的平方）
+
+
+## 力扣977. Squares of a Sorted Array（有序数组的平方）
+
+返回有序数组每个数的平方组成的数组。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0977_有序数组的平方/img/0977-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

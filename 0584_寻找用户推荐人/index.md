@@ -1,0 +1,20 @@
+# 力扣0584. Find Customer Referee（寻找用户推荐人）
+
+
+## 力扣0584. Find Customer Referee（寻找用户推荐人）
+
+SQL：找出没有被 2 推荐的用户。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0584_寻找用户推荐人/img/0584-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

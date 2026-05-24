@@ -1,0 +1,20 @@
+# 力扣696. Count Binary Substrings（计数二进制子串）
+
+
+## 力扣696. Count Binary Substrings（计数二进制子串）
+
+统计具有相同数量 0 和 1 的子串数量。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0696_计数二进制子串/img/0696-1-description.png)
+
+```
+输入："00110011"
+输出：6
+```
+
+提示：
+- 1 <= s.length <= 10^5
+- s 仅由 '0' 和 '1' 组成
+

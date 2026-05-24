@@ -1,0 +1,22 @@
+# 力扣209. Minimum Size Subarray Sum（长度最小的子数组）
+
+
+## 力扣209. Minimum Size Subarray Sum（长度最小的子数组）
+
+给定一个含有 n 个正整数的数组和一个正整数 target，找出该数组中满足其总和大于等于 target 的长度最小的连续子数组并返回其长度。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0209_长度最小的子数组/img/0209-1-description.png)
+
+```
+输入：target = 7, nums = [2,3,1,2,4,3]
+输出：2
+解释：子数组 [4,3] 是该条件下的长度最小的子数组。
+```
+
+提示：
+- 1 <= target <= 10^9
+- 1 <= nums.length <= 10^5
+- 1 <= nums[i] <= 10^5
+

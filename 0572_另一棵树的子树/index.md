@@ -1,0 +1,20 @@
+# 力扣0572. Subtree of Another Tree（另一棵树的子树）
+
+
+## 力扣0572. Subtree of Another Tree（另一棵树的子树）
+
+判断一棵树是否是另一棵树的子树。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0572_另一棵树的子树/img/0572-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

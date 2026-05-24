@@ -1,0 +1,20 @@
+# 力扣898. Bitwise ORs of Subarrays（子数组按位或操作）
+
+
+## 力扣898. Bitwise ORs of Subarrays（子数组按位或操作）
+
+统计所有子数组按位或的结果数。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0898_子数组按位或操作/img/0898-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

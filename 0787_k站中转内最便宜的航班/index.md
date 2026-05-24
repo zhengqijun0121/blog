@@ -1,0 +1,20 @@
+# 力扣787. Cheapest Flights Within K Stops（K 站中转内最便宜的航班）
+
+
+## 力扣787. Cheapest Flights Within K Stops（K 站中转内最便宜的航班）
+
+计算最多中转 k 次的最便宜航班价格。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0787_K站中转内最便宜的航班/img/0787-1-description.png)
+
+```
+输入：n = 3, edges = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 1
+输出：200
+解释：...
+```
+
+提示：
+- ...
+

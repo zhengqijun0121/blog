@@ -1,0 +1,20 @@
+# 力扣981. Time Based Key-Value Store（基于时间的键值存储）
+
+
+## 力扣981. Time Based Key-Value Store（基于时间的键值存储）
+
+设计支持时间版本的键值存储。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0981_基于时间的键值存储/img/0981-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

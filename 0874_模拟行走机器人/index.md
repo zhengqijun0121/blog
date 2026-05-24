@@ -1,0 +1,20 @@
+# 力扣874. Walking Robot Simulation（模拟行走机器人）
+
+
+## 力扣874. Walking Robot Simulation（模拟行走机器人）
+
+计算机器人行走的最大欧式距离。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0874_模拟行走机器人/img/0874-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

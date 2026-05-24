@@ -1,0 +1,20 @@
+# 力扣366. Find Leaves of Binary Tree（寻找二叉树的叶子节点）
+
+
+## 力扣366. Find Leaves of Binary Tree（寻找二叉树的叶子节点）
+
+逐层收集二叉树的叶子节点。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0366_寻找二叉树的叶子节点/img/0366-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

@@ -1,0 +1,20 @@
+# 力扣949. Largest Time for Given Digits（给定数字能组成的最大时间）
+
+
+## 力扣949. Largest Time for Given Digits（给定数字能组成的最大时间）
+
+用给定数字组成最大时间。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0949_给定数字能组成的最大时间/img/0949-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

@@ -1,0 +1,20 @@
+# 力扣769. Max Chunks To Make Sorted（最多能完成排序的块）
+
+
+## 力扣769. Max Chunks To Make Sorted（最多能完成排序的块）
+
+计算最多能分割的块数。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0769_最多能完成排序的块/img/0769-1-description.png)
+
+```
+输入：arr = [4,3,2,1,0]
+输出：1
+解释：...
+```
+
+提示：
+- ...
+

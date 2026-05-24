@@ -1,0 +1,20 @@
+# 力扣321. Create Maximum Number（拼接最大数）
+
+
+## 力扣321. Create Maximum Number（拼接最大数）
+
+从两个数组中选取数字拼接成最大数。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0321_拼接最大数/img/0321-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

@@ -1,0 +1,20 @@
+# 力扣830. Positions of Large Groups（较大分组的位置）
+
+
+## 力扣830. Positions of Large Groups（较大分组的位置）
+
+找到所有较大分组的起始位置.
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0830_较大分组的位置/img/0830_较大分组的位置-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

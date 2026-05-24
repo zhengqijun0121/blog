@@ -11,7 +11,7 @@
 
 示例 1：
 
-![](../posts/01_学习/88_LeetCode/0142_环形链表/img/142-1-circularlinkedlist.png)
+![](../posts/01_学习/88_LeetCode/0142_环形链表/img/0142-1-circularlinkedlist.png)
 
 ```
 输入：head = [3, 2, 0, -4], pos = 1
@@ -21,7 +21,7 @@
 
 示例 2：
 
-![](../posts/01_学习/88_LeetCode/0142_环形链表/img/142-2-circularlinkedlist_test2.png)
+![](../posts/01_学习/88_LeetCode/0142_环形链表/img/0142-2-circularlinkedlist_test2.png)
 
 ```
 输入：head = [1, 2], pos = 0
@@ -31,7 +31,7 @@
 
 示例 3：
 
-![](../posts/01_学习/88_LeetCode/0142_环形链表/img/142-3-circularlinkedlist_test3.png)
+![](../posts/01_学习/88_LeetCode/0142_环形链表/img/0142-3-circularlinkedlist_test3.png)
 
 ```
 输入：head = [1], pos = -1
@@ -46,12 +46,6 @@
 
 
 进阶：你是否可以使用 O(1) 空间解决此题？
-
-来源：力扣（LeetCode）
-
-链接：[https://leetcode-cn.com/problems/linked-list-cycle-ii](https://leetcode-cn.com/problems/linked-list-cycle-ii)
-
-著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 ----
 
@@ -189,7 +183,7 @@ public class Solution {
 
 如下图所示，设链表中环外部分的长度为 `a`。`slow` 指针进入环后，又走了 `b` 的距离与 `fast` 相遇。此时，`fast` 指针已经走完了环的 `n` 圈，因此它走过的总距离为 `a + n(b + c) + b = a + (n + 1)b + nc`。
 
-![](../posts/01_学习/88_LeetCode/0142_环形链表/img/142-4-fig1.png)
+![](../posts/01_学习/88_LeetCode/0142_环形链表/img/0142-4-fig1.png)
 
 设 `fast` 指针走过的距离都为 `slow` 指针的 `x` 倍，因此有 `a + (n + 1)b + nc = x(a + b)` ⟹  `(b + c)n = (x − 1)(a + b)`。即从相遇点到入环点的距离加上 `n` 圈的环长，恰好等于从链表头部到入环点的距离的 `x - 1` 倍。
 

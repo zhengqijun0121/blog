@@ -1,0 +1,20 @@
+# 力扣802. Find Eventual Safe States（找到最终的安全状态）
+
+
+## 力扣802. Find Eventual Safe States（找到最终的安全状态）
+
+找出所有安全节点.
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0802_找到最终的安全状态/img/0802_找到最终的安全状态-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

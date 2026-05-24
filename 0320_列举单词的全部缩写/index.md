@@ -1,0 +1,20 @@
+# 力扣320. Generalized Abbreviation（列举单词的全部缩写）
+
+
+## 力扣320. Generalized Abbreviation（列举单词的全部缩写）
+
+返回单词所有可能的缩写形式。会员题。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0320_列举单词的全部缩写/img/0320-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

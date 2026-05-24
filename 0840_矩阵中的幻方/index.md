@@ -1,0 +1,20 @@
+# 力扣840. Magic Squares In Grid（矩阵中的幻方）
+
+
+## 力扣840. Magic Squares In Grid（矩阵中的幻方）
+
+统计 3x3 幻方数量.
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0840_矩阵中的幻方/img/0840_矩阵中的幻方-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

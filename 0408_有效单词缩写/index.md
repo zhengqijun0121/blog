@@ -1,0 +1,20 @@
+# 力扣408. Valid Word Abbreviation（有效单词缩写）
+
+
+## 力扣408. Valid Word Abbreviation（有效单词缩写）
+
+判断单词缩写是否有效。会员题。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0408_有效单词缩写/img/0408-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

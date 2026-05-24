@@ -1,0 +1,20 @@
+# 力扣447. Number of Boomerangs（回旋镖的数量）
+
+
+## 力扣447. Number of Boomerangs（回旋镖的数量）
+
+计算回旋镖的数量。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0447_回旋镖的数量/img/0447-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

@@ -1,0 +1,19 @@
+# 力扣540. Single Element in a Sorted Array（有序数组中的单一元素）
+
+
+## 力扣540. Single Element in a Sorted Array（有序数组中的单一元素）
+
+在有序数组中找到只出现一次的元素。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0540_有序数组中的单一元素/img/540-1-description.png)
+
+```
+输入：nums = [1,1,2,3,3,4,4,8,8]
+输出：2
+```
+
+提示：
+- 详见原题。
+

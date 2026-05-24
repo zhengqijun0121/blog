@@ -1,0 +1,20 @@
+# 力扣388. Longest Absolute File Path（文件的最长绝对路径）
+
+
+## 力扣388. Longest Absolute File Path（文件的最长绝对路径）
+
+返回文件系统中文件的最长绝对路径长度。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0388_文件的最长绝对路径/img/0388-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

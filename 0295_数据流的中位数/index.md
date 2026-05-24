@@ -1,0 +1,20 @@
+# 力扣295. Find Median from Data Stream（数据流的中位数）
+
+
+## 力扣295. Find Median from Data Stream（数据流的中位数）
+
+设计一个支持添加整数和查找中位数的数据结构。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0295_数据流的中位数/img/0295-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

@@ -1,0 +1,20 @@
+# 力扣266. Palindrome Permutation（回文排列）
+
+
+## 力扣266. Palindrome Permutation（回文排列）
+
+判断一个字符串是否可以重排成回文串。会员题。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0266_回文排列/img/0266-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

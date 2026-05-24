@@ -1,0 +1,19 @@
+# 力扣525. Contiguous Array（连续数组）
+
+
+## 力扣525. Contiguous Array（连续数组）
+
+找到含有相同数量 0 和 1 的最长连续子数组。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0525_连续数组/img/525-1-description.png)
+
+```
+输入：nums = [0,1]
+输出：2
+```
+
+提示：
+- 详见原题。
+

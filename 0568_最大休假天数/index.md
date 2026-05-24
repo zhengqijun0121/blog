@@ -1,0 +1,20 @@
+# 力扣0568. Maximum Vacation Days（最大休假天数）
+
+
+## 力扣0568. Maximum Vacation Days（最大休假天数）
+
+计算最大休假天数。会员题。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0568_最大休假天数/img/0568-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

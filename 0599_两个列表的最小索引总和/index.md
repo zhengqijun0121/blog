@@ -1,0 +1,20 @@
+# 力扣0599. Minimum Index Sum of Two Lists（两个列表的最小索引总和）
+
+
+## 力扣0599. Minimum Index Sum of Two Lists（两个列表的最小索引总和）
+
+找到两人都喜欢的餐厅且索引和最小。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0599_两个列表的最小索引总和/img/0599-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

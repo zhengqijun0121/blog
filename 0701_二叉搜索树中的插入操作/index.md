@@ -1,0 +1,23 @@
+# 力扣701. Insert into a Binary Search Tree（二叉搜索树中的插入操作）
+
+
+## 力扣701. Insert into a Binary Search Tree（二叉搜索树中的插入操作）
+
+向 BST 中插入值。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0701_二叉搜索树中的插入操作/img/0701-1-description.png)
+
+```
+输入：root = [4,2,7,1,3], val = 5
+输出：[4,2,7,1,3,5]
+解释：...
+```
+
+提示：
+- 给定的树节点数在 [0, 10^4] 范围内
+- 树中所有值唯一
+- 0 <= Node.val <= 10^8
+- 所有插入值与原树节点值不同
+

@@ -1,0 +1,20 @@
+# 力扣315. Count of Smaller Numbers After Self（计算右侧小于当前元素的个数）
+
+
+## 力扣315. Count of Smaller Numbers After Self（计算右侧小于当前元素的个数）
+
+返回数组中每个元素右侧比它小的元素数量。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0315_计算右侧小于当前元素的个数/img/0315-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

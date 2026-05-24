@@ -1,0 +1,20 @@
+# 力扣399. Evaluate Division（除法求值）
+
+
+## 力扣399. Evaluate Division（除法求值）
+
+计算变量相除的结果。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0399_除法求值/img/0399-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

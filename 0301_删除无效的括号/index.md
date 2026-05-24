@@ -1,0 +1,20 @@
+# 力扣301. Remove Invalid Parentheses（删除无效的括号）
+
+
+## 力扣301. Remove Invalid Parentheses（删除无效的括号）
+
+删除最小数量的无效括号使字符串有效，返回所有可能结果。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0301_删除无效的括号/img/0301-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

@@ -1,0 +1,20 @@
+# 力扣0583. Delete Operation for Two Strings（两个字符串的删除操作）
+
+
+## 力扣0583. Delete Operation for Two Strings（两个字符串的删除操作）
+
+使两个字符串相等所需的最小删除次数。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0583_两个字符串的删除操作/img/0583-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

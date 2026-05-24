@@ -1,0 +1,20 @@
+# 力扣305. Number of Islands II（岛屿数量 II）
+
+
+## 力扣305. Number of Islands II（岛屿数量 II）
+
+每次添加一个陆地格子，返回每次后的岛屿数量。会员题。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0305_岛屿数量II/img/0305-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

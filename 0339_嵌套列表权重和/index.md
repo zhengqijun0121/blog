@@ -1,0 +1,20 @@
+# 力扣339. Nested List Weight Sum（嵌套列表权重和）
+
+
+## 力扣339. Nested List Weight Sum（嵌套列表权重和）
+
+计算嵌套列表的权重和。会员题。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0339_嵌套列表权重和/img/0339-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

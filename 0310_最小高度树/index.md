@@ -1,0 +1,20 @@
+# 力扣310. Minimum Height Trees（最小高度树）
+
+
+## 力扣310. Minimum Height Trees（最小高度树）
+
+找到使树高度最小的根节点。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0310_最小高度树/img/0310-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

@@ -1,0 +1,20 @@
+# 力扣379. Design Phone Directory（电话目录管理系统）
+
+
+## 力扣379. Design Phone Directory（电话目录管理系统）
+
+设计电话目录管理器。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0379_电话目录管理系统/img/0379-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

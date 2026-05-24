@@ -1,0 +1,19 @@
+# 力扣544. Output Contest Matches（输出比赛匹配对）
+
+
+## 力扣544. Output Contest Matches（输出比赛匹配对）
+
+输出比赛配对。会员题。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0544_输出比赛匹配对/img/544-1-description.png)
+
+```
+输入：n = 4
+输出："((1,4),(2,3))"
+```
+
+提示：
+- 详见原题。
+

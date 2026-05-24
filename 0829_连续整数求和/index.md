@@ -1,0 +1,20 @@
+# 力扣829. Consecutive Numbers Sum（连续整数求和）
+
+
+## 力扣829. Consecutive Numbers Sum（连续整数求和）
+
+统计表示 n 的连续正整数序列个数.
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0829_连续整数求和/img/0829_连续整数求和-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

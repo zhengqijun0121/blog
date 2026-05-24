@@ -1,0 +1,20 @@
+# 力扣979. Distribute Coins in Binary Tree（在二叉树中分配硬币）
+
+
+## 力扣979. Distribute Coins in Binary Tree（在二叉树中分配硬币）
+
+计算使所有节点硬币数相等所需的移动次数。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0979_在二叉树中分配硬币/img/0979-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

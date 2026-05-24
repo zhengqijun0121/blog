@@ -1,0 +1,20 @@
+# 力扣924. Minimize Malware Spread（尽量减少恶意软件的传播）
+
+
+## 力扣924. Minimize Malware Spread（尽量减少恶意软件的传播）
+
+移除一个节点最小化感染。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0924_尽量减少恶意软件的传播/img/0924-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+

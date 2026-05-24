@@ -1,0 +1,20 @@
+# 力扣332. Reconstruct Itinerary（重新安排行程）
+
+
+## 力扣332. Reconstruct Itinerary（重新安排行程）
+
+给定机票列表，重建行程。
+
+示例 1：
+
+![](../posts/01_学习/87_LeetCode/0332_重新安排行程/img/0332-1-description.png)
+
+```
+输入：...
+输出：...
+解释：...
+```
+
+提示：
+- ...
+
