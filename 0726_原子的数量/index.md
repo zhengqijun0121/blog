@@ -1,4 +1,4 @@
-# 力扣726. Number of Atoms（原子的数量）
+# 力扣726. 原子的数量
 
 
 ## 力扣726. Number of Atoms（原子的数量）

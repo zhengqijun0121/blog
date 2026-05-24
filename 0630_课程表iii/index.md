@@ -1,4 +1,4 @@
-# 力扣630. Course Schedule III（课程表 III）
+# 力扣630. 课程表 III
 
 
 ## 力扣630. Course Schedule III（课程表 III）

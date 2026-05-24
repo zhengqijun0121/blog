@@ -1,4 +1,4 @@
-# 力扣770. Basic Calculator IV（基本计算器 IV）
+# 力扣770. 基本计算器 IV
 
 
 ## 力扣770. Basic Calculator IV（基本计算器 IV）

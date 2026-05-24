@@ -1,4 +1,4 @@
-# 力扣489. Robot Room Cleaner（扫地机器人）
+# 力扣489. 扫地机器人
 
 
 ## 力扣489. Robot Room Cleaner（扫地机器人）

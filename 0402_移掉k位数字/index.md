@@ -1,4 +1,4 @@
-# 力扣402. Remove K Digits（移掉 K 位数字）
+# 力扣402. 移掉 K 位数字
 
 
 ## 力扣402. Remove K Digits（移掉 K 位数字）

@@ -1,4 +1,4 @@
-# 力扣741. Cherry Pickup（摘樱桃）
+# 力扣741. 摘樱桃
 
 
 ## 力扣741. Cherry Pickup（摘樱桃）

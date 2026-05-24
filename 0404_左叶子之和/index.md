@@ -1,4 +1,4 @@
-# 力扣404. Sum of Left Leaves（左叶子之和）
+# 力扣404. 左叶子之和
 
 
 ## 力扣404. Sum of Left Leaves（左叶子之和）

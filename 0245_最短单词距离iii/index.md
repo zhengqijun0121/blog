@@ -1,4 +1,4 @@
-# 力扣245. Shortest Word Distance III（最短单词距离 III）
+# 力扣245. 最短单词距离 III
 
 
 ## 力扣245. Shortest Word Distance III（最短单词距离 III）

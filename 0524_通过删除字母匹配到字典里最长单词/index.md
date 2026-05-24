@@ -1,4 +1,4 @@
-# 力扣524. Longest Word in Dictionary through Deleting（通过删除字母匹配到字典里最长单词）
+# 力扣524. 通过删除字母匹配到字典里最长单词
 
 
 ## 力扣524. Longest Word in Dictionary through Deleting（通过删除字母匹配到字典里最长单词）

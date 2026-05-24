@@ -1,4 +1,4 @@
-# 力扣450. Delete Node in a BST（删除二叉搜索树中的节点）
+# 力扣450. 删除二叉搜索树中的节点
 
 
 ## 力扣450. Delete Node in a BST（删除二叉搜索树中的节点）

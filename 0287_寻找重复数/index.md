@@ -1,4 +1,4 @@
-# 力扣287. Find the Duplicate Number（寻找重复数）
+# 力扣287. 寻找重复数
 
 
 ## 力扣287. Find the Duplicate Number（寻找重复数）

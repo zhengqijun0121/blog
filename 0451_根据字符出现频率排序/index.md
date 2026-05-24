@@ -1,4 +1,4 @@
-# 力扣451. Sort Characters By Frequency（根据字符出现频率排序）
+# 力扣451. 根据字符出现频率排序
 
 
 ## 力扣451. Sort Characters By Frequency（根据字符出现频率排序）

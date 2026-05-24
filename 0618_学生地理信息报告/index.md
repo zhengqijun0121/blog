@@ -1,4 +1,4 @@
-# 力扣618. Students Report By Geography（学生地理信息报告）
+# 力扣618. 学生地理信息报告
 
 
 ## 力扣618. Students Report By Geography（学生地理信息报告）

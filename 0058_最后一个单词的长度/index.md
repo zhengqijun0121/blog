@@ -1,4 +1,4 @@
-# 力扣58. Length of Last Word（最后一个单词的长度）
+# 力扣58. 最后一个单词的长度
 
 
 ## 力扣58. Length of Last Word（最后一个单词的长度）

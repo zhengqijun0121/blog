@@ -1,4 +1,4 @@
-# 力扣99. Recover Binary Search Tree（恢复二叉搜索树）
+# 力扣99. 恢复二叉搜索树
 
 
 ## 力扣99. Recover Binary Search Tree（恢复二叉搜索树）

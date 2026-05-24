@@ -1,4 +1,4 @@
-# 力扣503. Next Greater Element II（下一个更大元素 II）
+# 力扣503. 下一个更大元素 II
 
 
 ## 力扣503. Next Greater Element II（下一个更大元素 II）

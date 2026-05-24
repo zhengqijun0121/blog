@@ -1,4 +1,4 @@
-# 力扣432. All O`one Data Structure（全 O(1) 的数据结构）
+# 力扣432. 全 O(1) 的数据结构
 
 
 ## 力扣432. All O`one Data Structure（全 O(1) 的数据结构）

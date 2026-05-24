@@ -1,4 +1,4 @@
-# 力扣31. Next Permutation（下一个排列）
+# 力扣31. 下一个排列
 
 
 ## 力扣31. Next Permutation（下一个排列）

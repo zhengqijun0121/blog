@@ -1,4 +1,4 @@
-# 力扣308. Range Sum Query 2D - Mutable（二维区域和检索 - 矩阵可修改）
+# 力扣308. 二维区域和检索 - 矩阵可修改
 
 
 ## 力扣308. Range Sum Query 2D - Mutable（二维区域和检索 - 矩阵可修改）

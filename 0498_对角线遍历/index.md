@@ -1,4 +1,4 @@
-# 力扣498. Diagonal Traverse（对角线遍历）
+# 力扣498. 对角线遍历
 
 
 ## 力扣498. Diagonal Traverse（对角线遍历）

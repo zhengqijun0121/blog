@@ -1,4 +1,4 @@
-# 力扣49. Group Anagrams（字母异位词分组）
+# 力扣49. 字母异位词分组
 
 
 ## 力扣49. Group Anagrams（字母异位词分组）

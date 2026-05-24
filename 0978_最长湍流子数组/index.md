@@ -1,4 +1,4 @@
-# 力扣978. Longest Turbulent Subarray（最长湍流子数组）
+# 力扣978. 最长湍流子数组
 
 
 ## 力扣978. Longest Turbulent Subarray（最长湍流子数组）

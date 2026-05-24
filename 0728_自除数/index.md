@@ -1,4 +1,4 @@
-# 力扣728. Self Dividing Numbers（自除数）
+# 力扣728. 自除数
 
 
 ## 力扣728. Self Dividing Numbers（自除数）

@@ -1,4 +1,4 @@
-# 力扣527. Word Abbreviation（单词缩写）
+# 力扣527. 单词缩写
 
 
 ## 力扣527. Word Abbreviation（单词缩写）

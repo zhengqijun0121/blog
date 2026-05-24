@@ -1,4 +1,4 @@
-# 力扣817. Linked List Components（链表组件）
+# 力扣817. 链表组件
 
 
 ## 力扣817. Linked List Components（链表组件）

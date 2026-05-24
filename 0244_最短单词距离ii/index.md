@@ -1,4 +1,4 @@
-# 力扣244. Shortest Word Distance II（最短单词距离 II）
+# 力扣244. 最短单词距离 II
 
 
 ## 力扣244. Shortest Word Distance II（最短单词距离 II）

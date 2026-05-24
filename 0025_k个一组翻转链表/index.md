@@ -1,4 +1,4 @@
-# 力扣25. Reverse Nodes in k-Group（K 个一组翻转链表）
+# 力扣25. K 个一组翻转链表
 
 
 ## 力扣25. Reverse Nodes in k-Group（K 个一组翻转链表）

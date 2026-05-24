@@ -1,4 +1,4 @@
-# 力扣767. Reorganize String（重构字符串）
+# 力扣767. 重构字符串
 
 
 ## 力扣767. Reorganize String（重构字符串）

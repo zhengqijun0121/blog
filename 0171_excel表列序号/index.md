@@ -1,4 +1,4 @@
-# 力扣171. Excel Sheet Column Number（Excel 表列序号）
+# 力扣171. Excel 表列序号
 
 
 ## 力扣171. Excel Sheet Column Number（Excel 表列序号）

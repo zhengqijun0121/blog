@@ -1,4 +1,4 @@
-# 力扣170. Two Sum III - Data Structure Design（两数之和 III - 数据结构设计）
+# 力扣170. 两数之和 III - 数据结构设计
 
 
 ## 力扣170. Two Sum III - Data Structure Design（两数之和 III - 数据结构设计）

@@ -1,4 +1,4 @@
-# 力扣509. Fibonacci Number（斐波那契数）
+# 力扣509. 斐波那契数
 
 
 ## 力扣509. Fibonacci Number（斐波那契数）

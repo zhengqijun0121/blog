@@ -1,4 +1,4 @@
-# 力扣924. Minimize Malware Spread（尽量减少恶意软件的传播）
+# 力扣924. 尽量减少恶意软件的传播
 
 
 ## 力扣924. Minimize Malware Spread（尽量减少恶意软件的传播）

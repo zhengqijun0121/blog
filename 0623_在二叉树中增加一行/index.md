@@ -1,4 +1,4 @@
-# 力扣623. Add One Row to Tree（在二叉树中增加一行）
+# 力扣623. 在二叉树中增加一行
 
 
 ## 力扣623. Add One Row to Tree（在二叉树中增加一行）

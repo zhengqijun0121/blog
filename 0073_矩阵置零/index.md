@@ -1,4 +1,4 @@
-# 力扣73. Set Matrix Zeroes（矩阵置零）
+# 力扣73. 矩阵置零
 
 
 ## 力扣73. Set Matrix Zeroes（矩阵置零）

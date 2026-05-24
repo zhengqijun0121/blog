@@ -1,4 +1,4 @@
-# 力扣861. Score After Flipping Matrix（翻转矩阵后的得分）
+# 力扣861. 翻转矩阵后的得分
 
 
 ## 力扣861. Score After Flipping Matrix（翻转矩阵后的得分）

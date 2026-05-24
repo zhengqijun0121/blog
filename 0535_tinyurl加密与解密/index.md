@@ -1,4 +1,4 @@
-# 力扣535. Encode and Decode TinyURL（TinyURL 的加密与解密）
+# 力扣535. TinyURL 的加密与解密
 
 
 ## 力扣535. Encode and Decode TinyURL（TinyURL 的加密与解密）

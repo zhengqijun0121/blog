@@ -1,4 +1,4 @@
-# 力扣442. Find All Duplicates in an Array（数组中重复的数据）
+# 力扣442. 数组中重复的数据
 
 
 ## 力扣442. Find All Duplicates in an Array（数组中重复的数据）

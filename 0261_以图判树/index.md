@@ -1,4 +1,4 @@
-# 力扣261. Graph Valid Tree（以图判树）
+# 力扣261. 以图判树
 
 
 ## 力扣261. Graph Valid Tree（以图判树）

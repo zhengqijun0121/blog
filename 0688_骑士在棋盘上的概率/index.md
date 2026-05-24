@@ -1,4 +1,4 @@
-# 力扣688. Knight Probability in Chessboard（骑士在棋盘上的概率）
+# 力扣688. 骑士在棋盘上的概率
 
 
 ## 力扣688. Knight Probability in Chessboard（骑士在棋盘上的概率）

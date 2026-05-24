@@ -1,4 +1,4 @@
-# 力扣348. Design Tic-Tac-Toe（设计井字棋）
+# 力扣348. 设计井字棋
 
 
 ## 力扣348. Design Tic-Tac-Toe（设计井字棋）

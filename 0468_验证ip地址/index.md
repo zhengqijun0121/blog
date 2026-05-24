@@ -1,4 +1,4 @@
-# 力扣468. Validate IP Address（验证 IP 地址）
+# 力扣468. 验证 IP 地址
 
 
 ## 力扣468. Validate IP Address（验证 IP 地址）

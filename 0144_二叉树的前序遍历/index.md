@@ -1,4 +1,4 @@
-# 力扣144. Binary Tree Preorder Traversal（二叉树的前序遍历）
+# 力扣144. 二叉树的前序遍历
 
 
 ## 力扣144. Binary Tree Preorder Traversal（二叉树的前序遍历）

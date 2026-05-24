@@ -1,4 +1,4 @@
-# 力扣915. Partition Array into Disjoint Intervals（分割数组）
+# 力扣915. 分割数组
 
 
 ## 力扣915. Partition Array into Disjoint Intervals（分割数组）

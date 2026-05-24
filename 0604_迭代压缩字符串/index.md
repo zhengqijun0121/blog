@@ -1,4 +1,4 @@
-# 力扣604. Design Compressed String Iterator（迭代压缩字符串）
+# 力扣604. 迭代压缩字符串
 
 
 ## 力扣604. Design Compressed String Iterator（迭代压缩字符串）

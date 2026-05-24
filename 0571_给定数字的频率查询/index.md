@@ -1,4 +1,4 @@
-# 力扣0571. Find Median Given Frequency of Numbers（给定数字的频率查询）
+# 力扣0571. 给定数字的频率查询
 
 
 ## 力扣0571. Find Median Given Frequency of Numbers（给定数字的频率查询）

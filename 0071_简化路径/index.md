@@ -1,4 +1,4 @@
-# 力扣71. Simplify Path（简化路径）
+# 力扣71. 简化路径
 
 
 ## 力扣71. Simplify Path（简化路径）

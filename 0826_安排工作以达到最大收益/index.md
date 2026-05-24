@@ -1,4 +1,4 @@
-# 力扣826. Most Profit Assigning Work（安排工作以达到最大收益）
+# 力扣826. 安排工作以达到最大收益
 
 
 ## 力扣826. Most Profit Assigning Work（安排工作以达到最大收益）

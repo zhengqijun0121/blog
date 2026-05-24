@@ -1,4 +1,4 @@
-# 力扣831. Masking Personal Information（隐藏个人信息）
+# 力扣831. 隐藏个人信息
 
 
 ## 力扣831. Masking Personal Information（隐藏个人信息）

@@ -1,4 +1,4 @@
-# 力扣941. Valid Mountain Array（有效的山脉数组）
+# 力扣941. 有效的山脉数组
 
 
 ## 力扣941. Valid Mountain Array（有效的山脉数组）

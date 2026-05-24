@@ -1,4 +1,4 @@
-# 力扣94. Binary Tree Inorder Traversal（二叉树的中序遍历）
+# 力扣94. 二叉树的中序遍历
 
 
 ## 力扣94. Binary Tree Inorder Traversal（二叉树的中序遍历）

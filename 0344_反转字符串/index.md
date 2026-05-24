@@ -1,4 +1,4 @@
-# 力扣344. Reverse String（反转字符串）
+# 力扣344. 反转字符串
 
 
 ## 力扣344. Reverse String（反转字符串）

@@ -1,4 +1,4 @@
-# 力扣651. 4 Keys Keyboard（4 键键盘）
+# 力扣651. 4 键键盘
 
 
 ## 力扣651. 4 Keys Keyboard（4 键键盘）

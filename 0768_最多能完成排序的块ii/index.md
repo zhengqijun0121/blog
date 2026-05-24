@@ -1,4 +1,4 @@
-# 力扣768. Max Chunks To Make Sorted II（最多能完成排序的块 II）
+# 力扣768. 最多能完成排序的块 II
 
 
 ## 力扣768. Max Chunks To Make Sorted II（最多能完成排序的块 II）

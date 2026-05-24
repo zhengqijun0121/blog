@@ -1,4 +1,4 @@
-# 力扣21. Merge Two Sorted Lists（合并两个有序链表）
+# 力扣21. 合并两个有序链表
 
 
 ## 力扣21. Merge Two Sorted Lists（合并两个有序链表）

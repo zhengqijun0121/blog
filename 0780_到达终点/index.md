@@ -1,4 +1,4 @@
-# 力扣780. Reaching Points（到达终点）
+# 力扣780. 到达终点
 
 
 ## 力扣780. Reaching Points（到达终点）

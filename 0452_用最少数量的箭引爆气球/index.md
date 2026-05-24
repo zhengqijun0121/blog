@@ -1,4 +1,4 @@
-# 力扣452. Minimum Number of Arrows to Burst Balloons（用最少数量的箭引爆气球）
+# 力扣452. 用最少数量的箭引爆气球
 
 
 ## 力扣452. Minimum Number of Arrows to Burst Balloons（用最少数量的箭引爆气球）

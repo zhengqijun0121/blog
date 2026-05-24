@@ -1,4 +1,4 @@
-# 力扣891. Sum of Subsequence Widths（子序列宽度之和）
+# 力扣891. 子序列宽度之和
 
 
 ## 力扣891. Sum of Subsequence Widths（子序列宽度之和）

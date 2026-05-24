@@ -1,4 +1,4 @@
-# 力扣418. Sentence Screen Fitting（屏幕可显示句子的数量）
+# 力扣418. 屏幕可显示句子的数量
 
 
 ## 力扣418. Sentence Screen Fitting（屏幕可显示句子的数量）

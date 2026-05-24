@@ -1,4 +1,4 @@
-# 力扣0556. Next Greater Element III（下一个更大元素 III）
+# 力扣0556. 下一个更大元素 III
 
 
 ## 力扣0556. Next Greater Element III（下一个更大元素 III）

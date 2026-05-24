@@ -1,4 +1,4 @@
-# 力扣124. Binary Tree Maximum Path Sum（二叉树中的最大路径和）
+# 力扣124. 二叉树中的最大路径和
 
 
 ## 力扣124. Binary Tree Maximum Path Sum（二叉树中的最大路径和）

@@ -1,4 +1,4 @@
-# 力扣233. Number of Digit One（数字 1 的个数）
+# 力扣233. 数字 1 的个数
 
 
 ## 力扣233. Number of Digit One（数字 1 的个数）

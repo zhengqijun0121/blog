@@ -1,4 +1,4 @@
-# 力扣974. Subarray Sums Divisible by K（和可被 K 整除的子数组）
+# 力扣974. 和可被 K 整除的子数组
 
 
 ## 力扣974. Subarray Sums Divisible by K（和可被 K 整除的子数组）

@@ -1,4 +1,4 @@
-# 力扣93. Restore IP Addresses（复原 IP 地址）
+# 力扣93. 复原 IP 地址
 
 
 ## 力扣93. Restore IP Addresses（复原 IP 地址）

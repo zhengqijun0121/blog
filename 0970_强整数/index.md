@@ -1,4 +1,4 @@
-# 力扣970. Powerful Integers（强整数）
+# 力扣970. 强整数
 
 
 ## 力扣970. Powerful Integers（强整数）

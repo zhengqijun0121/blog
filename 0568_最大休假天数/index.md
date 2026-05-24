@@ -1,4 +1,4 @@
-# 力扣0568. Maximum Vacation Days（最大休假天数）
+# 力扣0568. 最大休假天数
 
 
 ## 力扣0568. Maximum Vacation Days（最大休假天数）

@@ -1,4 +1,4 @@
-# 力扣761. Special Binary String（特殊的二进制序列）
+# 力扣761. 特殊的二进制序列
 
 
 ## 力扣761. Special Binary String（特殊的二进制序列）

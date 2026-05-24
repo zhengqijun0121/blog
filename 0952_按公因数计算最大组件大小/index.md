@@ -1,4 +1,4 @@
-# 力扣952. Largest Component Size by Common Factor（按公因数计算最大组件大小）
+# 力扣952. 按公因数计算最大组件大小
 
 
 ## 力扣952. Largest Component Size by Common Factor（按公因数计算最大组件大小）

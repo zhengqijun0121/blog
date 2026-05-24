@@ -1,4 +1,4 @@
-# 力扣528. Random Pick with Weight（按权重随机选择）
+# 力扣528. 按权重随机选择
 
 
 ## 力扣528. Random Pick with Weight（按权重随机选择）

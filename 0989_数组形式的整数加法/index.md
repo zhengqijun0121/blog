@@ -1,4 +1,4 @@
-# 力扣989. Add to Array-Form of Integer（数组形式的整数加法）
+# 力扣989. 数组形式的整数加法
 
 
 ## 力扣989. Add to Array-Form of Integer（数组形式的整数加法）

@@ -1,4 +1,4 @@
-# 力扣762. Prime Number of Set Bits in Binary Representation（二进制表示中质数个计算置位）
+# 力扣762. 二进制表示中质数个计算置位
 
 
 ## 力扣762. Prime Number of Set Bits in Binary Representation（二进制表示中质数个计算置位）

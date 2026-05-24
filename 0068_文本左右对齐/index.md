@@ -1,4 +1,4 @@
-# 力扣68. Text Justification（文本左右对齐）
+# 力扣68. 文本左右对齐
 
 
 ## 力扣68. Text Justification（文本左右对齐）

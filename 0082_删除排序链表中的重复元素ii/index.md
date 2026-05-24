@@ -1,4 +1,4 @@
-# 力扣82. Remove Duplicates from Sorted List II（删除排序链表中的重复元素 II）
+# 力扣82. 删除排序链表中的重复元素 II
 
 
 ## 力扣82. Remove Duplicates from Sorted List II（删除排序链表中的重复元素 II）

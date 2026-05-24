@@ -1,4 +1,4 @@
-# 力扣813. Largest Sum of Averages（最大平均值和的分组）
+# 力扣813. 最大平均值和的分组
 
 
 ## 力扣813. Largest Sum of Averages（最大平均值和的分组）

@@ -1,4 +1,4 @@
-# 力扣980. Unique Paths III（不同路径 III）
+# 力扣980. 不同路径 III
 
 
 ## 力扣980. Unique Paths III（不同路径 III）

@@ -1,4 +1,4 @@
-# 力扣128. Longest Consecutive Sequence（最长连续序列）
+# 力扣128. 最长连续序列
 
 
 ## 力扣128. Longest Consecutive Sequence（最长连续序列）

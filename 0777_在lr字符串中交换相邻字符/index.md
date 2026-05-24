@@ -1,4 +1,4 @@
-# 力扣777. Swap Adjacent in LR String（在 LR 字符串中交换相邻字符）
+# 力扣777. 在 LR 字符串中交换相邻字符
 
 
 ## 力扣777. Swap Adjacent in LR String（在 LR 字符串中交换相邻字符）

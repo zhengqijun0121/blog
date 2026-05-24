@@ -1,4 +1,4 @@
-# 力扣470. Implement Rand10() Using Rand7()（用 Rand7() 实现 Rand10()）
+# 力扣470. 用 Rand7() 实现 Rand10()
 
 
 ## 力扣470. Implement Rand10() Using Rand7()（用 Rand7() 实现 Rand10()）

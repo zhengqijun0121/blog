@@ -1,4 +1,4 @@
-# 力扣282. Expression Add Operators（给表达式添加运算符）
+# 力扣282. 给表达式添加运算符
 
 
 ## 力扣282. Expression Add Operators（给表达式添加运算符）

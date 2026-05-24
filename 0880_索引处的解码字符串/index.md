@@ -1,4 +1,4 @@
-# 力扣880. Decoded String at Index（索引处的解码字符串）
+# 力扣880. 索引处的解码字符串
 
 
 ## 力扣880. Decoded String at Index（索引处的解码字符串）

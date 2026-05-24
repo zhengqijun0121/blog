@@ -1,4 +1,4 @@
-# 力扣221. Maximal Square（最大正方形）
+# 力扣221. 最大正方形
 
 
 ## 力扣221. Maximal Square（最大正方形）

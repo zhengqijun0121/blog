@@ -1,4 +1,4 @@
-# 力扣863. All Nodes Distance K in Binary Tree（二叉树中所有距离为 K 的结点）
+# 力扣863. 二叉树中所有距离为 K 的结点
 
 
 ## 力扣863. All Nodes Distance K in Binary Tree（二叉树中所有距离为 K 的结点）

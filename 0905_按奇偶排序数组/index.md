@@ -1,4 +1,4 @@
-# 力扣905. Sort Array By Parity（按奇偶排序数组）
+# 力扣905. 按奇偶排序数组
 
 
 ## 力扣905. Sort Array By Parity（按奇偶排序数组）

@@ -1,4 +1,4 @@
-# 力扣448. Find All Numbers Disappeared in an Array（找到所有数组中消失的数字）
+# 力扣448. 找到所有数组中消失的数字
 
 
 ## 力扣448. Find All Numbers Disappeared in an Array（找到所有数组中消失的数字）

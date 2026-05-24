@@ -1,4 +1,4 @@
-# 力扣351. Android Unlock Patterns（安卓系统手势解锁）
+# 力扣351. 安卓系统手势解锁
 
 
 ## 力扣351. Android Unlock Patterns（安卓系统手势解锁）

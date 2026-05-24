@@ -1,4 +1,4 @@
-# 力扣297. Serialize and Deserialize Binary Tree（二叉树的序列化与反序列化）
+# 力扣297. 二叉树的序列化与反序列化
 
 
 ## 力扣297. Serialize and Deserialize Binary Tree（二叉树的序列化与反序列化）

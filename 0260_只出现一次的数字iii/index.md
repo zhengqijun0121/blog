@@ -1,4 +1,4 @@
-# 力扣260. Single Number III（只出现一次的数字 III）
+# 力扣260. 只出现一次的数字 III
 
 
 ## 力扣260. Single Number III（只出现一次的数字 III）

@@ -1,4 +1,4 @@
-# 力扣601. Human Traffic of Stadium（体育馆的人流量）
+# 力扣601. 体育馆的人流量
 
 
 ## 力扣601. Human Traffic of Stadium（体育馆的人流量）

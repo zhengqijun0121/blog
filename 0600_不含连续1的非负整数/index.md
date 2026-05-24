@@ -1,4 +1,4 @@
-# 力扣0600. Non-negative Integers without Consecutive Ones（不含连续 1 的非负整数）
+# 力扣0600. 不含连续 1 的非负整数
 
 
 ## 力扣0600. Non-negative Integers without Consecutive Ones（不含连续 1 的非负整数）

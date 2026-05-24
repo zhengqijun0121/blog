@@ -1,4 +1,4 @@
-# 力扣745. Prefix and Suffix Search（前缀和后缀搜索）
+# 力扣745. 前缀和后缀搜索
 
 
 ## 力扣745. Prefix and Suffix Search（前缀和后缀搜索）

@@ -1,4 +1,4 @@
-# 力扣387. First Unique Character in a String（字符串中的第一个唯一字符）
+# 力扣387. 字符串中的第一个唯一字符
 
 
 ## 力扣387. First Unique Character in a String（字符串中的第一个唯一字符）

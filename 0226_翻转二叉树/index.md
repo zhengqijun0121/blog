@@ -1,4 +1,4 @@
-# 力扣226. Invert Binary Tree（翻转二叉树）
+# 力扣226. 翻转二叉树
 
 
 ## 力扣226. Invert Binary Tree（翻转二叉树）

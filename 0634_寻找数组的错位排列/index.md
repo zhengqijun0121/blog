@@ -1,4 +1,4 @@
-# 力扣634. Find the Derangement of An Array（寻找数组的错位排列）
+# 力扣634. 寻找数组的错位排列
 
 
 ## 力扣634. Find the Derangement of An Array（寻找数组的错位排列）

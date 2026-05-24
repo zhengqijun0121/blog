@@ -1,4 +1,4 @@
-# 力扣525. Contiguous Array（连续数组）
+# 力扣525. 连续数组
 
 
 ## 力扣525. Contiguous Array（连续数组）

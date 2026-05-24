@@ -1,4 +1,4 @@
-# 力扣98. Validate Binary Search Tree（验证二叉搜索树）
+# 力扣98. 验证二叉搜索树
 
 
 ## 力扣98. Validate Binary Search Tree（验证二叉搜索树）

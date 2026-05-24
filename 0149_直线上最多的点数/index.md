@@ -1,4 +1,4 @@
-# 力扣149. Max Points on a Line（直线上最多的点数）
+# 力扣149. 直线上最多的点数
 
 
 ## 力扣149. Max Points on a Line（直线上最多的点数）

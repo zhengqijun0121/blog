@@ -1,4 +1,4 @@
-# 力扣173. Binary Search Tree Iterator（二叉搜索树迭代器）
+# 力扣173. 二叉搜索树迭代器
 
 
 ## 力扣173. Binary Search Tree Iterator（二叉搜索树迭代器）

@@ -1,4 +1,4 @@
-# 力扣631. Design Excel Sum Formula（设计 Excel 求和公式）
+# 力扣631. 设计 Excel 求和公式
 
 
 ## 力扣631. Design Excel Sum Formula（设计 Excel 求和公式）

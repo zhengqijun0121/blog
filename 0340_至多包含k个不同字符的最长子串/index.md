@@ -1,4 +1,4 @@
-# 力扣340. Longest Substring with At Most K Distinct Characters（至多包含 K 个不同字符的最长子串）
+# 力扣340. 至多包含 K 个不同字符的最长子串
 
 
 ## 力扣340. Longest Substring with At Most K Distinct Characters（至多包含 K 个不同字符的最长子串）

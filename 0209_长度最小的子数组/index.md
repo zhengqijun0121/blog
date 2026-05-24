@@ -1,4 +1,4 @@
-# 力扣209. Minimum Size Subarray Sum（长度最小的子数组）
+# 力扣209. 长度最小的子数组
 
 
 ## 力扣209. Minimum Size Subarray Sum（长度最小的子数组）

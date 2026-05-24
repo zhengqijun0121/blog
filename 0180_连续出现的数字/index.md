@@ -1,4 +1,4 @@
-# 力扣180. Consecutive Numbers（连续出现的数字）
+# 力扣180. 连续出现的数字
 
 
 ## 力扣180. Consecutive Numbers（连续出现的数字）

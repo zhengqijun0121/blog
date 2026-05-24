@@ -1,4 +1,4 @@
-# 力扣14. Longest Common Prefix（最长公共前缀）
+# 力扣14. 最长公共前缀
 
 
 ## 力扣14. Longest Common Prefix（最长公共前缀）

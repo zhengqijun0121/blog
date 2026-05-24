@@ -1,4 +1,4 @@
-# 力扣434. Number of Segments in a String（字符串中的单词数）
+# 力扣434. 字符串中的单词数
 
 
 ## 力扣434. Number of Segments in a String（字符串中的单词数）

@@ -1,4 +1,4 @@
-# 力扣507. Perfect Number（完美数）
+# 力扣507. 完美数
 
 
 ## 力扣507. Perfect Number（完美数）

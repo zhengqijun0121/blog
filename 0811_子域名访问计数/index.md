@@ -1,4 +1,4 @@
-# 力扣811. Subdomain Visit Count（子域名访问计数）
+# 力扣811. 子域名访问计数
 
 
 ## 力扣811. Subdomain Visit Count（子域名访问计数）

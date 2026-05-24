@@ -1,4 +1,4 @@
-# 力扣993. Cousins in Binary Tree（二叉树的堂兄弟节点）
+# 力扣993. 二叉树的堂兄弟节点
 
 
 ## 力扣993. Cousins in Binary Tree（二叉树的堂兄弟节点）

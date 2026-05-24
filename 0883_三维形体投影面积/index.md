@@ -1,4 +1,4 @@
-# 力扣883. Projection Area of 3D Shapes（三维形体投影面积）
+# 力扣883. 三维形体投影面积
 
 
 ## 力扣883. Projection Area of 3D Shapes（三维形体投影面积）

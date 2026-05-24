@@ -1,4 +1,4 @@
-# 力扣671. Second Minimum Node In a Binary Tree（二叉树中第二小的节点）
+# 力扣671. 二叉树中第二小的节点
 
 
 ## 力扣671. Second Minimum Node In a Binary Tree（二叉树中第二小的节点）

@@ -1,4 +1,4 @@
-# 力扣390. Elimination Game（消除游戏）
+# 力扣390. 消除游戏
 
 
 ## 力扣390. Elimination Game（消除游戏）

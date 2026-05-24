@@ -1,4 +1,4 @@
-# 力扣332. Reconstruct Itinerary（重新安排行程）
+# 力扣332. 重新安排行程
 
 
 ## 力扣332. Reconstruct Itinerary（重新安排行程）

@@ -1,4 +1,4 @@
-# 力扣647. Palindromic Substrings（回文子串）
+# 力扣647. 回文子串
 
 
 ## 力扣647. Palindromic Substrings（回文子串）

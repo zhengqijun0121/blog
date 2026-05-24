@@ -1,4 +1,4 @@
-# 力扣934. Shortest Bridge（最短的桥）
+# 力扣934. 最短的桥
 
 
 ## 力扣934. Shortest Bridge（最短的桥）

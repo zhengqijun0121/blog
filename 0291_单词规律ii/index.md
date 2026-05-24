@@ -1,4 +1,4 @@
-# 力扣291. Word Pattern II（单词规律 II）
+# 力扣291. 单词规律 II
 
 
 ## 力扣291. Word Pattern II（单词规律 II）

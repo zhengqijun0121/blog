@@ -1,4 +1,4 @@
-# 力扣130. Surrounded Regions（被围绕的区域）
+# 力扣130. 被围绕的区域
 
 
 ## 力扣130. Surrounded Regions（被围绕的区域）

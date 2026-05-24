@@ -1,4 +1,4 @@
-# 力扣255. Verify Preorder Sequence in Binary Search Tree（验证前序遍历序列二叉搜索树）
+# 力扣255. 验证前序遍历序列二叉搜索树
 
 
 ## 力扣255. Verify Preorder Sequence in Binary Search Tree（验证前序遍历序列二叉搜索树）

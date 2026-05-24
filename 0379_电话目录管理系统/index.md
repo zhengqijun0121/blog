@@ -1,4 +1,4 @@
-# 力扣379. Design Phone Directory（电话目录管理系统）
+# 力扣379. 电话目录管理系统
 
 
 ## 力扣379. Design Phone Directory（电话目录管理系统）

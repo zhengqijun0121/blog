@@ -1,4 +1,4 @@
-# 力扣110. Balanced Binary Tree（平衡二叉树）
+# 力扣110. 平衡二叉树
 
 
 ## 力扣110. Balanced Binary Tree（平衡二叉树）

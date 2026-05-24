@@ -1,4 +1,4 @@
-# 力扣305. Number of Islands II（岛屿数量 II）
+# 力扣305. 岛屿数量 II
 
 
 ## 力扣305. Number of Islands II（岛屿数量 II）

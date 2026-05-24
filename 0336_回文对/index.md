@@ -1,4 +1,4 @@
-# 力扣336. Palindrome Pairs（回文对）
+# 力扣336. 回文对
 
 
 ## 力扣336. Palindrome Pairs（回文对）

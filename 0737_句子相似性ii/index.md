@@ -1,4 +1,4 @@
-# 力扣737. Sentence Similarity II（句子相似性 II）
+# 力扣737. 句子相似性 II
 
 
 ## 力扣737. Sentence Similarity II（句子相似性 II）

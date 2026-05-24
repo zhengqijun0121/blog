@@ -1,4 +1,4 @@
-# 力扣876. Middle of the Linked List（链表的中间结点）
+# 力扣876. 链表的中间结点
 
 
 ## 力扣876. Middle of the Linked List（链表的中间结点）

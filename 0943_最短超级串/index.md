@@ -1,4 +1,4 @@
-# 力扣943. Find the Shortest Superstring（最短超级串）
+# 力扣943. 最短超级串
 
 
 ## 力扣943. Find the Shortest Superstring（最短超级串）

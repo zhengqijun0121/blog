@@ -1,4 +1,4 @@
-# 力扣879. Profitable Schemes（盈利计划）
+# 力扣879. 盈利计划
 
 
 ## 力扣879. Profitable Schemes（盈利计划）

@@ -1,4 +1,4 @@
-# 力扣447. Number of Boomerangs（回旋镖的数量）
+# 力扣447. 回旋镖的数量
 
 
 ## 力扣447. Number of Boomerangs（回旋镖的数量）

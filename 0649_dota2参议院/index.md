@@ -1,4 +1,4 @@
-# 力扣649. Dota2 Senate（Dota2 参议院）
+# 力扣649. Dota2 参议院
 
 
 ## 力扣649. Dota2 Senate（Dota2 参议院）

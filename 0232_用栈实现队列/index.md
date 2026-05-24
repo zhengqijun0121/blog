@@ -1,4 +1,4 @@
-# 力扣232. Implement Queue using Stacks（用栈实现队列）
+# 力扣232. 用栈实现队列
 
 
 ## 力扣232. Implement Queue using Stacks（用栈实现队列）

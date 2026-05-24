@@ -1,4 +1,4 @@
-# 力扣84. Largest Rectangle in Histogram（柱状图中最大的矩形）
+# 力扣84. 柱状图中最大的矩形
 
 
 ## 力扣84. Largest Rectangle in Histogram（柱状图中最大的矩形）

@@ -1,4 +1,4 @@
-# 力扣708. Insert into a Sorted Circular Linked List（循环有序列表的插入）
+# 力扣708. 循环有序列表的插入
 
 
 ## 力扣708. Insert into a Sorted Circular Linked List（循环有序列表的插入）

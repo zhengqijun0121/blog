@@ -1,4 +1,4 @@
-# 力扣732. My Calendar III（我的日程安排表 III）
+# 力扣732. 我的日程安排表 III
 
 
 ## 力扣732. My Calendar III（我的日程安排表 III）

@@ -1,4 +1,4 @@
-# 力扣85. Maximal Rectangle（最大矩形）
+# 力扣85. 最大矩形
 
 
 ## 力扣85. Maximal Rectangle（最大矩形）

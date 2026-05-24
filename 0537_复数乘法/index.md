@@ -1,4 +1,4 @@
-# 力扣537. Complex Number Multiplication（复数乘法）
+# 力扣537. 复数乘法
 
 
 ## 力扣537. Complex Number Multiplication（复数乘法）

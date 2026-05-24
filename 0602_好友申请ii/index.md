@@ -1,4 +1,4 @@
-# 力扣602. Friend Requests II: Who Has the Most Friends（好友申请 II：谁有最多的好友）
+# 力扣602. 好友申请 II：谁有最多的好友
 
 
 ## 力扣602. Friend Requests II: Who Has the Most Friends（好友申请 II：谁有最多的好友）

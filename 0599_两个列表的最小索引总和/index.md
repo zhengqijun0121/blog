@@ -1,4 +1,4 @@
-# 力扣0599. Minimum Index Sum of Two Lists（两个列表的最小索引总和）
+# 力扣0599. 两个列表的最小索引总和
 
 
 ## 力扣0599. Minimum Index Sum of Two Lists（两个列表的最小索引总和）

@@ -1,4 +1,4 @@
-# 力扣865. Smallest Subtree with all the Deepest Nodes（具有所有最深节点的最小子树）
+# 力扣865. 具有所有最深节点的最小子树
 
 
 ## 力扣865. Smallest Subtree with all the Deepest Nodes（具有所有最深节点的最小子树）

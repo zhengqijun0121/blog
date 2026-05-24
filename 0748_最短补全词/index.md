@@ -1,4 +1,4 @@
-# 力扣748. Shortest Completing Word（最短补全词）
+# 力扣748. 最短补全词
 
 
 ## 力扣748. Shortest Completing Word（最短补全词）

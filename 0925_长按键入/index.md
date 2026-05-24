@@ -1,4 +1,4 @@
-# 力扣925. Long Pressed Name（长按键入）
+# 力扣925. 长按键入
 
 
 ## 力扣925. Long Pressed Name（长按键入）

@@ -1,4 +1,4 @@
-# 力扣635. Design Log Storage System（设计日志存储系统）
+# 力扣635. 设计日志存储系统
 
 
 ## 力扣635. Design Log Storage System（设计日志存储系统）

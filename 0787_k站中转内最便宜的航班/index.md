@@ -1,4 +1,4 @@
-# 力扣787. Cheapest Flights Within K Stops（K 站中转内最便宜的航班）
+# 力扣787. K 站中转内最便宜的航班
 
 
 ## 力扣787. Cheapest Flights Within K Stops（K 站中转内最便宜的航班）

@@ -1,4 +1,4 @@
-# 力扣782. Transform to Chessboard（变为棋盘）
+# 力扣782. 变为棋盘
 
 
 ## 力扣782. Transform to Chessboard（变为棋盘）

@@ -1,4 +1,4 @@
-# 力扣0566. Reshape the Matrix（重塑矩阵）
+# 力扣0566. 重塑矩阵
 
 
 ## 力扣0566. Reshape the Matrix（重塑矩阵）

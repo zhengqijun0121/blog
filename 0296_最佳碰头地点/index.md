@@ -1,4 +1,4 @@
-# 力扣296. Best Meeting Point（最佳碰头地点）
+# 力扣296. 最佳碰头地点
 
 
 ## 力扣296. Best Meeting Point（最佳碰头地点）

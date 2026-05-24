@@ -1,4 +1,4 @@
-# 力扣760. Find Anagram Mappings（找出变位映射）
+# 力扣760. 找出变位映射
 
 
 ## 力扣760. Find Anagram Mappings（找出变位映射）

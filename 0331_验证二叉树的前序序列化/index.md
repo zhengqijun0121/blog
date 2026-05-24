@@ -1,4 +1,4 @@
-# 力扣331. Verify Preorder Serialization of a Binary Tree（验证二叉树的前序序列化）
+# 力扣331. 验证二叉树的前序序列化
 
 
 ## 力扣331. Verify Preorder Serialization of a Binary Tree（验证二叉树的前序序列化）

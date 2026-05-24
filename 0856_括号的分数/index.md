@@ -1,4 +1,4 @@
-# 力扣856. Score of Parentheses（括号的分数）
+# 力扣856. 括号的分数
 
 
 ## 力扣856. Score of Parentheses（括号的分数）

@@ -1,4 +1,4 @@
-# 力扣869. Reordered Power of 2（重新排序得到 2 的幂）
+# 力扣869. 重新排序得到 2 的幂
 
 
 ## 力扣869. Reordered Power of 2（重新排序得到 2 的幂）

@@ -1,4 +1,4 @@
-# 力扣719. Find K-th Smallest Pair Distance（找出第 K 小的数对距离）
+# 力扣719. 找出第 K 小的数对距离
 
 
 ## 力扣719. Find K-th Smallest Pair Distance（找出第 K 小的数对距离）

@@ -1,4 +1,4 @@
-# 力扣765. Couples Holding Hands（情侣牵手）
+# 力扣765. 情侣牵手
 
 
 ## 力扣765. Couples Holding Hands（情侣牵手）

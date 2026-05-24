@@ -1,4 +1,4 @@
-# 力扣707. Design Linked List（设计链表）
+# 力扣707. 设计链表
 
 
 ## 力扣707. Design Linked List（设计链表）

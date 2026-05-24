@@ -1,4 +1,4 @@
-# 力扣358. Rearrange String k Distance Apart（K 距离间隔重排字符串）
+# 力扣358. K 距离间隔重排字符串
 
 
 ## 力扣358. Rearrange String k Distance Apart（K 距离间隔重排字符串）

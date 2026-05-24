@@ -1,4 +1,4 @@
-# 力扣832. Flipping an Image（翻转图像）
+# 力扣832. 翻转图像
 
 
 ## 力扣832. Flipping an Image（翻转图像）

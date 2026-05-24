@@ -1,4 +1,4 @@
-# 力扣0563. Binary Tree Tilt（二叉树的坡度）
+# 力扣0563. 二叉树的坡度
 
 
 ## 力扣0563. Binary Tree Tilt（二叉树的坡度）

@@ -1,4 +1,4 @@
-# 力扣937. Reorder Data in Log Files（重新排列日志文件）
+# 力扣937. 重新排列日志文件
 
 
 ## 力扣937. Reorder Data in Log Files（重新排列日志文件）

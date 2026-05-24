@@ -1,4 +1,4 @@
-# 力扣0584. Find Customer Referee（寻找用户推荐人）
+# 力扣0584. 寻找用户推荐人
 
 
 ## 力扣0584. Find Customer Referee（寻找用户推荐人）

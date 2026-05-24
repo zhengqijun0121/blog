@@ -1,4 +1,4 @@
-# 力扣722. Remove Comments（删除注释）
+# 力扣722. 删除注释
 
 
 ## 力扣722. Remove Comments（删除注释）

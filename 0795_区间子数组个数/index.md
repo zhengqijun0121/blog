@@ -1,4 +1,4 @@
-# 力扣795. Number of Subarrays with Bounded Maximum（区间子数组个数）
+# 力扣795. 区间子数组个数
 
 
 ## 力扣795. Number of Subarrays with Bounded Maximum（区间子数组个数）

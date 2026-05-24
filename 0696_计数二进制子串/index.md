@@ -1,4 +1,4 @@
-# 力扣696. Count Binary Substrings（计数二进制子串）
+# 力扣696. 计数二进制子串
 
 
 ## 力扣696. Count Binary Substrings（计数二进制子串）

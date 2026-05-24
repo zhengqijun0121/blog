@@ -1,4 +1,4 @@
-# 力扣854. K-Similar Strings（相似度为 K 的字符串）
+# 力扣854. 相似度为 K 的字符串
 
 
 ## 力扣854. K-Similar Strings（相似度为 K 的字符串）

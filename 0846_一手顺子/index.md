@@ -1,4 +1,4 @@
-# 力扣846. Hand of Straights（一手顺子）
+# 力扣846. 一手顺子
 
 
 ## 力扣846. Hand of Straights（一手顺子）

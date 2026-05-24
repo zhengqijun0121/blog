@@ -1,4 +1,4 @@
-# 力扣0575. Distribute Candies（分糖果）
+# 力扣0575. 分糖果
 
 
 ## 力扣0575. Distribute Candies（分糖果）

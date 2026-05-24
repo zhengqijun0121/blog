@@ -1,4 +1,4 @@
-# 力扣186. Reverse Words in a String II（反转字符串中的单词 II）
+# 力扣186. 反转字符串中的单词 II
 
 
 ## 力扣186. Reverse Words in a String II（反转字符串中的单词 II）

@@ -1,4 +1,4 @@
-# 力扣201. Bitwise AND of Numbers Range（数字范围按位与）
+# 力扣201. 数字范围按位与
 
 
 ## 力扣201. Bitwise AND of Numbers Range（数字范围按位与）

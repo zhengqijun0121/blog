@@ -1,4 +1,4 @@
-# 力扣973. K Closest Points to Origin（最接近原点的 K 个点）
+# 力扣973. 最接近原点的 K 个点
 
 
 ## 力扣973. K Closest Points to Origin（最接近原点的 K 个点）

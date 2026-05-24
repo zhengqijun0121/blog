@@ -1,4 +1,4 @@
-# 力扣614. Second Degree Follower（二级关注者）
+# 力扣614. 二级关注者
 
 
 ## 力扣614. Second Degree Follower（二级关注者）

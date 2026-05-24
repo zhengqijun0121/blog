@@ -1,4 +1,4 @@
-# 力扣368. Largest Divisible Subset（最大整除子集）
+# 力扣368. 最大整除子集
 
 
 ## 力扣368. Largest Divisible Subset（最大整除子集）

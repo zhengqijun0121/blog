@@ -1,4 +1,4 @@
-# 力扣756. Pyramid Transition Matrix（金字塔转换矩阵）
+# 力扣756. 金字塔转换矩阵
 
 
 ## 力扣756. Pyramid Transition Matrix（金字塔转换矩阵）

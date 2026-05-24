@@ -1,4 +1,4 @@
-# 力扣703. Kth Largest Element in a Stream（数据流中的第 K 大元素）
+# 力扣703. 数据流中的第 K 大元素
 
 
 ## 力扣703. Kth Largest Element in a Stream（数据流中的第 K 大元素）

@@ -1,4 +1,4 @@
-# 力扣159. Longest Substring with At Most Two Distinct Characters（至多包含两个不同字符的最长子串）
+# 力扣159. 至多包含两个不同字符的最长子串
 
 
 ## 力扣159. Longest Substring with At Most Two Distinct Characters（至多包含两个不同字符的最长子串）

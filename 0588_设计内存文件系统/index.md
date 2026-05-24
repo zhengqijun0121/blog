@@ -1,4 +1,4 @@
-# 力扣0588. Design In-Memory File System（设计内存文件系统）
+# 力扣0588. 设计内存文件系统
 
 
 ## 力扣0588. Design In-Memory File System（设计内存文件系统）

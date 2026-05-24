@@ -1,4 +1,4 @@
-# 力扣609. Find Duplicate File in System（在系统中查找重复文件）
+# 力扣609. 在系统中查找重复文件
 
 
 ## 力扣609. Find Duplicate File in System（在系统中查找重复文件）

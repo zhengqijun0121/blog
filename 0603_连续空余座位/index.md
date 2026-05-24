@@ -1,4 +1,4 @@
-# 力扣603. Consecutive Available Seats（连续空余座位）
+# 力扣603. 连续空余座位
 
 
 ## 力扣603. Consecutive Available Seats（连续空余座位）

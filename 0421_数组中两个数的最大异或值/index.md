@@ -1,4 +1,4 @@
-# 力扣421. Maximum XOR of Two Numbers in an Array（数组中两个数的最大异或值）
+# 力扣421. 数组中两个数的最大异或值
 
 
 ## 力扣421. Maximum XOR of Two Numbers in an Array（数组中两个数的最大异或值）

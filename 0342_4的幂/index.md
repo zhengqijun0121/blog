@@ -1,4 +1,4 @@
-# 力扣342. Power of Four（4 的幂）
+# 力扣342. 4 的幂
 
 
 ## 力扣342. Power of Four（4 的幂）

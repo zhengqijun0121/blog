@@ -1,4 +1,4 @@
-# 力扣710. Random Pick with Blacklist（黑名单中的随机数）
+# 力扣710. 黑名单中的随机数
 
 
 ## 力扣710. Random Pick with Blacklist（黑名单中的随机数）

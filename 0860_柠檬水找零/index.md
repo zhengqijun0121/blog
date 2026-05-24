@@ -1,4 +1,4 @@
-# 力扣860. Lemonade Change（柠檬水找零）
+# 力扣860. 柠檬水找零
 
 
 ## 力扣860. Lemonade Change（柠檬水找零）

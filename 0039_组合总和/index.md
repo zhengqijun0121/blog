@@ -1,4 +1,4 @@
-# 力扣39. Combination Sum（组合总和）
+# 力扣39. 组合总和
 
 
 ## 力扣39. Combination Sum（组合总和）

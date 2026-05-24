@@ -1,4 +1,4 @@
-# 力扣775. Global and Local Inversions（全局倒置与局部倒置）
+# 力扣775. 全局倒置与局部倒置
 
 
 ## 力扣775. Global and Local Inversions（全局倒置与局部倒置）

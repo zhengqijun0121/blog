@@ -1,4 +1,4 @@
-# 力扣0580. Count Student Number in Departments（统计各专业学生人数）
+# 力扣0580. 统计各专业学生人数
 
 
 ## 力扣0580. Count Student Number in Departments（统计各专业学生人数）

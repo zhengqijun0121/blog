@@ -1,4 +1,4 @@
-# 力扣7. Reverse Integer（整数反转）
+# 力扣7. 整数反转
 
 
 ## 力扣7. Reverse Integer（整数反转）

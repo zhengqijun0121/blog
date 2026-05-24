@@ -1,4 +1,4 @@
-# 力扣4. Median of Two Sorted Arrays（寻找两个正序数组的中位数）
+# 力扣4. 寻找两个正序数组的中位数
 
 
 ## 力扣4. Median of Two Sorted Arrays（寻找两个正序数组的中位数）

@@ -1,4 +1,4 @@
-# 力扣633. Sum of Square Numbers（平方数之和）
+# 力扣633. 平方数之和
 
 
 ## 力扣633. Sum of Square Numbers（平方数之和）

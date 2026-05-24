@@ -1,4 +1,4 @@
-# 力扣644. Maximum Average Subarray II（子数组最大平均数 II）
+# 力扣644. 子数组最大平均数 II
 
 
 ## 力扣644. Maximum Average Subarray II（子数组最大平均数 II）

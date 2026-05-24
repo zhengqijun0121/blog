@@ -1,4 +1,4 @@
-# 力扣871. Minimum Number of Refueling Stops（最低加油次数）
+# 力扣871. 最低加油次数
 
 
 ## 力扣871. Minimum Number of Refueling Stops（最低加油次数）

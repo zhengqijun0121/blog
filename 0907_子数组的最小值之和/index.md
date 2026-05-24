@@ -1,4 +1,4 @@
-# 力扣907. Sum of Subarray Minimums（子数组的最小值之和）
+# 力扣907. 子数组的最小值之和
 
 
 ## 力扣907. Sum of Subarray Minimums（子数组的最小值之和）

@@ -1,4 +1,4 @@
-# 力扣0573. Squirrel Simulation（松鼠模拟）
+# 力扣0573. 松鼠模拟
 
 
 ## 力扣0573. Squirrel Simulation（松鼠模拟）

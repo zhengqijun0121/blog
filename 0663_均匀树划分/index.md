@@ -1,4 +1,4 @@
-# 力扣663. Equal Tree Partition（均匀树划分）
+# 力扣663. 均匀树划分
 
 
 ## 力扣663. Equal Tree Partition（均匀树划分）

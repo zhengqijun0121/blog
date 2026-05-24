@@ -1,4 +1,4 @@
-# 力扣531. Lonely Pixel I（孤独像素 I）
+# 力扣531. 孤独像素 I
 
 
 ## 力扣531. Lonely Pixel I（孤独像素 I）

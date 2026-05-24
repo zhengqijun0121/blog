@@ -1,4 +1,4 @@
-# 力扣205. Isomorphic Strings（同构字符串）
+# 力扣205. 同构字符串
 
 
 ## 力扣205. Isomorphic Strings（同构字符串）

@@ -1,4 +1,4 @@
-# 力扣350. Intersection of Two Arrays II（两个数组的交集 II）
+# 力扣350. 两个数组的交集 II
 
 
 ## 力扣350. Intersection of Two Arrays II（两个数组的交集 II）

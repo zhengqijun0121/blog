@@ -1,4 +1,4 @@
-# 力扣548. Split Array with Equal Sum（将数组分割成和相等的子数组）
+# 力扣548. 将数组分割成和相等的子数组
 
 
 ## 力扣548. Split Array with Equal Sum（将数组分割成和相等的子数组）

@@ -1,4 +1,4 @@
-# 力扣909. Snakes and Ladders（蛇梯棋）
+# 力扣909. 蛇梯棋
 
 
 ## 力扣909. Snakes and Ladders（蛇梯棋）

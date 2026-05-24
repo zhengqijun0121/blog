@@ -1,4 +1,4 @@
-# 力扣175. Combine Two Tables（组合两个表）
+# 力扣175. 组合两个表
 
 
 ## 力扣175. Combine Two Tables（组合两个表）

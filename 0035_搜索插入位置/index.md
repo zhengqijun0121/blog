@@ -1,4 +1,4 @@
-# 力扣35. Search Insert Position（搜索插入位置）
+# 力扣35. 搜索插入位置
 
 
 ## 力扣35. Search Insert Position（搜索插入位置）

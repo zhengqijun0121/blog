@@ -1,4 +1,4 @@
-# 力扣353. Design Snake Game（贪吃蛇）
+# 力扣353. 贪吃蛇
 
 
 ## 力扣353. Design Snake Game（贪吃蛇）

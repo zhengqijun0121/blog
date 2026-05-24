@@ -1,4 +1,4 @@
-# 力扣0574. Winning Candidate（当选者）
+# 力扣0574. 当选者
 
 
 ## 力扣0574. Winning Candidate（当选者）

@@ -1,4 +1,4 @@
-# 力扣114. Flatten Binary Tree to Linked List（二叉树展开为链表）
+# 力扣114. 二叉树展开为链表
 
 
 ## 力扣114. Flatten Binary Tree to Linked List（二叉树展开为链表）

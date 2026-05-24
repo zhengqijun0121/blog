@@ -1,4 +1,4 @@
-# 力扣858. Mirror Reflection（镜面反射）
+# 力扣858. 镜面反射
 
 
 ## 力扣858. Mirror Reflection（镜面反射）

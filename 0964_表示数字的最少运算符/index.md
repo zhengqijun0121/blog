@@ -1,4 +1,4 @@
-# 力扣964. Least Operators to Express Number（表示数字的最少运算符）
+# 力扣964. 表示数字的最少运算符
 
 
 ## 力扣964. Least Operators to Express Number（表示数字的最少运算符）

@@ -1,4 +1,4 @@
-# 力扣751. IP to CIDR（IP 到 CIDR）
+# 力扣751. IP 到 CIDR
 
 
 ## 力扣751. IP to CIDR（IP 到 CIDR）

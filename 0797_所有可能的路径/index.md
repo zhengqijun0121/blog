@@ -1,4 +1,4 @@
-# 力扣797. All Paths From Source to Target（所有可能的路径）
+# 力扣797. 所有可能的路径
 
 
 ## 力扣797. All Paths From Source to Target（所有可能的路径）

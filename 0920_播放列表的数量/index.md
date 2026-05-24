@@ -1,4 +1,4 @@
-# 力扣920. Number of Music Playlists（播放列表的数量）
+# 力扣920. 播放列表的数量
 
 
 ## 力扣920. Number of Music Playlists（播放列表的数量）

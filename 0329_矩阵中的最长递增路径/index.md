@@ -1,4 +1,4 @@
-# 力扣329. Longest Increasing Path in a Matrix（矩阵中的最长递增路径）
+# 力扣329. 矩阵中的最长递增路径
 
 
 ## 力扣329. Longest Increasing Path in a Matrix（矩阵中的最长递增路径）

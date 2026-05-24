@@ -1,4 +1,4 @@
-# 力扣267. Palindrome Permutation II（回文排列 II）
+# 力扣267. 回文排列 II
 
 
 ## 力扣267. Palindrome Permutation II（回文排列 II）

@@ -1,4 +1,4 @@
-# 力扣386. Lexicographical Numbers（字典序排数）
+# 力扣386. 字典序排数
 
 
 ## 力扣386. Lexicographical Numbers（字典序排数）

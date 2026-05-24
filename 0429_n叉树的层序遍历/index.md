@@ -1,4 +1,4 @@
-# 力扣429. N-ary Tree Level Order Traversal（N 叉树的层序遍历）
+# 力扣429. N 叉树的层序遍历
 
 
 ## 力扣429. N-ary Tree Level Order Traversal（N 叉树的层序遍历）

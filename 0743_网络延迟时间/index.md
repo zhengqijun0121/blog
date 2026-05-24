@@ -1,4 +1,4 @@
-# 力扣743. Network Delay Time（网络延迟时间）
+# 力扣743. 网络延迟时间
 
 
 ## 力扣743. Network Delay Time（网络延迟时间）

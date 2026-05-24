@@ -1,4 +1,4 @@
-# 力扣449. Serialize and Deserialize BST（序列化和反序列化二叉搜索树）
+# 力扣449. 序列化和反序列化二叉搜索树
 
 
 ## 力扣449. Serialize and Deserialize BST（序列化和反序列化二叉搜索树）

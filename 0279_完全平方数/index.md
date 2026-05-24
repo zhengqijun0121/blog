@@ -1,4 +1,4 @@
-# 力扣279. Perfect Squares（完全平方数）
+# 力扣279. 完全平方数
 
 
 ## 力扣279. Perfect Squares（完全平方数）

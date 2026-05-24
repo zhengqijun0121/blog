@@ -1,4 +1,4 @@
-# 力扣693. Binary Number with Alternating Bits（交替位二进制数）
+# 力扣693. 交替位二进制数
 
 
 ## 力扣693. Binary Number with Alternating Bits（交替位二进制数）

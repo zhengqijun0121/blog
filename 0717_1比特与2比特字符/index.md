@@ -1,4 +1,4 @@
-# 力扣717. 1-bit and 2-bit Characters（1 比特与 2 比特字符）
+# 力扣717. 1 比特与 2 比特字符
 
 
 ## 力扣717. 1-bit and 2-bit Characters（1 比特与 2 比特字符）

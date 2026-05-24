@@ -1,4 +1,4 @@
-# 力扣849. Maximize Distance to Closest Person（到最近的人的最大距离）
+# 力扣849. 到最近的人的最大距离
 
 
 ## 力扣849. Maximize Distance to Closest Person（到最近的人的最大距离）

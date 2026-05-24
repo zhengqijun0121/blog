@@ -1,4 +1,4 @@
-# 力扣947. Most Stones Removed with Same Row or Column（移除最多的同行或同列石头）
+# 力扣947. 移除最多的同行或同列石头
 
 
 ## 力扣947. Most Stones Removed with Same Row or Column（移除最多的同行或同列石头）

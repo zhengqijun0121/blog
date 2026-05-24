@@ -1,4 +1,4 @@
-# 力扣362. Design Hit Counter（敲击计数器）
+# 力扣362. 敲击计数器
 
 
 ## 力扣362. Design Hit Counter（敲击计数器）

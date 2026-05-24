@@ -1,4 +1,4 @@
-# 力扣976. Largest Perimeter Triangle（三角形的最大周长）
+# 力扣976. 三角形的最大周长
 
 
 ## 力扣976. Largest Perimeter Triangle（三角形的最大周长）

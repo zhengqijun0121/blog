@@ -1,4 +1,4 @@
-# 力扣407. Trapping Rain Water II（接雨水 II）
+# 力扣407. 接雨水 II
 
 
 ## 力扣407. Trapping Rain Water II（接雨水 II）

@@ -1,4 +1,4 @@
-# 力扣691. Stickers to Spell Word（贴纸拼词）
+# 力扣691. 贴纸拼词
 
 
 ## 力扣691. Stickers to Spell Word（贴纸拼词）

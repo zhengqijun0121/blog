@@ -1,4 +1,4 @@
-# 力扣393. UTF-8 Validation（UTF-8 编码验证）
+# 力扣393. UTF-8 编码验证
 
 
 ## 力扣393. UTF-8 Validation（UTF-8 编码验证）

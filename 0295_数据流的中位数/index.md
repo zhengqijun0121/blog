@@ -1,4 +1,4 @@
-# 力扣295. Find Median from Data Stream（数据流的中位数）
+# 力扣295. 数据流的中位数
 
 
 ## 力扣295. Find Median from Data Stream（数据流的中位数）

@@ -1,4 +1,4 @@
-# 力扣999. Available Captures for Rook（可以被一步捕获的棋子数）
+# 力扣999. 可以被一步捕获的棋子数
 
 
 ## 力扣999. Available Captures for Rook（可以被一步捕获的棋子数）

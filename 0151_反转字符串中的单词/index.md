@@ -1,4 +1,4 @@
-# 力扣151. Reverse Words in a String（反转字符串中的单词）
+# 力扣151. 反转字符串中的单词
 
 
 ## 力扣151. Reverse Words in a String（反转字符串中的单词）

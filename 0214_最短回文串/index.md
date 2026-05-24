@@ -1,4 +1,4 @@
-# 力扣214. Shortest Palindrome（最短回文串）
+# 力扣214. 最短回文串
 
 
 ## 力扣214. Shortest Palindrome（最短回文串）

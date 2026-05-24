@@ -1,4 +1,4 @@
-# 力扣223. Rectangle Area（矩形面积）
+# 力扣223. 矩形面积
 
 
 ## 力扣223. Rectangle Area（矩形面积）

@@ -1,4 +1,4 @@
-# 力扣484. Find Permutation（寻找排列）
+# 力扣484. 寻找排列
 
 
 ## 力扣484. Find Permutation（寻找排列）

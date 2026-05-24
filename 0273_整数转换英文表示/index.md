@@ -1,4 +1,4 @@
-# 力扣273. Integer to English Words（整数转换英文表示）
+# 力扣273. 整数转换英文表示
 
 
 ## 力扣273. Integer to English Words（整数转换英文表示）

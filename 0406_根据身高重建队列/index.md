@@ -1,4 +1,4 @@
-# 力扣406. Queue Reconstruction by Height（根据身高重建队列）
+# 力扣406. 根据身高重建队列
 
 
 ## 力扣406. Queue Reconstruction by Height（根据身高重建队列）

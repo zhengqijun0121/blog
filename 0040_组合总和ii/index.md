@@ -1,4 +1,4 @@
-# 力扣40. Combination Sum II（组合总和 II）
+# 力扣40. 组合总和 II
 
 
 ## 力扣40. Combination Sum II（组合总和 II）

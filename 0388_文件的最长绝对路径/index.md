@@ -1,4 +1,4 @@
-# 力扣388. Longest Absolute File Path（文件的最长绝对路径）
+# 力扣388. 文件的最长绝对路径
 
 
 ## 力扣388. Longest Absolute File Path（文件的最长绝对路径）

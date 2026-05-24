@@ -1,4 +1,4 @@
-# 力扣315. Count of Smaller Numbers After Self（计算右侧小于当前元素的个数）
+# 力扣315. 计算右侧小于当前元素的个数
 
 
 ## 力扣315. Count of Smaller Numbers After Self（计算右侧小于当前元素的个数）

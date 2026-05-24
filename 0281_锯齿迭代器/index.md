@@ -1,4 +1,4 @@
-# 力扣281. Zigzag Iterator（锯齿迭代器）
+# 力扣281. 锯齿迭代器
 
 
 ## 力扣281. Zigzag Iterator（锯齿迭代器）

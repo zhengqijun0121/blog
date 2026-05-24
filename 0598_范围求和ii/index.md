@@ -1,4 +1,4 @@
-# 力扣0598. Range Addition II（范围求和 II）
+# 力扣0598. 范围求和 II
 
 
 ## 力扣0598. Range Addition II（范围求和 II）

@@ -1,4 +1,4 @@
-# 力扣638. Shopping Offers（大礼包）
+# 力扣638. 大礼包
 
 
 ## 力扣638. Shopping Offers（大礼包）

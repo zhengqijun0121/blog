@@ -1,4 +1,4 @@
-# 力扣929. Unique Email Addresses（独特的电子邮件地址）
+# 力扣929. 独特的电子邮件地址
 
 
 ## 力扣929. Unique Email Addresses（独特的电子邮件地址）

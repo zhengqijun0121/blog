@@ -1,4 +1,4 @@
-# 力扣203. Remove Linked List Elements（移除链表元素）
+# 力扣203. 移除链表元素
 
 
 ## 力扣203. Remove Linked List Elements（移除链表元素）

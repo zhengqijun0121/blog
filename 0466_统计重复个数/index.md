@@ -1,4 +1,4 @@
-# 力扣466. Count The Repetitions（统计重复个数）
+# 力扣466. 统计重复个数
 
 
 ## 力扣466. Count The Repetitions（统计重复个数）

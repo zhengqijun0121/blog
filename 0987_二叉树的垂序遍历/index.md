@@ -1,4 +1,4 @@
-# 力扣987. Vertical Order Traversal of a Binary Tree（二叉树的垂序遍历）
+# 力扣987. 二叉树的垂序遍历
 
 
 ## 力扣987. Vertical Order Traversal of a Binary Tree（二叉树的垂序遍历）

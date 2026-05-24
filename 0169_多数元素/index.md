@@ -1,4 +1,4 @@
-# 力扣169. Majority Element（多数元素）
+# 力扣169. 多数元素
 
 
 ## 力扣169. Majority Element（多数元素）

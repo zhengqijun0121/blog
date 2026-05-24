@@ -1,4 +1,4 @@
-# 力扣875. Koko Eating Bananas（爱吃香蕉的珂珂）
+# 力扣875. 爱吃香蕉的珂珂
 
 
 ## 力扣875. Koko Eating Bananas（爱吃香蕉的珂珂）

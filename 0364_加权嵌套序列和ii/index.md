@@ -1,4 +1,4 @@
-# 力扣364. Nested List Weight Sum II（加权嵌套序列和 II）
+# 力扣364. 加权嵌套序列和 II
 
 
 ## 力扣364. Nested List Weight Sum II（加权嵌套序列和 II）

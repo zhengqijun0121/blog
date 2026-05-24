@@ -1,4 +1,4 @@
-# 力扣137. Single Number II（只出现一次的数字 II）
+# 力扣137. 只出现一次的数字 II
 
 
 ## 力扣137. Single Number II（只出现一次的数字 II）

@@ -1,4 +1,4 @@
-# 力扣349. Intersection of Two Arrays（两个数组的交集）
+# 力扣349. 两个数组的交集
 
 
 ## 力扣349. Intersection of Two Arrays（两个数组的交集）

@@ -1,4 +1,4 @@
-# 力扣0590. N-ary Tree Postorder Traversal（N 叉树的后序遍历）
+# 力扣0590. N 叉树的后序遍历
 
 
 ## 力扣0590. N-ary Tree Postorder Traversal（N 叉树的后序遍历）

@@ -1,4 +1,4 @@
-# 力扣254. Factor Combinations（因子的组合）
+# 力扣254. 因子的组合
 
 
 ## 力扣254. Factor Combinations（因子的组合）

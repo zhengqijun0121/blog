@@ -1,4 +1,4 @@
-# 力扣229. Majority Element II（多数元素 II）
+# 力扣229. 多数元素 II
 
 
 ## 力扣229. Majority Element II（多数元素 II）

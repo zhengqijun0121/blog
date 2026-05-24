@@ -1,4 +1,4 @@
-# 力扣808. Soup Servings（分汤）
+# 力扣808. 分汤
 
 
 ## 力扣808. Soup Servings（分汤）

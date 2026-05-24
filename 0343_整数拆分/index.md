@@ -1,4 +1,4 @@
-# 力扣343. Integer Break（整数拆分）
+# 力扣343. 整数拆分
 
 
 ## 力扣343. Integer Break（整数拆分）

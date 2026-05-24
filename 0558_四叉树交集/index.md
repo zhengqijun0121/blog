@@ -1,4 +1,4 @@
-# 力扣0558. Logical OR of Two Binary Grids Represented as Quad-Trees（四叉树交集）
+# 力扣0558. 四叉树交集
 
 
 ## 力扣0558. Logical OR of Two Binary Grids Represented as Quad-Trees（四叉树交集）

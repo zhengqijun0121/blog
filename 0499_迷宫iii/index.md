@@ -1,4 +1,4 @@
-# 力扣499. The Maze III（迷宫 III）
+# 力扣499. 迷宫 III
 
 
 ## 力扣499. The Maze III（迷宫 III）

@@ -1,4 +1,4 @@
-# 力扣757. Set Intersection Size At Least Two（设置交集大小至少为 2）
+# 力扣757. 设置交集大小至少为 2
 
 
 ## 力扣757. Set Intersection Size At Least Two（设置交集大小至少为 2）

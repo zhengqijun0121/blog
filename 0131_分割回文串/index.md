@@ -1,4 +1,4 @@
-# 力扣131. Palindrome Partitioning（分割回文串）
+# 力扣131. 分割回文串
 
 
 ## 力扣131. Palindrome Partitioning（分割回文串）

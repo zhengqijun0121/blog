@@ -1,4 +1,4 @@
-# 力扣77. Combinations（组合）
+# 力扣77. 组合
 
 
 ## 力扣77. Combinations（组合）

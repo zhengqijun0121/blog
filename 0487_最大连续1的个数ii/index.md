@@ -1,4 +1,4 @@
-# 力扣487. Max Consecutive Ones II（最大连续 1 的个数 II）
+# 力扣487. 最大连续 1 的个数 II
 
 
 ## 力扣487. Max Consecutive Ones II（最大连续 1 的个数 II）

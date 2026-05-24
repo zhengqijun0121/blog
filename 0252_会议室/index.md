@@ -1,4 +1,4 @@
-# 力扣252. Meeting Rooms（会议室）
+# 力扣252. 会议室
 
 
 ## 力扣252. Meeting Rooms（会议室）

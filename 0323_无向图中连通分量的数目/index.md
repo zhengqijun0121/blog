@@ -1,4 +1,4 @@
-# 力扣323. Number of Connected Components in an Undirected Graph（无向图中连通分量的数目）
+# 力扣323. 无向图中连通分量的数目
 
 
 ## 力扣323. Number of Connected Components in an Undirected Graph（无向图中连通分量的数目）

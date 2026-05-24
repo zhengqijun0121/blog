@@ -1,4 +1,4 @@
-# 力扣302. Smallest Rectangle Enclosing Black Pixels（包含全部黑色像素的最小矩形）
+# 力扣302. 包含全部黑色像素的最小矩形
 
 
 ## 力扣302. Smallest Rectangle Enclosing Black Pixels（包含全部黑色像素的最小矩形）

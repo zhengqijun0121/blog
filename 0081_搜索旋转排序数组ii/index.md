@@ -1,4 +1,4 @@
-# 力扣81. Search in Rotated Sorted Array II（搜索旋转排序数组 II）
+# 力扣81. 搜索旋转排序数组 II
 
 
 ## 力扣81. Search in Rotated Sorted Array II（搜索旋转排序数组 II）

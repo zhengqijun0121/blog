@@ -1,4 +1,4 @@
-# 力扣56. Merge Intervals（合并区间）
+# 力扣56. 合并区间
 
 
 ## 力扣56. Merge Intervals（合并区间）

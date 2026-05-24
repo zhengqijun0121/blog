@@ -1,4 +1,4 @@
-# 力扣953. Verifying an Alien Dictionary（验证外星语词典）
+# 力扣953. 验证外星语词典
 
 
 ## 力扣953. Verifying an Alien Dictionary（验证外星语词典）

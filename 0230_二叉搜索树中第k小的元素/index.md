@@ -1,4 +1,4 @@
-# 力扣230. Kth Smallest Element in a BST（二叉搜索树中第 K 小的元素）
+# 力扣230. 二叉搜索树中第 K 小的元素
 
 
 ## 力扣230. Kth Smallest Element in a BST（二叉搜索树中第 K 小的元素）

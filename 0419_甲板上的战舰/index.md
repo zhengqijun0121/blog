@@ -1,4 +1,4 @@
-# 力扣419. Battleships in a Board（甲板上的战舰）
+# 力扣419. 甲板上的战舰
 
 
 ## 力扣419. Battleships in a Board（甲板上的战舰）

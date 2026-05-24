@@ -1,4 +1,4 @@
-# 力扣292. Nim Game（Nim 游戏）
+# 力扣292. Nim 游戏
 
 
 ## 力扣292. Nim Game（Nim 游戏）

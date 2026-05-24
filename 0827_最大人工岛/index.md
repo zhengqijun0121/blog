@@ -1,4 +1,4 @@
-# 力扣827. Making A Large Island（最大人工岛）
+# 力扣827. 最大人工岛
 
 
 ## 力扣827. Making A Large Island（最大人工岛）

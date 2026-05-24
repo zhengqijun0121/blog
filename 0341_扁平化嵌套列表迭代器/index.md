@@ -1,4 +1,4 @@
-# 力扣341. Flatten Nested List Iterator（扁平化嵌套列表迭代器）
+# 力扣341. 扁平化嵌套列表迭代器
 
 
 ## 力扣341. Flatten Nested List Iterator（扁平化嵌套列表迭代器）

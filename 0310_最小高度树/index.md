@@ -1,4 +1,4 @@
-# 力扣310. Minimum Height Trees（最小高度树）
+# 力扣310. 最小高度树
 
 
 ## 力扣310. Minimum Height Trees（最小高度树）

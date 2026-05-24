@@ -1,4 +1,4 @@
-# 力扣801. Minimum Swaps To Make Sequences Increasing（使序列递增的最小交换次数）
+# 力扣801. 使序列递增的最小交换次数
 
 
 ## 力扣801. Minimum Swaps To Make Sequences Increasing（使序列递增的最小交换次数）

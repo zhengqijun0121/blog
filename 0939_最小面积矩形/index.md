@@ -1,4 +1,4 @@
-# 力扣939. Minimum Area Rectangle（最小面积矩形）
+# 力扣939. 最小面积矩形
 
 
 ## 力扣939. Minimum Area Rectangle（最小面积矩形）

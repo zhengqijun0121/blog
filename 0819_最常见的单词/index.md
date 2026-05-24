@@ -1,4 +1,4 @@
-# 力扣819. Most Common Word（最常见的单词）
+# 力扣819. 最常见的单词
 
 
 ## 力扣819. Most Common Word（最常见的单词）

@@ -1,4 +1,4 @@
-# 力扣86. Partition List（分隔链表）
+# 力扣86. 分隔链表
 
 
 ## 力扣86. Partition List（分隔链表）

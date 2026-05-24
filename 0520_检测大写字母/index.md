@@ -1,4 +1,4 @@
-# 力扣520. Detect Capital（检测大写字母）
+# 力扣520. 检测大写字母
 
 
 ## 力扣520. Detect Capital（检测大写字母）

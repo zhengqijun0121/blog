@@ -1,4 +1,4 @@
-# 力扣316. Remove Duplicate Letters（去除重复字母）
+# 力扣316. 去除重复字母
 
 
 ## 力扣316. Remove Duplicate Letters（去除重复字母）

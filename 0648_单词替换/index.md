@@ -1,4 +1,4 @@
-# 力扣648. Replace Words（单词替换）
+# 力扣648. 单词替换
 
 
 ## 力扣648. Replace Words（单词替换）

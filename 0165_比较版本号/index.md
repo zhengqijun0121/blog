@@ -1,4 +1,4 @@
-# 力扣165. Compare Version Numbers（比较版本号）
+# 力扣165. 比较版本号
 
 
 ## 力扣165. Compare Version Numbers（比较版本号）

@@ -1,4 +1,4 @@
-# 力扣510. Inorder Successor in BST II（二叉搜索树中的中序后继 II）
+# 力扣510. 二叉搜索树中的中序后继 II
 
 
 ## 力扣510. Inorder Successor in BST II（二叉搜索树中的中序后继 II）

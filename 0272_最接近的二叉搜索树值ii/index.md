@@ -1,4 +1,4 @@
-# 力扣272. Closest Binary Search Tree Value II（最接近的二叉搜索树值 II）
+# 力扣272. 最接近的二叉搜索树值 II
 
 
 ## 力扣272. Closest Binary Search Tree Value II（最接近的二叉搜索树值 II）

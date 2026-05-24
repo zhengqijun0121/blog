@@ -1,4 +1,4 @@
-# 力扣517. Super Washing Machines（超级洗衣机）
+# 力扣517. 超级洗衣机
 
 
 ## 力扣517. Super Washing Machines（超级洗衣机）

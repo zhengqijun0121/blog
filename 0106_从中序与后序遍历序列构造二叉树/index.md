@@ -1,4 +1,4 @@
-# 力扣106. Construct Binary Tree from Inorder and Postorder Traversal（从中序与后序遍历序列构造二叉树）
+# 力扣106. 从中序与后序遍历序列构造二叉树
 
 
 ## 力扣106. Construct Binary Tree from Inorder and Postorder Traversal（从中序与后序遍历序列构造二叉树）

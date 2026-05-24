@@ -1,4 +1,4 @@
-# 力扣814. Binary Tree Pruning（二叉树剪枝）
+# 力扣814. 二叉树剪枝
 
 
 ## 力扣814. Binary Tree Pruning（二叉树剪枝）

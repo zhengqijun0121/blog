@@ -1,4 +1,4 @@
-# 力扣983. Minimum Cost For Tickets（最低票价）
+# 力扣983. 最低票价
 
 
 ## 力扣983. Minimum Cost For Tickets（最低票价）

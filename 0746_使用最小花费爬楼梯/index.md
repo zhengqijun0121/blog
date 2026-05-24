@@ -1,4 +1,4 @@
-# 力扣746. Min Cost Climbing Stairs（使用最小花费爬楼梯）
+# 力扣746. 使用最小花费爬楼梯
 
 
 ## 力扣746. Min Cost Climbing Stairs（使用最小花费爬楼梯）

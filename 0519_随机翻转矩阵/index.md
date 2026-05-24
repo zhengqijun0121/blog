@@ -1,4 +1,4 @@
-# 力扣519. Random Flip Matrix（随机翻转矩阵）
+# 力扣519. 随机翻转矩阵
 
 
 ## 力扣519. Random Flip Matrix（随机翻转矩阵）

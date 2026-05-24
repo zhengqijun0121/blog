@@ -1,4 +1,4 @@
-# 力扣536. Construct Binary Tree from String（从字符串生成二叉树）
+# 力扣536. 从字符串生成二叉树
 
 
 ## 力扣536. Construct Binary Tree from String（从字符串生成二叉树）

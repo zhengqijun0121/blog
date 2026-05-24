@@ -1,4 +1,4 @@
-# 力扣821. Shortest Distance to a Character（字符的最短距离）
+# 力扣821. 字符的最短距离
 
 
 ## 力扣821. Shortest Distance to a Character（字符的最短距离）

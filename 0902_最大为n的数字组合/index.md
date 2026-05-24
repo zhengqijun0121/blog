@@ -1,4 +1,4 @@
-# 力扣902. Numbers At Most N Given Digit Set（最大为 N 的数字组合）
+# 力扣902. 最大为 N 的数字组合
 
 
 ## 力扣902. Numbers At Most N Given Digit Set（最大为 N 的数字组合）

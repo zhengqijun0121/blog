@@ -1,4 +1,4 @@
-# 力扣971. Flip Binary Tree To Match Preorder Traversal（翻转二叉树以匹配先序遍历）
+# 力扣971. 翻转二叉树以匹配先序遍历
 
 
 ## 力扣971. Flip Binary Tree To Match Preorder Traversal（翻转二叉树以匹配先序遍历）

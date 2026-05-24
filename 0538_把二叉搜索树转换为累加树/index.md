@@ -1,4 +1,4 @@
-# 力扣538. Convert BST to Greater Tree（把二叉搜索树转换为累加树）
+# 力扣538. 把二叉搜索树转换为累加树
 
 
 ## 力扣538. Convert BST to Greater Tree（把二叉搜索树转换为累加树）

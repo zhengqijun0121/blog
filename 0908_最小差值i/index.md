@@ -1,4 +1,4 @@
-# 力扣908. Smallest Range I（最小差值 I）
+# 力扣908. 最小差值 I
 
 
 ## 力扣908. Smallest Range I（最小差值 I）

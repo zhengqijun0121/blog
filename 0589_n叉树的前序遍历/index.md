@@ -1,4 +1,4 @@
-# 力扣0589. N-ary Tree Preorder Traversal（N 叉树的前序遍历）
+# 力扣0589. N 叉树的前序遍历
 
 
 ## 力扣0589. N-ary Tree Preorder Traversal（N 叉树的前序遍历）

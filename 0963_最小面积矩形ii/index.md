@@ -1,4 +1,4 @@
-# 力扣963. Minimum Area Rectangle II（最小面积矩形 II）
+# 力扣963. 最小面积矩形 II
 
 
 ## 力扣963. Minimum Area Rectangle II（最小面积矩形 II）

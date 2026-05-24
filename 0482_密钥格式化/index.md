@@ -1,4 +1,4 @@
-# 力扣482. License Key Formatting（密钥格式化）
+# 力扣482. 密钥格式化
 
 
 ## 力扣482. License Key Formatting（密钥格式化）

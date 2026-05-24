@@ -1,4 +1,4 @@
-# 力扣646. Maximum Length of Pair Chain（最长数对链）
+# 力扣646. 最长数对链
 
 
 ## 力扣646. Maximum Length of Pair Chain（最长数对链）

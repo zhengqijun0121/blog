@@ -1,4 +1,4 @@
-# 力扣803. Bricks Falling When Hit（打砖块）
+# 力扣803. 打砖块
 
 
 ## 力扣803. Bricks Falling When Hit（打砖块）

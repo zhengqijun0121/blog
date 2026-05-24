@@ -1,4 +1,4 @@
-# 力扣347. Top K Frequent Elements（前 K 个高频元素）
+# 力扣347. 前 K 个高频元素
 
 
 ## 力扣347. Top K Frequent Elements（前 K 个高频元素）

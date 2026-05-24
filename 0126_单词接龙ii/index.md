@@ -1,4 +1,4 @@
-# 力扣126. Word Ladder II（单词接龙 II）
+# 力扣126. 单词接龙 II
 
 
 ## 力扣126. Word Ladder II（单词接龙 II）

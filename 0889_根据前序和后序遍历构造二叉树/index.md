@@ -1,4 +1,4 @@
-# 力扣889. Construct Binary Tree from Preorder and Postorder Traversal（根据前序和后序遍历构造二叉树）
+# 力扣889. 根据前序和后序遍历构造二叉树
 
 
 ## 力扣889. Construct Binary Tree from Preorder and Postorder Traversal（根据前序和后序遍历构造二叉树）

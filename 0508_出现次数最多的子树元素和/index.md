@@ -1,4 +1,4 @@
-# 力扣508. Most Frequent Subtree Sum（出现次数最多的子树元素和）
+# 力扣508. 出现次数最多的子树元素和
 
 
 ## 力扣508. Most Frequent Subtree Sum（出现次数最多的子树元素和）

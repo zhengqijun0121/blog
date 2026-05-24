@@ -1,4 +1,4 @@
-# 力扣0577. Employee Bonus（员工奖金）
+# 力扣0577. 员工奖金
 
 
 ## 力扣0577. Employee Bonus（员工奖金）

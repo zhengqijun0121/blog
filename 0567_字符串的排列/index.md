@@ -1,4 +1,4 @@
-# 力扣0567. Permutation in String（字符串的排列）
+# 力扣0567. 字符串的排列
 
 
 ## 力扣0567. Permutation in String（字符串的排列）

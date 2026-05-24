@@ -1,4 +1,4 @@
-# 力扣533. Lonely Pixel II（孤独像素 II）
+# 力扣533. 孤独像素 II
 
 
 ## 力扣533. Lonely Pixel II（孤独像素 II）

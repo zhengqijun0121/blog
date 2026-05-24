@@ -1,4 +1,4 @@
-# 力扣326. Power of Three（3 的幂）
+# 力扣326. 3 的幂
 
 
 ## 力扣326. Power of Three（3 的幂）

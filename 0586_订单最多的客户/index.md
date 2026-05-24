@@ -1,4 +1,4 @@
-# 力扣0586. Customer Placing the Largest Number of Orders（订单最多的客户）
+# 力扣0586. 订单最多的客户
 
 
 ## 力扣0586. Customer Placing the Largest Number of Orders（订单最多的客户）

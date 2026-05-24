@@ -1,4 +1,4 @@
-# 力扣664. Strange Printer（奇怪的打印机）
+# 力扣664. 奇怪的打印机
 
 
 ## 力扣664. Strange Printer（奇怪的打印机）

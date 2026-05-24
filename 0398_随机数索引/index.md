@@ -1,4 +1,4 @@
-# 力扣398. Random Pick Index（随机数索引）
+# 力扣398. 随机数索引
 
 
 ## 力扣398. Random Pick Index（随机数索引）

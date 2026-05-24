@@ -1,4 +1,4 @@
-# 力扣264. Ugly Number II（丑数 II）
+# 力扣264. 丑数 II
 
 
 ## 力扣264. Ugly Number II（丑数 II）

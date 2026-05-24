@@ -1,4 +1,4 @@
-# 力扣392. Is Subsequence（判断子序列）
+# 力扣392. 判断子序列
 
 
 ## 力扣392. Is Subsequence（判断子序列）

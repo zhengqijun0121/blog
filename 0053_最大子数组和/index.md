@@ -1,4 +1,4 @@
-# 力扣53. Maximum Subarray（最大子数组和）
+# 力扣53. 最大子数组和
 
 
 ## 力扣53. Maximum Subarray（最大子数组和）

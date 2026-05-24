@@ -1,4 +1,4 @@
-# 力扣346. Moving Average from Data Stream（数据流中的移动平均值）
+# 力扣346. 数据流中的移动平均值
 
 
 ## 力扣346. Moving Average from Data Stream（数据流中的移动平均值）

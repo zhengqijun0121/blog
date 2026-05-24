@@ -1,4 +1,4 @@
-# 力扣38. Count and Say（外观数列）
+# 力扣38. 外观数列
 
 
 ## 力扣38. Count and Say（外观数列）

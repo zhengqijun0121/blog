@@ -1,4 +1,4 @@
-# 力扣918. Maximum Sum Circular Subarray（环形子数组的最大和）
+# 力扣918. 环形子数组的最大和
 
 
 ## 力扣918. Maximum Sum Circular Subarray（环形子数组的最大和）

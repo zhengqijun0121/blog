@@ -1,4 +1,4 @@
-# 力扣997. Find the Town Judge（找到小镇的法官）
+# 力扣997. 找到小镇的法官
 
 
 ## 力扣997. Find the Town Judge（找到小镇的法官）

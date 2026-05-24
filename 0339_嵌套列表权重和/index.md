@@ -1,4 +1,4 @@
-# 力扣339. Nested List Weight Sum（嵌套列表权重和）
+# 力扣339. 嵌套列表权重和
 
 
 ## 力扣339. Nested List Weight Sum（嵌套列表权重和）

@@ -1,4 +1,4 @@
-# 力扣80. Remove Duplicates from Sorted Array II（删除有序数组中的重复项 II）
+# 力扣80. 删除有序数组中的重复项 II
 
 
 ## 力扣80. Remove Duplicates from Sorted Array II（删除有序数组中的重复项 II）

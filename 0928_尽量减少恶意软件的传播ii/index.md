@@ -1,4 +1,4 @@
-# 力扣928. Minimize Malware Spread II（尽量减少恶意软件的传播 II）
+# 力扣928. 尽量减少恶意软件的传播 II
 
 
 ## 力扣928. Minimize Malware Spread II（尽量减少恶意软件的传播 II）

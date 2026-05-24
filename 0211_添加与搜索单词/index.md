@@ -1,4 +1,4 @@
-# 力扣211. Design Add and Search Words Data Structure（添加与搜索单词）
+# 力扣211. 添加与搜索单词
 
 
 ## 力扣211. Design Add and Search Words Data Structure（添加与搜索单词）

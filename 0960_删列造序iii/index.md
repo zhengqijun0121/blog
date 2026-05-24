@@ -1,4 +1,4 @@
-# 力扣960. Delete Columns to Make Sorted III（删列造序 III）
+# 力扣960. 删列造序 III
 
 
 ## 力扣960. Delete Columns to Make Sorted III（删列造序 III）

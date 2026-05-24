@@ -1,4 +1,4 @@
-# 力扣0559. Maximum Depth of N-ary Tree（N 叉树的最大深度）
+# 力扣0559. N 叉树的最大深度
 
 
 ## 力扣0559. Maximum Depth of N-ary Tree（N 叉树的最大深度）

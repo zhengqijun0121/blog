@@ -1,4 +1,4 @@
-# 力扣990. Satisfiability of Equality Equations（等式方程的可满足性）
+# 力扣990. 等式方程的可满足性
 
 
 ## 力扣990. Satisfiability of Equality Equations（等式方程的可满足性）

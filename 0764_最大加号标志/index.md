@@ -1,4 +1,4 @@
-# 力扣764. Largest Plus Sign（最大加号标志）
+# 力扣764. 最大加号标志
 
 
 ## 力扣764. Largest Plus Sign（最大加号标志）

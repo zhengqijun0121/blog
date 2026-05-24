@@ -1,4 +1,4 @@
-# 力扣625. Minimum Factorization（最小因式分解）
+# 力扣625. 最小因式分解
 
 
 ## 力扣625. Minimum Factorization（最小因式分解）

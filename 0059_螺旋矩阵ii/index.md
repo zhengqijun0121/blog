@@ -1,4 +1,4 @@
-# 力扣59. Spiral Matrix II（螺旋矩阵 II）
+# 力扣59. 螺旋矩阵 II
 
 
 ## 力扣59. Spiral Matrix II（螺旋矩阵 II）

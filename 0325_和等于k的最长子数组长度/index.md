@@ -1,4 +1,4 @@
-# 力扣325. Maximum Size Subarray Sum Equals k（和等于 k 的最长子数组长度）
+# 力扣325. 和等于 k 的最长子数组长度
 
 
 ## 力扣325. Maximum Size Subarray Sum Equals k（和等于 k 的最长子数组长度）

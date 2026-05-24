@@ -1,4 +1,4 @@
-# 力扣200. Number of Islands（岛屿数量）
+# 力扣200. 岛屿数量
 
 
 ## 力扣200. Number of Islands（岛屿数量）

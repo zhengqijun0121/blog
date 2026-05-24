@@ -1,4 +1,4 @@
-# 力扣161. One Edit Distance（相隔为 1 的编辑距离）
+# 力扣161. 相隔为 1 的编辑距离
 
 
 ## 力扣161. One Edit Distance（相隔为 1 的编辑距离）

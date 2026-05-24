@@ -1,4 +1,4 @@
-# 力扣870. Advantage Shuffle（优势洗牌）
+# 力扣870. 优势洗牌
 
 
 ## 力扣870. Advantage Shuffle（优势洗牌）

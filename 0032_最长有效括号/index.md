@@ -1,4 +1,4 @@
-# 力扣32. Longest Valid Parentheses（最长有效括号）
+# 力扣32. 最长有效括号
 
 
 ## 力扣32. Longest Valid Parentheses（最长有效括号）

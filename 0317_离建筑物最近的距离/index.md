@@ -1,4 +1,4 @@
-# 力扣317. Shortest Distance from All Buildings（离建筑物最近的距离）
+# 力扣317. 离建筑物最近的距离
 
 
 ## 力扣317. Shortest Distance from All Buildings（离建筑物最近的距离）

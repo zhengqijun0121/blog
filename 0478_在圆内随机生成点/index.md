@@ -1,4 +1,4 @@
-# 力扣478. Generate Random Point in a Circle（在圆内随机生成点）
+# 力扣478. 在圆内随机生成点
 
 
 ## 力扣478. Generate Random Point in a Circle（在圆内随机生成点）

@@ -1,4 +1,4 @@
-# 力扣409. Longest Palindrome（最长回文串）
+# 力扣409. 最长回文串
 
 
 ## 力扣409. Longest Palindrome（最长回文串）

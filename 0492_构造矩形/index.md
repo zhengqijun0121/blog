@@ -1,4 +1,4 @@
-# 力扣492. Construct the Rectangle（构造矩形）
+# 力扣492. 构造矩形
 
 
 ## 力扣492. Construct the Rectangle（构造矩形）

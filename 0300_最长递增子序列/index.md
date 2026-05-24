@@ -1,4 +1,4 @@
-# 力扣300. Longest Increasing Subsequence（最长递增子序列）
+# 力扣300. 最长递增子序列
 
 
 ## 力扣300. Longest Increasing Subsequence（最长递增子序列）

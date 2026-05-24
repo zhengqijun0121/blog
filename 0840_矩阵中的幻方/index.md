@@ -1,4 +1,4 @@
-# 力扣840. Magic Squares In Grid（矩阵中的幻方）
+# 力扣840. 矩阵中的幻方
 
 
 ## 力扣840. Magic Squares In Grid（矩阵中的幻方）

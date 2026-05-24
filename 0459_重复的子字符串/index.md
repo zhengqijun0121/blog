@@ -1,4 +1,4 @@
-# 力扣459. Repeated Substring Pattern（重复的子字符串）
+# 力扣459. 重复的子字符串
 
 
 ## 力扣459. Repeated Substring Pattern（重复的子字符串）

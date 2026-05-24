@@ -1,4 +1,4 @@
-# 力扣92. Reverse Linked List II（反转链表 II）
+# 力扣92. 反转链表 II
 
 
 ## 力扣92. Reverse Linked List II（反转链表 II）

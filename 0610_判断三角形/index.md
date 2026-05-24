@@ -1,4 +1,4 @@
-# 力扣610. Triangle Judgement（判断三角形）
+# 力扣610. 判断三角形
 
 
 ## 力扣610. Triangle Judgement（判断三角形）

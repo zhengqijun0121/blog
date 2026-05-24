@@ -1,4 +1,4 @@
-# 力扣249. Group Shifted Strings（移位字符串分组）
+# 力扣249. 移位字符串分组
 
 
 ## 力扣249. Group Shifted Strings（移位字符串分组）

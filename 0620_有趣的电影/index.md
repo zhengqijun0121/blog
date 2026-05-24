@@ -1,4 +1,4 @@
-# 力扣620. Not Boring Movies（有趣的电影）
+# 力扣620. 有趣的电影
 
 
 ## 力扣620. Not Boring Movies（有趣的电影）

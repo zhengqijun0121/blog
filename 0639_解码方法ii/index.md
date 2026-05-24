@@ -1,4 +1,4 @@
-# 力扣639. Decode Ways II（解码方法 II）
+# 力扣639. 解码方法 II
 
 
 ## 力扣639. Decode Ways II（解码方法 II）

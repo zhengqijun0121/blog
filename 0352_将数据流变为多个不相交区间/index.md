@@ -1,4 +1,4 @@
-# 力扣352. Data Stream as Disjoint Intervals（将数据流变为多个不相交区间）
+# 力扣352. 将数据流变为多个不相交区间
 
 
 ## 力扣352. Data Stream as Disjoint Intervals（将数据流变为多个不相交区间）

@@ -1,4 +1,4 @@
-# 力扣786. K-th Smallest Prime Fraction（第 K 个最小的素数分数）
+# 力扣786. 第 K 个最小的素数分数
 
 
 ## 力扣786. K-th Smallest Prime Fraction（第 K 个最小的素数分数）

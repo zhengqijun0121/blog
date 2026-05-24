@@ -1,4 +1,4 @@
-# 力扣673. Number of Longest Increasing Subsequence（最长递增子序列的个数）
+# 力扣673. 最长递增子序列的个数
 
 
 ## 力扣673. Number of Longest Increasing Subsequence（最长递增子序列的个数）

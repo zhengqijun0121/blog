@@ -1,4 +1,4 @@
-# 力扣365. Water and Jug Problem（水壶问题）
+# 力扣365. 水壶问题
 
 
 ## 力扣365. Water and Jug Problem（水壶问题）

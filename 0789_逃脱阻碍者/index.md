@@ -1,4 +1,4 @@
-# 力扣789. Escape The Ghosts（逃脱阻碍者）
+# 力扣789. 逃脱阻碍者
 
 
 ## 力扣789. Escape The Ghosts（逃脱阻碍者）

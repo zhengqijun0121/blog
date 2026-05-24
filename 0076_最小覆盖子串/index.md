@@ -1,4 +1,4 @@
-# 力扣76. Minimum Window Substring（最小覆盖子串）
+# 力扣76. 最小覆盖子串
 
 
 ## 力扣76. Minimum Window Substring（最小覆盖子串）

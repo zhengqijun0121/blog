@@ -1,4 +1,4 @@
-# 力扣772. Basic Calculator III（基本计算器 III）
+# 力扣772. 基本计算器 III
 
 
 ## 力扣772. Basic Calculator III（基本计算器 III）

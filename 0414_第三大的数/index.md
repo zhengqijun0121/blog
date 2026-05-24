@@ -1,4 +1,4 @@
-# 力扣414. Third Maximum Number（第三大的数）
+# 力扣414. 第三大的数
 
 
 ## 力扣414. Third Maximum Number（第三大的数）

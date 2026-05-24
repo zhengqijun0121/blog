@@ -1,4 +1,4 @@
-# 力扣721. Accounts Merge（账户合并）
+# 力扣721. 账户合并
 
 
 ## 力扣721. Accounts Merge（账户合并）

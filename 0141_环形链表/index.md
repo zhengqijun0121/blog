@@ -1,4 +1,4 @@
-# 力扣141. Linked List Cycle（环形链表）
+# 力扣141. 环形链表
 
 
 ## 力扣141. Linked List Cycle（环形链表）

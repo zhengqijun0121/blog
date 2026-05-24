@@ -1,4 +1,4 @@
-# 力扣541. Reverse String II（反转字符串 II）
+# 力扣541. 反转字符串 II
 
 
 ## 力扣541. Reverse String II（反转字符串 II）

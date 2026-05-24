@@ -1,4 +1,4 @@
-# 力扣637. Average of Levels in Binary Tree（二叉树的层平均值）
+# 力扣637. 二叉树的层平均值
 
 
 ## 力扣637. Average of Levels in Binary Tree（二叉树的层平均值）

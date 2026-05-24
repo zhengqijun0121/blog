@@ -1,4 +1,4 @@
-# 力扣218. The Skyline Problem（天际线问题）
+# 力扣218. 天际线问题
 
 
 ## 力扣218. The Skyline Problem（天际线问题）

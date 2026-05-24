@@ -1,4 +1,4 @@
-# 力扣738. Monotone Increasing Digits（单调递增的数字）
+# 力扣738. 单调递增的数字
 
 
 ## 力扣738. Monotone Increasing Digits（单调递增的数字）

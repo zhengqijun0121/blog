@@ -1,4 +1,4 @@
-# 力扣506. Relative Ranks（相对名次）
+# 力扣506. 相对名次
 
 
 ## 力扣506. Relative Ranks（相对名次）

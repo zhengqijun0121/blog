@@ -1,4 +1,4 @@
-# 力扣822. Card Flipping Game（翻转卡片游戏）
+# 力扣822. 翻转卡片游戏
 
 
 ## 力扣822. Card Flipping Game（翻转卡片游戏）

@@ -1,4 +1,4 @@
-# 力扣162. Find Peak Element（寻找峰值）
+# 力扣162. 寻找峰值
 
 
 ## 力扣162. Find Peak Element（寻找峰值）

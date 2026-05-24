@@ -1,4 +1,4 @@
-# 力扣48. Rotate Image（旋转图像）
+# 力扣48. 旋转图像
 
 
 ## 力扣48. Rotate Image（旋转图像）

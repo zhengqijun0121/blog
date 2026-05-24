@@ -1,4 +1,4 @@
-# 力扣206. Reverse Linked List（反转链表）
+# 力扣206. 反转链表
 
 
 ## 力扣206. Reverse Linked List（反转链表）

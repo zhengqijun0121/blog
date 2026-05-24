@@ -1,4 +1,4 @@
-# 力扣838. Push Dominoes（推多米诺）
+# 力扣838. 推多米诺
 
 
 ## 力扣838. Push Dominoes（推多米诺）

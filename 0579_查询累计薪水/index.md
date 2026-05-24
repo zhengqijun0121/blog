@@ -1,4 +1,4 @@
-# 力扣0579. Find Cumulative Salary of an Employee（查询累计薪水）
+# 力扣0579. 查询累计薪水
 
 
 ## 力扣0579. Find Cumulative Salary of an Employee（查询累计薪水）

@@ -1,4 +1,4 @@
-# 力扣668. Kth Smallest Number in Multiplication Table（乘法表中第 k 小的数）
+# 力扣668. 乘法表中第 k 小的数
 
 
 ## 力扣668. Kth Smallest Number in Multiplication Table（乘法表中第 k 小的数）

@@ -1,4 +1,4 @@
-# 力扣636. Exclusive Time of Functions（函数的独占时间）
+# 力扣636. 函数的独占时间
 
 
 ## 力扣636. Exclusive Time of Functions（函数的独占时间）

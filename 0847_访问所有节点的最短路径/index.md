@@ -1,4 +1,4 @@
-# 力扣847. Shortest Path Visiting All Nodes（访问所有节点的最短路径）
+# 力扣847. 访问所有节点的最短路径
 
 
 ## 力扣847. Shortest Path Visiting All Nodes（访问所有节点的最短路径）

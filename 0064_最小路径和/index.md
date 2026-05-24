@@ -1,4 +1,4 @@
-# 力扣64. Minimum Path Sum（最小路径和）
+# 力扣64. 最小路径和
 
 
 ## 力扣64. Minimum Path Sum（最小路径和）

@@ -1,4 +1,4 @@
-# 力扣680. Valid Palindrome II（验证回文串 II）
+# 力扣680. 验证回文串 II
 
 
 ## 力扣680. Valid Palindrome II（验证回文串 II）

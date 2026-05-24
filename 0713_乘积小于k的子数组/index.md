@@ -1,4 +1,4 @@
-# 力扣713. Subarray Product Less Than K（乘积小于 K 的子数组）
+# 力扣713. 乘积小于 K 的子数组
 
 
 ## 力扣713. Subarray Product Less Than K（乘积小于 K 的子数组）

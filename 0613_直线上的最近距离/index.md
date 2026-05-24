@@ -1,4 +1,4 @@
-# 力扣613. Shortest Distance in a Line（直线上的最近距离）
+# 力扣613. 直线上的最近距离
 
 
 ## 力扣613. Shortest Distance in a Line（直线上的最近距离）

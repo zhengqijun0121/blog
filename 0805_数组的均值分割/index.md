@@ -1,4 +1,4 @@
-# 力扣805. Split Array With Same Average（数组的均值分割）
+# 力扣805. 数组的均值分割
 
 
 ## 力扣805. Split Array With Same Average（数组的均值分割）

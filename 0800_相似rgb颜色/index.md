@@ -1,4 +1,4 @@
-# 力扣800. Similar RGB Color（相似 RGB 颜色）
+# 力扣800. 相似 RGB 颜色
 
 
 ## 力扣800. Similar RGB Color（相似 RGB 颜色）

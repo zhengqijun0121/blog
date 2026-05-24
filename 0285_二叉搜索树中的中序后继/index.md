@@ -1,4 +1,4 @@
-# 力扣285. Inorder Successor in BST（二叉搜索树中的中序后继）
+# 力扣285. 二叉搜索树中的中序后继
 
 
 ## 力扣285. Inorder Successor in BST（二叉搜索树中的中序后继）

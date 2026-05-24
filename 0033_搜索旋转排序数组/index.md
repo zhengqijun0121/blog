@@ -1,4 +1,4 @@
-# 力扣33. Search in Rotated Sorted Array（搜索旋转排序数组）
+# 力扣33. 搜索旋转排序数组
 
 
 ## 力扣33. Search in Rotated Sorted Array（搜索旋转排序数组）

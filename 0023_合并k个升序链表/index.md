@@ -1,4 +1,4 @@
-# 力扣23. Merge k Sorted Lists（合并 K 个升序链表）
+# 力扣23. 合并 K 个升序链表
 
 
 ## 力扣23. Merge k Sorted Lists（合并 K 个升序链表）

@@ -1,4 +1,4 @@
-# 力扣949. Largest Time for Given Digits（给定数字能组成的最大时间）
+# 力扣949. 给定数字能组成的最大时间
 
 
 ## 力扣949. Largest Time for Given Digits（给定数字能组成的最大时间）

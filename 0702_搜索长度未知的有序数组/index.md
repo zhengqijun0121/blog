@@ -1,4 +1,4 @@
-# 力扣702. Search in a Sorted Array of Unknown Size（搜索长度未知的有序数组）
+# 力扣702. 搜索长度未知的有序数组
 
 
 ## 力扣702. Search in a Sorted Array of Unknown Size（搜索长度未知的有序数组）

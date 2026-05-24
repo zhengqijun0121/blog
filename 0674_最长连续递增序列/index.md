@@ -1,4 +1,4 @@
-# 力扣674. Longest Continuous Increasing Subsequence（最长连续递增序列）
+# 力扣674. 最长连续递增序列
 
 
 ## 力扣674. Longest Continuous Increasing Subsequence（最长连续递增序列）

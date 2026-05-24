@@ -1,4 +1,4 @@
-# 力扣894. All Possible Full Binary Trees（所有可能的满二叉树）
+# 力扣894. 所有可能的满二叉树
 
 
 ## 力扣894. All Possible Full Binary Trees（所有可能的满二叉树）

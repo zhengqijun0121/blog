@@ -1,4 +1,4 @@
-# 力扣607. Sales Person（销售员）
+# 力扣607. 销售员
 
 
 ## 力扣607. Sales Person（销售员）

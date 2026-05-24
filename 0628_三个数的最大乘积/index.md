@@ -1,4 +1,4 @@
-# 力扣628. Maximum Product of Three Numbers（三个数的最大乘积）
+# 力扣628. 三个数的最大乘积
 
 
 ## 力扣628. Maximum Product of Three Numbers（三个数的最大乘积）

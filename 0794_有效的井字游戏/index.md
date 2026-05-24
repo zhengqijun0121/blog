@@ -1,4 +1,4 @@
-# 力扣794. Valid Tic-Tac-Toe State（有效的井字游戏）
+# 力扣794. 有效的井字游戏
 
 
 ## 力扣794. Valid Tic-Tac-Toe State（有效的井字游戏）

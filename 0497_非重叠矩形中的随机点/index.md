@@ -1,4 +1,4 @@
-# 力扣497. Random Point in Non-overlapping Rectangles（非重叠矩形中的随机点）
+# 力扣497. 非重叠矩形中的随机点
 
 
 ## 力扣497. Random Point in Non-overlapping Rectangles（非重叠矩形中的随机点）

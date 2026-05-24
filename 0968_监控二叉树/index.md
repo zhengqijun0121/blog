@@ -1,4 +1,4 @@
-# 力扣968. Binary Tree Cameras（监控二叉树）
+# 力扣968. 监控二叉树
 
 
 ## 力扣968. Binary Tree Cameras（监控二叉树）

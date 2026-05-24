@@ -1,4 +1,4 @@
-# 力扣154. Find Minimum in Rotated Sorted Array II（寻找旋转排序数组中的最小值 II）
+# 力扣154. 寻找旋转排序数组中的最小值 II
 
 
 ## 力扣154. Find Minimum in Rotated Sorted Array II（寻找旋转排序数组中的最小值 II）

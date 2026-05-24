@@ -1,4 +1,4 @@
-# 力扣701. Insert into a Binary Search Tree（二叉搜索树中的插入操作）
+# 力扣701. 二叉搜索树中的插入操作
 
 
 ## 力扣701. Insert into a Binary Search Tree（二叉搜索树中的插入操作）

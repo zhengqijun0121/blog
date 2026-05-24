@@ -1,4 +1,4 @@
-# 力扣228. Summary Ranges（汇总区间）
+# 力扣228. 汇总区间
 
 
 ## 力扣228. Summary Ranges（汇总区间）

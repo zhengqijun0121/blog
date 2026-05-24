@@ -1,4 +1,4 @@
-# 力扣109. Convert Sorted List to Binary Search Tree（有序链表转换二叉搜索树）
+# 力扣109. 有序链表转换二叉搜索树
 
 
 ## 力扣109. Convert Sorted List to Binary Search Tree（有序链表转换二叉搜索树）

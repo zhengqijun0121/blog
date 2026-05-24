@@ -1,4 +1,4 @@
-# 力扣380. Insert Delete GetRandom O(1)（O(1) 时间插入、删除和获取随机元素）
+# 力扣380. O(1) 时间插入、删除和获取随机元素
 
 
 ## 力扣380. Insert Delete GetRandom O(1)（O(1) 时间插入、删除和获取随机元素）

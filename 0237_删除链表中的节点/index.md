@@ -1,4 +1,4 @@
-# 力扣237. Delete Node in a Linked List（删除链表中的节点）
+# 力扣237. 删除链表中的节点
 
 
 ## 力扣237. Delete Node in a Linked List（删除链表中的节点）

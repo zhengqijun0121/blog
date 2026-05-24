@@ -1,4 +1,4 @@
-# 力扣277. Find the Celebrity（搜寻名人）
+# 力扣277. 搜寻名人
 
 
 ## 力扣277. Find the Celebrity（搜寻名人）

@@ -1,4 +1,4 @@
-# 力扣262. Trips and Users（行程和用户）
+# 力扣262. 行程和用户
 
 
 ## 力扣262. Trips and Users（行程和用户）

@@ -1,4 +1,4 @@
-# 力扣181. Employees Earning More Than Their Managers（超过经理收入的员工）
+# 力扣181. 超过经理收入的员工
 
 
 ## 力扣181. Employees Earning More Than Their Managers（超过经理收入的员工）

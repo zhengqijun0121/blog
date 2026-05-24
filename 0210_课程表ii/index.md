@@ -1,4 +1,4 @@
-# 力扣210. Course Schedule II（课程表 II）
+# 力扣210. 课程表 II
 
 
 ## 力扣210. Course Schedule II（课程表 II）

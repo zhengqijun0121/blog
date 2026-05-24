@@ -1,4 +1,4 @@
-# 力扣469. Convex Polygon（凸多边形）
+# 力扣469. 凸多边形
 
 
 ## 力扣469. Convex Polygon（凸多边形）

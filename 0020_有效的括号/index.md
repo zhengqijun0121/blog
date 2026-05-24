@@ -1,4 +1,4 @@
-# 力扣20. Valid Parentheses（有效的括号）
+# 力扣20. 有效的括号
 
 
 ## 力扣20. Valid Parentheses（有效的括号）

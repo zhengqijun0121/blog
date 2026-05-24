@@ -1,4 +1,4 @@
-# 力扣111. Minimum Depth of Binary Tree（二叉树的最小深度）
+# 力扣111. 二叉树的最小深度
 
 
 ## 力扣111. Minimum Depth of Binary Tree（二叉树的最小深度）

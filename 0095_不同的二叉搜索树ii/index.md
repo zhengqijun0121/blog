@@ -1,4 +1,4 @@
-# 力扣95. Unique Binary Search Trees II（不同的二叉搜索树 II）
+# 力扣95. 不同的二叉搜索树 II
 
 
 ## 力扣95. Unique Binary Search Trees II（不同的二叉搜索树 II）

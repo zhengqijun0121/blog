@@ -1,4 +1,4 @@
-# 力扣967. Numbers With Same Consecutive Differences（连续差相同的数字）
+# 力扣967. 连续差相同的数字
 
 
 ## 力扣967. Numbers With Same Consecutive Differences（连续差相同的数字）

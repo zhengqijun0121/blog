@@ -1,4 +1,4 @@
-# 力扣243. Shortest Word Distance（最短单词距离）
+# 力扣243. 最短单词距离
 
 
 ## 力扣243. Shortest Word Distance（最短单词距离）

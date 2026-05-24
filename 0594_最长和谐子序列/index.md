@@ -1,4 +1,4 @@
-# 力扣0594. Longest Harmonious Subsequence（最长和谐子序列）
+# 力扣0594. 最长和谐子序列
 
 
 ## 力扣0594. Longest Harmonious Subsequence（最长和谐子序列）

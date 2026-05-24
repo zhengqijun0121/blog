@@ -1,4 +1,4 @@
-# 力扣373. Find K Pairs with Smallest Sums（查找和最小的 K 对数字）
+# 力扣373. 查找和最小的 K 对数字
 
 
 ## 力扣373. Find K Pairs with Smallest Sums（查找和最小的 K 对数字）

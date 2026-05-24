@@ -1,4 +1,4 @@
-# 力扣791. Custom Sort String（自定义字符串排序）
+# 力扣791. 自定义字符串排序
 
 
 ## 力扣791. Custom Sort String（自定义字符串排序）

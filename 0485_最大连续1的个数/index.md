@@ -1,4 +1,4 @@
-# 力扣485. Max Consecutive Ones（最大连续 1 的个数）
+# 力扣485. 最大连续 1 的个数
 
 
 ## 力扣485. Max Consecutive Ones（最大连续 1 的个数）

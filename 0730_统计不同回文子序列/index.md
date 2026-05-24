@@ -1,4 +1,4 @@
-# 力扣730. Count Different Palindromic Subsequences（统计不同回文子序列）
+# 力扣730. 统计不同回文子序列
 
 
 ## 力扣730. Count Different Palindromic Subsequences（统计不同回文子序列）

@@ -1,4 +1,4 @@
-# 力扣958. Check Completeness of a Binary Tree（二叉树的完全性检验）
+# 力扣958. 二叉树的完全性检验
 
 
 ## 力扣958. Check Completeness of a Binary Tree（二叉树的完全性检验）

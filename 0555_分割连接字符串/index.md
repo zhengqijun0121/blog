@@ -1,4 +1,4 @@
-# 力扣0555. Split Concatenated Strings（分割连接字符串）
+# 力扣0555. 分割连接字符串
 
 
 ## 力扣0555. Split Concatenated Strings（分割连接字符串）

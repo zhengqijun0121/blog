@@ -1,4 +1,4 @@
-# 力扣359. Logger Rate Limiter（日志速率限制器）
+# 力扣359. 日志速率限制器
 
 
 ## 力扣359. Logger Rate Limiter（日志速率限制器）

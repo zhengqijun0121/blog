@@ -1,4 +1,4 @@
-# 力扣453. Minimum Moves to Equal Array Elements（最小操作次数使数组元素相等）
+# 力扣453. 最小操作次数使数组元素相等
 
 
 ## 力扣453. Minimum Moves to Equal Array Elements（最小操作次数使数组元素相等）

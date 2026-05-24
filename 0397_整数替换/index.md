@@ -1,4 +1,4 @@
-# 力扣397. Integer Replacement（整数替换）
+# 力扣397. 整数替换
 
 
 ## 力扣397. Integer Replacement（整数替换）

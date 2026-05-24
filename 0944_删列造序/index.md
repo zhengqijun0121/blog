@@ -1,4 +1,4 @@
-# 力扣944. Delete Columns to Make Sorted（删列造序）
+# 力扣944. 删列造序
 
 
 ## 力扣944. Delete Columns to Make Sorted（删列造序）

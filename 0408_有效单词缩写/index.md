@@ -1,4 +1,4 @@
-# 力扣408. Valid Word Abbreviation（有效单词缩写）
+# 力扣408. 有效单词缩写
 
 
 ## 力扣408. Valid Word Abbreviation（有效单词缩写）

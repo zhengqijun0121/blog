@@ -1,4 +1,4 @@
-# 力扣739. Daily Temperatures（每日温度）
+# 力扣739. 每日温度
 
 
 ## 力扣739. Daily Temperatures（每日温度）

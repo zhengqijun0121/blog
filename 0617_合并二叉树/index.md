@@ -1,4 +1,4 @@
-# 力扣617. Merge Two Binary Trees（合并二叉树）
+# 力扣617. 合并二叉树
 
 
 ## 力扣617. Merge Two Binary Trees（合并二叉树）

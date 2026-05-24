@@ -1,4 +1,4 @@
-# 力扣926. Flip String to Monotone Increasing（将字符串翻转到单调递增）
+# 力扣926. 将字符串翻转到单调递增
 
 
 ## 力扣926. Flip String to Monotone Increasing（将字符串翻转到单调递增）

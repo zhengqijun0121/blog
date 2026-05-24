@@ -1,4 +1,4 @@
-# 力扣184. Department Highest Salary（部门工资最高的员工）
+# 力扣184. 部门工资最高的员工
 
 
 ## 力扣184. Department Highest Salary（部门工资最高的员工）

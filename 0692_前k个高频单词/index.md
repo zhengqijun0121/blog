@@ -1,4 +1,4 @@
-# 力扣692. Top K Frequent Words（前 K 个高频单词）
+# 力扣692. 前 K 个高频单词
 
 
 ## 力扣692. Top K Frequent Words（前 K 个高频单词）

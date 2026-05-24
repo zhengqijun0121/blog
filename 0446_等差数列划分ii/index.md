@@ -1,4 +1,4 @@
-# 力扣446. Arithmetic Slices II - Subsequence（等差数列划分 II - 子序列）
+# 力扣446. 等差数列划分 II - 子序列
 
 
 ## 力扣446. Arithmetic Slices II - Subsequence（等差数列划分 II - 子序列）

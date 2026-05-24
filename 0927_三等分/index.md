@@ -1,4 +1,4 @@
-# 力扣927. Three Equal Parts（三等分）
+# 力扣927. 三等分
 
 
 ## 力扣927. Three Equal Parts（三等分）

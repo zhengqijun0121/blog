@@ -1,4 +1,4 @@
-# 力扣940. Distinct Subsequences II（不同的子序列 II）
+# 力扣940. 不同的子序列 II
 
 
 ## 力扣940. Distinct Subsequences II（不同的子序列 II）

@@ -1,4 +1,4 @@
-# 力扣725. Split Linked List in Parts（分隔链表）
+# 力扣725. 分隔链表
 
 
 ## 力扣725. Split Linked List in Parts（分隔链表）

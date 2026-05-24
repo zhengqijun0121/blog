@@ -1,4 +1,4 @@
-# 力扣965. Univalued Binary Tree（单值二叉树）
+# 力扣965. 单值二叉树
 
 
 ## 力扣965. Univalued Binary Tree（单值二叉树）

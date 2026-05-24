@@ -1,4 +1,4 @@
-# 力扣0562. Longest Line of Consecutive One in Matrix（矩阵中最长的连续 1 线段）
+# 力扣0562. 矩阵中最长的连续 1 线段
 
 
 ## 力扣0562. Longest Line of Consecutive One in Matrix（矩阵中最长的连续 1 线段）

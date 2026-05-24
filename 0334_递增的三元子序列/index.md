@@ -1,4 +1,4 @@
-# 力扣334. Increasing Triplet Subsequence（递增的三元子序列）
+# 力扣334. 递增的三元子序列
 
 
 ## 力扣334. Increasing Triplet Subsequence（递增的三元子序列）

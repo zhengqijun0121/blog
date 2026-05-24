@@ -1,4 +1,4 @@
-# 力扣799. Champagne Tower（香槟塔）
+# 力扣799. 香槟塔
 
 
 ## 力扣799. Champagne Tower（香槟塔）

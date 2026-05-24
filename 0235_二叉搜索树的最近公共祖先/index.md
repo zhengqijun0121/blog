@@ -1,4 +1,4 @@
-# 力扣235. Lowest Common Ancestor of a Binary Search Tree（二叉搜索树的最近公共祖先）
+# 力扣235. 二叉搜索树的最近公共祖先
 
 
 ## 力扣235. Lowest Common Ancestor of a Binary Search Tree（二叉搜索树的最近公共祖先）

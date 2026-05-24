@@ -1,4 +1,4 @@
-# 力扣303. Range Sum Query - Immutable（区域和检索 - 数组不可变）
+# 力扣303. 区域和检索 - 数组不可变
 
 
 ## 力扣303. Range Sum Query - Immutable（区域和检索 - 数组不可变）

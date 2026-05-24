@@ -1,4 +1,4 @@
-# 力扣491. Non-decreasing Subsequences（非递减子序列）
+# 力扣491. 非递减子序列
 
 
 ## 力扣491. Non-decreasing Subsequences（非递减子序列）

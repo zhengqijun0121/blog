@@ -1,4 +1,4 @@
-# 力扣694. Number of Distinct Islands（不同岛屿的数量）
+# 力扣694. 不同岛屿的数量
 
 
 ## 力扣694. Number of Distinct Islands（不同岛屿的数量）

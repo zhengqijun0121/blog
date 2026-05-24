@@ -1,4 +1,4 @@
-# 力扣969. Pancake Sorting（煎饼排序）
+# 力扣969. 煎饼排序
 
 
 ## 力扣969. Pancake Sorting（煎饼排序）

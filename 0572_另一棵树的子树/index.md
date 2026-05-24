@@ -1,4 +1,4 @@
-# 力扣0572. Subtree of Another Tree（另一棵树的子树）
+# 力扣0572. 另一棵树的子树
 
 
 ## 力扣0572. Subtree of Another Tree（另一棵树的子树）

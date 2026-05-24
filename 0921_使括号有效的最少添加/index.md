@@ -1,4 +1,4 @@
-# 力扣921. Minimum Add to Make Parentheses Valid（使括号有效的最少添加）
+# 力扣921. 使括号有效的最少添加
 
 
 ## 力扣921. Minimum Add to Make Parentheses Valid（使括号有效的最少添加）

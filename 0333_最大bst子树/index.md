@@ -1,4 +1,4 @@
-# 力扣333. Largest BST Subtree（最大 BST 子树）
+# 力扣333. 最大 BST 子树
 
 
 ## 力扣333. Largest BST Subtree（最大 BST 子树）

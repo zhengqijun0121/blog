@@ -1,4 +1,4 @@
-# 力扣923. 3Sum With Multiplicity（三数之和的多种可能）
+# 力扣923. 三数之和的多种可能
 
 
 ## 力扣923. 3Sum With Multiplicity（三数之和的多种可能）

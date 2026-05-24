@@ -1,4 +1,4 @@
-# 力扣0552. Student Attendance Record II（学生出勤记录 II）
+# 力扣0552. 学生出勤记录 II
 
 
 ## 力扣0552. Student Attendance Record II（学生出勤记录 II）

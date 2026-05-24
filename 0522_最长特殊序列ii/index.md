@@ -1,4 +1,4 @@
-# 力扣522. Longest Uncommon Subsequence II（最长特殊序列 II）
+# 力扣522. 最长特殊序列 II
 
 
 ## 力扣522. Longest Uncommon Subsequence II（最长特殊序列 II）

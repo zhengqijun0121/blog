@@ -1,4 +1,4 @@
-# 力扣652. Find Duplicate Subtrees（寻找重复的子树）
+# 力扣652. 寻找重复的子树
 
 
 ## 力扣652. Find Duplicate Subtrees（寻找重复的子树）

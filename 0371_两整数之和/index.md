@@ -1,4 +1,4 @@
-# 力扣371. Sum of Two Integers（两整数之和）
+# 力扣371. 两整数之和
 
 
 ## 力扣371. Sum of Two Integers（两整数之和）

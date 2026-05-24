@@ -1,4 +1,4 @@
-# 力扣682. Baseball Game（棒球比赛）
+# 力扣682. 棒球比赛
 
 
 ## 力扣682. Baseball Game（棒球比赛）

@@ -1,4 +1,4 @@
-# 力扣328. Odd Even Linked List（奇偶链表）
+# 力扣328. 奇偶链表
 
 
 ## 力扣328. Odd Even Linked List（奇偶链表）

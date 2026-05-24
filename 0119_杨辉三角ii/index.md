@@ -1,4 +1,4 @@
-# 力扣119. Pascal's Triangle II（杨辉三角 II）
+# 力扣119. 杨辉三角 II
 
 
 ## 力扣119. Pascal's Triangle II（杨辉三角 II）

@@ -1,4 +1,4 @@
-# 力扣672. Bulb Switcher II（灯泡开关 II）
+# 力扣672. 灯泡开关 II
 
 
 ## 力扣672. Bulb Switcher II（灯泡开关 II）

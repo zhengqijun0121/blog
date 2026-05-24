@@ -1,4 +1,4 @@
-# 力扣9. Palindrome Number（回文数）
+# 力扣9. 回文数
 
 
 ## 力扣9. Palindrome Number（回文数）

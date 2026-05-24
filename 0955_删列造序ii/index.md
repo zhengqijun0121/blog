@@ -1,4 +1,4 @@
-# 力扣955. Delete Columns to Make Sorted II（删列造序 II）
+# 力扣955. 删列造序 II
 
 
 ## 力扣955. Delete Columns to Make Sorted II（删列造序 II）

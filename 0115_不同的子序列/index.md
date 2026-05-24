@@ -1,4 +1,4 @@
-# 力扣115. Distinct Subsequences（不同的子序列）
+# 力扣115. 不同的子序列
 
 
 ## 力扣115. Distinct Subsequences（不同的子序列）

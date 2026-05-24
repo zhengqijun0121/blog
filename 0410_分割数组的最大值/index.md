@@ -1,4 +1,4 @@
-# 力扣410. Split Array Largest Sum（分割数组的最大值）
+# 力扣410. 分割数组的最大值
 
 
 ## 力扣410. Split Array Largest Sum（分割数组的最大值）

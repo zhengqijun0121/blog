@@ -1,4 +1,4 @@
-# 力扣704. Binary Search（二分查找）
+# 力扣704. 二分查找
 
 
 ## 力扣704. Binary Search（二分查找）

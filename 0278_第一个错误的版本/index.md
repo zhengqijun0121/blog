@@ -1,4 +1,4 @@
-# 力扣278. First Bad Version（第一个错误的版本）
+# 力扣278. 第一个错误的版本
 
 
 ## 力扣278. First Bad Version（第一个错误的版本）

@@ -1,4 +1,4 @@
-# 力扣0592. Fraction Addition and Subtraction（分数加减运算）
+# 力扣0592. 分数加减运算
 
 
 ## 力扣0592. Fraction Addition and Subtraction（分数加减运算）

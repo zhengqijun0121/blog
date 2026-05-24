@@ -1,4 +1,4 @@
-# 力扣606. Construct String from Binary Tree（根据二叉树创建字符串）
+# 力扣606. 根据二叉树创建字符串
 
 
 ## 力扣606. Construct String from Binary Tree（根据二叉树创建字符串）

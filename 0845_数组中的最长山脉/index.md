@@ -1,4 +1,4 @@
-# 力扣845. Longest Mountain in Array（数组中的最长山脉）
+# 力扣845. 数组中的最长山脉
 
 
 ## 力扣845. Longest Mountain in Array（数组中的最长山脉）

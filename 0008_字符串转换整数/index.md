@@ -1,4 +1,4 @@
-# 力扣8. String to Integer (atoi)（字符串转换整数）
+# 力扣8. 字符串转换整数
 
 
 ## 力扣8. String to Integer (atoi)（字符串转换整数）

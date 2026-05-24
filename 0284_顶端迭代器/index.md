@@ -1,4 +1,4 @@
-# 力扣284. Peeking Iterator（顶端迭代器）
+# 力扣284. 顶端迭代器
 
 
 ## 力扣284. Peeking Iterator（顶端迭代器）

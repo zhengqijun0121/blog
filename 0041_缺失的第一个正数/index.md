@@ -1,4 +1,4 @@
-# 力扣41. First Missing Positive（缺失的第一个正数）
+# 力扣41. 缺失的第一个正数
 
 
 ## 力扣41. First Missing Positive（缺失的第一个正数）

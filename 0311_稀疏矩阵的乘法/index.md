@@ -1,4 +1,4 @@
-# 力扣311. Sparse Matrix Multiplication（稀疏矩阵的乘法）
+# 力扣311. 稀疏矩阵的乘法
 
 
 ## 力扣311. Sparse Matrix Multiplication（稀疏矩阵的乘法）

@@ -1,4 +1,4 @@
-# 力扣930. Binary Subarrays With Sum（和相同的二元子数组）
+# 力扣930. 和相同的二元子数组
 
 
 ## 力扣930. Binary Subarrays With Sum（和相同的二元子数组）

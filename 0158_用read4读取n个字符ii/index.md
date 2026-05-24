@@ -1,4 +1,4 @@
-# 力扣158. Read N Characters Given Read4 II - Call Multiple Times（用 Read4 读取 N 个字符 II）
+# 力扣158. 用 Read4 读取 N 个字符 II
 
 
 ## 力扣158. Read N Characters Given Read4 II - Call Multiple Times（用 Read4 读取 N 个字符 II）

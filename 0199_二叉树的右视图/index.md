@@ -1,4 +1,4 @@
-# 力扣199. Binary Tree Right Side View（二叉树的右视图）
+# 力扣199. 二叉树的右视图
 
 
 ## 力扣199. Binary Tree Right Side View（二叉树的右视图）

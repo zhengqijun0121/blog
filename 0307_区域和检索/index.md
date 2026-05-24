@@ -1,4 +1,4 @@
-# 力扣307. Range Sum Query - Mutable（区域和检索 - 数组可修改）
+# 力扣307. 区域和检索 - 数组可修改
 
 
 ## 力扣307. Range Sum Query - Mutable（区域和检索 - 数组可修改）

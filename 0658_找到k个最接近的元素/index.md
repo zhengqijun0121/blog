@@ -1,4 +1,4 @@
-# 力扣658. Find K Closest Elements（找到 K 个最接近的元素）
+# 力扣658. 找到 K 个最接近的元素
 
 
 ## 力扣658. Find K Closest Elements（找到 K 个最接近的元素）

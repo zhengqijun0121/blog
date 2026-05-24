@@ -1,4 +1,4 @@
-# 力扣437. Path Sum III（路径总和 III）
+# 力扣437. 路径总和 III
 
 
 ## 力扣437. Path Sum III（路径总和 III）

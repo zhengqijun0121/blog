@@ -1,4 +1,4 @@
-# 力扣957. Prison Cells After N Days（N 天后的牢房）
+# 力扣957. N 天后的牢房
 
 
 ## 力扣957. Prison Cells After N Days（N 天后的牢房）

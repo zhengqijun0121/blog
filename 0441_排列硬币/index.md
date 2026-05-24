@@ -1,4 +1,4 @@
-# 力扣441. Arranging Coins（排列硬币）
+# 力扣441. 排列硬币
 
 
 ## 力扣441. Arranging Coins（排列硬币）

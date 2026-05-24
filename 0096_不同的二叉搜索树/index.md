@@ -1,4 +1,4 @@
-# 力扣96. Unique Binary Search Trees（不同的二叉搜索树）
+# 力扣96. 不同的二叉搜索树
 
 
 ## 力扣96. Unique Binary Search Trees（不同的二叉搜索树）

@@ -1,4 +1,4 @@
-# 力扣933. Number of Recent Calls（最近的请求次数）
+# 力扣933. 最近的请求次数
 
 
 ## 力扣933. Number of Recent Calls（最近的请求次数）

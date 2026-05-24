@@ -1,4 +1,4 @@
-# 力扣172. Factorial Trailing Zeroes（阶乘后的零）
+# 力扣172. 阶乘后的零
 
 
 ## 力扣172. Factorial Trailing Zeroes（阶乘后的零）

@@ -1,4 +1,4 @@
-# 力扣461. Hamming Distance（汉明距离）
+# 力扣461. 汉明距离
 
 
 ## 力扣461. Hamming Distance（汉明距离）

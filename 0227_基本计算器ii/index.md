@@ -1,4 +1,4 @@
-# 力扣227. Basic Calculator II（基本计算器 II）
+# 力扣227. 基本计算器 II
 
 
 ## 力扣227. Basic Calculator II（基本计算器 II）

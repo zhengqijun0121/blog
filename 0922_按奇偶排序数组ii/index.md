@@ -1,4 +1,4 @@
-# 力扣922. Sort Array By Parity II（按奇偶排序数组 II）
+# 力扣922. 按奇偶排序数组 II
 
 
 ## 力扣922. Sort Array By Parity II（按奇偶排序数组 II）

@@ -1,4 +1,4 @@
-# 力扣750. Number Of Corner Rectangles（角矩形的数量）
+# 力扣750. 角矩形的数量
 
 
 ## 力扣750. Number Of Corner Rectangles（角矩形的数量）

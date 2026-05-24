@@ -1,4 +1,4 @@
-# 力扣828. Count Unique Characters of All Substrings of a Given String（统计子串中的唯一字符）
+# 力扣828. 统计子串中的唯一字符
 
 
 ## 力扣828. Count Unique Characters of All Substrings of a Given String（统计子串中的唯一字符）

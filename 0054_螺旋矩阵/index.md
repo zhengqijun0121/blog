@@ -1,4 +1,4 @@
-# 力扣54. Spiral Matrix（螺旋矩阵）
+# 力扣54. 螺旋矩阵
 
 
 ## 力扣54. Spiral Matrix（螺旋矩阵）

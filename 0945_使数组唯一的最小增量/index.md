@@ -1,4 +1,4 @@
-# 力扣945. Minimum Increment to Make Array Unique（使数组唯一的最小增量）
+# 力扣945. 使数组唯一的最小增量
 
 
 ## 力扣945. Minimum Increment to Make Array Unique（使数组唯一的最小增量）

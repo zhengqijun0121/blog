@@ -1,4 +1,4 @@
-# 力扣857. Minimum Cost to Hire K Workers（雇佣 K 名工人的最低成本）
+# 力扣857. 雇佣 K 名工人的最低成本
 
 
 ## 力扣857. Minimum Cost to Hire K Workers（雇佣 K 名工人的最低成本）

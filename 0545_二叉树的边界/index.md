@@ -1,4 +1,4 @@
-# 力扣545. Boundary of Binary Tree（二叉树的边界）
+# 力扣545. 二叉树的边界
 
 
 ## 力扣545. Boundary of Binary Tree（二叉树的边界）

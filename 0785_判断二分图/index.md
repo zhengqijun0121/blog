@@ -1,4 +1,4 @@
-# 力扣785. Is Graph Bipartite?（判断二分图）
+# 力扣785. 判断二分图
 
 
 ## 力扣785. Is Graph Bipartite?（判断二分图）

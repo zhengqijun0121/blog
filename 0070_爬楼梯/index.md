@@ -1,4 +1,4 @@
-# 力扣70. Climbing Stairs（爬楼梯）
+# 力扣70. 爬楼梯
 
 
 ## 力扣70. Climbing Stairs（爬楼梯）

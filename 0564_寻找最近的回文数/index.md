@@ -1,4 +1,4 @@
-# 力扣0564. Find the Closest Palindrome（寻找最近的回文数）
+# 力扣0564. 寻找最近的回文数
 
 
 ## 力扣0564. Find the Closest Palindrome（寻找最近的回文数）

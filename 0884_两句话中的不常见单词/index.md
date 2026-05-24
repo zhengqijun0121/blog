@@ -1,4 +1,4 @@
-# 力扣884. Uncommon Words from Two Sentences（两句话中的不常见单词）
+# 力扣884. 两句话中的不常见单词
 
 
 ## 力扣884. Uncommon Words from Two Sentences（两句话中的不常见单词）

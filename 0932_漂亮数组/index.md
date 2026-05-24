@@ -1,4 +1,4 @@
-# 力扣932. Beautiful Array（漂亮数组）
+# 力扣932. 漂亮数组
 
 
 ## 力扣932. Beautiful Array（漂亮数组）

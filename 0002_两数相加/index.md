@@ -1,4 +1,4 @@
-# 力扣2. Add Two Numbers（两数相加）
+# 力扣2. 两数相加
 
 
 ## 力扣2. Add Two Numbers（两数相加）

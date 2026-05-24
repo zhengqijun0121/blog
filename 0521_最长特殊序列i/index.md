@@ -1,4 +1,4 @@
-# 力扣521. Longest Uncommon Subsequence I（最长特殊序列 I）
+# 力扣521. 最长特殊序列 I
 
 
 ## 力扣521. Longest Uncommon Subsequence I（最长特殊序列 I）

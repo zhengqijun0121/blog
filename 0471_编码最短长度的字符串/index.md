@@ -1,4 +1,4 @@
-# 力扣471. Encode String with Shortest Length（编码最短长度的字符串）
+# 力扣471. 编码最短长度的字符串
 
 
 ## 力扣471. Encode String with Shortest Length（编码最短长度的字符串）

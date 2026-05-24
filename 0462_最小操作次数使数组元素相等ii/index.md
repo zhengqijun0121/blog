@@ -1,4 +1,4 @@
-# 力扣462. Minimum Moves to Equal Array Elements II（最小操作次数使数组元素相等 II）
+# 力扣462. 最小操作次数使数组元素相等 II
 
 
 ## 力扣462. Minimum Moves to Equal Array Elements II（最小操作次数使数组元素相等 II）

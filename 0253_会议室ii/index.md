@@ -1,4 +1,4 @@
-# 力扣253. Meeting Rooms II（会议室 II）
+# 力扣253. 会议室 II
 
 
 ## 力扣253. Meeting Rooms II（会议室 II）

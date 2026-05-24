@@ -1,4 +1,4 @@
-# 力扣423. Reconstruct Original Digits from English（从英文中重建数字）
+# 力扣423. 从英文中重建数字
 
 
 ## 力扣423. Reconstruct Original Digits from English（从英文中重建数字）

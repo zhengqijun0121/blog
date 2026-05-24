@@ -1,4 +1,4 @@
-# 力扣246. Strobogrammatic Number（中心对称数）
+# 力扣246. 中心对称数
 
 
 ## 力扣246. Strobogrammatic Number（中心对称数）

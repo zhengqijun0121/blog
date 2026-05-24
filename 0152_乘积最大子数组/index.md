@@ -1,4 +1,4 @@
-# 力扣152. Maximum Product Subarray（乘积最大子数组）
+# 力扣152. 乘积最大子数组
 
 
 ## 力扣152. Maximum Product Subarray（乘积最大子数组）

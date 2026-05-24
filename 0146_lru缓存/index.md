@@ -1,4 +1,4 @@
-# 力扣146. LRU Cache（LRU 缓存）
+# 力扣146. LRU 缓存
 
 
 ## 力扣146. LRU Cache（LRU 缓存）

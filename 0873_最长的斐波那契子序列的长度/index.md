@@ -1,4 +1,4 @@
-# 力扣873. Length of Longest Fibonacci Subsequence（最长的斐波那契子序列的长度）
+# 力扣873. 最长的斐波那契子序列的长度
 
 
 ## 力扣873. Length of Longest Fibonacci Subsequence（最长的斐波那契子序列的长度）

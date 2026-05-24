@@ -1,4 +1,4 @@
-# 力扣495. Teemo Attacking（提莫攻击）
+# 力扣495. 提莫攻击
 
 
 ## 力扣495. Teemo Attacking（提莫攻击）

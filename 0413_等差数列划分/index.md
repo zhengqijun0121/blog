@@ -1,4 +1,4 @@
-# 力扣413. Arithmetic Slices（等差数列划分）
+# 力扣413. 等差数列划分
 
 
 ## 力扣413. Arithmetic Slices（等差数列划分）

@@ -1,4 +1,4 @@
-# 力扣886. Possible Bipartition（可能的二分法）
+# 力扣886. 可能的二分法
 
 
 ## 力扣886. Possible Bipartition（可能的二分法）

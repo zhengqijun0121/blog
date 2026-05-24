@@ -1,4 +1,4 @@
-# 力扣319. Bulb Switcher（灯泡开关）
+# 力扣319. 灯泡开关
 
 
 ## 力扣319. Bulb Switcher（灯泡开关）

@@ -1,4 +1,4 @@
-# 力扣391. Perfect Rectangle（完美矩形）
+# 力扣391. 完美矩形
 
 
 ## 力扣391. Perfect Rectangle（完美矩形）

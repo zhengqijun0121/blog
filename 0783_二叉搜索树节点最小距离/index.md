@@ -1,4 +1,4 @@
-# 力扣783. Minimum Distance Between BST Nodes（二叉搜索树节点最小距离）
+# 力扣783. 二叉搜索树节点最小距离
 
 
 ## 力扣783. Minimum Distance Between BST Nodes（二叉搜索树节点最小距离）

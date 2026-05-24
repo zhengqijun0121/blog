@@ -1,4 +1,4 @@
-# 力扣28. Find the Index of the First Occurrence in a String（找出字符串中第一个匹配项的下标）
+# 力扣28. 找出字符串中第一个匹配项的下标
 
 
 ## 力扣28. Find the Index of the First Occurrence in a String（找出字符串中第一个匹配项的下标）

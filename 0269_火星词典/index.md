@@ -1,4 +1,4 @@
-# 力扣269. Alien Dictionary（火星词典）
+# 力扣269. 火星词典
 
 
 ## 力扣269. Alien Dictionary（火星词典）

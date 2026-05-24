@@ -1,4 +1,4 @@
-# 力扣523. Continuous Subarray Sum（连续的子数组和）
+# 力扣523. 连续的子数组和
 
 
 ## 力扣523. Continuous Subarray Sum（连续的子数组和）

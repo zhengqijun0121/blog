@@ -1,4 +1,4 @@
-# 力扣160. Intersection of Two Linked Lists（相交链表）
+# 力扣160. 相交链表
 
 
 ## 力扣160. Intersection of Two Linked Lists（相交链表）

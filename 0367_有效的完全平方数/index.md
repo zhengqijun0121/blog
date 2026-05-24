@@ -1,4 +1,4 @@
-# 力扣367. Valid Perfect Square（有效的完全平方数）
+# 力扣367. 有效的完全平方数
 
 
 ## 力扣367. Valid Perfect Square（有效的完全平方数）

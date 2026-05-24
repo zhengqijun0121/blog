@@ -1,4 +1,4 @@
-# 力扣550. Game Play Analysis IV（游戏玩法分析 IV）
+# 力扣550. 游戏玩法分析 IV
 
 
 ## 力扣550. Game Play Analysis IV（游戏玩法分析 IV）

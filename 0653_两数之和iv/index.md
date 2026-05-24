@@ -1,4 +1,4 @@
-# 力扣653. Two Sum IV - Input is a BST（两数之和 IV - 输入 BST）
+# 力扣653. 两数之和 IV - 输入 BST
 
 
 ## 力扣653. Two Sum IV - Input is a BST（两数之和 IV - 输入 BST）

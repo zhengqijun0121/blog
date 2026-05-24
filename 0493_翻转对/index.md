@@ -1,4 +1,4 @@
-# 力扣493. Reverse Pairs（翻转对）
+# 力扣493. 翻转对
 
 
 ## 力扣493. Reverse Pairs（翻转对）

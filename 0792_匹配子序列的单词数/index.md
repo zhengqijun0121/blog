@@ -1,4 +1,4 @@
-# 力扣792. Number of Matching Subsequences（匹配子序列的单词数）
+# 力扣792. 匹配子序列的单词数
 
 
 ## 力扣792. Number of Matching Subsequences（匹配子序列的单词数）

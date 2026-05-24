@@ -1,4 +1,4 @@
-# 力扣763. Partition Labels（划分字母区间）
+# 力扣763. 划分字母区间
 
 
 ## 力扣763. Partition Labels（划分字母区间）

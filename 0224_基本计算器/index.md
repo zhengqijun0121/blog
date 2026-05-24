@@ -1,4 +1,4 @@
-# 力扣224. Basic Calculator（基本计算器）
+# 力扣224. 基本计算器
 
 
 ## 力扣224. Basic Calculator（基本计算器）

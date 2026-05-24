@@ -1,4 +1,4 @@
-# 力扣605. Can Place Flowers（种花问题）
+# 力扣605. 种花问题
 
 
 ## 力扣605. Can Place Flowers（种花问题）

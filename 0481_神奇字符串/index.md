@@ -1,4 +1,4 @@
-# 力扣481. Magical String（神奇字符串）
+# 力扣481. 神奇字符串
 
 
 ## 力扣481. Magical String（神奇字符串）

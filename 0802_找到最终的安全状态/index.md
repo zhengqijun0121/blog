@@ -1,4 +1,4 @@
-# 力扣802. Find Eventual Safe States（找到最终的安全状态）
+# 力扣802. 找到最终的安全状态
 
 
 ## 力扣802. Find Eventual Safe States（找到最终的安全状态）

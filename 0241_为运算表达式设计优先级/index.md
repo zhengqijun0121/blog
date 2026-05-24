@@ -1,4 +1,4 @@
-# 力扣241. Different Ways to Add Parentheses（为运算表达式设计优先级）
+# 力扣241. 为运算表达式设计优先级
 
 
 ## 力扣241. Different Ways to Add Parentheses（为运算表达式设计优先级）

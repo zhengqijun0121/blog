@@ -1,4 +1,4 @@
-# 力扣844. Backspace String Compare（比较含退格的字符串）
+# 力扣844. 比较含退格的字符串
 
 
 ## 力扣844. Backspace String Compare（比较含退格的字符串）

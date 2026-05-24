@@ -1,4 +1,4 @@
-# 力扣436. Find Right Interval（寻找右区间）
+# 力扣436. 寻找右区间
 
 
 ## 力扣436. Find Right Interval（寻找右区间）

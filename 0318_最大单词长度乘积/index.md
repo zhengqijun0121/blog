@@ -1,4 +1,4 @@
-# 力扣318. Maximum Product of Word Lengths（最大单词长度乘积）
+# 力扣318. 最大单词长度乘积
 
 
 ## 力扣318. Maximum Product of Word Lengths（最大单词长度乘积）

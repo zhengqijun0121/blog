@@ -1,4 +1,4 @@
-# 力扣207. Course Schedule（课程表）
+# 力扣207. 课程表
 
 
 ## 力扣207. Course Schedule（课程表）

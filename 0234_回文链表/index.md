@@ -1,4 +1,4 @@
-# 力扣234. Palindrome Linked List（回文链表）
+# 力扣234. 回文链表
 
 
 ## 力扣234. Palindrome Linked List（回文链表）

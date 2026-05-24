@@ -1,4 +1,4 @@
-# 力扣890. Find and Replace Pattern（查找和替换模式）
+# 力扣890. 查找和替换模式
 
 
 ## 力扣890. Find and Replace Pattern（查找和替换模式）

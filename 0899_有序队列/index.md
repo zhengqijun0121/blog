@@ -1,4 +1,4 @@
-# 力扣899. Orderly Queue（有序队列）
+# 力扣899. 有序队列
 
 
 ## 力扣899. Orderly Queue（有序队列）

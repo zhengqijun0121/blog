@@ -1,4 +1,4 @@
-# 力扣473. Matchsticks to Square（火柴拼正方形）
+# 力扣473. 火柴拼正方形
 
 
 ## 力扣473. Matchsticks to Square（火柴拼正方形）

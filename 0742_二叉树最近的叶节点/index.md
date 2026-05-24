@@ -1,4 +1,4 @@
-# 力扣742. Closest Leaf in a Binary Tree（二叉树最近的叶节点）
+# 力扣742. 二叉树最近的叶节点
 
 
 ## 力扣742. Closest Leaf in a Binary Tree（二叉树最近的叶节点）

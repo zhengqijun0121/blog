@@ -1,4 +1,4 @@
-# 力扣778. Swim in Rising Water（水位上升的泳池中游泳）
+# 力扣778. 水位上升的泳池中游泳
 
 
 ## 力扣778. Swim in Rising Water（水位上升的泳池中游泳）

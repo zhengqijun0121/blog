@@ -1,4 +1,4 @@
-# 力扣87. Scramble String（扰乱字符串）
+# 力扣87. 扰乱字符串
 
 
 ## 力扣87. Scramble String（扰乱字符串）

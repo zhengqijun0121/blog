@@ -1,4 +1,4 @@
-# 力扣839. Similar String Groups（相似字符串组）
+# 力扣839. 相似字符串组
 
 
 ## 力扣839. Similar String Groups（相似字符串组）

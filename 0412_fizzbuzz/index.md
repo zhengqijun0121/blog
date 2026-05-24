@@ -1,4 +1,4 @@
-# 力扣412. Fizz Buzz（Fizz Buzz）
+# 力扣412. Fizz Buzz
 
 
 ## 力扣412. Fizz Buzz（Fizz Buzz）

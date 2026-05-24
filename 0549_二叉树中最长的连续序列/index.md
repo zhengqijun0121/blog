@@ -1,4 +1,4 @@
-# 力扣549. Binary Tree Longest Consecutive Sequence II（二叉树中最长的连续序列 II）
+# 力扣549. 二叉树中最长的连续序列 II
 
 
 ## 力扣549. Binary Tree Longest Consecutive Sequence II（二叉树中最长的连续序列 II）

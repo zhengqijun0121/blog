@@ -1,4 +1,4 @@
-# 力扣956. Tallest Billboard（最高的广告牌）
+# 力扣956. 最高的广告牌
 
 
 ## 力扣956. Tallest Billboard（最高的广告牌）

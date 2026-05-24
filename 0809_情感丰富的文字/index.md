@@ -1,4 +1,4 @@
-# 力扣809. Expressive Words（情感丰富的文字）
+# 力扣809. 情感丰富的文字
 
 
 ## 力扣809. Expressive Words（情感丰富的文字）

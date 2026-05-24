@@ -1,4 +1,4 @@
-# 力扣834. Sum of Distances in Tree（树中距离之和）
+# 力扣834. 树中距离之和
 
 
 ## 力扣834. Sum of Distances in Tree（树中距离之和）

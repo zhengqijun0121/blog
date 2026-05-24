@@ -1,4 +1,4 @@
-# 力扣640. Solve the Equation（求解方程）
+# 力扣640. 求解方程
 
 
 ## 力扣640. Solve the Equation（求解方程）

@@ -1,4 +1,4 @@
-# 力扣248. Strobogrammatic Number III（中心对称数 III）
+# 力扣248. 中心对称数 III
 
 
 ## 力扣248. Strobogrammatic Number III（中心对称数 III）

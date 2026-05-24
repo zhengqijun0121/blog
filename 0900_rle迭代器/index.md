@@ -1,4 +1,4 @@
-# 力扣900. RLE Iterator（RLE 迭代器）
+# 力扣900. RLE 迭代器
 
 
 ## 力扣900. RLE Iterator（RLE 迭代器）

@@ -1,4 +1,4 @@
-# 力扣995. Minimum Number of K Consecutive Bit Flips（K 连续位的最小翻转次数）
+# 力扣995. K 连续位的最小翻转次数
 
 
 ## 力扣995. Minimum Number of K Consecutive Bit Flips（K 连续位的最小翻转次数）

@@ -1,4 +1,4 @@
-# 力扣897. Increasing Order Search Tree（递增顺序搜索树）
+# 力扣897. 递增顺序搜索树
 
 
 ## 力扣897. Increasing Order Search Tree（递增顺序搜索树）

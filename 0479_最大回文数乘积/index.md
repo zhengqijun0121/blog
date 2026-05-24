@@ -1,4 +1,4 @@
-# 力扣479. Largest Palindrome Product（最大回文数乘积）
+# 力扣479. 最大回文数乘积
 
 
 ## 力扣479. Largest Palindrome Product（最大回文数乘积）

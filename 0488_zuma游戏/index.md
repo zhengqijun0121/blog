@@ -1,4 +1,4 @@
-# 力扣488. Zuma Game（Zuma 游戏）
+# 力扣488. Zuma 游戏
 
 
 ## 力扣488. Zuma Game（Zuma 游戏）

@@ -1,4 +1,4 @@
-# 力扣867. Transpose Matrix（转置矩阵）
+# 力扣867. 转置矩阵
 
 
 ## 力扣867. Transpose Matrix（转置矩阵）

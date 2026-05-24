@@ -1,4 +1,4 @@
-# 力扣874. Walking Robot Simulation（模拟行走机器人）
+# 力扣874. 模拟行走机器人
 
 
 ## 力扣874. Walking Robot Simulation（模拟行走机器人）

@@ -1,4 +1,4 @@
-# 力扣984. String Without AAA or BBB（不含 AAA 或 BBB 的字符串）
+# 力扣984. 不含 AAA 或 BBB 的字符串
 
 
 ## 力扣984. String Without AAA or BBB（不含 AAA 或 BBB 的字符串）

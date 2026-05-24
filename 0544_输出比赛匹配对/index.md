@@ -1,4 +1,4 @@
-# 力扣544. Output Contest Matches（输出比赛匹配对）
+# 力扣544. 输出比赛匹配对
 
 
 ## 力扣544. Output Contest Matches（输出比赛匹配对）

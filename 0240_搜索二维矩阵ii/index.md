@@ -1,4 +1,4 @@
-# 力扣240. Search a 2D Matrix II（搜索二维矩阵 II）
+# 力扣240. 搜索二维矩阵 II
 
 
 ## 力扣240. Search a 2D Matrix II（搜索二维矩阵 II）

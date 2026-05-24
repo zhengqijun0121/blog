@@ -1,4 +1,4 @@
-# 力扣991. Broken Calculator（坏了的计算器）
+# 力扣991. 坏了的计算器
 
 
 ## 力扣991. Broken Calculator（坏了的计算器）

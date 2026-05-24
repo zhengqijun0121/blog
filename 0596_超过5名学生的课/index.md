@@ -1,4 +1,4 @@
-# 力扣0596. Classes More Than 5 Students（超过 5 名学生的课）
+# 力扣0596. 超过 5 名学生的课
 
 
 ## 力扣0596. Classes More Than 5 Students（超过 5 名学生的课）

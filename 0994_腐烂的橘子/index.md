@@ -1,4 +1,4 @@
-# 力扣994. Rotting Oranges（腐烂的橘子）
+# 力扣994. 腐烂的橘子
 
 
 ## 力扣994. Rotting Oranges（腐烂的橘子）

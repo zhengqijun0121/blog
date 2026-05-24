@@ -1,4 +1,4 @@
-# 力扣420. Strong Password Checker（强密码检验器）
+# 力扣420. 强密码检验器
 
 
 ## 力扣420. Strong Password Checker（强密码检验器）

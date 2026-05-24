@@ -1,4 +1,4 @@
-# 力扣513. Find Bottom Left Tree Value（找树左下角的值）
+# 力扣513. 找树左下角的值
 
 
 ## 力扣513. Find Bottom Left Tree Value（找树左下角的值）

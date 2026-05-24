@@ -1,4 +1,4 @@
-# 力扣486. Predict the Winner（预测赢家）
+# 力扣486. 预测赢家
 
 
 ## 力扣486. Predict the Winner（预测赢家）

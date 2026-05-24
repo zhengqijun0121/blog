@@ -1,4 +1,4 @@
-# 力扣83. Remove Duplicates from Sorted List（删除排序链表中的重复元素）
+# 力扣83. 删除排序链表中的重复元素
 
 
 ## 力扣83. Remove Duplicates from Sorted List（删除排序链表中的重复元素）

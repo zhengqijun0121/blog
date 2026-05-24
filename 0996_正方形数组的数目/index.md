@@ -1,4 +1,4 @@
-# 力扣996. Number of Squareful Arrays（正方形数组的数目）
+# 力扣996. 正方形数组的数目
 
 
 ## 力扣996. Number of Squareful Arrays（正方形数组的数目）

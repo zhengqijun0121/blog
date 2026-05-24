@@ -1,4 +1,4 @@
-# 力扣225. Implement Stack using Queues（用队列实现栈）
+# 力扣225. 用队列实现栈
 
 
 ## 力扣225. Implement Stack using Queues（用队列实现栈）

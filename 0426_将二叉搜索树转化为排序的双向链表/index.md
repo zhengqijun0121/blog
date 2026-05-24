@@ -1,4 +1,4 @@
-# 力扣426. Convert Binary Search Tree to Sorted Doubly Linked List（将二叉搜索树转化为排序的双向链表）
+# 力扣426. 将二叉搜索树转化为排序的双向链表
 
 
 ## 力扣426. Convert Binary Search Tree to Sorted Doubly Linked List（将二叉搜索树转化为排序的双向链表）

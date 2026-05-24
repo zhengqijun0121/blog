@@ -1,4 +1,4 @@
-# 力扣216. Combination Sum III（组合总和 III）
+# 力扣216. 组合总和 III
 
 
 ## 力扣216. Combination Sum III（组合总和 III）

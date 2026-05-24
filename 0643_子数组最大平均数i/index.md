@@ -1,4 +1,4 @@
-# 力扣643. Maximum Average Subarray I（子数组最大平均数 I）
+# 力扣643. 子数组最大平均数 I
 
 
 ## 力扣643. Maximum Average Subarray I（子数组最大平均数 I）

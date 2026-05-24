@@ -1,4 +1,4 @@
-# 力扣157. Read N Characters Given Read4（用 Read4 读取 N 个字符）
+# 力扣157. 用 Read4 读取 N 个字符
 
 
 ## 力扣157. Read N Characters Given Read4（用 Read4 读取 N 个字符）

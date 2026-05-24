@@ -1,4 +1,4 @@
-# 力扣382. Linked List Random Node（链表随机节点）
+# 力扣382. 链表随机节点
 
 
 ## 力扣382. Linked List Random Node（链表随机节点）

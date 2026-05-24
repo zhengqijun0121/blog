@@ -1,4 +1,4 @@
-# 力扣753. Cracking the Safe（破解保险箱）
+# 力扣753. 破解保险箱
 
 
 ## 力扣753. Cracking the Safe（破解保险箱）

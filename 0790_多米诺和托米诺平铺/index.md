@@ -1,4 +1,4 @@
-# 力扣790. Domino and Tromino Tiling（多米诺和托米诺平铺）
+# 力扣790. 多米诺和托米诺平铺
 
 
 ## 力扣790. Domino and Tromino Tiling（多米诺和托米诺平铺）

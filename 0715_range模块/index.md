@@ -1,4 +1,4 @@
-# 力扣715. Range Module（Range 模块）
+# 力扣715. Range 模块
 
 
 ## 力扣715. Range Module（Range 模块）

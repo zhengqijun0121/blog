@@ -1,4 +1,4 @@
-# 力扣62. Unique Paths（不同路径）
+# 力扣62. 不同路径
 
 
 ## 力扣62. Unique Paths（不同路径）

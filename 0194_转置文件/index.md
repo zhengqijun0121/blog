@@ -1,4 +1,4 @@
-# 力扣194. Transpose File（转置文件）
+# 力扣194. 转置文件
 
 
 ## 力扣194. Transpose File（转置文件）

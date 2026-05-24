@@ -1,4 +1,4 @@
-# 力扣612. Shortest Distance in a Plane（平面上的最近距离）
+# 力扣612. 平面上的最近距离
 
 
 ## 力扣612. Shortest Distance in a Plane（平面上的最近距离）

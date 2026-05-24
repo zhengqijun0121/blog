@@ -1,4 +1,4 @@
-# 力扣72. Edit Distance（编辑距离）
+# 力扣72. 编辑距离
 
 
 ## 力扣72. Edit Distance（编辑距离）

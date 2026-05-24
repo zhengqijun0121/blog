@@ -1,4 +1,4 @@
-# 力扣431. Encode N-ary Tree to Binary Tree（将 N 叉树编码为二叉树）
+# 力扣431. 将 N 叉树编码为二叉树
 
 
 ## 力扣431. Encode N-ary Tree to Binary Tree（将 N 叉树编码为二叉树）

@@ -1,4 +1,4 @@
-# 力扣50. Pow(x, n)（Pow(x, n)）
+# 力扣50. Pow(x, n)
 
 
 ## 力扣50. Pow(x, n)（Pow(x, n)）

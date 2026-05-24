@@ -1,4 +1,4 @@
-# 力扣440. K-th Smallest in Lexicographical Order（字典序的第 K 小数字）
+# 力扣440. 字典序的第 K 小数字
 
 
 ## 力扣440. K-th Smallest in Lexicographical Order（字典序的第 K 小数字）

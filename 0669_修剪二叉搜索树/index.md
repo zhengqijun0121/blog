@@ -1,4 +1,4 @@
-# 力扣669. Trim a Binary Search Tree（修剪二叉搜索树）
+# 力扣669. 修剪二叉搜索树
 
 
 ## 力扣669. Trim a Binary Search Tree（修剪二叉搜索树）

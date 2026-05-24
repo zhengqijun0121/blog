@@ -1,4 +1,4 @@
-# 力扣202. Happy Number（快乐数）
+# 力扣202. 快乐数
 
 
 ## 力扣202. Happy Number（快乐数）

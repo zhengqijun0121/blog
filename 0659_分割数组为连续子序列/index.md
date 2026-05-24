@@ -1,4 +1,4 @@
-# 力扣659. Split Array into Consecutive Subsequences（分割数组为连续子序列）
+# 力扣659. 分割数组为连续子序列
 
 
 ## 力扣659. Split Array into Consecutive Subsequences（分割数组为连续子序列）

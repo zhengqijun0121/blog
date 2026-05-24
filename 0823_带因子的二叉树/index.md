@@ -1,4 +1,4 @@
-# 力扣823. Binary Trees With Factors（带因子的二叉树）
+# 力扣823. 带因子的二叉树
 
 
 ## 力扣823. Binary Trees With Factors（带因子的二叉树）

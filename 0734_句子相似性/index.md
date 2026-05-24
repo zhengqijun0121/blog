@@ -1,4 +1,4 @@
-# 力扣734. Sentence Similarity（句子相似性）
+# 力扣734. 句子相似性
 
 
 ## 力扣734. Sentence Similarity（句子相似性）

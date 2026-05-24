@@ -1,4 +1,4 @@
-# 力扣532. K-diff Pairs in an Array（数组中的 K-diff 数对）
+# 力扣532. 数组中的 K-diff 数对
 
 
 ## 力扣532. K-diff Pairs in an Array（数组中的 K-diff 数对）

@@ -1,4 +1,4 @@
-# 力扣705. Design HashSet（设计哈希集合）
+# 力扣705. 设计哈希集合
 
 
 ## 力扣705. Design HashSet（设计哈希集合）

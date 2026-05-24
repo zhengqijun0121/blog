@@ -1,4 +1,4 @@
-# 力扣118. Pascal's Triangle（杨辉三角）
+# 力扣118. 杨辉三角
 
 
 ## 力扣118. Pascal's Triangle（杨辉三角）

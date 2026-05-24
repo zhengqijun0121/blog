@@ -1,4 +1,4 @@
-# 力扣327. Count of Range Sum（区间和的个数）
+# 力扣327. 区间和的个数
 
 
 ## 力扣327. Count of Range Sum（区间和的个数）

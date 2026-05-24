@@ -1,4 +1,4 @@
-# 力扣0576. Out of Boundary Paths（出界的路径数）
+# 力扣0576. 出界的路径数
 
 
 ## 力扣0576. Out of Boundary Paths（出界的路径数）

@@ -1,4 +1,4 @@
-# 力扣215. Kth Largest Element in an Array（数组中的第 K 个最大元素）
+# 力扣215. 数组中的第 K 个最大元素
 
 
 ## 力扣215. Kth Largest Element in an Array（数组中的第 K 个最大元素）

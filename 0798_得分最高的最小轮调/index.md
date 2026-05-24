@@ -1,4 +1,4 @@
-# 力扣798. Smallest Rotation with Highest Score（得分最高的最小轮调）
+# 力扣798. 得分最高的最小轮调
 
 
 ## 力扣798. Smallest Rotation with Highest Score（得分最高的最小轮调）

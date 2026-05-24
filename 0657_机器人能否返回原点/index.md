@@ -1,4 +1,4 @@
-# 力扣657. Robot Return to Origin（机器人能否返回原点）
+# 力扣657. 机器人能否返回原点
 
 
 ## 力扣657. Robot Return to Origin（机器人能否返回原点）

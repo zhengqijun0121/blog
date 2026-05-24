@@ -1,4 +1,4 @@
-# 力扣117. Populating Next Right Pointers in Each Node II（填充每个节点的下一个右侧节点指针 II）
+# 力扣117. 填充每个节点的下一个右侧节点指针 II
 
 
 ## 力扣117. Populating Next Right Pointers in Each Node II（填充每个节点的下一个右侧节点指针 II）

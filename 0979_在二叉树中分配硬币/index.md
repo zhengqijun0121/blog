@@ -1,4 +1,4 @@
-# 力扣979. Distribute Coins in Binary Tree（在二叉树中分配硬币）
+# 力扣979. 在二叉树中分配硬币
 
 
 ## 力扣979. Distribute Coins in Binary Tree（在二叉树中分配硬币）

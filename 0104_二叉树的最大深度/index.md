@@ -1,4 +1,4 @@
-# 力扣104. Maximum Depth of Binary Tree（二叉树的最大深度）
+# 力扣104. 二叉树的最大深度
 
 
 ## 力扣104. Maximum Depth of Binary Tree（二叉树的最大深度）

@@ -1,4 +1,4 @@
-# 力扣156. Binary Tree Upside Down（上下翻转二叉树）
+# 力扣156. 上下翻转二叉树
 
 
 ## 力扣156. Binary Tree Upside Down（上下翻转二叉树）

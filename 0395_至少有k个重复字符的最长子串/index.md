@@ -1,4 +1,4 @@
-# 力扣395. Longest Substring with At Least K Repeating Characters（至少有 K 个重复字符的最长子串）
+# 力扣395. 至少有 K 个重复字符的最长子串
 
 
 ## 力扣395. Longest Substring with At Least K Repeating Characters（至少有 K 个重复字符的最长子串）

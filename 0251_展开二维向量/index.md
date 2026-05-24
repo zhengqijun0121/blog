@@ -1,4 +1,4 @@
-# 力扣251. Flatten 2D Vector（展开二维向量）
+# 力扣251. 展开二维向量
 
 
 ## 力扣251. Flatten 2D Vector（展开二维向量）

@@ -1,4 +1,4 @@
-# 力扣366. Find Leaves of Binary Tree（寻找二叉树的叶子节点）
+# 力扣366. 寻找二叉树的叶子节点
 
 
 ## 力扣366. Find Leaves of Binary Tree（寻找二叉树的叶子节点）

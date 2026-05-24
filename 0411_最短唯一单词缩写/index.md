@@ -1,4 +1,4 @@
-# 力扣411. Minimum Unique Word Abbreviation（最短唯一单词缩写）
+# 力扣411. 最短唯一单词缩写
 
 
 ## 力扣411. Minimum Unique Word Abbreviation（最短唯一单词缩写）

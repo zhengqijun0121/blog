@@ -1,4 +1,4 @@
-# 力扣132. Palindrome Partitioning II（分割回文串 II）
+# 力扣132. 分割回文串 II
 
 
 ## 力扣132. Palindrome Partitioning II（分割回文串 II）

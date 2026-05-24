@@ -1,4 +1,4 @@
-# 力扣781. Rabbits in Forest（森林中的兔子）
+# 力扣781. 森林中的兔子
 
 
 ## 力扣781. Rabbits in Forest（森林中的兔子）

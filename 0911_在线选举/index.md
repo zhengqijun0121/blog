@@ -1,4 +1,4 @@
-# 力扣911. Online Election（在线选举）
+# 力扣911. 在线选举
 
 
 ## 力扣911. Online Election（在线选举）

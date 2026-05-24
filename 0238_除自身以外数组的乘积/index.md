@@ -1,4 +1,4 @@
-# 力扣238. Product of Array Except Self（除自身以外数组的乘积）
+# 力扣238. 除自身以外数组的乘积
 
 
 ## 力扣238. Product of Array Except Self（除自身以外数组的乘积）

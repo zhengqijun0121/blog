@@ -1,4 +1,4 @@
-# 力扣150. Evaluate Reverse Polish Notation（逆波兰表达式求值）
+# 力扣150. 逆波兰表达式求值
 
 
 ## 力扣150. Evaluate Reverse Polish Notation（逆波兰表达式求值）

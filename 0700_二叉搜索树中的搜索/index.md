@@ -1,4 +1,4 @@
-# 力扣700. Search in a Binary Search Tree（二叉搜索树中的搜索）
+# 力扣700. 二叉搜索树中的搜索
 
 
 ## 力扣700. Search in a Binary Search Tree（二叉搜索树中的搜索）

@@ -1,4 +1,4 @@
-# 力扣460. LFU Cache（LFU 缓存）
+# 力扣460. LFU 缓存
 
 
 ## 力扣460. LFU Cache（LFU 缓存）

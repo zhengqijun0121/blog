@@ -1,4 +1,4 @@
-# 力扣678. Valid Parenthesis String（有效的括号字符串）
+# 力扣678. 有效的括号字符串
 
 
 ## 力扣678. Valid Parenthesis String（有效的括号字符串）

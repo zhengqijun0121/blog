@@ -1,4 +1,4 @@
-# 力扣901. Online Stock Span（股票价格跨度）
+# 力扣901. 股票价格跨度
 
 
 ## 力扣901. Online Stock Span（股票价格跨度）

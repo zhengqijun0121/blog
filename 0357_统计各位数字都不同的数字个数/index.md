@@ -1,4 +1,4 @@
-# 力扣357. Count Numbers with Unique Digits（统计各位数字都不同的数字个数）
+# 力扣357. 统计各位数字都不同的数字个数
 
 
 ## 力扣357. Count Numbers with Unique Digits（统计各位数字都不同的数字个数）

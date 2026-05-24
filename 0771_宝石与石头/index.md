@@ -1,4 +1,4 @@
-# 力扣771. Jewels and Stones（宝石与石头）
+# 力扣771. 宝石与石头
 
 
 ## 力扣771. Jewels and Stones（宝石与石头）

@@ -1,4 +1,4 @@
-# 力扣675. Cut Off Trees for Golf Event（为高尔夫比赛砍树）
+# 力扣675. 为高尔夫比赛砍树
 
 
 ## 力扣675. Cut Off Trees for Golf Event（为高尔夫比赛砍树）

@@ -1,4 +1,4 @@
-# 力扣749. Contain Virus（隔离病毒）
+# 力扣749. 隔离病毒
 
 
 ## 力扣749. Contain Virus（隔离病毒）

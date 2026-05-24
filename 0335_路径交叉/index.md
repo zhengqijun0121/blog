@@ -1,4 +1,4 @@
-# 力扣335. Self Crossing（路径交叉）
+# 力扣335. 路径交叉
 
 
 ## 力扣335. Self Crossing（路径交叉）

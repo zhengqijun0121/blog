@@ -1,4 +1,4 @@
-# 力扣138. Copy List with Random Pointer（随机链表的复制）
+# 力扣138. 随机链表的复制
 
 
 ## 力扣138. Copy List with Random Pointer（随机链表的复制）

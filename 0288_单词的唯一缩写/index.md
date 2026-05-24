@@ -1,4 +1,4 @@
-# 力扣288. Unique Word Abbreviation（单词的唯一缩写）
+# 力扣288. 单词的唯一缩写
 
 
 ## 力扣288. Unique Word Abbreviation（单词的唯一缩写）

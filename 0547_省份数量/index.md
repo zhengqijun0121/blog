@@ -1,4 +1,4 @@
-# 力扣547. Number of Provinces（省份数量）
+# 力扣547. 省份数量
 
 
 ## 力扣547. Number of Provinces（省份数量）

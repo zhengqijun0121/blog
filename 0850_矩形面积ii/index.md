@@ -1,4 +1,4 @@
-# 力扣850. Rectangle Area II（矩形面积II）
+# 力扣850. 矩形面积II
 
 
 ## 力扣850. Rectangle Area II（矩形面积II）

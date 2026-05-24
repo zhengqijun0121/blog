@@ -1,4 +1,4 @@
-# 力扣472. Concatenated Words（连接词）
+# 力扣472. 连接词
 
 
 ## 力扣472. Concatenated Words（连接词）

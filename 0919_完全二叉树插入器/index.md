@@ -1,4 +1,4 @@
-# 力扣919. Complete Binary Tree Inserter（完全二叉树插入器）
+# 力扣919. 完全二叉树插入器
 
 
 ## 力扣919. Complete Binary Tree Inserter（完全二叉树插入器）

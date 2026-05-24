@@ -1,4 +1,4 @@
-# 力扣467. Unique Substrings in Wraparound String（环绕字符串中唯一的子字符串）
+# 力扣467. 环绕字符串中唯一的子字符串
 
 
 ## 力扣467. Unique Substrings in Wraparound String（环绕字符串中唯一的子字符串）

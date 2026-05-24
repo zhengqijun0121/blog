@@ -1,4 +1,4 @@
-# 力扣661. Image Smoother（图片平滑器）
+# 力扣661. 图片平滑器
 
 
 ## 力扣661. Image Smoother（图片平滑器）

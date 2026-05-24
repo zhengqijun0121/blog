@@ -1,4 +1,4 @@
-# 力扣129. Sum Root to Leaf Numbers（求根节点到叶节点数字之和）
+# 力扣129. 求根节点到叶节点数字之和
 
 
 ## 力扣129. Sum Root to Leaf Numbers（求根节点到叶节点数字之和）

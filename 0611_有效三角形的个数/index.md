@@ -1,4 +1,4 @@
-# 力扣611. Valid Triangle Number（有效三角形的个数）
+# 力扣611. 有效三角形的个数
 
 
 ## 力扣611. Valid Triangle Number（有效三角形的个数）

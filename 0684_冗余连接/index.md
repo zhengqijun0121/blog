@@ -1,4 +1,4 @@
-# 力扣684. Redundant Connection（冗余连接）
+# 力扣684. 冗余连接
 
 
 ## 力扣684. Redundant Connection（冗余连接）

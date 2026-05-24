@@ -1,4 +1,4 @@
-# 力扣903. Valid Permutations for DI Sequence（DI 序列的有效排列）
+# 力扣903. DI 序列的有效排列
 
 
 ## 力扣903. Valid Permutations for DI Sequence（DI 序列的有效排列）

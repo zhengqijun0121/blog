@@ -1,4 +1,4 @@
-# 力扣862. Shortest Subarray with Sum at Least K（和至少为 K 的最短子数组）
+# 力扣862. 和至少为 K 的最短子数组
 
 
 ## 力扣862. Shortest Subarray with Sum at Least K（和至少为 K 的最短子数组）

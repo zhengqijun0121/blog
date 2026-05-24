@@ -1,4 +1,4 @@
-# 力扣966. Vowel Spellchecker（元音拼写检查器）
+# 力扣966. 元音拼写检查器
 
 
 ## 力扣966. Vowel Spellchecker（元音拼写检查器）

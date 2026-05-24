@@ -1,4 +1,4 @@
-# 力扣530. Minimum Absolute Difference in BST（二叉搜索树的最小绝对差）
+# 力扣530. 二叉搜索树的最小绝对差
 
 
 ## 力扣530. Minimum Absolute Difference in BST（二叉搜索树的最小绝对差）

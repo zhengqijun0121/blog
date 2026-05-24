@@ -1,4 +1,4 @@
-# 力扣147. Insertion Sort List（对链表进行插入排序）
+# 力扣147. 对链表进行插入排序
 
 
 ## 力扣147. Insertion Sort List（对链表进行插入排序）

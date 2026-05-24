@@ -1,4 +1,4 @@
-# 力扣0560. Subarray Sum Equals K（和为 K 的子数组）
+# 力扣0560. 和为 K 的子数组
 
 
 ## 力扣0560. Subarray Sum Equals K（和为 K 的子数组）

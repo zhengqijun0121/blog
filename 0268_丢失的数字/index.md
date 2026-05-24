@@ -1,4 +1,4 @@
-# 力扣268. Missing Number（丢失的数字）
+# 力扣268. 丢失的数字
 
 
 ## 力扣268. Missing Number（丢失的数字）

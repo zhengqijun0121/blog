@@ -1,4 +1,4 @@
-# 力扣621. Task Scheduler（任务调度器）
+# 力扣621. 任务调度器
 
 
 ## 力扣621. Task Scheduler（任务调度器）

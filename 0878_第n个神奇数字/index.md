@@ -1,4 +1,4 @@
-# 力扣878. Nth Magical Number（第 N 个神奇数字）
+# 力扣878. 第 N 个神奇数字
 
 
 ## 力扣878. Nth Magical Number（第 N 个神奇数字）

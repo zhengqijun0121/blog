@@ -1,4 +1,4 @@
-# 力扣427. Construct Quad Tree（建立四叉树）
+# 力扣427. 建立四叉树
 
 
 ## 力扣427. Construct Quad Tree（建立四叉树）

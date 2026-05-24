@@ -1,4 +1,4 @@
-# 力扣196. Delete Duplicate Emails（删除重复的电子邮箱）
+# 力扣196. 删除重复的电子邮箱
 
 
 ## 力扣196. Delete Duplicate Emails（删除重复的电子邮箱）

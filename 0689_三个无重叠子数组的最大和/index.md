@@ -1,4 +1,4 @@
-# 力扣689. Maximum Sum of 3 Non-Overlapping Subarrays（三个无重叠子数组的最大和）
+# 力扣689. 三个无重叠子数组的最大和
 
 
 ## 力扣689. Maximum Sum of 3 Non-Overlapping Subarrays（三个无重叠子数组的最大和）

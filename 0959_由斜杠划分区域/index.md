@@ -1,4 +1,4 @@
-# 力扣959. Regions Cut By Slashes（由斜杠划分区域）
+# 力扣959. 由斜杠划分区域
 
 
 ## 力扣959. Regions Cut By Slashes（由斜杠划分区域）

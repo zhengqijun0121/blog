@@ -1,4 +1,4 @@
-# 力扣665. Non-decreasing Array（非递减数列）
+# 力扣665. 非递减数列
 
 
 ## 力扣665. Non-decreasing Array（非递减数列）

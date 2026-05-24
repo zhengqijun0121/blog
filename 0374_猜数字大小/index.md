@@ -1,4 +1,4 @@
-# 力扣374. Guess Number Higher or Lower（猜数字大小）
+# 力扣374. 猜数字大小
 
 
 ## 力扣374. Guess Number Higher or Lower（猜数字大小）

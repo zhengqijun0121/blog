@@ -1,4 +1,4 @@
-# 力扣74. Search a 2D Matrix（搜索二维矩阵）
+# 力扣74. 搜索二维矩阵
 
 
 ## 力扣74. Search a 2D Matrix（搜索二维矩阵）

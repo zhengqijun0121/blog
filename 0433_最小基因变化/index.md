@@ -1,4 +1,4 @@
-# 力扣433. Minimum Genetic Mutation（最小基因变化）
+# 力扣433. 最小基因变化
 
 
 ## 力扣433. Minimum Genetic Mutation（最小基因变化）

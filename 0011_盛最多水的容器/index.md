@@ -1,4 +1,4 @@
-# 力扣11. Container With Most Water（盛最多水的容器）
+# 力扣11. 盛最多水的容器
 
 
 ## 力扣11. Container With Most Water（盛最多水的容器）

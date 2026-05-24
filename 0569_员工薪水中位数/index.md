@@ -1,4 +1,4 @@
-# 力扣0569. Median Employee Salary（员工薪水中位数）
+# 力扣0569. 员工薪水中位数
 
 
 ## 力扣0569. Median Employee Salary（员工薪水中位数）

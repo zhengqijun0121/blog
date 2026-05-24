@@ -1,4 +1,4 @@
-# 力扣766. Toeplitz Matrix（托普利茨矩阵）
+# 力扣766. 托普利茨矩阵
 
 
 ## 力扣766. Toeplitz Matrix（托普利茨矩阵）

@@ -1,4 +1,4 @@
-# 力扣779. K-th Symbol in Grammar（第 K 个语法符号）
+# 力扣779. 第 K 个语法符号
 
 
 ## 力扣779. K-th Symbol in Grammar（第 K 个语法符号）

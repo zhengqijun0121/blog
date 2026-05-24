@@ -1,4 +1,4 @@
-# 力扣864. Shortest Path to Get All Keys（获取所有钥匙的最短路径）
+# 力扣864. 获取所有钥匙的最短路径
 
 
 ## 力扣864. Shortest Path to Get All Keys（获取所有钥匙的最短路径）

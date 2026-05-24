@@ -1,4 +1,4 @@
-# 力扣236. Lowest Common Ancestor of a Binary Tree（二叉树的最近公共祖先）
+# 力扣236. 二叉树的最近公共祖先
 
 
 ## 力扣236. Lowest Common Ancestor of a Binary Tree（二叉树的最近公共祖先）

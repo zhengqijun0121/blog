@@ -1,4 +1,4 @@
-# 力扣257. Binary Tree Paths（二叉树的所有路径）
+# 力扣257. 二叉树的所有路径
 
 
 ## 力扣257. Binary Tree Paths（二叉树的所有路径）

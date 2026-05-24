@@ -1,4 +1,4 @@
-# 力扣910. Smallest Range II（最小差值 II）
+# 力扣910. 最小差值 II
 
 
 ## 力扣910. Smallest Range II（最小差值 II）

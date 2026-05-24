@@ -1,4 +1,4 @@
-# 力扣57. Insert Interval（插入区间）
+# 力扣57. 插入区间
 
 
 ## 力扣57. Insert Interval（插入区间）

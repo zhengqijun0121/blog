@@ -1,4 +1,4 @@
-# 力扣29. Divide Two Integers（两数相除）
+# 力扣29. 两数相除
 
 
 ## 力扣29. Divide Two Integers（两数相除）

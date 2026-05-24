@@ -1,4 +1,4 @@
-# 力扣711. Number of Distinct Islands II（不同岛屿的数量 II）
+# 力扣711. 不同岛屿的数量 II
 
 
 ## 力扣711. Number of Distinct Islands II（不同岛屿的数量 II）

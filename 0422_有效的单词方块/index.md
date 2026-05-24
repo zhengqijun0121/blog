@@ -1,4 +1,4 @@
-# 力扣422. Valid Word Square（有效的单词方块）
+# 力扣422. 有效的单词方块
 
 
 ## 力扣422. Valid Word Square（有效的单词方块）

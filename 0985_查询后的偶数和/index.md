@@ -1,4 +1,4 @@
-# 力扣985. Sum of Even Numbers After Queries（查询后的偶数和）
+# 力扣985. 查询后的偶数和
 
 
 ## 力扣985. Sum of Even Numbers After Queries（查询后的偶数和）

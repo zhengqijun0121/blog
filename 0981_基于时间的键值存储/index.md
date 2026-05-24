@@ -1,4 +1,4 @@
-# 力扣981. Time Based Key-Value Store（基于时间的键值存储）
+# 力扣981. 基于时间的键值存储
 
 
 ## 力扣981. Time Based Key-Value Store（基于时间的键值存储）

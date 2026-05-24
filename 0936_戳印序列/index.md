@@ -1,4 +1,4 @@
-# 力扣936. Stamping The Sequence（戳印序列）
+# 力扣936. 戳印序列
 
 
 ## 力扣936. Stamping The Sequence（戳印序列）

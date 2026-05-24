@@ -1,4 +1,4 @@
-# 力扣852. Peak Index in a Mountain Array（山脉数组的峰顶索引）
+# 力扣852. 山脉数组的峰顶索引
 
 
 ## 力扣852. Peak Index in a Mountain Array（山脉数组的峰顶索引）

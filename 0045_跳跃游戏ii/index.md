@@ -1,4 +1,4 @@
-# 力扣45. Jump Game II（跳跃游戏 II）
+# 力扣45. 跳跃游戏 II
 
 
 ## 力扣45. Jump Game II（跳跃游戏 II）

@@ -1,4 +1,4 @@
-# 力扣435. Non-overlapping Intervals（无重叠区间）
+# 力扣435. 无重叠区间
 
 
 ## 力扣435. Non-overlapping Intervals（无重叠区间）

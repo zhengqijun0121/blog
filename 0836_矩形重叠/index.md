@@ -1,4 +1,4 @@
-# 力扣836. Rectangle Overlap（矩形重叠）
+# 力扣836. 矩形重叠
 
 
 ## 力扣836. Rectangle Overlap（矩形重叠）

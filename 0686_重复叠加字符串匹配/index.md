@@ -1,4 +1,4 @@
-# 力扣686. Repeated String Match（重复叠加字符串匹配）
+# 力扣686. 重复叠加字符串匹配
 
 
 ## 力扣686. Repeated String Match（重复叠加字符串匹配）

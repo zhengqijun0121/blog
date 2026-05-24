@@ -1,4 +1,4 @@
-# 力扣887. Super Egg Drop（鸡蛋掉落）
+# 力扣887. 鸡蛋掉落
 
 
 ## 力扣887. Super Egg Drop（鸡蛋掉落）

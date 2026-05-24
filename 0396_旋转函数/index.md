@@ -1,4 +1,4 @@
-# 力扣396. Rotate Function（旋转函数）
+# 力扣396. 旋转函数
 
 
 ## 力扣396. Rotate Function（旋转函数）

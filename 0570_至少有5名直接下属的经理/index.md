@@ -1,4 +1,4 @@
-# 力扣0570. Managers with at Least 5 Direct Reports（至少有 5 名直接下属的经理）
+# 力扣0570. 至少有 5 名直接下属的经理
 
 
 ## 力扣0570. Managers with at Least 5 Direct Reports（至少有 5 名直接下属的经理）

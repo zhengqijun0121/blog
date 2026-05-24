@@ -1,4 +1,4 @@
-# 力扣324. Wiggle Sort II（摆动排序 II）
+# 力扣324. 摆动排序 II
 
 
 ## 力扣324. Wiggle Sort II（摆动排序 II）

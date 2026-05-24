@@ -1,4 +1,4 @@
-# 力扣0597. Friend Requests I: Overall Acceptance Rate（好友申请 I：总体通过率）
+# 力扣0597. 好友申请 I：总体通过率
 
 
 ## 力扣0597. Friend Requests I: Overall Acceptance Rate（好友申请 I：总体通过率）

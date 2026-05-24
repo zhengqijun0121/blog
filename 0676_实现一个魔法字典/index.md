@@ -1,4 +1,4 @@
-# 力扣676. Implement Magic Dictionary（实现一个魔法字典）
+# 力扣676. 实现一个魔法字典
 
 
 ## 力扣676. Implement Magic Dictionary（实现一个魔法字典）

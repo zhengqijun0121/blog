@@ -1,4 +1,4 @@
-# 力扣345. Reverse Vowels of a String（反转字符串中的元音字母）
+# 力扣345. 反转字符串中的元音字母
 
 
 ## 力扣345. Reverse Vowels of a String（反转字符串中的元音字母）

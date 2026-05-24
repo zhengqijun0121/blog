@@ -1,4 +1,4 @@
-# 力扣197. Rising Temperature（上升的温度）
+# 力扣197. 上升的温度
 
 
 ## 力扣197. Rising Temperature（上升的温度）

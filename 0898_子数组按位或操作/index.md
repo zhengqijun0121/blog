@@ -1,4 +1,4 @@
-# 力扣898. Bitwise ORs of Subarrays（子数组按位或操作）
+# 力扣898. 子数组按位或操作
 
 
 ## 力扣898. Bitwise ORs of Subarrays（子数组按位或操作）

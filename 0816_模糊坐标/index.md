@@ -1,4 +1,4 @@
-# 力扣816. Ambiguous Coordinates（模糊坐标）
+# 力扣816. 模糊坐标
 
 
 ## 力扣816. Ambiguous Coordinates（模糊坐标）

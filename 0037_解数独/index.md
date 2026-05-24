@@ -1,4 +1,4 @@
-# 力扣37. Sudoku Solver（解数独）
+# 力扣37. 解数独
 
 
 ## 力扣37. Sudoku Solver（解数独）

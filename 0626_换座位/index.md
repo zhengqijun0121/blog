@@ -1,4 +1,4 @@
-# 力扣626. Exchange Seats（换座位）
+# 力扣626. 换座位
 
 
 ## 力扣626. Exchange Seats（换座位）

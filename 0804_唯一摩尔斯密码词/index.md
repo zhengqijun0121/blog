@@ -1,4 +1,4 @@
-# 力扣804. Unique Morse Code Words（唯一摩尔斯密码词）
+# 力扣804. 唯一摩尔斯密码词
 
 
 ## 力扣804. Unique Morse Code Words（唯一摩尔斯密码词）

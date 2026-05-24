@@ -1,4 +1,4 @@
-# 力扣5. Longest Palindromic Substring（最长回文子串）
+# 力扣5. 最长回文子串
 
 
 ## 力扣5. Longest Palindromic Substring（最长回文子串）

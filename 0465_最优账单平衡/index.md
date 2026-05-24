@@ -1,4 +1,4 @@
-# 力扣465. Optimal Account Balancing（最优账单平衡）
+# 力扣465. 最优账单平衡
 
 
 ## 力扣465. Optimal Account Balancing（最优账单平衡）

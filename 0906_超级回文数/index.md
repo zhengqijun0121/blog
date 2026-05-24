@@ -1,4 +1,4 @@
-# 力扣906. Super Palindromes（超级回文数）
+# 力扣906. 超级回文数
 
 
 ## 力扣906. Super Palindromes（超级回文数）

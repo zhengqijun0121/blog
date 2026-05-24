@@ -1,4 +1,4 @@
-# 力扣294. Flip Game II（翻转游戏 II）
+# 力扣294. 翻转游戏 II
 
 
 ## 力扣294. Flip Game II（翻转游戏 II）

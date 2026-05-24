@@ -1,4 +1,4 @@
-# 力扣439. Ternary Expression Parser（三元表达式解析器）
+# 力扣439. 三元表达式解析器
 
 
 ## 力扣439. Ternary Expression Parser（三元表达式解析器）

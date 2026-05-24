@@ -1,4 +1,4 @@
-# 力扣516. Longest Palindromic Subsequence（最长回文子序列）
+# 力扣516. 最长回文子序列
 
 
 ## 力扣516. Longest Palindromic Subsequence（最长回文子序列）

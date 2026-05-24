@@ -1,4 +1,4 @@
-# 力扣22. Generate Parentheses（括号生成）
+# 力扣22. 括号生成
 
 
 ## 力扣22. Generate Parentheses（括号生成）

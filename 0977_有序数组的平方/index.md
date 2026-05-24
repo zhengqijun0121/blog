@@ -1,4 +1,4 @@
-# 力扣977. Squares of a Sorted Array（有序数组的平方）
+# 力扣977. 有序数组的平方
 
 
 ## 力扣977. Squares of a Sorted Array（有序数组的平方）

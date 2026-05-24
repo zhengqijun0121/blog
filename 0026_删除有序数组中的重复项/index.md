@@ -1,4 +1,4 @@
-# 力扣26. Remove Duplicates from Sorted Array（删除有序数组中的重复项）
+# 力扣26. 删除有序数组中的重复项
 
 
 ## 力扣26. Remove Duplicates from Sorted Array（删除有序数组中的重复项）

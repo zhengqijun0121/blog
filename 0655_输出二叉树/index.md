@@ -1,4 +1,4 @@
-# 力扣655. Print Binary Tree（输出二叉树）
+# 力扣655. 输出二叉树
 
 
 ## 力扣655. Print Binary Tree（输出二叉树）

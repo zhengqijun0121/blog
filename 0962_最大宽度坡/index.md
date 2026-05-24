@@ -1,4 +1,4 @@
-# 力扣962. Maximum Width Ramp（最大宽度坡）
+# 力扣962. 最大宽度坡
 
 
 ## 力扣962. Maximum Width Ramp（最大宽度坡）

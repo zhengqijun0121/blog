@@ -1,4 +1,4 @@
-# 力扣735. Asteroid Collision（行星碰撞）
+# 力扣735. 行星碰撞
 
 
 ## 力扣735. Asteroid Collision（行星碰撞）

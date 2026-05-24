@@ -1,4 +1,4 @@
-# 力扣355. Design Twitter（设计推特）
+# 力扣355. 设计推特
 
 
 ## 力扣355. Design Twitter（设计推特）

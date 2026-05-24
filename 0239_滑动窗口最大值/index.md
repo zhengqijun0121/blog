@@ -1,4 +1,4 @@
-# 力扣239. Sliding Window Maximum（滑动窗口最大值）
+# 力扣239. 滑动窗口最大值
 
 
 ## 力扣239. Sliding Window Maximum（滑动窗口最大值）

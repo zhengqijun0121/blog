@@ -1,4 +1,4 @@
-# 力扣101. Symmetric Tree（对称二叉树）
+# 力扣101. 对称二叉树
 
 
 ## 力扣101. Symmetric Tree（对称二叉树）

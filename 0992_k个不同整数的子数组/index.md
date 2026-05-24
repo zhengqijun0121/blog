@@ -1,4 +1,4 @@
-# 力扣992. Subarrays with K Different Integers（K 个不同整数的子数组）
+# 力扣992. K 个不同整数的子数组
 
 
 ## 力扣992. Subarrays with K Different Integers（K 个不同整数的子数组）

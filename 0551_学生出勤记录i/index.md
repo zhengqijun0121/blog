@@ -1,4 +1,4 @@
-# 力扣0551. Student Attendance Record I（学生出勤记录 I）
+# 力扣0551. 学生出勤记录 I
 
 
 ## 力扣0551. Student Attendance Record I（学生出勤记录 I）

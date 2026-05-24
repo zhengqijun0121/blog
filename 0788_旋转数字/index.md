@@ -1,4 +1,4 @@
-# 力扣788. Rotated Digits（旋转数字）
+# 力扣788. 旋转数字
 
 
 ## 力扣788. Rotated Digits（旋转数字）

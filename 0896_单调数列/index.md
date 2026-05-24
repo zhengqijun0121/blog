@@ -1,4 +1,4 @@
-# 力扣896. Monotonic Array（单调数列）
+# 力扣896. 单调数列
 
 
 ## 力扣896. Monotonic Array（单调数列）

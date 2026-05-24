@@ -1,4 +1,4 @@
-# 力扣192. Word Frequency（统计词频）
+# 力扣192. 统计词频
 
 
 ## 力扣192. Word Frequency（统计词频）

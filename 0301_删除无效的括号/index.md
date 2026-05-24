@@ -1,4 +1,4 @@
-# 力扣301. Remove Invalid Parentheses（删除无效的括号）
+# 力扣301. 删除无效的括号
 
 
 ## 力扣301. Remove Invalid Parentheses（删除无效的括号）

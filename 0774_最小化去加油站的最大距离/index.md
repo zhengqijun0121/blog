@@ -1,4 +1,4 @@
-# 力扣774. Minimize Max Distance to Gas Station（最小化去加油站的最大距离）
+# 力扣774. 最小化去加油站的最大距离
 
 
 ## 力扣774. Minimize Max Distance to Gas Station（最小化去加油站的最大距离）

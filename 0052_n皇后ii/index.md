@@ -1,4 +1,4 @@
-# 力扣52. N-Queens II（N 皇后 II）
+# 力扣52. N 皇后 II
 
 
 ## 力扣52. N-Queens II（N 皇后 II）

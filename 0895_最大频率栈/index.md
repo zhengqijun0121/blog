@@ -1,4 +1,4 @@
-# 力扣895. Maximum Frequency Stack（最大频率栈）
+# 力扣895. 最大频率栈
 
 
 ## 力扣895. Maximum Frequency Stack（最大频率栈）

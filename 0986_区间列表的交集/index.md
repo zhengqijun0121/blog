@@ -1,4 +1,4 @@
-# 力扣986. Interval List Intersections（区间列表的交集）
+# 力扣986. 区间列表的交集
 
 
 ## 力扣986. Interval List Intersections（区间列表的交集）

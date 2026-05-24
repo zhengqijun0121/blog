@@ -1,4 +1,4 @@
-# 力扣975. Odd Even Jump（奇偶跳）
+# 力扣975. 奇偶跳
 
 
 ## 力扣975. Odd Even Jump（奇偶跳）

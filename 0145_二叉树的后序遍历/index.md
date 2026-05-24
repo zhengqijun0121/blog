@@ -1,4 +1,4 @@
-# 力扣145. Binary Tree Postorder Traversal（二叉树的后序遍历）
+# 力扣145. 二叉树的后序遍历
 
 
 ## 力扣145. Binary Tree Postorder Traversal（二叉树的后序遍历）

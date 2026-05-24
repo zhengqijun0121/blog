@@ -1,4 +1,4 @@
-# 力扣121. Best Time to Buy and Sell Stock（买卖股票的最佳时机）
+# 力扣121. 买卖股票的最佳时机
 
 
 ## 力扣121. Best Time to Buy and Sell Stock（买卖股票的最佳时机）

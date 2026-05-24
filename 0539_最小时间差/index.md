@@ -1,4 +1,4 @@
-# 力扣539. Minimum Time Difference（最小时间差）
+# 力扣539. 最小时间差
 
 
 ## 力扣539. Minimum Time Difference（最小时间差）

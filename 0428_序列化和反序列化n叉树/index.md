@@ -1,4 +1,4 @@
-# 力扣428. Serialize and Deserialize N-ary Tree（序列化和反序列化 N 叉树）
+# 力扣428. 序列化和反序列化 N 叉树
 
 
 ## 力扣428. Serialize and Deserialize N-ary Tree（序列化和反序列化 N 叉树）

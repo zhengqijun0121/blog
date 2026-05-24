@@ -1,4 +1,4 @@
-# 力扣784. Letter Case Permutation（字母大小写全排列）
+# 力扣784. 字母大小写全排列
 
 
 ## 力扣784. Letter Case Permutation（字母大小写全排列）

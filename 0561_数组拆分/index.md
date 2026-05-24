@@ -1,4 +1,4 @@
-# 力扣0561. Array Partition（数组拆分）
+# 力扣0561. 数组拆分
 
 
 ## 力扣0561. Array Partition（数组拆分）

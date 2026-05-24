@@ -1,4 +1,4 @@
-# 力扣540. Single Element in a Sorted Array（有序数组中的单一元素）
+# 力扣540. 有序数组中的单一元素
 
 
 ## 力扣540. Single Element in a Sorted Array（有序数组中的单一元素）

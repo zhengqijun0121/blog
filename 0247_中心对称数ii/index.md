@@ -1,4 +1,4 @@
-# 力扣247. Strobogrammatic Number II（中心对称数 II）
+# 力扣247. 中心对称数 II
 
 
 ## 力扣247. Strobogrammatic Number II（中心对称数 II）

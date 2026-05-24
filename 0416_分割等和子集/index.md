@@ -1,4 +1,4 @@
-# 力扣416. Partition Equal Subset Sum（分割等和子集）
+# 力扣416. 分割等和子集
 
 
 ## 力扣416. Partition Equal Subset Sum（分割等和子集）

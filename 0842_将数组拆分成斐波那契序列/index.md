@@ -1,4 +1,4 @@
-# 力扣842. Split Array into Fibonacci Sequence（将数组拆分成斐波那契序列）
+# 力扣842. 将数组拆分成斐波那契序列
 
 
 ## 力扣842. Split Array into Fibonacci Sequence（将数组拆分成斐波那契序列）

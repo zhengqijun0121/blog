@@ -1,4 +1,4 @@
-# 力扣685. Redundant Connection II（冗余连接 II）
+# 力扣685. 冗余连接 II
 
 
 ## 力扣685. Redundant Connection II（冗余连接 II）

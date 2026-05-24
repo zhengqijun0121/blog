@@ -1,4 +1,4 @@
-# 力扣19. Remove Nth Node From End of List（删除链表的倒数第 N 个结点）
+# 力扣19. 删除链表的倒数第 N 个结点
 
 
 ## 力扣19. Remove Nth Node From End of List（删除链表的倒数第 N 个结点）

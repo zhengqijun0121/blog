@@ -1,4 +1,4 @@
-# 力扣972. Equal Rational Numbers（相等的有理数）
+# 力扣972. 相等的有理数
 
 
 ## 力扣972. Equal Rational Numbers（相等的有理数）

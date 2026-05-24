@@ -1,4 +1,4 @@
-# 力扣632. Smallest Range Covering Elements from K Lists（最小区间）
+# 力扣632. 最小区间
 
 
 ## 力扣632. Smallest Range Covering Elements from K Lists（最小区间）

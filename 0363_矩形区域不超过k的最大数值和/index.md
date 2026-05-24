@@ -1,4 +1,4 @@
-# 力扣363. Max Sum of Rectangle No Larger Than K（矩形区域不超过 K 的最大数值和）
+# 力扣363. 矩形区域不超过 K 的最大数值和
 
 
 ## 力扣363. Max Sum of Rectangle No Larger Than K（矩形区域不超过 K 的最大数值和）

@@ -1,4 +1,4 @@
-# 力扣187. Repeated DNA Sequences（重复的DNA序列）
+# 力扣187. 重复的DNA序列
 
 
 ## 力扣187. Repeated DNA Sequences（重复的DNA序列）

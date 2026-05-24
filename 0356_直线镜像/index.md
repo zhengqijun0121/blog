@@ -1,4 +1,4 @@
-# 力扣356. Line Reflection（直线镜像）
+# 力扣356. 直线镜像
 
 
 ## 力扣356. Line Reflection（直线镜像）

@@ -1,4 +1,4 @@
-# 力扣697. Degree of an Array（数组的度）
+# 力扣697. 数组的度
 
 
 ## 力扣697. Degree of an Array（数组的度）

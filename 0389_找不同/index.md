@@ -1,4 +1,4 @@
-# 力扣389. Find the Difference（找不同）
+# 力扣389. 找不同
 
 
 ## 力扣389. Find the Difference（找不同）

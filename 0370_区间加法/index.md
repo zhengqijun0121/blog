@@ -1,4 +1,4 @@
-# 力扣370. Range Addition（区间加法）
+# 力扣370. 区间加法
 
 
 ## 力扣370. Range Addition（区间加法）

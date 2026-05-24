@@ -1,4 +1,4 @@
-# 力扣667. Beautiful Arrangement II（优美的排列 II）
+# 力扣667. 优美的排列 II
 
 
 ## 力扣667. Beautiful Arrangement II（优美的排列 II）

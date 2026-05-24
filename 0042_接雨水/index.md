@@ -1,4 +1,4 @@
-# 力扣42. Trapping Rain Water（接雨水）
+# 力扣42. 接雨水
 
 
 ## 力扣42. Trapping Rain Water（接雨水）

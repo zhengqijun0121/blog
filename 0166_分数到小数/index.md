@@ -1,4 +1,4 @@
-# 力扣166. Fraction to Recurring Decimal（分数到小数）
+# 力扣166. 分数到小数
 
 
 ## 力扣166. Fraction to Recurring Decimal（分数到小数）

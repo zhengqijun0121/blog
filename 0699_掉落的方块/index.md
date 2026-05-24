@@ -1,4 +1,4 @@
-# 力扣699. Falling Squares（掉落的方块）
+# 力扣699. 掉落的方块
 
 
 ## 力扣699. Falling Squares（掉落的方块）

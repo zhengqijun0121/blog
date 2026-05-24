@@ -1,4 +1,4 @@
-# 力扣829. Consecutive Numbers Sum（连续整数求和）
+# 力扣829. 连续整数求和
 
 
 ## 力扣829. Consecutive Numbers Sum（连续整数求和）

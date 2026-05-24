@@ -1,4 +1,4 @@
-# 力扣744. Find Smallest Letter Greater Than Target（寻找比目标字母大的最小字母）
+# 力扣744. 寻找比目标字母大的最小字母
 
 
 ## 力扣744. Find Smallest Letter Greater Than Target（寻找比目标字母大的最小字母）

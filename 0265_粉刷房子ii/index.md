@@ -1,4 +1,4 @@
-# 力扣265. Paint House II（粉刷房子 II）
+# 力扣265. 粉刷房子 II
 
 
 ## 力扣265. Paint House II（粉刷房子 II）

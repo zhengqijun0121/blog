@@ -1,4 +1,4 @@
-# 力扣835. Image Overlap（图像重叠）
+# 力扣835. 图像重叠
 
 
 ## 力扣835. Image Overlap（图像重叠）

@@ -1,4 +1,4 @@
-# 力扣666. Path Sum IV（路径和 IV）
+# 力扣666. 路径和 IV
 
 
 ## 力扣666. Path Sum IV（路径和 IV）

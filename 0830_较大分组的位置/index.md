@@ -1,4 +1,4 @@
-# 力扣830. Positions of Large Groups（较大分组的位置）
+# 力扣830. 较大分组的位置
 
 
 ## 力扣830. Positions of Large Groups（较大分组的位置）

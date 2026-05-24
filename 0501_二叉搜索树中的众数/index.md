@@ -1,4 +1,4 @@
-# 力扣501. Find Mode in Binary Search Tree（二叉搜索树中的众数）
+# 力扣501. 二叉搜索树中的众数
 
 
 ## 力扣501. Find Mode in Binary Search Tree（二叉搜索树中的众数）

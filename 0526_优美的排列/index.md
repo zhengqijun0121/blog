@@ -1,4 +1,4 @@
-# 力扣526. Beautiful Arrangement（优美的排列）
+# 力扣526. 优美的排列
 
 
 ## 力扣526. Beautiful Arrangement（优美的排列）

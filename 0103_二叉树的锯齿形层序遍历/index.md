@@ -1,4 +1,4 @@
-# 力扣103. Binary Tree Zigzag Level Order Traversal（二叉树的锯齿形层序遍历）
+# 力扣103. 二叉树的锯齿形层序遍历
 
 
 ## 力扣103. Binary Tree Zigzag Level Order Traversal（二叉树的锯齿形层序遍历）

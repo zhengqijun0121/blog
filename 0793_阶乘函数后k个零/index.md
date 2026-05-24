@@ -1,4 +1,4 @@
-# 力扣793. Preimage Size of Factorial Zeroes Function（阶乘函数后 K 个零）
+# 力扣793. 阶乘函数后 K 个零
 
 
 ## 力扣793. Preimage Size of Factorial Zeroes Function（阶乘函数后 K 个零）

@@ -1,4 +1,4 @@
-# 力扣168. Excel Sheet Column Title（Excel表列名称）
+# 力扣168. Excel表列名称
 
 
 ## 力扣168. Excel Sheet Column Title（Excel表列名称）

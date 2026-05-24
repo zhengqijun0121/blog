@@ -1,4 +1,4 @@
-# 力扣622. Design Circular Queue（设计循环队列）
+# 力扣622. 设计循环队列
 
 
 ## 力扣622. Design Circular Queue（设计循环队列）

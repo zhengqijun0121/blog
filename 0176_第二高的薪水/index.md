@@ -1,4 +1,4 @@
-# 力扣176. Second Highest Salary（第二高的薪水）
+# 力扣176. 第二高的薪水
 
 
 ## 力扣176. Second Highest Salary（第二高的薪水）

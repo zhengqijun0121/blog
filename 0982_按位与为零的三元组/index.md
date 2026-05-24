@@ -1,4 +1,4 @@
-# 力扣982. Triples with Bitwise AND Equal To Zero（按位与为零的三元组）
+# 力扣982. 按位与为零的三元组
 
 
 ## 力扣982. Triples with Bitwise AND Equal To Zero（按位与为零的三元组）

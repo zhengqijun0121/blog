@@ -1,4 +1,4 @@
-# 力扣885. Spiral Matrix III（螺旋矩阵 III）
+# 力扣885. 螺旋矩阵 III
 
 
 ## 力扣885. Spiral Matrix III（螺旋矩阵 III）

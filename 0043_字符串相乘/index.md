@@ -1,4 +1,4 @@
-# 力扣43. Multiply Strings（字符串相乘）
+# 力扣43. 字符串相乘
 
 
 ## 力扣43. Multiply Strings（字符串相乘）

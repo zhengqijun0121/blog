@@ -1,4 +1,4 @@
-# 力扣405. Convert a Number to Hexadecimal（数字转换为十六进制数）
+# 力扣405. 数字转换为十六进制数
 
 
 ## 力扣405. Convert a Number to Hexadecimal（数字转换为十六进制数）

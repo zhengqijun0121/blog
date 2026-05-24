@@ -1,4 +1,4 @@
-# 力扣988. Smallest String Starting From Leaf（从叶结点开始的最小字符串）
+# 力扣988. 从叶结点开始的最小字符串
 
 
 ## 力扣988. Smallest String Starting From Leaf（从叶结点开始的最小字符串）

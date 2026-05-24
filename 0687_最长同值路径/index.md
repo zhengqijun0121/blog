@@ -1,4 +1,4 @@
-# 力扣687. Longest Univalue Path（最长同值路径）
+# 力扣687. 最长同值路径
 
 
 ## 力扣687. Longest Univalue Path（最长同值路径）

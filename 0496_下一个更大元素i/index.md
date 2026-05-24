@@ -1,4 +1,4 @@
-# 力扣496. Next Greater Element I（下一个更大元素 I）
+# 力扣496. 下一个更大元素 I
 
 
 ## 力扣496. Next Greater Element I（下一个更大元素 I）

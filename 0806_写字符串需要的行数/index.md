@@ -1,4 +1,4 @@
-# 力扣806. Number of Lines To Write String（写字符串需要的行数）
+# 力扣806. 写字符串需要的行数
 
 
 ## 力扣806. Number of Lines To Write String（写字符串需要的行数）

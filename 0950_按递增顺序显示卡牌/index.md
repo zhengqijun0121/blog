@@ -1,4 +1,4 @@
-# 力扣950. Reveal Cards In Increasing Order（按递增顺序显示卡牌）
+# 力扣950. 按递增顺序显示卡牌
 
 
 ## 力扣950. Reveal Cards In Increasing Order（按递增顺序显示卡牌）

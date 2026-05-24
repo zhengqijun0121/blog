@@ -1,4 +1,4 @@
-# 力扣951. Flip Equivalent Binary Trees（翻转等价二叉树）
+# 力扣951. 翻转等价二叉树
 
 
 ## 力扣951. Flip Equivalent Binary Trees（翻转等价二叉树）

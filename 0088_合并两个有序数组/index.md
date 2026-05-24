@@ -1,4 +1,4 @@
-# 力扣88. Merge Sorted Array（合并两个有序数组）
+# 力扣88. 合并两个有序数组
 
 
 ## 力扣88. Merge Sorted Array（合并两个有序数组）

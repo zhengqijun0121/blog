@@ -1,4 +1,4 @@
-# 力扣60. Permutation Sequence（排列序列）
+# 力扣60. 排列序列
 
 
 ## 力扣60. Permutation Sequence（排列序列）

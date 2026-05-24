@@ -1,4 +1,4 @@
-# 力扣773. Sliding Puzzle（滑动谜题）
+# 力扣773. 滑动谜题
 
 
 ## 力扣773. Sliding Puzzle（滑动谜题）

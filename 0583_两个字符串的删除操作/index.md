@@ -1,4 +1,4 @@
-# 力扣0583. Delete Operation for Two Strings（两个字符串的删除操作）
+# 力扣0583. 两个字符串的删除操作
 
 
 ## 力扣0583. Delete Operation for Two Strings（两个字符串的删除操作）

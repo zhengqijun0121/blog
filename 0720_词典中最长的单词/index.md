@@ -1,4 +1,4 @@
-# 力扣720. Longest Word in Dictionary（词典中最长的单词）
+# 力扣720. 词典中最长的单词
 
 
 ## 力扣720. Longest Word in Dictionary（词典中最长的单词）

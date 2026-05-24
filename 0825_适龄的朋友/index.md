@@ -1,4 +1,4 @@
-# 力扣825. Friends Of Appropriate Ages（适龄的朋友）
+# 力扣825. 适龄的朋友
 
 
 ## 力扣825. Friends Of Appropriate Ages（适龄的朋友）

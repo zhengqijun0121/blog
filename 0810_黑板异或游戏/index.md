@@ -1,4 +1,4 @@
-# 力扣810. Chalkboard XOR Game（黑板异或游戏）
+# 力扣810. 黑板异或游戏
 
 
 ## 力扣810. Chalkboard XOR Game（黑板异或游戏）

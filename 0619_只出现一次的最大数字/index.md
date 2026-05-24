@@ -1,4 +1,4 @@
-# 力扣619. Biggest Single Number（只出现一次的最大数字）
+# 力扣619. 只出现一次的最大数字
 
 
 ## 力扣619. Biggest Single Number（只出现一次的最大数字）

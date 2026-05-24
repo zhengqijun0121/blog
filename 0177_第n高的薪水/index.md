@@ -1,4 +1,4 @@
-# 力扣177. Nth Highest Salary（第 N 高的薪水）
+# 力扣177. 第 N 高的薪水
 
 
 ## 力扣177. Nth Highest Salary（第 N 高的薪水）

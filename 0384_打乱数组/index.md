@@ -1,4 +1,4 @@
-# 力扣384. Shuffle an Array（打乱数组）
+# 力扣384. 打乱数组
 
 
 ## 力扣384. Shuffle an Array（打乱数组）

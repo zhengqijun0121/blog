@@ -1,4 +1,4 @@
-# 力扣893. Groups of Special-Equivalent Strings（特殊等价字符串组）
+# 力扣893. 特殊等价字符串组
 
 
 ## 力扣893. Groups of Special-Equivalent Strings（特殊等价字符串组）

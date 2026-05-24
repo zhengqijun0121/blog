@@ -1,4 +1,4 @@
-# 力扣266. Palindrome Permutation（回文排列）
+# 力扣266. 回文排列
 
 
 ## 力扣266. Palindrome Permutation（回文排列）

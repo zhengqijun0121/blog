@@ -1,4 +1,4 @@
-# 力扣892. Surface Area of 3D Shapes（三维形体的表面积）
+# 力扣892. 三维形体的表面积
 
 
 ## 力扣892. Surface Area of 3D Shapes（三维形体的表面积）

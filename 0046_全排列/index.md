@@ -1,4 +1,4 @@
-# 力扣46. Permutations（全排列）
+# 力扣46. 全排列
 
 
 ## 力扣46. Permutations（全排列）

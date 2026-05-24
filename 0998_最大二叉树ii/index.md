@@ -1,4 +1,4 @@
-# 力扣998. Maximum Binary Tree II（最大二叉树 II）
+# 力扣998. 最大二叉树 II
 
 
 ## 力扣998. Maximum Binary Tree II（最大二叉树 II）

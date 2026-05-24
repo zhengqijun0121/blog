@@ -1,4 +1,4 @@
-# 力扣369. Plus One Linked List（给单链表加一）
+# 力扣369. 给单链表加一
 
 
 ## 力扣369. Plus One Linked List（给单链表加一）

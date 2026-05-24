@@ -1,4 +1,4 @@
-# 力扣275. H-Index II（H 指数 II）
+# 力扣275. H 指数 II
 
 
 ## 力扣275. H-Index II（H 指数 II）

@@ -1,4 +1,4 @@
-# 力扣286. Walls and Gates（墙与门）
+# 力扣286. 墙与门
 
 
 ## 力扣286. Walls and Gates（墙与门）

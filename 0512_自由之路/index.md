@@ -1,4 +1,4 @@
-# 力扣514. Freedom Trail（自由之路）
+# 力扣514. 自由之路
 
 
 ## 力扣514. Freedom Trail（自由之路）

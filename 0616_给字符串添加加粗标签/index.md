@@ -1,4 +1,4 @@
-# 力扣616. Add Bold Tag in String（给字符串添加加粗标签）
+# 力扣616. 给字符串添加加粗标签
 
 
 ## 力扣616. Add Bold Tag in String（给字符串添加加粗标签）

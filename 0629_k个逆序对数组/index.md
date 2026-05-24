@@ -1,4 +1,4 @@
-# 力扣629. K Inverse Pairs Array（K 个逆序对数组）
+# 力扣629. K 个逆序对数组
 
 
 ## 力扣629. K Inverse Pairs Array（K 个逆序对数组）

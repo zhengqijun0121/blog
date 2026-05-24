@@ -1,4 +1,4 @@
-# 力扣30. Substring with Concatenation of All Words（串联所有单词的子串）
+# 力扣30. 串联所有单词的子串
 
 
 ## 力扣30. Substring with Concatenation of All Words（串联所有单词的子串）

@@ -1,4 +1,4 @@
-# 力扣662. Maximum Width of Binary Tree（二叉树最大宽度）
+# 力扣662. 二叉树最大宽度
 
 
 ## 力扣662. Maximum Width of Binary Tree（二叉树最大宽度）

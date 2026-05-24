@@ -1,4 +1,4 @@
-# 力扣882. Reachable Nodes In Subdivided Graph（细分图中的可到达节点）
+# 力扣882. 细分图中的可到达节点
 
 
 ## 力扣882. Reachable Nodes In Subdivided Graph（细分图中的可到达节点）

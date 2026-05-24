@@ -1,4 +1,4 @@
-# 力扣946. Validate Stack Sequences（验证栈序列）
+# 力扣946. 验证栈序列
 
 
 ## 力扣946. Validate Stack Sequences（验证栈序列）

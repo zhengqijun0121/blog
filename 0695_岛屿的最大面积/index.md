@@ -1,4 +1,4 @@
-# 力扣695. Max Area of Island（岛屿的最大面积）
+# 力扣695. 岛屿的最大面积
 
 
 ## 力扣695. Max Area of Island（岛屿的最大面积）

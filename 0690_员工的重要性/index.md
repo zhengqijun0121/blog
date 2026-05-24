@@ -1,4 +1,4 @@
-# 力扣690. Employee Importance（员工的重要性）
+# 力扣690. 员工的重要性
 
 
 ## 力扣690. Employee Importance（员工的重要性）

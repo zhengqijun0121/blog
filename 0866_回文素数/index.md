@@ -1,4 +1,4 @@
-# 力扣866. Prime Palindrome（回文素数）
+# 力扣866. 回文素数
 
 
 ## 力扣866. Prime Palindrome（回文素数）

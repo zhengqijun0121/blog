@@ -1,4 +1,4 @@
-# 力扣914. X of a Kind in a Deck of Cards（卡牌分组）
+# 力扣914. 卡牌分组
 
 
 ## 力扣914. X of a Kind in a Deck of Cards（卡牌分组）

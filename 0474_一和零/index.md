@@ -1,4 +1,4 @@
-# 力扣474. Ones and Zeroes（一和零）
+# 力扣474. 一和零
 
 
 ## 力扣474. Ones and Zeroes（一和零）

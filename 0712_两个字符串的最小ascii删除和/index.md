@@ -1,4 +1,4 @@
-# 力扣712. Minimum ASCII Delete Sum for Two Strings（两个字符串的最小 ASCII 删除和）
+# 力扣712. 两个字符串的最小 ASCII 删除和
 
 
 ## 力扣712. Minimum ASCII Delete Sum for Two Strings（两个字符串的最小 ASCII 删除和）

@@ -1,4 +1,4 @@
-# 力扣615. Average Salary: Departments VS Company（平均工资：部门与公司比较）
+# 力扣615. 平均工资：部门与公司比较
 
 
 ## 力扣615. Average Salary: Departments VS Company（平均工资：部门与公司比较）

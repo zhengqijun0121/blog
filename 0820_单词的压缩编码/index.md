@@ -1,4 +1,4 @@
-# 力扣820. Short Encoding of Words（单词的压缩编码）
+# 力扣820. 单词的压缩编码
 
 
 ## 力扣820. Short Encoding of Words（单词的压缩编码）

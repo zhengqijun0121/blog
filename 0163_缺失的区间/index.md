@@ -1,4 +1,4 @@
-# 力扣163. Missing Ranges（缺失的区间）
+# 力扣163. 缺失的区间
 
 
 ## 力扣163. Missing Ranges（缺失的区间）

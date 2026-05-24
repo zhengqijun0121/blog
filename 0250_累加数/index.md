@@ -1,4 +1,4 @@
-# 力扣250. Count Univalue Subtrees（统计同值子树）
+# 力扣250. 统计同值子树
 
 
 ## 力扣250. Count Univalue Subtrees（统计同值子树）

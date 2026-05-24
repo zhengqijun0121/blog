@@ -1,4 +1,4 @@
-# 力扣424. Longest Repeating Character Replacement（替换后的最长重复字符）
+# 力扣424. 替换后的最长重复字符
 
 
 ## 力扣424. Longest Repeating Character Replacement（替换后的最长重复字符）

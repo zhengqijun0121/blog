@@ -1,4 +1,4 @@
-# 力扣182. Duplicate Emails（查找重复的电子邮箱）
+# 力扣182. 查找重复的电子邮箱
 
 
 ## 力扣182. Duplicate Emails（查找重复的电子邮箱）

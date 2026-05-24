@@ -1,4 +1,4 @@
-# 力扣378. Kth Smallest Element in a Sorted Matrix（有序矩阵中第 K 小的元素）
+# 力扣378. 有序矩阵中第 K 小的元素
 
 
 ## 力扣378. Kth Smallest Element in a Sorted Matrix（有序矩阵中第 K 小的元素）

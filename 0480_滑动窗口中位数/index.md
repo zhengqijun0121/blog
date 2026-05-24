@@ -1,4 +1,4 @@
-# 力扣480. Sliding Window Median（滑动窗口中位数）
+# 力扣480. 滑动窗口中位数
 
 
 ## 力扣480. Sliding Window Median（滑动窗口中位数）

@@ -1,4 +1,4 @@
-# 力扣812. Largest Triangle Area（最大三角形面积）
+# 力扣812. 最大三角形面积
 
 
 ## 力扣812. Largest Triangle Area（最大三角形面积）

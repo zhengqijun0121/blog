@@ -1,4 +1,4 @@
-# 力扣543. Diameter of Binary Tree（二叉树的直径）
+# 力扣543. 二叉树的直径
 
 
 ## 力扣543. Diameter of Binary Tree（二叉树的直径）

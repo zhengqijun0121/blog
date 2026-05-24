@@ -1,4 +1,4 @@
-# 力扣306. Additive Number（累加数）
+# 力扣306. 累加数
 
 
 ## 力扣306. Additive Number（累加数）

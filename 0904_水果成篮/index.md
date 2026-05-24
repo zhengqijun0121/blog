@@ -1,4 +1,4 @@
-# 力扣904. Fruit Into Baskets（水果成篮）
+# 力扣904. 水果成篮
 
 
 ## 力扣904. Fruit Into Baskets（水果成篮）

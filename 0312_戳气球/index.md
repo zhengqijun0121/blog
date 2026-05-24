@@ -1,4 +1,4 @@
-# 力扣312. Burst Balloons（戳气球）
+# 力扣312. 戳气球
 
 
 ## 力扣312. Burst Balloons（戳气球）

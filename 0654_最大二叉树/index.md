@@ -1,4 +1,4 @@
-# 力扣654. Maximum Binary Tree（最大二叉树）
+# 力扣654. 最大二叉树
 
 
 ## 力扣654. Maximum Binary Tree（最大二叉树）

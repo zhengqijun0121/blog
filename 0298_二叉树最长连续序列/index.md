@@ -1,4 +1,4 @@
-# 力扣298. Binary Tree Longest Consecutive Sequence（二叉树最长连续序列）
+# 力扣298. 二叉树最长连续序列
 
 
 ## 力扣298. Binary Tree Longest Consecutive Sequence（二叉树最长连续序列）

@@ -1,4 +1,4 @@
-# 力扣505. The Maze II（迷宫 II）
+# 力扣505. 迷宫 II
 
 
 ## 力扣505. The Maze II（迷宫 II）

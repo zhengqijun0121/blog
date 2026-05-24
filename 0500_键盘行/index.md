@@ -1,4 +1,4 @@
-# 力扣500. Keyboard Row（键盘行）
+# 力扣500. 键盘行
 
 
 ## 力扣500. Keyboard Row（键盘行）

@@ -1,4 +1,4 @@
-# 力扣444. Sequence Reconstruction（序列重建）
+# 力扣444. 序列重建
 
 
 ## 力扣444. Sequence Reconstruction（序列重建）

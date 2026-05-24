@@ -1,4 +1,4 @@
-# 力扣706. Design HashMap（设计哈希映射）
+# 力扣706. 设计哈希映射
 
 
 ## 力扣706. Design HashMap（设计哈希映射）

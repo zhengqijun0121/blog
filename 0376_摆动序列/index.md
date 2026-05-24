@@ -1,4 +1,4 @@
-# 力扣376. Wiggle Subsequence（摆动序列）
+# 力扣376. 摆动序列
 
 
 ## 力扣376. Wiggle Subsequence（摆动序列）

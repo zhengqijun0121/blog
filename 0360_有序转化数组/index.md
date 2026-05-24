@@ -1,4 +1,4 @@
-# 力扣360. Sort Transformed Array（有序转化数组）
+# 力扣360. 有序转化数组
 
 
 ## 力扣360. Sort Transformed Array（有序转化数组）

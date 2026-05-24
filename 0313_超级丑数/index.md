@@ -1,4 +1,4 @@
-# 力扣313. Super Ugly Number（超级丑数）
+# 力扣313. 超级丑数
 
 
 ## 力扣313. Super Ugly Number（超级丑数）

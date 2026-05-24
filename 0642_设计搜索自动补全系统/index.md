@@ -1,4 +1,4 @@
-# 力扣642. Design Search Autocomplete System（设计搜索自动补全系统）
+# 力扣642. 设计搜索自动补全系统
 
 
 ## 力扣642. Design Search Autocomplete System（设计搜索自动补全系统）

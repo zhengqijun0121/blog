@@ -1,4 +1,4 @@
-# 力扣881. Boats to Save People（救生艇）
+# 力扣881. 救生艇
 
 
 ## 力扣881. Boats to Save People（救生艇）

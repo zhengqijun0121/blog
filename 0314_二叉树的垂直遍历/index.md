@@ -1,4 +1,4 @@
-# 力扣314. Binary Tree Vertical Order Traversal（二叉树的垂直遍历）
+# 力扣314. 二叉树的垂直遍历
 
 
 ## 力扣314. Binary Tree Vertical Order Traversal（二叉树的垂直遍历）

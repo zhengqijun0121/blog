@@ -1,4 +1,4 @@
-# 力扣872. Leaf-Similar Trees（叶子相似的树）
+# 力扣872. 叶子相似的树
 
 
 ## 力扣872. Leaf-Similar Trees（叶子相似的树）

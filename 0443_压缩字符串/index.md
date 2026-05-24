@@ -1,4 +1,4 @@
-# 力扣443. String Compression（压缩字符串）
+# 力扣443. 压缩字符串
 
 
 ## 力扣443. String Compression（压缩字符串）

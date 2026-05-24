@@ -1,4 +1,4 @@
-# 力扣698. Partition to K Equal Sum Subsets（划分为 k 个相等的子集）
+# 力扣698. 划分为 k 个相等的子集
 
 
 ## 力扣698. Partition to K Equal Sum Subsets（划分为 k 个相等的子集）

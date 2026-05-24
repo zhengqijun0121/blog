@@ -1,4 +1,4 @@
-# 力扣185. Department Top Three Salaries（部门工资前三高的所有员工）
+# 力扣185. 部门工资前三高的所有员工
 
 
 ## 力扣185. Department Top Three Salaries（部门工资前三高的所有员工）

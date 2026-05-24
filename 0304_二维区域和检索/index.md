@@ -1,4 +1,4 @@
-# 力扣304. Range Sum Query 2D - Immutable（二维区域和检索 - 矩阵不可变）
+# 力扣304. 二维区域和检索 - 矩阵不可变
 
 
 ## 力扣304. Range Sum Query 2D - Immutable（二维区域和检索 - 矩阵不可变）

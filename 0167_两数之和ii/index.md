@@ -1,4 +1,4 @@
-# 力扣167. Two Sum II - Input Array Is Sorted（两数之和 II - 输入有序数组）
+# 力扣167. 两数之和 II - 输入有序数组
 
 
 ## 力扣167. Two Sum II - Input Array Is Sorted（两数之和 II - 输入有序数组）

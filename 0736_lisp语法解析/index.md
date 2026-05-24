@@ -1,4 +1,4 @@
-# 力扣736. Parse Lisp Expression（Lisp 语法解析）
+# 力扣736. Lisp 语法解析
 
 
 ## 力扣736. Parse Lisp Expression（Lisp 语法解析）

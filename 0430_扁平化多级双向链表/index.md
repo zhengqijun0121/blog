@@ -1,4 +1,4 @@
-# 力扣430. Flatten a Multilevel Doubly Linked List（扁平化多级双向链表）
+# 力扣430. 扁平化多级双向链表
 
 
 ## 力扣430. Flatten a Multilevel Doubly Linked List（扁平化多级双向链表）

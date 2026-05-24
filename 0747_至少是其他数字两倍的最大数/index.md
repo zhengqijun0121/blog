@@ -1,4 +1,4 @@
-# 力扣747. Largest Number At Least Twice of Others（至少是其他数字两倍的最大数）
+# 力扣747. 至少是其他数字两倍的最大数
 
 
 ## 力扣747. Largest Number At Least Twice of Others（至少是其他数字两倍的最大数）

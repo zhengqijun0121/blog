@@ -1,4 +1,4 @@
-# 力扣0581. Shortest Unsorted Continuous Subarray（最短无序连续子数组）
+# 力扣0581. 最短无序连续子数组
 
 
 ## 力扣0581. Shortest Unsorted Continuous Subarray（最短无序连续子数组）

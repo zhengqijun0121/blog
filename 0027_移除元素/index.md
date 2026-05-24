@@ -1,4 +1,4 @@
-# 力扣27. Remove Element（移除元素）
+# 力扣27. 移除元素
 
 
 ## 力扣27. Remove Element（移除元素）

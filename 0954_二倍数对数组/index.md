@@ -1,4 +1,4 @@
-# 力扣954. Array of Doubled Pairs（二倍数对数组）
+# 力扣954. 二倍数对数组
 
 
 ## 力扣954. Array of Doubled Pairs（二倍数对数组）

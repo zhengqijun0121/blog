@@ -1,4 +1,4 @@
-# 力扣125. Valid Palindrome（验证回文串）
+# 力扣125. 验证回文串
 
 
 ## 力扣125. Valid Palindrome（验证回文串）

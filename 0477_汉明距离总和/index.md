@@ -1,4 +1,4 @@
-# 力扣477. Total Hamming Distance（汉明距离总和）
+# 力扣477. 汉明距离总和
 
 
 ## 力扣477. Total Hamming Distance（汉明距离总和）

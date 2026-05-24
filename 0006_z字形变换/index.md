@@ -1,4 +1,4 @@
-# 力扣6. Zigzag Conversion（Z 字形变换）
+# 力扣6. Z 字形变换
 
 
 ## 力扣6. Zigzag Conversion（Z 字形变换）

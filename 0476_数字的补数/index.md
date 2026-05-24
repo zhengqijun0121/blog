@@ -1,4 +1,4 @@
-# 力扣476. Number Complement（数字的补数）
+# 力扣476. 数字的补数
 
 
 ## 力扣476. Number Complement（数字的补数）

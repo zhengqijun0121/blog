@@ -1,4 +1,4 @@
-# 力扣271. Encode and Decode Strings（字符串的编码与解码）
+# 力扣271. 字符串的编码与解码
 
 
 ## 力扣271. Encode and Decode Strings（字符串的编码与解码）

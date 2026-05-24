@@ -1,4 +1,4 @@
-# 力扣727. Minimum Window Subsequence（最小窗口子序列）
+# 力扣727. 最小窗口子序列
 
 
 ## 力扣727. Minimum Window Subsequence（最小窗口子序列）

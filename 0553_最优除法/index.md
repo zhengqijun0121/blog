@@ -1,4 +1,4 @@
-# 力扣0553. Optimal Division（最优除法）
+# 力扣0553. 最优除法
 
 
 ## 力扣0553. Optimal Division（最优除法）

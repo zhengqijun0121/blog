@@ -1,4 +1,4 @@
-# 力扣47. Permutations II（全排列 II）
+# 力扣47. 全排列 II
 
 
 ## 力扣47. Permutations II（全排列 II）

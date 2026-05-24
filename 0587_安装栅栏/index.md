@@ -1,4 +1,4 @@
-# 力扣0587. Erect the Fence（安装栅栏）
+# 力扣0587. 安装栅栏
 
 
 ## 力扣0587. Erect the Fence（安装栅栏）

@@ -1,4 +1,4 @@
-# 力扣212. Word Search II（单词搜索 II）
+# 力扣212. 单词搜索 II
 
 
 ## 力扣212. Word Search II（单词搜索 II）

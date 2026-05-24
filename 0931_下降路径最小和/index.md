@@ -1,4 +1,4 @@
-# 力扣931. Minimum Falling Path Sum（下降路径最小和）
+# 力扣931. 下降路径最小和
 
 
 ## 力扣931. Minimum Falling Path Sum（下降路径最小和）

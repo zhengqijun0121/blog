@@ -1,4 +1,4 @@
-# 力扣113. Path Sum II（路径总和 II）
+# 力扣113. 路径总和 II
 
 
 ## 力扣113. Path Sum II（路径总和 II）

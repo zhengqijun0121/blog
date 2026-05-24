@@ -1,4 +1,4 @@
-# 力扣208. Implement Trie (Prefix Tree)（实现 Trie 前缀树）
+# 力扣208. 实现 Trie 前缀树
 
 
 ## 力扣208. Implement Trie (Prefix Tree)（实现 Trie 前缀树）

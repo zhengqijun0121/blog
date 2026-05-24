@@ -1,4 +1,4 @@
-# 力扣24. Swap Nodes in Pairs（两两交换链表中的节点）
+# 力扣24. 两两交换链表中的节点
 
 
 ## 力扣24. Swap Nodes in Pairs（两两交换链表中的节点）

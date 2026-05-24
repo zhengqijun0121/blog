@@ -1,4 +1,4 @@
-# 力扣321. Create Maximum Number（拼接最大数）
+# 力扣321. 拼接最大数
 
 
 ## 力扣321. Create Maximum Number（拼接最大数）

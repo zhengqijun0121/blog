@@ -1,4 +1,4 @@
-# 力扣641. Design Circular Deque（设计循环双端队列）
+# 力扣641. 设计循环双端队列
 
 
 ## 力扣641. Design Circular Deque（设计循环双端队列）
