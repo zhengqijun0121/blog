@@ -171,7 +171,7 @@ System Configuration 选择 `/etc/pacman.d/mirrorlist`
 
 ![](../posts/01_学习/24_ArchLinux/img/002-36.png)
 
-在文件第一行添加清华源 `Server = http://mirrors.tuna.tsinghua.edu.cn/archlinuxarm/$repo/$arch`
+在文件第一行添加清华源 `Server = http://mirrors.tuna.tsinghua.edu.cn/archlinuxarm/$arch/$repo`
 
 ![](../posts/01_学习/24_ArchLinux/img/002-37.png)
 
