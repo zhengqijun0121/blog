@@ -41,6 +41,8 @@
 
 ![](../posts/01_学习/24_ArchLinux/img/002-05.png)
 
+-----
+
 ### 2. 安装启动过程
 
 开始安装 `ArchLinux` 系统可以看到安装启动界面，选择 `Launch UEFI Archboot - Arch Linux aarch64` 下一步
@@ -51,7 +53,7 @@
 
 ![](../posts/01_学习/24_ArchLinux/img/002-07.png)
 
-下面就开始正式配置安装 `ArchLinux`
+**下面就开始正式配置安装 `ArchLinux`**
 
 这里 Locale 选择 `en_US English`
 
@@ -161,7 +163,7 @@ System Configuration 选择 `/etc/hostname`
 
 ![](../posts/01_学习/24_ArchLinux/img/002-34.png)
 
-修复主机名为 `archlinux`
+修改主机名为 `archlinux`
 
 ![](../posts/01_学习/24_ArchLinux/img/002-35.png)
 
@@ -169,7 +171,7 @@ System Configuration 选择 `/etc/pacman.d/mirrorlist`
 
 ![](../posts/01_学习/24_ArchLinux/img/002-36.png)
 
-在文件第一行添加清华源 `Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxarm/$repo/$arch`
+在文件第一行添加清华源 `Server = http://mirrors.tuna.tsinghua.edu.cn/archlinuxarm/$repo/$arch`
 
 ![](../posts/01_学习/24_ArchLinux/img/002-37.png)
 
@@ -209,6 +211,10 @@ Exit Menu 选择 `3 Poweroff System`
 
 ![](../posts/01_学习/24_ArchLinux/img/002-46.png)
 
+-----
+
+### 3. 更新系统
+
 由于是安装的离线版，安装的不是最新内核，这里执行 `Pacman -Syu` 命令更新下系统
 
 ![](../posts/01_学习/24_ArchLinux/img/002-47.png)
@@ -218,5 +224,4 @@ Exit Menu 选择 `3 Poweroff System`
 ![](../posts/01_学习/24_ArchLinux/img/002-48.png)
 
 ----
-
 
