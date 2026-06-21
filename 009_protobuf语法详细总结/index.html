@@ -5,22 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>Protobuf 协议详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/009_protobuf%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="Protobuf 协议详细总结">
-  <meta property="og:description" content="Protocol Buffers (Protobuf) 语法详细总结 Protocol Buffers（简称Protobuf/protobuf）是Google开源的跨语言、跨平台、高性能的二进制序列化协议，核心通过.proto文件定义数据结构与服务接口，再通过protoc编译器生成对应编程语言的代码，实现高效的数据序列化与RPC通信。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-03-15T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-03-15T10:00:20+08:00">
-    <meta property="article:tag" content="协议">
-    <meta property="article:tag" content="Protobuf">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="Protobuf 协议详细总结">
+	<meta property="og:description" content="Protocol Buffers (Protobuf) 语法详细总结 Protocol Buffers（简称Protobuf/protobuf）是Google开源的跨语言、跨平台、高性能的二进制序列化协议，核心通过.proto文件定义数据结构与服务接口，再通过protoc编译器生成对应编程语言的代码，实现高效的数据序列化与RPC通信。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-03-15T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-03-15T10:00:20+08:00">
+		<meta property="article:tag" content="协议">
+		<meta property="article:tag" content="Protobuf">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="Protobuf 协议详细总结">
-  <meta name="twitter:description" content="Protocol Buffers (Protobuf) 语法详细总结 Protocol Buffers（简称Protobuf/protobuf）是Google开源的跨语言、跨平台、高性能的二进制序列化协议，核心通过.proto文件定义数据结构与服务接口，再通过protoc编译器生成对应编程语言的代码，实现高效的数据序列化与RPC通信。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="Protobuf 协议详细总结">
+	<meta name="twitter:description" content="Protocol Buffers (Protobuf) 语法详细总结 Protocol Buffers（简称Protobuf/protobuf）是Google开源的跨语言、跨平台、高性能的二进制序列化协议，核心通过.proto文件定义数据结构与服务接口，再通过protoc编译器生成对应编程语言的代码，实现高效的数据序列化与RPC通信。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -279,90 +279,90 @@
 <h2 id="二标量数据类型">二、标量数据类型</h2>
 <p>Protobuf提供了一套跨语言的标量类型，不同类型对应不同的编码效率与适用场景，核心标量类型如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th>Proto类型</th>
-          <th>编码方式</th>
-          <th>核心说明与适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>double</td>
-          <td>64-bit固定长度</td>
-          <td>IEEE754双精度浮点数，适用于高精度小数场景</td>
-      </tr>
-      <tr>
-          <td>float</td>
-          <td>32-bit固定长度</td>
-          <td>IEEE754单精度浮点数，适用于精度要求不高的小数场景</td>
-      </tr>
-      <tr>
-          <td>int32</td>
-          <td>可变长varint</td>
-          <td>32位有符号整数，<strong>负数编码效率极低</strong>，仅适用于正整数</td>
-      </tr>
-      <tr>
-          <td>int64</td>
-          <td>可变长varint</td>
-          <td>64位有符号整数，负数编码效率极低，仅适用于正整数</td>
-      </tr>
-      <tr>
-          <td>uint32</td>
-          <td>可变长varint</td>
-          <td>32位无符号整数，适用于始终为正的数值</td>
-      </tr>
-      <tr>
-          <td>uint64</td>
-          <td>可变长varint</td>
-          <td>64位无符号整数，适用于始终为正的大数值</td>
-      </tr>
-      <tr>
-          <td>sint32</td>
-          <td>可变长varint+ZigZag</td>
-          <td>32位有符号整数，<strong>负数编码效率远高于int32</strong>，适用于可能为负的整数</td>
-      </tr>
-      <tr>
-          <td>sint64</td>
-          <td>可变长varint+ZigZag</td>
-          <td>64位有符号整数，负数场景优先使用</td>
-      </tr>
-      <tr>
-          <td>fixed32</td>
-          <td>32-bit固定长度</td>
-          <td>32位无符号整数，<strong>数值大于2^28时编码效率高于uint32</strong></td>
-      </tr>
-      <tr>
-          <td>fixed64</td>
-          <td>64-bit固定长度</td>
-          <td>64位无符号整数，数值大于2^56时编码效率高于uint64</td>
-      </tr>
-      <tr>
-          <td>sfixed32</td>
-          <td>32-bit固定长度</td>
-          <td>32位有符号整数，固定长度，大数值场景适用</td>
-      </tr>
-      <tr>
-          <td>sfixed64</td>
-          <td>64-bit固定长度</td>
-          <td>64位有符号整数，固定长度，大数值场景适用</td>
-      </tr>
-      <tr>
-          <td>bool</td>
-          <td>可变长varint</td>
-          <td>布尔类型，取值true/false</td>
-      </tr>
-      <tr>
-          <td>string</td>
-          <td>长度前缀型</td>
-          <td>字符串，<strong>必须是UTF-8编码或7位ASCII文本</strong>，不可包含非UTF-8字节</td>
-      </tr>
-      <tr>
-          <td>bytes</td>
-          <td>长度前缀型</td>
-          <td>任意字节序列，可存储二进制数据，无编码限制</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>Proto类型</th>
+					<th>编码方式</th>
+					<th>核心说明与适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>double</td>
+					<td>64-bit固定长度</td>
+					<td>IEEE754双精度浮点数，适用于高精度小数场景</td>
+			</tr>
+			<tr>
+					<td>float</td>
+					<td>32-bit固定长度</td>
+					<td>IEEE754单精度浮点数，适用于精度要求不高的小数场景</td>
+			</tr>
+			<tr>
+					<td>int32</td>
+					<td>可变长varint</td>
+					<td>32位有符号整数，<strong>负数编码效率极低</strong>，仅适用于正整数</td>
+			</tr>
+			<tr>
+					<td>int64</td>
+					<td>可变长varint</td>
+					<td>64位有符号整数，负数编码效率极低，仅适用于正整数</td>
+			</tr>
+			<tr>
+					<td>uint32</td>
+					<td>可变长varint</td>
+					<td>32位无符号整数，适用于始终为正的数值</td>
+			</tr>
+			<tr>
+					<td>uint64</td>
+					<td>可变长varint</td>
+					<td>64位无符号整数，适用于始终为正的大数值</td>
+			</tr>
+			<tr>
+					<td>sint32</td>
+					<td>可变长varint+ZigZag</td>
+					<td>32位有符号整数，<strong>负数编码效率远高于int32</strong>，适用于可能为负的整数</td>
+			</tr>
+			<tr>
+					<td>sint64</td>
+					<td>可变长varint+ZigZag</td>
+					<td>64位有符号整数，负数场景优先使用</td>
+			</tr>
+			<tr>
+					<td>fixed32</td>
+					<td>32-bit固定长度</td>
+					<td>32位无符号整数，<strong>数值大于2^28时编码效率高于uint32</strong></td>
+			</tr>
+			<tr>
+					<td>fixed64</td>
+					<td>64-bit固定长度</td>
+					<td>64位无符号整数，数值大于2^56时编码效率高于uint64</td>
+			</tr>
+			<tr>
+					<td>sfixed32</td>
+					<td>32-bit固定长度</td>
+					<td>32位有符号整数，固定长度，大数值场景适用</td>
+			</tr>
+			<tr>
+					<td>sfixed64</td>
+					<td>64-bit固定长度</td>
+					<td>64位有符号整数，固定长度，大数值场景适用</td>
+			</tr>
+			<tr>
+					<td>bool</td>
+					<td>可变长varint</td>
+					<td>布尔类型，取值true/false</td>
+			</tr>
+			<tr>
+					<td>string</td>
+					<td>长度前缀型</td>
+					<td>字符串，<strong>必须是UTF-8编码或7位ASCII文本</strong>，不可包含非UTF-8字节</td>
+			</tr>
+			<tr>
+					<td>bytes</td>
+					<td>长度前缀型</td>
+					<td>任意字节序列，可存储二进制数据，无编码限制</td>
+			</tr>
+	</tbody>
 </table>
 <blockquote>
 <p>补充：所有标量类型都有默认值，proto3不支持自定义默认值，proto2可通过<code>default</code>选项自定义。</p>
@@ -400,65 +400,65 @@
 <p>字段规则定义了字段的出现次数与行为，proto2和proto3有显著差异：</p>
 <h4 id="1proto3-核心字段规则">（1）proto3 核心字段规则</h4>
 <table>
-  <thead>
-      <tr>
-          <th>规则</th>
-          <th>说明</th>
-          <th>适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>singular</td>
-          <td>默认规则，字段可出现0次或1次，不可多次出现</td>
-          <td>绝大多数单值字段</td>
-      </tr>
-      <tr>
-          <td>optional</td>
-          <td>3.12.0版本新增，与singular兼容，额外支持<strong>字段存在性检测</strong>（可区分「未赋值」和「赋值为默认值」）</td>
-          <td>需要判断字段是否显式赋值的场景</td>
-      </tr>
-      <tr>
-          <td>repeated</td>
-          <td>字段可出现0次或N次，元素顺序保留，对应编程语言中的数组/列表</td>
-          <td>集合、列表类数据</td>
-      </tr>
-      <tr>
-          <td>map</td>
-          <td>键值对类型，对应编程语言中的字典/Map</td>
-          <td>关联型数据</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>规则</th>
+					<th>说明</th>
+					<th>适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>singular</td>
+					<td>默认规则，字段可出现0次或1次，不可多次出现</td>
+					<td>绝大多数单值字段</td>
+			</tr>
+			<tr>
+					<td>optional</td>
+					<td>3.12.0版本新增，与singular兼容，额外支持<strong>字段存在性检测</strong>（可区分「未赋值」和「赋值为默认值」）</td>
+					<td>需要判断字段是否显式赋值的场景</td>
+			</tr>
+			<tr>
+					<td>repeated</td>
+					<td>字段可出现0次或N次，元素顺序保留，对应编程语言中的数组/列表</td>
+					<td>集合、列表类数据</td>
+			</tr>
+			<tr>
+					<td>map</td>
+					<td>键值对类型，对应编程语言中的字典/Map</td>
+					<td>关联型数据</td>
+			</tr>
+	</tbody>
 </table>
 <blockquote>
 <p>补充：proto3中<code>repeated</code>字段默认开启<code>packed=true</code>紧凑编码，无需手动指定。</p>
 </blockquote>
 <h4 id="2proto2-专属字段规则">（2）proto2 专属字段规则</h4>
 <table>
-  <thead>
-      <tr>
-          <th>规则</th>
-          <th>说明</th>
-          <th>注意事项</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>required</td>
-          <td>必须字段，必须赋值，否则编解码会直接失败</td>
-          <td><strong>官方强烈不推荐使用</strong>，一旦定义无法修改，新旧版本必须包含该字段，兼容性极差</td>
-      </tr>
-      <tr>
-          <td>optional</td>
-          <td>可选字段，可出现0次或1次，支持自定义默认值</td>
-          <td>与proto3的optional语义一致，proto2默认无字段存在性检测，需显式判断</td>
-      </tr>
-      <tr>
-          <td>repeated</td>
-          <td>重复字段，默认不开启packed编码，需手动添加<code>[packed=true]</code>选项</td>
-          <td>仅对标量数值类型生效</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>规则</th>
+					<th>说明</th>
+					<th>注意事项</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>required</td>
+					<td>必须字段，必须赋值，否则编解码会直接失败</td>
+					<td><strong>官方强烈不推荐使用</strong>，一旦定义无法修改，新旧版本必须包含该字段，兼容性极差</td>
+			</tr>
+			<tr>
+					<td>optional</td>
+					<td>可选字段，可出现0次或1次，支持自定义默认值</td>
+					<td>与proto3的optional语义一致，proto2默认无字段存在性检测，需显式判断</td>
+			</tr>
+			<tr>
+					<td>repeated</td>
+					<td>重复字段，默认不开启packed编码，需手动添加<code>[packed=true]</code>选项</td>
+					<td>仅对标量数值类型生效</td>
+			</tr>
+	</tbody>
 </table>
 <hr>
 <h2 id="四枚举类型-enum">四、枚举类型 enum</h2>
@@ -616,135 +616,135 @@
 <hr>
 <h2 id="六proto2-与-proto3-核心差异对比">六、proto2 与 proto3 核心差异对比</h2>
 <table>
-  <thead>
-      <tr>
-          <th>特性</th>
-          <th>proto3</th>
-          <th>proto2</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>版本声明</td>
-          <td>必须在文件首行显式声明<code>syntax = &quot;proto3&quot;;</code></td>
-          <td>可省略，默认按proto2解析</td>
-      </tr>
-      <tr>
-          <td>字段规则</td>
-          <td>移除<code>required</code>，默认<code>singular</code>，3.12+恢复<code>optional</code></td>
-          <td>支持<code>required</code>、<code>optional</code>、<code>repeated</code></td>
-      </tr>
-      <tr>
-          <td>默认值</td>
-          <td>不支持自定义默认值，使用类型系统默认值</td>
-          <td>支持通过<code>default</code>选项自定义字段默认值</td>
-      </tr>
-      <tr>
-          <td>枚举规则</td>
-          <td>第一个枚举常量必须为0</td>
-          <td>无强制要求，推荐第一个为0</td>
-      </tr>
-      <tr>
-          <td>packed编码</td>
-          <td>repeated标量字段默认开启<code>packed=true</code></td>
-          <td>需手动添加<code>[packed=true]</code>开启</td>
-      </tr>
-      <tr>
-          <td>扩展特性</td>
-          <td>移除<code>extensions</code>扩展，使用<code>Any</code>替代</td>
-          <td>支持<code>extensions</code>消息扩展</td>
-      </tr>
-      <tr>
-          <td>废弃特性</td>
-          <td>彻底移除<code>groups</code></td>
-          <td>保留已废弃的<code>groups</code>，不推荐使用</td>
-      </tr>
-      <tr>
-          <td>语言支持</td>
-          <td>支持更多新兴语言（Go、Rust、Dart等），更新活跃</td>
-          <td>仅维护兼容，无新特性更新</td>
-      </tr>
-      <tr>
-          <td>未知字段</td>
-          <td>3.5+版本保留并序列化未知字段</td>
-          <td>支持保留未知字段</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>特性</th>
+					<th>proto3</th>
+					<th>proto2</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>版本声明</td>
+					<td>必须在文件首行显式声明<code>syntax = &quot;proto3&quot;;</code></td>
+					<td>可省略，默认按proto2解析</td>
+			</tr>
+			<tr>
+					<td>字段规则</td>
+					<td>移除<code>required</code>，默认<code>singular</code>，3.12+恢复<code>optional</code></td>
+					<td>支持<code>required</code>、<code>optional</code>、<code>repeated</code></td>
+			</tr>
+			<tr>
+					<td>默认值</td>
+					<td>不支持自定义默认值，使用类型系统默认值</td>
+					<td>支持通过<code>default</code>选项自定义字段默认值</td>
+			</tr>
+			<tr>
+					<td>枚举规则</td>
+					<td>第一个枚举常量必须为0</td>
+					<td>无强制要求，推荐第一个为0</td>
+			</tr>
+			<tr>
+					<td>packed编码</td>
+					<td>repeated标量字段默认开启<code>packed=true</code></td>
+					<td>需手动添加<code>[packed=true]</code>开启</td>
+			</tr>
+			<tr>
+					<td>扩展特性</td>
+					<td>移除<code>extensions</code>扩展，使用<code>Any</code>替代</td>
+					<td>支持<code>extensions</code>消息扩展</td>
+			</tr>
+			<tr>
+					<td>废弃特性</td>
+					<td>彻底移除<code>groups</code></td>
+					<td>保留已废弃的<code>groups</code>，不推荐使用</td>
+			</tr>
+			<tr>
+					<td>语言支持</td>
+					<td>支持更多新兴语言（Go、Rust、Dart等），更新活跃</td>
+					<td>仅维护兼容，无新特性更新</td>
+			</tr>
+			<tr>
+					<td>未知字段</td>
+					<td>3.5+版本保留并序列化未知字段</td>
+					<td>支持保留未知字段</td>
+			</tr>
+	</tbody>
 </table>
 <hr>
 <h2 id="七选项-options">七、选项 Options</h2>
 <p>选项用于给<code>.proto</code>文件、消息、字段等元素添加额外的配置元数据，分为<strong>内置选项</strong>和<strong>自定义选项</strong>，按作用域可分为6类。</p>
 <h3 id="1-按作用域分类与常用内置选项">1. 按作用域分类与常用内置选项</h3>
 <table>
-  <thead>
-      <tr>
-          <th>作用域</th>
-          <th>常用选项</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>文件级</td>
-          <td>java_package</td>
-          <td>指定生成Java代码的包名</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>java_outer_classname</td>
-          <td>指定生成Java代码的外层类名</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>optimize_for</td>
-          <td>优化模式，可选<code>SPEED</code>（默认，速度优先）、<code>CODE_SIZE</code>（代码体积优先）、<code>LITE_RUNTIME</code>（轻量运行时）</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>go_package</td>
-          <td>指定生成Go代码的包路径</td>
-      </tr>
-      <tr>
-          <td>消息级</td>
-          <td>message_set_wire_format</td>
-          <td>启用消息集格式（proto2专属）</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>deprecated</td>
-          <td>标记消息为废弃，生成代码时添加废弃注解</td>
-      </tr>
-      <tr>
-          <td>字段级</td>
-          <td>deprecated</td>
-          <td>标记字段为废弃</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>default</td>
-          <td>自定义字段默认值（proto2专属）</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>packed</td>
-          <td>开启repeated字段的紧凑编码</td>
-      </tr>
-      <tr>
-          <td>枚举级</td>
-          <td>allow_alias</td>
-          <td>允许枚举常量同数值别名</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>deprecated</td>
-          <td>标记枚举为废弃</td>
-      </tr>
-      <tr>
-          <td>服务/方法级</td>
-          <td>deprecated</td>
-          <td>标记服务/方法为废弃</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>作用域</th>
+					<th>常用选项</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>文件级</td>
+					<td>java_package</td>
+					<td>指定生成Java代码的包名</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>java_outer_classname</td>
+					<td>指定生成Java代码的外层类名</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>optimize_for</td>
+					<td>优化模式，可选<code>SPEED</code>（默认，速度优先）、<code>CODE_SIZE</code>（代码体积优先）、<code>LITE_RUNTIME</code>（轻量运行时）</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>go_package</td>
+					<td>指定生成Go代码的包路径</td>
+			</tr>
+			<tr>
+					<td>消息级</td>
+					<td>message_set_wire_format</td>
+					<td>启用消息集格式（proto2专属）</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>deprecated</td>
+					<td>标记消息为废弃，生成代码时添加废弃注解</td>
+			</tr>
+			<tr>
+					<td>字段级</td>
+					<td>deprecated</td>
+					<td>标记字段为废弃</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>default</td>
+					<td>自定义字段默认值（proto2专属）</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>packed</td>
+					<td>开启repeated字段的紧凑编码</td>
+			</tr>
+			<tr>
+					<td>枚举级</td>
+					<td>allow_alias</td>
+					<td>允许枚举常量同数值别名</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>deprecated</td>
+					<td>标记枚举为废弃</td>
+			</tr>
+			<tr>
+					<td>服务/方法级</td>
+					<td>deprecated</td>
+					<td>标记服务/方法为废弃</td>
+			</tr>
+	</tbody>
 </table>
 <p>示例：</p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -835,50 +835,50 @@
 <h2 id="九标准扩展类型well-known-types">九、标准扩展类型（Well-Known Types）</h2>
 <p>Protobuf官方提供了一套通用的标准类型，封装了常见的业务场景，需导入对应的<code>.proto</code>文件后使用，核心常用类型如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th>类型</th>
-          <th>导入文件</th>
-          <th>核心作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Any</td>
-          <td>google/protobuf/any.proto</td>
-          <td>包装任意消息类型，实现泛型能力，支持<code>PackFrom</code>打包、<code>UnpackTo</code>解包、<code>Is</code>类型判断</td>
-      </tr>
-      <tr>
-          <td>Timestamp</td>
-          <td>google/protobuf/timestamp.proto</td>
-          <td>标准时间戳，对应Unix时间，精度到纳秒</td>
-      </tr>
-      <tr>
-          <td>Duration</td>
-          <td>google/protobuf/duration.proto</td>
-          <td>时间间隔/持续时间，精度到纳秒</td>
-      </tr>
-      <tr>
-          <td>Empty</td>
-          <td>google/protobuf/empty.proto</td>
-          <td>空消息，用于无参的RPC请求/响应</td>
-      </tr>
-      <tr>
-          <td>FieldMask</td>
-          <td>google/protobuf/field_mask.proto</td>
-          <td>字段掩码，用于增量更新，指定需要操作的字段</td>
-      </tr>
-      <tr>
-          <td>Struct/Value</td>
-          <td>google/protobuf/struct.proto</td>
-          <td>对应JSON的结构体和值，支持动态数据结构</td>
-      </tr>
-      <tr>
-          <td>Wrapper类型（Int32Value、StringValue等）</td>
-          <td>google/protobuf/wrappers.proto</td>
-          <td>标量类型的包装类，可区分「0/空字符串」和「未赋值」</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>类型</th>
+					<th>导入文件</th>
+					<th>核心作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Any</td>
+					<td>google/protobuf/any.proto</td>
+					<td>包装任意消息类型，实现泛型能力，支持<code>PackFrom</code>打包、<code>UnpackTo</code>解包、<code>Is</code>类型判断</td>
+			</tr>
+			<tr>
+					<td>Timestamp</td>
+					<td>google/protobuf/timestamp.proto</td>
+					<td>标准时间戳，对应Unix时间，精度到纳秒</td>
+			</tr>
+			<tr>
+					<td>Duration</td>
+					<td>google/protobuf/duration.proto</td>
+					<td>时间间隔/持续时间，精度到纳秒</td>
+			</tr>
+			<tr>
+					<td>Empty</td>
+					<td>google/protobuf/empty.proto</td>
+					<td>空消息，用于无参的RPC请求/响应</td>
+			</tr>
+			<tr>
+					<td>FieldMask</td>
+					<td>google/protobuf/field_mask.proto</td>
+					<td>字段掩码，用于增量更新，指定需要操作的字段</td>
+			</tr>
+			<tr>
+					<td>Struct/Value</td>
+					<td>google/protobuf/struct.proto</td>
+					<td>对应JSON的结构体和值，支持动态数据结构</td>
+			</tr>
+			<tr>
+					<td>Wrapper类型（Int32Value、StringValue等）</td>
+					<td>google/protobuf/wrappers.proto</td>
+					<td>标量类型的包装类，可区分「0/空字符串」和「未赋值」</td>
+			</tr>
+	</tbody>
 </table>
 <p>示例：</p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -936,35 +936,35 @@
 <li><strong>Tag计算规则</strong>：Tag由<code>字段编号 &lt;&lt; 3 | wire_type</code>组成，低3位为wire_type，决定值的编码方式</li>
 <li><strong>核心Wire Type</strong>：
 <table>
-  <thead>
-      <tr>
-          <th>Wire Type</th>
-          <th>编码类型</th>
-          <th>对应Proto类型</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>0</td>
-          <td>Varint</td>
-          <td>int32/int64/uint32/uint64/sint32/sint64/bool/enum</td>
-      </tr>
-      <tr>
-          <td>1</td>
-          <td>64-bit固定长度</td>
-          <td>double/fixed64/sfixed64</td>
-      </tr>
-      <tr>
-          <td>2</td>
-          <td>长度前缀型</td>
-          <td>string/bytes/message/repeated/map</td>
-      </tr>
-      <tr>
-          <td>5</td>
-          <td>32-bit固定长度</td>
-          <td>float/fixed32/sfixed32</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>Wire Type</th>
+					<th>编码类型</th>
+					<th>对应Proto类型</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>0</td>
+					<td>Varint</td>
+					<td>int32/int64/uint32/uint64/sint32/sint64/bool/enum</td>
+			</tr>
+			<tr>
+					<td>1</td>
+					<td>64-bit固定长度</td>
+					<td>double/fixed64/sfixed64</td>
+			</tr>
+			<tr>
+					<td>2</td>
+					<td>长度前缀型</td>
+					<td>string/bytes/message/repeated/map</td>
+			</tr>
+			<tr>
+					<td>5</td>
+					<td>32-bit固定长度</td>
+					<td>float/fixed32/sfixed32</td>
+			</tr>
+	</tbody>
 </table>
 </li>
 <li><strong>Varint编码</strong>：可变长度编码，每个字节最高位为续位标志，小数字仅需1字节，编码效率极高；负数需通过ZigZag编码（sint类型）转换为正整数，否则会占用10字节，效率极低</li>
@@ -1027,7 +1027,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

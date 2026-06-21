@@ -5,22 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>Linux 进程调度策略详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/003_linux%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="Linux 进程调度策略详细总结">
-  <meta property="og:description" content="Linux进程调度策略详细总结 Linux进程调度是内核核心子系统，负责决定CPU资源的分配顺序与时长，通过分层调度器架构和多类调度策略，兼顾通用场景的公平性、实时场景的低延迟与批处理场景的吞吐量。本文从核心基础、调度策略详解、对比、实践接口与注意事项五个维度，完整梳理Linux进程调度体系。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-03-05T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-03-05T10:00:20+08:00">
-    <meta property="article:tag" content="OS">
-    <meta property="article:tag" content="Schedule">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="Linux 进程调度策略详细总结">
+	<meta property="og:description" content="Linux进程调度策略详细总结 Linux进程调度是内核核心子系统，负责决定CPU资源的分配顺序与时长，通过分层调度器架构和多类调度策略，兼顾通用场景的公平性、实时场景的低延迟与批处理场景的吞吐量。本文从核心基础、调度策略详解、对比、实践接口与注意事项五个维度，完整梳理Linux进程调度体系。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-03-05T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-03-05T10:00:20+08:00">
+		<meta property="article:tag" content="OS">
+		<meta property="article:tag" content="Schedule">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="Linux 进程调度策略详细总结">
-  <meta name="twitter:description" content="Linux进程调度策略详细总结 Linux进程调度是内核核心子系统，负责决定CPU资源的分配顺序与时长，通过分层调度器架构和多类调度策略，兼顾通用场景的公平性、实时场景的低延迟与批处理场景的吞吐量。本文从核心基础、调度策略详解、对比、实践接口与注意事项五个维度，完整梳理Linux进程调度体系。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="Linux 进程调度策略详细总结">
+	<meta name="twitter:description" content="Linux进程调度策略详细总结 Linux进程调度是内核核心子系统，负责决定CPU资源的分配顺序与时长，通过分层调度器架构和多类调度策略，兼顾通用场景的公平性、实时场景的低延迟与批处理场景的吞吐量。本文从核心基础、调度策略详解、对比、实践接口与注意事项五个维度，完整梳理Linux进程调度体系。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -180,34 +180,34 @@
 <h3 id="1-调度器演进与架构">1. 调度器演进与架构</h3>
 <p>Linux内核调度器经历了三代核心演进，当前主流分为两大稳定分支：</p>
 <table>
-  <thead>
-      <tr>
-          <th>调度器</th>
-          <th>内核版本</th>
-          <th>核心定位</th>
-          <th>核心思想</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>O(1)调度器</td>
-          <td>2.6早期~2.6.22</td>
-          <td>传统通用调度</td>
-          <td>固定优先级哈希桶，O(1)时间复杂度调度，对交互式进程不友好</td>
-      </tr>
-      <tr>
-          <td>CFS完全公平调度器</td>
-          <td>2.6.23~6.5</td>
-          <td>默认通用进程调度</td>
-          <td>虚拟运行时间vruntime为核心，红黑树管理进程，保证CPU时间按权重公平分配</td>
-      </tr>
-      <tr>
-          <td>EEVDF调度器</td>
-          <td>6.6+（6.12后完全替代CFS）</td>
-          <td>新一代默认通用调度</td>
-          <td>最早可用虚拟截止时间优先，解决CFS延迟不稳定问题，兼顾公平性与低延迟，用户态接口完全兼容CFS</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>调度器</th>
+					<th>内核版本</th>
+					<th>核心定位</th>
+					<th>核心思想</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>O(1)调度器</td>
+					<td>2.6早期~2.6.22</td>
+					<td>传统通用调度</td>
+					<td>固定优先级哈希桶，O(1)时间复杂度调度，对交互式进程不友好</td>
+			</tr>
+			<tr>
+					<td>CFS完全公平调度器</td>
+					<td>2.6.23~6.5</td>
+					<td>默认通用进程调度</td>
+					<td>虚拟运行时间vruntime为核心，红黑树管理进程，保证CPU时间按权重公平分配</td>
+			</tr>
+			<tr>
+					<td>EEVDF调度器</td>
+					<td>6.6+（6.12后完全替代CFS）</td>
+					<td>新一代默认通用调度</td>
+					<td>最早可用虚拟截止时间优先，解决CFS延迟不稳定问题，兼顾公平性与低延迟，用户态接口完全兼容CFS</td>
+			</tr>
+	</tbody>
 </table>
 <p>同时，内核为不同调度策略提供独立的调度类，优先级从高到低为：<strong>Deadline调度类 &gt; RT实时调度类 &gt; Fair公平调度类</strong>，调度器总是优先从高优先级调度类中选取可运行进程。</p>
 <h3 id="2-进程优先级体系">2. 进程优先级体系</h3>
@@ -324,128 +324,128 @@
 </ul>
 <h2 id="三linux调度策略核心对比表">三、Linux调度策略核心对比表</h2>
 <table>
-  <thead>
-      <tr>
-          <th>调度策略</th>
-          <th>类型</th>
-          <th>所属调度类</th>
-          <th>优先级范围</th>
-          <th>核心机制</th>
-          <th>时间片</th>
-          <th>核心抢占规则</th>
-          <th>典型适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>SCHED_DEADLINE</td>
-          <td>硬实时</td>
-          <td>Deadline</td>
-          <td>系统最高</td>
-          <td>EDF+CBS+准入控制，按截止时间调度</td>
-          <td>动态预算</td>
-          <td>截止时间更早的进程可抢占，优先级高于所有实时进程</td>
-          <td>自动驾驶、工业机器人、硬实时帧处理</td>
-      </tr>
-      <tr>
-          <td>SCHED_FIFO</td>
-          <td>实时</td>
-          <td>RT</td>
-          <td>1~99（数值越大优先级越高）</td>
-          <td>先进先出，无时间片，直到主动释放或被高优先级抢占</td>
-          <td>无</td>
-          <td>仅更高优先级实时进程可抢占，同优先级无法抢占</td>
-          <td>工业控制、低延迟关键任务、传感器采集</td>
-      </tr>
-      <tr>
-          <td>SCHED_RR</td>
-          <td>实时</td>
-          <td>RT</td>
-          <td>1~99（数值越大优先级越高）</td>
-          <td>同优先级时间片轮转，高优先级抢占规则同FIFO</td>
-          <td>固定可配置</td>
-          <td>高优先级可抢占，同优先级时间片耗尽后让出CPU</td>
-          <td>多通道实时处理、同优先级多实时任务</td>
-      </tr>
-      <tr>
-          <td>SCHED_OTHER/NORMAL</td>
-          <td>普通</td>
-          <td>Fair</td>
-          <td>nice -20~+19（数值越小优先级越高）</td>
-          <td>CFS/EEVDF，按权重公平分配CPU时间</td>
-          <td>动态调整</td>
-          <td>内核态可抢占，按虚拟时间/截止时间调度，无用户态抢占</td>
-          <td>桌面应用、后台服务、网络服务、通用场景</td>
-      </tr>
-      <tr>
-          <td>SCHED_BATCH</td>
-          <td>普通</td>
-          <td>Fair</td>
-          <td>nice -20~+19</td>
-          <td>优化CPU密集型任务，减少抢占，提升缓存命中率</td>
-          <td>动态长周期</td>
-          <td>降低抢占频率，减少被交互进程打断</td>
-          <td>科学计算、编译、渲染、离线批处理</td>
-      </tr>
-      <tr>
-          <td>SCHED_IDLE</td>
-          <td>普通</td>
-          <td>Fair</td>
-          <td>系统最低</td>
-          <td>仅CPU无其他可运行进程时调度</td>
-          <td>动态</td>
-          <td>任何其他进程都可抢占</td>
-          <td>闲时系统维护、闲置算力任务、非紧急清理</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>调度策略</th>
+					<th>类型</th>
+					<th>所属调度类</th>
+					<th>优先级范围</th>
+					<th>核心机制</th>
+					<th>时间片</th>
+					<th>核心抢占规则</th>
+					<th>典型适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>SCHED_DEADLINE</td>
+					<td>硬实时</td>
+					<td>Deadline</td>
+					<td>系统最高</td>
+					<td>EDF+CBS+准入控制，按截止时间调度</td>
+					<td>动态预算</td>
+					<td>截止时间更早的进程可抢占，优先级高于所有实时进程</td>
+					<td>自动驾驶、工业机器人、硬实时帧处理</td>
+			</tr>
+			<tr>
+					<td>SCHED_FIFO</td>
+					<td>实时</td>
+					<td>RT</td>
+					<td>1~99（数值越大优先级越高）</td>
+					<td>先进先出，无时间片，直到主动释放或被高优先级抢占</td>
+					<td>无</td>
+					<td>仅更高优先级实时进程可抢占，同优先级无法抢占</td>
+					<td>工业控制、低延迟关键任务、传感器采集</td>
+			</tr>
+			<tr>
+					<td>SCHED_RR</td>
+					<td>实时</td>
+					<td>RT</td>
+					<td>1~99（数值越大优先级越高）</td>
+					<td>同优先级时间片轮转，高优先级抢占规则同FIFO</td>
+					<td>固定可配置</td>
+					<td>高优先级可抢占，同优先级时间片耗尽后让出CPU</td>
+					<td>多通道实时处理、同优先级多实时任务</td>
+			</tr>
+			<tr>
+					<td>SCHED_OTHER/NORMAL</td>
+					<td>普通</td>
+					<td>Fair</td>
+					<td>nice -20~+19（数值越小优先级越高）</td>
+					<td>CFS/EEVDF，按权重公平分配CPU时间</td>
+					<td>动态调整</td>
+					<td>内核态可抢占，按虚拟时间/截止时间调度，无用户态抢占</td>
+					<td>桌面应用、后台服务、网络服务、通用场景</td>
+			</tr>
+			<tr>
+					<td>SCHED_BATCH</td>
+					<td>普通</td>
+					<td>Fair</td>
+					<td>nice -20~+19</td>
+					<td>优化CPU密集型任务，减少抢占，提升缓存命中率</td>
+					<td>动态长周期</td>
+					<td>降低抢占频率，减少被交互进程打断</td>
+					<td>科学计算、编译、渲染、离线批处理</td>
+			</tr>
+			<tr>
+					<td>SCHED_IDLE</td>
+					<td>普通</td>
+					<td>Fair</td>
+					<td>系统最低</td>
+					<td>仅CPU无其他可运行进程时调度</td>
+					<td>动态</td>
+					<td>任何其他进程都可抢占</td>
+					<td>闲时系统维护、闲置算力任务、非紧急清理</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="四调度策略相关系统调用与工具">四、调度策略相关系统调用与工具</h2>
 <h3 id="1-核心系统调用">1. 核心系统调用</h3>
 <table>
-  <thead>
-      <tr>
-          <th>系统调用</th>
-          <th>核心功能</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>sched_setscheduler()</code></td>
-          <td>设置进程的调度策略、优先级、实时参数</td>
-      </tr>
-      <tr>
-          <td><code>sched_getscheduler()</code></td>
-          <td>获取进程当前使用的调度策略</td>
-      </tr>
-      <tr>
-          <td><code>sched_setparam()</code>/<code>sched_getparam()</code></td>
-          <td>设置/获取进程的调度优先级参数</td>
-      </tr>
-      <tr>
-          <td><code>sched_setattr()</code>/<code>sched_getattr()</code></td>
-          <td>新一代调度属性设置接口，支持SCHED_DEADLINE三参数配置</td>
-      </tr>
-      <tr>
-          <td><code>nice()</code></td>
-          <td>调整当前进程的nice值</td>
-      </tr>
-      <tr>
-          <td><code>setpriority()</code>/<code>getpriority()</code></td>
-          <td>设置/获取进程、进程组、用户的nice优先级</td>
-      </tr>
-      <tr>
-          <td><code>sched_yield()</code></td>
-          <td>主动放弃CPU，让出调度权</td>
-      </tr>
-      <tr>
-          <td><code>sched_setaffinity()</code>/<code>sched_getaffinity()</code></td>
-          <td>设置/获取进程的CPU亲和性，绑定进程到指定CPU核</td>
-      </tr>
-      <tr>
-          <td><code>sched_rr_get_interval()</code></td>
-          <td>获取SCHED_RR进程的时间片长度</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>系统调用</th>
+					<th>核心功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>sched_setscheduler()</code></td>
+					<td>设置进程的调度策略、优先级、实时参数</td>
+			</tr>
+			<tr>
+					<td><code>sched_getscheduler()</code></td>
+					<td>获取进程当前使用的调度策略</td>
+			</tr>
+			<tr>
+					<td><code>sched_setparam()</code>/<code>sched_getparam()</code></td>
+					<td>设置/获取进程的调度优先级参数</td>
+			</tr>
+			<tr>
+					<td><code>sched_setattr()</code>/<code>sched_getattr()</code></td>
+					<td>新一代调度属性设置接口，支持SCHED_DEADLINE三参数配置</td>
+			</tr>
+			<tr>
+					<td><code>nice()</code></td>
+					<td>调整当前进程的nice值</td>
+			</tr>
+			<tr>
+					<td><code>setpriority()</code>/<code>getpriority()</code></td>
+					<td>设置/获取进程、进程组、用户的nice优先级</td>
+			</tr>
+			<tr>
+					<td><code>sched_yield()</code></td>
+					<td>主动放弃CPU，让出调度权</td>
+			</tr>
+			<tr>
+					<td><code>sched_setaffinity()</code>/<code>sched_getaffinity()</code></td>
+					<td>设置/获取进程的CPU亲和性，绑定进程到指定CPU核</td>
+			</tr>
+			<tr>
+					<td><code>sched_rr_get_interval()</code></td>
+					<td>获取SCHED_RR进程的时间片长度</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-用户态常用工具">2. 用户态常用工具</h3>
 <ul>
@@ -492,7 +492,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

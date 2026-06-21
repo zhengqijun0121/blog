@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>GoogleMock 使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/002_googlemock%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="GoogleMock 使用详细总结">
-  <meta property="og:description" content="GoogleMock 使用详细总结 Google Mock（简称gmock）是Google推出的C&#43;&#43;开源Mock框架，与Google Test（gtest）深度集成，是现代C&#43;&#43;单元测试的核心基础设施。它用于在单元测试中创建模拟对象，替代被测代码的外部依赖（数据库、网络、第三方接口、复杂组件等），实现依赖隔离、行为精准控制、交互逻辑验证，让测试更稳定、高效、可复现。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-03-02T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-03-02T10:00:20+08:00">
-    <meta property="article:tag" content="UT">
-    <meta property="article:tag" content="GoogleMock">
-    <meta property="article:tag" content="Gmock">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="GoogleMock 使用详细总结">
+	<meta property="og:description" content="GoogleMock 使用详细总结 Google Mock（简称gmock）是Google推出的C&#43;&#43;开源Mock框架，与Google Test（gtest）深度集成，是现代C&#43;&#43;单元测试的核心基础设施。它用于在单元测试中创建模拟对象，替代被测代码的外部依赖（数据库、网络、第三方接口、复杂组件等），实现依赖隔离、行为精准控制、交互逻辑验证，让测试更稳定、高效、可复现。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-03-02T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-03-02T10:00:20+08:00">
+		<meta property="article:tag" content="UT">
+		<meta property="article:tag" content="GoogleMock">
+		<meta property="article:tag" content="Gmock">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="GoogleMock 使用详细总结">
-  <meta name="twitter:description" content="GoogleMock 使用详细总结 Google Mock（简称gmock）是Google推出的C&#43;&#43;开源Mock框架，与Google Test（gtest）深度集成，是现代C&#43;&#43;单元测试的核心基础设施。它用于在单元测试中创建模拟对象，替代被测代码的外部依赖（数据库、网络、第三方接口、复杂组件等），实现依赖隔离、行为精准控制、交互逻辑验证，让测试更稳定、高效、可复现。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="GoogleMock 使用详细总结">
+	<meta name="twitter:description" content="GoogleMock 使用详细总结 Google Mock（简称gmock）是Google推出的C&#43;&#43;开源Mock框架，与Google Test（gtest）深度集成，是现代C&#43;&#43;单元测试的核心基础设施。它用于在单元测试中创建模拟对象，替代被测代码的外部依赖（数据库、网络、第三方接口、复杂组件等），实现依赖隔离、行为精准控制、交互逻辑验证，让测试更稳定、高效、可复现。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -236,30 +236,30 @@
 <h3 id="13-三种mock对象模式">1.3 三种Mock对象模式</h3>
 <p>gmock提供三种Mock模式，控制对未设置期望的函数调用的处理行为：</p>
 <table>
-  <thead>
-      <tr>
-          <th>模式</th>
-          <th>行为</th>
-          <th>适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>NaggyMock（默认）</td>
-          <td>未设置期望的函数被调用时，打印警告日志，测试不失败</td>
-          <td>开发调试阶段，兼顾灵活性与提示性</td>
-      </tr>
-      <tr>
-          <td>NiceMock</td>
-          <td>未设置期望的函数被调用时，完全忽略，无警告无报错</td>
-          <td>只关注核心交互，非关键函数不影响测试结果</td>
-      </tr>
-      <tr>
-          <td>StrictMock</td>
-          <td>未设置期望的函数被调用时，直接触发测试失败</td>
-          <td>需严格校验协议，任何非预期调用都视为bug</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>模式</th>
+					<th>行为</th>
+					<th>适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>NaggyMock（默认）</td>
+					<td>未设置期望的函数被调用时，打印警告日志，测试不失败</td>
+					<td>开发调试阶段，兼顾灵活性与提示性</td>
+			</tr>
+			<tr>
+					<td>NiceMock</td>
+					<td>未设置期望的函数被调用时，完全忽略，无警告无报错</td>
+					<td>只关注核心交互，非关键函数不影响测试结果</td>
+			</tr>
+			<tr>
+					<td>StrictMock</td>
+					<td>未设置期望的函数被调用时，直接触发测试失败</td>
+					<td>需严格校验协议，任何非预期调用都视为bug</td>
+			</tr>
+	</tbody>
 </table>
 <p>使用方式：<code>NiceMock&lt;MockDB&gt; mock_db;</code> <code>StrictMock&lt;MockDB&gt; mock_db;</code></p>
 <h2 id="二环境搭建与项目集成">二、环境搭建与项目集成</h2>
@@ -326,38 +326,38 @@
 <h2 id="三核心概念与语法">三、核心概念与语法</h2>
 <h3 id="31-六大核心概念">3.1 六大核心概念</h3>
 <table>
-  <thead>
-      <tr>
-          <th>概念</th>
-          <th>核心作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Mock类</td>
-          <td>继承自待模拟的接口，通过gmock宏自动生成桩函数，替代真实依赖类</td>
-      </tr>
-      <tr>
-          <td>期望（EXPECT_CALL）</td>
-          <td>核心宏，定义对mock函数的调用预期（是否调用、调用次数、入参要求）</td>
-      </tr>
-      <tr>
-          <td>匹配器（Matcher）</td>
-          <td>校验函数入参是否符合预期，支持精准匹配、模糊匹配、复合匹配</td>
-      </tr>
-      <tr>
-          <td>基数（Cardinality）</td>
-          <td>定义函数的预期调用次数，如恰好1次、至少2次、任意次</td>
-      </tr>
-      <tr>
-          <td>动作（Action）</td>
-          <td>定义mock函数被调用时执行的行为，如设置返回值、修改出参、调用回调</td>
-      </tr>
-      <tr>
-          <td>序列（Sequence）</td>
-          <td>控制多个mock函数的调用顺序，确保执行符合预期时序</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>概念</th>
+					<th>核心作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Mock类</td>
+					<td>继承自待模拟的接口，通过gmock宏自动生成桩函数，替代真实依赖类</td>
+			</tr>
+			<tr>
+					<td>期望（EXPECT_CALL）</td>
+					<td>核心宏，定义对mock函数的调用预期（是否调用、调用次数、入参要求）</td>
+			</tr>
+			<tr>
+					<td>匹配器（Matcher）</td>
+					<td>校验函数入参是否符合预期，支持精准匹配、模糊匹配、复合匹配</td>
+			</tr>
+			<tr>
+					<td>基数（Cardinality）</td>
+					<td>定义函数的预期调用次数，如恰好1次、至少2次、任意次</td>
+			</tr>
+			<tr>
+					<td>动作（Action）</td>
+					<td>定义mock函数被调用时执行的行为，如设置返回值、修改出参、调用回调</td>
+			</tr>
+			<tr>
+					<td>序列（Sequence）</td>
+					<td>控制多个mock函数的调用顺序，确保执行符合预期时序</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="32-核心宏语法">3.2 核心宏语法</h3>
 <h4 id="1-mock_methodmock函数声明">1. MOCK_METHOD：Mock函数声明</h4>
@@ -619,146 +619,146 @@
 <p>匹配器用于校验函数入参是否符合预期，是gmock最常用的能力之一，支持丰富的匹配规则。</p>
 <h4 id="1-通用基础匹配器">1. 通用基础匹配器</h4>
 <table>
-  <thead>
-      <tr>
-          <th>匹配器</th>
-          <th>作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>_</code></td>
-          <td>万能匹配，匹配任意类型、任意值的参数</td>
-      </tr>
-      <tr>
-          <td><code>A&lt;T&gt;()/An&lt;T&gt;()</code></td>
-          <td>匹配任意T类型的参数</td>
-      </tr>
-      <tr>
-          <td><code>Eq(value)</code> / <code>value</code></td>
-          <td>匹配等于value的参数，直接写value等价于Eq(value)</td>
-      </tr>
-      <tr>
-          <td><code>Ne(value)</code></td>
-          <td>匹配不等于value的参数</td>
-      </tr>
-      <tr>
-          <td><code>Gt(value)</code></td>
-          <td>匹配大于value的参数</td>
-      </tr>
-      <tr>
-          <td><code>Ge(value)</code></td>
-          <td>匹配大于等于value的参数</td>
-      </tr>
-      <tr>
-          <td><code>Lt(value)</code></td>
-          <td>匹配小于value的参数</td>
-      </tr>
-      <tr>
-          <td><code>Le(value)</code></td>
-          <td>匹配小于等于value的参数</td>
-      </tr>
-      <tr>
-          <td><code>IsNull()</code></td>
-          <td>匹配空指针</td>
-      </tr>
-      <tr>
-          <td><code>NotNull()</code></td>
-          <td>匹配非空指针</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>匹配器</th>
+					<th>作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>_</code></td>
+					<td>万能匹配，匹配任意类型、任意值的参数</td>
+			</tr>
+			<tr>
+					<td><code>A&lt;T&gt;()/An&lt;T&gt;()</code></td>
+					<td>匹配任意T类型的参数</td>
+			</tr>
+			<tr>
+					<td><code>Eq(value)</code> / <code>value</code></td>
+					<td>匹配等于value的参数，直接写value等价于Eq(value)</td>
+			</tr>
+			<tr>
+					<td><code>Ne(value)</code></td>
+					<td>匹配不等于value的参数</td>
+			</tr>
+			<tr>
+					<td><code>Gt(value)</code></td>
+					<td>匹配大于value的参数</td>
+			</tr>
+			<tr>
+					<td><code>Ge(value)</code></td>
+					<td>匹配大于等于value的参数</td>
+			</tr>
+			<tr>
+					<td><code>Lt(value)</code></td>
+					<td>匹配小于value的参数</td>
+			</tr>
+			<tr>
+					<td><code>Le(value)</code></td>
+					<td>匹配小于等于value的参数</td>
+			</tr>
+			<tr>
+					<td><code>IsNull()</code></td>
+					<td>匹配空指针</td>
+			</tr>
+			<tr>
+					<td><code>NotNull()</code></td>
+					<td>匹配非空指针</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="2-字符串匹配器">2. 字符串匹配器</h4>
 <p>支持<code>std::string</code>和C风格字符串，大小写敏感/不敏感可选：</p>
 <table>
-  <thead>
-      <tr>
-          <th>匹配器</th>
-          <th>作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>StrEq(str)</code></td>
-          <td>字符串内容完全相等</td>
-      </tr>
-      <tr>
-          <td><code>StrCaseEq(str)</code></td>
-          <td>忽略大小写相等</td>
-      </tr>
-      <tr>
-          <td><code>HasSubstr(substr)</code></td>
-          <td>包含指定子串</td>
-      </tr>
-      <tr>
-          <td><code>StartsWith(prefix)</code></td>
-          <td>以指定前缀开头</td>
-      </tr>
-      <tr>
-          <td><code>EndsWith(suffix)</code></td>
-          <td>以指定后缀结尾</td>
-      </tr>
-      <tr>
-          <td><code>MatchesRegex(regex)</code></td>
-          <td>匹配正则表达式</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>匹配器</th>
+					<th>作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>StrEq(str)</code></td>
+					<td>字符串内容完全相等</td>
+			</tr>
+			<tr>
+					<td><code>StrCaseEq(str)</code></td>
+					<td>忽略大小写相等</td>
+			</tr>
+			<tr>
+					<td><code>HasSubstr(substr)</code></td>
+					<td>包含指定子串</td>
+			</tr>
+			<tr>
+					<td><code>StartsWith(prefix)</code></td>
+					<td>以指定前缀开头</td>
+			</tr>
+			<tr>
+					<td><code>EndsWith(suffix)</code></td>
+					<td>以指定后缀结尾</td>
+			</tr>
+			<tr>
+					<td><code>MatchesRegex(regex)</code></td>
+					<td>匹配正则表达式</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="3-容器匹配器">3. 容器匹配器</h4>
 <p>支持vector、list、map等所有STL容器：</p>
 <table>
-  <thead>
-      <tr>
-          <th>匹配器</th>
-          <th>作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>ElementsAre(a,b,c...)</code></td>
-          <td>容器元素按顺序匹配指定值</td>
-      </tr>
-      <tr>
-          <td><code>ContainerEq(container)</code></td>
-          <td>两个容器完全相等</td>
-      </tr>
-      <tr>
-          <td><code>Contains(value)</code></td>
-          <td>容器包含指定值</td>
-      </tr>
-      <tr>
-          <td><code>Each(matcher)</code></td>
-          <td>容器中每个元素都匹配指定规则</td>
-      </tr>
-      <tr>
-          <td><code>SizeIs(matcher)</code></td>
-          <td>容器大小匹配指定规则</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>匹配器</th>
+					<th>作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>ElementsAre(a,b,c...)</code></td>
+					<td>容器元素按顺序匹配指定值</td>
+			</tr>
+			<tr>
+					<td><code>ContainerEq(container)</code></td>
+					<td>两个容器完全相等</td>
+			</tr>
+			<tr>
+					<td><code>Contains(value)</code></td>
+					<td>容器包含指定值</td>
+			</tr>
+			<tr>
+					<td><code>Each(matcher)</code></td>
+					<td>容器中每个元素都匹配指定规则</td>
+			</tr>
+			<tr>
+					<td><code>SizeIs(matcher)</code></td>
+					<td>容器大小匹配指定规则</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="4-复合匹配器">4. 复合匹配器</h4>
 <p>支持多个匹配器组合，实现复杂逻辑校验：</p>
 <table>
-  <thead>
-      <tr>
-          <th>匹配器</th>
-          <th>作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>Not(matcher)</code></td>
-          <td>逻辑非，不匹配指定规则</td>
-      </tr>
-      <tr>
-          <td><code>AllOf(m1,m2,m3...)</code></td>
-          <td>逻辑与，同时匹配所有规则</td>
-      </tr>
-      <tr>
-          <td><code>AnyOf(m1,m2,m3...)</code></td>
-          <td>逻辑或，匹配任意一个规则</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>匹配器</th>
+					<th>作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>Not(matcher)</code></td>
+					<td>逻辑非，不匹配指定规则</td>
+			</tr>
+			<tr>
+					<td><code>AllOf(m1,m2,m3...)</code></td>
+					<td>逻辑与，同时匹配所有规则</td>
+			</tr>
+			<tr>
+					<td><code>AnyOf(m1,m2,m3...)</code></td>
+					<td>逻辑或，匹配任意一个规则</td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>示例</strong>：</p>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
@@ -775,34 +775,34 @@
 <h3 id="52-基数cardinality调用次数控制">5.2 基数（Cardinality）：调用次数控制</h3>
 <p>用于<code>Times()</code>子句，定义函数的预期调用次数，测试结束时gmock会自动校验，不符合则测试失败。</p>
 <table>
-  <thead>
-      <tr>
-          <th>基数</th>
-          <th>含义</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>Times(n)</code></td>
-          <td>必须恰好被调用n次</td>
-      </tr>
-      <tr>
-          <td><code>AtLeast(n)</code></td>
-          <td>至少被调用n次</td>
-      </tr>
-      <tr>
-          <td><code>AtMost(n)</code></td>
-          <td>最多被调用n次</td>
-      </tr>
-      <tr>
-          <td><code>Between(m,n)</code></td>
-          <td>调用次数在m~n之间（包含边界）</td>
-      </tr>
-      <tr>
-          <td><code>AnyNumber()</code></td>
-          <td>任意次数，不校验调用次数</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>基数</th>
+					<th>含义</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>Times(n)</code></td>
+					<td>必须恰好被调用n次</td>
+			</tr>
+			<tr>
+					<td><code>AtLeast(n)</code></td>
+					<td>至少被调用n次</td>
+			</tr>
+			<tr>
+					<td><code>AtMost(n)</code></td>
+					<td>最多被调用n次</td>
+			</tr>
+			<tr>
+					<td><code>Between(m,n)</code></td>
+					<td>调用次数在m~n之间（包含边界）</td>
+			</tr>
+			<tr>
+					<td><code>AnyNumber()</code></td>
+					<td>任意次数，不校验调用次数</td>
+			</tr>
+	</tbody>
 </table>
 <blockquote>
 <p>自动推断规则：若不写<code>Times()</code>，gmock会根据动作自动推断：</p>
@@ -815,91 +815,91 @@
 <p>定义mock函数被调用时执行的操作，支持返回值设置、出参修改、回调执行等丰富能力。</p>
 <h4 id="1-基础返回动作">1. 基础返回动作</h4>
 <table>
-  <thead>
-      <tr>
-          <th>动作</th>
-          <th>作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>Return(value)</code></td>
-          <td>返回指定value，必须与函数返回值类型匹配</td>
-      </tr>
-      <tr>
-          <td><code>Return()</code></td>
-          <td>用于void函数，无返回值</td>
-      </tr>
-      <tr>
-          <td><code>ReturnRef(var)</code></td>
-          <td>返回变量的引用</td>
-      </tr>
-      <tr>
-          <td><code>ReturnNew&lt;T&gt;(args)</code></td>
-          <td>返回<code>new T(args)</code>创建的指针</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>动作</th>
+					<th>作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>Return(value)</code></td>
+					<td>返回指定value，必须与函数返回值类型匹配</td>
+			</tr>
+			<tr>
+					<td><code>Return()</code></td>
+					<td>用于void函数，无返回值</td>
+			</tr>
+			<tr>
+					<td><code>ReturnRef(var)</code></td>
+					<td>返回变量的引用</td>
+			</tr>
+			<tr>
+					<td><code>ReturnNew&lt;T&gt;(args)</code></td>
+					<td>返回<code>new T(args)</code>创建的指针</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="2-出参设置动作">2. 出参设置动作</h4>
 <table>
-  <thead>
-      <tr>
-          <th>动作</th>
-          <th>作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>SetArgPointee&lt;N&gt;(value)</code></td>
-          <td>给第N个参数（指针类型）指向的地址赋值</td>
-      </tr>
-      <tr>
-          <td><code>SetArgReferee&lt;N&gt;(value)</code></td>
-          <td>给第N个参数（引用类型）赋值</td>
-      </tr>
-      <tr>
-          <td><code>SaveArg&lt;N&gt;(ptr)</code></td>
-          <td>把第N个参数的值保存到ptr指向的变量</td>
-      </tr>
-      <tr>
-          <td><code>SaveArgPointee&lt;N&gt;(ptr)</code></td>
-          <td>把第N个指针参数指向的值保存到ptr</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>动作</th>
+					<th>作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>SetArgPointee&lt;N&gt;(value)</code></td>
+					<td>给第N个参数（指针类型）指向的地址赋值</td>
+			</tr>
+			<tr>
+					<td><code>SetArgReferee&lt;N&gt;(value)</code></td>
+					<td>给第N个参数（引用类型）赋值</td>
+			</tr>
+			<tr>
+					<td><code>SaveArg&lt;N&gt;(ptr)</code></td>
+					<td>把第N个参数的值保存到ptr指向的变量</td>
+			</tr>
+			<tr>
+					<td><code>SaveArgPointee&lt;N&gt;(ptr)</code></td>
+					<td>把第N个指针参数指向的值保存到ptr</td>
+			</tr>
+	</tbody>
 </table>
 <blockquote>
 <p>注意：参数索引从0开始，第一个参数索引为0，第二个为1，以此类推。</p>
 </blockquote>
 <h4 id="3-复合与自定义动作">3. 复合与自定义动作</h4>
 <table>
-  <thead>
-      <tr>
-          <th>动作</th>
-          <th>作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>DoAll(a1,a2,a3...)</code></td>
-          <td>按顺序执行多个动作，最后一个动作的返回值作为函数返回值</td>
-      </tr>
-      <tr>
-          <td><code>Invoke(func)</code></td>
-          <td>调用全局函数/仿函数/lambda表达式，入参与mock函数一致</td>
-      </tr>
-      <tr>
-          <td><code>Invoke(obj, &amp;Class::Method)</code></td>
-          <td>调用对象的成员函数</td>
-      </tr>
-      <tr>
-          <td><code>Throw(exception)</code></td>
-          <td>抛出指定异常</td>
-      </tr>
-      <tr>
-          <td><code>Assign(&amp;var, value)</code></td>
-          <td>给指定变量赋值</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>动作</th>
+					<th>作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>DoAll(a1,a2,a3...)</code></td>
+					<td>按顺序执行多个动作，最后一个动作的返回值作为函数返回值</td>
+			</tr>
+			<tr>
+					<td><code>Invoke(func)</code></td>
+					<td>调用全局函数/仿函数/lambda表达式，入参与mock函数一致</td>
+			</tr>
+			<tr>
+					<td><code>Invoke(obj, &amp;Class::Method)</code></td>
+					<td>调用对象的成员函数</td>
+			</tr>
+			<tr>
+					<td><code>Throw(exception)</code></td>
+					<td>抛出指定异常</td>
+			</tr>
+			<tr>
+					<td><code>Assign(&amp;var, value)</code></td>
+					<td>给指定变量赋值</td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>示例</strong>：</p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -1132,35 +1132,35 @@
 <h3 id="65-on_call与expect_call的区别与配合">6.5 ON_CALL与EXPECT_CALL的区别与配合</h3>
 <p>这是新手最容易混淆的两个核心宏，核心区别与最佳配合方式如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th>特性</th>
-          <th>ON_CALL</th>
-          <th>EXPECT_CALL</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>核心作用</td>
-          <td>设置函数默认行为</td>
-          <td>设置调用期望，校验交互逻辑</td>
-      </tr>
-      <tr>
-          <td>调用校验</td>
-          <td>不校验函数是否被调用</td>
-          <td>严格校验调用次数、入参、顺序，不符合则测试失败</td>
-      </tr>
-      <tr>
-          <td>匹配优先级</td>
-          <td>低，无匹配的EXPECT_CALL时才生效</td>
-          <td>高，优先匹配EXPECT_CALL</td>
-      </tr>
-      <tr>
-          <td>适用场景</td>
-          <td>设置通用默认行为，避免重复代码</td>
-          <td>校验当前测试用例关心的核心交互</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>特性</th>
+					<th>ON_CALL</th>
+					<th>EXPECT_CALL</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>核心作用</td>
+					<td>设置函数默认行为</td>
+					<td>设置调用期望，校验交互逻辑</td>
+			</tr>
+			<tr>
+					<td>调用校验</td>
+					<td>不校验函数是否被调用</td>
+					<td>严格校验调用次数、入参、顺序，不符合则测试失败</td>
+			</tr>
+			<tr>
+					<td>匹配优先级</td>
+					<td>低，无匹配的EXPECT_CALL时才生效</td>
+					<td>高，优先匹配EXPECT_CALL</td>
+			</tr>
+			<tr>
+					<td>适用场景</td>
+					<td>设置通用默认行为，避免重复代码</td>
+					<td>校验当前测试用例关心的核心交互</td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>最佳实践</strong>：</p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -1292,7 +1292,7 @@ Mock类的唯一作用是模拟依赖行为，禁止在Mock类中添加任何业
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>Qt5 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/002_qt5%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="Qt5 语法详细总结">
-  <meta property="og:description" content="Qt5 语法详细总结 Qt5 是跨平台 C&#43;&#43; GUI 开发框架，核心基于元对象系统(MOC) 扩展标准C&#43;&#43;，核心特性为信号与槽机制，同时提供了完整的UI、事件、IO、网络、多线程等开发能力。以下是从基础到进阶的全语法体系总结。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-02-20T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-02-20T10:00:20+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="Qt">
-    <meta property="article:tag" content="Qt5">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="Qt5 语法详细总结">
+	<meta property="og:description" content="Qt5 语法详细总结 Qt5 是跨平台 C&#43;&#43; GUI 开发框架，核心基于元对象系统(MOC) 扩展标准C&#43;&#43;，核心特性为信号与槽机制，同时提供了完整的UI、事件、IO、网络、多线程等开发能力。以下是从基础到进阶的全语法体系总结。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-02-20T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-02-20T10:00:20+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="Qt">
+		<meta property="article:tag" content="Qt5">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="Qt5 语法详细总结">
-  <meta name="twitter:description" content="Qt5 语法详细总结 Qt5 是跨平台 C&#43;&#43; GUI 开发框架，核心基于元对象系统(MOC) 扩展标准C&#43;&#43;，核心特性为信号与槽机制，同时提供了完整的UI、事件、IO、网络、多线程等开发能力。以下是从基础到进阶的全语法体系总结。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="Qt5 语法详细总结">
+	<meta name="twitter:description" content="Qt5 语法详细总结 Qt5 是跨平台 C&#43;&#43; GUI 开发框架，核心基于元对象系统(MOC) 扩展标准C&#43;&#43;，核心特性为信号与槽机制，同时提供了完整的UI、事件、IO、网络、多线程等开发能力。以下是从基础到进阶的全语法体系总结。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -354,35 +354,35 @@
 </span></span></span><span class="line"><span class="cl"><span class="n">QObject</span><span class="o">::</span><span class="n">connect</span><span class="p">(</span><span class="n">btn</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="n">clicked</span><span class="p">()),</span> <span class="n">w</span><span class="p">,</span> <span class="n">SLOT</span><span class="p">(</span><span class="n">mySlot</span><span class="p">()));</span></span></span></code></pre></div></div>
 <h3 id="23-连接类型-qtconnectiontype">2.3 连接类型 <code>Qt::ConnectionType</code></h3>
 <table>
-  <thead>
-      <tr>
-          <th>类型</th>
-          <th>作用</th>
-          <th>适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>Qt::AutoConnection</code></td>
-          <td>默认值，自动判断：同线程用直连，跨线程用队列连接</td>
-          <td>绝大多数通用场景</td>
-      </tr>
-      <tr>
-          <td><code>Qt::DirectConnection</code></td>
-          <td>信号发出时立即调用槽函数，槽在发送者线程执行</td>
-          <td>同线程同步执行，需谨慎跨线程使用</td>
-      </tr>
-      <tr>
-          <td><code>Qt::QueuedConnection</code></td>
-          <td>信号放入接收者线程的事件队列，等待事件循环处理，槽在接收者线程执行</td>
-          <td>跨线程通信，线程安全</td>
-      </tr>
-      <tr>
-          <td><code>Qt::BlockingQueuedConnection</code></td>
-          <td>信号发出后发送者线程阻塞，直到槽执行完毕</td>
-          <td>跨线程同步操作，禁止同线程使用（会死锁）</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>类型</th>
+					<th>作用</th>
+					<th>适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>Qt::AutoConnection</code></td>
+					<td>默认值，自动判断：同线程用直连，跨线程用队列连接</td>
+					<td>绝大多数通用场景</td>
+			</tr>
+			<tr>
+					<td><code>Qt::DirectConnection</code></td>
+					<td>信号发出时立即调用槽函数，槽在发送者线程执行</td>
+					<td>同线程同步执行，需谨慎跨线程使用</td>
+			</tr>
+			<tr>
+					<td><code>Qt::QueuedConnection</code></td>
+					<td>信号放入接收者线程的事件队列，等待事件循环处理，槽在接收者线程执行</td>
+					<td>跨线程通信，线程安全</td>
+			</tr>
+			<tr>
+					<td><code>Qt::BlockingQueuedConnection</code></td>
+					<td>信号发出后发送者线程阻塞，直到槽执行完毕</td>
+					<td>跨线程同步操作，禁止同线程使用（会死锁）</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="24-断开连接语法">2.4 断开连接语法</h3>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -447,55 +447,55 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 <h3 id="32-qt5-核心模块说明">3.2 Qt5 核心模块说明</h3>
 <table>
-  <thead>
-      <tr>
-          <th>模块名</th>
-          <th>功能说明</th>
-          <th>引入方式</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>core</td>
-          <td>核心非GUI功能：元对象、事件循环、容器、线程、文件IO、定时器</td>
-          <td>默认包含</td>
-      </tr>
-      <tr>
-          <td>gui</td>
-          <td>GUI核心基础：图形、字体、窗口、事件、OpenGL</td>
-          <td>默认包含</td>
-      </tr>
-      <tr>
-          <td>widgets</td>
-          <td>桌面UI控件：QWidget、QPushButton、QLabel等所有标准控件</td>
-          <td><code>QT += widgets</code></td>
-      </tr>
-      <tr>
-          <td>network</td>
-          <td>网络编程：TCP/UDP/HTTP/WebSocket</td>
-          <td><code>QT += network</code></td>
-      </tr>
-      <tr>
-          <td>sql</td>
-          <td>数据库操作：MySQL、SQLite、ODBC等</td>
-          <td><code>QT += sql</code></td>
-      </tr>
-      <tr>
-          <td>multimedia</td>
-          <td>音视频播放、采集</td>
-          <td><code>QT += multimedia</code></td>
-      </tr>
-      <tr>
-          <td>qml/quick</td>
-          <td>QML/Qt Quick 动态UI开发</td>
-          <td><code>QT += qml quick</code></td>
-      </tr>
-      <tr>
-          <td>printsupport</td>
-          <td>打印相关功能</td>
-          <td><code>QT += printsupport</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>模块名</th>
+					<th>功能说明</th>
+					<th>引入方式</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>core</td>
+					<td>核心非GUI功能：元对象、事件循环、容器、线程、文件IO、定时器</td>
+					<td>默认包含</td>
+			</tr>
+			<tr>
+					<td>gui</td>
+					<td>GUI核心基础：图形、字体、窗口、事件、OpenGL</td>
+					<td>默认包含</td>
+			</tr>
+			<tr>
+					<td>widgets</td>
+					<td>桌面UI控件：QWidget、QPushButton、QLabel等所有标准控件</td>
+					<td><code>QT += widgets</code></td>
+			</tr>
+			<tr>
+					<td>network</td>
+					<td>网络编程：TCP/UDP/HTTP/WebSocket</td>
+					<td><code>QT += network</code></td>
+			</tr>
+			<tr>
+					<td>sql</td>
+					<td>数据库操作：MySQL、SQLite、ODBC等</td>
+					<td><code>QT += sql</code></td>
+			</tr>
+			<tr>
+					<td>multimedia</td>
+					<td>音视频播放、采集</td>
+					<td><code>QT += multimedia</code></td>
+			</tr>
+			<tr>
+					<td>qml/quick</td>
+					<td>QML/Qt Quick 动态UI开发</td>
+					<td><code>QT += qml quick</code></td>
+			</tr>
+			<tr>
+					<td>printsupport</td>
+					<td>打印相关功能</td>
+					<td><code>QT += printsupport</code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="33-qt5-程序入口标准写法">3.3 Qt5 程序入口标准写法</h3>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -671,30 +671,30 @@
 <p>Qt推荐使用布局管理替代固定坐标，实现窗口缩放自适应，四大核心布局如下。</p>
 <h4 id="核心布局类与语法">核心布局类与语法</h4>
 <table>
-  <thead>
-      <tr>
-          <th>布局类</th>
-          <th>功能</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>QHBoxLayout</code></td>
-          <td>水平布局，控件从左到右排列</td>
-      </tr>
-      <tr>
-          <td><code>QVBoxLayout</code></td>
-          <td>垂直布局，控件从上到下排列</td>
-      </tr>
-      <tr>
-          <td><code>QGridLayout</code></td>
-          <td>网格布局，按行列排列控件</td>
-      </tr>
-      <tr>
-          <td><code>QFormLayout</code></td>
-          <td>表单布局，标签+输入框两列布局</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>布局类</th>
+					<th>功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>QHBoxLayout</code></td>
+					<td>水平布局，控件从左到右排列</td>
+			</tr>
+			<tr>
+					<td><code>QVBoxLayout</code></td>
+					<td>垂直布局，控件从上到下排列</td>
+			</tr>
+			<tr>
+					<td><code>QGridLayout</code></td>
+					<td>网格布局，按行列排列控件</td>
+			</tr>
+			<tr>
+					<td><code>QFormLayout</code></td>
+					<td>表单布局，标签+输入框两列布局</td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>代码示例</strong></p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -728,64 +728,64 @@
 </span></span><span class="line"><span class="cl"><span class="n">window</span><span class="o">-&gt;</span><span class="n">show</span><span class="p">();</span></span></span></code></pre></div></div>
 <h3 id="53-常用标准控件核心语法">5.3 常用标准控件核心语法</h3>
 <table>
-  <thead>
-      <tr>
-          <th>控件类</th>
-          <th>核心功能</th>
-          <th>核心信号</th>
-          <th>核心方法</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>QPushButton</code></td>
-          <td>按钮控件</td>
-          <td><code>clicked()</code> 点击、<code>pressed()</code> 按下</td>
-          <td><code>setText()</code> 设置文本、<code>setIcon()</code> 设置图标</td>
-      </tr>
-      <tr>
-          <td><code>QLabel</code></td>
-          <td>文本/图片显示标签</td>
-          <td>无默认常用信号</td>
-          <td><code>setText()</code> 设置文本、<code>setPixmap()</code> 设置图片、<code>setAlignment()</code> 设置对齐</td>
-      </tr>
-      <tr>
-          <td><code>QLineEdit</code></td>
-          <td>单行输入框</td>
-          <td><code>textChanged()</code> 文本变化、<code>editingFinished()</code> 编辑完成</td>
-          <td><code>text()</code> 获取文本、<code>setPlaceholderText()</code> 设置占位符、<code>setEchoMode()</code> 设置密码模式</td>
-      </tr>
-      <tr>
-          <td><code>QTextEdit</code></td>
-          <td>多行富文本输入框</td>
-          <td><code>textChanged()</code> 文本变化</td>
-          <td><code>toPlainText()</code> 获取纯文本、<code>append()</code> 追加文本</td>
-      </tr>
-      <tr>
-          <td><code>QCheckBox</code></td>
-          <td>复选框</td>
-          <td><code>stateChanged()</code> 状态变化</td>
-          <td><code>isChecked()</code> 判断是否选中、<code>setChecked()</code> 设置选中状态</td>
-      </tr>
-      <tr>
-          <td><code>QRadioButton</code></td>
-          <td>单选框</td>
-          <td><code>toggled()</code> 状态切换</td>
-          <td><code>isChecked()</code> 判断是否选中</td>
-      </tr>
-      <tr>
-          <td><code>QComboBox</code></td>
-          <td>下拉选择框</td>
-          <td><code>currentIndexChanged()</code> 选中项变化</td>
-          <td><code>addItem()</code> 添加选项、<code>currentText()</code> 获取当前选中文本</td>
-      </tr>
-      <tr>
-          <td><code>QSlider</code></td>
-          <td>滑块控件</td>
-          <td><code>valueChanged()</code> 值变化</td>
-          <td><code>setValue()</code> 设置值、<code>setRange()</code> 设置取值范围</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>控件类</th>
+					<th>核心功能</th>
+					<th>核心信号</th>
+					<th>核心方法</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>QPushButton</code></td>
+					<td>按钮控件</td>
+					<td><code>clicked()</code> 点击、<code>pressed()</code> 按下</td>
+					<td><code>setText()</code> 设置文本、<code>setIcon()</code> 设置图标</td>
+			</tr>
+			<tr>
+					<td><code>QLabel</code></td>
+					<td>文本/图片显示标签</td>
+					<td>无默认常用信号</td>
+					<td><code>setText()</code> 设置文本、<code>setPixmap()</code> 设置图片、<code>setAlignment()</code> 设置对齐</td>
+			</tr>
+			<tr>
+					<td><code>QLineEdit</code></td>
+					<td>单行输入框</td>
+					<td><code>textChanged()</code> 文本变化、<code>editingFinished()</code> 编辑完成</td>
+					<td><code>text()</code> 获取文本、<code>setPlaceholderText()</code> 设置占位符、<code>setEchoMode()</code> 设置密码模式</td>
+			</tr>
+			<tr>
+					<td><code>QTextEdit</code></td>
+					<td>多行富文本输入框</td>
+					<td><code>textChanged()</code> 文本变化</td>
+					<td><code>toPlainText()</code> 获取纯文本、<code>append()</code> 追加文本</td>
+			</tr>
+			<tr>
+					<td><code>QCheckBox</code></td>
+					<td>复选框</td>
+					<td><code>stateChanged()</code> 状态变化</td>
+					<td><code>isChecked()</code> 判断是否选中、<code>setChecked()</code> 设置选中状态</td>
+			</tr>
+			<tr>
+					<td><code>QRadioButton</code></td>
+					<td>单选框</td>
+					<td><code>toggled()</code> 状态切换</td>
+					<td><code>isChecked()</code> 判断是否选中</td>
+			</tr>
+			<tr>
+					<td><code>QComboBox</code></td>
+					<td>下拉选择框</td>
+					<td><code>currentIndexChanged()</code> 选中项变化</td>
+					<td><code>addItem()</code> 添加选项、<code>currentText()</code> 获取当前选中文本</td>
+			</tr>
+			<tr>
+					<td><code>QSlider</code></td>
+					<td>滑块控件</td>
+					<td><code>valueChanged()</code> 值变化</td>
+					<td><code>setValue()</code> 设置值、<code>setRange()</code> 设置取值范围</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="54-标准对话框核心语法">5.4 标准对话框核心语法</h3>
 <p>Qt提供了开箱即用的标准对话框，均通过静态方法调用，无需手动创建实例。</p>
@@ -966,60 +966,60 @@
 <p>Qt5的MVC架构变体，将<strong>数据(Model)</strong> 和<strong>显示(View)</strong> 完全分离，通过<strong>委托(Delegate)</strong> 处理单元格渲染和编辑，适合大数据量、复杂列表/表格/树形结构的展示。</p>
 <h3 id="71-核心类">7.1 核心类</h3>
 <table>
-  <thead>
-      <tr>
-          <th>分类</th>
-          <th>核心类</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>模型基类</td>
-          <td><code>QAbstractItemModel</code></td>
-          <td>所有模型的抽象基类，需子类化实现核心接口</td>
-      </tr>
-      <tr>
-          <td>标准模型</td>
-          <td><code>QStringListModel</code></td>
-          <td>字符串列表专用模型</td>
-      </tr>
-      <tr>
-          <td>标准模型</td>
-          <td><code>QStandardItemModel</code></td>
-          <td>通用数据模型，支持表格/树形结构</td>
-      </tr>
-      <tr>
-          <td>标准模型</td>
-          <td><code>QSqlTableModel</code></td>
-          <td>数据库表专用模型</td>
-      </tr>
-      <tr>
-          <td>视图基类</td>
-          <td><code>QAbstractItemView</code></td>
-          <td>所有视图的抽象基类</td>
-      </tr>
-      <tr>
-          <td>标准视图</td>
-          <td><code>QListView</code></td>
-          <td>列表视图</td>
-      </tr>
-      <tr>
-          <td>标准视图</td>
-          <td><code>QTableView</code></td>
-          <td>表格视图</td>
-      </tr>
-      <tr>
-          <td>标准视图</td>
-          <td><code>QTreeView</code></td>
-          <td>树形视图</td>
-      </tr>
-      <tr>
-          <td>委托</td>
-          <td><code>QStyledItemDelegate</code></td>
-          <td>自定义单元格渲染和编辑的基类</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>分类</th>
+					<th>核心类</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>模型基类</td>
+					<td><code>QAbstractItemModel</code></td>
+					<td>所有模型的抽象基类，需子类化实现核心接口</td>
+			</tr>
+			<tr>
+					<td>标准模型</td>
+					<td><code>QStringListModel</code></td>
+					<td>字符串列表专用模型</td>
+			</tr>
+			<tr>
+					<td>标准模型</td>
+					<td><code>QStandardItemModel</code></td>
+					<td>通用数据模型，支持表格/树形结构</td>
+			</tr>
+			<tr>
+					<td>标准模型</td>
+					<td><code>QSqlTableModel</code></td>
+					<td>数据库表专用模型</td>
+			</tr>
+			<tr>
+					<td>视图基类</td>
+					<td><code>QAbstractItemView</code></td>
+					<td>所有视图的抽象基类</td>
+			</tr>
+			<tr>
+					<td>标准视图</td>
+					<td><code>QListView</code></td>
+					<td>列表视图</td>
+			</tr>
+			<tr>
+					<td>标准视图</td>
+					<td><code>QTableView</code></td>
+					<td>表格视图</td>
+			</tr>
+			<tr>
+					<td>标准视图</td>
+					<td><code>QTreeView</code></td>
+					<td>树形视图</td>
+			</tr>
+			<tr>
+					<td>委托</td>
+					<td><code>QStyledItemDelegate</code></td>
+					<td>自定义单元格渲染和编辑的基类</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="72-代码示例">7.2 代码示例</h3>
 <h4 id="1-qstringlistmodel--qlistview">1. QStringListModel + QListView</h4>
@@ -1556,7 +1556,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

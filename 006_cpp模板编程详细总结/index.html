@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>C&#43;&#43; 模板编程详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/006_cpp%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="C&#43;&#43; 模板编程详细总结">
-  <meta property="og:description" content="C&#43;&#43; 模板编程 超详细全面总结 模板是C&#43;&#43;泛型编程的核心基石，本质是编译期代码生成机制：编译器根据传入的类型/常量参数，在编译期自动生成类型安全、零运行时开销的具体代码，实现“一次编写，任意类型复用”，同时支撑编译期计算、类型元编程等高级特性。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-01-11T09:00:00+08:00">
-    <meta property="article:modified_time" content="2026-01-11T09:30:00+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="Cpp">
-    <meta property="article:tag" content="Template">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="C&#43;&#43; 模板编程详细总结">
+	<meta property="og:description" content="C&#43;&#43; 模板编程 超详细全面总结 模板是C&#43;&#43;泛型编程的核心基石，本质是编译期代码生成机制：编译器根据传入的类型/常量参数，在编译期自动生成类型安全、零运行时开销的具体代码，实现“一次编写，任意类型复用”，同时支撑编译期计算、类型元编程等高级特性。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-01-11T09:00:00+08:00">
+		<meta property="article:modified_time" content="2026-01-11T09:30:00+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="Cpp">
+		<meta property="article:tag" content="Template">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="C&#43;&#43; 模板编程详细总结">
-  <meta name="twitter:description" content="C&#43;&#43; 模板编程 超详细全面总结 模板是C&#43;&#43;泛型编程的核心基石，本质是编译期代码生成机制：编译器根据传入的类型/常量参数，在编译期自动生成类型安全、零运行时开销的具体代码，实现“一次编写，任意类型复用”，同时支撑编译期计算、类型元编程等高级特性。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="C&#43;&#43; 模板编程详细总结">
+	<meta name="twitter:description" content="C&#43;&#43; 模板编程 超详细全面总结 模板是C&#43;&#43;泛型编程的核心基石，本质是编译期代码生成机制：编译器根据传入的类型/常量参数，在编译期自动生成类型安全、零运行时开销的具体代码，实现“一次编写，任意类型复用”，同时支撑编译期计算、类型元编程等高级特性。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -261,35 +261,35 @@
 <h3 id="12-模板基础语法与分类">1.2 模板基础语法与分类</h3>
 <p>C++模板分为四大核心类型，覆盖所有泛型场景：</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">模板类型</th>
-          <th style="text-align: left">引入标准</th>
-          <th style="text-align: left">核心用途</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">函数模板</td>
-          <td style="text-align: left">C++98</td>
-          <td style="text-align: left">泛型函数，适配任意类型的函数逻辑</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">类模板</td>
-          <td style="text-align: left">C++98</td>
-          <td style="text-align: left">泛型类/结构体，适配任意类型的类逻辑</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">别名模板</td>
-          <td style="text-align: left">C++11</td>
-          <td style="text-align: left">模板化的类型别名，解决typedef不支持泛型的问题</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">变量模板</td>
-          <td style="text-align: left">C++14</td>
-          <td style="text-align: left">模板化的常量/变量，实现泛型常量与类型萃取简化</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">模板类型</th>
+					<th style="text-align: left">引入标准</th>
+					<th style="text-align: left">核心用途</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">函数模板</td>
+					<td style="text-align: left">C++98</td>
+					<td style="text-align: left">泛型函数，适配任意类型的函数逻辑</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">类模板</td>
+					<td style="text-align: left">C++98</td>
+					<td style="text-align: left">泛型类/结构体，适配任意类型的类逻辑</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">别名模板</td>
+					<td style="text-align: left">C++11</td>
+					<td style="text-align: left">模板化的类型别名，解决typedef不支持泛型的问题</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">变量模板</td>
+					<td style="text-align: left">C++14</td>
+					<td style="text-align: left">模板化的常量/变量，实现泛型常量与类型萃取简化</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="121-函数模板">1.2.1 函数模板</h4>
 <p>用于实现泛型函数，是最基础的模板形式。</p>
@@ -447,30 +447,30 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 <p><strong>支持范围与限制</strong>：</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">标准</th>
-          <th style="text-align: left">支持的非类型参数类型</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">C++98</td>
-          <td style="text-align: left">整数类型、枚举类型、指针/左值引用类型</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">C++17</td>
-          <td style="text-align: left">新增auto自动推导非类型参数类型</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">C++20</td>
-          <td style="text-align: left">新增浮点数、满足constexpr构造的字面量类类型</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">C++23</td>
-          <td style="text-align: left">新增字符串字面量、更灵活的类类型支持</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">标准</th>
+					<th style="text-align: left">支持的非类型参数类型</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">C++98</td>
+					<td style="text-align: left">整数类型、枚举类型、指针/左值引用类型</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">C++17</td>
+					<td style="text-align: left">新增auto自动推导非类型参数类型</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">C++20</td>
+					<td style="text-align: left">新增浮点数、满足constexpr构造的字面量类类型</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">C++23</td>
+					<td style="text-align: left">新增字符串字面量、更灵活的类类型支持</td>
+			</tr>
+	</tbody>
 </table>
 <ul>
 <li>核心限制：必须是<strong>编译期可确定的常量表达式</strong>，运行时可变的值无法作为非类型模板参数。</li>
@@ -678,35 +678,35 @@
 <li>
 <p><strong>折叠表达式（C++17 简化方式）</strong>：大幅简化参数包的展开逻辑，支持4种折叠形式</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">折叠类型</th>
-          <th style="text-align: left">语法</th>
-          <th style="text-align: left">展开结果</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">一元右折叠</td>
-          <td style="text-align: left"><code>(op ...)</code></td>
-          <td style="text-align: left"><code>arg1 op (arg2 op (arg3 op ...))</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">一元左折叠</td>
-          <td style="text-align: left"><code>(... op)</code></td>
-          <td style="text-align: left"><code>(((arg1 op arg2) op arg3) op ...)</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">二元右折叠</td>
-          <td style="text-align: left"><code>(init op ... op args)</code></td>
-          <td style="text-align: left"><code>init op (arg1 op (arg2 op ...))</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">二元左折叠</td>
-          <td style="text-align: left"><code>(args op ... op init)</code></td>
-          <td style="text-align: left"><code>(((init op arg1) op arg2) op ...)</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">折叠类型</th>
+					<th style="text-align: left">语法</th>
+					<th style="text-align: left">展开结果</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">一元右折叠</td>
+					<td style="text-align: left"><code>(op ...)</code></td>
+					<td style="text-align: left"><code>arg1 op (arg2 op (arg3 op ...))</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">一元左折叠</td>
+					<td style="text-align: left"><code>(... op)</code></td>
+					<td style="text-align: left"><code>(((arg1 op arg2) op arg3) op ...)</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">二元右折叠</td>
+					<td style="text-align: left"><code>(init op ... op args)</code></td>
+					<td style="text-align: left"><code>init op (arg1 op (arg2 op ...))</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">二元左折叠</td>
+					<td style="text-align: left"><code>(args op ... op init)</code></td>
+					<td style="text-align: left"><code>(((init op arg1) op arg2) op ...)</code></td>
+			</tr>
+	</tbody>
 </table>
 <p>常用示例：</p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -817,30 +817,30 @@
 <p>类型萃取是基于模板特化、SFINAE实现的<strong>编译期类型信息查询与转换工具</strong>，C++标准库在<code>&lt;type_traits&gt;</code>头文件中提供了完整的实现，是泛型编程、模板元编程的基础工具库。</p>
 <h3 id="51-核心分类与常用工具">5.1 核心分类与常用工具</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">分类</th>
-          <th style="text-align: left">核心用途</th>
-          <th style="text-align: left">常用工具</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">类型判断</td>
-          <td style="text-align: left">编译期查询类型的属性、类别、关系</td>
-          <td style="text-align: left"><code>is_integral</code>/<code>is_floating_point</code>/<code>is_pointer</code>/<code>is_reference</code>/<code>is_same</code>/<code>is_convertible</code>/<code>is_base_of</code>/<code>is_invocable</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">类型修改</td>
-          <td style="text-align: left">编译期对类型进行转换、修饰符增减</td>
-          <td style="text-align: left"><code>remove_const</code>/<code>add_const</code>/<code>remove_reference</code>/<code>add_lvalue_reference</code>/<code>remove_pointer</code>/<code>add_pointer</code>/<code>decay</code>/<code>invoke_result</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">编译期逻辑</td>
-          <td style="text-align: left">编译期逻辑运算，组合多个判断条件</td>
-          <td style="text-align: left"><code>conjunction</code>/<code>disjunction</code>/<code>negation</code>（C++17）</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">分类</th>
+					<th style="text-align: left">核心用途</th>
+					<th style="text-align: left">常用工具</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">类型判断</td>
+					<td style="text-align: left">编译期查询类型的属性、类别、关系</td>
+					<td style="text-align: left"><code>is_integral</code>/<code>is_floating_point</code>/<code>is_pointer</code>/<code>is_reference</code>/<code>is_same</code>/<code>is_convertible</code>/<code>is_base_of</code>/<code>is_invocable</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">类型修改</td>
+					<td style="text-align: left">编译期对类型进行转换、修饰符增减</td>
+					<td style="text-align: left"><code>remove_const</code>/<code>add_const</code>/<code>remove_reference</code>/<code>add_lvalue_reference</code>/<code>remove_pointer</code>/<code>add_pointer</code>/<code>decay</code>/<code>invoke_result</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">编译期逻辑</td>
+					<td style="text-align: left">编译期逻辑运算，组合多个判断条件</td>
+					<td style="text-align: left"><code>conjunction</code>/<code>disjunction</code>/<code>negation</code>（C++17）</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="52-高频使用技巧">5.2 高频使用技巧</h3>
 <ol>
@@ -1160,7 +1160,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

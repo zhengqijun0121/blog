@@ -5,22 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>CMake 多平台 Toolchain 配置指南 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/003_cmake%E5%A4%9A%E5%B9%B3%E5%8F%B0toolchain%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="CMake 多平台 Toolchain 配置指南">
-  <meta property="og:description" content="CMake 多平台 Toolchain 编写指南 CMake Toolchain 的核心作用是隔离平台/架构的编译器、链接器、系统配置差异，配合通用构建逻辑实现一套代码多平台编译。分为两大核心场景：原生多平台适配（在目标平台本地编译，自动适配环境）、交叉编译（在主机编译其他平台的目标程序），以下是完整的实现方案、模板和最佳实践。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-01-24T09:00:00+08:00">
-    <meta property="article:modified_time" content="2026-01-24T09:00:00+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="CMake">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="CMake 多平台 Toolchain 配置指南">
+	<meta property="og:description" content="CMake 多平台 Toolchain 编写指南 CMake Toolchain 的核心作用是隔离平台/架构的编译器、链接器、系统配置差异，配合通用构建逻辑实现一套代码多平台编译。分为两大核心场景：原生多平台适配（在目标平台本地编译，自动适配环境）、交叉编译（在主机编译其他平台的目标程序），以下是完整的实现方案、模板和最佳实践。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-01-24T09:00:00+08:00">
+		<meta property="article:modified_time" content="2026-01-24T09:00:00+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="CMake">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="CMake 多平台 Toolchain 配置指南">
-  <meta name="twitter:description" content="CMake 多平台 Toolchain 编写指南 CMake Toolchain 的核心作用是隔离平台/架构的编译器、链接器、系统配置差异，配合通用构建逻辑实现一套代码多平台编译。分为两大核心场景：原生多平台适配（在目标平台本地编译，自动适配环境）、交叉编译（在主机编译其他平台的目标程序），以下是完整的实现方案、模板和最佳实践。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="CMake 多平台 Toolchain 配置指南">
+	<meta name="twitter:description" content="CMake 多平台 Toolchain 编写指南 CMake Toolchain 的核心作用是隔离平台/架构的编译器、链接器、系统配置差异，配合通用构建逻辑实现一套代码多平台编译。分为两大核心场景：原生多平台适配（在目标平台本地编译，自动适配环境）、交叉编译（在主机编译其他平台的目标程序），以下是完整的实现方案、模板和最佳实践。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -171,95 +171,95 @@
 <p>Toolchain 文件通过 <code>-DCMAKE_TOOLCHAIN_FILE=xxx.cmake</code> 参数传入，会在 CMake 系统检测流程<strong>之前</strong>执行，用于覆盖默认的编译器、目标系统属性、编译/链接规则，是交叉编译的核心，也可用于原生平台的编译配置统一管理。</p>
 <h3 id="12-核心必知变量">1.2 核心必知变量</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">变量分类</th>
-          <th style="text-align: left">关键变量</th>
-          <th style="text-align: left">作用说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">目标系统配置</td>
-          <td style="text-align: left"><code>CMAKE_SYSTEM_NAME</code></td>
-          <td style="text-align: left">目标操作系统名（如<code>Linux</code>/<code>Windows</code>/<code>Darwin</code>/<code>Android</code>/<code>Generic</code>），<strong>设置后CMake自动进入交叉编译模式</strong></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"><code>CMAKE_SYSTEM_PROCESSOR</code></td>
-          <td style="text-align: left">目标CPU架构（如<code>x86_64</code>/<code>aarch64</code>/<code>armv7-a</code>/<code>riscv64</code>/<code>AMD64</code>）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"><code>CMAKE_SYSROOT</code></td>
-          <td style="text-align: left">交叉编译的系统根目录，对应目标平台的系统头文件/库根路径</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">工具链配置</td>
-          <td style="text-align: left"><code>CMAKE_C_COMPILER</code></td>
-          <td style="text-align: left">C编译器路径/名称（如<code>gcc</code>/<code>clang</code>/<code>cl</code>/<code>aarch64-linux-gnu-gcc</code>）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"><code>CMAKE_CXX_COMPILER</code></td>
-          <td style="text-align: left">C++编译器路径/名称</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"><code>CMAKE_AR</code>/<code>CMAKE_RANLIB</code>/<code>CMAKE_STRIP</code></td>
-          <td style="text-align: left">静态库归档、符号表处理、裁剪工具路径</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"><code>CMAKE_LINKER</code></td>
-          <td style="text-align: left">链接器路径</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">编译链接选项</td>
-          <td style="text-align: left"><code>CMAKE_C_FLAGS</code>/<code>CMAKE_CXX_FLAGS</code></td>
-          <td style="text-align: left">全局C/C++编译选项，分构建类型可加<code>_DEBUG</code>/<code>_RELEASE</code>后缀</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"><code>CMAKE_EXE_LINKER_FLAGS</code></td>
-          <td style="text-align: left">可执行文件全局链接选项</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"><code>CMAKE_SHARED_LINKER_FLAGS</code></td>
-          <td style="text-align: left">共享库全局链接选项</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"><code>CMAKE_POSITION_INDEPENDENT_CODE</code></td>
-          <td style="text-align: left">生成位置无关代码，Linux/macOS共享库必须开启（设为<code>ON</code>）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">交叉编译查找规则</td>
-          <td style="text-align: left"><code>CMAKE_FIND_ROOT_PATH</code></td>
-          <td style="text-align: left">交叉编译时，查找头文件/库/程序的根目录前缀</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"><code>CMAKE_FIND_ROOT_PATH_MODE_PROGRAM</code></td>
-          <td style="text-align: left">程序查找模式，交叉编译设为<code>NEVER</code>（仅找主机程序）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"><code>CMAKE_FIND_ROOT_PATH_MODE_LIBRARY</code></td>
-          <td style="text-align: left">库查找模式，交叉编译设为<code>ONLY</code>（仅找目标平台库）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"><code>CMAKE_FIND_ROOT_PATH_MODE_INCLUDE</code></td>
-          <td style="text-align: left">头文件查找模式，交叉编译设为<code>ONLY</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"><code>CMAKE_FIND_ROOT_PATH_MODE_PACKAGE</code></td>
-          <td style="text-align: left">包查找模式，交叉编译设为<code>ONLY</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">变量分类</th>
+					<th style="text-align: left">关键变量</th>
+					<th style="text-align: left">作用说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">目标系统配置</td>
+					<td style="text-align: left"><code>CMAKE_SYSTEM_NAME</code></td>
+					<td style="text-align: left">目标操作系统名（如<code>Linux</code>/<code>Windows</code>/<code>Darwin</code>/<code>Android</code>/<code>Generic</code>），<strong>设置后CMake自动进入交叉编译模式</strong></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left"><code>CMAKE_SYSTEM_PROCESSOR</code></td>
+					<td style="text-align: left">目标CPU架构（如<code>x86_64</code>/<code>aarch64</code>/<code>armv7-a</code>/<code>riscv64</code>/<code>AMD64</code>）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left"><code>CMAKE_SYSROOT</code></td>
+					<td style="text-align: left">交叉编译的系统根目录，对应目标平台的系统头文件/库根路径</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">工具链配置</td>
+					<td style="text-align: left"><code>CMAKE_C_COMPILER</code></td>
+					<td style="text-align: left">C编译器路径/名称（如<code>gcc</code>/<code>clang</code>/<code>cl</code>/<code>aarch64-linux-gnu-gcc</code>）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left"><code>CMAKE_CXX_COMPILER</code></td>
+					<td style="text-align: left">C++编译器路径/名称</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left"><code>CMAKE_AR</code>/<code>CMAKE_RANLIB</code>/<code>CMAKE_STRIP</code></td>
+					<td style="text-align: left">静态库归档、符号表处理、裁剪工具路径</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left"><code>CMAKE_LINKER</code></td>
+					<td style="text-align: left">链接器路径</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">编译链接选项</td>
+					<td style="text-align: left"><code>CMAKE_C_FLAGS</code>/<code>CMAKE_CXX_FLAGS</code></td>
+					<td style="text-align: left">全局C/C++编译选项，分构建类型可加<code>_DEBUG</code>/<code>_RELEASE</code>后缀</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left"><code>CMAKE_EXE_LINKER_FLAGS</code></td>
+					<td style="text-align: left">可执行文件全局链接选项</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left"><code>CMAKE_SHARED_LINKER_FLAGS</code></td>
+					<td style="text-align: left">共享库全局链接选项</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left"><code>CMAKE_POSITION_INDEPENDENT_CODE</code></td>
+					<td style="text-align: left">生成位置无关代码，Linux/macOS共享库必须开启（设为<code>ON</code>）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">交叉编译查找规则</td>
+					<td style="text-align: left"><code>CMAKE_FIND_ROOT_PATH</code></td>
+					<td style="text-align: left">交叉编译时，查找头文件/库/程序的根目录前缀</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left"><code>CMAKE_FIND_ROOT_PATH_MODE_PROGRAM</code></td>
+					<td style="text-align: left">程序查找模式，交叉编译设为<code>NEVER</code>（仅找主机程序）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left"><code>CMAKE_FIND_ROOT_PATH_MODE_LIBRARY</code></td>
+					<td style="text-align: left">库查找模式，交叉编译设为<code>ONLY</code>（仅找目标平台库）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left"><code>CMAKE_FIND_ROOT_PATH_MODE_INCLUDE</code></td>
+					<td style="text-align: left">头文件查找模式，交叉编译设为<code>ONLY</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left"><code>CMAKE_FIND_ROOT_PATH_MODE_PACKAGE</code></td>
+					<td style="text-align: left">包查找模式，交叉编译设为<code>ONLY</code></td>
+			</tr>
+	</tbody>
 </table>
 <hr>
 <h2 id="二多平台-toolchain-通用架构设计">二、多平台 Toolchain 通用架构设计</h2>
@@ -621,45 +621,45 @@
 </ol>
 <h3 id="62-常见坑与解决方案">6.2 常见坑与解决方案</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">问题现象</th>
-          <th style="text-align: left">根因</th>
-          <th style="text-align: left">解决方案</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">交叉编译时，CMake提示“编译器无法编译简单测试程序”</td>
-          <td style="text-align: left">未设置<code>CMAKE_SYSTEM_NAME</code>，CMake未进入交叉编译模式，用主机规则校验目标编译器</td>
-          <td style="text-align: left">必须在toolchain开头设置<code>CMAKE_SYSTEM_NAME</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">交叉编译链接时，找到主机的so库，出现架构不匹配错误</td>
-          <td style="text-align: left">未设置<code>FIND_ROOT_PATH</code>相关变量，CMake优先查找主机系统库</td>
-          <td style="text-align: left">设置<code>CMAKE_FIND_ROOT_PATH_MODE_LIBRARY/INCLUDE</code>为<code>ONLY</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Linux共享库编译报错“relocation R_X86_64_32 against `.rodata&rsquo; can not be used when making a shared object”</td>
-          <td style="text-align: left">未开启PIC（位置无关代码）</td>
-          <td style="text-align: left">设置<code>CMAKE_POSITION_INDEPENDENT_CODE ON</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">MinGW编译的程序运行时缺少libgcc_s_seh-1.dll等依赖</td>
-          <td style="text-align: left">标准库动态链接，未静态链接</td>
-          <td style="text-align: left">添加链接选项<code>-static-libgcc -static-libstdc++</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">MSVC编译出现中文乱码</td>
-          <td style="text-align: left">未指定源码编码为UTF-8</td>
-          <td style="text-align: left">添加编译选项<code>/utf-8</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">macOS编译提示“library not found for -lxxx”</td>
-          <td style="text-align: left">RPATH未配置，运行时找不到动态库</td>
-          <td style="text-align: left">开启<code>CMAKE_MACOSX_RPATH</code>，设置<code>CMAKE_INSTALL_RPATH</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">问题现象</th>
+					<th style="text-align: left">根因</th>
+					<th style="text-align: left">解决方案</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">交叉编译时，CMake提示“编译器无法编译简单测试程序”</td>
+					<td style="text-align: left">未设置<code>CMAKE_SYSTEM_NAME</code>，CMake未进入交叉编译模式，用主机规则校验目标编译器</td>
+					<td style="text-align: left">必须在toolchain开头设置<code>CMAKE_SYSTEM_NAME</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">交叉编译链接时，找到主机的so库，出现架构不匹配错误</td>
+					<td style="text-align: left">未设置<code>FIND_ROOT_PATH</code>相关变量，CMake优先查找主机系统库</td>
+					<td style="text-align: left">设置<code>CMAKE_FIND_ROOT_PATH_MODE_LIBRARY/INCLUDE</code>为<code>ONLY</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Linux共享库编译报错“relocation R_X86_64_32 against `.rodata&rsquo; can not be used when making a shared object”</td>
+					<td style="text-align: left">未开启PIC（位置无关代码）</td>
+					<td style="text-align: left">设置<code>CMAKE_POSITION_INDEPENDENT_CODE ON</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">MinGW编译的程序运行时缺少libgcc_s_seh-1.dll等依赖</td>
+					<td style="text-align: left">标准库动态链接，未静态链接</td>
+					<td style="text-align: left">添加链接选项<code>-static-libgcc -static-libstdc++</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">MSVC编译出现中文乱码</td>
+					<td style="text-align: left">未指定源码编码为UTF-8</td>
+					<td style="text-align: left">添加编译选项<code>/utf-8</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">macOS编译提示“library not found for -lxxx”</td>
+					<td style="text-align: left">RPATH未配置，运行时找不到动态库</td>
+					<td style="text-align: left">开启<code>CMAKE_MACOSX_RPATH</code>，设置<code>CMAKE_INSTALL_RPATH</code></td>
+			</tr>
+	</tbody>
 </table>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
@@ -691,7 +691,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

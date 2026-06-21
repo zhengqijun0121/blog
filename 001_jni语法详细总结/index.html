@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>JNI 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_jni%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="JNI 语法详细总结">
-  <meta property="og:description" content="JNI 语法详细总结 JNI（Java Native Interface，Java本地接口）是Java平台提供的标准化编程规范，用于实现Java代码与C/C&#43;&#43;本地代码的双向交互：Java层可调用Native实现的高性能/系统级逻辑，Native层也可反向访问Java层的类、对象、方法和字段。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-02-14T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-02-14T10:00:20+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="Android">
-    <meta property="article:tag" content="JNI">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="JNI 语法详细总结">
+	<meta property="og:description" content="JNI 语法详细总结 JNI（Java Native Interface，Java本地接口）是Java平台提供的标准化编程规范，用于实现Java代码与C/C&#43;&#43;本地代码的双向交互：Java层可调用Native实现的高性能/系统级逻辑，Native层也可反向访问Java层的类、对象、方法和字段。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-02-14T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-02-14T10:00:20+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="Android">
+		<meta property="article:tag" content="JNI">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="JNI 语法详细总结">
-  <meta name="twitter:description" content="JNI 语法详细总结 JNI（Java Native Interface，Java本地接口）是Java平台提供的标准化编程规范，用于实现Java代码与C/C&#43;&#43;本地代码的双向交互：Java层可调用Native实现的高性能/系统级逻辑，Native层也可反向访问Java层的类、对象、方法和字段。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="JNI 语法详细总结">
+	<meta name="twitter:description" content="JNI 语法详细总结 JNI（Java Native Interface，Java本地接口）是Java平台提供的标准化编程规范，用于实现Java代码与C/C&#43;&#43;本地代码的双向交互：Java层可调用Native实现的高性能/系统级逻辑，Native层也可反向访问Java层的类、对象、方法和字段。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -241,157 +241,157 @@
 <p>JNI定义了与Java完全对应的类型体系，分为<strong>基本类型</strong>（值传递）和<strong>引用类型</strong>（引用传递），所有引用类型的基类都是<code>jobject</code>。</p>
 <h3 id="21-基本类型映射">2.1 基本类型映射</h3>
 <table>
-  <thead>
-      <tr>
-          <th>Java基本类型</th>
-          <th>JNI类型</th>
-          <th>签名标识</th>
-          <th>C/C++对应类型</th>
-          <th>字节数</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>boolean</td>
-          <td>jboolean</td>
-          <td>Z</td>
-          <td>unsigned char</td>
-          <td>1</td>
-      </tr>
-      <tr>
-          <td>byte</td>
-          <td>jbyte</td>
-          <td>B</td>
-          <td>signed char</td>
-          <td>1</td>
-      </tr>
-      <tr>
-          <td>char</td>
-          <td>jchar</td>
-          <td>C</td>
-          <td>unsigned short</td>
-          <td>2</td>
-      </tr>
-      <tr>
-          <td>short</td>
-          <td>jshort</td>
-          <td>S</td>
-          <td>short</td>
-          <td>2</td>
-      </tr>
-      <tr>
-          <td>int</td>
-          <td>jint</td>
-          <td>I</td>
-          <td>int</td>
-          <td>4</td>
-      </tr>
-      <tr>
-          <td>long</td>
-          <td>jlong</td>
-          <td>J</td>
-          <td>long long</td>
-          <td>8</td>
-      </tr>
-      <tr>
-          <td>float</td>
-          <td>jfloat</td>
-          <td>F</td>
-          <td>float</td>
-          <td>4</td>
-      </tr>
-      <tr>
-          <td>double</td>
-          <td>jdouble</td>
-          <td>D</td>
-          <td>double</td>
-          <td>8</td>
-      </tr>
-      <tr>
-          <td>void</td>
-          <td>void</td>
-          <td>V</td>
-          <td>void</td>
-          <td>-</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>Java基本类型</th>
+					<th>JNI类型</th>
+					<th>签名标识</th>
+					<th>C/C++对应类型</th>
+					<th>字节数</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>boolean</td>
+					<td>jboolean</td>
+					<td>Z</td>
+					<td>unsigned char</td>
+					<td>1</td>
+			</tr>
+			<tr>
+					<td>byte</td>
+					<td>jbyte</td>
+					<td>B</td>
+					<td>signed char</td>
+					<td>1</td>
+			</tr>
+			<tr>
+					<td>char</td>
+					<td>jchar</td>
+					<td>C</td>
+					<td>unsigned short</td>
+					<td>2</td>
+			</tr>
+			<tr>
+					<td>short</td>
+					<td>jshort</td>
+					<td>S</td>
+					<td>short</td>
+					<td>2</td>
+			</tr>
+			<tr>
+					<td>int</td>
+					<td>jint</td>
+					<td>I</td>
+					<td>int</td>
+					<td>4</td>
+			</tr>
+			<tr>
+					<td>long</td>
+					<td>jlong</td>
+					<td>J</td>
+					<td>long long</td>
+					<td>8</td>
+			</tr>
+			<tr>
+					<td>float</td>
+					<td>jfloat</td>
+					<td>F</td>
+					<td>float</td>
+					<td>4</td>
+			</tr>
+			<tr>
+					<td>double</td>
+					<td>jdouble</td>
+					<td>D</td>
+					<td>double</td>
+					<td>8</td>
+			</tr>
+			<tr>
+					<td>void</td>
+					<td>void</td>
+					<td>V</td>
+					<td>void</td>
+					<td>-</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="22-引用类型映射">2.2 引用类型映射</h3>
 <table>
-  <thead>
-      <tr>
-          <th>Java引用类型</th>
-          <th>JNI类型</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>java.lang.Object</td>
-          <td>jobject</td>
-          <td>所有Java对象的基类</td>
-      </tr>
-      <tr>
-          <td>java.lang.Class</td>
-          <td>jclass</td>
-          <td>Java类的Class对象</td>
-      </tr>
-      <tr>
-          <td>java.lang.String</td>
-          <td>jstring</td>
-          <td>Java字符串类型</td>
-      </tr>
-      <tr>
-          <td>java.lang.Throwable</td>
-          <td>jthrowable</td>
-          <td>Java异常/Throwable类型</td>
-      </tr>
-      <tr>
-          <td>Object[]</td>
-          <td>jobjectArray</td>
-          <td>Java对象数组</td>
-      </tr>
-      <tr>
-          <td>boolean[]</td>
-          <td>jbooleanArray</td>
-          <td>boolean基本类型数组</td>
-      </tr>
-      <tr>
-          <td>byte[]</td>
-          <td>jbyteArray</td>
-          <td>byte基本类型数组</td>
-      </tr>
-      <tr>
-          <td>char[]</td>
-          <td>jcharArray</td>
-          <td>char基本类型数组</td>
-      </tr>
-      <tr>
-          <td>short[]</td>
-          <td>jshortArray</td>
-          <td>short基本类型数组</td>
-      </tr>
-      <tr>
-          <td>int[]</td>
-          <td>jintArray</td>
-          <td>int基本类型数组</td>
-      </tr>
-      <tr>
-          <td>long[]</td>
-          <td>jlongArray</td>
-          <td>long基本类型数组</td>
-      </tr>
-      <tr>
-          <td>float[]</td>
-          <td>jfloatArray</td>
-          <td>float基本类型数组</td>
-      </tr>
-      <tr>
-          <td>double[]</td>
-          <td>jdoubleArray</td>
-          <td>double基本类型数组</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>Java引用类型</th>
+					<th>JNI类型</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>java.lang.Object</td>
+					<td>jobject</td>
+					<td>所有Java对象的基类</td>
+			</tr>
+			<tr>
+					<td>java.lang.Class</td>
+					<td>jclass</td>
+					<td>Java类的Class对象</td>
+			</tr>
+			<tr>
+					<td>java.lang.String</td>
+					<td>jstring</td>
+					<td>Java字符串类型</td>
+			</tr>
+			<tr>
+					<td>java.lang.Throwable</td>
+					<td>jthrowable</td>
+					<td>Java异常/Throwable类型</td>
+			</tr>
+			<tr>
+					<td>Object[]</td>
+					<td>jobjectArray</td>
+					<td>Java对象数组</td>
+			</tr>
+			<tr>
+					<td>boolean[]</td>
+					<td>jbooleanArray</td>
+					<td>boolean基本类型数组</td>
+			</tr>
+			<tr>
+					<td>byte[]</td>
+					<td>jbyteArray</td>
+					<td>byte基本类型数组</td>
+			</tr>
+			<tr>
+					<td>char[]</td>
+					<td>jcharArray</td>
+					<td>char基本类型数组</td>
+			</tr>
+			<tr>
+					<td>short[]</td>
+					<td>jshortArray</td>
+					<td>short基本类型数组</td>
+			</tr>
+			<tr>
+					<td>int[]</td>
+					<td>jintArray</td>
+					<td>int基本类型数组</td>
+			</tr>
+			<tr>
+					<td>long[]</td>
+					<td>jlongArray</td>
+					<td>long基本类型数组</td>
+			</tr>
+			<tr>
+					<td>float[]</td>
+					<td>jfloatArray</td>
+					<td>float基本类型数组</td>
+			</tr>
+			<tr>
+					<td>double[]</td>
+					<td>jdoubleArray</td>
+					<td>double基本类型数组</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="三jni函数签名规则">三、JNI函数签名规则</h2>
 <p>JNI通过<strong>函数签名</strong>唯一标识一个方法，解决Java方法重载问题，签名不匹配会导致方法找不到、程序崩溃。</p>
@@ -412,34 +412,34 @@
 </ol>
 <h3 id="32-签名示例">3.2 签名示例</h3>
 <table>
-  <thead>
-      <tr>
-          <th>Java方法声明</th>
-          <th>JNI方法签名</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>void test()</td>
-          <td>()V</td>
-      </tr>
-      <tr>
-          <td>int add(int a, int b)</td>
-          <td>(II)I</td>
-      </tr>
-      <tr>
-          <td>String getName(long id)</td>
-          <td>(J)Ljava/lang/String;</td>
-      </tr>
-      <tr>
-          <td>boolean setInfo(String name, int age)</td>
-          <td>(Ljava/lang/String;I)Z</td>
-      </tr>
-      <tr>
-          <td>int[] getArray(String[] arr)</td>
-          <td>([Ljava/lang/String;)[I</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>Java方法声明</th>
+					<th>JNI方法签名</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>void test()</td>
+					<td>()V</td>
+			</tr>
+			<tr>
+					<td>int add(int a, int b)</td>
+					<td>(II)I</td>
+			</tr>
+			<tr>
+					<td>String getName(long id)</td>
+					<td>(J)Ljava/lang/String;</td>
+			</tr>
+			<tr>
+					<td>boolean setInfo(String name, int age)</td>
+					<td>(Ljava/lang/String;I)Z</td>
+			</tr>
+			<tr>
+					<td>int[] getArray(String[] arr)</td>
+					<td>([Ljava/lang/String;)[I</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="33-快速生成签名">3.3 快速生成签名</h3>
 <p>命令行执行<code>javap -s -p 全类名</code>，可直接输出类中所有方法/字段的完整签名，避免手写出错。
@@ -469,30 +469,30 @@
 </li>
 <li><strong>核心API</strong>：
 <table>
-  <thead>
-      <tr>
-          <th>函数名</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>AttachCurrentThread(JavaVM *vm, JNIEnv **env, void *args)</code></td>
-          <td>将Native线程绑定到虚拟机，获取当前线程的JNIEnv</td>
-      </tr>
-      <tr>
-          <td><code>AttachCurrentThreadAsDaemon(JavaVM *vm, JNIEnv **env, void *args)</code></td>
-          <td>绑定为守护线程</td>
-      </tr>
-      <tr>
-          <td><code>DetachCurrentThread(JavaVM *vm)</code></td>
-          <td>解绑线程，必须与Attach成对调用，否则线程退出时崩溃</td>
-      </tr>
-      <tr>
-          <td><code>DestroyJavaVM(JavaVM *vm)</code></td>
-          <td>销毁Java虚拟机</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数名</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>AttachCurrentThread(JavaVM *vm, JNIEnv **env, void *args)</code></td>
+					<td>将Native线程绑定到虚拟机，获取当前线程的JNIEnv</td>
+			</tr>
+			<tr>
+					<td><code>AttachCurrentThreadAsDaemon(JavaVM *vm, JNIEnv **env, void *args)</code></td>
+					<td>绑定为守护线程</td>
+			</tr>
+			<tr>
+					<td><code>DetachCurrentThread(JavaVM *vm)</code></td>
+					<td>解绑线程，必须与Attach成对调用，否则线程退出时崩溃</td>
+			</tr>
+			<tr>
+					<td><code>DestroyJavaVM(JavaVM *vm)</code></td>
+					<td>销毁Java虚拟机</td>
+			</tr>
+	</tbody>
 </table>
 </li>
 </ul>
@@ -645,225 +645,225 @@
 <h3 id="61-字符串操作jstring">6.1 字符串操作（jstring）</h3>
 <p>jstring不能直接当作C/C++的char*使用，必须通过JNI函数完成转换，且必须成对执行申请/释放操作。</p>
 <table>
-  <thead>
-      <tr>
-          <th>函数名</th>
-          <th>功能说明</th>
-          <th>注意事项</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>jstring NewStringUTF(JNIEnv *env, const char *bytes)</code></td>
-          <td>用UTF-8编码的C字符串创建jstring</td>
-          <td>传入NULL会崩溃</td>
-      </tr>
-      <tr>
-          <td><code>const char* GetStringUTFChars(JNIEnv *env, jstring str, jboolean *isCopy)</code></td>
-          <td>将jstring转为UTF-8编码的C字符串</td>
-          <td>isCopy标识是否拷贝了Java堆数据；<strong>使用完必须调用ReleaseStringUTFChars释放</strong></td>
-      </tr>
-      <tr>
-          <td><code>void ReleaseStringUTFChars(JNIEnv *env, jstring str, const char *utf)</code></td>
-          <td>释放GetStringUTFChars获取的C字符串</td>
-          <td>必须成对调用，否则内存泄漏</td>
-      </tr>
-      <tr>
-          <td><code>jsize GetStringUTFLength(JNIEnv *env, jstring str)</code></td>
-          <td>获取UTF-8编码的字符串字节长度</td>
-          <td>对应Java的<code>String.getBytes(&quot;UTF-8&quot;).length</code></td>
-      </tr>
-      <tr>
-          <td><code>jsize GetStringLength(JNIEnv *env, jstring str)</code></td>
-          <td>获取Unicode编码的字符串字符长度</td>
-          <td>对应Java的<code>String.length()</code></td>
-      </tr>
-      <tr>
-          <td><code>void GetStringUTFRegion(JNIEnv *env, jstring str, jsize start, jsize len, char *buf)</code></td>
-          <td>将jstring指定区间的UTF-8字符拷贝到buf</td>
-          <td>无需释放，需提前分配buf内存，避免越界</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数名</th>
+					<th>功能说明</th>
+					<th>注意事项</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>jstring NewStringUTF(JNIEnv *env, const char *bytes)</code></td>
+					<td>用UTF-8编码的C字符串创建jstring</td>
+					<td>传入NULL会崩溃</td>
+			</tr>
+			<tr>
+					<td><code>const char* GetStringUTFChars(JNIEnv *env, jstring str, jboolean *isCopy)</code></td>
+					<td>将jstring转为UTF-8编码的C字符串</td>
+					<td>isCopy标识是否拷贝了Java堆数据；<strong>使用完必须调用ReleaseStringUTFChars释放</strong></td>
+			</tr>
+			<tr>
+					<td><code>void ReleaseStringUTFChars(JNIEnv *env, jstring str, const char *utf)</code></td>
+					<td>释放GetStringUTFChars获取的C字符串</td>
+					<td>必须成对调用，否则内存泄漏</td>
+			</tr>
+			<tr>
+					<td><code>jsize GetStringUTFLength(JNIEnv *env, jstring str)</code></td>
+					<td>获取UTF-8编码的字符串字节长度</td>
+					<td>对应Java的<code>String.getBytes(&quot;UTF-8&quot;).length</code></td>
+			</tr>
+			<tr>
+					<td><code>jsize GetStringLength(JNIEnv *env, jstring str)</code></td>
+					<td>获取Unicode编码的字符串字符长度</td>
+					<td>对应Java的<code>String.length()</code></td>
+			</tr>
+			<tr>
+					<td><code>void GetStringUTFRegion(JNIEnv *env, jstring str, jsize start, jsize len, char *buf)</code></td>
+					<td>将jstring指定区间的UTF-8字符拷贝到buf</td>
+					<td>无需释放，需提前分配buf内存，避免越界</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="62-数组操作">6.2 数组操作</h3>
 <p>分为<strong>基本类型数组</strong>和<strong>对象数组</strong>，操作API差异较大。</p>
 <h4 id="621-基本类型数组">6.2.1 基本类型数组</h4>
 <p>以jintArray为例，其他基本类型数组（jbooleanArray、jbyteArray等）API格式完全一致，替换类型前缀即可。</p>
 <table>
-  <thead>
-      <tr>
-          <th>函数名</th>
-          <th>功能说明</th>
-          <th>注意事项</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>&lt;Type&gt;Array New&lt;Type&gt;Array(JNIEnv *env, jsize length)</code></td>
-          <td>创建指定长度的基本类型数组</td>
-          <td>例：<code>NewIntArray(env, 10)</code>创建长度10的int数组</td>
-      </tr>
-      <tr>
-          <td><code>jsize GetArrayLength(JNIEnv *env, jarray array)</code></td>
-          <td>获取数组长度</td>
-          <td>通用所有数组类型</td>
-      </tr>
-      <tr>
-          <td><code>&lt;Type&gt;* Get&lt;Type&gt;ArrayElements(JNIEnv *env, &lt;Type&gt;Array array, jboolean *isCopy)</code></td>
-          <td>获取数组元素指针</td>
-          <td>用完必须Release释放；isCopy标识是否拷贝数据</td>
-      </tr>
-      <tr>
-          <td><code>void Release&lt;Type&gt;ArrayElements(JNIEnv *env, &lt;Type&gt;Array array, &lt;Type&gt; *elems, jint mode)</code></td>
-          <td>释放数组元素指针</td>
-          <td>mode：0→拷贝回原数组+释放缓冲区；JNI_COMMIT→拷贝回原数组+不释放；JNI_ABORT→不拷贝+释放</td>
-      </tr>
-      <tr>
-          <td><code>void Get&lt;Type&gt;ArrayRegion(JNIEnv *env, &lt;Type&gt;Array array, jsize start, jsize len, &lt;Type&gt; *buf)</code></td>
-          <td>批量拷贝数组元素到buf</td>
-          <td>无需释放，推荐小数据量使用</td>
-      </tr>
-      <tr>
-          <td><code>void Set&lt;Type&gt;ArrayRegion(JNIEnv *env, &lt;Type&gt;Array array, jsize start, jsize len, const &lt;Type&gt; *buf)</code></td>
-          <td>批量将buf数据写入数组</td>
-          <td>无内存泄漏风险</td>
-      </tr>
-      <tr>
-          <td><code>void* GetPrimitiveArrayCritical(JNIEnv *env, jarray array, jboolean *isCopy)</code></td>
-          <td>获取数组临界区指针，尽量避免拷贝</td>
-          <td>临界区内<strong>禁止调用任何其他JNI函数、不能阻塞</strong>，否则会导致虚拟机死锁</td>
-      </tr>
-      <tr>
-          <td><code>void ReleasePrimitiveArrayCritical(JNIEnv *env, jarray array, void *carray, jint mode)</code></td>
-          <td>释放临界区指针</td>
-          <td>必须与Get成对调用</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数名</th>
+					<th>功能说明</th>
+					<th>注意事项</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>&lt;Type&gt;Array New&lt;Type&gt;Array(JNIEnv *env, jsize length)</code></td>
+					<td>创建指定长度的基本类型数组</td>
+					<td>例：<code>NewIntArray(env, 10)</code>创建长度10的int数组</td>
+			</tr>
+			<tr>
+					<td><code>jsize GetArrayLength(JNIEnv *env, jarray array)</code></td>
+					<td>获取数组长度</td>
+					<td>通用所有数组类型</td>
+			</tr>
+			<tr>
+					<td><code>&lt;Type&gt;* Get&lt;Type&gt;ArrayElements(JNIEnv *env, &lt;Type&gt;Array array, jboolean *isCopy)</code></td>
+					<td>获取数组元素指针</td>
+					<td>用完必须Release释放；isCopy标识是否拷贝数据</td>
+			</tr>
+			<tr>
+					<td><code>void Release&lt;Type&gt;ArrayElements(JNIEnv *env, &lt;Type&gt;Array array, &lt;Type&gt; *elems, jint mode)</code></td>
+					<td>释放数组元素指针</td>
+					<td>mode：0→拷贝回原数组+释放缓冲区；JNI_COMMIT→拷贝回原数组+不释放；JNI_ABORT→不拷贝+释放</td>
+			</tr>
+			<tr>
+					<td><code>void Get&lt;Type&gt;ArrayRegion(JNIEnv *env, &lt;Type&gt;Array array, jsize start, jsize len, &lt;Type&gt; *buf)</code></td>
+					<td>批量拷贝数组元素到buf</td>
+					<td>无需释放，推荐小数据量使用</td>
+			</tr>
+			<tr>
+					<td><code>void Set&lt;Type&gt;ArrayRegion(JNIEnv *env, &lt;Type&gt;Array array, jsize start, jsize len, const &lt;Type&gt; *buf)</code></td>
+					<td>批量将buf数据写入数组</td>
+					<td>无内存泄漏风险</td>
+			</tr>
+			<tr>
+					<td><code>void* GetPrimitiveArrayCritical(JNIEnv *env, jarray array, jboolean *isCopy)</code></td>
+					<td>获取数组临界区指针，尽量避免拷贝</td>
+					<td>临界区内<strong>禁止调用任何其他JNI函数、不能阻塞</strong>，否则会导致虚拟机死锁</td>
+			</tr>
+			<tr>
+					<td><code>void ReleasePrimitiveArrayCritical(JNIEnv *env, jarray array, void *carray, jint mode)</code></td>
+					<td>释放临界区指针</td>
+					<td>必须与Get成对调用</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="622-对象数组">6.2.2 对象数组</h4>
 <p>对象数组类型为<code>jobjectArray</code>，不支持批量操作，只能单个元素读写。</p>
 <table>
-  <thead>
-      <tr>
-          <th>函数名</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>jobjectArray NewObjectArray(JNIEnv *env, jsize length, jclass elementClass, jobject initialElement)</code></td>
-          <td>创建指定长度、指定元素类型的对象数组</td>
-      </tr>
-      <tr>
-          <td><code>jobject GetObjectArrayElement(JNIEnv *env, jobjectArray array, jsize index)</code></td>
-          <td>获取数组指定索引的元素</td>
-      </tr>
-      <tr>
-          <td><code>void SetObjectArrayElement(JNIEnv *env, jobjectArray array, jsize index, jobject value)</code></td>
-          <td>给数组指定索引设置元素</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数名</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>jobjectArray NewObjectArray(JNIEnv *env, jsize length, jclass elementClass, jobject initialElement)</code></td>
+					<td>创建指定长度、指定元素类型的对象数组</td>
+			</tr>
+			<tr>
+					<td><code>jobject GetObjectArrayElement(JNIEnv *env, jobjectArray array, jsize index)</code></td>
+					<td>获取数组指定索引的元素</td>
+			</tr>
+			<tr>
+					<td><code>void SetObjectArrayElement(JNIEnv *env, jobjectArray array, jsize index, jobject value)</code></td>
+					<td>给数组指定索引设置元素</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="63-类与对象操作">6.3 类与对象操作</h3>
 <table>
-  <thead>
-      <tr>
-          <th>函数名</th>
-          <th>功能说明</th>
-          <th>注意事项</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>jclass FindClass(JNIEnv *env, const char *name)</code></td>
-          <td>查找Java类，name为全类名（/分隔包名）</td>
-          <td>例：<code>env-&gt;FindClass(&quot;java/util/ArrayList&quot;)</code>；返回局部引用，需长期使用要转全局引用</td>
-      </tr>
-      <tr>
-          <td><code>jobject NewObject(JNIEnv *env, jclass clazz, jmethodID methodID, ...)</code></td>
-          <td>创建Java对象，调用构造方法</td>
-          <td>methodID为构造方法的ID，固定名为<code>&lt;init&gt;</code>，返回值签名为V</td>
-      </tr>
-      <tr>
-          <td><code>jclass GetObjectClass(JNIEnv *env, jobject obj)</code></td>
-          <td>获取对象对应的Class对象</td>
-          <td>对应Java的<code>obj.getClass()</code></td>
-      </tr>
-      <tr>
-          <td><code>jboolean IsInstanceOf(JNIEnv *env, jobject obj, jclass clazz)</code></td>
-          <td>判断对象是否是类的实例</td>
-          <td>对应Java的<code>instanceof</code>关键字</td>
-      </tr>
-      <tr>
-          <td><code>jboolean IsSameObject(JNIEnv *env, jobject ref1, jobject ref2)</code></td>
-          <td>判断两个引用是否指向同一个Java对象</td>
-          <td>可用于判断弱引用是否被回收（与NULL比较）</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数名</th>
+					<th>功能说明</th>
+					<th>注意事项</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>jclass FindClass(JNIEnv *env, const char *name)</code></td>
+					<td>查找Java类，name为全类名（/分隔包名）</td>
+					<td>例：<code>env-&gt;FindClass(&quot;java/util/ArrayList&quot;)</code>；返回局部引用，需长期使用要转全局引用</td>
+			</tr>
+			<tr>
+					<td><code>jobject NewObject(JNIEnv *env, jclass clazz, jmethodID methodID, ...)</code></td>
+					<td>创建Java对象，调用构造方法</td>
+					<td>methodID为构造方法的ID，固定名为<code>&lt;init&gt;</code>，返回值签名为V</td>
+			</tr>
+			<tr>
+					<td><code>jclass GetObjectClass(JNIEnv *env, jobject obj)</code></td>
+					<td>获取对象对应的Class对象</td>
+					<td>对应Java的<code>obj.getClass()</code></td>
+			</tr>
+			<tr>
+					<td><code>jboolean IsInstanceOf(JNIEnv *env, jobject obj, jclass clazz)</code></td>
+					<td>判断对象是否是类的实例</td>
+					<td>对应Java的<code>instanceof</code>关键字</td>
+			</tr>
+			<tr>
+					<td><code>jboolean IsSameObject(JNIEnv *env, jobject ref1, jobject ref2)</code></td>
+					<td>判断两个引用是否指向同一个Java对象</td>
+					<td>可用于判断弱引用是否被回收（与NULL比较）</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="64-字段与方法访问">6.4 字段与方法访问</h3>
 <p>Native层可反向访问Java对象的字段、调用Java方法，分为<strong>实例字段/方法</strong>和<strong>静态字段/方法</strong>。</p>
 <h4 id="641-字段访问">6.4.1 字段访问</h4>
 <table>
-  <thead>
-      <tr>
-          <th>函数名</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>jfieldID GetFieldID(JNIEnv *env, jclass clazz, const char *name, const char *sig)</code></td>
-          <td>获取实例字段的ID</td>
-      </tr>
-      <tr>
-          <td><code>&lt;Type&gt; Get&lt;Type&gt;Field(JNIEnv *env, jobject obj, jfieldID fieldID)</code></td>
-          <td>获取实例字段的值</td>
-      </tr>
-      <tr>
-          <td><code>void Set&lt;Type&gt;Field(JNIEnv *env, jobject obj, jfieldID fieldID, &lt;Type&gt; value)</code></td>
-          <td>设置实例字段的值</td>
-      </tr>
-      <tr>
-          <td><code>jfieldID GetStaticFieldID(JNIEnv *env, jclass clazz, const char *name, const char *sig)</code></td>
-          <td>获取静态字段的ID</td>
-      </tr>
-      <tr>
-          <td><code>&lt;Type&gt; GetStatic&lt;Type&gt;Field(JNIEnv *env, jclass clazz, jfieldID fieldID)</code></td>
-          <td>获取静态字段的值</td>
-      </tr>
-      <tr>
-          <td><code>void SetStatic&lt;Type&gt;Field(JNIEnv *env, jclass clazz, jfieldID fieldID, &lt;Type&gt; value)</code></td>
-          <td>设置静态字段的值</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数名</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>jfieldID GetFieldID(JNIEnv *env, jclass clazz, const char *name, const char *sig)</code></td>
+					<td>获取实例字段的ID</td>
+			</tr>
+			<tr>
+					<td><code>&lt;Type&gt; Get&lt;Type&gt;Field(JNIEnv *env, jobject obj, jfieldID fieldID)</code></td>
+					<td>获取实例字段的值</td>
+			</tr>
+			<tr>
+					<td><code>void Set&lt;Type&gt;Field(JNIEnv *env, jobject obj, jfieldID fieldID, &lt;Type&gt; value)</code></td>
+					<td>设置实例字段的值</td>
+			</tr>
+			<tr>
+					<td><code>jfieldID GetStaticFieldID(JNIEnv *env, jclass clazz, const char *name, const char *sig)</code></td>
+					<td>获取静态字段的ID</td>
+			</tr>
+			<tr>
+					<td><code>&lt;Type&gt; GetStatic&lt;Type&gt;Field(JNIEnv *env, jclass clazz, jfieldID fieldID)</code></td>
+					<td>获取静态字段的值</td>
+			</tr>
+			<tr>
+					<td><code>void SetStatic&lt;Type&gt;Field(JNIEnv *env, jclass clazz, jfieldID fieldID, &lt;Type&gt; value)</code></td>
+					<td>设置静态字段的值</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="642-方法调用">6.4.2 方法调用</h4>
 <table>
-  <thead>
-      <tr>
-          <th>函数名</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>jmethodID GetMethodID(JNIEnv *env, jclass clazz, const char *name, const char *sig)</code></td>
-          <td>获取实例方法的ID</td>
-      </tr>
-      <tr>
-          <td><code>&lt;Type&gt; Call&lt;Type&gt;Method(JNIEnv *env, jobject obj, jmethodID methodID, ...)</code></td>
-          <td>调用实例方法</td>
-      </tr>
-      <tr>
-          <td><code>jmethodID GetStaticMethodID(JNIEnv *env, jclass clazz, const char *name, const char *sig)</code></td>
-          <td>获取静态方法的ID</td>
-      </tr>
-      <tr>
-          <td><code>&lt;Type&gt; CallStatic&lt;Type&gt;Method(JNIEnv *env, jclass clazz, jmethodID methodID, ...)</code></td>
-          <td>调用静态方法</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数名</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>jmethodID GetMethodID(JNIEnv *env, jclass clazz, const char *name, const char *sig)</code></td>
+					<td>获取实例方法的ID</td>
+			</tr>
+			<tr>
+					<td><code>&lt;Type&gt; Call&lt;Type&gt;Method(JNIEnv *env, jobject obj, jmethodID methodID, ...)</code></td>
+					<td>调用实例方法</td>
+			</tr>
+			<tr>
+					<td><code>jmethodID GetStaticMethodID(JNIEnv *env, jclass clazz, const char *name, const char *sig)</code></td>
+					<td>获取静态方法的ID</td>
+			</tr>
+			<tr>
+					<td><code>&lt;Type&gt; CallStatic&lt;Type&gt;Method(JNIEnv *env, jclass clazz, jmethodID methodID, ...)</code></td>
+					<td>调用静态方法</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="七jni引用管理">七、JNI引用管理</h2>
 <p>JNI将引用分为3类，用于管理Java对象的生命周期，防止内存泄漏和对象被GC意外回收。</p>
@@ -899,34 +899,34 @@
 <p>JNI的异常机制与Java不同：<strong>JNI函数抛出异常后，不会立即中断Native代码的执行，必须手动检查、处理、清除异常</strong>，否则后续JNI调用会导致程序崩溃。</p>
 <h3 id="81-核心异常处理api">8.1 核心异常处理API</h3>
 <table>
-  <thead>
-      <tr>
-          <th>函数名</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>jboolean ExceptionCheck(JNIEnv *env)</code></td>
-          <td>检查当前是否有挂起的异常，返回JNI_TRUE表示有异常</td>
-      </tr>
-      <tr>
-          <td><code>jthrowable ExceptionOccurred(JNIEnv *env)</code></td>
-          <td>获取当前挂起的异常对象，无异常返回NULL</td>
-      </tr>
-      <tr>
-          <td><code>void ExceptionDescribe(JNIEnv *env)</code></td>
-          <td>打印异常堆栈信息，用于调试</td>
-      </tr>
-      <tr>
-          <td><code>void ExceptionClear(JNIEnv *env)</code></td>
-          <td>清除当前挂起的异常</td>
-      </tr>
-      <tr>
-          <td><code>jint ThrowNew(JNIEnv *env, jclass clazz, const char *message)</code></td>
-          <td>向Java层抛出指定类型、指定信息的异常</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数名</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>jboolean ExceptionCheck(JNIEnv *env)</code></td>
+					<td>检查当前是否有挂起的异常，返回JNI_TRUE表示有异常</td>
+			</tr>
+			<tr>
+					<td><code>jthrowable ExceptionOccurred(JNIEnv *env)</code></td>
+					<td>获取当前挂起的异常对象，无异常返回NULL</td>
+			</tr>
+			<tr>
+					<td><code>void ExceptionDescribe(JNIEnv *env)</code></td>
+					<td>打印异常堆栈信息，用于调试</td>
+			</tr>
+			<tr>
+					<td><code>void ExceptionClear(JNIEnv *env)</code></td>
+					<td>清除当前挂起的异常</td>
+			</tr>
+			<tr>
+					<td><code>jint ThrowNew(JNIEnv *env, jclass clazz, const char *message)</code></td>
+					<td>向Java层抛出指定类型、指定信息的异常</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="82-异常处理规范">8.2 异常处理规范</h3>
 <ol>
@@ -1065,7 +1065,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

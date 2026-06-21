@@ -5,22 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>VSCode 插件制作过程总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/010_vscode%E6%8F%92%E4%BB%B6%E5%88%B6%E4%BD%9C%E8%BF%87%E7%A8%8B%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="VSCode 插件制作过程总结">
-  <meta property="og:description" content="VSCode插件制作全流程详细总结 本文基于VSCode官方Extension API规范，完整覆盖从环境搭建、项目初始化、核心开发、调试、打包到发布的全流程，兼顾新手入门与进阶优化，所有步骤均符合2026年最新官方标准。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-02-03T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-02-03T10:00:20+08:00">
-    <meta property="article:tag" content="编辑器">
-    <meta property="article:tag" content="VSCode">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="VSCode 插件制作过程总结">
+	<meta property="og:description" content="VSCode插件制作全流程详细总结 本文基于VSCode官方Extension API规范，完整覆盖从环境搭建、项目初始化、核心开发、调试、打包到发布的全流程，兼顾新手入门与进阶优化，所有步骤均符合2026年最新官方标准。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-02-03T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-02-03T10:00:20+08:00">
+		<meta property="article:tag" content="编辑器">
+		<meta property="article:tag" content="VSCode">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="VSCode 插件制作过程总结">
-  <meta name="twitter:description" content="VSCode插件制作全流程详细总结 本文基于VSCode官方Extension API规范，完整覆盖从环境搭建、项目初始化、核心开发、调试、打包到发布的全流程，兼顾新手入门与进阶优化，所有步骤均符合2026年最新官方标准。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="VSCode 插件制作过程总结">
+	<meta name="twitter:description" content="VSCode插件制作全流程详细总结 本文基于VSCode官方Extension API规范，完整覆盖从环境搭建、项目初始化、核心开发、调试、打包到发布的全流程，兼顾新手入门与进阶优化，所有步骤均符合2026年最新官方标准。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -221,30 +221,30 @@
 <p>VSCode插件基于Node.js运行，官方推荐使用TypeScript开发，需提前安装配套工具链：</p>
 <h3 id="1-必装基础工具">1. 必装基础工具</h3>
 <table>
-  <thead>
-      <tr>
-          <th>工具</th>
-          <th>版本要求</th>
-          <th>作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>VS Code</td>
-          <td>最新稳定版</td>
-          <td>插件开发与调试宿主</td>
-      </tr>
-      <tr>
-          <td>Node.js</td>
-          <td>18.x及以上LTS版本</td>
-          <td>插件运行环境与包管理，自带npm</td>
-      </tr>
-      <tr>
-          <td>Git</td>
-          <td>最新版</td>
-          <td>版本管理，脚手架可选初始化仓库</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>工具</th>
+					<th>版本要求</th>
+					<th>作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>VS Code</td>
+					<td>最新稳定版</td>
+					<td>插件开发与调试宿主</td>
+			</tr>
+			<tr>
+					<td>Node.js</td>
+					<td>18.x及以上LTS版本</td>
+					<td>插件运行环境与包管理，自带npm</td>
+			</tr>
+			<tr>
+					<td>Git</td>
+					<td>最新版</td>
+					<td>版本管理，脚手架可选初始化仓库</td>
+			</tr>
+	</tbody>
 </table>
 <blockquote>
 <p>验证安装：终端执行 <code>node -v</code>、<code>npm -v</code>，输出版本号即为成功。mac/Linux需加<code>sudo</code>执行全局安装命令，Windows需用管理员权限终端。</p>
@@ -281,46 +281,46 @@
 <li>
 <p>按照交互式提示完成配置，核心选项说明：</p>
 <table>
-  <thead>
-      <tr>
-          <th>配置项</th>
-          <th>推荐选择/填写说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>插件类型</td>
-          <td>新手首选 <code>New Extension (TypeScript)</code>，其他可选主题、代码片段、快捷键映射等模板</td>
-      </tr>
-      <tr>
-          <td>插件名称</td>
-          <td>全小写，无空格，可用连字符，如<code>hello-world-extension</code></td>
-      </tr>
-      <tr>
-          <td>插件唯一标识</td>
-          <td>与名称保持一致，市场发布的唯一ID</td>
-      </tr>
-      <tr>
-          <td>插件描述</td>
-          <td>简短说明功能，会展示在市场详情页</td>
-      </tr>
-      <tr>
-          <td>初始化Git仓库</td>
-          <td>推荐Yes</td>
-      </tr>
-      <tr>
-          <td>webpack打包</td>
-          <td>推荐Yes，大幅减小插件体积，优化启动性能</td>
-      </tr>
-      <tr>
-          <td>包管理器</td>
-          <td>根据习惯选择npm/yarn/pnpm，默认npm</td>
-      </tr>
-      <tr>
-          <td>作者与许可证</td>
-          <td>填写作者名，推荐MIT开源协议</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>配置项</th>
+					<th>推荐选择/填写说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>插件类型</td>
+					<td>新手首选 <code>New Extension (TypeScript)</code>，其他可选主题、代码片段、快捷键映射等模板</td>
+			</tr>
+			<tr>
+					<td>插件名称</td>
+					<td>全小写，无空格，可用连字符，如<code>hello-world-extension</code></td>
+			</tr>
+			<tr>
+					<td>插件唯一标识</td>
+					<td>与名称保持一致，市场发布的唯一ID</td>
+			</tr>
+			<tr>
+					<td>插件描述</td>
+					<td>简短说明功能，会展示在市场详情页</td>
+			</tr>
+			<tr>
+					<td>初始化Git仓库</td>
+					<td>推荐Yes</td>
+			</tr>
+			<tr>
+					<td>webpack打包</td>
+					<td>推荐Yes，大幅减小插件体积，优化启动性能</td>
+			</tr>
+			<tr>
+					<td>包管理器</td>
+					<td>根据习惯选择npm/yarn/pnpm，默认npm</td>
+			</tr>
+			<tr>
+					<td>作者与许可证</td>
+					<td>填写作者名，推荐MIT开源协议</td>
+			</tr>
+	</tbody>
 </table>
 </li>
 <li>
@@ -706,38 +706,38 @@
 </ol>
 <h3 id="2-常见进阶插件类型开发要点">2. 常见进阶插件类型开发要点</h3>
 <table>
-  <thead>
-      <tr>
-          <th>插件类型</th>
-          <th>核心开发要点</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>代码片段插件</td>
-          <td>选择<code>yo code</code>中的<code>New Code Snippets</code>模板，在snippets目录编写JSON格式代码片段，在<code>package.json</code>配置<code>contributes.snippets</code></td>
-      </tr>
-      <tr>
-          <td>主题插件</td>
-          <td>选择<code>New Color Theme</code>模板，基于现有主题修改，在<code>color-theme.json</code>中配置颜色规则</td>
-      </tr>
-      <tr>
-          <td>语言支持插件</td>
-          <td>基于Language Server Protocol (LSP) 开发，实现语法高亮、代码补全、跳转定义、格式化等能力，官方提供专用示例</td>
-      </tr>
-      <tr>
-          <td>格式化插件</td>
-          <td>通过<code>vscode.languages.registerDocumentFormattingEditProvider</code>注册格式化提供者，实现文档格式化逻辑</td>
-      </tr>
-      <tr>
-          <td>侧边栏视图插件</td>
-          <td>通过<code>contributes.views</code>注册视图，用<code>vscode.window.createTreeView</code>实现树状视图逻辑</td>
-      </tr>
-      <tr>
-          <td>Webview自定义UI插件</td>
-          <td>通过<code>vscode.window.createWebviewPanel</code>创建webview，实现自定义复杂UI，支持HTML/CSS/JS</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>插件类型</th>
+					<th>核心开发要点</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>代码片段插件</td>
+					<td>选择<code>yo code</code>中的<code>New Code Snippets</code>模板，在snippets目录编写JSON格式代码片段，在<code>package.json</code>配置<code>contributes.snippets</code></td>
+			</tr>
+			<tr>
+					<td>主题插件</td>
+					<td>选择<code>New Color Theme</code>模板，基于现有主题修改，在<code>color-theme.json</code>中配置颜色规则</td>
+			</tr>
+			<tr>
+					<td>语言支持插件</td>
+					<td>基于Language Server Protocol (LSP) 开发，实现语法高亮、代码补全、跳转定义、格式化等能力，官方提供专用示例</td>
+			</tr>
+			<tr>
+					<td>格式化插件</td>
+					<td>通过<code>vscode.languages.registerDocumentFormattingEditProvider</code>注册格式化提供者，实现文档格式化逻辑</td>
+			</tr>
+			<tr>
+					<td>侧边栏视图插件</td>
+					<td>通过<code>contributes.views</code>注册视图，用<code>vscode.window.createTreeView</code>实现树状视图逻辑</td>
+			</tr>
+			<tr>
+					<td>Webview自定义UI插件</td>
+					<td>通过<code>vscode.window.createWebviewPanel</code>创建webview，实现自定义复杂UI，支持HTML/CSS/JS</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-其他进阶能力">3. 其他进阶能力</h3>
 <ul>
@@ -748,40 +748,40 @@
 </ul>
 <h2 id="九常见问题排查与解决方案">九、常见问题排查与解决方案</h2>
 <table>
-  <thead>
-      <tr>
-          <th>问题现象</th>
-          <th>核心原因</th>
-          <th>解决方案</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>yo code执行报错，无法生成项目</td>
-          <td>Node.js版本过低、npm镜像源问题、权限不足</td>
-          <td>升级Node.js到18.x+ LTS版本，切换npm淘宝镜像，mac/Linux加sudo，Windows用管理员终端</td>
-      </tr>
-      <tr>
-          <td>F5启动调试后，扩展宿主找不到命令</td>
-          <td>命令ID不匹配、激活事件未配置、代码编译错误</td>
-          <td>核对package.json与代码中的命令ID完全一致，补充activationEvents配置，修复TS编译错误</td>
-      </tr>
-      <tr>
-          <td>vsce package打包失败</td>
-          <td>README图片链接无效、package.json缺少必填字段、忽略文件配置错误</td>
-          <td>修复图片为在线绝对路径，补全publisher、engines等必填字段，配置.vscodeignore忽略不必要文件</td>
-      </tr>
-      <tr>
-          <td>vsce publish发布失败</td>
-          <td>PAT权限不足、Publisher ID不匹配、插件名称/版本号已存在</td>
-          <td>重新创建PAT，确保勾选Marketplace的Manage权限，核对package.json的publisher与市场ID一致，修改插件名称/升级版本号</td>
-      </tr>
-      <tr>
-          <td>插件安装后不生效</td>
-          <td>VSCode版本低于插件最低兼容要求</td>
-          <td>升级VSCode到最新版，或降低package.json中engines.vscode的最低版本要求</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>问题现象</th>
+					<th>核心原因</th>
+					<th>解决方案</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>yo code执行报错，无法生成项目</td>
+					<td>Node.js版本过低、npm镜像源问题、权限不足</td>
+					<td>升级Node.js到18.x+ LTS版本，切换npm淘宝镜像，mac/Linux加sudo，Windows用管理员终端</td>
+			</tr>
+			<tr>
+					<td>F5启动调试后，扩展宿主找不到命令</td>
+					<td>命令ID不匹配、激活事件未配置、代码编译错误</td>
+					<td>核对package.json与代码中的命令ID完全一致，补充activationEvents配置，修复TS编译错误</td>
+			</tr>
+			<tr>
+					<td>vsce package打包失败</td>
+					<td>README图片链接无效、package.json缺少必填字段、忽略文件配置错误</td>
+					<td>修复图片为在线绝对路径，补全publisher、engines等必填字段，配置.vscodeignore忽略不必要文件</td>
+			</tr>
+			<tr>
+					<td>vsce publish发布失败</td>
+					<td>PAT权限不足、Publisher ID不匹配、插件名称/版本号已存在</td>
+					<td>重新创建PAT，确保勾选Marketplace的Manage权限，核对package.json的publisher与市场ID一致，修改插件名称/升级版本号</td>
+			</tr>
+			<tr>
+					<td>插件安装后不生效</td>
+					<td>VSCode版本低于插件最低兼容要求</td>
+					<td>升级VSCode到最新版，或降低package.json中engines.vscode的最低版本要求</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="官方参考资源">官方参考资源</h2>
 <ul>
@@ -821,7 +821,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

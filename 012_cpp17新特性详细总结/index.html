@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>C&#43;&#43;17 新特性详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/012_cpp17%E6%96%B0%E7%89%B9%E6%80%A7%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="C&#43;&#43;17 新特性详细总结">
-  <meta property="og:description" content="C&#43;&#43;17 新特性完整详细总结 C&#43;&#43;17（ISO/IEC 14882:2017）是继C&#43;&#43;11之后的又一重大标准版本，于2017年12月正式发布。它延续了C&#43;&#43;“零开销抽象”的核心哲学，在语法层面大幅简化编码复杂度，深化编译期计算能力，完善类型安全；在标准库层面补齐了并行计算、文件系统、类型安全容器等核心能力，让C&#43;&#43;更易用、更高效、更安全。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-01-03T09:00:00+08:00">
-    <meta property="article:modified_time" content="2026-01-03T09:30:00+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="Cpp">
-    <meta property="article:tag" content="Cpp17">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="C&#43;&#43;17 新特性详细总结">
+	<meta property="og:description" content="C&#43;&#43;17 新特性完整详细总结 C&#43;&#43;17（ISO/IEC 14882:2017）是继C&#43;&#43;11之后的又一重大标准版本，于2017年12月正式发布。它延续了C&#43;&#43;“零开销抽象”的核心哲学，在语法层面大幅简化编码复杂度，深化编译期计算能力，完善类型安全；在标准库层面补齐了并行计算、文件系统、类型安全容器等核心能力，让C&#43;&#43;更易用、更高效、更安全。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-01-03T09:00:00+08:00">
+		<meta property="article:modified_time" content="2026-01-03T09:30:00+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="Cpp">
+		<meta property="article:tag" content="Cpp17">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="C&#43;&#43;17 新特性详细总结">
-  <meta name="twitter:description" content="C&#43;&#43;17 新特性完整详细总结 C&#43;&#43;17（ISO/IEC 14882:2017）是继C&#43;&#43;11之后的又一重大标准版本，于2017年12月正式发布。它延续了C&#43;&#43;“零开销抽象”的核心哲学，在语法层面大幅简化编码复杂度，深化编译期计算能力，完善类型安全；在标准库层面补齐了并行计算、文件系统、类型安全容器等核心能力，让C&#43;&#43;更易用、更高效、更安全。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="C&#43;&#43;17 新特性详细总结">
+	<meta name="twitter:description" content="C&#43;&#43;17 新特性完整详细总结 C&#43;&#43;17（ISO/IEC 14882:2017）是继C&#43;&#43;11之后的又一重大标准版本，于2017年12月正式发布。它延续了C&#43;&#43;“零开销抽象”的核心哲学，在语法层面大幅简化编码复杂度，深化编译期计算能力，完善类型安全；在标准库层面补齐了并行计算、文件系统、类型安全容器等核心能力，让C&#43;&#43;更易用、更高效、更安全。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -287,35 +287,35 @@
 <p><strong>核心作用</strong>：为可变参数模板的参数包展开提供原生语法支持，无需递归即可对参数包的所有元素执行二元操作，大幅简化可变模板的代码编写。</p>
 <p><strong>语法与4种折叠形式</strong></p>
 <table>
-  <thead>
-      <tr>
-          <th>折叠类型</th>
-          <th>语法</th>
-          <th>展开逻辑</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>一元左折叠</td>
-          <td><code>(... op pack)</code></td>
-          <td><code>((arg1 op arg2) op arg3) op ...</code></td>
-      </tr>
-      <tr>
-          <td>一元右折叠</td>
-          <td><code>(pack op ...)</code></td>
-          <td><code>arg1 op (arg2 op (arg3 op ...))</code></td>
-      </tr>
-      <tr>
-          <td>二元左折叠</td>
-          <td><code>(init op ... op pack)</code></td>
-          <td><code>(((init op arg1) op arg2) op arg3) op ...</code></td>
-      </tr>
-      <tr>
-          <td>二元右折叠</td>
-          <td><code>(pack op ... op init)</code></td>
-          <td><code>arg1 op (arg2 op (arg3 op (... op init)))</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>折叠类型</th>
+					<th>语法</th>
+					<th>展开逻辑</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>一元左折叠</td>
+					<td><code>(... op pack)</code></td>
+					<td><code>((arg1 op arg2) op arg3) op ...</code></td>
+			</tr>
+			<tr>
+					<td>一元右折叠</td>
+					<td><code>(pack op ...)</code></td>
+					<td><code>arg1 op (arg2 op (arg3 op ...))</code></td>
+			</tr>
+			<tr>
+					<td>二元左折叠</td>
+					<td><code>(init op ... op pack)</code></td>
+					<td><code>(((init op arg1) op arg2) op arg3) op ...</code></td>
+			</tr>
+			<tr>
+					<td>二元右折叠</td>
+					<td><code>(pack op ... op init)</code></td>
+					<td><code>arg1 op (arg2 op (arg3 op (... op init)))</code></td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>示例</strong></p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -474,30 +474,30 @@
 <h3 id="8-标准属性attributes增强">8. 标准属性（Attributes）增强</h3>
 <p>C++17新增3个跨编译器的标准属性，用于向编译器传递代码意图，提升代码安全性、消除不必要的警告。</p>
 <table>
-  <thead>
-      <tr>
-          <th>属性</th>
-          <th>核心作用</th>
-          <th>适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>[[nodiscard]]</code></td>
-          <td>标记函数返回值不可被丢弃，调用者不使用返回值时编译器触发警告</td>
-          <td>错误码返回函数、工厂函数、无副作用的纯函数</td>
-      </tr>
-      <tr>
-          <td><code>[[fallthrough]]</code></td>
-          <td>标记switch-case的穿透是有意为之，消除编译器的穿透警告</td>
-          <td>switch中case无break的合法穿透场景</td>
-      </tr>
-      <tr>
-          <td><code>[[maybe_unused]]</code></td>
-          <td>标记变量/函数/参数可能未被使用，消除编译器的未使用警告</td>
-          <td>调试变量、预留接口、泛型编程中的未使用参数</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>属性</th>
+					<th>核心作用</th>
+					<th>适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>[[nodiscard]]</code></td>
+					<td>标记函数返回值不可被丢弃，调用者不使用返回值时编译器触发警告</td>
+					<td>错误码返回函数、工厂函数、无副作用的纯函数</td>
+			</tr>
+			<tr>
+					<td><code>[[fallthrough]]</code></td>
+					<td>标记switch-case的穿透是有意为之，消除编译器的穿透警告</td>
+					<td>switch中case无break的合法穿透场景</td>
+			</tr>
+			<tr>
+					<td><code>[[maybe_unused]]</code></td>
+					<td>标记变量/函数/参数可能未被使用，消除编译器的未使用警告</td>
+					<td>调试变量、预留接口、泛型编程中的未使用参数</td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>示例</strong></p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -561,54 +561,54 @@
 </ul>
 <h3 id="10-其他核心语言特性">10. 其他核心语言特性</h3>
 <table>
-  <thead>
-      <tr>
-          <th>特性</th>
-          <th>核心作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>嵌套命名空间定义</td>
-          <td>支持<code>namespace A::B::C { ... }</code>语法，一行定义多层命名空间，无需多层缩进</td>
-      </tr>
-      <tr>
-          <td>非类型模板参数auto推导</td>
-          <td>允许<code>template &lt;auto N&gt;</code>语法，由编译器自动推导非类型模板参数的类型，简化泛型编程</td>
-      </tr>
-      <tr>
-          <td>noexcept成为类型系统的一部分</td>
-          <td>noexcept修饰符成为函数类型的一部分，支持基于noexcept的函数指针重载，完善异常规范的类型系统</td>
-      </tr>
-      <tr>
-          <td>静态断言无需消息</td>
-          <td>支持<code>static_assert(编译期常量表达式);</code>语法，可省略错误消息字符串</td>
-      </tr>
-      <tr>
-          <td>枚举类直接列表初始化</td>
-          <td>允许<code>enum class E : int {}; E e{100};</code>语法，解决枚举类底层类型的转换问题</td>
-      </tr>
-      <tr>
-          <td>泛化的范围for循环</td>
-          <td>允许begin()和end()返回不同类型，拓展了范围for的适用场景</td>
-      </tr>
-      <tr>
-          <td><code>__has_include</code>预处理指令</td>
-          <td>编译期判断头文件是否存在，实现跨平台的条件编译</td>
-      </tr>
-      <tr>
-          <td>十六进制浮点字面量</td>
-          <td>支持0x前缀的十六进制浮点字面量，精准表示IEEE754浮点数</td>
-      </tr>
-      <tr>
-          <td>u8字符字面量</td>
-          <td>新增u8前缀的字符字面量，用于表示UTF-8编码的单个字符</td>
-      </tr>
-      <tr>
-          <td>对齐的动态内存分配</td>
-          <td>支持大对齐对象的动态内存分配，新增operator new的对齐重载</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>特性</th>
+					<th>核心作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>嵌套命名空间定义</td>
+					<td>支持<code>namespace A::B::C { ... }</code>语法，一行定义多层命名空间，无需多层缩进</td>
+			</tr>
+			<tr>
+					<td>非类型模板参数auto推导</td>
+					<td>允许<code>template &lt;auto N&gt;</code>语法，由编译器自动推导非类型模板参数的类型，简化泛型编程</td>
+			</tr>
+			<tr>
+					<td>noexcept成为类型系统的一部分</td>
+					<td>noexcept修饰符成为函数类型的一部分，支持基于noexcept的函数指针重载，完善异常规范的类型系统</td>
+			</tr>
+			<tr>
+					<td>静态断言无需消息</td>
+					<td>支持<code>static_assert(编译期常量表达式);</code>语法，可省略错误消息字符串</td>
+			</tr>
+			<tr>
+					<td>枚举类直接列表初始化</td>
+					<td>允许<code>enum class E : int {}; E e{100};</code>语法，解决枚举类底层类型的转换问题</td>
+			</tr>
+			<tr>
+					<td>泛化的范围for循环</td>
+					<td>允许begin()和end()返回不同类型，拓展了范围for的适用场景</td>
+			</tr>
+			<tr>
+					<td><code>__has_include</code>预处理指令</td>
+					<td>编译期判断头文件是否存在，实现跨平台的条件编译</td>
+			</tr>
+			<tr>
+					<td>十六进制浮点字面量</td>
+					<td>支持0x前缀的十六进制浮点字面量，精准表示IEEE754浮点数</td>
+			</tr>
+			<tr>
+					<td>u8字符字面量</td>
+					<td>新增u8前缀的字符字面量，用于表示UTF-8编码的单个字符</td>
+			</tr>
+			<tr>
+					<td>对齐的动态内存分配</td>
+					<td>支持大对齐对象的动态内存分配，新增operator new的对齐重载</td>
+			</tr>
+	</tbody>
 </table>
 <hr>
 <h2 id="二标准库新增与增强">二、标准库新增与增强</h2>
@@ -791,26 +791,26 @@
 <p><strong>核心作用</strong>：为STL中69个经典算法提供了并行执行版本，通过指定执行策略，让算法自动实现多线程并行/向量化执行，无需手动编写多线程代码，大幅提升大数据量下的算法执行效率。</p>
 <p><strong>核心执行策略</strong></p>
 <table>
-  <thead>
-      <tr>
-          <th>执行策略</th>
-          <th>含义</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>std::execution::seq</code></td>
-          <td>顺序执行，与普通算法行为一致</td>
-      </tr>
-      <tr>
-          <td><code>std::execution::par</code></td>
-          <td>并行执行，允许多线程并行处理</td>
-      </tr>
-      <tr>
-          <td><code>std::execution::par_unseq</code></td>
-          <td>并行+向量化执行，允许线程并行和SIMD向量化优化，性能最高</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>执行策略</th>
+					<th>含义</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>std::execution::seq</code></td>
+					<td>顺序执行，与普通算法行为一致</td>
+			</tr>
+			<tr>
+					<td><code>std::execution::par</code></td>
+					<td>并行执行，允许多线程并行处理</td>
+			</tr>
+			<tr>
+					<td><code>std::execution::par_unseq</code></td>
+					<td>并行+向量化执行，允许线程并行和SIMD向量化优化，性能最高</td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>核心用法示例</strong></p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -851,42 +851,42 @@
 <h3 id="5-类型萃取type_traits增强">5. 类型萃取（type_traits）增强</h3>
 <p>C++17新增了大量实用的类型萃取工具，大幅简化泛型编程与模板元编程的代码。</p>
 <table>
-  <thead>
-      <tr>
-          <th>新增类型萃取</th>
-          <th>核心作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>std::void_t</code></td>
-          <td>模板别名，用于SFINAE，检测类型是否有特定的成员/方法</td>
-      </tr>
-      <tr>
-          <td><code>std::is_invocable</code> / <code>std::is_invocable_r</code></td>
-          <td>检测可调用对象是否可使用指定参数调用，以及返回值是否可转换为目标类型</td>
-      </tr>
-      <tr>
-          <td><code>std::conjunction</code></td>
-          <td>模板元编程的逻辑与，多个type_traits的&amp;&amp;操作</td>
-      </tr>
-      <tr>
-          <td><code>std::disjunction</code></td>
-          <td>模板元编程的逻辑或，多个type_traits的</td>
-      </tr>
-      <tr>
-          <td><code>std::negation</code></td>
-          <td>模板元编程的逻辑非，对type_traits取反</td>
-      </tr>
-      <tr>
-          <td><code>std::is_swappable</code> / <code>std::is_nothrow_swappable</code></td>
-          <td>检测类型是否可交换</td>
-      </tr>
-      <tr>
-          <td><code>std::invoke_result</code></td>
-          <td>获取可调用对象的返回类型</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>新增类型萃取</th>
+					<th>核心作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>std::void_t</code></td>
+					<td>模板别名，用于SFINAE，检测类型是否有特定的成员/方法</td>
+			</tr>
+			<tr>
+					<td><code>std::is_invocable</code> / <code>std::is_invocable_r</code></td>
+					<td>检测可调用对象是否可使用指定参数调用，以及返回值是否可转换为目标类型</td>
+			</tr>
+			<tr>
+					<td><code>std::conjunction</code></td>
+					<td>模板元编程的逻辑与，多个type_traits的&amp;&amp;操作</td>
+			</tr>
+			<tr>
+					<td><code>std::disjunction</code></td>
+					<td>模板元编程的逻辑或，多个type_traits的</td>
+			</tr>
+			<tr>
+					<td><code>std::negation</code></td>
+					<td>模板元编程的逻辑非，对type_traits取反</td>
+			</tr>
+			<tr>
+					<td><code>std::is_swappable</code> / <code>std::is_nothrow_swappable</code></td>
+					<td>检测类型是否可交换</td>
+			</tr>
+			<tr>
+					<td><code>std::invoke_result</code></td>
+					<td>获取可调用对象的返回类型</td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>核心示例</strong></p>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
@@ -970,46 +970,46 @@
 </span></span><span class="line"><span class="cl"><span class="k">auto</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_from_tuple</span><span class="o">&lt;</span><span class="n">Test</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">3.14</span><span class="p">));</span></span></span></code></pre></div></div>
 <h3 id="7-其他核心库特性">7. 其他核心库特性</h3>
 <table>
-  <thead>
-      <tr>
-          <th>特性</th>
-          <th>核心作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>std::scoped_lock</code></td>
-          <td>RAII锁包装器，支持同时锁定多个互斥量，自动避免死锁，简化多线程锁代码</td>
-      </tr>
-      <tr>
-          <td><code>std::shared_mutex</code></td>
-          <td>读写锁正式纳入标准，支持多读单写，大幅优化读多写少的并发场景性能</td>
-      </tr>
-      <tr>
-          <td><code>std::byte</code></td>
-          <td>专用字节类型，区分“原始内存字节”与“字符/数值”，类型更安全，仅支持位运算</td>
-      </tr>
-      <tr>
-          <td><code>std::launder</code></td>
-          <td>指针优化屏障，解决严格别名规则下的指针生命周期问题，用于底层内存操作、placement new场景</td>
-      </tr>
-      <tr>
-          <td><code>std::shared_ptr&lt;T[]&gt;</code></td>
-          <td>shared_ptr正式支持数组类型，无需自定义删除器</td>
-      </tr>
-      <tr>
-          <td>chrono库增强</td>
-          <td>新增时间点/时长的舍入函数，duration和time_point的成员函数全面支持constexpr</td>
-      </tr>
-      <tr>
-          <td>数学特殊函数</td>
-          <td>新增贝塞尔函数、伽马函数、误差函数、椭圆积分等科学计算专用数学函数</td>
-      </tr>
-      <tr>
-          <td><code>std::sample</code></td>
-          <td>随机采样算法，从序列中随机抽取指定数量的样本</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>特性</th>
+					<th>核心作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>std::scoped_lock</code></td>
+					<td>RAII锁包装器，支持同时锁定多个互斥量，自动避免死锁，简化多线程锁代码</td>
+			</tr>
+			<tr>
+					<td><code>std::shared_mutex</code></td>
+					<td>读写锁正式纳入标准，支持多读单写，大幅优化读多写少的并发场景性能</td>
+			</tr>
+			<tr>
+					<td><code>std::byte</code></td>
+					<td>专用字节类型，区分“原始内存字节”与“字符/数值”，类型更安全，仅支持位运算</td>
+			</tr>
+			<tr>
+					<td><code>std::launder</code></td>
+					<td>指针优化屏障，解决严格别名规则下的指针生命周期问题，用于底层内存操作、placement new场景</td>
+			</tr>
+			<tr>
+					<td><code>std::shared_ptr&lt;T[]&gt;</code></td>
+					<td>shared_ptr正式支持数组类型，无需自定义删除器</td>
+			</tr>
+			<tr>
+					<td>chrono库增强</td>
+					<td>新增时间点/时长的舍入函数，duration和time_point的成员函数全面支持constexpr</td>
+			</tr>
+			<tr>
+					<td>数学特殊函数</td>
+					<td>新增贝塞尔函数、伽马函数、误差函数、椭圆积分等科学计算专用数学函数</td>
+			</tr>
+			<tr>
+					<td><code>std::sample</code></td>
+					<td>随机采样算法，从序列中随机抽取指定数量的样本</td>
+			</tr>
+	</tbody>
 </table>
 <hr>
 <h2 id="三c17-核心价值总结">三、C++17 核心价值总结</h2>
@@ -1052,7 +1052,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

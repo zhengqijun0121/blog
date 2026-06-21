@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>MySQL 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/002_mysql%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="MySQL 语法详细总结">
-  <meta property="og:description" content="MySQL 数据库语法详细总结 本文基于 MySQL 主流版本（5.7/8.0），覆盖从基础到进阶的全量核心语法，按功能模块结构化梳理，标注关键避坑点与生产最佳实践。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-02-24T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-02-24T10:00:20+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="Database">
-    <meta property="article:tag" content="MySQL">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="MySQL 语法详细总结">
+	<meta property="og:description" content="MySQL 数据库语法详细总结 本文基于 MySQL 主流版本（5.7/8.0），覆盖从基础到进阶的全量核心语法，按功能模块结构化梳理，标注关键避坑点与生产最佳实践。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-02-24T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-02-24T10:00:20+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="Database">
+		<meta property="article:tag" content="MySQL">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="MySQL 语法详细总结">
-  <meta name="twitter:description" content="MySQL 数据库语法详细总结 本文基于 MySQL 主流版本（5.7/8.0），覆盖从基础到进阶的全量核心语法，按功能模块结构化梳理，标注关键避坑点与生产最佳实践。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="MySQL 语法详细总结">
+	<meta name="twitter:description" content="MySQL 数据库语法详细总结 本文基于 MySQL 主流版本（5.7/8.0），覆盖从基础到进阶的全量核心语法，按功能模块结构化梳理，标注关键避坑点与生产最佳实践。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -415,50 +415,50 @@
 <h4 id="343-where-条件筛选">3.4.3 WHERE 条件筛选</h4>
 <p>用于行级数据过滤，支持以下运算符：</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">运算符类型</th>
-          <th style="text-align: left">常用语法</th>
-          <th style="text-align: left">说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">比较运算符</td>
-          <td style="text-align: left"><code>=</code>、<code>!=/&lt;&gt;</code>、<code>&gt;</code>、<code>&lt;</code>、<code>&gt;=</code>、<code>&lt;=</code></td>
-          <td style="text-align: left">基础值比较</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">范围查询</td>
-          <td style="text-align: left"><code>BETWEEN 最小值 AND 最大值</code></td>
-          <td style="text-align: left">闭区间范围匹配</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">集合查询</td>
-          <td style="text-align: left"><code>IN (值1,值2,...)</code>、<code>NOT IN (...)</code></td>
-          <td style="text-align: left">集合内匹配</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">空值判断</td>
-          <td style="text-align: left"><code>IS NULL</code>、<code>IS NOT NULL</code></td>
-          <td style="text-align: left">唯一正确的NULL判断方式，禁止用<code>=NULL</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">模糊查询</td>
-          <td style="text-align: left"><code>LIKE '通配符'</code></td>
-          <td style="text-align: left"><code>%</code>匹配任意字符，<code>_</code>匹配单个字符；<code>%开头</code>会导致索引失效</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">逻辑运算符</td>
-          <td style="text-align: left"><code>AND</code>、<code>OR</code>、<code>NOT</code></td>
-          <td style="text-align: left">多条件组合，AND优先级高于OR，可用括号调整优先级</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">正则匹配</td>
-          <td style="text-align: left"><code>REGEXP '正则表达式'</code></td>
-          <td style="text-align: left">正则规则匹配，如<code>REGEXP '^[a-z]'</code>匹配小写字母开头</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">运算符类型</th>
+					<th style="text-align: left">常用语法</th>
+					<th style="text-align: left">说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">比较运算符</td>
+					<td style="text-align: left"><code>=</code>、<code>!=/&lt;&gt;</code>、<code>&gt;</code>、<code>&lt;</code>、<code>&gt;=</code>、<code>&lt;=</code></td>
+					<td style="text-align: left">基础值比较</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">范围查询</td>
+					<td style="text-align: left"><code>BETWEEN 最小值 AND 最大值</code></td>
+					<td style="text-align: left">闭区间范围匹配</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">集合查询</td>
+					<td style="text-align: left"><code>IN (值1,值2,...)</code>、<code>NOT IN (...)</code></td>
+					<td style="text-align: left">集合内匹配</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">空值判断</td>
+					<td style="text-align: left"><code>IS NULL</code>、<code>IS NOT NULL</code></td>
+					<td style="text-align: left">唯一正确的NULL判断方式，禁止用<code>=NULL</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">模糊查询</td>
+					<td style="text-align: left"><code>LIKE '通配符'</code></td>
+					<td style="text-align: left"><code>%</code>匹配任意字符，<code>_</code>匹配单个字符；<code>%开头</code>会导致索引失效</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">逻辑运算符</td>
+					<td style="text-align: left"><code>AND</code>、<code>OR</code>、<code>NOT</code></td>
+					<td style="text-align: left">多条件组合，AND优先级高于OR，可用括号调整优先级</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">正则匹配</td>
+					<td style="text-align: left"><code>REGEXP '正则表达式'</code></td>
+					<td style="text-align: left">正则规则匹配，如<code>REGEXP '^[a-z]'</code>匹配小写字母开头</td>
+			</tr>
+	</tbody>
 </table>
 <p>示例：</p>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
@@ -490,50 +490,50 @@
 <h4 id="345-聚合函数分组统计">3.4.5 聚合函数（分组统计）</h4>
 <p>聚合函数会忽略NULL值，必须配合<code>GROUP BY</code>使用，或用于全表统计，<strong>禁止在WHERE中使用聚合函数</strong>。</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">函数</th>
-          <th style="text-align: left">功能说明</th>
-          <th style="text-align: left">最佳实践</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>COUNT(*)</code></td>
-          <td style="text-align: left">统计总行数（包含NULL值行）</td>
-          <td style="text-align: left">InnoDB中统计行数优先使用，性能最优</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>COUNT(字段)</code></td>
-          <td style="text-align: left">统计该字段非NULL的行数</td>
-          <td style="text-align: left"></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>SUM(字段)</code></td>
-          <td style="text-align: left">求和</td>
-          <td style="text-align: left"></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>AVG(字段)</code></td>
-          <td style="text-align: left">求平均值</td>
-          <td style="text-align: left"></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>MAX(字段)</code></td>
-          <td style="text-align: left">求最大值</td>
-          <td style="text-align: left"></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>MIN(字段)</code></td>
-          <td style="text-align: left">求最小值</td>
-          <td style="text-align: left"></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>GROUP_CONCAT(字段)</code></td>
-          <td style="text-align: left">分组内字段值拼接，默认逗号分隔</td>
-          <td style="text-align: left">可指定分隔符：<code>GROUP_CONCAT(字段 SEPARATOR ';')</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">函数</th>
+					<th style="text-align: left">功能说明</th>
+					<th style="text-align: left">最佳实践</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>COUNT(*)</code></td>
+					<td style="text-align: left">统计总行数（包含NULL值行）</td>
+					<td style="text-align: left">InnoDB中统计行数优先使用，性能最优</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>COUNT(字段)</code></td>
+					<td style="text-align: left">统计该字段非NULL的行数</td>
+					<td style="text-align: left"></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>SUM(字段)</code></td>
+					<td style="text-align: left">求和</td>
+					<td style="text-align: left"></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>AVG(字段)</code></td>
+					<td style="text-align: left">求平均值</td>
+					<td style="text-align: left"></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>MAX(字段)</code></td>
+					<td style="text-align: left">求最大值</td>
+					<td style="text-align: left"></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>MIN(字段)</code></td>
+					<td style="text-align: left">求最小值</td>
+					<td style="text-align: left"></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>GROUP_CONCAT(字段)</code></td>
+					<td style="text-align: left">分组内字段值拼接，默认逗号分隔</td>
+					<td style="text-align: left">可指定分隔符：<code>GROUP_CONCAT(字段 SEPARATOR ';')</code></td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="346-分组查询group-by--having">3.4.6 分组查询（GROUP BY + HAVING）</h4>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -634,166 +634,166 @@
 <p>建表时字段类型的核心选择依据，直接影响存储效率与数据准确性，以下为生产高频类型。</p>
 <h3 id="41-数值类型">4.1 数值类型</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">类型</th>
-          <th style="text-align: left">存储空间</th>
-          <th style="text-align: left">取值范围</th>
-          <th style="text-align: left">适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">TINYINT</td>
-          <td style="text-align: left">1字节</td>
-          <td style="text-align: left">有符号：-128<del>127；无符号：0</del>255</td>
-          <td style="text-align: left">性别、状态、类型等枚举值</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">INT</td>
-          <td style="text-align: left">4字节</td>
-          <td style="text-align: left">有符号：-2147483648<del>2147483647；无符号：0</del>4294967295</td>
-          <td style="text-align: left">主键ID、普通数字字段，最常用</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">BIGINT</td>
-          <td style="text-align: left">8字节</td>
-          <td style="text-align: left">超大范围</td>
-          <td style="text-align: left">分布式ID、雪花ID、超大数值</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">DECIMAL(M,D)</td>
-          <td style="text-align: left">自定义</td>
-          <td style="text-align: left">M为总位数，D为小数位，精确存储</td>
-          <td style="text-align: left">金额、价格等对精度要求极高的场景，如<code>DECIMAL(10,2)</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">BOOL/BOOLEAN</td>
-          <td style="text-align: left">1字节</td>
-          <td style="text-align: left">本质是TINYINT(1)，0=false，非0=true</td>
-          <td style="text-align: left">布尔值判断</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">类型</th>
+					<th style="text-align: left">存储空间</th>
+					<th style="text-align: left">取值范围</th>
+					<th style="text-align: left">适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">TINYINT</td>
+					<td style="text-align: left">1字节</td>
+					<td style="text-align: left">有符号：-128<del>127；无符号：0</del>255</td>
+					<td style="text-align: left">性别、状态、类型等枚举值</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">INT</td>
+					<td style="text-align: left">4字节</td>
+					<td style="text-align: left">有符号：-2147483648<del>2147483647；无符号：0</del>4294967295</td>
+					<td style="text-align: left">主键ID、普通数字字段，最常用</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">BIGINT</td>
+					<td style="text-align: left">8字节</td>
+					<td style="text-align: left">超大范围</td>
+					<td style="text-align: left">分布式ID、雪花ID、超大数值</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">DECIMAL(M,D)</td>
+					<td style="text-align: left">自定义</td>
+					<td style="text-align: left">M为总位数，D为小数位，精确存储</td>
+					<td style="text-align: left">金额、价格等对精度要求极高的场景，如<code>DECIMAL(10,2)</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">BOOL/BOOLEAN</td>
+					<td style="text-align: left">1字节</td>
+					<td style="text-align: left">本质是TINYINT(1)，0=false，非0=true</td>
+					<td style="text-align: left">布尔值判断</td>
+			</tr>
+	</tbody>
 </table>
 <blockquote>
 <p>避坑：<code>INT(10)</code> 仅为显示宽度，不影响存储范围，MySQL8.0已废弃该语法；FLOAT/DOUBLE存在精度丢失，禁止用于存储金额。</p>
 </blockquote>
 <h3 id="42-字符串类型">4.2 字符串类型</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">类型</th>
-          <th style="text-align: left">特性</th>
-          <th style="text-align: left">最大长度</th>
-          <th style="text-align: left">适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">CHAR(M)</td>
-          <td style="text-align: left">定长字符串，查询效率高</td>
-          <td style="text-align: left">M最大255字符</td>
-          <td style="text-align: left">手机号、身份证号、固定长度编码</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">VARCHAR(M)</td>
-          <td style="text-align: left">变长字符串，节省存储空间</td>
-          <td style="text-align: left">最大65535字节</td>
-          <td style="text-align: left">用户名、地址、备注等非固定长度文本，最常用</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">TEXT</td>
-          <td style="text-align: left">长文本，无默认值</td>
-          <td style="text-align: left">最大64KB</td>
-          <td style="text-align: left">文章详情、富文本内容等长文本</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">ENUM</td>
-          <td style="text-align: left">枚举类型，只能选指定值</td>
-          <td style="text-align: left">最多65535个枚举项</td>
-          <td style="text-align: left">性别、状态等固定选项的字段</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">类型</th>
+					<th style="text-align: left">特性</th>
+					<th style="text-align: left">最大长度</th>
+					<th style="text-align: left">适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">CHAR(M)</td>
+					<td style="text-align: left">定长字符串，查询效率高</td>
+					<td style="text-align: left">M最大255字符</td>
+					<td style="text-align: left">手机号、身份证号、固定长度编码</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">VARCHAR(M)</td>
+					<td style="text-align: left">变长字符串，节省存储空间</td>
+					<td style="text-align: left">最大65535字节</td>
+					<td style="text-align: left">用户名、地址、备注等非固定长度文本，最常用</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">TEXT</td>
+					<td style="text-align: left">长文本，无默认值</td>
+					<td style="text-align: left">最大64KB</td>
+					<td style="text-align: left">文章详情、富文本内容等长文本</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">ENUM</td>
+					<td style="text-align: left">枚举类型，只能选指定值</td>
+					<td style="text-align: left">最多65535个枚举项</td>
+					<td style="text-align: left">性别、状态等固定选项的字段</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="43-日期时间类型">4.3 日期时间类型</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">类型</th>
-          <th style="text-align: left">格式</th>
-          <th style="text-align: left">取值范围</th>
-          <th style="text-align: left">特性与适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">DATE</td>
-          <td style="text-align: left">YYYY-MM-DD</td>
-          <td style="text-align: left">1000-01-01 ~ 9999-12-31</td>
-          <td style="text-align: left">仅存储日期，如生日、业务日期</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">DATETIME</td>
-          <td style="text-align: left">YYYY-MM-DD HH:MM:SS</td>
-          <td style="text-align: left">1000-01-01 ~ 9999-12-31</td>
-          <td style="text-align: left">与时区无关，无2038问题，生产推荐，如创建时间、更新时间</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">TIMESTAMP</td>
-          <td style="text-align: left">YYYY-MM-DD HH:MM:SS</td>
-          <td style="text-align: left">1970-01-01 ~ 2038-01-19</td>
-          <td style="text-align: left">受时区影响，支持自动更新，如<code>ON UPDATE CURRENT_TIMESTAMP</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">TIME</td>
-          <td style="text-align: left">HH:MM:SS</td>
-          <td style="text-align: left">-838:59:59 ~ 838:59:59</td>
-          <td style="text-align: left">仅存储时间</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">类型</th>
+					<th style="text-align: left">格式</th>
+					<th style="text-align: left">取值范围</th>
+					<th style="text-align: left">特性与适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">DATE</td>
+					<td style="text-align: left">YYYY-MM-DD</td>
+					<td style="text-align: left">1000-01-01 ~ 9999-12-31</td>
+					<td style="text-align: left">仅存储日期，如生日、业务日期</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">DATETIME</td>
+					<td style="text-align: left">YYYY-MM-DD HH:MM:SS</td>
+					<td style="text-align: left">1000-01-01 ~ 9999-12-31</td>
+					<td style="text-align: left">与时区无关，无2038问题，生产推荐，如创建时间、更新时间</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">TIMESTAMP</td>
+					<td style="text-align: left">YYYY-MM-DD HH:MM:SS</td>
+					<td style="text-align: left">1970-01-01 ~ 2038-01-19</td>
+					<td style="text-align: left">受时区影响，支持自动更新，如<code>ON UPDATE CURRENT_TIMESTAMP</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">TIME</td>
+					<td style="text-align: left">HH:MM:SS</td>
+					<td style="text-align: left">-838:59:59 ~ 838:59:59</td>
+					<td style="text-align: left">仅存储时间</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="五约束与索引">五、约束与索引</h2>
 <h3 id="51-字段约束数据完整性保障">5.1 字段约束（数据完整性保障）</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">约束</th>
-          <th style="text-align: left">功能说明</th>
-          <th style="text-align: left">核心特性</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">PRIMARY KEY（主键约束）</td>
-          <td style="text-align: left">唯一标识一行数据，非空+唯一</td>
-          <td style="text-align: left">一张表只能有一个主键，InnoDB主键为聚簇索引，建议用自增ID/雪花ID</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">NOT NULL（非空约束）</td>
-          <td style="text-align: left">字段不允许为NULL</td>
-          <td style="text-align: left">生产建议所有字段都加，配合DEFAULT默认值，避免NULL带来的查询异常</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">UNIQUE（唯一约束）</td>
-          <td style="text-align: left">字段值唯一，不可重复</td>
-          <td style="text-align: left">一张表可多个，允许NULL值，自动创建唯一索引，如手机号、邮箱</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">DEFAULT（默认约束）</td>
-          <td style="text-align: left">字段未赋值时使用默认值</td>
-          <td style="text-align: left">如<code>DEFAULT 0</code>、<code>DEFAULT CURRENT_TIMESTAMP</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">FOREIGN KEY（外键约束）</td>
-          <td style="text-align: left">保证两张表的参照完整性</td>
-          <td style="text-align: left">生产环境慎用，会影响写入性能，级联操作有风险，建议用业务代码保证</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">CHECK（检查约束）</td>
-          <td style="text-align: left">字段值必须满足指定条件</td>
-          <td style="text-align: left">MySQL8.0原生支持，如<code>CHECK(age &gt; 0 AND age &lt; 150)</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">约束</th>
+					<th style="text-align: left">功能说明</th>
+					<th style="text-align: left">核心特性</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">PRIMARY KEY（主键约束）</td>
+					<td style="text-align: left">唯一标识一行数据，非空+唯一</td>
+					<td style="text-align: left">一张表只能有一个主键，InnoDB主键为聚簇索引，建议用自增ID/雪花ID</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">NOT NULL（非空约束）</td>
+					<td style="text-align: left">字段不允许为NULL</td>
+					<td style="text-align: left">生产建议所有字段都加，配合DEFAULT默认值，避免NULL带来的查询异常</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">UNIQUE（唯一约束）</td>
+					<td style="text-align: left">字段值唯一，不可重复</td>
+					<td style="text-align: left">一张表可多个，允许NULL值，自动创建唯一索引，如手机号、邮箱</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">DEFAULT（默认约束）</td>
+					<td style="text-align: left">字段未赋值时使用默认值</td>
+					<td style="text-align: left">如<code>DEFAULT 0</code>、<code>DEFAULT CURRENT_TIMESTAMP</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">FOREIGN KEY（外键约束）</td>
+					<td style="text-align: left">保证两张表的参照完整性</td>
+					<td style="text-align: left">生产环境慎用，会影响写入性能，级联操作有风险，建议用业务代码保证</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">CHECK（检查约束）</td>
+					<td style="text-align: left">字段值必须满足指定条件</td>
+					<td style="text-align: left">MySQL8.0原生支持，如<code>CHECK(age &gt; 0 AND age &lt; 150)</code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="52-索引查询性能优化核心">5.2 索引（查询性能优化核心）</h3>
 <p>索引用于加速查询，本质是排好序的数据结构，InnoDB默认使用B+树索引。</p>
@@ -906,45 +906,45 @@
 </span></span></span><span class="line"><span class="cl"><span class="k">SET</span><span class="w"> </span><span class="n">autocommit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span></span></span></code></pre></div></div>
 <h3 id="73-事务隔离级别">7.3 事务隔离级别</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">隔离级别</th>
-          <th style="text-align: center">脏读</th>
-          <th style="text-align: center">不可重复读</th>
-          <th style="text-align: center">幻读</th>
-          <th style="text-align: left">说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">READ UNCOMMITTED（读未提交）</td>
-          <td style="text-align: center">✅</td>
-          <td style="text-align: center">✅</td>
-          <td style="text-align: center">✅</td>
-          <td style="text-align: left">最低级别，基本不用</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">READ COMMITTED（读已提交）</td>
-          <td style="text-align: center">❌</td>
-          <td style="text-align: center">✅</td>
-          <td style="text-align: center">✅</td>
-          <td style="text-align: left">Oracle默认级别，解决脏读</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">REPEATABLE READ（可重复读）</td>
-          <td style="text-align: center">❌</td>
-          <td style="text-align: center">❌</td>
-          <td style="text-align: center">✅</td>
-          <td style="text-align: left">MySQL InnoDB默认级别，通过MVCC解决幻读</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">SERIALIZABLE（串行化）</td>
-          <td style="text-align: center">❌</td>
-          <td style="text-align: center">❌</td>
-          <td style="text-align: center">❌</td>
-          <td style="text-align: left">最高级别，强制事务串行，性能极差，基本不用</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">隔离级别</th>
+					<th style="text-align: center">脏读</th>
+					<th style="text-align: center">不可重复读</th>
+					<th style="text-align: center">幻读</th>
+					<th style="text-align: left">说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">READ UNCOMMITTED（读未提交）</td>
+					<td style="text-align: center">✅</td>
+					<td style="text-align: center">✅</td>
+					<td style="text-align: center">✅</td>
+					<td style="text-align: left">最低级别，基本不用</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">READ COMMITTED（读已提交）</td>
+					<td style="text-align: center">❌</td>
+					<td style="text-align: center">✅</td>
+					<td style="text-align: center">✅</td>
+					<td style="text-align: left">Oracle默认级别，解决脏读</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">REPEATABLE READ（可重复读）</td>
+					<td style="text-align: center">❌</td>
+					<td style="text-align: center">❌</td>
+					<td style="text-align: center">✅</td>
+					<td style="text-align: left">MySQL InnoDB默认级别，通过MVCC解决幻读</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">SERIALIZABLE（串行化）</td>
+					<td style="text-align: center">❌</td>
+					<td style="text-align: center">❌</td>
+					<td style="text-align: center">❌</td>
+					<td style="text-align: left">最高级别，强制事务串行，性能极差，基本不用</td>
+			</tr>
+	</tbody>
 </table>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
     <div class="code-header language-sql">
@@ -1187,7 +1187,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

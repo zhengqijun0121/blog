@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>tcpdump 命令使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/012_tcpdump%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="tcpdump 命令使用详细总结">
-  <meta property="og:description" content="tcpdump 命令使用详细总结 tcpdump 是类Unix/Linux系统下开源、轻量、高性能的命令行网络数据包捕获与分析工具，基于libpcap库实现，是网络故障排查、协议分析、安全审计、流量监控的核心工具。必须以root/sudo权限运行才能操作网卡捕获流量，抓包结果可直接在终端分析，也可保存为pcap文件供Wireshark等工具深度解析。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-01-20T09:00:00+08:00">
-    <meta property="article:modified_time" content="2026-01-20T09:00:00+08:00">
-    <meta property="article:tag" content="开发工具">
-    <meta property="article:tag" content="Shell">
-    <meta property="article:tag" content="Tcpdump">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="tcpdump 命令使用详细总结">
+	<meta property="og:description" content="tcpdump 命令使用详细总结 tcpdump 是类Unix/Linux系统下开源、轻量、高性能的命令行网络数据包捕获与分析工具，基于libpcap库实现，是网络故障排查、协议分析、安全审计、流量监控的核心工具。必须以root/sudo权限运行才能操作网卡捕获流量，抓包结果可直接在终端分析，也可保存为pcap文件供Wireshark等工具深度解析。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-01-20T09:00:00+08:00">
+		<meta property="article:modified_time" content="2026-01-20T09:00:00+08:00">
+		<meta property="article:tag" content="开发工具">
+		<meta property="article:tag" content="Shell">
+		<meta property="article:tag" content="Tcpdump">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="tcpdump 命令使用详细总结">
-  <meta name="twitter:description" content="tcpdump 命令使用详细总结 tcpdump 是类Unix/Linux系统下开源、轻量、高性能的命令行网络数据包捕获与分析工具，基于libpcap库实现，是网络故障排查、协议分析、安全审计、流量监控的核心工具。必须以root/sudo权限运行才能操作网卡捕获流量，抓包结果可直接在终端分析，也可保存为pcap文件供Wireshark等工具深度解析。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="tcpdump 命令使用详细总结">
+	<meta name="twitter:description" content="tcpdump 命令使用详细总结 tcpdump 是类Unix/Linux系统下开源、轻量、高性能的命令行网络数据包捕获与分析工具，基于libpcap库实现，是网络故障排查、协议分析、安全审计、流量监控的核心工具。必须以root/sudo权限运行才能操作网卡捕获流量，抓包结果可直接在终端分析，也可保存为pcap文件供Wireshark等工具深度解析。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -197,339 +197,339 @@
 <p>按功能分类整理，标注高频必用选项，覆盖99%日常使用场景。</p>
 <h3 id="21-捕获控制选项核心必用">2.1 捕获控制选项（核心必用）</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">选项</th>
-          <th style="text-align: left">功能说明</th>
-          <th style="text-align: left">高频使用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>-i &lt;接口&gt;</code></td>
-          <td style="text-align: left">指定监听的网络接口，<code>any</code> 表示监听所有可用网卡</td>
-          <td style="text-align: left">必用，<code>-i eth0</code> 抓指定网卡，<code>-i any</code> 全网卡抓包</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-c &lt;数量&gt;</code></td>
-          <td style="text-align: left">捕获指定数量的数据包后自动退出</td>
-          <td style="text-align: left">避免无限抓包，精准控制抓包规模</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-s &lt;长度&gt;</code></td>
-          <td style="text-align: left">设置每个数据包的抓取长度（snaplen），<code>-s 0</code> 表示完整抓取整个数据包</td>
-          <td style="text-align: left">解决默认长度导致的包内容截断问题，<code>-s 128</code> 仅抓头部减少性能损耗</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-Q &lt;方向&gt;</code></td>
-          <td style="text-align: left">指定抓包流量方向，可选 <code>in/out/inout</code>，默认 <code>inout</code></td>
-          <td style="text-align: left">仅抓入方向/出方向流量，精准过滤</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-p</code></td>
-          <td style="text-align: left">关闭网卡混杂模式</td>
-          <td style="text-align: left">普通环境下仅需抓取本机流量，避免不必要的权限开销</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-n</code></td>
-          <td style="text-align: left">不解析主机名，直接显示IP地址，避免DNS反向解析导致的输出卡顿</td>
-          <td style="text-align: left">必用，大幅提升抓包响应速度</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-nn</code></td>
-          <td style="text-align: left">不解析主机名、端口号、协议名，完全以数字形式显示</td>
-          <td style="text-align: left">最高频选项，比<code>-n</code>更彻底，无任何解析开销</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">选项</th>
+					<th style="text-align: left">功能说明</th>
+					<th style="text-align: left">高频使用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>-i &lt;接口&gt;</code></td>
+					<td style="text-align: left">指定监听的网络接口，<code>any</code> 表示监听所有可用网卡</td>
+					<td style="text-align: left">必用，<code>-i eth0</code> 抓指定网卡，<code>-i any</code> 全网卡抓包</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-c &lt;数量&gt;</code></td>
+					<td style="text-align: left">捕获指定数量的数据包后自动退出</td>
+					<td style="text-align: left">避免无限抓包，精准控制抓包规模</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-s &lt;长度&gt;</code></td>
+					<td style="text-align: left">设置每个数据包的抓取长度（snaplen），<code>-s 0</code> 表示完整抓取整个数据包</td>
+					<td style="text-align: left">解决默认长度导致的包内容截断问题，<code>-s 128</code> 仅抓头部减少性能损耗</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-Q &lt;方向&gt;</code></td>
+					<td style="text-align: left">指定抓包流量方向，可选 <code>in/out/inout</code>，默认 <code>inout</code></td>
+					<td style="text-align: left">仅抓入方向/出方向流量，精准过滤</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-p</code></td>
+					<td style="text-align: left">关闭网卡混杂模式</td>
+					<td style="text-align: left">普通环境下仅需抓取本机流量，避免不必要的权限开销</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-n</code></td>
+					<td style="text-align: left">不解析主机名，直接显示IP地址，避免DNS反向解析导致的输出卡顿</td>
+					<td style="text-align: left">必用，大幅提升抓包响应速度</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-nn</code></td>
+					<td style="text-align: left">不解析主机名、端口号、协议名，完全以数字形式显示</td>
+					<td style="text-align: left">最高频选项，比<code>-n</code>更彻底，无任何解析开销</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="22-输出格式选项">2.2 输出格式选项</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">选项</th>
-          <th style="text-align: left">功能说明</th>
-          <th style="text-align: left">使用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>-v/-vv/-vvv</code></td>
-          <td style="text-align: left">逐级增加输出详细程度，<code>-vvv</code> 为最详细模式</td>
-          <td style="text-align: left">深度分析协议字段、包细节</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-e</code></td>
-          <td style="text-align: left">输出数据链路层（二层）头部信息，包括源MAC、目的MAC、VLAN标签、以太网协议类型</td>
-          <td style="text-align: left">排查二层网络问题、MAC地址过滤、VLAN流量分析</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-A</code></td>
-          <td style="text-align: left">仅以ASCII格式打印数据包载荷内容</td>
-          <td style="text-align: left">分析HTTP、SMTP等文本类应用层协议</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-X</code></td>
-          <td style="text-align: left">同时以十六进制+ASCII格式打印数据包载荷</td>
-          <td style="text-align: left">二进制协议分析、深度排查包内容</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-XX</code></td>
-          <td style="text-align: left">同<code>-X</code>，额外打印数据链路层头部的十六进制+ASCII内容</td>
-          <td style="text-align: left">二层+三层+四层全内容分析</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-S</code></td>
-          <td style="text-align: left">打印TCP绝对序列号，而非默认的相对序列号</td>
-          <td style="text-align: left">精准排查TCP序列号异常、丢包重传问题</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-l</code></td>
-          <td style="text-align: left">开启行缓冲模式</td>
-          <td style="text-align: left">抓包同时通过管道`</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">选项</th>
+					<th style="text-align: left">功能说明</th>
+					<th style="text-align: left">使用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>-v/-vv/-vvv</code></td>
+					<td style="text-align: left">逐级增加输出详细程度，<code>-vvv</code> 为最详细模式</td>
+					<td style="text-align: left">深度分析协议字段、包细节</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-e</code></td>
+					<td style="text-align: left">输出数据链路层（二层）头部信息，包括源MAC、目的MAC、VLAN标签、以太网协议类型</td>
+					<td style="text-align: left">排查二层网络问题、MAC地址过滤、VLAN流量分析</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-A</code></td>
+					<td style="text-align: left">仅以ASCII格式打印数据包载荷内容</td>
+					<td style="text-align: left">分析HTTP、SMTP等文本类应用层协议</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-X</code></td>
+					<td style="text-align: left">同时以十六进制+ASCII格式打印数据包载荷</td>
+					<td style="text-align: left">二进制协议分析、深度排查包内容</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-XX</code></td>
+					<td style="text-align: left">同<code>-X</code>，额外打印数据链路层头部的十六进制+ASCII内容</td>
+					<td style="text-align: left">二层+三层+四层全内容分析</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-S</code></td>
+					<td style="text-align: left">打印TCP绝对序列号，而非默认的相对序列号</td>
+					<td style="text-align: left">精准排查TCP序列号异常、丢包重传问题</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-l</code></td>
+					<td style="text-align: left">开启行缓冲模式</td>
+					<td style="text-align: left">抓包同时通过管道`</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="23-文件读写选项">2.3 文件读写选项</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">选项</th>
-          <th style="text-align: left">功能说明</th>
-          <th style="text-align: left">使用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>-w &lt;文件名.pcap&gt;</code></td>
-          <td style="text-align: left">将捕获的原始数据包写入文件，而非输出到终端</td>
-          <td style="text-align: left">长期抓包、后续离线分析、导出到Wireshark</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-r &lt;文件名.pcap&gt;</code></td>
-          <td style="text-align: left">从已保存的pcap文件中读取数据包，配合过滤表达式做离线分析</td>
-          <td style="text-align: left">历史流量回溯、二次筛选分析</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-C &lt;文件大小(MB)&gt;</code></td>
-          <td style="text-align: left">自动切割抓包文件，单个文件达到指定大小时，生成新文件（后缀自增.pcap1、.pcap2）</td>
-          <td style="text-align: left">高流量场景长期抓包，避免单个文件过大</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-G &lt;秒数&gt;</code></td>
-          <td style="text-align: left">按时间周期自动切割抓包文件，常用<code>-G 3600</code>（每小时1个文件）</td>
-          <td style="text-align: left">定时归档流量，配合时间命名<code>%Y%m%d_%H%M%S</code>区分文件</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">选项</th>
+					<th style="text-align: left">功能说明</th>
+					<th style="text-align: left">使用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>-w &lt;文件名.pcap&gt;</code></td>
+					<td style="text-align: left">将捕获的原始数据包写入文件，而非输出到终端</td>
+					<td style="text-align: left">长期抓包、后续离线分析、导出到Wireshark</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-r &lt;文件名.pcap&gt;</code></td>
+					<td style="text-align: left">从已保存的pcap文件中读取数据包，配合过滤表达式做离线分析</td>
+					<td style="text-align: left">历史流量回溯、二次筛选分析</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-C &lt;文件大小(MB)&gt;</code></td>
+					<td style="text-align: left">自动切割抓包文件，单个文件达到指定大小时，生成新文件（后缀自增.pcap1、.pcap2）</td>
+					<td style="text-align: left">高流量场景长期抓包，避免单个文件过大</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-G &lt;秒数&gt;</code></td>
+					<td style="text-align: left">按时间周期自动切割抓包文件，常用<code>-G 3600</code>（每小时1个文件）</td>
+					<td style="text-align: left">定时归档流量，配合时间命名<code>%Y%m%d_%H%M%S</code>区分文件</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="24-时间戳控制选项">2.4 时间戳控制选项</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">选项</th>
-          <th style="text-align: left">功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>-t</code></td>
-          <td style="text-align: left">不打印时间戳</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-tt</code></td>
-          <td style="text-align: left">打印秒级时间戳（从1970年至今的秒数）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-ttt</code></td>
-          <td style="text-align: left">打印当前包与上一个包的时间间隔</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-tttt</code></td>
-          <td style="text-align: left">打印完整的日期+时间戳，可读性最高</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">选项</th>
+					<th style="text-align: left">功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>-t</code></td>
+					<td style="text-align: left">不打印时间戳</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-tt</code></td>
+					<td style="text-align: left">打印秒级时间戳（从1970年至今的秒数）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-ttt</code></td>
+					<td style="text-align: left">打印当前包与上一个包的时间间隔</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-tttt</code></td>
+					<td style="text-align: left">打印完整的日期+时间戳，可读性最高</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="三bpf过滤规则核心能力">三、BPF过滤规则（核心能力）</h2>
 <p>tcpdump的过滤能力基于BPF语法，可通过<strong>类型、方向、协议、逻辑组合</strong>实现精准流量筛选，避免捕获无关流量，提升抓包效率与分析效率。</p>
 <h3 id="31-基础过滤规则">3.1 基础过滤规则</h3>
 <h4 id="1-主机网络过滤二层三层地址过滤">1. 主机/网络过滤（二层/三层地址过滤）</h4>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">表达式</th>
-          <th style="text-align: left">功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>host 192.168.1.100</code></td>
-          <td style="text-align: left">捕获源或目的IP为192.168.1.100的所有流量</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>src host 10.0.0.5</code></td>
-          <td style="text-align: left">仅捕获源IP为10.0.0.5的流量</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>dst host 172.16.0.10</code></td>
-          <td style="text-align: left">仅捕获目的IP为172.16.0.10的流量</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>net 192.168.1.0/24</code></td>
-          <td style="text-align: left">捕获192.168.1.0/24网段的所有流量</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>src net 10.0.0.0/8</code></td>
-          <td style="text-align: left">仅捕获源地址属于10.0.0.0/8网段的流量</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>ether host 00:11:22:33:44:55</code></td>
-          <td style="text-align: left">基于MAC地址过滤流量</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>broadcast</code></td>
-          <td style="text-align: left">捕获广播包</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>multicast</code></td>
-          <td style="text-align: left">捕获组播包</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">表达式</th>
+					<th style="text-align: left">功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>host 192.168.1.100</code></td>
+					<td style="text-align: left">捕获源或目的IP为192.168.1.100的所有流量</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>src host 10.0.0.5</code></td>
+					<td style="text-align: left">仅捕获源IP为10.0.0.5的流量</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>dst host 172.16.0.10</code></td>
+					<td style="text-align: left">仅捕获目的IP为172.16.0.10的流量</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>net 192.168.1.0/24</code></td>
+					<td style="text-align: left">捕获192.168.1.0/24网段的所有流量</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>src net 10.0.0.0/8</code></td>
+					<td style="text-align: left">仅捕获源地址属于10.0.0.0/8网段的流量</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>ether host 00:11:22:33:44:55</code></td>
+					<td style="text-align: left">基于MAC地址过滤流量</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>broadcast</code></td>
+					<td style="text-align: left">捕获广播包</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>multicast</code></td>
+					<td style="text-align: left">捕获组播包</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="2-端口过滤四层端口过滤">2. 端口过滤（四层端口过滤）</h4>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">表达式</th>
-          <th style="text-align: left">功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>port 80</code></td>
-          <td style="text-align: left">捕获源或目的端口为80的流量</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>src port 53</code></td>
-          <td style="text-align: left">仅捕获源端口为53的流量（DNS响应）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>dst port 22</code></td>
-          <td style="text-align: left">仅捕获目的端口为22的流量（SSH请求）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>portrange 1000-2000</code></td>
-          <td style="text-align: left">捕获端口在1000-2000范围内的流量</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>src portrange 5000-6000</code></td>
-          <td style="text-align: left">仅捕获源端口在指定范围的流量</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">表达式</th>
+					<th style="text-align: left">功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>port 80</code></td>
+					<td style="text-align: left">捕获源或目的端口为80的流量</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>src port 53</code></td>
+					<td style="text-align: left">仅捕获源端口为53的流量（DNS响应）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>dst port 22</code></td>
+					<td style="text-align: left">仅捕获目的端口为22的流量（SSH请求）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>portrange 1000-2000</code></td>
+					<td style="text-align: left">捕获端口在1000-2000范围内的流量</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>src portrange 5000-6000</code></td>
+					<td style="text-align: left">仅捕获源端口在指定范围的流量</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="3-协议过滤按网络协议分层过滤">3. 协议过滤（按网络协议分层过滤）</h4>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">表达式</th>
-          <th style="text-align: left">功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>ether</code></td>
-          <td style="text-align: left">以太网二层协议过滤，如<code>ether arp</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>arp</code> / <code>rarp</code></td>
-          <td style="text-align: left">捕获ARP/RARP协议包（地址解析）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>ip</code> / <code>ip6</code></td>
-          <td style="text-align: left">捕获IPv4/IPv6协议包</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>icmp</code> / <code>icmp6</code></td>
-          <td style="text-align: left">捕获ICMP/ICMPv6包（ping/tracert流量）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>tcp</code></td>
-          <td style="text-align: left">仅捕获TCP协议包</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>udp</code></td>
-          <td style="text-align: left">仅捕获UDP协议包</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>sctp</code></td>
-          <td style="text-align: left">捕获SCTP协议包</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">表达式</th>
+					<th style="text-align: left">功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>ether</code></td>
+					<td style="text-align: left">以太网二层协议过滤，如<code>ether arp</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>arp</code> / <code>rarp</code></td>
+					<td style="text-align: left">捕获ARP/RARP协议包（地址解析）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>ip</code> / <code>ip6</code></td>
+					<td style="text-align: left">捕获IPv4/IPv6协议包</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>icmp</code> / <code>icmp6</code></td>
+					<td style="text-align: left">捕获ICMP/ICMPv6包（ping/tracert流量）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>tcp</code></td>
+					<td style="text-align: left">仅捕获TCP协议包</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>udp</code></td>
+					<td style="text-align: left">仅捕获UDP协议包</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>sctp</code></td>
+					<td style="text-align: left">捕获SCTP协议包</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="4-逻辑运算符多条件组合过滤">4. 逻辑运算符（多条件组合过滤）</h4>
 <p>通过逻辑运算符实现多条件精准筛选，<strong>复杂表达式建议用单引号包裹，避免shell解析特殊字符</strong>。</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">运算符</th>
-          <th style="text-align: left">功能说明</th>
-          <th style="text-align: left">示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>and</code> / <code>&amp;&amp;</code></td>
-          <td style="text-align: left">逻辑与，多个条件同时满足</td>
-          <td style="text-align: left"><code>host 192.168.1.100 and port 80</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>or</code> / `</td>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">`</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>not</code> / <code>!</code></td>
-          <td style="text-align: left">逻辑非，排除指定条件</td>
-          <td style="text-align: left"><code>not port 22</code>（排除SSH流量）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>()</code></td>
-          <td style="text-align: left">括号，改变运算优先级</td>
-          <td style="text-align: left"><code>src net 192.168.1.0/24 and (dst port 80 or dst port 443)</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">运算符</th>
+					<th style="text-align: left">功能说明</th>
+					<th style="text-align: left">示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>and</code> / <code>&amp;&amp;</code></td>
+					<td style="text-align: left">逻辑与，多个条件同时满足</td>
+					<td style="text-align: left"><code>host 192.168.1.100 and port 80</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>or</code> / `</td>
+					<td style="text-align: left"></td>
+					<td style="text-align: left">`</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>not</code> / <code>!</code></td>
+					<td style="text-align: left">逻辑非，排除指定条件</td>
+					<td style="text-align: left"><code>not port 22</code>（排除SSH流量）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>()</code></td>
+					<td style="text-align: left">括号，改变运算优先级</td>
+					<td style="text-align: left"><code>src net 192.168.1.0/24 and (dst port 80 or dst port 443)</code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="32-高级过滤规则基于包内容字段偏移">3.2 高级过滤规则（基于包内容/字段偏移）</h3>
 <p>针对协议头部字段、载荷内容进行精准匹配，适用于深度协议分析、异常流量排查。</p>
 <h4 id="1-tcp标志位过滤">1. TCP标志位过滤</h4>
 <p>TCP头部的标志位是连接状态诊断的核心，常用过滤规则如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">表达式</th>
-          <th style="text-align: left">功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>'tcp[tcpflags] &amp; tcp-syn != 0'</code></td>
-          <td style="text-align: left">捕获TCP SYN包（TCP连接发起请求）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>'tcp[tcpflags] &amp; tcp-fin != 0'</code></td>
-          <td style="text-align: left">捕获TCP FIN包（TCP连接关闭请求）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>'tcp[tcpflags] &amp; tcp-rst != 0'</code></td>
-          <td style="text-align: left">捕获TCP RST包（TCP连接强制重置）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">`&lsquo;tcp[tcpflags] &amp; (tcp-syn</td>
-          <td style="text-align: left">tcp-ack) == (tcp-syn</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">`&lsquo;tcp[tcpflags] &amp; (tcp-syn</td>
-          <td style="text-align: left">tcp-fin</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">表达式</th>
+					<th style="text-align: left">功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>'tcp[tcpflags] &amp; tcp-syn != 0'</code></td>
+					<td style="text-align: left">捕获TCP SYN包（TCP连接发起请求）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>'tcp[tcpflags] &amp; tcp-fin != 0'</code></td>
+					<td style="text-align: left">捕获TCP FIN包（TCP连接关闭请求）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>'tcp[tcpflags] &amp; tcp-rst != 0'</code></td>
+					<td style="text-align: left">捕获TCP RST包（TCP连接强制重置）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">`&lsquo;tcp[tcpflags] &amp; (tcp-syn</td>
+					<td style="text-align: left">tcp-ack) == (tcp-syn</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">`&lsquo;tcp[tcpflags] &amp; (tcp-syn</td>
+					<td style="text-align: left">tcp-fin</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="2-应用层内容过滤">2. 应用层内容过滤</h4>
 <p>基于数据包载荷的偏移量匹配关键词，精准捕获应用层请求：</p>
@@ -569,97 +569,97 @@
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
     </div><pre tabindex="0"><code>14:35:22.123456 IP 192.168.1.100.54321 &gt; 192.168.1.200.80: Flags [S], seq 123456789, win 65535, length 0</code></pre></div>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">字段</th>
-          <th style="text-align: left">含义说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>14:35:22.123456</code></td>
-          <td style="text-align: left">数据包捕获时间戳（时:分:秒.微秒），可通过<code>-tttt</code>显示完整日期</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>IP</code></td>
-          <td style="text-align: left">网络层协议，此处为IPv4，IPv6会显示<code>IP6</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>192.168.1.100.54321</code></td>
-          <td style="text-align: left">源IP地址.源端口号，<code>-nn</code>选项下直接显示数字，无解析</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>&gt;</code></td>
-          <td style="text-align: left">数据包传输方向，从左侧源地址发往右侧目的地址</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>192.168.1.200.80</code></td>
-          <td style="text-align: left">目的IP地址.目的端口号</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>Flags [S]</code></td>
-          <td style="text-align: left">TCP标志位，核心字段，标识TCP包的类型</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>seq 123456789</code></td>
-          <td style="text-align: left">TCP序列号，<code>-S</code>选项显示绝对序列号，默认显示相对序列号</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>win 65535</code></td>
-          <td style="text-align: left">TCP窗口大小，标识接收端的缓冲区大小</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>length 0</code></td>
-          <td style="text-align: left">TCP载荷长度，0表示无应用层数据（仅控制包）</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">字段</th>
+					<th style="text-align: left">含义说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>14:35:22.123456</code></td>
+					<td style="text-align: left">数据包捕获时间戳（时:分:秒.微秒），可通过<code>-tttt</code>显示完整日期</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>IP</code></td>
+					<td style="text-align: left">网络层协议，此处为IPv4，IPv6会显示<code>IP6</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>192.168.1.100.54321</code></td>
+					<td style="text-align: left">源IP地址.源端口号，<code>-nn</code>选项下直接显示数字，无解析</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>&gt;</code></td>
+					<td style="text-align: left">数据包传输方向，从左侧源地址发往右侧目的地址</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>192.168.1.200.80</code></td>
+					<td style="text-align: left">目的IP地址.目的端口号</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>Flags [S]</code></td>
+					<td style="text-align: left">TCP标志位，核心字段，标识TCP包的类型</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>seq 123456789</code></td>
+					<td style="text-align: left">TCP序列号，<code>-S</code>选项显示绝对序列号，默认显示相对序列号</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>win 65535</code></td>
+					<td style="text-align: left">TCP窗口大小，标识接收端的缓冲区大小</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>length 0</code></td>
+					<td style="text-align: left">TCP载荷长度，0表示无应用层数据（仅控制包）</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="常用tcp标志位速记">常用TCP标志位速记</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">标志缩写</th>
-          <th style="text-align: left">全称</th>
-          <th style="text-align: left">核心含义</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>[S]</code></td>
-          <td style="text-align: left">SYN</td>
-          <td style="text-align: left">连接发起请求</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>[S.]</code></td>
-          <td style="text-align: left">SYN+ACK</td>
-          <td style="text-align: left">连接请求响应</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>[.]</code></td>
-          <td style="text-align: left">ACK</td>
-          <td style="text-align: left">数据确认包</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>[P]</code></td>
-          <td style="text-align: left">PSH</td>
-          <td style="text-align: left">推送数据，立即交给应用层</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>[F]</code></td>
-          <td style="text-align: left">FIN</td>
-          <td style="text-align: left">连接正常关闭请求</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>[R]</code></td>
-          <td style="text-align: left">RST</td>
-          <td style="text-align: left">连接强制重置</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>[U]</code></td>
-          <td style="text-align: left">URG</td>
-          <td style="text-align: left">紧急指针生效</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">标志缩写</th>
+					<th style="text-align: left">全称</th>
+					<th style="text-align: left">核心含义</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>[S]</code></td>
+					<td style="text-align: left">SYN</td>
+					<td style="text-align: left">连接发起请求</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>[S.]</code></td>
+					<td style="text-align: left">SYN+ACK</td>
+					<td style="text-align: left">连接请求响应</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>[.]</code></td>
+					<td style="text-align: left">ACK</td>
+					<td style="text-align: left">数据确认包</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>[P]</code></td>
+					<td style="text-align: left">PSH</td>
+					<td style="text-align: left">推送数据，立即交给应用层</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>[F]</code></td>
+					<td style="text-align: left">FIN</td>
+					<td style="text-align: left">连接正常关闭请求</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>[R]</code></td>
+					<td style="text-align: left">RST</td>
+					<td style="text-align: left">连接强制重置</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>[U]</code></td>
+					<td style="text-align: left">URG</td>
+					<td style="text-align: left">紧急指针生效</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="五高频实战场景案例">五、高频实战场景案例</h2>
 <p>覆盖日常网络排查90%的使用场景，直接复制可用。</p>
@@ -791,7 +791,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

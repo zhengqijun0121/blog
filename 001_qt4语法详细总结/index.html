@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>Qt4 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_qt4%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="Qt4 语法详细总结">
-  <meta property="og:description" content="Qt4 语法详细总结 Qt4 是 Qt 经典的长期支持版本（最终稳定版为 Qt4.8.7），基于元对象系统扩展标准C&#43;&#43;，核心主打跨平台GUI开发，同时提供完善的网络、数据库、XML、线程等能力。以下是其核心语法、模块特性与使用规范的完整总结，同时标注与Qt5的核心差异，避免混淆。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-02-19T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-02-19T10:00:20+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="Qt">
-    <meta property="article:tag" content="Qt4">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="Qt4 语法详细总结">
+	<meta property="og:description" content="Qt4 语法详细总结 Qt4 是 Qt 经典的长期支持版本（最终稳定版为 Qt4.8.7），基于元对象系统扩展标准C&#43;&#43;，核心主打跨平台GUI开发，同时提供完善的网络、数据库、XML、线程等能力。以下是其核心语法、模块特性与使用规范的完整总结，同时标注与Qt5的核心差异，避免混淆。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-02-19T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-02-19T10:00:20+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="Qt">
+		<meta property="article:tag" content="Qt4">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="Qt4 语法详细总结">
-  <meta name="twitter:description" content="Qt4 语法详细总结 Qt4 是 Qt 经典的长期支持版本（最终稳定版为 Qt4.8.7），基于元对象系统扩展标准C&#43;&#43;，核心主打跨平台GUI开发，同时提供完善的网络、数据库、XML、线程等能力。以下是其核心语法、模块特性与使用规范的完整总结，同时标注与Qt5的核心差异，避免混淆。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="Qt4 语法详细总结">
+	<meta name="twitter:description" content="Qt4 语法详细总结 Qt4 是 Qt 经典的长期支持版本（最终稳定版为 Qt4.8.7），基于元对象系统扩展标准C&#43;&#43;，核心主打跨平台GUI开发，同时提供完善的网络、数据库、XML、线程等能力。以下是其核心语法、模块特性与使用规范的完整总结，同时标注与Qt5的核心差异，避免混淆。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -220,30 +220,30 @@
 </ol>
 <h3 id="11-核心宏语法">1.1 核心宏语法</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">宏</th>
-          <th style="text-align: left">作用与语法规范</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>Q_OBJECT</code></td>
-          <td style="text-align: left">核心宏，必须放在类声明的最开头（私有区），启用元对象特性，无参数。添加后必须重新执行qmake，否则会编译报错</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>Q_PROPERTY(type name READ getFunc WRITE setFunc [NOTIFY signal] [DESIGNABLE bool] ...)</code></td>
-          <td style="text-align: left">属性系统宏，为类声明可通过元对象访问的属性。<br>必填：<code>type</code>属性类型、<code>name</code>属性名、<code>READ</code>读函数、<code>WRITE</code>写函数<br>可选：<code>NOTIFY</code>属性变化时触发的信号、<code>DESIGNABLE</code>是否在设计师可见</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>Q_ENUM(EnumType)</code></td>
-          <td style="text-align: left">注册枚举类型到元对象系统，可通过元对象获取枚举名、值，支持字符串与枚举值互转</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>Q_FLAGS(FlagsType)</code></td>
-          <td style="text-align: left">注册位运算枚举（标志位），支持按位与/或操作</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">宏</th>
+					<th style="text-align: left">作用与语法规范</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>Q_OBJECT</code></td>
+					<td style="text-align: left">核心宏，必须放在类声明的最开头（私有区），启用元对象特性，无参数。添加后必须重新执行qmake，否则会编译报错</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>Q_PROPERTY(type name READ getFunc WRITE setFunc [NOTIFY signal] [DESIGNABLE bool] ...)</code></td>
+					<td style="text-align: left">属性系统宏，为类声明可通过元对象访问的属性。<br>必填：<code>type</code>属性类型、<code>name</code>属性名、<code>READ</code>读函数、<code>WRITE</code>写函数<br>可选：<code>NOTIFY</code>属性变化时触发的信号、<code>DESIGNABLE</code>是否在设计师可见</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>Q_ENUM(EnumType)</code></td>
+					<td style="text-align: left">注册枚举类型到元对象系统，可通过元对象获取枚举名、值，支持字符串与枚举值互转</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>Q_FLAGS(FlagsType)</code></td>
+					<td style="text-align: left">注册位运算枚举（标志位），支持按位与/或操作</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="12-核心配套语法">1.2 核心配套语法</h3>
 <ul>
@@ -366,30 +366,30 @@
 </span></span></span><span class="line"><span class="cl"><span class="n">connect</span><span class="p">(</span><span class="n">slider</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="n">valueChanged</span><span class="p">(</span><span class="kt">int</span><span class="p">)),</span> <span class="k">this</span><span class="p">,</span> <span class="n">SLOT</span><span class="p">(</span><span class="n">onValueChanged</span><span class="p">(</span><span class="n">QString</span><span class="p">)));</span></span></span></code></pre></div></div>
 <h4 id="3-连接类型枚举">3. 连接类型枚举</h4>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">枚举值</th>
-          <th style="text-align: left">作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>Qt::AutoConnection</code>（默认）</td>
-          <td style="text-align: left">自动判断：发送者和接收者在同一线程用直连，跨线程用队列连接</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>Qt::DirectConnection</code></td>
-          <td style="text-align: left">信号发射时，立即调用槽函数，槽函数在发送者线程执行</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>Qt::QueuedConnection</code></td>
-          <td style="text-align: left">信号发射后，放入接收者线程的事件队列，等待事件循环执行，槽函数在接收者线程执行</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>Qt::BlockingQueuedConnection</code></td>
-          <td style="text-align: left">阻塞队列连接，槽函数执行完成后，发送者线程才继续运行，<strong>禁止同一线程使用，会死锁</strong></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">枚举值</th>
+					<th style="text-align: left">作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>Qt::AutoConnection</code>（默认）</td>
+					<td style="text-align: left">自动判断：发送者和接收者在同一线程用直连，跨线程用队列连接</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>Qt::DirectConnection</code></td>
+					<td style="text-align: left">信号发射时，立即调用槽函数，槽函数在发送者线程执行</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>Qt::QueuedConnection</code></td>
+					<td style="text-align: left">信号发射后，放入接收者线程的事件队列，等待事件循环执行，槽函数在接收者线程执行</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>Qt::BlockingQueuedConnection</code></td>
+					<td style="text-align: left">阻塞队列连接，槽函数执行完成后，发送者线程才继续运行，<strong>禁止同一线程使用，会死锁</strong></td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="4-断开连接disconnect语法">4. 断开连接disconnect语法</h4>
 <p>Qt4中断开连接同样使用宏语法，示例：</p>
@@ -416,73 +416,73 @@
 <p>Qt4默认使用qmake构建系统，通过<code>.pro</code>文件配置项目，核心语法如下：</p>
 <h3 id="31-基础配置项">3.1 基础配置项</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">配置项</th>
-          <th style="text-align: left">语法与说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>TEMPLATE</code></td>
-          <td style="text-align: left">项目模板，必填。<br><code>app</code>：桌面应用程序（默认）；<code>lib</code>：静态/动态库；<code>dll</code>：动态库；<code>subdirs</code>：子目录项目</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>TARGET</code></td>
-          <td style="text-align: left">生成的目标文件名，示例：<code>TARGET = MyQt4App</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>QT</code></td>
-          <td style="text-align: left">引入Qt模块，<strong>Qt4默认包含core和gui模块，无需手动添加</strong>。<br>示例：<code>QT += network sql xml</code>（引入网络、数据库、XML模块）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>SOURCES</code></td>
-          <td style="text-align: left">源文件列表，示例：<code>SOURCES += main.cpp mainwindow.cpp</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>HEADERS</code></td>
-          <td style="text-align: left">头文件列表，示例：<code>HEADERS += mainwindow.h</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>FORMS</code></td>
-          <td style="text-align: left">Qt设计师界面文件(.ui)，示例：<code>FORMS += mainwindow.ui</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>RESOURCES</code></td>
-          <td style="text-align: left">Qt资源文件(.qrc)，示例：<code>RESOURCES += res.qrc</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">配置项</th>
+					<th style="text-align: left">语法与说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>TEMPLATE</code></td>
+					<td style="text-align: left">项目模板，必填。<br><code>app</code>：桌面应用程序（默认）；<code>lib</code>：静态/动态库；<code>dll</code>：动态库；<code>subdirs</code>：子目录项目</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>TARGET</code></td>
+					<td style="text-align: left">生成的目标文件名，示例：<code>TARGET = MyQt4App</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>QT</code></td>
+					<td style="text-align: left">引入Qt模块，<strong>Qt4默认包含core和gui模块，无需手动添加</strong>。<br>示例：<code>QT += network sql xml</code>（引入网络、数据库、XML模块）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>SOURCES</code></td>
+					<td style="text-align: left">源文件列表，示例：<code>SOURCES += main.cpp mainwindow.cpp</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>HEADERS</code></td>
+					<td style="text-align: left">头文件列表，示例：<code>HEADERS += mainwindow.h</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>FORMS</code></td>
+					<td style="text-align: left">Qt设计师界面文件(.ui)，示例：<code>FORMS += mainwindow.ui</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>RESOURCES</code></td>
+					<td style="text-align: left">Qt资源文件(.qrc)，示例：<code>RESOURCES += res.qrc</code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="32-进阶配置项">3.2 进阶配置项</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">配置项</th>
-          <th style="text-align: left">语法与说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>CONFIG</code></td>
-          <td style="text-align: left">通用配置，示例：<br><code>CONFIG += c++11</code>（启用C++11，Qt4.8+支持）；<br><code>CONFIG += static</code>（编译静态库）；<br><code>CONFIG += console</code>（启用控制台输出）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>DEFINES</code></td>
-          <td style="text-align: left">全局宏定义，示例：<code>DEFINES += MY_APP_VERSION=100</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>INCLUDEPATH</code></td>
-          <td style="text-align: left">头文件搜索路径，示例：<code>INCLUDEPATH += ./3rdparty/include</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>LIBS</code></td>
-          <td style="text-align: left">链接外部库，示例：<code>LIBS += -L./3rdparty/lib -lmysql</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>DESTDIR</code></td>
-          <td style="text-align: left">目标文件输出路径，示例：<code>DESTDIR = ./bin</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">配置项</th>
+					<th style="text-align: left">语法与说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>CONFIG</code></td>
+					<td style="text-align: left">通用配置，示例：<br><code>CONFIG += c++11</code>（启用C++11，Qt4.8+支持）；<br><code>CONFIG += static</code>（编译静态库）；<br><code>CONFIG += console</code>（启用控制台输出）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>DEFINES</code></td>
+					<td style="text-align: left">全局宏定义，示例：<code>DEFINES += MY_APP_VERSION=100</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>INCLUDEPATH</code></td>
+					<td style="text-align: left">头文件搜索路径，示例：<code>INCLUDEPATH += ./3rdparty/include</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>LIBS</code></td>
+					<td style="text-align: left">链接外部库，示例：<code>LIBS += -L./3rdparty/lib -lmysql</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>DESTDIR</code></td>
+					<td style="text-align: left">目标文件输出路径，示例：<code>DESTDIR = ./bin</code></td>
+			</tr>
+	</tbody>
 </table>
 <hr>
 <h2 id="四qt4-核心模块与常用类语法">四、Qt4 核心模块与常用类语法</h2>
@@ -490,34 +490,34 @@
 <h4 id="1-跨平台基础数据类型">1. 跨平台基础数据类型</h4>
 <p>Qt4提供固定宽度的跨平台类型，避免不同系统的基础类型宽度差异：</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">类型</th>
-          <th style="text-align: left">说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>qint8</code>/<code>quint8</code></td>
-          <td style="text-align: left">8位有符号/无符号整型</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>qint16</code>/<code>quint16</code></td>
-          <td style="text-align: left">16位有符号/无符号整型</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>qint32</code>/<code>quint32</code></td>
-          <td style="text-align: left">32位有符号/无符号整型</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>qint64</code>/<code>quint64</code></td>
-          <td style="text-align: left">64位有符号/无符号整型</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>qreal</code></td>
-          <td style="text-align: left">浮点类型，默认是double，嵌入式平台可配置为float</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">类型</th>
+					<th style="text-align: left">说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>qint8</code>/<code>quint8</code></td>
+					<td style="text-align: left">8位有符号/无符号整型</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>qint16</code>/<code>quint16</code></td>
+					<td style="text-align: left">16位有符号/无符号整型</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>qint32</code>/<code>quint32</code></td>
+					<td style="text-align: left">32位有符号/无符号整型</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>qint64</code>/<code>quint64</code></td>
+					<td style="text-align: left">64位有符号/无符号整型</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>qreal</code></td>
+					<td style="text-align: left">浮点类型，默认是double，嵌入式平台可配置为float</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="2-核心字符串与字节数组">2. 核心字符串与字节数组</h4>
 <ul>
@@ -547,25 +547,25 @@
 <h4 id="3-容器类">3. 容器类</h4>
 <p>Qt4容器基于<strong>隐式共享（写时复制）</strong>，内存效率高，兼容Java风格和STL风格迭代器，同时提供专属<code>foreach</code>遍历宏。</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">容器类型</th>
-          <th style="text-align: left">常用类</th>
-          <th style="text-align: left">核心语法</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">顺序容器</td>
-          <td style="text-align: left"><code>QList&lt;T&gt;</code>（通用列表，Qt4主推）、<code>QVector&lt;T&gt;</code>、<code>QLinkedList&lt;T&gt;</code>、<code>QStack&lt;T&gt;</code>、<code>QQueue&lt;T&gt;</code></td>
-          <td style="text-align: left">初始化：<code>QList&lt;QString&gt; list; list &lt;&lt; &quot;A&quot; &lt;&lt; &quot;B&quot; &lt;&lt; &quot;C&quot;;</code><br>增删：<code>list.append(&quot;D&quot;); list.removeAt(0);</code><br>取值：<code>list[0]</code>、<code>list.at(1)</code>（只读，效率更高）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">关联容器</td>
-          <td style="text-align: left"><code>QMap&lt;K,T&gt;</code>（有序键值对）、<code>QMultiMap&lt;K,T&gt;</code>、<code>QHash&lt;K,T&gt;</code>（无序哈希表，效率更高）、<code>QMultiHash&lt;K,T&gt;</code>、<code>QSet&lt;T&gt;</code></td>
-          <td style="text-align: left">初始化：<code>QMap&lt;int, QString&gt; map; map[1] = &quot;张三&quot;; map[2] = &quot;李四&quot;;</code><br>取值：<code>map.value(1)</code>、<code>map[2]</code><br>遍历：<code>foreach(int key, map.keys()) { qDebug() &lt;&lt; map[key]; }</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">容器类型</th>
+					<th style="text-align: left">常用类</th>
+					<th style="text-align: left">核心语法</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">顺序容器</td>
+					<td style="text-align: left"><code>QList&lt;T&gt;</code>（通用列表，Qt4主推）、<code>QVector&lt;T&gt;</code>、<code>QLinkedList&lt;T&gt;</code>、<code>QStack&lt;T&gt;</code>、<code>QQueue&lt;T&gt;</code></td>
+					<td style="text-align: left">初始化：<code>QList&lt;QString&gt; list; list &lt;&lt; &quot;A&quot; &lt;&lt; &quot;B&quot; &lt;&lt; &quot;C&quot;;</code><br>增删：<code>list.append(&quot;D&quot;); list.removeAt(0);</code><br>取值：<code>list[0]</code>、<code>list.at(1)</code>（只读，效率更高）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">关联容器</td>
+					<td style="text-align: left"><code>QMap&lt;K,T&gt;</code>（有序键值对）、<code>QMultiMap&lt;K,T&gt;</code>、<code>QHash&lt;K,T&gt;</code>（无序哈希表，效率更高）、<code>QMultiHash&lt;K,T&gt;</code>、<code>QSet&lt;T&gt;</code></td>
+					<td style="text-align: left">初始化：<code>QMap&lt;int, QString&gt; map; map[1] = &quot;张三&quot;; map[2] = &quot;李四&quot;;</code><br>取值：<code>map.value(1)</code>、<code>map[2]</code><br>遍历：<code>foreach(int key, map.keys()) { qDebug() &lt;&lt; map[key]; }</code></td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>Qt4专属foreach遍历宏</strong>：简化容器遍历，无需迭代器，语法：</p>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
@@ -763,35 +763,35 @@
 <h4 id="2-布局管理qt4核心自适应方案">2. 布局管理（Qt4核心自适应方案）</h4>
 <p>Qt4布局实现窗口自适应缩放，替代固定坐标，四大核心布局类：</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">布局类</th>
-          <th style="text-align: left">作用</th>
-          <th style="text-align: left">核心语法</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>QHBoxLayout</code></td>
-          <td style="text-align: left">水平布局，控件从左到右排列</td>
-          <td style="text-align: left"><code>QHBoxLayout *layout = new QHBoxLayout();</code><br><code>layout-&gt;addWidget(btn1);</code><br><code>layout-&gt;addWidget(btn2);</code><br><code>w-&gt;setLayout(layout);</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>QVBoxLayout</code></td>
-          <td style="text-align: left">垂直布局，控件从上到下排列</td>
-          <td style="text-align: left">同水平布局，控件垂直排列</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>QGridLayout</code></td>
-          <td style="text-align: left">网格布局，按行、列排列控件</td>
-          <td style="text-align: left"><code>QGridLayout *layout = new QGridLayout();</code><br><code>layout-&gt;addWidget(label, 0, 0); // 第0行第0列</code><br><code>layout-&gt;addWidget(edit, 0, 1); // 第0行第1列</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>QFormLayout</code></td>
-          <td style="text-align: left">表单布局，标签+输入框的两列布局（Qt4.2+引入）</td>
-          <td style="text-align: left"><code>QFormLayout *layout = new QFormLayout();</code><br><code>layout-&gt;addRow(&quot;姓名：&quot;, nameEdit);</code><br><code>layout-&gt;addRow(&quot;年龄：&quot;, ageEdit);</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">布局类</th>
+					<th style="text-align: left">作用</th>
+					<th style="text-align: left">核心语法</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>QHBoxLayout</code></td>
+					<td style="text-align: left">水平布局，控件从左到右排列</td>
+					<td style="text-align: left"><code>QHBoxLayout *layout = new QHBoxLayout();</code><br><code>layout-&gt;addWidget(btn1);</code><br><code>layout-&gt;addWidget(btn2);</code><br><code>w-&gt;setLayout(layout);</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>QVBoxLayout</code></td>
+					<td style="text-align: left">垂直布局，控件从上到下排列</td>
+					<td style="text-align: left">同水平布局，控件垂直排列</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>QGridLayout</code></td>
+					<td style="text-align: left">网格布局，按行、列排列控件</td>
+					<td style="text-align: left"><code>QGridLayout *layout = new QGridLayout();</code><br><code>layout-&gt;addWidget(label, 0, 0); // 第0行第0列</code><br><code>layout-&gt;addWidget(edit, 0, 1); // 第0行第1列</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>QFormLayout</code></td>
+					<td style="text-align: left">表单布局，标签+输入框的两列布局（Qt4.2+引入）</td>
+					<td style="text-align: left"><code>QFormLayout *layout = new QFormLayout();</code><br><code>layout-&gt;addRow(&quot;姓名：&quot;, nameEdit);</code><br><code>layout-&gt;addRow(&quot;年龄：&quot;, ageEdit);</code></td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>常用布局方法</strong>：</p>
 <ul>
@@ -832,60 +832,60 @@
 </span></span><span class="line"><span class="cl"><span class="n">w</span><span class="o">-&gt;</span><span class="n">show</span><span class="p">();</span></span></span></code></pre></div></div>
 <h4 id="3-常用可视化部件">3. 常用可视化部件</h4>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">部件类</th>
-          <th style="text-align: left">作用</th>
-          <th style="text-align: left">核心语法</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>QLabel</code></td>
-          <td style="text-align: left">标签，显示文本、图片、动画</td>
-          <td style="text-align: left"><code>QLabel *label = new QLabel(&quot;文本标签&quot;);</code><br><code>label-&gt;setPixmap(QPixmap(&quot;:/images/icon.png&quot;)); // 显示图片</code><br><code>label-&gt;setAlignment(Qt::AlignCenter); // 居中对齐</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>QPushButton</code></td>
-          <td style="text-align: left">普通按钮</td>
-          <td style="text-align: left"><code>QPushButton *btn = new QPushButton(&quot;按钮文本&quot;);</code><br><code>connect(btn, SIGNAL(clicked()), this, SLOT(onBtnClicked()));</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>QLineEdit</code></td>
-          <td style="text-align: left">单行文本输入框</td>
-          <td style="text-align: left"><code>QLineEdit *edit = new QLineEdit();</code><br><code>edit-&gt;setPlaceholderText(&quot;请输入内容&quot;);</code><br><code>edit-&gt;setEchoMode(QLineEdit::Password); // 密码模式</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>QTextEdit</code></td>
-          <td style="text-align: left">多行富文本编辑器</td>
-          <td style="text-align: left"><code>QTextEdit *edit = new QTextEdit();</code><br><code>edit-&gt;setHtml(&quot;&lt;b&gt;富文本内容&lt;/b&gt;&quot;);</code><br><code>QString text = edit-&gt;toPlainText();</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>QCheckBox</code></td>
-          <td style="text-align: left">复选框</td>
-          <td style="text-align: left"><code>QCheckBox *check = new QCheckBox(&quot;记住密码&quot;);</code><br><code>connect(check, SIGNAL(stateChanged(int)), this, SLOT(onCheckChanged(int)));</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>QRadioButton</code></td>
-          <td style="text-align: left">单选按钮</td>
-          <td style="text-align: left">需搭配<code>QButtonGroup</code>实现互斥</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>QComboBox</code></td>
-          <td style="text-align: left">下拉选择框</td>
-          <td style="text-align: left"><code>QComboBox *combo = new QComboBox();</code><br><code>combo-&gt;addItem(&quot;选项1&quot;);</code><br><code>combo-&gt;addItems(QStringList() &lt;&lt; &quot;选项2&quot; &lt;&lt; &quot;选项3&quot;);</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>QSlider</code></td>
-          <td style="text-align: left">滑块</td>
-          <td style="text-align: left"><code>QSlider *slider = new QSlider(Qt::Horizontal);</code><br><code>slider-&gt;setRange(0, 100);</code><br><code>slider-&gt;setValue(50);</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>QProgressBar</code></td>
-          <td style="text-align: left">进度条</td>
-          <td style="text-align: left"><code>QProgressBar *bar = new QProgressBar();</code><br><code>bar-&gt;setRange(0, 100);</code><br><code>bar-&gt;setValue(30);</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">部件类</th>
+					<th style="text-align: left">作用</th>
+					<th style="text-align: left">核心语法</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>QLabel</code></td>
+					<td style="text-align: left">标签，显示文本、图片、动画</td>
+					<td style="text-align: left"><code>QLabel *label = new QLabel(&quot;文本标签&quot;);</code><br><code>label-&gt;setPixmap(QPixmap(&quot;:/images/icon.png&quot;)); // 显示图片</code><br><code>label-&gt;setAlignment(Qt::AlignCenter); // 居中对齐</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>QPushButton</code></td>
+					<td style="text-align: left">普通按钮</td>
+					<td style="text-align: left"><code>QPushButton *btn = new QPushButton(&quot;按钮文本&quot;);</code><br><code>connect(btn, SIGNAL(clicked()), this, SLOT(onBtnClicked()));</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>QLineEdit</code></td>
+					<td style="text-align: left">单行文本输入框</td>
+					<td style="text-align: left"><code>QLineEdit *edit = new QLineEdit();</code><br><code>edit-&gt;setPlaceholderText(&quot;请输入内容&quot;);</code><br><code>edit-&gt;setEchoMode(QLineEdit::Password); // 密码模式</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>QTextEdit</code></td>
+					<td style="text-align: left">多行富文本编辑器</td>
+					<td style="text-align: left"><code>QTextEdit *edit = new QTextEdit();</code><br><code>edit-&gt;setHtml(&quot;&lt;b&gt;富文本内容&lt;/b&gt;&quot;);</code><br><code>QString text = edit-&gt;toPlainText();</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>QCheckBox</code></td>
+					<td style="text-align: left">复选框</td>
+					<td style="text-align: left"><code>QCheckBox *check = new QCheckBox(&quot;记住密码&quot;);</code><br><code>connect(check, SIGNAL(stateChanged(int)), this, SLOT(onCheckChanged(int)));</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>QRadioButton</code></td>
+					<td style="text-align: left">单选按钮</td>
+					<td style="text-align: left">需搭配<code>QButtonGroup</code>实现互斥</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>QComboBox</code></td>
+					<td style="text-align: left">下拉选择框</td>
+					<td style="text-align: left"><code>QComboBox *combo = new QComboBox();</code><br><code>combo-&gt;addItem(&quot;选项1&quot;);</code><br><code>combo-&gt;addItems(QStringList() &lt;&lt; &quot;选项2&quot; &lt;&lt; &quot;选项3&quot;);</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>QSlider</code></td>
+					<td style="text-align: left">滑块</td>
+					<td style="text-align: left"><code>QSlider *slider = new QSlider(Qt::Horizontal);</code><br><code>slider-&gt;setRange(0, 100);</code><br><code>slider-&gt;setValue(50);</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>QProgressBar</code></td>
+					<td style="text-align: left">进度条</td>
+					<td style="text-align: left"><code>QProgressBar *bar = new QProgressBar();</code><br><code>bar-&gt;setRange(0, 100);</code><br><code>bar-&gt;setValue(30);</code></td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="4-2d绘图与图形视图">4. 2D绘图与图形视图</h4>
 <ul>
@@ -1057,45 +1057,45 @@
 <hr>
 <h2 id="六qt4-与-qt5-核心语法差异">六、Qt4 与 Qt5 核心语法差异</h2>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">特性</th>
-          <th style="text-align: left">Qt4 语法</th>
-          <th style="text-align: left">Qt5 语法</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">信号槽连接</td>
-          <td style="text-align: left">仅支持<code>SIGNAL()</code>/<code>SLOT()</code>宏，槽必须声明在slots块</td>
-          <td style="text-align: left">兼容宏语法，新增函数指针语法，普通成员函数可作为槽</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">模块划分</td>
-          <td style="text-align: left">core和gui默认包含，gui集成所有widgets</td>
-          <td style="text-align: left">core和gui默认包含，widgets拆分为独立模块，需手动加<code>QT += widgets</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">中文编码</td>
-          <td style="text-align: left">提供<code>setCodecForTr</code>/<code>setCodecForCStrings</code>设置全局编码</td>
-          <td style="text-align: left">废弃上述函数，默认全UTF-8编码</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">容器遍历</td>
-          <td style="text-align: left">主推<code>foreach</code>宏</td>
-          <td style="text-align: left">推荐C++11范围for，<code>foreach</code>保留但不推荐</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">网络模块</td>
-          <td style="text-align: left">内置<code>QHttp</code>/<code>QFtp</code>类</td>
-          <td style="text-align: left">移除上述类，移到QtExtras模块</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">线程用法</td>
-          <td style="text-align: left">继承QThread重写<code>run()</code>为主流</td>
-          <td style="text-align: left">推荐<code>moveToThread()</code>方式，<code>run()</code>默认启动事件循环</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">特性</th>
+					<th style="text-align: left">Qt4 语法</th>
+					<th style="text-align: left">Qt5 语法</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">信号槽连接</td>
+					<td style="text-align: left">仅支持<code>SIGNAL()</code>/<code>SLOT()</code>宏，槽必须声明在slots块</td>
+					<td style="text-align: left">兼容宏语法，新增函数指针语法，普通成员函数可作为槽</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">模块划分</td>
+					<td style="text-align: left">core和gui默认包含，gui集成所有widgets</td>
+					<td style="text-align: left">core和gui默认包含，widgets拆分为独立模块，需手动加<code>QT += widgets</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">中文编码</td>
+					<td style="text-align: left">提供<code>setCodecForTr</code>/<code>setCodecForCStrings</code>设置全局编码</td>
+					<td style="text-align: left">废弃上述函数，默认全UTF-8编码</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">容器遍历</td>
+					<td style="text-align: left">主推<code>foreach</code>宏</td>
+					<td style="text-align: left">推荐C++11范围for，<code>foreach</code>保留但不推荐</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">网络模块</td>
+					<td style="text-align: left">内置<code>QHttp</code>/<code>QFtp</code>类</td>
+					<td style="text-align: left">移除上述类，移到QtExtras模块</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">线程用法</td>
+					<td style="text-align: left">继承QThread重写<code>run()</code>为主流</td>
+					<td style="text-align: left">推荐<code>moveToThread()</code>方式，<code>run()</code>默认启动事件循环</td>
+			</tr>
+	</tbody>
 </table>
 <hr>
 <h2 id="七qt4-完整语法示例">七、Qt4 完整语法示例</h2>
@@ -1282,7 +1282,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

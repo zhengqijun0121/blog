@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>SQLite3 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_sqlite3%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="SQLite3 语法详细总结">
-  <meta property="og:description" content="SQLite3 数据库语法详细总结 SQLite3 是一款轻量级、文件型、零配置、支持ACID的关系型数据库，兼容大部分SQL-92标准，同时有自身特有的语法特性与约束。本文从基础到进阶，全面梳理其核心语法、特性与最佳实践。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-02-23T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-02-23T10:00:20+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="Database">
-    <meta property="article:tag" content="SQLite3">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="SQLite3 语法详细总结">
+	<meta property="og:description" content="SQLite3 数据库语法详细总结 SQLite3 是一款轻量级、文件型、零配置、支持ACID的关系型数据库，兼容大部分SQL-92标准，同时有自身特有的语法特性与约束。本文从基础到进阶，全面梳理其核心语法、特性与最佳实践。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-02-23T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-02-23T10:00:20+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="Database">
+		<meta property="article:tag" content="SQLite3">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="SQLite3 语法详细总结">
-  <meta name="twitter:description" content="SQLite3 数据库语法详细总结 SQLite3 是一款轻量级、文件型、零配置、支持ACID的关系型数据库，兼容大部分SQL-92标准，同时有自身特有的语法特性与约束。本文从基础到进阶，全面梳理其核心语法、特性与最佳实践。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="SQLite3 语法详细总结">
+	<meta name="twitter:description" content="SQLite3 数据库语法详细总结 SQLite3 是一款轻量级、文件型、零配置、支持ACID的关系型数据库，兼容大部分SQL-92标准，同时有自身特有的语法特性与约束。本文从基础到进阶，全面梳理其核心语法、特性与最佳实践。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -246,66 +246,66 @@
 <p>SQLite 采用<strong>基于存储类的动态类型系统</strong>，而非传统数据库的列强制类型。列声明的类型为「亲和类型」，仅做类型推荐，不强制约束数据存储。</p>
 <h3 id="1-5种核心存储类">1. 5种核心存储类</h3>
 <table>
-  <thead>
-      <tr>
-          <th>存储类</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>NULL</code></td>
-          <td>空值</td>
-      </tr>
-      <tr>
-          <td><code>INTEGER</code></td>
-          <td>带符号整数，根据数值大小自动适配1/2/3/4/6/8字节存储</td>
-      </tr>
-      <tr>
-          <td><code>REAL</code></td>
-          <td>浮点型，8字节IEEE双精度浮点数</td>
-      </tr>
-      <tr>
-          <td><code>TEXT</code></td>
-          <td>字符串，默认使用UTF-8/UTF-16编码存储</td>
-      </tr>
-      <tr>
-          <td><code>BLOB</code></td>
-          <td>二进制数据，完全按输入原样存储</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>存储类</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>NULL</code></td>
+					<td>空值</td>
+			</tr>
+			<tr>
+					<td><code>INTEGER</code></td>
+					<td>带符号整数，根据数值大小自动适配1/2/3/4/6/8字节存储</td>
+			</tr>
+			<tr>
+					<td><code>REAL</code></td>
+					<td>浮点型，8字节IEEE双精度浮点数</td>
+			</tr>
+			<tr>
+					<td><code>TEXT</code></td>
+					<td>字符串，默认使用UTF-8/UTF-16编码存储</td>
+			</tr>
+			<tr>
+					<td><code>BLOB</code></td>
+					<td>二进制数据，完全按输入原样存储</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-列亲和类型与常用别名">2. 列亲和类型与常用别名</h3>
 <p>SQLite 会根据列声明的类型，自动映射为5种亲和类型，兼容主流数据库的类型别名，无需修改语法即可适配。</p>
 <table>
-  <thead>
-      <tr>
-          <th>亲和类型</th>
-          <th>兼容的类型别名</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>INTEGER</code></td>
-          <td><code>INT</code>、<code>BIGINT</code>、<code>SMALLINT</code>、<code>TINYINT</code>、<code>BOOLEAN</code>、<code>SERIAL</code></td>
-      </tr>
-      <tr>
-          <td><code>REAL</code></td>
-          <td><code>FLOAT</code>、<code>DOUBLE</code>、<code>DECIMAL</code>、<code>NUMERIC</code></td>
-      </tr>
-      <tr>
-          <td><code>TEXT</code></td>
-          <td><code>VARCHAR(n)</code>、<code>CHAR(n)</code>、<code>TEXT</code>、<code>CLOB</code></td>
-      </tr>
-      <tr>
-          <td><code>BLOB</code></td>
-          <td><code>BLOB</code>、<code>BINARY</code></td>
-      </tr>
-      <tr>
-          <td><code>NUMERIC</code></td>
-          <td><code>DATE</code>、<code>DATETIME</code>、<code>TIMESTAMP</code>、<code>NUMERIC</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>亲和类型</th>
+					<th>兼容的类型别名</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>INTEGER</code></td>
+					<td><code>INT</code>、<code>BIGINT</code>、<code>SMALLINT</code>、<code>TINYINT</code>、<code>BOOLEAN</code>、<code>SERIAL</code></td>
+			</tr>
+			<tr>
+					<td><code>REAL</code></td>
+					<td><code>FLOAT</code>、<code>DOUBLE</code>、<code>DECIMAL</code>、<code>NUMERIC</code></td>
+			</tr>
+			<tr>
+					<td><code>TEXT</code></td>
+					<td><code>VARCHAR(n)</code>、<code>CHAR(n)</code>、<code>TEXT</code>、<code>CLOB</code></td>
+			</tr>
+			<tr>
+					<td><code>BLOB</code></td>
+					<td><code>BLOB</code>、<code>BINARY</code></td>
+			</tr>
+			<tr>
+					<td><code>NUMERIC</code></td>
+					<td><code>DATE</code>、<code>DATETIME</code>、<code>TIMESTAMP</code>、<code>NUMERIC</code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-关键注意事项">3. 关键注意事项</h3>
 <ol>
@@ -796,35 +796,35 @@
 <h3 id="2-联表查询">2. 联表查询</h3>
 <p>SQLite 支持主流联表类型，<strong>不支持 RIGHT JOIN、FULL OUTER JOIN</strong>，可通过其他方式替代。</p>
 <table>
-  <thead>
-      <tr>
-          <th>联表类型</th>
-          <th>语法</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>内连接 INNER JOIN</td>
-          <td><code>A INNER JOIN B ON A.关联列 = B.关联列</code></td>
-          <td>仅返回两张表中匹配关联条件的行，默认JOIN等价于INNER JOIN</td>
-      </tr>
-      <tr>
-          <td>左连接 LEFT JOIN</td>
-          <td><code>A LEFT JOIN B ON A.关联列 = B.关联列</code></td>
-          <td>返回左表A的所有行，右表B无匹配的行填充NULL</td>
-      </tr>
-      <tr>
-          <td>交叉连接 CROSS JOIN</td>
-          <td><code>A CROSS JOIN B</code></td>
-          <td>返回两张表的笛卡尔积，A的每一行与B的每一行组合，无ON子句</td>
-      </tr>
-      <tr>
-          <td>自然连接 NATURAL JOIN</td>
-          <td><code>A NATURAL JOIN B</code></td>
-          <td>自动按两张表中同名的列进行内连接，无需写ON子句</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>联表类型</th>
+					<th>语法</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>内连接 INNER JOIN</td>
+					<td><code>A INNER JOIN B ON A.关联列 = B.关联列</code></td>
+					<td>仅返回两张表中匹配关联条件的行，默认JOIN等价于INNER JOIN</td>
+			</tr>
+			<tr>
+					<td>左连接 LEFT JOIN</td>
+					<td><code>A LEFT JOIN B ON A.关联列 = B.关联列</code></td>
+					<td>返回左表A的所有行，右表B无匹配的行填充NULL</td>
+			</tr>
+			<tr>
+					<td>交叉连接 CROSS JOIN</td>
+					<td><code>A CROSS JOIN B</code></td>
+					<td>返回两张表的笛卡尔积，A的每一行与B的每一行组合，无ON子句</td>
+			</tr>
+			<tr>
+					<td>自然连接 NATURAL JOIN</td>
+					<td><code>A NATURAL JOIN B</code></td>
+					<td>自动按两张表中同名的列进行内连接，无需写ON子句</td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>示例</strong></p>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
@@ -950,30 +950,30 @@
 <h3 id="5-集合操作">5. 集合操作</h3>
 <p>用于合并多个SELECT语句的结果集，要求多个查询的列数、列类型一致。</p>
 <table>
-  <thead>
-      <tr>
-          <th>操作符</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>UNION</code></td>
-          <td>合并两个结果集，自动去重</td>
-      </tr>
-      <tr>
-          <td><code>UNION ALL</code></td>
-          <td>合并两个结果集，不去重，性能远高于UNION</td>
-      </tr>
-      <tr>
-          <td><code>INTERSECT</code></td>
-          <td>取两个结果集的交集（同时存在的行），自动去重</td>
-      </tr>
-      <tr>
-          <td><code>EXCEPT</code></td>
-          <td>取两个结果集的差集（第一个有、第二个没有的行），自动去重</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>操作符</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>UNION</code></td>
+					<td>合并两个结果集，自动去重</td>
+			</tr>
+			<tr>
+					<td><code>UNION ALL</code></td>
+					<td>合并两个结果集，不去重，性能远高于UNION</td>
+			</tr>
+			<tr>
+					<td><code>INTERSECT</code></td>
+					<td>取两个结果集的交集（同时存在的行），自动去重</td>
+			</tr>
+			<tr>
+					<td><code>EXCEPT</code></td>
+					<td>取两个结果集的差集（第一个有、第二个没有的行），自动去重</td>
+			</tr>
+	</tbody>
 </table>
 <p>示例：</p>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
@@ -999,45 +999,45 @@
 </span></span></span><span class="line"><span class="cl"><span class="p">)</span></span></span></code></pre></div></div>
 <h4 id="常用窗口函数">常用窗口函数</h4>
 <table>
-  <thead>
-      <tr>
-          <th>分类</th>
-          <th>函数名</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>排名函数</td>
-          <td><code>ROW_NUMBER()</code></td>
-          <td>分区内连续排名，相同值排名不同，无并列</td>
-      </tr>
-      <tr>
-          <td>排名函数</td>
-          <td><code>RANK()</code></td>
-          <td>分区内跳跃排名，相同值排名相同，后续排名跳过</td>
-      </tr>
-      <tr>
-          <td>排名函数</td>
-          <td><code>DENSE_RANK()</code></td>
-          <td>分区内连续排名，相同值排名相同，后续排名不跳过</td>
-      </tr>
-      <tr>
-          <td>偏移函数</td>
-          <td><code>LAG(列名, 偏移量, 默认值)</code></td>
-          <td>取当前行前面第N行的值</td>
-      </tr>
-      <tr>
-          <td>偏移函数</td>
-          <td><code>LEAD(列名, 偏移量, 默认值)</code></td>
-          <td>取当前行后面第N行的值</td>
-      </tr>
-      <tr>
-          <td>聚合函数</td>
-          <td><code>SUM()/AVG()/COUNT()/MAX()/MIN()</code></td>
-          <td>窗口内聚合计算</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>分类</th>
+					<th>函数名</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>排名函数</td>
+					<td><code>ROW_NUMBER()</code></td>
+					<td>分区内连续排名，相同值排名不同，无并列</td>
+			</tr>
+			<tr>
+					<td>排名函数</td>
+					<td><code>RANK()</code></td>
+					<td>分区内跳跃排名，相同值排名相同，后续排名跳过</td>
+			</tr>
+			<tr>
+					<td>排名函数</td>
+					<td><code>DENSE_RANK()</code></td>
+					<td>分区内连续排名，相同值排名相同，后续排名不跳过</td>
+			</tr>
+			<tr>
+					<td>偏移函数</td>
+					<td><code>LAG(列名, 偏移量, 默认值)</code></td>
+					<td>取当前行前面第N行的值</td>
+			</tr>
+			<tr>
+					<td>偏移函数</td>
+					<td><code>LEAD(列名, 偏移量, 默认值)</code></td>
+					<td>取当前行后面第N行的值</td>
+			</tr>
+			<tr>
+					<td>聚合函数</td>
+					<td><code>SUM()/AVG()/COUNT()/MAX()/MIN()</code></td>
+					<td>窗口内聚合计算</td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>示例</strong></p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -1064,145 +1064,145 @@
 <h2 id="五核心内置函数">五、核心内置函数</h2>
 <h3 id="1-字符串函数">1. 字符串函数</h3>
 <table>
-  <thead>
-      <tr>
-          <th>函数</th>
-          <th>语法</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>length</code></td>
-          <td><code>length(str)</code></td>
-          <td>返回字符串的字节长度（UTF-8中文占3字节）</td>
-      </tr>
-      <tr>
-          <td><code>lower/upper</code></td>
-          <td><code>lower(str)</code>/<code>upper(str)</code></td>
-          <td>字符串转小写/大写</td>
-      </tr>
-      <tr>
-          <td><code>trim/ltrim/rtrim</code></td>
-          <td><code>trim(str [, 字符集])</code></td>
-          <td>去除字符串两端/左侧/右侧的指定字符（默认空格）</td>
-      </tr>
-      <tr>
-          <td><code>substr</code></td>
-          <td><code>substr(str, 起始位置, 长度)</code></td>
-          <td>截取子串，起始位置从1开始，负数从末尾倒数</td>
-      </tr>
-      <tr>
-          <td><code>instr</code></td>
-          <td><code>instr(str, 子串)</code></td>
-          <td>返回子串在字符串中第一次出现的位置，无匹配返回0</td>
-      </tr>
-      <tr>
-          <td><code>replace</code></td>
-          <td><code>replace(str, 旧子串, 新子串)</code></td>
-          <td>替换字符串中的指定子串</td>
-      </tr>
-      <tr>
-          <td><code>concat</code></td>
-          <td><code>concat(str1, str2, ...)</code></td>
-          <td>拼接多个字符串（3.38.0+版本支持）</td>
-      </tr>
-      <tr>
-          <td><code>concat_ws</code></td>
-          <td><code>concat_ws(分隔符, str1, str2, ...)</code></td>
-          <td>带分隔符拼接字符串（3.38.0+版本支持）</td>
-      </tr>
-      <tr>
-          <td><code>group_concat</code></td>
-          <td><code>group_concat(列名 [, 分隔符])</code></td>
-          <td>聚合函数，将分组内的字符串拼接，默认分隔符为逗号</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数</th>
+					<th>语法</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>length</code></td>
+					<td><code>length(str)</code></td>
+					<td>返回字符串的字节长度（UTF-8中文占3字节）</td>
+			</tr>
+			<tr>
+					<td><code>lower/upper</code></td>
+					<td><code>lower(str)</code>/<code>upper(str)</code></td>
+					<td>字符串转小写/大写</td>
+			</tr>
+			<tr>
+					<td><code>trim/ltrim/rtrim</code></td>
+					<td><code>trim(str [, 字符集])</code></td>
+					<td>去除字符串两端/左侧/右侧的指定字符（默认空格）</td>
+			</tr>
+			<tr>
+					<td><code>substr</code></td>
+					<td><code>substr(str, 起始位置, 长度)</code></td>
+					<td>截取子串，起始位置从1开始，负数从末尾倒数</td>
+			</tr>
+			<tr>
+					<td><code>instr</code></td>
+					<td><code>instr(str, 子串)</code></td>
+					<td>返回子串在字符串中第一次出现的位置，无匹配返回0</td>
+			</tr>
+			<tr>
+					<td><code>replace</code></td>
+					<td><code>replace(str, 旧子串, 新子串)</code></td>
+					<td>替换字符串中的指定子串</td>
+			</tr>
+			<tr>
+					<td><code>concat</code></td>
+					<td><code>concat(str1, str2, ...)</code></td>
+					<td>拼接多个字符串（3.38.0+版本支持）</td>
+			</tr>
+			<tr>
+					<td><code>concat_ws</code></td>
+					<td><code>concat_ws(分隔符, str1, str2, ...)</code></td>
+					<td>带分隔符拼接字符串（3.38.0+版本支持）</td>
+			</tr>
+			<tr>
+					<td><code>group_concat</code></td>
+					<td><code>group_concat(列名 [, 分隔符])</code></td>
+					<td>聚合函数，将分组内的字符串拼接，默认分隔符为逗号</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-数值函数">2. 数值函数</h3>
 <table>
-  <thead>
-      <tr>
-          <th>函数</th>
-          <th>语法</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>abs</code></td>
-          <td><code>abs(num)</code></td>
-          <td>返回绝对值</td>
-      </tr>
-      <tr>
-          <td><code>round</code></td>
-          <td><code>round(num, 小数位数)</code></td>
-          <td>四舍五入到指定小数位数</td>
-      </tr>
-      <tr>
-          <td><code>ceil/floor</code></td>
-          <td><code>ceil(num)</code>/<code>floor(num)</code></td>
-          <td>向上取整/向下取整</td>
-      </tr>
-      <tr>
-          <td><code>mod</code></td>
-          <td><code>mod(num, 除数)</code></td>
-          <td>取模运算，返回余数</td>
-      </tr>
-      <tr>
-          <td><code>random</code></td>
-          <td><code>random()</code></td>
-          <td>返回-9223372036854775808到9223372036854775807之间的随机整数</td>
-      </tr>
-      <tr>
-          <td><code>sqrt</code></td>
-          <td><code>sqrt(num)</code></td>
-          <td>平方根</td>
-      </tr>
-      <tr>
-          <td><code>pow</code></td>
-          <td><code>pow(num, 指数)</code></td>
-          <td>幂运算</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数</th>
+					<th>语法</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>abs</code></td>
+					<td><code>abs(num)</code></td>
+					<td>返回绝对值</td>
+			</tr>
+			<tr>
+					<td><code>round</code></td>
+					<td><code>round(num, 小数位数)</code></td>
+					<td>四舍五入到指定小数位数</td>
+			</tr>
+			<tr>
+					<td><code>ceil/floor</code></td>
+					<td><code>ceil(num)</code>/<code>floor(num)</code></td>
+					<td>向上取整/向下取整</td>
+			</tr>
+			<tr>
+					<td><code>mod</code></td>
+					<td><code>mod(num, 除数)</code></td>
+					<td>取模运算，返回余数</td>
+			</tr>
+			<tr>
+					<td><code>random</code></td>
+					<td><code>random()</code></td>
+					<td>返回-9223372036854775808到9223372036854775807之间的随机整数</td>
+			</tr>
+			<tr>
+					<td><code>sqrt</code></td>
+					<td><code>sqrt(num)</code></td>
+					<td>平方根</td>
+			</tr>
+			<tr>
+					<td><code>pow</code></td>
+					<td><code>pow(num, 指数)</code></td>
+					<td>幂运算</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-日期时间函数">3. 日期时间函数</h3>
 <p>SQLite 日期函数核心基于ISO8601格式，支持时间戳、日期计算，核心函数如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th>函数</th>
-          <th>语法</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>date</code></td>
-          <td><code>date(时间源, 修饰符1, 修饰符2...)</code></td>
-          <td>返回日期字符串，格式<code>YYYY-MM-DD</code></td>
-      </tr>
-      <tr>
-          <td><code>time</code></td>
-          <td><code>time(时间源, 修饰符1, 修饰符2...)</code></td>
-          <td>返回时间字符串，格式<code>HH:MM:SS</code></td>
-      </tr>
-      <tr>
-          <td><code>datetime</code></td>
-          <td><code>datetime(时间源, 修饰符1, 修饰符2...)</code></td>
-          <td>返回日期时间字符串，格式<code>YYYY-MM-DD HH:MM:SS</code></td>
-      </tr>
-      <tr>
-          <td><code>julianday</code></td>
-          <td><code>julianday(时间源, 修饰符...)</code></td>
-          <td>返回儒略日数，用于日期差值计算</td>
-      </tr>
-      <tr>
-          <td><code>strftime</code></td>
-          <td><code>strftime(格式符, 时间源, 修饰符...)</code></td>
-          <td>按指定格式格式化日期，是所有日期函数的底层函数</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数</th>
+					<th>语法</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>date</code></td>
+					<td><code>date(时间源, 修饰符1, 修饰符2...)</code></td>
+					<td>返回日期字符串，格式<code>YYYY-MM-DD</code></td>
+			</tr>
+			<tr>
+					<td><code>time</code></td>
+					<td><code>time(时间源, 修饰符1, 修饰符2...)</code></td>
+					<td>返回时间字符串，格式<code>HH:MM:SS</code></td>
+			</tr>
+			<tr>
+					<td><code>datetime</code></td>
+					<td><code>datetime(时间源, 修饰符1, 修饰符2...)</code></td>
+					<td>返回日期时间字符串，格式<code>YYYY-MM-DD HH:MM:SS</code></td>
+			</tr>
+			<tr>
+					<td><code>julianday</code></td>
+					<td><code>julianday(时间源, 修饰符...)</code></td>
+					<td>返回儒略日数，用于日期差值计算</td>
+			</tr>
+			<tr>
+					<td><code>strftime</code></td>
+					<td><code>strftime(格式符, 时间源, 修饰符...)</code></td>
+					<td>按指定格式格式化日期，是所有日期函数的底层函数</td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>核心参数说明</strong></p>
 <ol>
@@ -1266,35 +1266,35 @@
 </span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">datetime</span><span class="p">(</span><span class="mi">1713254400</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;unixepoch&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;localtime&#39;</span><span class="p">);</span></span></span></code></pre></div></div>
 <h3 id="4-条件与空值函数">4. 条件与空值函数</h3>
 <table>
-  <thead>
-      <tr>
-          <th>函数</th>
-          <th>语法</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>ifnull</code></td>
-          <td><code>ifnull(表达式, 替代值)</code></td>
-          <td>表达式为NULL时返回替代值，否则返回表达式本身（SQLite核心空值处理函数）</td>
-      </tr>
-      <tr>
-          <td><code>nullif</code></td>
-          <td><code>nullif(表达式1, 表达式2)</code></td>
-          <td>两个表达式相等时返回NULL，否则返回表达式1</td>
-      </tr>
-      <tr>
-          <td><code>iif</code></td>
-          <td><code>iif(条件, 真值, 假值)</code></td>
-          <td>三元运算符，条件为true返回真值，否则返回假值（3.32.0+版本支持）</td>
-      </tr>
-      <tr>
-          <td><code>CASE WHEN</code></td>
-          <td>简单CASE：<code>CASE 表达式 WHEN 值1 THEN 结果1 ... ELSE 默认值 END</code> <br> 搜索CASE：<code>CASE WHEN 条件1 THEN 结果1 ... ELSE 默认值 END</code></td>
-          <td>多条件分支判断，兼容所有SQLite版本</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数</th>
+					<th>语法</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>ifnull</code></td>
+					<td><code>ifnull(表达式, 替代值)</code></td>
+					<td>表达式为NULL时返回替代值，否则返回表达式本身（SQLite核心空值处理函数）</td>
+			</tr>
+			<tr>
+					<td><code>nullif</code></td>
+					<td><code>nullif(表达式1, 表达式2)</code></td>
+					<td>两个表达式相等时返回NULL，否则返回表达式1</td>
+			</tr>
+			<tr>
+					<td><code>iif</code></td>
+					<td><code>iif(条件, 真值, 假值)</code></td>
+					<td>三元运算符，条件为true返回真值，否则返回假值（3.32.0+版本支持）</td>
+			</tr>
+			<tr>
+					<td><code>CASE WHEN</code></td>
+					<td>简单CASE：<code>CASE 表达式 WHEN 值1 THEN 结果1 ... ELSE 默认值 END</code> <br> 搜索CASE：<code>CASE WHEN 条件1 THEN 结果1 ... ELSE 默认值 END</code></td>
+					<td>多条件分支判断，兼容所有SQLite版本</td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>示例</strong></p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -1337,30 +1337,30 @@
 </span></span></span><span class="line"><span class="cl"><span class="k">ROLLBACK</span><span class="w"> </span><span class="p">[</span><span class="k">TRANSACTION</span><span class="p">];</span></span></span></code></pre></div></div>
 <h3 id="2-三种事务类型核心区别锁的获取时机">2. 三种事务类型（核心区别：锁的获取时机）</h3>
 <table>
-  <thead>
-      <tr>
-          <th>事务类型</th>
-          <th>说明</th>
-          <th>适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>DEFERRED</code></td>
-          <td>默认模式，开启事务时不获取任何锁，第一次读操作获取共享锁，第一次写操作获取排他锁</td>
-          <td>只读事务、低并发场景，默认首选</td>
-      </tr>
-      <tr>
-          <td><code>IMMEDIATE</code></td>
-          <td>开启事务时立即获取数据库级共享读锁，其他连接可继续读，无法写</td>
-          <td>读写事务，避免并发写冲突，高并发写推荐</td>
-      </tr>
-      <tr>
-          <td><code>EXCLUSIVE</code></td>
-          <td>开启事务时立即获取数据库级排他锁，其他连接无法读也无法写</td>
-          <td>严格的批量写操作，保证数据绝对一致性</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>事务类型</th>
+					<th>说明</th>
+					<th>适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>DEFERRED</code></td>
+					<td>默认模式，开启事务时不获取任何锁，第一次读操作获取共享锁，第一次写操作获取排他锁</td>
+					<td>只读事务、低并发场景，默认首选</td>
+			</tr>
+			<tr>
+					<td><code>IMMEDIATE</code></td>
+					<td>开启事务时立即获取数据库级共享读锁，其他连接可继续读，无法写</td>
+					<td>读写事务，避免并发写冲突，高并发写推荐</td>
+			</tr>
+			<tr>
+					<td><code>EXCLUSIVE</code></td>
+					<td>开启事务时立即获取数据库级排他锁，其他连接无法读也无法写</td>
+					<td>严格的批量写操作，保证数据绝对一致性</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-保存点savepoint">3. 保存点（SAVEPOINT）</h3>
 <p>SQLite 不支持真正的嵌套事务，通过保存点实现事务内的部分回滚，语法如下：</p>
@@ -1400,97 +1400,97 @@
 <p>PRAGMA 是SQLite特有的指令，用于配置数据库参数、查询元数据、控制数据库行为，是SQLite优化和运维的核心。</p>
 <h3 id="1-核心配置类pragma">1. 核心配置类PRAGMA</h3>
 <table>
-  <thead>
-      <tr>
-          <th>指令</th>
-          <th>用法</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>foreign_keys</code></td>
-          <td><code>PRAGMA foreign_keys = ON/OFF;</code></td>
-          <td>开启/关闭外键约束，<strong>默认OFF</strong>，使用外键必须手动开启</td>
-      </tr>
-      <tr>
-          <td><code>journal_mode</code></td>
-          <td><code>PRAGMA journal_mode = WAL;</code></td>
-          <td>设置日志模式，可选值：<code>DELETE</code>(默认)、<code>TRUNCATE</code>、<code>PERSIST</code>、<code>MEMORY</code>、<code>WAL</code>、<code>OFF</code>；<strong>WAL模式推荐高并发场景使用</strong>，支持读写并发，大幅提升读性能</td>
-      </tr>
-      <tr>
-          <td><code>synchronous</code></td>
-          <td><code>PRAGMA synchronous = FULL/NORMAL/OFF;</code></td>
-          <td>同步模式，控制数据持久化安全与性能：<code>FULL</code>(最安全，断电不丢数据)、<code>NORMAL</code>(WAL模式推荐，平衡安全与性能)、<code>OFF</code>(性能最高，断电可能丢数据，仅批量操作临时使用)</td>
-      </tr>
-      <tr>
-          <td><code>busy_timeout</code></td>
-          <td><code>PRAGMA busy_timeout = 5000;</code></td>
-          <td>锁等待超时时间，单位毫秒，锁冲突时等待指定时间再报错，避免频繁锁异常</td>
-      </tr>
-      <tr>
-          <td><code>cache_size</code></td>
-          <td><code>PRAGMA cache_size = -20000;</code></td>
-          <td>设置页面缓存大小，负数代表KB数（-20000=20000KB=20MB），增大缓存可提升查询性能</td>
-      </tr>
-      <tr>
-          <td><code>temp_store</code></td>
-          <td><code>PRAGMA temp_store = MEMORY;</code></td>
-          <td>临时表/索引存储位置，<code>MEMORY</code>(内存，最快)、<code>FILE</code>(磁盘)、<code>DEFAULT</code>(默认)</td>
-      </tr>
-      <tr>
-          <td><code>auto_vacuum</code></td>
-          <td><code>PRAGMA auto_vacuum = 0/1/2;</code></td>
-          <td>自动真空，<code>0</code>(关闭，默认)、<code>1</code>(全量自动)、<code>2</code>(增量自动)，回收删除数据的磁盘空间</td>
-      </tr>
-      <tr>
-          <td><code>encoding</code></td>
-          <td><code>PRAGMA encoding = 'UTF-8';</code></td>
-          <td>设置数据库字符编码，仅新建数据库时可修改，默认UTF-8</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>指令</th>
+					<th>用法</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>foreign_keys</code></td>
+					<td><code>PRAGMA foreign_keys = ON/OFF;</code></td>
+					<td>开启/关闭外键约束，<strong>默认OFF</strong>，使用外键必须手动开启</td>
+			</tr>
+			<tr>
+					<td><code>journal_mode</code></td>
+					<td><code>PRAGMA journal_mode = WAL;</code></td>
+					<td>设置日志模式，可选值：<code>DELETE</code>(默认)、<code>TRUNCATE</code>、<code>PERSIST</code>、<code>MEMORY</code>、<code>WAL</code>、<code>OFF</code>；<strong>WAL模式推荐高并发场景使用</strong>，支持读写并发，大幅提升读性能</td>
+			</tr>
+			<tr>
+					<td><code>synchronous</code></td>
+					<td><code>PRAGMA synchronous = FULL/NORMAL/OFF;</code></td>
+					<td>同步模式，控制数据持久化安全与性能：<code>FULL</code>(最安全，断电不丢数据)、<code>NORMAL</code>(WAL模式推荐，平衡安全与性能)、<code>OFF</code>(性能最高，断电可能丢数据，仅批量操作临时使用)</td>
+			</tr>
+			<tr>
+					<td><code>busy_timeout</code></td>
+					<td><code>PRAGMA busy_timeout = 5000;</code></td>
+					<td>锁等待超时时间，单位毫秒，锁冲突时等待指定时间再报错，避免频繁锁异常</td>
+			</tr>
+			<tr>
+					<td><code>cache_size</code></td>
+					<td><code>PRAGMA cache_size = -20000;</code></td>
+					<td>设置页面缓存大小，负数代表KB数（-20000=20000KB=20MB），增大缓存可提升查询性能</td>
+			</tr>
+			<tr>
+					<td><code>temp_store</code></td>
+					<td><code>PRAGMA temp_store = MEMORY;</code></td>
+					<td>临时表/索引存储位置，<code>MEMORY</code>(内存，最快)、<code>FILE</code>(磁盘)、<code>DEFAULT</code>(默认)</td>
+			</tr>
+			<tr>
+					<td><code>auto_vacuum</code></td>
+					<td><code>PRAGMA auto_vacuum = 0/1/2;</code></td>
+					<td>自动真空，<code>0</code>(关闭，默认)、<code>1</code>(全量自动)、<code>2</code>(增量自动)，回收删除数据的磁盘空间</td>
+			</tr>
+			<tr>
+					<td><code>encoding</code></td>
+					<td><code>PRAGMA encoding = 'UTF-8';</code></td>
+					<td>设置数据库字符编码，仅新建数据库时可修改，默认UTF-8</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-元数据查询类pragma">2. 元数据查询类PRAGMA</h3>
 <table>
-  <thead>
-      <tr>
-          <th>指令</th>
-          <th>用法</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>table_info</code></td>
-          <td><code>PRAGMA table_info(表名);</code></td>
-          <td>查询表的完整结构：列ID、列名、类型、是否非空、默认值、是否主键</td>
-      </tr>
-      <tr>
-          <td><code>index_list</code></td>
-          <td><code>PRAGMA index_list(表名);</code></td>
-          <td>查询表的所有索引列表：索引名、是否唯一、索引类型</td>
-      </tr>
-      <tr>
-          <td><code>index_info</code></td>
-          <td><code>PRAGMA index_info(索引名);</code></td>
-          <td>查询索引的列信息：列ID、列名</td>
-      </tr>
-      <tr>
-          <td><code>foreign_key_list</code></td>
-          <td><code>PRAGMA foreign_key_list(表名);</code></td>
-          <td>查询表的所有外键约束信息</td>
-      </tr>
-      <tr>
-          <td><code>database_list</code></td>
-          <td><code>PRAGMA database_list;</code></td>
-          <td>查询当前连接的所有数据库列表</td>
-      </tr>
-      <tr>
-          <td><code>version</code></td>
-          <td><code>PRAGMA user_version;</code></td>
-          <td>查询/设置用户自定义版本号，常用于数据库版本升级，<code>PRAGMA user_version = 1;</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>指令</th>
+					<th>用法</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>table_info</code></td>
+					<td><code>PRAGMA table_info(表名);</code></td>
+					<td>查询表的完整结构：列ID、列名、类型、是否非空、默认值、是否主键</td>
+			</tr>
+			<tr>
+					<td><code>index_list</code></td>
+					<td><code>PRAGMA index_list(表名);</code></td>
+					<td>查询表的所有索引列表：索引名、是否唯一、索引类型</td>
+			</tr>
+			<tr>
+					<td><code>index_info</code></td>
+					<td><code>PRAGMA index_info(索引名);</code></td>
+					<td>查询索引的列信息：列ID、列名</td>
+			</tr>
+			<tr>
+					<td><code>foreign_key_list</code></td>
+					<td><code>PRAGMA foreign_key_list(表名);</code></td>
+					<td>查询表的所有外键约束信息</td>
+			</tr>
+			<tr>
+					<td><code>database_list</code></td>
+					<td><code>PRAGMA database_list;</code></td>
+					<td>查询当前连接的所有数据库列表</td>
+			</tr>
+			<tr>
+					<td><code>version</code></td>
+					<td><code>PRAGMA user_version;</code></td>
+					<td>查询/设置用户自定义版本号，常用于数据库版本升级，<code>PRAGMA user_version = 1;</code></td>
+			</tr>
+	</tbody>
 </table>
 <hr>
 <h2 id="八常见坑与最佳实践">八、常见坑与最佳实践</h2>
@@ -1544,7 +1544,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

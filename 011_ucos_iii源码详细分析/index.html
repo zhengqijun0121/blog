@@ -5,22 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>uCOS-III 源码详细分析 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/011_ucos_iii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="uCOS-III 源码详细分析">
-  <meta property="og:description" content="μC/OS-III 源码详细分析 μC/OS-III 是由Jean J. Labrosse于2009年发布的可剥夺型、硬实时、可裁剪、可固化的嵌入式多任务RTOS，专为资源受限的MCU/MPU设计，源码采用ANSI C编写，仅需少量汇编完成硬件相关适配，具备完全确定的执行时序，广泛应用于工业控制、汽车电子、医疗设备等硬实时场景。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-03-04T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-03-04T10:00:20+08:00">
-    <meta property="article:tag" content="OS">
-    <meta property="article:tag" content="UCOS-III">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="uCOS-III 源码详细分析">
+	<meta property="og:description" content="μC/OS-III 源码详细分析 μC/OS-III 是由Jean J. Labrosse于2009年发布的可剥夺型、硬实时、可裁剪、可固化的嵌入式多任务RTOS，专为资源受限的MCU/MPU设计，源码采用ANSI C编写，仅需少量汇编完成硬件相关适配，具备完全确定的执行时序，广泛应用于工业控制、汽车电子、医疗设备等硬实时场景。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-03-04T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-03-04T10:00:20+08:00">
+		<meta property="article:tag" content="OS">
+		<meta property="article:tag" content="UCOS-III">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="uCOS-III 源码详细分析">
-  <meta name="twitter:description" content="μC/OS-III 源码详细分析 μC/OS-III 是由Jean J. Labrosse于2009年发布的可剥夺型、硬实时、可裁剪、可固化的嵌入式多任务RTOS，专为资源受限的MCU/MPU设计，源码采用ANSI C编写，仅需少量汇编完成硬件相关适配，具备完全确定的执行时序，广泛应用于工业控制、汽车电子、医疗设备等硬实时场景。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="uCOS-III 源码详细分析">
+	<meta name="twitter:description" content="μC/OS-III 源码详细分析 μC/OS-III 是由Jean J. Labrosse于2009年发布的可剥夺型、硬实时、可裁剪、可固化的嵌入式多任务RTOS，专为资源受限的MCU/MPU设计，源码采用ANSI C编写，仅需少量汇编完成硬件相关适配，具备完全确定的执行时序，广泛应用于工业控制、汽车电子、医疗设备等硬实时场景。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -214,138 +214,138 @@
 <p>μC/OS-III 采用<strong>分层解耦的模块化设计</strong>，将硬件相关与硬件无关代码完全分离，核心源码结构清晰、注释详尽，可移植性极强。</p>
 <h3 id="11-分层架构">1.1 分层架构</h3>
 <table>
-  <thead>
-      <tr>
-          <th>层级</th>
-          <th>核心作用</th>
-          <th>与硬件耦合度</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>应用层</td>
-          <td>用户任务、业务逻辑，调用内核标准API实现业务功能</td>
-          <td>无耦合</td>
-      </tr>
-      <tr>
-          <td>API接口层</td>
-          <td>os.h 封装所有内核API声明、数据类型定义，屏蔽内核实现细节</td>
-          <td>无耦合</td>
-      </tr>
-      <tr>
-          <td>内核核心层</td>
-          <td>纯C实现的RTOS核心功能，与硬件无关，是源码分析的核心</td>
-          <td>无耦合</td>
-      </tr>
-      <tr>
-          <td>CPU架构适配层</td>
-          <td>与CPU指令集强相关，实现上下文切换、临界区、中断控制等</td>
-          <td>强耦合</td>
-      </tr>
-      <tr>
-          <td>BSP板级支持包</td>
-          <td>与硬件板卡相关，实现时钟节拍、外设驱动、中断控制器配置</td>
-          <td>强耦合</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>层级</th>
+					<th>核心作用</th>
+					<th>与硬件耦合度</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>应用层</td>
+					<td>用户任务、业务逻辑，调用内核标准API实现业务功能</td>
+					<td>无耦合</td>
+			</tr>
+			<tr>
+					<td>API接口层</td>
+					<td>os.h 封装所有内核API声明、数据类型定义，屏蔽内核实现细节</td>
+					<td>无耦合</td>
+			</tr>
+			<tr>
+					<td>内核核心层</td>
+					<td>纯C实现的RTOS核心功能，与硬件无关，是源码分析的核心</td>
+					<td>无耦合</td>
+			</tr>
+			<tr>
+					<td>CPU架构适配层</td>
+					<td>与CPU指令集强相关，实现上下文切换、临界区、中断控制等</td>
+					<td>强耦合</td>
+			</tr>
+			<tr>
+					<td>BSP板级支持包</td>
+					<td>与硬件板卡相关，实现时钟节拍、外设驱动、中断控制器配置</td>
+					<td>强耦合</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="12-核心源码文件清单">1.2 核心源码文件清单</h3>
 <p>源码按功能模块独立拆分，每个模块对应一对.c/.h文件，便于裁剪和维护，核心文件如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th>文件分类</th>
-          <th>核心文件</th>
-          <th>核心功能</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>内核核心头文件</td>
-          <td>os.h</td>
-          <td>内核总头文件，包含所有数据结构、宏定义、API函数声明</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>os_cfg.h</td>
-          <td>内核功能裁剪、参数配置文件，用户可按需修改宏定义开关功能</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>os_type.h</td>
-          <td>内核通用数据类型定义，实现跨平台兼容</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>os_cpu.h</td>
-          <td>CPU架构相关的宏、函数声明，与汇编适配文件配套</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>os_app_hooks.h</td>
-          <td>内核钩子函数声明，用于用户功能扩展</td>
-      </tr>
-      <tr>
-          <td>内核核心源文件</td>
-          <td>os_core.c</td>
-          <td>内核核心初始化、调度器、临界区、中断管理、全局状态管理</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>os_task.c</td>
-          <td>任务全生命周期管理：创建、删除、挂起、恢复、优先级修改</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>os_time.c/os_tick.c</td>
-          <td>时间管理：时钟节拍、任务延时、超时管理、时间片轮转</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>os_sem.c</td>
-          <td>计数型/二进制信号量的创建、等待、释放、删除</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>os_mutex.c</td>
-          <td>支持优先级继承的互斥锁，解决优先级反转问题</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>os_q.c</td>
-          <td>消息队列管理，实现任务间异步数据通信</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>os_flag.c</td>
-          <td>事件标志组管理，支持多事件的组合等待与触发</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>os_mem.c</td>
-          <td>固定分区内存管理，无碎片、O(1)时间复杂度的内存分配/释放</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>os_hooks.c</td>
-          <td>内核钩子函数的默认空实现</td>
-      </tr>
-      <tr>
-          <td>CPU架构适配文件</td>
-          <td>os_cpu_a.asm</td>
-          <td>汇编实现：任务启动、上下文切换、关/开中断底层指令</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>os_cpu_c.c</td>
-          <td>C语言实现：任务堆栈初始化、CPU架构相关初始化</td>
-      </tr>
-      <tr>
-          <td>BSP板级文件</td>
-          <td>bsp.c/bsp.h</td>
-          <td>板级硬件初始化、系统时钟配置、时钟节拍中断实现、外设驱动</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>文件分类</th>
+					<th>核心文件</th>
+					<th>核心功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>内核核心头文件</td>
+					<td>os.h</td>
+					<td>内核总头文件，包含所有数据结构、宏定义、API函数声明</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>os_cfg.h</td>
+					<td>内核功能裁剪、参数配置文件，用户可按需修改宏定义开关功能</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>os_type.h</td>
+					<td>内核通用数据类型定义，实现跨平台兼容</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>os_cpu.h</td>
+					<td>CPU架构相关的宏、函数声明，与汇编适配文件配套</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>os_app_hooks.h</td>
+					<td>内核钩子函数声明，用于用户功能扩展</td>
+			</tr>
+			<tr>
+					<td>内核核心源文件</td>
+					<td>os_core.c</td>
+					<td>内核核心初始化、调度器、临界区、中断管理、全局状态管理</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>os_task.c</td>
+					<td>任务全生命周期管理：创建、删除、挂起、恢复、优先级修改</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>os_time.c/os_tick.c</td>
+					<td>时间管理：时钟节拍、任务延时、超时管理、时间片轮转</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>os_sem.c</td>
+					<td>计数型/二进制信号量的创建、等待、释放、删除</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>os_mutex.c</td>
+					<td>支持优先级继承的互斥锁，解决优先级反转问题</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>os_q.c</td>
+					<td>消息队列管理，实现任务间异步数据通信</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>os_flag.c</td>
+					<td>事件标志组管理，支持多事件的组合等待与触发</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>os_mem.c</td>
+					<td>固定分区内存管理，无碎片、O(1)时间复杂度的内存分配/释放</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>os_hooks.c</td>
+					<td>内核钩子函数的默认空实现</td>
+			</tr>
+			<tr>
+					<td>CPU架构适配文件</td>
+					<td>os_cpu_a.asm</td>
+					<td>汇编实现：任务启动、上下文切换、关/开中断底层指令</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>os_cpu_c.c</td>
+					<td>C语言实现：任务堆栈初始化、CPU架构相关初始化</td>
+			</tr>
+			<tr>
+					<td>BSP板级文件</td>
+					<td>bsp.c/bsp.h</td>
+					<td>板级硬件初始化、系统时钟配置、时钟节拍中断实现、外设驱动</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="13-核心配置文件-os_cfgh">1.3 核心配置文件 os_cfg.h</h3>
 <p>该文件是内核裁剪的核心，通过宏定义实现功能开关和参数配置，核心配置项如下：</p>
@@ -659,35 +659,35 @@
 </ol>
 <h4 id="512-其他核心任务管理函数">5.1.2 其他核心任务管理函数</h4>
 <table>
-  <thead>
-      <tr>
-          <th>函数名</th>
-          <th>核心功能</th>
-          <th>关键注意事项</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>OSTaskDel()</td>
-          <td>删除任务，从所有内核链表中移除，任务无法被调度</td>
-          <td>任务可删除自身，删除后触发调度；禁止删除空闲任务</td>
-      </tr>
-      <tr>
-          <td>OSTaskSuspend()</td>
-          <td>挂起任务，任务进入挂起态，即使就绪也无法被调度</td>
-          <td>支持嵌套挂起，需对应次数的恢复才能解除挂起</td>
-      </tr>
-      <tr>
-          <td>OSTaskResume()</td>
-          <td>恢复被挂起的任务，解除挂起态，就绪后加入调度</td>
-          <td>仅能恢复被OSTaskSuspend()挂起的任务</td>
-      </tr>
-      <tr>
-          <td>OSTaskChangePrio()</td>
-          <td>动态修改任务优先级</td>
-          <td>互斥锁的优先级继承机制基于该函数实现</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数名</th>
+					<th>核心功能</th>
+					<th>关键注意事项</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>OSTaskDel()</td>
+					<td>删除任务，从所有内核链表中移除，任务无法被调度</td>
+					<td>任务可删除自身，删除后触发调度；禁止删除空闲任务</td>
+			</tr>
+			<tr>
+					<td>OSTaskSuspend()</td>
+					<td>挂起任务，任务进入挂起态，即使就绪也无法被调度</td>
+					<td>支持嵌套挂起，需对应次数的恢复才能解除挂起</td>
+			</tr>
+			<tr>
+					<td>OSTaskResume()</td>
+					<td>恢复被挂起的任务，解除挂起态，就绪后加入调度</td>
+					<td>仅能恢复被OSTaskSuspend()挂起的任务</td>
+			</tr>
+			<tr>
+					<td>OSTaskChangePrio()</td>
+					<td>动态修改任务优先级</td>
+					<td>互斥锁的优先级继承机制基于该函数实现</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="52-时间管理模块os_timecos_tickc">5.2 时间管理模块（os_time.c/os_tick.c）</h3>
 <p>时间管理是RTOS的基础，基于硬件时钟节拍实现，提供任务延时、超时管理、时间戳等核心功能。</p>
@@ -829,28 +829,28 @@
 <h3 id="62-临界区保护机制">6.2 临界区保护机制</h3>
 <p>临界区是必须原子执行的代码段，不能被中断或任务调度打断，μC/OS-III提供两种临界区保护方案：</p>
 <table>
-  <thead>
-      <tr>
-          <th>保护方式</th>
-          <th>实现原理</th>
-          <th>适用场景</th>
-          <th>优缺点</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>关中断保护<br>CPU_CRITICAL_ENTER/EXIT</td>
-          <td>进入临界区关中断，退出时恢复中断状态</td>
-          <td>被中断和任务同时访问的共享资源</td>
-          <td>优点：保护粒度最细，完全保证原子性；<br>缺点：临界区代码必须极短，避免影响中断响应</td>
-      </tr>
-      <tr>
-          <td>调度锁保护<br>OSSchedLock/Unlock</td>
-          <td>进入临界区锁定调度器，禁止任务切换，允许中断响应</td>
-          <td>仅被任务访问的共享资源，临界区较长</td>
-          <td>优点：不影响中断响应；<br>缺点：锁定期间高优先级任务无法调度，影响实时性，禁止调用阻塞函数</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>保护方式</th>
+					<th>实现原理</th>
+					<th>适用场景</th>
+					<th>优缺点</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>关中断保护<br>CPU_CRITICAL_ENTER/EXIT</td>
+					<td>进入临界区关中断，退出时恢复中断状态</td>
+					<td>被中断和任务同时访问的共享资源</td>
+					<td>优点：保护粒度最细，完全保证原子性；<br>缺点：临界区代码必须极短，避免影响中断响应</td>
+			</tr>
+			<tr>
+					<td>调度锁保护<br>OSSchedLock/Unlock</td>
+					<td>进入临界区锁定调度器，禁止任务切换，允许中断响应</td>
+					<td>仅被任务访问的共享资源，临界区较长</td>
+					<td>优点：不影响中断响应；<br>缺点：锁定期间高优先级任务无法调度，影响实时性，禁止调用阻塞函数</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="七ucos-iii-核心特色与最佳实践">七、uC/OS-III 核心特色与最佳实践</h2>
 <h3 id="71-与ucos-ii的核心区别">7.1 与uC/OS-II的核心区别</h3>
@@ -901,7 +901,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

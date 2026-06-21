@@ -5,22 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>Neovim 使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_neovim%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="Neovim 使用详细总结">
-  <meta property="og:description" content="Neovim 详细使用总结 Neovim 是 Vim 的社区驱动现代化分支，100%兼容Vim核心模态编辑逻辑与绝大多数Vimscript配置/插件，同时从底层重构了异步非阻塞架构，原生支持Lua脚本、内置LSP客户端、Tree-sitter语法解析、终端模拟器等现代IDE核心能力，兼顾了模态编辑的极致效率与现代开发的全场景需求，是当前终端编辑器的主流选择之一。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-02-02T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-02-02T10:00:20+08:00">
-    <meta property="article:tag" content="编辑器">
-    <meta property="article:tag" content="Neovim">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="Neovim 使用详细总结">
+	<meta property="og:description" content="Neovim 详细使用总结 Neovim 是 Vim 的社区驱动现代化分支，100%兼容Vim核心模态编辑逻辑与绝大多数Vimscript配置/插件，同时从底层重构了异步非阻塞架构，原生支持Lua脚本、内置LSP客户端、Tree-sitter语法解析、终端模拟器等现代IDE核心能力，兼顾了模态编辑的极致效率与现代开发的全场景需求，是当前终端编辑器的主流选择之一。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-02-02T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-02-02T10:00:20+08:00">
+		<meta property="article:tag" content="编辑器">
+		<meta property="article:tag" content="Neovim">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="Neovim 使用详细总结">
-  <meta name="twitter:description" content="Neovim 详细使用总结 Neovim 是 Vim 的社区驱动现代化分支，100%兼容Vim核心模态编辑逻辑与绝大多数Vimscript配置/插件，同时从底层重构了异步非阻塞架构，原生支持Lua脚本、内置LSP客户端、Tree-sitter语法解析、终端模拟器等现代IDE核心能力，兼顾了模态编辑的极致效率与现代开发的全场景需求，是当前终端编辑器的主流选择之一。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="Neovim 使用详细总结">
+	<meta name="twitter:description" content="Neovim 详细使用总结 Neovim 是 Vim 的社区驱动现代化分支，100%兼容Vim核心模态编辑逻辑与绝大多数Vimscript配置/插件，同时从底层重构了异步非阻塞架构，原生支持Lua脚本、内置LSP客户端、Tree-sitter语法解析、终端模拟器等现代IDE核心能力，兼顾了模态编辑的极致效率与现代开发的全场景需求，是当前终端编辑器的主流选择之一。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -230,40 +230,40 @@
 <p>Neovim 是 Vim 的社区驱动现代化分支，<strong>100%兼容Vim核心模态编辑逻辑与绝大多数Vimscript配置/插件</strong>，同时从底层重构了异步非阻塞架构，原生支持Lua脚本、内置LSP客户端、Tree-sitter语法解析、终端模拟器等现代IDE核心能力，兼顾了模态编辑的极致效率与现代开发的全场景需求，是当前终端编辑器的主流选择之一。</p>
 <h2 id="一核心特性与vim的核心差异">一、核心特性与Vim的核心差异</h2>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">特性维度</th>
-          <th style="text-align: left">Neovim</th>
-          <th style="text-align: left">Vim</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">核心架构</td>
-          <td style="text-align: left">原生异步非阻塞，耗时任务（LSP、格式化、搜索）完全不阻塞主界面</td>
-          <td style="text-align: left">同步阻塞为主，Vim8后仅支持有限异步能力，体验割裂</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">脚本支持</td>
-          <td style="text-align: left">Lua为一等公民，执行效率高、语法简洁、生态繁荣，同时兼容Vimscript</td>
-          <td style="text-align: left">原生仅支持Vimscript，Lua支持为第三方扩展，能力受限</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">开发模式</td>
-          <td style="text-align: left">社区驱动，迭代快，持续拥抱现代开发标准</td>
-          <td style="text-align: left">原作者主导，更新保守，优先保证向下兼容</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">内置能力</td>
-          <td style="text-align: left">原生内置LSP客户端、Tree-sitter、终端模拟器、浮动窗口</td>
-          <td style="text-align: left">无原生LSP/Tree-sitter，终端能力弱，UI扩展受限</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">配置规范</td>
-          <td style="text-align: left">遵循XDG基础目录规范，配置文件管理更清晰规范</td>
-          <td style="text-align: left">传统vimrc路径，无统一目录规范</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">特性维度</th>
+					<th style="text-align: left">Neovim</th>
+					<th style="text-align: left">Vim</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">核心架构</td>
+					<td style="text-align: left">原生异步非阻塞，耗时任务（LSP、格式化、搜索）完全不阻塞主界面</td>
+					<td style="text-align: left">同步阻塞为主，Vim8后仅支持有限异步能力，体验割裂</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">脚本支持</td>
+					<td style="text-align: left">Lua为一等公民，执行效率高、语法简洁、生态繁荣，同时兼容Vimscript</td>
+					<td style="text-align: left">原生仅支持Vimscript，Lua支持为第三方扩展，能力受限</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">开发模式</td>
+					<td style="text-align: left">社区驱动，迭代快，持续拥抱现代开发标准</td>
+					<td style="text-align: left">原作者主导，更新保守，优先保证向下兼容</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">内置能力</td>
+					<td style="text-align: left">原生内置LSP客户端、Tree-sitter、终端模拟器、浮动窗口</td>
+					<td style="text-align: left">无原生LSP/Tree-sitter，终端能力弱，UI扩展受限</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">配置规范</td>
+					<td style="text-align: left">遵循XDG基础目录规范，配置文件管理更清晰规范</td>
+					<td style="text-align: left">传统vimrc路径，无统一目录规范</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="核心杀手锏特性">核心杀手锏特性</h3>
 <ol>
@@ -311,34 +311,34 @@
 <h3 id="2-极简入门操作">2. 极简入门操作</h3>
 <p>Neovim完全兼容Vim的模态编辑逻辑，核心6种模式，新手只需先掌握3种核心模式：</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">模式</th>
-          <th style="text-align: left">进入方式</th>
-          <th style="text-align: left">核心用途</th>
-          <th style="text-align: left">退出方式</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">普通模式(Normal)</td>
-          <td style="text-align: left">启动默认进入，其他模式按<code>Esc</code>返回</td>
-          <td style="text-align: left">光标移动、文本操作、命令执行</td>
-          <td style="text-align: left">无需退出，基础模式</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">插入模式(Insert)</td>
-          <td style="text-align: left">普通模式按<code>i</code>/<code>a</code>/<code>o</code>等</td>
-          <td style="text-align: left">文本输入、编辑</td>
-          <td style="text-align: left">按<code>Esc</code>返回普通模式</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">命令模式(Command)</td>
-          <td style="text-align: left">普通模式按<code>:</code></td>
-          <td style="text-align: left">执行保存、退出、搜索、设置等命令</td>
-          <td style="text-align: left">执行完命令自动返回，或按<code>Esc</code>取消</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">模式</th>
+					<th style="text-align: left">进入方式</th>
+					<th style="text-align: left">核心用途</th>
+					<th style="text-align: left">退出方式</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">普通模式(Normal)</td>
+					<td style="text-align: left">启动默认进入，其他模式按<code>Esc</code>返回</td>
+					<td style="text-align: left">光标移动、文本操作、命令执行</td>
+					<td style="text-align: left">无需退出，基础模式</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">插入模式(Insert)</td>
+					<td style="text-align: left">普通模式按<code>i</code>/<code>a</code>/<code>o</code>等</td>
+					<td style="text-align: left">文本输入、编辑</td>
+					<td style="text-align: left">按<code>Esc</code>返回普通模式</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">命令模式(Command)</td>
+					<td style="text-align: left">普通模式按<code>:</code></td>
+					<td style="text-align: left">执行保存、退出、搜索、设置等命令</td>
+					<td style="text-align: left">执行完命令自动返回，或按<code>Esc</code>取消</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="新手必记基础命令">新手必记基础命令</h4>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -727,34 +727,34 @@
 </span></span><span class="line"><span class="cl"><span class="p">})</span></span></span></code></pre></div></div>
 <h4 id="核心lsp命令">核心LSP命令</h4>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">命令</th>
-          <th style="text-align: left">功能</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>:LspInfo</code></td>
-          <td style="text-align: left">查看当前缓冲区LSP服务器运行状态</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>:LspInstall</code></td>
-          <td style="text-align: left">安装语言服务器</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>:LspUninstall</code></td>
-          <td style="text-align: left">卸载语言服务器</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>:Mason</code></td>
-          <td style="text-align: left">打开Mason图形界面，管理LSP/DAP/Linter/Formatter</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>:lua vim.diagnostic.setloclist()</code></td>
-          <td style="text-align: left">打开诊断列表，查看所有文件错误</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">命令</th>
+					<th style="text-align: left">功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>:LspInfo</code></td>
+					<td style="text-align: left">查看当前缓冲区LSP服务器运行状态</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>:LspInstall</code></td>
+					<td style="text-align: left">安装语言服务器</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>:LspUninstall</code></td>
+					<td style="text-align: left">卸载语言服务器</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>:Mason</code></td>
+					<td style="text-align: left">打开Mason图形界面，管理LSP/DAP/Linter/Formatter</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>:lua vim.diagnostic.setloclist()</code></td>
+					<td style="text-align: left">打开诊断列表，查看所有文件错误</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-tree-sitter">2. Tree-sitter</h3>
 <p>Tree-sitter是一个增量语法解析器，基于AST抽象语法树实现精准的代码解析，远优于传统正则匹配的语法高亮，同时提供增量选择、代码折叠、智能缩进等能力。</p>
@@ -804,38 +804,38 @@
 <p>Neovim原生内置基于libvterm的终端模拟器，无需离开编辑器即可执行shell命令、运行程序，完全兼容Neovim的按键映射与模式。</p>
 <h4 id="核心使用方式">核心使用方式</h4>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">命令/操作</th>
-          <th style="text-align: left">功能</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>:terminal</code> / <code>:term</code></td>
-          <td style="text-align: left">新建缓冲区打开终端</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>:vs term://bash</code></td>
-          <td style="text-align: left">垂直分屏打开终端</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>:sp term://zsh</code></td>
-          <td style="text-align: left">水平分屏打开终端</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>i</code> / <code>a</code></td>
-          <td style="text-align: left">终端缓冲区进入终端插入模式（可输入shell命令）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>Esc</code></td>
-          <td style="text-align: left">终端插入模式返回普通模式（可执行复制、滚动、切换窗口等操作）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>Ctrl+\ Ctrl+n</code></td>
-          <td style="text-align: left">强制退出终端插入模式（Esc映射失效时使用）</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">命令/操作</th>
+					<th style="text-align: left">功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>:terminal</code> / <code>:term</code></td>
+					<td style="text-align: left">新建缓冲区打开终端</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>:vs term://bash</code></td>
+					<td style="text-align: left">垂直分屏打开终端</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>:sp term://zsh</code></td>
+					<td style="text-align: left">水平分屏打开终端</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>i</code> / <code>a</code></td>
+					<td style="text-align: left">终端缓冲区进入终端插入模式（可输入shell命令）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>Esc</code></td>
+					<td style="text-align: left">终端插入模式返回普通模式（可执行复制、滚动、切换窗口等操作）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>Ctrl+\ Ctrl+n</code></td>
+					<td style="text-align: left">强制退出终端插入模式（Esc映射失效时使用）</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="常用配置">常用配置</h4>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
@@ -894,156 +894,156 @@
 </span></span><span class="line"><span class="cl"><span class="p">})</span></span></span></code></pre></div></div>
 <p>核心命令：</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">命令</th>
-          <th style="text-align: left">功能</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>:Lazy</code></td>
-          <td style="text-align: left">打开lazy.nvim图形管理界面</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>:Lazy install</code></td>
-          <td style="text-align: left">安装所有缺失插件</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>:Lazy update</code></td>
-          <td style="text-align: left">更新所有插件</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>:Lazy clean</code></td>
-          <td style="text-align: left">清理未使用的插件</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>:Lazy sync</code></td>
-          <td style="text-align: left">同步插件（install+update+clean）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>:Lazy check</code></td>
-          <td style="text-align: left">检查插件更新</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">命令</th>
+					<th style="text-align: left">功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>:Lazy</code></td>
+					<td style="text-align: left">打开lazy.nvim图形管理界面</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>:Lazy install</code></td>
+					<td style="text-align: left">安装所有缺失插件</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>:Lazy update</code></td>
+					<td style="text-align: left">更新所有插件</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>:Lazy clean</code></td>
+					<td style="text-align: left">清理未使用的插件</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>:Lazy sync</code></td>
+					<td style="text-align: left">同步插件（install+update+clean）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>:Lazy check</code></td>
+					<td style="text-align: left">检查插件更新</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-核心必备插件推荐">2. 核心必备插件推荐</h3>
 <p>按功能分类，推荐社区主流、稳定维护的Lua原生插件，覆盖绝大多数开发场景：</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">分类</th>
-          <th style="text-align: left">插件</th>
-          <th style="text-align: left">核心功能</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><strong>插件管理</strong></td>
-          <td style="text-align: left">folke/lazy.nvim</td>
-          <td style="text-align: left">现代插件管理器，异步、懒加载、图形化界面，社区首选</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>配色与UI</strong></td>
-          <td style="text-align: left">folke/tokyonight.nvim</td>
-          <td style="text-align: left">主流配色方案，支持真彩色，护眼且辨识度高</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">catppuccin/nvim</td>
-          <td style="text-align: left">低对比度柔和配色，多风格可选，适配绝大多数插件</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">nvim-lualine/lualine.nvim</td>
-          <td style="text-align: left">高颜值状态栏，自定义程度高，轻量高效</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">folke/noice.nvim</td>
-          <td style="text-align: left">重构命令行、通知、消息系统，现代化UI体验</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>文件管理</strong></td>
-          <td style="text-align: left">nvim-tree/nvim-tree.lua</td>
-          <td style="text-align: left">侧边栏文件树，功能全面，轻量稳定</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">nvim-neo-tree/neo-tree.nvim</td>
-          <td style="text-align: left">功能更强大的文件管理器，支持缓冲区、Git、远程文件</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>模糊搜索</strong></td>
-          <td style="text-align: left">nvim-telescope/telescope.nvim</td>
-          <td style="text-align: left">万能模糊搜索神器，支持文件、文本、符号、Git、缓冲区等全场景搜索</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>代码补全</strong></td>
-          <td style="text-align: left">hrsh7th/nvim-cmp</td>
-          <td style="text-align: left">社区最强补全引擎，全模块化设计，支持LSP、路径、片段、缓冲区等多种补全源</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">L3MON4D3/LuaSnip</td>
-          <td style="text-align: left">代码片段引擎，配合nvim-cmp实现自定义代码片段</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>LSP增强</strong></td>
-          <td style="text-align: left">williamboman/mason.nvim</td>
-          <td style="text-align: left">LSP/DAP/Linter/Formatter一键安装管理，内置App Store</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">neovim/nvim-lspconfig</td>
-          <td style="text-align: left">官方LSP配置合集，提供绝大多数语言服务器的开箱即用配置</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">nvimdev/lspsaga.nvim</td>
-          <td style="text-align: left">LSP功能增强，提供更美观的UI、跳转、诊断、代码动作体验</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>Git集成</strong></td>
-          <td style="text-align: left">lewis6991/gitsigns.nvim</td>
-          <td style="text-align: left">行级Git状态提示，支持 blame、diff、撤销修改等操作</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">tpope/vim-fugitive</td>
-          <td style="text-align: left">全能Git插件，支持所有Git命令，与Neovim深度集成</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>终端增强</strong></td>
-          <td style="text-align: left">akinsho/toggleterm.nvim</td>
-          <td style="text-align: left">浮动终端、分屏终端管理，支持多终端切换、自定义快捷键</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>效率工具</strong></td>
-          <td style="text-align: left">folke/which-key.nvim</td>
-          <td style="text-align: left">快捷键实时提示，按下前缀键自动弹出后续按键说明，解决记不住快捷键的痛点</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">windwp/nvim-autopairs</td>
-          <td style="text-align: left">自动补全括号、引号、标签，支持嵌套、多行匹配</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">numToStr/Comment.nvim</td>
-          <td style="text-align: left">极速代码注释，支持单行/多行注释，适配绝大多数语言</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>AI辅助</strong></td>
-          <td style="text-align: left">github/copilot.vim</td>
-          <td style="text-align: left">GitHub Copilot官方插件，AI代码补全</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">yetone/avante.nvim</td>
-          <td style="text-align: left">开源AI编程助手，支持多模型，类似Cursor的对话式编程体验</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">分类</th>
+					<th style="text-align: left">插件</th>
+					<th style="text-align: left">核心功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><strong>插件管理</strong></td>
+					<td style="text-align: left">folke/lazy.nvim</td>
+					<td style="text-align: left">现代插件管理器，异步、懒加载、图形化界面，社区首选</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>配色与UI</strong></td>
+					<td style="text-align: left">folke/tokyonight.nvim</td>
+					<td style="text-align: left">主流配色方案，支持真彩色，护眼且辨识度高</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left">catppuccin/nvim</td>
+					<td style="text-align: left">低对比度柔和配色，多风格可选，适配绝大多数插件</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left">nvim-lualine/lualine.nvim</td>
+					<td style="text-align: left">高颜值状态栏，自定义程度高，轻量高效</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left">folke/noice.nvim</td>
+					<td style="text-align: left">重构命令行、通知、消息系统，现代化UI体验</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>文件管理</strong></td>
+					<td style="text-align: left">nvim-tree/nvim-tree.lua</td>
+					<td style="text-align: left">侧边栏文件树，功能全面，轻量稳定</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left">nvim-neo-tree/neo-tree.nvim</td>
+					<td style="text-align: left">功能更强大的文件管理器，支持缓冲区、Git、远程文件</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>模糊搜索</strong></td>
+					<td style="text-align: left">nvim-telescope/telescope.nvim</td>
+					<td style="text-align: left">万能模糊搜索神器，支持文件、文本、符号、Git、缓冲区等全场景搜索</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>代码补全</strong></td>
+					<td style="text-align: left">hrsh7th/nvim-cmp</td>
+					<td style="text-align: left">社区最强补全引擎，全模块化设计，支持LSP、路径、片段、缓冲区等多种补全源</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left">L3MON4D3/LuaSnip</td>
+					<td style="text-align: left">代码片段引擎，配合nvim-cmp实现自定义代码片段</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>LSP增强</strong></td>
+					<td style="text-align: left">williamboman/mason.nvim</td>
+					<td style="text-align: left">LSP/DAP/Linter/Formatter一键安装管理，内置App Store</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left">neovim/nvim-lspconfig</td>
+					<td style="text-align: left">官方LSP配置合集，提供绝大多数语言服务器的开箱即用配置</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left">nvimdev/lspsaga.nvim</td>
+					<td style="text-align: left">LSP功能增强，提供更美观的UI、跳转、诊断、代码动作体验</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>Git集成</strong></td>
+					<td style="text-align: left">lewis6991/gitsigns.nvim</td>
+					<td style="text-align: left">行级Git状态提示，支持 blame、diff、撤销修改等操作</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left">tpope/vim-fugitive</td>
+					<td style="text-align: left">全能Git插件，支持所有Git命令，与Neovim深度集成</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>终端增强</strong></td>
+					<td style="text-align: left">akinsho/toggleterm.nvim</td>
+					<td style="text-align: left">浮动终端、分屏终端管理，支持多终端切换、自定义快捷键</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>效率工具</strong></td>
+					<td style="text-align: left">folke/which-key.nvim</td>
+					<td style="text-align: left">快捷键实时提示，按下前缀键自动弹出后续按键说明，解决记不住快捷键的痛点</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left">windwp/nvim-autopairs</td>
+					<td style="text-align: left">自动补全括号、引号、标签，支持嵌套、多行匹配</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left">numToStr/Comment.nvim</td>
+					<td style="text-align: left">极速代码注释，支持单行/多行注释，适配绝大多数语言</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>AI辅助</strong></td>
+					<td style="text-align: left">github/copilot.vim</td>
+					<td style="text-align: left">GitHub Copilot官方插件，AI代码补全</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"></td>
+					<td style="text-align: left">yetone/avante.nvim</td>
+					<td style="text-align: left">开源AI编程助手，支持多模型，类似Cursor的对话式编程体验</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="七进阶使用技巧">七、进阶使用技巧</h2>
 <h3 id="1-启动性能优化">1. 启动性能优化</h3>
@@ -1224,7 +1224,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

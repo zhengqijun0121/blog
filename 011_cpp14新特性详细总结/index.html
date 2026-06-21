@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>C&#43;&#43;14 新特性详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/011_cpp14%E6%96%B0%E7%89%B9%E6%80%A7%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="C&#43;&#43;14 新特性详细总结">
-  <meta property="og:description" content="C&#43;&#43;14 新特性详细总结 C&#43;&#43;14（ISO/IEC 14882:2014）是C&#43;&#43;11标准的增量更新版本，核心定位是补全C&#43;&#43;11的设计缺陷、简化语法、增强泛型编程能力与编译期计算能力，无颠覆性的语法革新，整体让现代C&#43;&#43;的开发体验更流畅、安全、简洁。整体分为核心语言新特性和标准库新特性两大模块，以下是完整详细总结。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-01-02T09:00:00+08:00">
-    <meta property="article:modified_time" content="2026-01-02T09:30:00+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="Cpp">
-    <meta property="article:tag" content="Cpp14">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="C&#43;&#43;14 新特性详细总结">
+	<meta property="og:description" content="C&#43;&#43;14 新特性详细总结 C&#43;&#43;14（ISO/IEC 14882:2014）是C&#43;&#43;11标准的增量更新版本，核心定位是补全C&#43;&#43;11的设计缺陷、简化语法、增强泛型编程能力与编译期计算能力，无颠覆性的语法革新，整体让现代C&#43;&#43;的开发体验更流畅、安全、简洁。整体分为核心语言新特性和标准库新特性两大模块，以下是完整详细总结。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-01-02T09:00:00+08:00">
+		<meta property="article:modified_time" content="2026-01-02T09:30:00+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="Cpp">
+		<meta property="article:tag" content="Cpp14">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="C&#43;&#43;14 新特性详细总结">
-  <meta name="twitter:description" content="C&#43;&#43;14 新特性详细总结 C&#43;&#43;14（ISO/IEC 14882:2014）是C&#43;&#43;11标准的增量更新版本，核心定位是补全C&#43;&#43;11的设计缺陷、简化语法、增强泛型编程能力与编译期计算能力，无颠覆性的语法革新，整体让现代C&#43;&#43;的开发体验更流畅、安全、简洁。整体分为核心语言新特性和标准库新特性两大模块，以下是完整详细总结。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="C&#43;&#43;14 新特性详细总结">
+	<meta name="twitter:description" content="C&#43;&#43;14 新特性详细总结 C&#43;&#43;14（ISO/IEC 14882:2014）是C&#43;&#43;11标准的增量更新版本，核心定位是补全C&#43;&#43;11的设计缺陷、简化语法、增强泛型编程能力与编译期计算能力，无颠覆性的语法革新，整体让现代C&#43;&#43;的开发体验更流畅、安全、简洁。整体分为核心语言新特性和标准库新特性两大模块，以下是完整详细总结。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -292,25 +292,25 @@
 <p>解决<code>auto</code>推导默认丢失引用、cv限定符的问题，<code>decltype(auto)</code>会严格按照<code>decltype</code>的规则推导表达式类型，完美保留表达式的值类别（左值/右值）与cv限定符，是泛型编程中完美转发的核心工具。</p>
 <h4 id="核心区别">核心区别</h4>
 <table>
-  <thead>
-      <tr>
-          <th>推导方式</th>
-          <th>核心行为</th>
-          <th>适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>auto</code></td>
-          <td>去除引用、顶层cv限定符，默认值类型推导</td>
-          <td>普通变量定义，无需保留原表达式属性</td>
-      </tr>
-      <tr>
-          <td><code>decltype(auto)</code></td>
-          <td>完全匹配表达式的类型与值类别，保留引用、cv限定符</td>
-          <td>泛型转发、返回值完美传递</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>推导方式</th>
+					<th>核心行为</th>
+					<th>适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>auto</code></td>
+					<td>去除引用、顶层cv限定符，默认值类型推导</td>
+					<td>普通变量定义，无需保留原表达式属性</td>
+			</tr>
+			<tr>
+					<td><code>decltype(auto)</code></td>
+					<td>完全匹配表达式的类型与值类别，保留引用、cv限定符</td>
+					<td>泛型转发、返回值完美传递</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="代码示例-1">代码示例</h4>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -713,34 +713,34 @@
 <p>C++14为所有类型特性模板新增了<code>_t</code>后缀的别名模板，用于替代C++11中繁琐的<code>typename xxx::type</code>写法，大幅简化泛型编程代码，降低模板代码的书写门槛。</p>
 <h4 id="核心示例">核心示例</h4>
 <table>
-  <thead>
-      <tr>
-          <th>C++11写法</th>
-          <th>C++14简化写法</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>typename std::enable_if&lt;cond, T&gt;::type</code></td>
-          <td><code>std::enable_if_t&lt;cond, T&gt;</code></td>
-      </tr>
-      <tr>
-          <td><code>typename std::remove_reference&lt;T&gt;::type</code></td>
-          <td><code>std::remove_reference_t&lt;T&gt;</code></td>
-      </tr>
-      <tr>
-          <td><code>typename std::decay&lt;T&gt;::type</code></td>
-          <td><code>std::decay_t&lt;T&gt;</code></td>
-      </tr>
-      <tr>
-          <td><code>typename std::add_const&lt;T&gt;::type</code></td>
-          <td><code>std::add_const_t&lt;T&gt;</code></td>
-      </tr>
-      <tr>
-          <td><code>typename std::remove_cv&lt;T&gt;::type</code></td>
-          <td><code>std::remove_cv_t&lt;T&gt;</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>C++11写法</th>
+					<th>C++14简化写法</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>typename std::enable_if&lt;cond, T&gt;::type</code></td>
+					<td><code>std::enable_if_t&lt;cond, T&gt;</code></td>
+			</tr>
+			<tr>
+					<td><code>typename std::remove_reference&lt;T&gt;::type</code></td>
+					<td><code>std::remove_reference_t&lt;T&gt;</code></td>
+			</tr>
+			<tr>
+					<td><code>typename std::decay&lt;T&gt;::type</code></td>
+					<td><code>std::decay_t&lt;T&gt;</code></td>
+			</tr>
+			<tr>
+					<td><code>typename std::add_const&lt;T&gt;::type</code></td>
+					<td><code>std::add_const_t&lt;T&gt;</code></td>
+			</tr>
+			<tr>
+					<td><code>typename std::remove_cv&lt;T&gt;::type</code></td>
+					<td><code>std::remove_cv_t&lt;T&gt;</code></td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="代码示例-16">代码示例</h4>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -797,34 +797,34 @@
 <p>C++11引入了用户定义字面量特性，但标准库未做大规模应用，C++14正式为标准库新增了高频场景的字面量后缀，简化代码书写。</p>
 <h4 id="核心字面量后缀">核心字面量后缀</h4>
 <table>
-  <thead>
-      <tr>
-          <th>字面量后缀</th>
-          <th>所属类型</th>
-          <th>命名空间</th>
-          <th>示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>s</code></td>
-          <td><code>std::basic_string</code></td>
-          <td><code>std::string_literals</code></td>
-          <td><code>&quot;hello&quot;s</code> → <code>std::string</code></td>
-      </tr>
-      <tr>
-          <td><code>h</code>/<code>min</code>/<code>s</code>/<code>ms</code>/<code>us</code>/<code>ns</code></td>
-          <td><code>std::chrono::duration</code></td>
-          <td><code>std::chrono_literals</code></td>
-          <td><code>1h</code>/<code>5min</code>/<code>10ms</code></td>
-      </tr>
-      <tr>
-          <td><code>i</code>/<code>if</code>/<code>il</code></td>
-          <td><code>std::complex</code></td>
-          <td><code>std::complex_literals</code></td>
-          <td><code>42i</code> → <code>std::complex&lt;double&gt;{0,42}</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>字面量后缀</th>
+					<th>所属类型</th>
+					<th>命名空间</th>
+					<th>示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>s</code></td>
+					<td><code>std::basic_string</code></td>
+					<td><code>std::string_literals</code></td>
+					<td><code>&quot;hello&quot;s</code> → <code>std::string</code></td>
+			</tr>
+			<tr>
+					<td><code>h</code>/<code>min</code>/<code>s</code>/<code>ms</code>/<code>us</code>/<code>ns</code></td>
+					<td><code>std::chrono::duration</code></td>
+					<td><code>std::chrono_literals</code></td>
+					<td><code>1h</code>/<code>5min</code>/<code>10ms</code></td>
+			</tr>
+			<tr>
+					<td><code>i</code>/<code>if</code>/<code>il</code></td>
+					<td><code>std::complex</code></td>
+					<td><code>std::complex_literals</code></td>
+					<td><code>42i</code> → <code>std::complex&lt;double&gt;{0,42}</code></td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="代码示例-18">代码示例</h4>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -895,7 +895,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

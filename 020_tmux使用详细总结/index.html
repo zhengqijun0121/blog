@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>tmux 命令使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/020_tmux%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="tmux 命令使用详细总结">
-  <meta property="og:description" content="tmux 使用完全总结 tmux 是一款经典的终端复用器（Terminal Multiplexer），核心能力是在单个终端窗口中创建、管理多个独立的终端会话，同时实现会话后台保活、窗口分屏、多任务并行处理，是远程SSH运维、服务器开发、多任务命令行操作的必备工具。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-03-22T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-03-22T10:00:20+08:00">
-    <meta property="article:tag" content="开发工具">
-    <meta property="article:tag" content="Shell">
-    <meta property="article:tag" content="Tmux">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="tmux 命令使用详细总结">
+	<meta property="og:description" content="tmux 使用完全总结 tmux 是一款经典的终端复用器（Terminal Multiplexer），核心能力是在单个终端窗口中创建、管理多个独立的终端会话，同时实现会话后台保活、窗口分屏、多任务并行处理，是远程SSH运维、服务器开发、多任务命令行操作的必备工具。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-03-22T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-03-22T10:00:20+08:00">
+		<meta property="article:tag" content="开发工具">
+		<meta property="article:tag" content="Shell">
+		<meta property="article:tag" content="Tmux">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="tmux 命令使用详细总结">
-  <meta name="twitter:description" content="tmux 使用完全总结 tmux 是一款经典的终端复用器（Terminal Multiplexer），核心能力是在单个终端窗口中创建、管理多个独立的终端会话，同时实现会话后台保活、窗口分屏、多任务并行处理，是远程SSH运维、服务器开发、多任务命令行操作的必备工具。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="tmux 命令使用详细总结">
+	<meta name="twitter:description" content="tmux 使用完全总结 tmux 是一款经典的终端复用器（Terminal Multiplexer），核心能力是在单个终端窗口中创建、管理多个独立的终端会话，同时实现会话后台保活、窗口分屏、多任务并行处理，是远程SSH运维、服务器开发、多任务命令行操作的必备工具。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -185,30 +185,30 @@
 <h2 id="一核心概念与架构">一、核心概念与架构</h2>
 <p>tmux 采用三级层级设计，所有操作都围绕这三个核心单元展开，理解层级关系是上手的关键：</p>
 <table>
-  <thead>
-      <tr>
-          <th>层级</th>
-          <th>全称</th>
-          <th>核心说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>会话</td>
-          <td>Session</td>
-          <td>tmux 的最高层级，对应一个独立的任务集，<strong>关闭终端/SSH断连后会话仍在后台运行</strong>，可随时重连恢复。一个会话可包含多个窗口</td>
-      </tr>
-      <tr>
-          <td>窗口</td>
-          <td>Window</td>
-          <td>对应终端的一个全屏页面，类似浏览器的标签页，底部状态栏会显示窗口编号与名称。一个窗口可包含多个窗格</td>
-      </tr>
-      <tr>
-          <td>窗格</td>
-          <td>Pane</td>
-          <td>窗口内分割出的最小终端单元，可上下/左右拆分，实现单屏同时显示多个终端界面</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>层级</th>
+					<th>全称</th>
+					<th>核心说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>会话</td>
+					<td>Session</td>
+					<td>tmux 的最高层级，对应一个独立的任务集，<strong>关闭终端/SSH断连后会话仍在后台运行</strong>，可随时重连恢复。一个会话可包含多个窗口</td>
+			</tr>
+			<tr>
+					<td>窗口</td>
+					<td>Window</td>
+					<td>对应终端的一个全屏页面，类似浏览器的标签页，底部状态栏会显示窗口编号与名称。一个窗口可包含多个窗格</td>
+			</tr>
+			<tr>
+					<td>窗格</td>
+					<td>Pane</td>
+					<td>窗口内分割出的最小终端单元，可上下/左右拆分，实现单屏同时显示多个终端界面</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="核心优势">核心优势</h3>
 <ol>
@@ -247,192 +247,192 @@
 <h3 id="31-会话管理最核心持久化能力的核心">3.1 会话管理（最核心，持久化能力的核心）</h3>
 <p>会话操作分为「终端外命令行操作」和「tmux内快捷键操作」两类，前者用于未进入tmux时管理会话，后者用于tmux内快速操作。</p>
 <table>
-  <thead>
-      <tr>
-          <th>操作场景</th>
-          <th>命令行操作（终端外执行）</th>
-          <th>快捷键操作（前缀+按键）</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>新建会话</td>
-          <td><code>tmux</code> / <code>tmux new</code></td>
-          <td>-</td>
-          <td>创建无名称的新会话，自动按数字编号</td>
-      </tr>
-      <tr>
-          <td>新建命名会话</td>
-          <td><code>tmux new -s 会话名</code></td>
-          <td>-</td>
-          <td>创建带自定义名称的会话，便于识别和管理</td>
-      </tr>
-      <tr>
-          <td>后台新建会话</td>
-          <td><code>tmux new -s 会话名 -d</code></td>
-          <td>-</td>
-          <td>创建会话并直接放在后台运行，不立即进入</td>
-      </tr>
-      <tr>
-          <td>查看所有会话</td>
-          <td><code>tmux ls</code> / <code>tmux list-sessions</code></td>
-          <td><code>Ctrl+b s</code></td>
-          <td>列出所有运行中的会话，快捷键可交互式选择切换</td>
-      </tr>
-      <tr>
-          <td>接入/重连会话</td>
-          <td><code>tmux a -t 会话名/编号</code> / <code>tmux attach -t 会话名</code></td>
-          <td>-</td>
-          <td>进入指定的后台会话，恢复操作界面</td>
-      </tr>
-      <tr>
-          <td>分离会话（后台保活）</td>
-          <td><code>tmux detach</code></td>
-          <td><code>Ctrl+b d</code></td>
-          <td>退出当前会话，会话和其中运行的程序继续在后台运行</td>
-      </tr>
-      <tr>
-          <td>重命名当前会话</td>
-          <td><code>tmux rename-session -t 旧名 新名</code></td>
-          <td><code>Ctrl+b $</code></td>
-          <td>修改会话名称，便于区分不同任务</td>
-      </tr>
-      <tr>
-          <td>切换会话</td>
-          <td><code>tmux switch -t 会话名</code></td>
-          <td><code>Ctrl+b ( / )</code></td>
-          <td>切换到上一个/下一个会话</td>
-      </tr>
-      <tr>
-          <td>关闭指定会话</td>
-          <td><code>tmux kill-session -t 会话名</code></td>
-          <td>-</td>
-          <td>彻底关闭指定会话，其中所有窗口/窗格和程序都会终止</td>
-      </tr>
-      <tr>
-          <td>关闭所有会话</td>
-          <td><code>tmux kill-server</code></td>
-          <td>-</td>
-          <td>彻底关闭tmux服务，所有会话全部终止</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>操作场景</th>
+					<th>命令行操作（终端外执行）</th>
+					<th>快捷键操作（前缀+按键）</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>新建会话</td>
+					<td><code>tmux</code> / <code>tmux new</code></td>
+					<td>-</td>
+					<td>创建无名称的新会话，自动按数字编号</td>
+			</tr>
+			<tr>
+					<td>新建命名会话</td>
+					<td><code>tmux new -s 会话名</code></td>
+					<td>-</td>
+					<td>创建带自定义名称的会话，便于识别和管理</td>
+			</tr>
+			<tr>
+					<td>后台新建会话</td>
+					<td><code>tmux new -s 会话名 -d</code></td>
+					<td>-</td>
+					<td>创建会话并直接放在后台运行，不立即进入</td>
+			</tr>
+			<tr>
+					<td>查看所有会话</td>
+					<td><code>tmux ls</code> / <code>tmux list-sessions</code></td>
+					<td><code>Ctrl+b s</code></td>
+					<td>列出所有运行中的会话，快捷键可交互式选择切换</td>
+			</tr>
+			<tr>
+					<td>接入/重连会话</td>
+					<td><code>tmux a -t 会话名/编号</code> / <code>tmux attach -t 会话名</code></td>
+					<td>-</td>
+					<td>进入指定的后台会话，恢复操作界面</td>
+			</tr>
+			<tr>
+					<td>分离会话（后台保活）</td>
+					<td><code>tmux detach</code></td>
+					<td><code>Ctrl+b d</code></td>
+					<td>退出当前会话，会话和其中运行的程序继续在后台运行</td>
+			</tr>
+			<tr>
+					<td>重命名当前会话</td>
+					<td><code>tmux rename-session -t 旧名 新名</code></td>
+					<td><code>Ctrl+b $</code></td>
+					<td>修改会话名称，便于区分不同任务</td>
+			</tr>
+			<tr>
+					<td>切换会话</td>
+					<td><code>tmux switch -t 会话名</code></td>
+					<td><code>Ctrl+b ( / )</code></td>
+					<td>切换到上一个/下一个会话</td>
+			</tr>
+			<tr>
+					<td>关闭指定会话</td>
+					<td><code>tmux kill-session -t 会话名</code></td>
+					<td>-</td>
+					<td>彻底关闭指定会话，其中所有窗口/窗格和程序都会终止</td>
+			</tr>
+			<tr>
+					<td>关闭所有会话</td>
+					<td><code>tmux kill-server</code></td>
+					<td>-</td>
+					<td>彻底关闭tmux服务，所有会话全部终止</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="32-窗口管理标签页式管理">3.2 窗口管理（标签页式管理）</h3>
 <p>一个会话可创建多个窗口，每个窗口都是一个独立的全屏终端，底部状态栏会显示窗口列表。</p>
 <table>
-  <thead>
-      <tr>
-          <th>操作场景</th>
-          <th>快捷键操作</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>新建窗口</td>
-          <td><code>Ctrl+b c</code></td>
-          <td>创建新窗口，自动按数字编号，状态栏会新增标签</td>
-      </tr>
-      <tr>
-          <td>重命名当前窗口</td>
-          <td><code>Ctrl+b ,</code></td>
-          <td>修改窗口名称，便于区分用途（如代码、日志、监控）</td>
-      </tr>
-      <tr>
-          <td>切换到上一个窗口</td>
-          <td><code>Ctrl+b p</code></td>
-          <td>切换到编号更小的上一个窗口</td>
-      </tr>
-      <tr>
-          <td>切换到下一个窗口</td>
-          <td><code>Ctrl+b n</code></td>
-          <td>切换到编号更大的下一个窗口</td>
-      </tr>
-      <tr>
-          <td>切换到指定编号窗口</td>
-          <td><code>Ctrl+b 0-9</code></td>
-          <td>直接跳转到对应数字编号的窗口</td>
-      </tr>
-      <tr>
-          <td>切换到上一个活跃窗口</td>
-          <td><code>Ctrl+b Tab</code></td>
-          <td>快速在最近两个窗口之间来回切换</td>
-      </tr>
-      <tr>
-          <td>可视化选择窗口</td>
-          <td><code>Ctrl+b w</code></td>
-          <td>打开会话/窗口树状列表，方向键选择回车进入</td>
-      </tr>
-      <tr>
-          <td>关闭当前窗口</td>
-          <td><code>Ctrl+b &amp;</code></td>
-          <td>关闭当前窗口，需输入 <code>y</code> 确认，窗口内所有窗格一并关闭</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>操作场景</th>
+					<th>快捷键操作</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>新建窗口</td>
+					<td><code>Ctrl+b c</code></td>
+					<td>创建新窗口，自动按数字编号，状态栏会新增标签</td>
+			</tr>
+			<tr>
+					<td>重命名当前窗口</td>
+					<td><code>Ctrl+b ,</code></td>
+					<td>修改窗口名称，便于区分用途（如代码、日志、监控）</td>
+			</tr>
+			<tr>
+					<td>切换到上一个窗口</td>
+					<td><code>Ctrl+b p</code></td>
+					<td>切换到编号更小的上一个窗口</td>
+			</tr>
+			<tr>
+					<td>切换到下一个窗口</td>
+					<td><code>Ctrl+b n</code></td>
+					<td>切换到编号更大的下一个窗口</td>
+			</tr>
+			<tr>
+					<td>切换到指定编号窗口</td>
+					<td><code>Ctrl+b 0-9</code></td>
+					<td>直接跳转到对应数字编号的窗口</td>
+			</tr>
+			<tr>
+					<td>切换到上一个活跃窗口</td>
+					<td><code>Ctrl+b Tab</code></td>
+					<td>快速在最近两个窗口之间来回切换</td>
+			</tr>
+			<tr>
+					<td>可视化选择窗口</td>
+					<td><code>Ctrl+b w</code></td>
+					<td>打开会话/窗口树状列表，方向键选择回车进入</td>
+			</tr>
+			<tr>
+					<td>关闭当前窗口</td>
+					<td><code>Ctrl+b &amp;</code></td>
+					<td>关闭当前窗口，需输入 <code>y</code> 确认，窗口内所有窗格一并关闭</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="33-窗格管理分屏核心">3.3 窗格管理（分屏核心）</h3>
 <p>将单个窗口拆分为多个独立的终端窗格，实现单屏多任务并行，是tmux最常用的功能之一。</p>
 <table>
-  <thead>
-      <tr>
-          <th>操作场景</th>
-          <th>快捷键操作</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>上下水平分屏</td>
-          <td><code>Ctrl+b &quot;</code></td>
-          <td>将当前窗格上下拆分为两个，新窗格在下方</td>
-      </tr>
-      <tr>
-          <td>左右垂直分屏</td>
-          <td><code>Ctrl+b %</code></td>
-          <td>将当前窗格左右拆分为两个，新窗格在右侧</td>
-      </tr>
-      <tr>
-          <td>切换窗格</td>
-          <td><code>Ctrl+b 方向键</code> / <code>Ctrl+b hjkl</code></td>
-          <td>按方向键切换到对应相邻窗格，hjkl为vi风格方向键（h左、j下、k上、l右）</td>
-      </tr>
-      <tr>
-          <td>顺时针切换窗格</td>
-          <td><code>Ctrl+b o</code></td>
-          <td>按顺时针顺序循环切换当前窗口内的所有窗格</td>
-      </tr>
-      <tr>
-          <td>窗格全屏/还原</td>
-          <td><code>Ctrl+b z</code></td>
-          <td>将当前窗格临时全屏显示，再次按下恢复原布局</td>
-      </tr>
-      <tr>
-          <td>关闭当前窗格</td>
-          <td><code>Ctrl+b x</code></td>
-          <td>关闭当前选中的窗格，需输入 <code>y</code> 确认；窗格内无程序时也可直接 <code>Ctrl+d</code> 关闭</td>
-      </tr>
-      <tr>
-          <td>调整窗格大小</td>
-          <td><code>Ctrl+b Ctrl+方向键</code></td>
-          <td>按方向键微调窗格大小，长按可连续调整</td>
-      </tr>
-      <tr>
-          <td>循环切换布局</td>
-          <td><code>Ctrl+b 空格键</code></td>
-          <td>自动切换预设的窗格布局（平铺、主从、均等分等）</td>
-      </tr>
-      <tr>
-          <td>显示窗格编号</td>
-          <td><code>Ctrl+b q</code></td>
-          <td>显示所有窗格的编号，按下对应数字可直接跳转到该窗格</td>
-      </tr>
-      <tr>
-          <td>交换窗格位置</td>
-          <td><code>Ctrl+b {</code> / <code>Ctrl+b }</code></td>
-          <td>将当前窗格与上一个/下一个窗格交换位置</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>操作场景</th>
+					<th>快捷键操作</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>上下水平分屏</td>
+					<td><code>Ctrl+b &quot;</code></td>
+					<td>将当前窗格上下拆分为两个，新窗格在下方</td>
+			</tr>
+			<tr>
+					<td>左右垂直分屏</td>
+					<td><code>Ctrl+b %</code></td>
+					<td>将当前窗格左右拆分为两个，新窗格在右侧</td>
+			</tr>
+			<tr>
+					<td>切换窗格</td>
+					<td><code>Ctrl+b 方向键</code> / <code>Ctrl+b hjkl</code></td>
+					<td>按方向键切换到对应相邻窗格，hjkl为vi风格方向键（h左、j下、k上、l右）</td>
+			</tr>
+			<tr>
+					<td>顺时针切换窗格</td>
+					<td><code>Ctrl+b o</code></td>
+					<td>按顺时针顺序循环切换当前窗口内的所有窗格</td>
+			</tr>
+			<tr>
+					<td>窗格全屏/还原</td>
+					<td><code>Ctrl+b z</code></td>
+					<td>将当前窗格临时全屏显示，再次按下恢复原布局</td>
+			</tr>
+			<tr>
+					<td>关闭当前窗格</td>
+					<td><code>Ctrl+b x</code></td>
+					<td>关闭当前选中的窗格，需输入 <code>y</code> 确认；窗格内无程序时也可直接 <code>Ctrl+d</code> 关闭</td>
+			</tr>
+			<tr>
+					<td>调整窗格大小</td>
+					<td><code>Ctrl+b Ctrl+方向键</code></td>
+					<td>按方向键微调窗格大小，长按可连续调整</td>
+			</tr>
+			<tr>
+					<td>循环切换布局</td>
+					<td><code>Ctrl+b 空格键</code></td>
+					<td>自动切换预设的窗格布局（平铺、主从、均等分等）</td>
+			</tr>
+			<tr>
+					<td>显示窗格编号</td>
+					<td><code>Ctrl+b q</code></td>
+					<td>显示所有窗格的编号，按下对应数字可直接跳转到该窗格</td>
+			</tr>
+			<tr>
+					<td>交换窗格位置</td>
+					<td><code>Ctrl+b {</code> / <code>Ctrl+b }</code></td>
+					<td>将当前窗格与上一个/下一个窗格交换位置</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="34-复制粘贴与历史查看">3.4 复制粘贴与历史查看</h3>
 <p>tmux 有独立的复制模式，用于查看终端历史输出、复制文本，解决默认无法滚动查看历史的问题。</p>
@@ -553,34 +553,34 @@ run &#39;~/.tmux/plugins/tpm/tpm&#39;</code></pre></div>
 </ol>
 <h4 id="高频实用插件">高频实用插件</h4>
 <table>
-  <thead>
-      <tr>
-          <th>插件名</th>
-          <th>核心功能</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>tmux-resurrect</td>
-          <td>手动保存/恢复会话布局和运行状态，服务器重启、tmux服务关闭后仍可恢复</td>
-      </tr>
-      <tr>
-          <td>tmux-continuum</td>
-          <td>搭配resurrect使用，自动定时保存会话，开机自动恢复，无需手动操作</td>
-      </tr>
-      <tr>
-          <td>tmux-yank</td>
-          <td>优化复制粘贴，支持将tmux缓冲区内容同步到系统剪贴板，跨终端复制</td>
-      </tr>
-      <tr>
-          <td>tmux-sensible</td>
-          <td>tmux 基础通用优化配置，兼容不同版本，解决各类默认配置的坑</td>
-      </tr>
-      <tr>
-          <td>tmux-power</td>
-          <td>美化状态栏，提供更丰富的系统信息显示（CPU、内存、网速等）</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>插件名</th>
+					<th>核心功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>tmux-resurrect</td>
+					<td>手动保存/恢复会话布局和运行状态，服务器重启、tmux服务关闭后仍可恢复</td>
+			</tr>
+			<tr>
+					<td>tmux-continuum</td>
+					<td>搭配resurrect使用，自动定时保存会话，开机自动恢复，无需手动操作</td>
+			</tr>
+			<tr>
+					<td>tmux-yank</td>
+					<td>优化复制粘贴，支持将tmux缓冲区内容同步到系统剪贴板，跨终端复制</td>
+			</tr>
+			<tr>
+					<td>tmux-sensible</td>
+					<td>tmux 基础通用优化配置，兼容不同版本，解决各类默认配置的坑</td>
+			</tr>
+			<tr>
+					<td>tmux-power</td>
+					<td>美化状态栏，提供更丰富的系统信息显示（CPU、内存、网速等）</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="43-其他进阶技巧">4.3 其他进阶技巧</h3>
 <h4 id="1-多窗格同步操作">1. 多窗格同步操作</h4>
@@ -706,110 +706,110 @@ set-window-option -g utf8 on</code></pre></div>
 </ul>
 <h2 id="六常用快捷键速查表">六、常用快捷键速查表</h2>
 <table>
-  <thead>
-      <tr>
-          <th>分类</th>
-          <th>快捷键</th>
-          <th>核心功能</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>前缀键</td>
-          <td><code>Ctrl+b</code></td>
-          <td>所有快捷键的触发前缀</td>
-      </tr>
-      <tr>
-          <td>会话</td>
-          <td><code>Ctrl+b d</code></td>
-          <td>分离会话，后台保活</td>
-      </tr>
-      <tr>
-          <td>会话</td>
-          <td><code>Ctrl+b s</code></td>
-          <td>可视化查看/切换所有会话</td>
-      </tr>
-      <tr>
-          <td>会话</td>
-          <td><code>Ctrl+b $</code></td>
-          <td>重命名当前会话</td>
-      </tr>
-      <tr>
-          <td>窗口</td>
-          <td><code>Ctrl+b c</code></td>
-          <td>新建窗口</td>
-      </tr>
-      <tr>
-          <td>窗口</td>
-          <td><code>Ctrl+b ,</code></td>
-          <td>重命名当前窗口</td>
-      </tr>
-      <tr>
-          <td>窗口</td>
-          <td><code>Ctrl+b n/p</code></td>
-          <td>切换到下一个/上一个窗口</td>
-      </tr>
-      <tr>
-          <td>窗口</td>
-          <td><code>Ctrl+b 0-9</code></td>
-          <td>跳转到指定编号窗口</td>
-      </tr>
-      <tr>
-          <td>窗口</td>
-          <td><code>Ctrl+b &amp;</code></td>
-          <td>关闭当前窗口</td>
-      </tr>
-      <tr>
-          <td>窗格</td>
-          <td><code>Ctrl+b &quot;</code></td>
-          <td>上下水平分屏</td>
-      </tr>
-      <tr>
-          <td>窗格</td>
-          <td><code>Ctrl+b %</code></td>
-          <td>左右垂直分屏</td>
-      </tr>
-      <tr>
-          <td>窗格</td>
-          <td><code>Ctrl+b 方向键/hjkl</code></td>
-          <td>切换窗格</td>
-      </tr>
-      <tr>
-          <td>窗格</td>
-          <td><code>Ctrl+b z</code></td>
-          <td>窗格全屏/还原</td>
-      </tr>
-      <tr>
-          <td>窗格</td>
-          <td><code>Ctrl+b x</code></td>
-          <td>关闭当前窗格</td>
-      </tr>
-      <tr>
-          <td>窗格</td>
-          <td><code>Ctrl+b 空格键</code></td>
-          <td>循环切换窗格布局</td>
-      </tr>
-      <tr>
-          <td>复制粘贴</td>
-          <td><code>Ctrl+b [</code></td>
-          <td>进入复制模式/滚动历史</td>
-      </tr>
-      <tr>
-          <td>复制粘贴</td>
-          <td><code>Ctrl+b ]</code></td>
-          <td>粘贴缓冲区内容</td>
-      </tr>
-      <tr>
-          <td>配置</td>
-          <td><code>Ctrl+b :</code></td>
-          <td>进入tmux命令模式</td>
-      </tr>
-      <tr>
-          <td>插件</td>
-          <td><code>Ctrl+b I</code></td>
-          <td>安装TPM插件</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>分类</th>
+					<th>快捷键</th>
+					<th>核心功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>前缀键</td>
+					<td><code>Ctrl+b</code></td>
+					<td>所有快捷键的触发前缀</td>
+			</tr>
+			<tr>
+					<td>会话</td>
+					<td><code>Ctrl+b d</code></td>
+					<td>分离会话，后台保活</td>
+			</tr>
+			<tr>
+					<td>会话</td>
+					<td><code>Ctrl+b s</code></td>
+					<td>可视化查看/切换所有会话</td>
+			</tr>
+			<tr>
+					<td>会话</td>
+					<td><code>Ctrl+b $</code></td>
+					<td>重命名当前会话</td>
+			</tr>
+			<tr>
+					<td>窗口</td>
+					<td><code>Ctrl+b c</code></td>
+					<td>新建窗口</td>
+			</tr>
+			<tr>
+					<td>窗口</td>
+					<td><code>Ctrl+b ,</code></td>
+					<td>重命名当前窗口</td>
+			</tr>
+			<tr>
+					<td>窗口</td>
+					<td><code>Ctrl+b n/p</code></td>
+					<td>切换到下一个/上一个窗口</td>
+			</tr>
+			<tr>
+					<td>窗口</td>
+					<td><code>Ctrl+b 0-9</code></td>
+					<td>跳转到指定编号窗口</td>
+			</tr>
+			<tr>
+					<td>窗口</td>
+					<td><code>Ctrl+b &amp;</code></td>
+					<td>关闭当前窗口</td>
+			</tr>
+			<tr>
+					<td>窗格</td>
+					<td><code>Ctrl+b &quot;</code></td>
+					<td>上下水平分屏</td>
+			</tr>
+			<tr>
+					<td>窗格</td>
+					<td><code>Ctrl+b %</code></td>
+					<td>左右垂直分屏</td>
+			</tr>
+			<tr>
+					<td>窗格</td>
+					<td><code>Ctrl+b 方向键/hjkl</code></td>
+					<td>切换窗格</td>
+			</tr>
+			<tr>
+					<td>窗格</td>
+					<td><code>Ctrl+b z</code></td>
+					<td>窗格全屏/还原</td>
+			</tr>
+			<tr>
+					<td>窗格</td>
+					<td><code>Ctrl+b x</code></td>
+					<td>关闭当前窗格</td>
+			</tr>
+			<tr>
+					<td>窗格</td>
+					<td><code>Ctrl+b 空格键</code></td>
+					<td>循环切换窗格布局</td>
+			</tr>
+			<tr>
+					<td>复制粘贴</td>
+					<td><code>Ctrl+b [</code></td>
+					<td>进入复制模式/滚动历史</td>
+			</tr>
+			<tr>
+					<td>复制粘贴</td>
+					<td><code>Ctrl+b ]</code></td>
+					<td>粘贴缓冲区内容</td>
+			</tr>
+			<tr>
+					<td>配置</td>
+					<td><code>Ctrl+b :</code></td>
+					<td>进入tmux命令模式</td>
+			</tr>
+			<tr>
+					<td>插件</td>
+					<td><code>Ctrl+b I</code></td>
+					<td>安装TPM插件</td>
+			</tr>
+	</tbody>
 </table>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
@@ -841,7 +841,7 @@ set-window-option -g utf8 on</code></pre></div>
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>Android.bp 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/005_android.bp%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="Android.bp 语法详细总结">
-  <meta property="og:description" content="Android.bp 语法详细总结 Android.bp 是 Android Soong 构建系统的核心配置文件，基于 Blueprint 语法设计，用于替代传统的 Android.mk（Make 构建体系），采用纯声明式语法，风格接近 Go/Bazel，无原生的分支/循环控制流，复杂逻辑由 Go 语言编写的构建底层处理，具备语法简洁、构建高效、可读性强的核心优势。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-02-18T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-02-18T10:00:20+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="Android">
-    <meta property="article:tag" content="Android.bp">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="Android.bp 语法详细总结">
+	<meta property="og:description" content="Android.bp 语法详细总结 Android.bp 是 Android Soong 构建系统的核心配置文件，基于 Blueprint 语法设计，用于替代传统的 Android.mk（Make 构建体系），采用纯声明式语法，风格接近 Go/Bazel，无原生的分支/循环控制流，复杂逻辑由 Go 语言编写的构建底层处理，具备语法简洁、构建高效、可读性强的核心优势。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-02-18T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-02-18T10:00:20+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="Android">
+		<meta property="article:tag" content="Android.bp">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="Android.bp 语法详细总结">
-  <meta name="twitter:description" content="Android.bp 语法详细总结 Android.bp 是 Android Soong 构建系统的核心配置文件，基于 Blueprint 语法设计，用于替代传统的 Android.mk（Make 构建体系），采用纯声明式语法，风格接近 Go/Bazel，无原生的分支/循环控制流，复杂逻辑由 Go 语言编写的构建底层处理，具备语法简洁、构建高效、可读性强的核心优势。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="Android.bp 语法详细总结">
+	<meta name="twitter:description" content="Android.bp 语法详细总结 Android.bp 是 Android Soong 构建系统的核心配置文件，基于 Blueprint 语法设计，用于替代传统的 Android.mk（Make 构建体系），采用纯声明式语法，风格接近 Go/Bazel，无原生的分支/循环控制流，复杂逻辑由 Go 语言编写的构建底层处理，具备语法简洁、构建高效、可读性强的核心优势。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -233,40 +233,40 @@
 <h3 id="2-支持的数据类型">2. 支持的数据类型</h3>
 <p>Android.bp 是强类型语法，变量类型由首次赋值动态推断，模块属性类型由模块类型静态定义，支持的核心类型如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th>数据类型</th>
-          <th>说明</th>
-          <th>示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>布尔值</td>
-          <td>仅支持 <code>true</code>/<code>false</code></td>
-          <td><code>enabled: true</code></td>
-      </tr>
-      <tr>
-          <td>整数</td>
-          <td>整型数值，支持加减运算</td>
-          <td><code>version: 1</code></td>
-      </tr>
-      <tr>
-          <td>字符串</td>
-          <td>双引号包裹的文本，不支持单引号</td>
-          <td><code>name: &quot;my_demo&quot;</code></td>
-      </tr>
-      <tr>
-          <td>字符串列表</td>
-          <td>方括号包裹的字符串数组，最常用类型</td>
-          <td><code>srcs: [&quot;main.cpp&quot;, &quot;utils.cpp&quot;]</code></td>
-      </tr>
-      <tr>
-          <td>Map/字典</td>
-          <td>花括号包裹的嵌套键值对，支持多层嵌套</td>
-          <td><code>product_variables: { eng: { cflags: [&quot;-DDEBUG&quot;] } }</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>数据类型</th>
+					<th>说明</th>
+					<th>示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>布尔值</td>
+					<td>仅支持 <code>true</code>/<code>false</code></td>
+					<td><code>enabled: true</code></td>
+			</tr>
+			<tr>
+					<td>整数</td>
+					<td>整型数值，支持加减运算</td>
+					<td><code>version: 1</code></td>
+			</tr>
+			<tr>
+					<td>字符串</td>
+					<td>双引号包裹的文本，不支持单引号</td>
+					<td><code>name: &quot;my_demo&quot;</code></td>
+			</tr>
+			<tr>
+					<td>字符串列表</td>
+					<td>方括号包裹的字符串数组，最常用类型</td>
+					<td><code>srcs: [&quot;main.cpp&quot;, &quot;utils.cpp&quot;]</code></td>
+			</tr>
+			<tr>
+					<td>Map/字典</td>
+					<td>花括号包裹的嵌套键值对，支持多层嵌套</td>
+					<td><code>product_variables: { eng: { cflags: [&quot;-DDEBUG&quot;] } }</code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-注释语法">3. 注释语法</h3>
 <p>与 Go 语言完全兼容，支持两种注释格式：</p>
@@ -390,327 +390,327 @@ filegroup {
 <p>Android.bp 支持上百种模块类型，覆盖 Android 系统构建全场景，以下是开发中最常用的模块类型，按场景分类说明。</p>
 <h3 id="1-cc-原生开发模块">1. C/C++ 原生开发模块</h3>
 <table>
-  <thead>
-      <tr>
-          <th>模块类型</th>
-          <th>核心作用</th>
-          <th>最简示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>cc_binary</code></td>
-          <td>编译生成 C/C++ 可执行文件</td>
-          <td><code>bp cc_binary { name: &quot;my_daemon&quot;, srcs: [&quot;main.cpp&quot;], shared_libs: [&quot;liblog&quot;], } </code></td>
-      </tr>
-      <tr>
-          <td><code>cc_library</code></td>
-          <td>编译生成 C/C++ 库，可同时输出静态库+动态库</td>
-          <td><code>bp cc_library { name: &quot;libdemo&quot;, srcs: [&quot;demo.cpp&quot;], export_include_dirs: [&quot;include&quot;], } </code></td>
-      </tr>
-      <tr>
-          <td><code>cc_library_static</code></td>
-          <td>仅编译生成 C/C++ 静态库（.a）</td>
-          <td><code>bp cc_library_static { name: &quot;libdemo_static&quot;, srcs: [&quot;demo.cpp&quot;], } </code></td>
-      </tr>
-      <tr>
-          <td><code>cc_library_shared</code></td>
-          <td>仅编译生成 C/C++ 动态库（.so）</td>
-          <td><code>bp cc_library_shared { name: &quot;libdemo_shared&quot;, srcs: [&quot;demo.cpp&quot;], } </code></td>
-      </tr>
-      <tr>
-          <td><code>cc_defaults</code></td>
-          <td>C/C++ 模块的默认配置模板，用于属性复用</td>
-          <td><code>bp cc_defaults { name: &quot;common_cc_config&quot;, cflags: [&quot;-Wall&quot;, &quot;-Werror&quot;], shared_libs: [&quot;libbase&quot;], } </code></td>
-      </tr>
-      <tr>
-          <td><code>cc_benchmark</code></td>
-          <td>C/C++ 性能基准测试模块</td>
-          <td><code>bp cc_benchmark { name: &quot;demo_bench&quot;, srcs: [&quot;benchmark.cpp&quot;], } </code></td>
-      </tr>
-      <tr>
-          <td><code>cc_test</code></td>
-          <td>C/C++ 单元测试模块</td>
-          <td><code>bp cc_test { name: &quot;demo_test&quot;, srcs: [&quot;test.cpp&quot;], } </code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>模块类型</th>
+					<th>核心作用</th>
+					<th>最简示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>cc_binary</code></td>
+					<td>编译生成 C/C++ 可执行文件</td>
+					<td><code>bp cc_binary { name: &quot;my_daemon&quot;, srcs: [&quot;main.cpp&quot;], shared_libs: [&quot;liblog&quot;], } </code></td>
+			</tr>
+			<tr>
+					<td><code>cc_library</code></td>
+					<td>编译生成 C/C++ 库，可同时输出静态库+动态库</td>
+					<td><code>bp cc_library { name: &quot;libdemo&quot;, srcs: [&quot;demo.cpp&quot;], export_include_dirs: [&quot;include&quot;], } </code></td>
+			</tr>
+			<tr>
+					<td><code>cc_library_static</code></td>
+					<td>仅编译生成 C/C++ 静态库（.a）</td>
+					<td><code>bp cc_library_static { name: &quot;libdemo_static&quot;, srcs: [&quot;demo.cpp&quot;], } </code></td>
+			</tr>
+			<tr>
+					<td><code>cc_library_shared</code></td>
+					<td>仅编译生成 C/C++ 动态库（.so）</td>
+					<td><code>bp cc_library_shared { name: &quot;libdemo_shared&quot;, srcs: [&quot;demo.cpp&quot;], } </code></td>
+			</tr>
+			<tr>
+					<td><code>cc_defaults</code></td>
+					<td>C/C++ 模块的默认配置模板，用于属性复用</td>
+					<td><code>bp cc_defaults { name: &quot;common_cc_config&quot;, cflags: [&quot;-Wall&quot;, &quot;-Werror&quot;], shared_libs: [&quot;libbase&quot;], } </code></td>
+			</tr>
+			<tr>
+					<td><code>cc_benchmark</code></td>
+					<td>C/C++ 性能基准测试模块</td>
+					<td><code>bp cc_benchmark { name: &quot;demo_bench&quot;, srcs: [&quot;benchmark.cpp&quot;], } </code></td>
+			</tr>
+			<tr>
+					<td><code>cc_test</code></td>
+					<td>C/C++ 单元测试模块</td>
+					<td><code>bp cc_test { name: &quot;demo_test&quot;, srcs: [&quot;test.cpp&quot;], } </code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-javakotlin-开发模块">2. Java/Kotlin 开发模块</h3>
 <table>
-  <thead>
-      <tr>
-          <th>模块类型</th>
-          <th>核心作用</th>
-          <th>最简示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>java_library</code></td>
-          <td>编译生成 Java 库（.jar），支持 Kotlin</td>
-          <td><code>bp java_library { name: &quot;demo_java_lib&quot;, srcs: [&quot;src/**/*.java&quot;], sdk_version: &quot;current&quot;, } </code></td>
-      </tr>
-      <tr>
-          <td><code>java_library_static</code></td>
-          <td>编译生成 Java 静态库，打包进目标模块</td>
-          <td><code>bp java_library_static { name: &quot;demo_java_static&quot;, srcs: [&quot;src/**/*.java&quot;], } </code></td>
-      </tr>
-      <tr>
-          <td><code>java_defaults</code></td>
-          <td>Java 模块的默认配置模板，属性复用</td>
-          <td><code>bp java_defaults { name: &quot;common_java_config&quot;, javacflags: [&quot;-Xlint:all&quot;], sdk_version: &quot;current&quot;, } </code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>模块类型</th>
+					<th>核心作用</th>
+					<th>最简示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>java_library</code></td>
+					<td>编译生成 Java 库（.jar），支持 Kotlin</td>
+					<td><code>bp java_library { name: &quot;demo_java_lib&quot;, srcs: [&quot;src/**/*.java&quot;], sdk_version: &quot;current&quot;, } </code></td>
+			</tr>
+			<tr>
+					<td><code>java_library_static</code></td>
+					<td>编译生成 Java 静态库，打包进目标模块</td>
+					<td><code>bp java_library_static { name: &quot;demo_java_static&quot;, srcs: [&quot;src/**/*.java&quot;], } </code></td>
+			</tr>
+			<tr>
+					<td><code>java_defaults</code></td>
+					<td>Java 模块的默认配置模板，属性复用</td>
+					<td><code>bp java_defaults { name: &quot;common_java_config&quot;, javacflags: [&quot;-Xlint:all&quot;], sdk_version: &quot;current&quot;, } </code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-android-应用开发模块">3. Android 应用开发模块</h3>
 <table>
-  <thead>
-      <tr>
-          <th>模块类型</th>
-          <th>核心作用</th>
-          <th>最简示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>android_app</code></td>
-          <td>编译生成 Android APK 安装包</td>
-          <td><code>bp android_app { name: &quot;MyApp&quot;, srcs: [&quot;src/**/*.java&quot;], manifest: &quot;AndroidManifest.xml&quot;, resource_dirs: [&quot;res&quot;], sdk_version: &quot;current&quot;, certificate: &quot;platform&quot;, } </code></td>
-      </tr>
-      <tr>
-          <td><code>android_app_certificate</code></td>
-          <td>定义 APK 签名证书</td>
-          <td><code>bp android_app_certificate { name: &quot;my_app_cert&quot;, key: &quot;app.key&quot;, certificate: &quot;app.x509.pem&quot;, } </code></td>
-      </tr>
-      <tr>
-          <td><code>android_library</code></td>
-          <td>编译生成 Android AAR 库</td>
-          <td><code>bp android_library { name: &quot;my_aar&quot;, srcs: [&quot;src/**/*.java&quot;], resource_dirs: [&quot;res&quot;], manifest: &quot;AndroidManifest.xml&quot;, } </code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>模块类型</th>
+					<th>核心作用</th>
+					<th>最简示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>android_app</code></td>
+					<td>编译生成 Android APK 安装包</td>
+					<td><code>bp android_app { name: &quot;MyApp&quot;, srcs: [&quot;src/**/*.java&quot;], manifest: &quot;AndroidManifest.xml&quot;, resource_dirs: [&quot;res&quot;], sdk_version: &quot;current&quot;, certificate: &quot;platform&quot;, } </code></td>
+			</tr>
+			<tr>
+					<td><code>android_app_certificate</code></td>
+					<td>定义 APK 签名证书</td>
+					<td><code>bp android_app_certificate { name: &quot;my_app_cert&quot;, key: &quot;app.key&quot;, certificate: &quot;app.x509.pem&quot;, } </code></td>
+			</tr>
+			<tr>
+					<td><code>android_library</code></td>
+					<td>编译生成 Android AAR 库</td>
+					<td><code>bp android_library { name: &quot;my_aar&quot;, srcs: [&quot;src/**/*.java&quot;], resource_dirs: [&quot;res&quot;], manifest: &quot;AndroidManifest.xml&quot;, } </code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="4-预编译与辅助模块">4. 预编译与辅助模块</h3>
 <table>
-  <thead>
-      <tr>
-          <th>模块类型</th>
-          <th>核心作用</th>
-          <th>最简示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>filegroup</code></td>
-          <td>源文件分组，供其他模块引用，不参与编译</td>
-          <td><code>bp filegroup { name: &quot;common_res&quot;, srcs: [&quot;res/**/*.xml&quot;], } </code></td>
-      </tr>
-      <tr>
-          <td><code>java_import</code></td>
-          <td>导入预编译的 JAR 包</td>
-          <td><code>bp java_import { name: &quot;third_party_jar&quot;, jars: [&quot;libs/third.jar&quot;], } </code></td>
-      </tr>
-      <tr>
-          <td><code>prebuilt_etc</code></td>
-          <td>预编译配置文件，拷贝到 system/etc 分区</td>
-          <td><code>bp prebuilt_etc { name: &quot;demo.conf&quot;, src: &quot;demo.conf&quot;, } </code></td>
-      </tr>
-      <tr>
-          <td><code>prebuilt_libs</code></td>
-          <td>导入预编译的 so 动态库</td>
-          <td><code>bp prebuilt_libs { name: &quot;libprebuilt&quot;, srcs: [&quot;libs/arm64-v8a/libprebuilt.so&quot;], } </code></td>
-      </tr>
-      <tr>
-          <td><code>genrule</code></td>
-          <td>自定义生成规则，执行脚本/命令生成文件</td>
-          <td><code>bp genrule { name: &quot;gen_header&quot;, srcs: [&quot;config.json&quot;], out: [&quot;config.h&quot;], cmd: &quot;python $(location :gen_script.py) $&lt; -o $@&quot;, } </code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>模块类型</th>
+					<th>核心作用</th>
+					<th>最简示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>filegroup</code></td>
+					<td>源文件分组，供其他模块引用，不参与编译</td>
+					<td><code>bp filegroup { name: &quot;common_res&quot;, srcs: [&quot;res/**/*.xml&quot;], } </code></td>
+			</tr>
+			<tr>
+					<td><code>java_import</code></td>
+					<td>导入预编译的 JAR 包</td>
+					<td><code>bp java_import { name: &quot;third_party_jar&quot;, jars: [&quot;libs/third.jar&quot;], } </code></td>
+			</tr>
+			<tr>
+					<td><code>prebuilt_etc</code></td>
+					<td>预编译配置文件，拷贝到 system/etc 分区</td>
+					<td><code>bp prebuilt_etc { name: &quot;demo.conf&quot;, src: &quot;demo.conf&quot;, } </code></td>
+			</tr>
+			<tr>
+					<td><code>prebuilt_libs</code></td>
+					<td>导入预编译的 so 动态库</td>
+					<td><code>bp prebuilt_libs { name: &quot;libprebuilt&quot;, srcs: [&quot;libs/arm64-v8a/libprebuilt.so&quot;], } </code></td>
+			</tr>
+			<tr>
+					<td><code>genrule</code></td>
+					<td>自定义生成规则，执行脚本/命令生成文件</td>
+					<td><code>bp genrule { name: &quot;gen_header&quot;, srcs: [&quot;config.json&quot;], out: [&quot;config.h&quot;], cmd: &quot;python $(location :gen_script.py) $&lt; -o $@&quot;, } </code></td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="四核心属性详解">四、核心属性详解</h2>
 <h3 id="1-依赖管理属性">1. 依赖管理属性</h3>
 <p>依赖是模块间关联的核心，Android.bp 按语言、链接类型拆分了精细化的依赖属性，核心如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th>属性名</th>
-          <th>适用模块</th>
-          <th>核心作用</th>
-          <th>示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>shared_libs</code></td>
-          <td>C/C++ 模块</td>
-          <td>依赖动态链接库（.so），会传递链接关系</td>
-          <td><code>shared_libs: [&quot;liblog&quot;, &quot;libutils&quot;]</code></td>
-      </tr>
-      <tr>
-          <td><code>static_libs</code></td>
-          <td>C/C++/Java 模块</td>
-          <td>依赖静态库，编译时打包进当前模块</td>
-          <td><code>static_libs: [&quot;libbase&quot;, &quot;libdemo_static&quot;]</code></td>
-      </tr>
-      <tr>
-          <td><code>libs</code></td>
-          <td>Java/Android 模块</td>
-          <td>依赖 Java 库/JAR 包</td>
-          <td><code>libs: [&quot;framework&quot;, &quot;third_party_jar&quot;]</code></td>
-      </tr>
-      <tr>
-          <td><code>deps</code></td>
-          <td>全模块通用</td>
-          <td>通用依赖，用于非链接型依赖（如生成源文件的模块）</td>
-          <td><code>deps: [&quot;:gen_header&quot;, &quot;:common_filegroup&quot;]</code></td>
-      </tr>
-      <tr>
-          <td><code>header_libs</code></td>
-          <td>C/C++ 模块</td>
-          <td>依赖头文件-only 库，仅传递头文件路径，不参与链接</td>
-          <td><code>header_libs: [&quot;libbase_headers&quot;]</code></td>
-      </tr>
-      <tr>
-          <td><code>export_include_dirs</code></td>
-          <td>C/C++ 库模块</td>
-          <td>导出头文件目录，依赖该库的模块会自动添加该 include 路径</td>
-          <td><code>export_include_dirs: [&quot;include&quot;]</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>属性名</th>
+					<th>适用模块</th>
+					<th>核心作用</th>
+					<th>示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>shared_libs</code></td>
+					<td>C/C++ 模块</td>
+					<td>依赖动态链接库（.so），会传递链接关系</td>
+					<td><code>shared_libs: [&quot;liblog&quot;, &quot;libutils&quot;]</code></td>
+			</tr>
+			<tr>
+					<td><code>static_libs</code></td>
+					<td>C/C++/Java 模块</td>
+					<td>依赖静态库，编译时打包进当前模块</td>
+					<td><code>static_libs: [&quot;libbase&quot;, &quot;libdemo_static&quot;]</code></td>
+			</tr>
+			<tr>
+					<td><code>libs</code></td>
+					<td>Java/Android 模块</td>
+					<td>依赖 Java 库/JAR 包</td>
+					<td><code>libs: [&quot;framework&quot;, &quot;third_party_jar&quot;]</code></td>
+			</tr>
+			<tr>
+					<td><code>deps</code></td>
+					<td>全模块通用</td>
+					<td>通用依赖，用于非链接型依赖（如生成源文件的模块）</td>
+					<td><code>deps: [&quot;:gen_header&quot;, &quot;:common_filegroup&quot;]</code></td>
+			</tr>
+			<tr>
+					<td><code>header_libs</code></td>
+					<td>C/C++ 模块</td>
+					<td>依赖头文件-only 库，仅传递头文件路径，不参与链接</td>
+					<td><code>header_libs: [&quot;libbase_headers&quot;]</code></td>
+			</tr>
+			<tr>
+					<td><code>export_include_dirs</code></td>
+					<td>C/C++ 库模块</td>
+					<td>导出头文件目录，依赖该库的模块会自动添加该 include 路径</td>
+					<td><code>export_include_dirs: [&quot;include&quot;]</code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-编译选项属性">2. 编译选项属性</h3>
 <table>
-  <thead>
-      <tr>
-          <th>属性名</th>
-          <th>适用模块</th>
-          <th>核心作用</th>
-          <th>示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>cflags</code></td>
-          <td>C/C++ 模块</td>
-          <td>C/C++ 通用编译选项，支持宏定义、警告配置等</td>
-          <td><code>cflags: [&quot;-DDEBUG&quot;, &quot;-Wall&quot;, &quot;-O2&quot;]</code></td>
-      </tr>
-      <tr>
-          <td><code>conlyflags</code></td>
-          <td>C/C++ 模块</td>
-          <td>仅对 C 语言生效的编译选项</td>
-          <td><code>conlyflags: [&quot;-std=c99&quot;]</code></td>
-      </tr>
-      <tr>
-          <td><code>cppflags</code></td>
-          <td>C/C++ 模块</td>
-          <td>仅对 C++ 语言生效的编译选项</td>
-          <td><code>cppflags: [&quot;-std=c++17&quot;, &quot;-fno-exceptions&quot;]</code></td>
-      </tr>
-      <tr>
-          <td><code>ldflags</code></td>
-          <td>C/C++ 模块</td>
-          <td>链接选项，用于配置链接器参数</td>
-          <td><code>ldflags: [&quot;-Wl,--as-needed&quot;]</code></td>
-      </tr>
-      <tr>
-          <td><code>javacflags</code></td>
-          <td>Java 模块</td>
-          <td>Java 编译选项</td>
-          <td><code>javacflags: [&quot;-Xlint:unchecked&quot;]</code></td>
-      </tr>
-      <tr>
-          <td><code>kotlincflags</code></td>
-          <td>Kotlin 模块</td>
-          <td>Kotlin 编译选项</td>
-          <td><code>kotlincflags: [&quot;-Xjvm-default=all&quot;]</code></td>
-      </tr>
-      <tr>
-          <td><code>stl</code></td>
-          <td>C/C++ 模块</td>
-          <td>指定 C++ 标准库实现</td>
-          <td><code>stl: &quot;libc++_static&quot;</code> / <code>stl: &quot;none&quot;</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>属性名</th>
+					<th>适用模块</th>
+					<th>核心作用</th>
+					<th>示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>cflags</code></td>
+					<td>C/C++ 模块</td>
+					<td>C/C++ 通用编译选项，支持宏定义、警告配置等</td>
+					<td><code>cflags: [&quot;-DDEBUG&quot;, &quot;-Wall&quot;, &quot;-O2&quot;]</code></td>
+			</tr>
+			<tr>
+					<td><code>conlyflags</code></td>
+					<td>C/C++ 模块</td>
+					<td>仅对 C 语言生效的编译选项</td>
+					<td><code>conlyflags: [&quot;-std=c99&quot;]</code></td>
+			</tr>
+			<tr>
+					<td><code>cppflags</code></td>
+					<td>C/C++ 模块</td>
+					<td>仅对 C++ 语言生效的编译选项</td>
+					<td><code>cppflags: [&quot;-std=c++17&quot;, &quot;-fno-exceptions&quot;]</code></td>
+			</tr>
+			<tr>
+					<td><code>ldflags</code></td>
+					<td>C/C++ 模块</td>
+					<td>链接选项，用于配置链接器参数</td>
+					<td><code>ldflags: [&quot;-Wl,--as-needed&quot;]</code></td>
+			</tr>
+			<tr>
+					<td><code>javacflags</code></td>
+					<td>Java 模块</td>
+					<td>Java 编译选项</td>
+					<td><code>javacflags: [&quot;-Xlint:unchecked&quot;]</code></td>
+			</tr>
+			<tr>
+					<td><code>kotlincflags</code></td>
+					<td>Kotlin 模块</td>
+					<td>Kotlin 编译选项</td>
+					<td><code>kotlincflags: [&quot;-Xjvm-default=all&quot;]</code></td>
+			</tr>
+			<tr>
+					<td><code>stl</code></td>
+					<td>C/C++ 模块</td>
+					<td>指定 C++ 标准库实现</td>
+					<td><code>stl: &quot;libc++_static&quot;</code> / <code>stl: &quot;none&quot;</code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-分区与安装属性">3. 分区与安装属性</h3>
 <p>用于控制模块编译后的安装分区、是否安装、权限等，核心如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th>属性名</th>
-          <th>核心作用</th>
-          <th>可选值/示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>vendor: true</code></td>
-          <td>标记模块安装到 vendor 分区（厂商分区）</td>
-          <td><code>true</code>/<code>false</code></td>
-      </tr>
-      <tr>
-          <td><code>product_specific: true</code></td>
-          <td>标记模块安装到 product 分区（产品定制分区）</td>
-          <td><code>true</code>/<code>false</code></td>
-      </tr>
-      <tr>
-          <td><code>odm: true</code></td>
-          <td>标记模块安装到 odm 分区（设备定制分区）</td>
-          <td><code>true</code>/<code>false</code></td>
-      </tr>
-      <tr>
-          <td><code>system_ext_specific: true</code></td>
-          <td>标记模块安装到 system_ext 分区</td>
-          <td><code>true</code>/<code>false</code></td>
-      </tr>
-      <tr>
-          <td><code>installable</code></td>
-          <td>控制模块是否安装到镜像，默认 true</td>
-          <td><code>installable: false</code>（仅编译不安装，如测试库）</td>
-      </tr>
-      <tr>
-          <td><code>required</code></td>
-          <td>声明模块运行依赖的其他模块，系统打包时会一同包含</td>
-          <td><code>required: [&quot;demo_config.conf&quot;]</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>属性名</th>
+					<th>核心作用</th>
+					<th>可选值/示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>vendor: true</code></td>
+					<td>标记模块安装到 vendor 分区（厂商分区）</td>
+					<td><code>true</code>/<code>false</code></td>
+			</tr>
+			<tr>
+					<td><code>product_specific: true</code></td>
+					<td>标记模块安装到 product 分区（产品定制分区）</td>
+					<td><code>true</code>/<code>false</code></td>
+			</tr>
+			<tr>
+					<td><code>odm: true</code></td>
+					<td>标记模块安装到 odm 分区（设备定制分区）</td>
+					<td><code>true</code>/<code>false</code></td>
+			</tr>
+			<tr>
+					<td><code>system_ext_specific: true</code></td>
+					<td>标记模块安装到 system_ext 分区</td>
+					<td><code>true</code>/<code>false</code></td>
+			</tr>
+			<tr>
+					<td><code>installable</code></td>
+					<td>控制模块是否安装到镜像，默认 true</td>
+					<td><code>installable: false</code>（仅编译不安装，如测试库）</td>
+			</tr>
+			<tr>
+					<td><code>required</code></td>
+					<td>声明模块运行依赖的其他模块，系统打包时会一同包含</td>
+					<td><code>required: [&quot;demo_config.conf&quot;]</code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="4-sdk-与平台-api-属性">4. SDK 与平台 API 属性</h3>
 <table>
-  <thead>
-      <tr>
-          <th>属性名</th>
-          <th>核心作用</th>
-          <th>示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>sdk_version</code></td>
-          <td>指定模块编译依赖的 Android SDK 版本</td>
-          <td><code>sdk_version: &quot;34&quot;</code> / <code>sdk_version: &quot;current&quot;</code></td>
-      </tr>
-      <tr>
-          <td><code>min_sdk_version</code></td>
-          <td>指定模块支持的最低 Android 版本</td>
-          <td><code>min_sdk_version: &quot;29&quot;</code></td>
-      </tr>
-      <tr>
-          <td><code>platform_apis</code></td>
-          <td>允许使用系统隐藏 API（平台私有API），仅系统级模块可用</td>
-          <td><code>platform_apis: true</code></td>
-      </tr>
-      <tr>
-          <td><code>privileged</code></td>
-          <td>标记应用为特权应用，安装到 priv-app 目录，可申请系统级权限</td>
-          <td><code>privileged: true</code></td>
-      </tr>
-      <tr>
-          <td><code>certificate</code></td>
-          <td>指定 APK 签名方式</td>
-          <td><code>certificate: &quot;platform&quot;</code> / <code>certificate: &quot;testkey&quot;</code> / 自定义证书模块</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>属性名</th>
+					<th>核心作用</th>
+					<th>示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>sdk_version</code></td>
+					<td>指定模块编译依赖的 Android SDK 版本</td>
+					<td><code>sdk_version: &quot;34&quot;</code> / <code>sdk_version: &quot;current&quot;</code></td>
+			</tr>
+			<tr>
+					<td><code>min_sdk_version</code></td>
+					<td>指定模块支持的最低 Android 版本</td>
+					<td><code>min_sdk_version: &quot;29&quot;</code></td>
+			</tr>
+			<tr>
+					<td><code>platform_apis</code></td>
+					<td>允许使用系统隐藏 API（平台私有API），仅系统级模块可用</td>
+					<td><code>platform_apis: true</code></td>
+			</tr>
+			<tr>
+					<td><code>privileged</code></td>
+					<td>标记应用为特权应用，安装到 priv-app 目录，可申请系统级权限</td>
+					<td><code>privileged: true</code></td>
+			</tr>
+			<tr>
+					<td><code>certificate</code></td>
+					<td>指定 APK 签名方式</td>
+					<td><code>certificate: &quot;platform&quot;</code> / <code>certificate: &quot;testkey&quot;</code> / 自定义证书模块</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="五代码复用defaults-模板继承">五、代码复用：defaults 模板继承</h2>
 <p>Android.bp 无类继承机制，通过 <code>defaults</code> 模块实现属性复用，解决多模块重复配置的问题，核心规则如下：</p>
@@ -943,7 +943,7 @@ cc_binary {
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

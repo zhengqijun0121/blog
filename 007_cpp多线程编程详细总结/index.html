@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>C&#43;&#43;11 新特性详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/007_cpp%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="C&#43;&#43;11 新特性详细总结">
-  <meta property="og:description" content="C&#43;&#43; 多线程编程详细总结 C&#43;&#43;11 首次引入了标准跨平台多线程库，彻底替代了此前 Windows、Linux 等平台各自的原生线程API（如CreateThread、pthread），后续 C&#43;&#43;14/17/20 持续补充完善，形成了完整的现代C&#43;&#43;多线程体系。本文从基础概念到高级特性、从核心用法到避坑指南，进行全面系统的总结。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-01-12T09:00:00+08:00">
-    <meta property="article:modified_time" content="2026-01-12T09:30:00+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="Cpp">
-    <meta property="article:tag" content="Cpp11">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="C&#43;&#43;11 新特性详细总结">
+	<meta property="og:description" content="C&#43;&#43; 多线程编程详细总结 C&#43;&#43;11 首次引入了标准跨平台多线程库，彻底替代了此前 Windows、Linux 等平台各自的原生线程API（如CreateThread、pthread），后续 C&#43;&#43;14/17/20 持续补充完善，形成了完整的现代C&#43;&#43;多线程体系。本文从基础概念到高级特性、从核心用法到避坑指南，进行全面系统的总结。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-01-12T09:00:00+08:00">
+		<meta property="article:modified_time" content="2026-01-12T09:30:00+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="Cpp">
+		<meta property="article:tag" content="Cpp11">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="C&#43;&#43;11 新特性详细总结">
-  <meta name="twitter:description" content="C&#43;&#43; 多线程编程详细总结 C&#43;&#43;11 首次引入了标准跨平台多线程库，彻底替代了此前 Windows、Linux 等平台各自的原生线程API（如CreateThread、pthread），后续 C&#43;&#43;14/17/20 持续补充完善，形成了完整的现代C&#43;&#43;多线程体系。本文从基础概念到高级特性、从核心用法到避坑指南，进行全面系统的总结。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="C&#43;&#43;11 新特性详细总结">
+	<meta name="twitter:description" content="C&#43;&#43; 多线程编程详细总结 C&#43;&#43;11 首次引入了标准跨平台多线程库，彻底替代了此前 Windows、Linux 等平台各自的原生线程API（如CreateThread、pthread），后续 C&#43;&#43;14/17/20 持续补充完善，形成了完整的现代C&#43;&#43;多线程体系。本文从基础概念到高级特性、从核心用法到避坑指南，进行全面系统的总结。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -267,89 +267,89 @@
 <h2 id="一基础概念与核心头文件">一、基础概念与核心头文件</h2>
 <h3 id="1-核心术语区分">1. 核心术语区分</h3>
 <table>
-  <thead>
-      <tr>
-          <th>术语</th>
-          <th>核心定义</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>进程</td>
-          <td>操作系统资源分配的最小单位，拥有独立的地址空间，进程间隔离性强，切换开销大</td>
-      </tr>
-      <tr>
-          <td>线程</td>
-          <td>操作系统调度执行的最小单位，隶属于进程，共享进程的地址空间，切换开销极小</td>
-      </tr>
-      <tr>
-          <td>并发</td>
-          <td>多个任务在宏观上同时推进，微观上可通过时间片轮转交替执行（单核CPU也可实现并发）</td>
-      </tr>
-      <tr>
-          <td>并行</td>
-          <td>多个任务在物理核心上同时执行，必须依赖多核CPU</td>
-      </tr>
-      <tr>
-          <td>同步</td>
-          <td>线程间按预定的先后顺序执行，通过互斥、等待-通知等机制协调执行节奏</td>
-      </tr>
-      <tr>
-          <td>异步</td>
-          <td>任务执行无需等待前序任务完成，可独立推进，结果通过回调、future等方式传递</td>
-      </tr>
-      <tr>
-          <td>数据竞争</td>
-          <td>多个线程同时访问同一个可变共享数据，且至少有一个线程是写操作，未做同步保护，会触发未定义行为</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>术语</th>
+					<th>核心定义</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>进程</td>
+					<td>操作系统资源分配的最小单位，拥有独立的地址空间，进程间隔离性强，切换开销大</td>
+			</tr>
+			<tr>
+					<td>线程</td>
+					<td>操作系统调度执行的最小单位，隶属于进程，共享进程的地址空间，切换开销极小</td>
+			</tr>
+			<tr>
+					<td>并发</td>
+					<td>多个任务在宏观上同时推进，微观上可通过时间片轮转交替执行（单核CPU也可实现并发）</td>
+			</tr>
+			<tr>
+					<td>并行</td>
+					<td>多个任务在物理核心上同时执行，必须依赖多核CPU</td>
+			</tr>
+			<tr>
+					<td>同步</td>
+					<td>线程间按预定的先后顺序执行，通过互斥、等待-通知等机制协调执行节奏</td>
+			</tr>
+			<tr>
+					<td>异步</td>
+					<td>任务执行无需等待前序任务完成，可独立推进，结果通过回调、future等方式传递</td>
+			</tr>
+			<tr>
+					<td>数据竞争</td>
+					<td>多个线程同时访问同一个可变共享数据，且至少有一个线程是写操作，未做同步保护，会触发未定义行为</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-标准库核心头文件">2. 标准库核心头文件</h3>
 <table>
-  <thead>
-      <tr>
-          <th>头文件</th>
-          <th>核心功能</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>&lt;thread&gt;</code></td>
-          <td>线程核心类<code>std::thread</code>、C++20<code>std::jthread</code>，线程ID、硬件并发数查询等基础接口</td>
-      </tr>
-      <tr>
-          <td><code>&lt;mutex&gt;</code></td>
-          <td>互斥量全系列（<code>std::mutex</code>、递归锁、超时锁）、RAII锁包装器（<code>lock_guard</code>、<code>unique_lock</code>、<code>scoped_lock</code>）</td>
-      </tr>
-      <tr>
-          <td><code>&lt;shared_mutex&gt;</code></td>
-          <td>C++17 读写锁<code>std::shared_mutex</code>，C++14<code>std::shared_timed_mutex</code>，适配读多写少场景</td>
-      </tr>
-      <tr>
-          <td><code>&lt;condition_variable&gt;</code></td>
-          <td>条件变量<code>std::condition_variable</code>、<code>std::condition_variable_any</code>，实现线程间等待-通知机制</td>
-      </tr>
-      <tr>
-          <td><code>&lt;future&gt;</code></td>
-          <td>异步任务体系：<code>std::promise</code>/<code>std::future</code>/<code>std::shared_future</code>、<code>std::packaged_task</code>、<code>std::async</code></td>
-      </tr>
-      <tr>
-          <td><code>&lt;atomic&gt;</code></td>
-          <td>原子操作模板类<code>std::atomic&lt;T&gt;</code>，6种内存顺序，无锁编程核心支持</td>
-      </tr>
-      <tr>
-          <td><code>&lt;stop_token&gt;</code></td>
-          <td>C++20 线程中断机制：<code>stop_token</code>/<code>stop_source</code>/<code>stop_callback</code>，配合<code>jthread</code>使用</td>
-      </tr>
-      <tr>
-          <td><code>&lt;semaphore&gt;</code></td>
-          <td>C++20 信号量，轻量级并发数限制工具</td>
-      </tr>
-      <tr>
-          <td><code>&lt;latch&gt;</code>/<code>&lt;barrier&gt;</code></td>
-          <td>C++20 线程屏障，实现多线程协同等待</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>头文件</th>
+					<th>核心功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>&lt;thread&gt;</code></td>
+					<td>线程核心类<code>std::thread</code>、C++20<code>std::jthread</code>，线程ID、硬件并发数查询等基础接口</td>
+			</tr>
+			<tr>
+					<td><code>&lt;mutex&gt;</code></td>
+					<td>互斥量全系列（<code>std::mutex</code>、递归锁、超时锁）、RAII锁包装器（<code>lock_guard</code>、<code>unique_lock</code>、<code>scoped_lock</code>）</td>
+			</tr>
+			<tr>
+					<td><code>&lt;shared_mutex&gt;</code></td>
+					<td>C++17 读写锁<code>std::shared_mutex</code>，C++14<code>std::shared_timed_mutex</code>，适配读多写少场景</td>
+			</tr>
+			<tr>
+					<td><code>&lt;condition_variable&gt;</code></td>
+					<td>条件变量<code>std::condition_variable</code>、<code>std::condition_variable_any</code>，实现线程间等待-通知机制</td>
+			</tr>
+			<tr>
+					<td><code>&lt;future&gt;</code></td>
+					<td>异步任务体系：<code>std::promise</code>/<code>std::future</code>/<code>std::shared_future</code>、<code>std::packaged_task</code>、<code>std::async</code></td>
+			</tr>
+			<tr>
+					<td><code>&lt;atomic&gt;</code></td>
+					<td>原子操作模板类<code>std::atomic&lt;T&gt;</code>，6种内存顺序，无锁编程核心支持</td>
+			</tr>
+			<tr>
+					<td><code>&lt;stop_token&gt;</code></td>
+					<td>C++20 线程中断机制：<code>stop_token</code>/<code>stop_source</code>/<code>stop_callback</code>，配合<code>jthread</code>使用</td>
+			</tr>
+			<tr>
+					<td><code>&lt;semaphore&gt;</code></td>
+					<td>C++20 信号量，轻量级并发数限制工具</td>
+			</tr>
+			<tr>
+					<td><code>&lt;latch&gt;</code>/<code>&lt;barrier&gt;</code></td>
+					<td>C++20 线程屏障，实现多线程协同等待</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="二线程的创建与生命周期管理">二、线程的创建与生命周期管理</h2>
 <h3 id="1-stdthread-核心特性">1. std::thread 核心特性</h3>
@@ -460,46 +460,46 @@
 <h3 id="3-线程核心操作与参数传递坑点">3. 线程核心操作与参数传递坑点</h3>
 <h4 id="1核心操作接口">（1）核心操作接口</h4>
 <table>
-  <thead>
-      <tr>
-          <th>接口</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>join()</code></td>
-          <td>阻塞当前线程，等待目标线程执行完毕，执行后线程变为<code>non-joinable</code>状态</td>
-      </tr>
-      <tr>
-          <td><code>detach()</code></td>
-          <td>分离线程，目标线程的生命周期与线程对象完全解绑，后台独立执行，执行后变为<code>non-joinable</code>状态</td>
-      </tr>
-      <tr>
-          <td><code>joinable()</code></td>
-          <td>判断线程是否为可结合状态，仅<code>joinable</code>的线程可调用<code>join()</code>/<code>detach()</code></td>
-      </tr>
-      <tr>
-          <td><code>get_id()</code></td>
-          <td>获取线程唯一ID，<code>std::thread::id</code>类型，可用于区分线程</td>
-      </tr>
-      <tr>
-          <td><code>std::this_thread::get_id()</code></td>
-          <td>获取当前线程的ID</td>
-      </tr>
-      <tr>
-          <td><code>std::this_thread::sleep_for()</code></td>
-          <td>当前线程休眠指定时长（如<code>std::chrono::milliseconds(100)</code>）</td>
-      </tr>
-      <tr>
-          <td><code>std::this_thread::yield()</code></td>
-          <td>放弃当前CPU时间片，主动让调度器切换其他线程</td>
-      </tr>
-      <tr>
-          <td><code>std::thread::hardware_concurrency()</code></td>
-          <td>静态方法，返回CPU支持的硬件并发数（逻辑核心数），失败返回0</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>接口</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>join()</code></td>
+					<td>阻塞当前线程，等待目标线程执行完毕，执行后线程变为<code>non-joinable</code>状态</td>
+			</tr>
+			<tr>
+					<td><code>detach()</code></td>
+					<td>分离线程，目标线程的生命周期与线程对象完全解绑，后台独立执行，执行后变为<code>non-joinable</code>状态</td>
+			</tr>
+			<tr>
+					<td><code>joinable()</code></td>
+					<td>判断线程是否为可结合状态，仅<code>joinable</code>的线程可调用<code>join()</code>/<code>detach()</code></td>
+			</tr>
+			<tr>
+					<td><code>get_id()</code></td>
+					<td>获取线程唯一ID，<code>std::thread::id</code>类型，可用于区分线程</td>
+			</tr>
+			<tr>
+					<td><code>std::this_thread::get_id()</code></td>
+					<td>获取当前线程的ID</td>
+			</tr>
+			<tr>
+					<td><code>std::this_thread::sleep_for()</code></td>
+					<td>当前线程休眠指定时长（如<code>std::chrono::milliseconds(100)</code>）</td>
+			</tr>
+			<tr>
+					<td><code>std::this_thread::yield()</code></td>
+					<td>放弃当前CPU时间片，主动让调度器切换其他线程</td>
+			</tr>
+			<tr>
+					<td><code>std::thread::hardware_concurrency()</code></td>
+					<td>静态方法，返回CPU支持的硬件并发数（逻辑核心数），失败返回0</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="2参数传递的核心坑点">（2）参数传递的核心坑点</h4>
 <ol>
@@ -599,73 +599,73 @@
 <h3 id="1-互斥量mutex全系列">1. 互斥量（Mutex）全系列</h3>
 <p>互斥量是最基础的同步工具，核心原理是<strong>互斥访问</strong>：同一时间只有一个线程能持有锁，持有锁的线程可安全访问共享数据，其他线程必须等待锁释放。</p>
 <table>
-  <thead>
-      <tr>
-          <th>互斥量类型</th>
-          <th>核心特性</th>
-          <th>适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>std::mutex</code></td>
-          <td>基础互斥量，不可递归加锁，支持<code>lock()</code>/<code>unlock()</code>/<code>try_lock()</code></td>
-          <td>绝大多数常规互斥场景，首选</td>
-      </tr>
-      <tr>
-          <td><code>std::recursive_mutex</code></td>
-          <td>递归互斥量，同一线程可多次<code>lock()</code>，需对应次数<code>unlock()</code>才会释放</td>
-          <td>类内多个成员函数互相调用，且都需要加锁的场景（不推荐滥用）</td>
-      </tr>
-      <tr>
-          <td><code>std::timed_mutex</code></td>
-          <td>带超时的基础互斥量，新增<code>try_lock_for()</code>/<code>try_lock_until()</code>，支持超时等待</td>
-          <td>避免无限阻塞，需要设置等待超时的场景</td>
-      </tr>
-      <tr>
-          <td><code>std::recursive_timed_mutex</code></td>
-          <td>递归+超时特性结合</td>
-          <td>递归加锁+超时等待的复合场景</td>
-      </tr>
-      <tr>
-          <td><code>std::shared_mutex</code> (C++17)</td>
-          <td>读写锁，支持两种模式：<br>1. 独占模式（写）：同一时间仅一个线程持有<br>2. 共享模式（读）：同一时间多个线程持有</td>
-          <td>读多写少场景（如配置缓存、元数据管理），大幅提升并发性能</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>互斥量类型</th>
+					<th>核心特性</th>
+					<th>适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>std::mutex</code></td>
+					<td>基础互斥量，不可递归加锁，支持<code>lock()</code>/<code>unlock()</code>/<code>try_lock()</code></td>
+					<td>绝大多数常规互斥场景，首选</td>
+			</tr>
+			<tr>
+					<td><code>std::recursive_mutex</code></td>
+					<td>递归互斥量，同一线程可多次<code>lock()</code>，需对应次数<code>unlock()</code>才会释放</td>
+					<td>类内多个成员函数互相调用，且都需要加锁的场景（不推荐滥用）</td>
+			</tr>
+			<tr>
+					<td><code>std::timed_mutex</code></td>
+					<td>带超时的基础互斥量，新增<code>try_lock_for()</code>/<code>try_lock_until()</code>，支持超时等待</td>
+					<td>避免无限阻塞，需要设置等待超时的场景</td>
+			</tr>
+			<tr>
+					<td><code>std::recursive_timed_mutex</code></td>
+					<td>递归+超时特性结合</td>
+					<td>递归加锁+超时等待的复合场景</td>
+			</tr>
+			<tr>
+					<td><code>std::shared_mutex</code> (C++17)</td>
+					<td>读写锁，支持两种模式：<br>1. 独占模式（写）：同一时间仅一个线程持有<br>2. 共享模式（读）：同一时间多个线程持有</td>
+					<td>读多写少场景（如配置缓存、元数据管理），大幅提升并发性能</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-raii锁包装器">2. RAII锁包装器</h3>
 <p><strong>严禁手动调用<code>lock()</code>/<code>unlock()</code></strong>，手动解锁极易因异常、分支跳转导致锁未释放，引发死锁。C++标准库提供了基于RAII（资源获取即初始化）的锁包装器，构造时加锁，析构时自动解锁，确保锁的安全释放。</p>
 <table>
-  <thead>
-      <tr>
-          <th>锁包装器</th>
-          <th>核心特性</th>
-          <th>适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>std::lock_guard</code> (C++11)</td>
-          <td>最简RAII锁，不可移动、不可复制，构造时强制加锁，析构时解锁，无额外接口</td>
-          <td>单锁、固定作用域的场景，首选，开销最小</td>
-      </tr>
-      <tr>
-          <td><code>std::unique_lock</code> (C++11)</td>
-          <td>灵活的RAII锁，支持移动、不可复制，支持延迟加锁、超时加锁、手动解锁、解锁后重新加锁</td>
-          <td>条件变量配合、需要灵活控制锁生命周期的场景</td>
-      </tr>
-      <tr>
-          <td><code>std::shared_lock</code> (C++14)</td>
-          <td>共享模式RAII锁，配合<code>std::shared_mutex</code>使用，构造时加共享读锁，析构时解锁</td>
-          <td>读写锁的读场景，线程安全的并发读</td>
-      </tr>
-      <tr>
-          <td><code>std::scoped_lock</code> (C++17)</td>
-          <td>多锁RAII包装器，支持同时对多个互斥量加锁，自动避免死锁，构造时加锁，析构时解锁</td>
-          <td>多个互斥量同时加锁的场景，替代C++11的<code>std::lock</code>，彻底解决多锁死锁问题</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>锁包装器</th>
+					<th>核心特性</th>
+					<th>适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>std::lock_guard</code> (C++11)</td>
+					<td>最简RAII锁，不可移动、不可复制，构造时强制加锁，析构时解锁，无额外接口</td>
+					<td>单锁、固定作用域的场景，首选，开销最小</td>
+			</tr>
+			<tr>
+					<td><code>std::unique_lock</code> (C++11)</td>
+					<td>灵活的RAII锁，支持移动、不可复制，支持延迟加锁、超时加锁、手动解锁、解锁后重新加锁</td>
+					<td>条件变量配合、需要灵活控制锁生命周期的场景</td>
+			</tr>
+			<tr>
+					<td><code>std::shared_lock</code> (C++14)</td>
+					<td>共享模式RAII锁，配合<code>std::shared_mutex</code>使用，构造时加共享读锁，析构时解锁</td>
+					<td>读写锁的读场景，线程安全的并发读</td>
+			</tr>
+			<tr>
+					<td><code>std::scoped_lock</code> (C++17)</td>
+					<td>多锁RAII包装器，支持同时对多个互斥量加锁，自动避免死锁，构造时加锁，析构时解锁</td>
+					<td>多个互斥量同时加锁的场景，替代C++11的<code>std::lock</code>，彻底解决多锁死锁问题</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="核心用法示例-1">核心用法示例</h4>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -709,34 +709,34 @@
 <p>条件变量用于实现<strong>线程间的等待-通知机制</strong>，解决“线程需要等待某个条件满足才能继续执行”的场景，避免忙等（while循环轮询）导致的CPU资源浪费。</p>
 <h4 id="核心接口">核心接口</h4>
 <table>
-  <thead>
-      <tr>
-          <th>接口</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>wait(unique_lock&lt;mutex&gt;&amp; lock)</code></td>
-          <td>阻塞当前线程，释放持有的锁，直到被其他线程唤醒；唤醒后会重新加锁</td>
-      </tr>
-      <tr>
-          <td><code>wait(unique_lock&lt;mutex&gt;&amp; lock, 谓词)</code></td>
-          <td>重载版本，唤醒后会执行谓词，仅当谓词返回<code>true</code>时才退出等待，<strong>彻底解决虚假唤醒问题</strong></td>
-      </tr>
-      <tr>
-          <td><code>wait_for()</code>/<code>wait_until()</code></td>
-          <td>带超时的等待，超时后自动退出，返回是否因条件满足而唤醒</td>
-      </tr>
-      <tr>
-          <td><code>notify_one()</code></td>
-          <td>唤醒一个正在等待的线程</td>
-      </tr>
-      <tr>
-          <td><code>notify_all()</code></td>
-          <td>唤醒所有正在等待的线程</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>接口</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>wait(unique_lock&lt;mutex&gt;&amp; lock)</code></td>
+					<td>阻塞当前线程，释放持有的锁，直到被其他线程唤醒；唤醒后会重新加锁</td>
+			</tr>
+			<tr>
+					<td><code>wait(unique_lock&lt;mutex&gt;&amp; lock, 谓词)</code></td>
+					<td>重载版本，唤醒后会执行谓词，仅当谓词返回<code>true</code>时才退出等待，<strong>彻底解决虚假唤醒问题</strong></td>
+			</tr>
+			<tr>
+					<td><code>wait_for()</code>/<code>wait_until()</code></td>
+					<td>带超时的等待，超时后自动退出，返回是否因条件满足而唤醒</td>
+			</tr>
+			<tr>
+					<td><code>notify_one()</code></td>
+					<td>唤醒一个正在等待的线程</td>
+			</tr>
+			<tr>
+					<td><code>notify_all()</code></td>
+					<td>唤醒所有正在等待的线程</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="核心坑点虚假唤醒">核心坑点：虚假唤醒</h4>
 <p>操作系统实现中，<code>wait()</code>可能在没有线程调用<code>notify_*()</code>的情况下提前返回（虚假唤醒），若直接认为条件满足，会触发未定义行为。
@@ -928,26 +928,26 @@
 <h4 id="1启动策略">（1）启动策略</h4>
 <p><code>std::async</code>支持两种启动策略，可手动指定，也可使用默认策略：</p>
 <table>
-  <thead>
-      <tr>
-          <th>策略</th>
-          <th>核心行为</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>std::launch::async</code></td>
-          <td>立即创建新线程，异步执行任务，任务一定会在新线程中执行</td>
-      </tr>
-      <tr>
-          <td><code>std::launch::deferred</code></td>
-          <td>延迟执行，任务不会启动新线程，仅当调用<code>future</code>的<code>get()</code>/<code>wait()</code>时，才会在调用线程中同步执行</td>
-      </tr>
-      <tr>
-          <td>默认策略 `async</td>
-          <td>deferred`</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>策略</th>
+					<th>核心行为</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>std::launch::async</code></td>
+					<td>立即创建新线程，异步执行任务，任务一定会在新线程中执行</td>
+			</tr>
+			<tr>
+					<td><code>std::launch::deferred</code></td>
+					<td>延迟执行，任务不会启动新线程，仅当调用<code>future</code>的<code>get()</code>/<code>wait()</code>时，才会在调用线程中同步执行</td>
+			</tr>
+			<tr>
+					<td>默认策略 `async</td>
+					<td>deferred`</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="2核心用法与坑点">（2）核心用法与坑点</h4>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -1000,46 +1000,46 @@
 </ul>
 <h4 id="2核心接口">（2）核心接口</h4>
 <table>
-  <thead>
-      <tr>
-          <th>接口</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>store(val, order)</code></td>
-          <td>原子写入值，支持指定内存序</td>
-      </tr>
-      <tr>
-          <td><code>load(order)</code></td>
-          <td>原子读取值，支持指定内存序</td>
-      </tr>
-      <tr>
-          <td><code>exchange(val, order)</code></td>
-          <td>原子替换值，返回旧值</td>
-      </tr>
-      <tr>
-          <td><code>compare_exchange_weak(expected, desired, order)</code></td>
-          <td>弱比较交换：若当前值等于expected，则写入desired，返回true；否则将expected更新为当前值，返回false。可能出现虚假失败，需放在循环中</td>
-      </tr>
-      <tr>
-          <td><code>compare_exchange_strong(expected, desired, order)</code></td>
-          <td>强比较交换：不会虚假失败，无需循环，性能略低于weak版本</td>
-      </tr>
-      <tr>
-          <td><code>fetch_add()</code>/<code>fetch_sub()</code></td>
-          <td>原子加减，返回旧值</td>
-      </tr>
-      <tr>
-          <td><code>fetch_and()</code>/<code>fetch_or()</code>/<code>fetch_xor()</code></td>
-          <td>原子位运算，返回旧值</td>
-      </tr>
-      <tr>
-          <td><code>operator++</code>/<code>operator--</code></td>
-          <td>重载自增自减运算符，原子操作</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>接口</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>store(val, order)</code></td>
+					<td>原子写入值，支持指定内存序</td>
+			</tr>
+			<tr>
+					<td><code>load(order)</code></td>
+					<td>原子读取值，支持指定内存序</td>
+			</tr>
+			<tr>
+					<td><code>exchange(val, order)</code></td>
+					<td>原子替换值，返回旧值</td>
+			</tr>
+			<tr>
+					<td><code>compare_exchange_weak(expected, desired, order)</code></td>
+					<td>弱比较交换：若当前值等于expected，则写入desired，返回true；否则将expected更新为当前值，返回false。可能出现虚假失败，需放在循环中</td>
+			</tr>
+			<tr>
+					<td><code>compare_exchange_strong(expected, desired, order)</code></td>
+					<td>强比较交换：不会虚假失败，无需循环，性能略低于weak版本</td>
+			</tr>
+			<tr>
+					<td><code>fetch_add()</code>/<code>fetch_sub()</code></td>
+					<td>原子加减，返回旧值</td>
+			</tr>
+			<tr>
+					<td><code>fetch_and()</code>/<code>fetch_or()</code>/<code>fetch_xor()</code></td>
+					<td>原子位运算，返回旧值</td>
+			</tr>
+			<tr>
+					<td><code>operator++</code>/<code>operator--</code></td>
+					<td>重载自增自减运算符，原子操作</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="基础用法示例-1">基础用法示例</h4>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -1077,45 +1077,45 @@
 <h4 id="26种内存顺序详解">（2）6种内存顺序详解</h4>
 <p>C++标准定义了6种内存顺序，分为4大类，按性能从高到低（约束从弱到强）排序：</p>
 <table>
-  <thead>
-      <tr>
-          <th>内存顺序</th>
-          <th>核心约束</th>
-          <th>适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>std::memory_order_relaxed</code></td>
-          <td>松散序：仅保证操作的原子性，不保证任何指令重排约束，不保证多线程间的内存可见性</td>
-          <td>无需同步的原子操作，如独立的计数器、统计量</td>
-      </tr>
-      <tr>
-          <td><code>std::memory_order_consume</code></td>
-          <td>消费序：仅保证依赖于该原子变量的操作不能重排到它之前，仅保证依赖数据的可见性</td>
-          <td>极少使用，编译器大多将其实现为<code>acquire</code>，不推荐使用</td>
-      </tr>
-      <tr>
-          <td><code>std::memory_order_acquire</code></td>
-          <td>获取序：用于load读操作，本线程中所有后续的读写操作不能重排到该acquire操作之前；能看到对应release操作之前的所有写入</td>
-          <td>与release配对使用，实现线程间的同步</td>
-      </tr>
-      <tr>
-          <td><code>std::memory_order_release</code></td>
-          <td>释放序：用于store写操作，本线程中所有之前的读写操作不能重排到该release操作之后；写入的内容会被对应acquire操作的线程看到</td>
-          <td>与acquire配对使用，实现线程间的同步</td>
-      </tr>
-      <tr>
-          <td><code>std::memory_order_acq_rel</code></td>
-          <td>获取释放序：用于读-改-写操作（如exchange、fetch_add），同时具备acquire和release的约束</td>
-          <td>同时需要读写同步的场景，如自旋锁</td>
-      </tr>
-      <tr>
-          <td><code>std::memory_order_seq_cst</code></td>
-          <td>顺序一致性：默认内存序，最强约束。所有线程看到的所有原子操作的顺序完全一致，同时具备acq_rel的所有约束</td>
-          <td>绝大多数场景的首选，最安全，无需考虑重排问题，仅性能瓶颈时再优化</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>内存顺序</th>
+					<th>核心约束</th>
+					<th>适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>std::memory_order_relaxed</code></td>
+					<td>松散序：仅保证操作的原子性，不保证任何指令重排约束，不保证多线程间的内存可见性</td>
+					<td>无需同步的原子操作，如独立的计数器、统计量</td>
+			</tr>
+			<tr>
+					<td><code>std::memory_order_consume</code></td>
+					<td>消费序：仅保证依赖于该原子变量的操作不能重排到它之前，仅保证依赖数据的可见性</td>
+					<td>极少使用，编译器大多将其实现为<code>acquire</code>，不推荐使用</td>
+			</tr>
+			<tr>
+					<td><code>std::memory_order_acquire</code></td>
+					<td>获取序：用于load读操作，本线程中所有后续的读写操作不能重排到该acquire操作之前；能看到对应release操作之前的所有写入</td>
+					<td>与release配对使用，实现线程间的同步</td>
+			</tr>
+			<tr>
+					<td><code>std::memory_order_release</code></td>
+					<td>释放序：用于store写操作，本线程中所有之前的读写操作不能重排到该release操作之后；写入的内容会被对应acquire操作的线程看到</td>
+					<td>与acquire配对使用，实现线程间的同步</td>
+			</tr>
+			<tr>
+					<td><code>std::memory_order_acq_rel</code></td>
+					<td>获取释放序：用于读-改-写操作（如exchange、fetch_add），同时具备acquire和release的约束</td>
+					<td>同时需要读写同步的场景，如自旋锁</td>
+			</tr>
+			<tr>
+					<td><code>std::memory_order_seq_cst</code></td>
+					<td>顺序一致性：默认内存序，最强约束。所有线程看到的所有原子操作的顺序完全一致，同时具备acq_rel的所有约束</td>
+					<td>绝大多数场景的首选，最安全，无需考虑重排问题，仅性能瓶颈时再优化</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="3核心同步关系">（3）核心同步关系</h4>
 <ul>
@@ -1294,65 +1294,65 @@
 </span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></div></div>
 <h2 id="八多线程编程常见坑与避坑指南">八、多线程编程常见坑与避坑指南</h2>
 <table>
-  <thead>
-      <tr>
-          <th>坑点</th>
-          <th>触发场景</th>
-          <th>避坑方案</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>joinable线程销毁导致程序terminate</td>
-          <td>std::thread对象销毁前未调用join/detach</td>
-          <td>优先使用std::jthread，自动join；用RAII包装std::thread</td>
-      </tr>
-      <tr>
-          <td>数据竞争与未定义行为</td>
-          <td>多个线程同时访问可变共享数据，无同步保护</td>
-          <td>共享数据必须用mutex保护，或使用原子操作；尽量减少共享可变数据</td>
-      </tr>
-      <tr>
-          <td>死锁</td>
-          <td>多线程循环等待锁、持有并等待、锁嵌套</td>
-          <td>优先使用scoped_lock；固定加锁顺序；避免锁嵌套；最小化临界区</td>
-      </tr>
-      <tr>
-          <td>虚假唤醒</td>
-          <td>条件变量wait未放在循环中，未使用谓词</td>
-          <td>必须使用带谓词的wait重载版本，每次唤醒都检查条件</td>
-      </tr>
-      <tr>
-          <td>detach线程悬空引用</td>
-          <td>detach线程引用了主线程的局部变量，变量销毁后线程仍在访问</td>
-          <td>非必要严禁使用detach；优先使用join；确保捕获的变量生命周期长于线程</td>
-      </tr>
-      <tr>
-          <td>async异步变同步</td>
-          <td>async返回的future未保存，临时对象析构阻塞；默认启动策略</td>
-          <td>必须保存async返回的future；明确指定std::launch::async策略</td>
-      </tr>
-      <tr>
-          <td>线程参数引用失效</td>
-          <td>线程函数参数为引用，未使用std::ref包装</td>
-          <td>引用传递必须用std::ref/cref；确保引用的变量生命周期</td>
-      </tr>
-      <tr>
-          <td>异常未捕获导致程序终止</td>
-          <td>线程函数抛出异常未捕获，会直接terminate</td>
-          <td>线程函数内必须捕获所有异常；用future/promise跨线程传递异常</td>
-      </tr>
-      <tr>
-          <td>递归mutex滥用</td>
-          <td>递归锁导致代码逻辑混乱，死锁风险提升</td>
-          <td>尽量不使用递归mutex，重构代码避免递归加锁</td>
-      </tr>
-      <tr>
-          <td>临界区过大</td>
-          <td>锁的范围包含耗时操作、IO、回调，导致并发性能下降，死锁风险提升</td>
-          <td>最小化临界区，仅保护共享数据访问，非共享操作放在锁外</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>坑点</th>
+					<th>触发场景</th>
+					<th>避坑方案</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>joinable线程销毁导致程序terminate</td>
+					<td>std::thread对象销毁前未调用join/detach</td>
+					<td>优先使用std::jthread，自动join；用RAII包装std::thread</td>
+			</tr>
+			<tr>
+					<td>数据竞争与未定义行为</td>
+					<td>多个线程同时访问可变共享数据，无同步保护</td>
+					<td>共享数据必须用mutex保护，或使用原子操作；尽量减少共享可变数据</td>
+			</tr>
+			<tr>
+					<td>死锁</td>
+					<td>多线程循环等待锁、持有并等待、锁嵌套</td>
+					<td>优先使用scoped_lock；固定加锁顺序；避免锁嵌套；最小化临界区</td>
+			</tr>
+			<tr>
+					<td>虚假唤醒</td>
+					<td>条件变量wait未放在循环中，未使用谓词</td>
+					<td>必须使用带谓词的wait重载版本，每次唤醒都检查条件</td>
+			</tr>
+			<tr>
+					<td>detach线程悬空引用</td>
+					<td>detach线程引用了主线程的局部变量，变量销毁后线程仍在访问</td>
+					<td>非必要严禁使用detach；优先使用join；确保捕获的变量生命周期长于线程</td>
+			</tr>
+			<tr>
+					<td>async异步变同步</td>
+					<td>async返回的future未保存，临时对象析构阻塞；默认启动策略</td>
+					<td>必须保存async返回的future；明确指定std::launch::async策略</td>
+			</tr>
+			<tr>
+					<td>线程参数引用失效</td>
+					<td>线程函数参数为引用，未使用std::ref包装</td>
+					<td>引用传递必须用std::ref/cref；确保引用的变量生命周期</td>
+			</tr>
+			<tr>
+					<td>异常未捕获导致程序终止</td>
+					<td>线程函数抛出异常未捕获，会直接terminate</td>
+					<td>线程函数内必须捕获所有异常；用future/promise跨线程传递异常</td>
+			</tr>
+			<tr>
+					<td>递归mutex滥用</td>
+					<td>递归锁导致代码逻辑混乱，死锁风险提升</td>
+					<td>尽量不使用递归mutex，重构代码避免递归加锁</td>
+			</tr>
+			<tr>
+					<td>临界区过大</td>
+					<td>锁的范围包含耗时操作、IO、回调，导致并发性能下降，死锁风险提升</td>
+					<td>最小化临界区，仅保护共享数据访问，非共享操作放在锁外</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="九最佳实践与性能优化">九、最佳实践与性能优化</h2>
 <h3 id="1-编码最佳实践">1. 编码最佳实践</h3>
@@ -1421,7 +1421,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

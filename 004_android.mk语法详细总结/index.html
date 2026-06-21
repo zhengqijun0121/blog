@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>Android.mk 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/004_android.mk%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="Android.mk 语法详细总结">
-  <meta property="og:description" content="Android.mk 语法详细总结 Android.mk 是 Android NDK 构建系统基于 GNU Make 封装的原生代码构建脚本，用于描述 C/C&#43;&#43; 源码、库、可执行文件的编译规则，是 NDK 开发中 native 代码构建的核心配置文件，本质是 Makefile 语法的子集，与 Android 平台源码构建语法高度兼容。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-02-17T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-02-17T10:00:20+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="Android">
-    <meta property="article:tag" content="Android.mk">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="Android.mk 语法详细总结">
+	<meta property="og:description" content="Android.mk 语法详细总结 Android.mk 是 Android NDK 构建系统基于 GNU Make 封装的原生代码构建脚本，用于描述 C/C&#43;&#43; 源码、库、可执行文件的编译规则，是 NDK 开发中 native 代码构建的核心配置文件，本质是 Makefile 语法的子集，与 Android 平台源码构建语法高度兼容。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-02-17T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-02-17T10:00:20+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="Android">
+		<meta property="article:tag" content="Android.mk">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="Android.mk 语法详细总结">
-  <meta name="twitter:description" content="Android.mk 语法详细总结 Android.mk 是 Android NDK 构建系统基于 GNU Make 封装的原生代码构建脚本，用于描述 C/C&#43;&#43; 源码、库、可执行文件的编译规则，是 NDK 开发中 native 代码构建的核心配置文件，本质是 Makefile 语法的子集，与 Android 平台源码构建语法高度兼容。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="Android.mk 语法详细总结">
+	<meta name="twitter:description" content="Android.mk 语法详细总结 Android.mk 是 Android NDK 构建系统基于 GNU Make 封装的原生代码构建脚本，用于描述 C/C&#43;&#43; 源码、库、可执行文件的编译规则，是 NDK 开发中 native 代码构建的核心配置文件，本质是 Makefile 语法的子集，与 Android 平台源码构建语法高度兼容。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -202,275 +202,275 @@
 <p>NDK 构建系统提前定义好的全局变量，无需用户赋值，直接引用即可，分为构建目标、平台架构两大类。</p>
 <h3 id="1-构建目标类型变量">1. 构建目标类型变量</h3>
 <table>
-  <thead>
-      <tr>
-          <th>变量名</th>
-          <th>核心作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>CLEAR_VARS</td>
-          <td>指向系统清空脚本，<strong>每个新模块前必须执行 <code>include $(CLEAR_VARS)</code></strong>，会清空除 LOCAL_PATH 外的所有 LOCAL_* 变量，避免模块间变量污染</td>
-      </tr>
-      <tr>
-          <td>BUILD_SHARED_LIBRARY</td>
-          <td>构建动态共享库（.so），将源码编译为可打包到APK的共享库，是JNI开发最常用的类型</td>
-      </tr>
-      <tr>
-          <td>BUILD_STATIC_LIBRARY</td>
-          <td>构建静态库（.a），编译后的静态库会被完整嵌入到依赖它的模块二进制文件中，不会单独打包到APK</td>
-      </tr>
-      <tr>
-          <td>BUILD_EXECUTABLE</td>
-          <td>构建原生可执行文件，生成可在Android终端shell中直接运行的二进制程序</td>
-      </tr>
-      <tr>
-          <td>PREBUILT_SHARED_LIBRARY</td>
-          <td>预编译共享库模板，用于引入第三方已编译好的.so文件，无需重新编译源码</td>
-      </tr>
-      <tr>
-          <td>PREBUILT_STATIC_LIBRARY</td>
-          <td>预编译静态库模板，用于引入第三方已编译好的.a文件</td>
-      </tr>
-      <tr>
-          <td>BUILD_PREBUILT</td>
-          <td>预编译库通用底层模板，是上述两个预编译变量的底层实现</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>变量名</th>
+					<th>核心作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>CLEAR_VARS</td>
+					<td>指向系统清空脚本，<strong>每个新模块前必须执行 <code>include $(CLEAR_VARS)</code></strong>，会清空除 LOCAL_PATH 外的所有 LOCAL_* 变量，避免模块间变量污染</td>
+			</tr>
+			<tr>
+					<td>BUILD_SHARED_LIBRARY</td>
+					<td>构建动态共享库（.so），将源码编译为可打包到APK的共享库，是JNI开发最常用的类型</td>
+			</tr>
+			<tr>
+					<td>BUILD_STATIC_LIBRARY</td>
+					<td>构建静态库（.a），编译后的静态库会被完整嵌入到依赖它的模块二进制文件中，不会单独打包到APK</td>
+			</tr>
+			<tr>
+					<td>BUILD_EXECUTABLE</td>
+					<td>构建原生可执行文件，生成可在Android终端shell中直接运行的二进制程序</td>
+			</tr>
+			<tr>
+					<td>PREBUILT_SHARED_LIBRARY</td>
+					<td>预编译共享库模板，用于引入第三方已编译好的.so文件，无需重新编译源码</td>
+			</tr>
+			<tr>
+					<td>PREBUILT_STATIC_LIBRARY</td>
+					<td>预编译静态库模板，用于引入第三方已编译好的.a文件</td>
+			</tr>
+			<tr>
+					<td>BUILD_PREBUILT</td>
+					<td>预编译库通用底层模板，是上述两个预编译变量的底层实现</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-目标平台与架构变量">2. 目标平台与架构变量</h3>
 <p>用于差异化适配不同CPU架构、Android系统版本，常用于条件编译。</p>
 <table>
-  <thead>
-      <tr>
-          <th>变量名</th>
-          <th>核心作用与取值</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>TARGET_ARCH</td>
-          <td>目标CPU架构，取值：<code>arm</code>、<code>arm64</code>、<code>x86</code>、<code>x86_64</code></td>
-      </tr>
-      <tr>
-          <td>TARGET_ARCH_ABI</td>
-          <td>目标应用二进制接口(ABI)，常用取值：<code>armeabi-v7a</code>、<code>arm64-v8a</code>、<code>x86</code>、<code>x86_64</code></td>
-      </tr>
-      <tr>
-          <td>TARGET_PLATFORM</td>
-          <td>目标Android API级别，格式为 <code>android-XX</code>，如 <code>android-21</code></td>
-      </tr>
-      <tr>
-          <td>TARGET_ABI</td>
-          <td>目标平台+ABI的完整组合，如 <code>android-21-arm64-v8a</code>，用于精准区分目标环境</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>变量名</th>
+					<th>核心作用与取值</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>TARGET_ARCH</td>
+					<td>目标CPU架构，取值：<code>arm</code>、<code>arm64</code>、<code>x86</code>、<code>x86_64</code></td>
+			</tr>
+			<tr>
+					<td>TARGET_ARCH_ABI</td>
+					<td>目标应用二进制接口(ABI)，常用取值：<code>armeabi-v7a</code>、<code>arm64-v8a</code>、<code>x86</code>、<code>x86_64</code></td>
+			</tr>
+			<tr>
+					<td>TARGET_PLATFORM</td>
+					<td>目标Android API级别，格式为 <code>android-XX</code>，如 <code>android-21</code></td>
+			</tr>
+			<tr>
+					<td>TARGET_ABI</td>
+					<td>目标平台+ABI的完整组合，如 <code>android-21-arm64-v8a</code>，用于精准区分目标环境</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="三模块定义核心-local_-变量">三、模块定义核心 LOCAL_* 变量</h2>
 <p>这是 Android.mk 最核心的部分，用于描述单个模块的编译规则，所有变量均以 <code>LOCAL_</code> 开头，必须在 <code>include $(CLEAR_VARS)</code> 之后、<code>include $(BUILD_XXX)</code> 之前定义。</p>
 <h3 id="1-模块基础标识变量">1. 模块基础标识变量</h3>
 <table>
-  <thead>
-      <tr>
-          <th>变量名</th>
-          <th>作用与用法规范</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>LOCAL_MODULE</td>
-          <td><strong>必填项</strong>，模块名称，必须全局唯一，无空格。<br>命名规则：共享库/静态库默认自动加 <code>lib</code> 前缀和对应后缀，如模块名 <code>hello</code> 生成 <code>libhello.so</code>；<strong>若模块名已以 <code>lib</code> 开头，系统不会重复添加前缀</strong></td>
-      </tr>
-      <tr>
-          <td>LOCAL_MODULE_FILENAME</td>
-          <td>可选，自定义生成文件的完整名称，覆盖系统默认命名规则。<br>示例：<code>LOCAL_MODULE_FILENAME := myhello</code> 可生成 <code>myhello.so</code>，而非默认的 <code>libhello.so</code></td>
-      </tr>
-      <tr>
-          <td>LOCAL_MODULE_TAGS</td>
-          <td>可选，模块标签，控制模块的编译场景，常用值：<br><code>optional</code>（默认）：所有编译版本均编译；<code>debug</code>：仅debug版本编译；<code>eng</code>：仅工程版本编译</td>
-      </tr>
-      <tr>
-          <td>LOCAL_PATH</td>
-          <td><strong>每个Android.mk必须在开头定义一次</strong>，指定当前mk文件所在的目录，固定写法：<code>LOCAL_PATH := $(call my-dir)</code><br>该变量不会被 <code>CLEAR_VARS</code> 清空，一个mk文件仅需定义一次</td>
-      </tr>
-      <tr>
-          <td>LOCAL_MODULE_CLASS</td>
-          <td>模块分类，预编译模块、系统级编译常用，可选值：<code>SHARED_LIBRARIES</code>、<code>STATIC_LIBRARIES</code>、<code>EXECUTABLES</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>变量名</th>
+					<th>作用与用法规范</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>LOCAL_MODULE</td>
+					<td><strong>必填项</strong>，模块名称，必须全局唯一，无空格。<br>命名规则：共享库/静态库默认自动加 <code>lib</code> 前缀和对应后缀，如模块名 <code>hello</code> 生成 <code>libhello.so</code>；<strong>若模块名已以 <code>lib</code> 开头，系统不会重复添加前缀</strong></td>
+			</tr>
+			<tr>
+					<td>LOCAL_MODULE_FILENAME</td>
+					<td>可选，自定义生成文件的完整名称，覆盖系统默认命名规则。<br>示例：<code>LOCAL_MODULE_FILENAME := myhello</code> 可生成 <code>myhello.so</code>，而非默认的 <code>libhello.so</code></td>
+			</tr>
+			<tr>
+					<td>LOCAL_MODULE_TAGS</td>
+					<td>可选，模块标签，控制模块的编译场景，常用值：<br><code>optional</code>（默认）：所有编译版本均编译；<code>debug</code>：仅debug版本编译；<code>eng</code>：仅工程版本编译</td>
+			</tr>
+			<tr>
+					<td>LOCAL_PATH</td>
+					<td><strong>每个Android.mk必须在开头定义一次</strong>，指定当前mk文件所在的目录，固定写法：<code>LOCAL_PATH := $(call my-dir)</code><br>该变量不会被 <code>CLEAR_VARS</code> 清空，一个mk文件仅需定义一次</td>
+			</tr>
+			<tr>
+					<td>LOCAL_MODULE_CLASS</td>
+					<td>模块分类，预编译模块、系统级编译常用，可选值：<code>SHARED_LIBRARIES</code>、<code>STATIC_LIBRARIES</code>、<code>EXECUTABLES</code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-源码与头文件相关变量">2. 源码与头文件相关变量</h3>
 <table>
-  <thead>
-      <tr>
-          <th>变量名</th>
-          <th>作用与用法规范</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>LOCAL_SRC_FILES</td>
-          <td><strong>必填项</strong>，待编译的C/C++源文件列表，空格分隔，路径<strong>相对于LOCAL_PATH</strong>。<br>⚠️ 禁止放入头文件，构建系统自动处理头文件依赖；必须使用Unix风格正斜杠 <code>/</code>，不支持Windows反斜杠 <code>\</code>；支持多目录、多后缀文件<br>示例：<code>LOCAL_SRC_FILES := hello.c test.cpp utils/string.c</code></td>
-      </tr>
-      <tr>
-          <td>LOCAL_CPP_EXTENSION</td>
-          <td>可选，自定义C++文件的扩展名，默认 <code>.cpp</code>，可指定多个后缀。<br>示例：<code>LOCAL_CPP_EXTENSION := .cc .cxx .cpp</code></td>
-      </tr>
-      <tr>
-          <td>LOCAL_C_INCLUDES</td>
-          <td>头文件搜索路径，空格分隔，路径可相对于LOCAL_PATH或NDK根目录。<br>优先级高于 <code>LOCAL_CFLAGS</code> 中的 <code>-I</code> 选项，且会被用于ndk-gdb调试的头文件路径解析，推荐优先使用。<br>示例：<code>LOCAL_C_INCLUDES := $(LOCAL_PATH)/include $(LOCAL_PATH)/3rdparty/inc</code></td>
-      </tr>
-      <tr>
-          <td>LOCAL_EXPORT_C_INCLUDES</td>
-          <td>导出头文件路径，<strong>核心高频用法</strong>。<br>当其他模块依赖当前模块时，系统会自动将此处的路径添加到依赖模块的 <code>LOCAL_C_INCLUDES</code> 中，无需手动重复配置，常用于库的对外头文件声明</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>变量名</th>
+					<th>作用与用法规范</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>LOCAL_SRC_FILES</td>
+					<td><strong>必填项</strong>，待编译的C/C++源文件列表，空格分隔，路径<strong>相对于LOCAL_PATH</strong>。<br>⚠️ 禁止放入头文件，构建系统自动处理头文件依赖；必须使用Unix风格正斜杠 <code>/</code>，不支持Windows反斜杠 <code>\</code>；支持多目录、多后缀文件<br>示例：<code>LOCAL_SRC_FILES := hello.c test.cpp utils/string.c</code></td>
+			</tr>
+			<tr>
+					<td>LOCAL_CPP_EXTENSION</td>
+					<td>可选，自定义C++文件的扩展名，默认 <code>.cpp</code>，可指定多个后缀。<br>示例：<code>LOCAL_CPP_EXTENSION := .cc .cxx .cpp</code></td>
+			</tr>
+			<tr>
+					<td>LOCAL_C_INCLUDES</td>
+					<td>头文件搜索路径，空格分隔，路径可相对于LOCAL_PATH或NDK根目录。<br>优先级高于 <code>LOCAL_CFLAGS</code> 中的 <code>-I</code> 选项，且会被用于ndk-gdb调试的头文件路径解析，推荐优先使用。<br>示例：<code>LOCAL_C_INCLUDES := $(LOCAL_PATH)/include $(LOCAL_PATH)/3rdparty/inc</code></td>
+			</tr>
+			<tr>
+					<td>LOCAL_EXPORT_C_INCLUDES</td>
+					<td>导出头文件路径，<strong>核心高频用法</strong>。<br>当其他模块依赖当前模块时，系统会自动将此处的路径添加到依赖模块的 <code>LOCAL_C_INCLUDES</code> 中，无需手动重复配置，常用于库的对外头文件声明</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-编译选项相关变量">3. 编译选项相关变量</h3>
 <table>
-  <thead>
-      <tr>
-          <th>变量名</th>
-          <th>作用与用法规范</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>LOCAL_CFLAGS</td>
-          <td>C/C++ 通用编译选项，空格分隔，常用场景：宏定义、优化等级、警告配置。<br>示例：<code>LOCAL_CFLAGS := -DDEBUG -O2 -Wall -Werror</code></td>
-      </tr>
-      <tr>
-          <td>LOCAL_CONLYFLAGS</td>
-          <td>仅对C语言生效的编译选项，编译C++文件时不会传递该参数，用于C/C++混合代码的差异化编译</td>
-      </tr>
-      <tr>
-          <td>LOCAL_CPPFLAGS</td>
-          <td>仅对C++生效的编译选项，追加在 <code>LOCAL_CFLAGS</code> 之后，常用场景：C++标准指定。<br>示例：<code>LOCAL_CPPFLAGS := -std=c++17 -fno-rtti</code></td>
-      </tr>
-      <tr>
-          <td>LOCAL_CPP_FEATURES</td>
-          <td>极简开启C++标准特性，替代手动配置编译FLAGS，常用值：<code>rtti</code>（运行时类型识别）、<code>exceptions</code>（异常处理）。<br>示例：<code>LOCAL_CPP_FEATURES := rtti exceptions</code></td>
-      </tr>
-      <tr>
-          <td>LOCAL_ARM_MODE</td>
-          <td>ARM架构专属，指定指令集模式：<br><code>thumb</code>（默认）：16位精简指令集，代码体积更小；<code>arm</code>：32位ARM指令集，性能更强<br>单文件指定：给文件加 <code>.arm</code> 后缀，如 <code>foo.c.arm</code></td>
-      </tr>
-      <tr>
-          <td>LOCAL_ARM_NEON</td>
-          <td>ARM架构专属，开启NEON SIMD指令集，设置为 <code>on</code> 全局开启；单文件指定加 <code>.neon</code> 后缀，如 <code>foo.c.neon</code></td>
-      </tr>
-      <tr>
-          <td>LOCAL_EXPORT_CFLAGS</td>
-          <td>导出C/C++编译选项，依赖当前模块的模块会自动继承这些编译参数</td>
-      </tr>
-      <tr>
-          <td>LOCAL_EXPORT_CPPFLAGS</td>
-          <td>导出C++专属编译选项，依赖当前模块的模块会自动继承</td>
-      </tr>
-      <tr>
-          <td>LOCAL_SHORT_COMMANDS</td>
-          <td>针对源码/依赖极多的大模块，设置为 <code>true</code> 开启短命令模式，解决Windows/Make命令行长度限制问题</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>变量名</th>
+					<th>作用与用法规范</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>LOCAL_CFLAGS</td>
+					<td>C/C++ 通用编译选项，空格分隔，常用场景：宏定义、优化等级、警告配置。<br>示例：<code>LOCAL_CFLAGS := -DDEBUG -O2 -Wall -Werror</code></td>
+			</tr>
+			<tr>
+					<td>LOCAL_CONLYFLAGS</td>
+					<td>仅对C语言生效的编译选项，编译C++文件时不会传递该参数，用于C/C++混合代码的差异化编译</td>
+			</tr>
+			<tr>
+					<td>LOCAL_CPPFLAGS</td>
+					<td>仅对C++生效的编译选项，追加在 <code>LOCAL_CFLAGS</code> 之后，常用场景：C++标准指定。<br>示例：<code>LOCAL_CPPFLAGS := -std=c++17 -fno-rtti</code></td>
+			</tr>
+			<tr>
+					<td>LOCAL_CPP_FEATURES</td>
+					<td>极简开启C++标准特性，替代手动配置编译FLAGS，常用值：<code>rtti</code>（运行时类型识别）、<code>exceptions</code>（异常处理）。<br>示例：<code>LOCAL_CPP_FEATURES := rtti exceptions</code></td>
+			</tr>
+			<tr>
+					<td>LOCAL_ARM_MODE</td>
+					<td>ARM架构专属，指定指令集模式：<br><code>thumb</code>（默认）：16位精简指令集，代码体积更小；<code>arm</code>：32位ARM指令集，性能更强<br>单文件指定：给文件加 <code>.arm</code> 后缀，如 <code>foo.c.arm</code></td>
+			</tr>
+			<tr>
+					<td>LOCAL_ARM_NEON</td>
+					<td>ARM架构专属，开启NEON SIMD指令集，设置为 <code>on</code> 全局开启；单文件指定加 <code>.neon</code> 后缀，如 <code>foo.c.neon</code></td>
+			</tr>
+			<tr>
+					<td>LOCAL_EXPORT_CFLAGS</td>
+					<td>导出C/C++编译选项，依赖当前模块的模块会自动继承这些编译参数</td>
+			</tr>
+			<tr>
+					<td>LOCAL_EXPORT_CPPFLAGS</td>
+					<td>导出C++专属编译选项，依赖当前模块的模块会自动继承</td>
+			</tr>
+			<tr>
+					<td>LOCAL_SHORT_COMMANDS</td>
+					<td>针对源码/依赖极多的大模块，设置为 <code>true</code> 开启短命令模式，解决Windows/Make命令行长度限制问题</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="4-链接与依赖相关变量">4. 链接与依赖相关变量</h3>
 <table>
-  <thead>
-      <tr>
-          <th>变量名</th>
-          <th>作用与用法规范</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>LOCAL_LDFLAGS</td>
-          <td>链接器通用选项，空格分隔，用于自定义链接规则、链接脚本、符号导出配置等</td>
-      </tr>
-      <tr>
-          <td>LOCAL_LDLIBS</td>
-          <td>链接Android系统预编译的动态库，格式为 <code>-lxxx</code>，<strong>仅可用于系统库，不可链接自定义模块</strong>。<br>常用系统库：<code>-llog</code>（Android日志库）、<code>-landroid</code>（Android原生API）、<code>-lGLESv2</code>（OpenGL ES 2.0）、<code>-lz</code>（zlib压缩库）、<code>-lm</code>（数学库）<br>示例：<code>LOCAL_LDLIBS := -llog -landroid -lGLESv2</code></td>
-      </tr>
-      <tr>
-          <td>LOCAL_SHARED_LIBRARIES</td>
-          <td>当前模块依赖的<strong>共享库模块名列表</strong>，空格分隔。<br>链接时会关联依赖的so库，运行时必须加载依赖库；自动继承依赖模块的 <code>LOCAL_EXPORT_*</code> 所有配置（头文件、编译选项、链接参数等）</td>
-      </tr>
-      <tr>
-          <td>LOCAL_STATIC_LIBRARIES</td>
-          <td>当前模块依赖的<strong>静态库模块名列表</strong>，空格分隔。<br>静态库会被编译进当前模块的二进制文件中，适合小体积工具库，默认会丢弃未被直接引用的符号</td>
-      </tr>
-      <tr>
-          <td>LOCAL_WHOLE_STATIC_LIBRARIES</td>
-          <td>全量链接静态库，与 <code>LOCAL_STATIC_LIBRARIES</code> 核心区别：<br>不会丢弃静态库中未被当前模块直接引用的符号，常用于静态库嵌套依赖、需要导出静态库全部符号的场景，避免运行时符号找不到</td>
-      </tr>
-      <tr>
-          <td>LOCAL_EXPORT_LDFLAGS</td>
-          <td>导出链接选项，依赖当前模块的模块会自动继承这些链接参数</td>
-      </tr>
-      <tr>
-          <td>LOCAL_EXPORT_LDLIBS</td>
-          <td>导出系统库依赖，依赖当前模块的模块会自动继承这些系统库链接配置</td>
-      </tr>
-      <tr>
-          <td>LOCAL_ALLOW_UNDEFINED_SYMBOLS</td>
-          <td>是否允许未定义符号，默认关闭。开启后链接时不会报未定义符号错误，仅特殊场景使用，不推荐开启</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>变量名</th>
+					<th>作用与用法规范</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>LOCAL_LDFLAGS</td>
+					<td>链接器通用选项，空格分隔，用于自定义链接规则、链接脚本、符号导出配置等</td>
+			</tr>
+			<tr>
+					<td>LOCAL_LDLIBS</td>
+					<td>链接Android系统预编译的动态库，格式为 <code>-lxxx</code>，<strong>仅可用于系统库，不可链接自定义模块</strong>。<br>常用系统库：<code>-llog</code>（Android日志库）、<code>-landroid</code>（Android原生API）、<code>-lGLESv2</code>（OpenGL ES 2.0）、<code>-lz</code>（zlib压缩库）、<code>-lm</code>（数学库）<br>示例：<code>LOCAL_LDLIBS := -llog -landroid -lGLESv2</code></td>
+			</tr>
+			<tr>
+					<td>LOCAL_SHARED_LIBRARIES</td>
+					<td>当前模块依赖的<strong>共享库模块名列表</strong>，空格分隔。<br>链接时会关联依赖的so库，运行时必须加载依赖库；自动继承依赖模块的 <code>LOCAL_EXPORT_*</code> 所有配置（头文件、编译选项、链接参数等）</td>
+			</tr>
+			<tr>
+					<td>LOCAL_STATIC_LIBRARIES</td>
+					<td>当前模块依赖的<strong>静态库模块名列表</strong>，空格分隔。<br>静态库会被编译进当前模块的二进制文件中，适合小体积工具库，默认会丢弃未被直接引用的符号</td>
+			</tr>
+			<tr>
+					<td>LOCAL_WHOLE_STATIC_LIBRARIES</td>
+					<td>全量链接静态库，与 <code>LOCAL_STATIC_LIBRARIES</code> 核心区别：<br>不会丢弃静态库中未被当前模块直接引用的符号，常用于静态库嵌套依赖、需要导出静态库全部符号的场景，避免运行时符号找不到</td>
+			</tr>
+			<tr>
+					<td>LOCAL_EXPORT_LDFLAGS</td>
+					<td>导出链接选项，依赖当前模块的模块会自动继承这些链接参数</td>
+			</tr>
+			<tr>
+					<td>LOCAL_EXPORT_LDLIBS</td>
+					<td>导出系统库依赖，依赖当前模块的模块会自动继承这些系统库链接配置</td>
+			</tr>
+			<tr>
+					<td>LOCAL_ALLOW_UNDEFINED_SYMBOLS</td>
+					<td>是否允许未定义符号，默认关闭。开启后链接时不会报未定义符号错误，仅特殊场景使用，不推荐开启</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="5-预编译库专属变量">5. 预编译库专属变量</h3>
 <p>用于引入第三方已编译好的 <code>.so</code>/<code>.a</code> 文件，无需重新编译源码，核心配置如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th>变量名</th>
-          <th>作用与用法规范</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>LOCAL_SRC_FILES</td>
-          <td>预编译库文件的路径，相对于LOCAL_PATH，支持按ABI区分路径<br>示例：<code>LOCAL_SRC_FILES := libs/$(TARGET_ARCH_ABI)/libffmpeg.so</code></td>
-      </tr>
-      <tr>
-          <td>LOCAL_EXPORT_C_INCLUDES</td>
-          <td>预编译库对应的头文件路径，必须配置，否则依赖模块无法找到头文件</td>
-      </tr>
-      <tr>
-          <td>LOCAL_MODULE_CLASS</td>
-          <td>预编译模块分类，共享库填 <code>SHARED_LIBRARIES</code>，静态库填 <code>STATIC_LIBRARIES</code></td>
-      </tr>
-      <tr>
-          <td>收尾指令</td>
-          <td>共享库：<code>include $(PREBUILT_SHARED_LIBRARY)</code><br>静态库：<code>include $(PREBUILT_STATIC_LIBRARY)</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>变量名</th>
+					<th>作用与用法规范</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>LOCAL_SRC_FILES</td>
+					<td>预编译库文件的路径，相对于LOCAL_PATH，支持按ABI区分路径<br>示例：<code>LOCAL_SRC_FILES := libs/$(TARGET_ARCH_ABI)/libffmpeg.so</code></td>
+			</tr>
+			<tr>
+					<td>LOCAL_EXPORT_C_INCLUDES</td>
+					<td>预编译库对应的头文件路径，必须配置，否则依赖模块无法找到头文件</td>
+			</tr>
+			<tr>
+					<td>LOCAL_MODULE_CLASS</td>
+					<td>预编译模块分类，共享库填 <code>SHARED_LIBRARIES</code>，静态库填 <code>STATIC_LIBRARIES</code></td>
+			</tr>
+			<tr>
+					<td>收尾指令</td>
+					<td>共享库：<code>include $(PREBUILT_SHARED_LIBRARY)</code><br>静态库：<code>include $(PREBUILT_STATIC_LIBRARY)</code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="6-其他常用变量">6. 其他常用变量</h3>
 <table>
-  <thead>
-      <tr>
-          <th>变量名</th>
-          <th>作用与用法规范</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>LOCAL_MODULE_PATH</td>
-          <td>自定义模块生成后的输出路径</td>
-      </tr>
-      <tr>
-          <td>LOCAL_STRIP_MODE</td>
-          <td>符号剥离配置，默认自动strip；设置为 <code>nostrip</code> 保留符号表，用于调试</td>
-      </tr>
-      <tr>
-          <td>LOCAL_THIN_ARCHIVE</td>
-          <td>静态库专属，设置为 <code>true</code> 生成瘦静态库，仅保留符号索引，不打包目标文件，大幅减小库体积</td>
-      </tr>
-      <tr>
-          <td>LOCAL_DISABLE_FORMAT_STRING_CHECKS</td>
-          <td>关闭格式化字符串安全检查，默认开启，不推荐关闭</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>变量名</th>
+					<th>作用与用法规范</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>LOCAL_MODULE_PATH</td>
+					<td>自定义模块生成后的输出路径</td>
+			</tr>
+			<tr>
+					<td>LOCAL_STRIP_MODE</td>
+					<td>符号剥离配置，默认自动strip；设置为 <code>nostrip</code> 保留符号表，用于调试</td>
+			</tr>
+			<tr>
+					<td>LOCAL_THIN_ARCHIVE</td>
+					<td>静态库专属，设置为 <code>true</code> 生成瘦静态库，仅保留符号索引，不打包目标文件，大幅减小库体积</td>
+			</tr>
+			<tr>
+					<td>LOCAL_DISABLE_FORMAT_STRING_CHECKS</td>
+					<td>关闭格式化字符串安全检查，默认开启，不推荐关闭</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="四ndk-内置常用函数">四、NDK 内置常用函数</h2>
 <p>所有函数均通过 <code>$(call 函数名, 参数)</code> 格式调用，核心高频函数如下：</p>
@@ -670,34 +670,34 @@
 <h2 id="九与-applicationmk-的配合">九、与 Application.mk 的配合</h2>
 <p>Android.mk 是<strong>模块级</strong>构建配置，描述单个模块的编译规则；Application.mk 是<strong>项目级</strong>全局配置，作用于当前项目所有模块，二者配合完成NDK构建，Application.mk 核心常用配置如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th>配置项</th>
-          <th>核心作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>APP_ABI</td>
-          <td>指定编译的目标ABI，如 <code>arm64-v8a armeabi-v7a x86_64</code>，默认编译所有支持的ABI</td>
-      </tr>
-      <tr>
-          <td>APP_PLATFORM</td>
-          <td>指定最低支持的Android API级别，与TARGET_PLATFORM对应</td>
-      </tr>
-      <tr>
-          <td>APP_STL</td>
-          <td>指定C++标准库，NDK r18+默认使用 <code>c++_shared</code>，可选 <code>c++_static</code>、<code>none</code></td>
-      </tr>
-      <tr>
-          <td>APP_OPTIM</td>
-          <td>编译模式，<code>debug</code>（调试模式）或 <code>release</code>（发布模式）</td>
-      </tr>
-      <tr>
-          <td>APP_CFLAGS/APP_CPPFLAGS</td>
-          <td>全局编译选项，作用于项目中所有模块</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>配置项</th>
+					<th>核心作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>APP_ABI</td>
+					<td>指定编译的目标ABI，如 <code>arm64-v8a armeabi-v7a x86_64</code>，默认编译所有支持的ABI</td>
+			</tr>
+			<tr>
+					<td>APP_PLATFORM</td>
+					<td>指定最低支持的Android API级别，与TARGET_PLATFORM对应</td>
+			</tr>
+			<tr>
+					<td>APP_STL</td>
+					<td>指定C++标准库，NDK r18+默认使用 <code>c++_shared</code>，可选 <code>c++_static</code>、<code>none</code></td>
+			</tr>
+			<tr>
+					<td>APP_OPTIM</td>
+					<td>编译模式，<code>debug</code>（调试模式）或 <code>release</code>（发布模式）</td>
+			</tr>
+			<tr>
+					<td>APP_CFLAGS/APP_CPPFLAGS</td>
+					<td>全局编译选项，作用于项目中所有模块</td>
+			</tr>
+	</tbody>
 </table>
 <blockquote>
 <p>补充说明：Android.mk 是传统NDK构建系统，目前Google推荐新工程使用 CMake 构建，但Android.mk 在大量存量项目、系统级native开发中仍广泛使用，是Android NDK开发的必备基础。</p>
@@ -732,7 +732,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

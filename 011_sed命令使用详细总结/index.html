@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>sed 命令使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/011_sed%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="sed 命令使用详细总结">
-  <meta property="og:description" content="sed 命令使用详细总结 sed（Stream Editor）是Linux/Unix生态下的非交互式流编辑器，是文本处理三剑客（grep/sed/awk）核心成员，以逐行流式处理为核心，无需打开文件即可完成批量文本修改、过滤、提取等操作，是自动化脚本、运维文本处理的核心工具。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-01-16T09:00:00+08:00">
-    <meta property="article:modified_time" content="2026-01-16T09:00:00+08:00">
-    <meta property="article:tag" content="开发工具">
-    <meta property="article:tag" content="Shell">
-    <meta property="article:tag" content="Sed">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="sed 命令使用详细总结">
+	<meta property="og:description" content="sed 命令使用详细总结 sed（Stream Editor）是Linux/Unix生态下的非交互式流编辑器，是文本处理三剑客（grep/sed/awk）核心成员，以逐行流式处理为核心，无需打开文件即可完成批量文本修改、过滤、提取等操作，是自动化脚本、运维文本处理的核心工具。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-01-16T09:00:00+08:00">
+		<meta property="article:modified_time" content="2026-01-16T09:00:00+08:00">
+		<meta property="article:tag" content="开发工具">
+		<meta property="article:tag" content="Shell">
+		<meta property="article:tag" content="Sed">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="sed 命令使用详细总结">
-  <meta name="twitter:description" content="sed 命令使用详细总结 sed（Stream Editor）是Linux/Unix生态下的非交互式流编辑器，是文本处理三剑客（grep/sed/awk）核心成员，以逐行流式处理为核心，无需打开文件即可完成批量文本修改、过滤、提取等操作，是自动化脚本、运维文本处理的核心工具。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="sed 命令使用详细总结">
+	<meta name="twitter:description" content="sed 命令使用详细总结 sed（Stream Editor）是Linux/Unix生态下的非交互式流编辑器，是文本处理三剑客（grep/sed/awk）核心成员，以逐行流式处理为核心，无需打开文件即可完成批量文本修改、过滤、提取等操作，是自动化脚本、运维文本处理的核心工具。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -224,59 +224,59 @@
 </span></span><span class="line"><span class="cl">sed <span class="o">[</span>选项<span class="o">]</span> <span class="s1">&#39;地址{命令1;命令2;...}&#39;</span> 文件     <span class="c1"># 同地址多命令组合执行</span></span></span></code></pre></div></div>
 <h2 id="三高频核心选项">三、高频核心选项</h2>
 <table>
-  <thead>
-      <tr>
-          <th>选项</th>
-          <th>全称</th>
-          <th>核心作用</th>
-          <th>高频使用场景</th>
-          <th>注意事项</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>-n</code></td>
-          <td><code>--quiet/--silent</code></td>
-          <td>取消默认输出，仅打印指令主动处理的结果</td>
-          <td>精准提取指定行、仅输出替换成功的行</td>
-          <td>必须和<code>p</code>打印命令配合使用，否则无输出</td>
-      </tr>
-      <tr>
-          <td><code>-i[SUFFIX]</code></td>
-          <td><code>--in-place</code></td>
-          <td>直接修改原文件，可选备份</td>
-          <td>批量修改配置文件、文本内容</td>
-          <td>高危操作！<code>-i.bak</code>会先备份原文件为<code>file.bak</code>；macOS(BSD sed)必须指定备份后缀，无备份需写<code>-i ''</code></td>
-      </tr>
-      <tr>
-          <td><code>-e</code></td>
-          <td><code>--expression</code></td>
-          <td>指定多个编辑指令，多命令串联</td>
-          <td>同时执行替换、删除、插入等多个操作</td>
-          <td>单条命令可省略，多条命令必须每个指令前加<code>-e</code></td>
-      </tr>
-      <tr>
-          <td><code>-E/-r</code></td>
-          <td><code>--regexp-extended</code></td>
-          <td>启用扩展正则表达式(ERE)</td>
-          <td>复杂正则匹配、分组、或逻辑`</td>
-          <td>`</td>
-      </tr>
-      <tr>
-          <td><code>-f</code></td>
-          <td><code>--file</code></td>
-          <td>从指定脚本文件读取sed命令</td>
-          <td>复杂逻辑、多命令批量执行</td>
-          <td>脚本文件中每行写一条sed命令，无需加单引号</td>
-      </tr>
-      <tr>
-          <td><code>-z</code></td>
-          <td><code>--null-data</code></td>
-          <td>按NULL字符(\0)分割行，而非换行符</td>
-          <td>处理含换行符的单行文本、JSON内容</td>
-          <td>GNU sed特有扩展</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>选项</th>
+					<th>全称</th>
+					<th>核心作用</th>
+					<th>高频使用场景</th>
+					<th>注意事项</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>-n</code></td>
+					<td><code>--quiet/--silent</code></td>
+					<td>取消默认输出，仅打印指令主动处理的结果</td>
+					<td>精准提取指定行、仅输出替换成功的行</td>
+					<td>必须和<code>p</code>打印命令配合使用，否则无输出</td>
+			</tr>
+			<tr>
+					<td><code>-i[SUFFIX]</code></td>
+					<td><code>--in-place</code></td>
+					<td>直接修改原文件，可选备份</td>
+					<td>批量修改配置文件、文本内容</td>
+					<td>高危操作！<code>-i.bak</code>会先备份原文件为<code>file.bak</code>；macOS(BSD sed)必须指定备份后缀，无备份需写<code>-i ''</code></td>
+			</tr>
+			<tr>
+					<td><code>-e</code></td>
+					<td><code>--expression</code></td>
+					<td>指定多个编辑指令，多命令串联</td>
+					<td>同时执行替换、删除、插入等多个操作</td>
+					<td>单条命令可省略，多条命令必须每个指令前加<code>-e</code></td>
+			</tr>
+			<tr>
+					<td><code>-E/-r</code></td>
+					<td><code>--regexp-extended</code></td>
+					<td>启用扩展正则表达式(ERE)</td>
+					<td>复杂正则匹配、分组、或逻辑`</td>
+					<td>`</td>
+			</tr>
+			<tr>
+					<td><code>-f</code></td>
+					<td><code>--file</code></td>
+					<td>从指定脚本文件读取sed命令</td>
+					<td>复杂逻辑、多命令批量执行</td>
+					<td>脚本文件中每行写一条sed命令，无需加单引号</td>
+			</tr>
+			<tr>
+					<td><code>-z</code></td>
+					<td><code>--null-data</code></td>
+					<td>按NULL字符(\0)分割行，而非换行符</td>
+					<td>处理含换行符的单行文本、JSON内容</td>
+					<td>GNU sed特有扩展</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="四地址定位sed的灵魂">四、地址定位（sed的灵魂）</h2>
 <p>sed的所有编辑命令，都可通过地址定位指定作用的行，不指定则默认作用于<strong>所有行</strong>。地址定位分为6大类，覆盖全场景。</p>
@@ -355,40 +355,40 @@
 </ul>
 <h4 id="核心标志位flags">核心标志位flags</h4>
 <table>
-  <thead>
-      <tr>
-          <th>标志位</th>
-          <th>核心作用</th>
-          <th>示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>g</code></td>
-          <td>全局替换，默认仅替换每行第一个匹配项</td>
-          <td><code>sed 's/old/new/g' file</code> 替换每行所有old为new</td>
-      </tr>
-      <tr>
-          <td><code>数字N</code></td>
-          <td>替换每行第N个匹配项</td>
-          <td><code>sed 's/old/new/3' file</code> 替换每行第3个old</td>
-      </tr>
-      <tr>
-          <td><code>p</code></td>
-          <td>打印替换成功的行，必须配合<code>-n</code>使用</td>
-          <td><code>sed -n 's/old/new/gp' file</code> 仅输出替换后的行</td>
-      </tr>
-      <tr>
-          <td><code>i/I</code></td>
-          <td>匹配时忽略大小写</td>
-          <td><code>sed 's/old/new/gi' file</code> 全局替换，忽略大小写</td>
-      </tr>
-      <tr>
-          <td><code>w 文件名</code></td>
-          <td>将替换成功的行写入指定文件</td>
-          <td><code>sed 's/old/new/gw output.log' file</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>标志位</th>
+					<th>核心作用</th>
+					<th>示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>g</code></td>
+					<td>全局替换，默认仅替换每行第一个匹配项</td>
+					<td><code>sed 's/old/new/g' file</code> 替换每行所有old为new</td>
+			</tr>
+			<tr>
+					<td><code>数字N</code></td>
+					<td>替换每行第N个匹配项</td>
+					<td><code>sed 's/old/new/3' file</code> 替换每行第3个old</td>
+			</tr>
+			<tr>
+					<td><code>p</code></td>
+					<td>打印替换成功的行，必须配合<code>-n</code>使用</td>
+					<td><code>sed -n 's/old/new/gp' file</code> 仅输出替换后的行</td>
+			</tr>
+			<tr>
+					<td><code>i/I</code></td>
+					<td>匹配时忽略大小写</td>
+					<td><code>sed 's/old/new/gi' file</code> 全局替换，忽略大小写</td>
+			</tr>
+			<tr>
+					<td><code>w 文件名</code></td>
+					<td>将替换成功的行写入指定文件</td>
+					<td><code>sed 's/old/new/gw output.log' file</code></td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="替换进阶用法">替换进阶用法</h4>
 <ol>
@@ -430,34 +430,34 @@
 <li>大小写转换（GNU sed特有）</li>
 </ol>
 <table>
-  <thead>
-      <tr>
-          <th>转义符</th>
-          <th>作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>\U</code></td>
-          <td>后面的字符全部转为大写，直到<code>\E</code>结束</td>
-      </tr>
-      <tr>
-          <td><code>\L</code></td>
-          <td>后面的字符全部转为小写，直到<code>\E</code>结束</td>
-      </tr>
-      <tr>
-          <td><code>\u</code></td>
-          <td>后面的第一个字符转为大写</td>
-      </tr>
-      <tr>
-          <td><code>\l</code></td>
-          <td>后面的第一个字符转为小写</td>
-      </tr>
-      <tr>
-          <td>示例：</td>
-          <td></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>转义符</th>
+					<th>作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>\U</code></td>
+					<td>后面的字符全部转为大写，直到<code>\E</code>结束</td>
+			</tr>
+			<tr>
+					<td><code>\L</code></td>
+					<td>后面的字符全部转为小写，直到<code>\E</code>结束</td>
+			</tr>
+			<tr>
+					<td><code>\u</code></td>
+					<td>后面的第一个字符转为大写</td>
+			</tr>
+			<tr>
+					<td><code>\l</code></td>
+					<td>后面的第一个字符转为小写</td>
+			</tr>
+			<tr>
+					<td>示例：</td>
+					<td></td>
+			</tr>
+	</tbody>
 </table>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
     <div class="code-header language-Bash">
@@ -526,119 +526,119 @@
 </span></span><span class="line"><span class="cl">sed <span class="s1">&#39;2,4c\=====CUT=====&#39;</span> file.txt</span></span></code></pre></div></div>
 <h3 id="55-其他常用基础命令">5.5 其他常用基础命令</h3>
 <table>
-  <thead>
-      <tr>
-          <th>命令</th>
-          <th>核心作用</th>
-          <th>示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>y</code></td>
-          <td>按字符一一对应转换，类似tr命令</td>
-          <td><code>sed 'y/abc/ABC/' file.txt</code> 小写a/b/c转大写</td>
-      </tr>
-      <tr>
-          <td><code>r 文件名</code></td>
-          <td>读取文件内容，追加到匹配行之后</td>
-          <td><code>sed '$r footer.txt' file.txt</code> 末尾追加文件内容</td>
-      </tr>
-      <tr>
-          <td><code>w 文件名</code></td>
-          <td>将匹配行写入指定文件</td>
-          <td><code>sed -n '/error/w error.log' file.txt</code> 提取错误日志</td>
-      </tr>
-      <tr>
-          <td><code>=</code></td>
-          <td>打印匹配行的行号</td>
-          <td><code>sed -n '/error/=' file.txt</code> 打印含error行的行号</td>
-      </tr>
-      <tr>
-          <td><code>q</code></td>
-          <td>匹配到指定行后直接退出sed</td>
-          <td><code>sed '5q' file.txt</code> 打印前5行后退出（等效head -5）</td>
-      </tr>
-      <tr>
-          <td><code>n</code></td>
-          <td>读取下一行到模式空间，覆盖当前内容</td>
-          <td><code>sed '/error/{n;d}' file.txt</code> 删除匹配行的下一行</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>命令</th>
+					<th>核心作用</th>
+					<th>示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>y</code></td>
+					<td>按字符一一对应转换，类似tr命令</td>
+					<td><code>sed 'y/abc/ABC/' file.txt</code> 小写a/b/c转大写</td>
+			</tr>
+			<tr>
+					<td><code>r 文件名</code></td>
+					<td>读取文件内容，追加到匹配行之后</td>
+					<td><code>sed '$r footer.txt' file.txt</code> 末尾追加文件内容</td>
+			</tr>
+			<tr>
+					<td><code>w 文件名</code></td>
+					<td>将匹配行写入指定文件</td>
+					<td><code>sed -n '/error/w error.log' file.txt</code> 提取错误日志</td>
+			</tr>
+			<tr>
+					<td><code>=</code></td>
+					<td>打印匹配行的行号</td>
+					<td><code>sed -n '/error/=' file.txt</code> 打印含error行的行号</td>
+			</tr>
+			<tr>
+					<td><code>q</code></td>
+					<td>匹配到指定行后直接退出sed</td>
+					<td><code>sed '5q' file.txt</code> 打印前5行后退出（等效head -5）</td>
+			</tr>
+			<tr>
+					<td><code>n</code></td>
+					<td>读取下一行到模式空间，覆盖当前内容</td>
+					<td><code>sed '/error/{n;d}' file.txt</code> 删除匹配行的下一行</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="六sed正则表达式规范">六、sed正则表达式规范</h2>
 <p>sed默认使用<strong>基础正则表达式(BRE)</strong>，加<code>-E/-r</code>启用<strong>扩展正则表达式(ERE)</strong>，核心元字符差异如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th>元字符</th>
-          <th>含义</th>
-          <th>BRE是否需要转义</th>
-          <th>ERE是否需要转义</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>^</code></td>
-          <td>行开头锚点</td>
-          <td>否</td>
-          <td>否</td>
-      </tr>
-      <tr>
-          <td><code>$</code></td>
-          <td>行结尾锚点</td>
-          <td>否</td>
-          <td>否</td>
-      </tr>
-      <tr>
-          <td><code>.</code></td>
-          <td>匹配任意单个字符</td>
-          <td>否</td>
-          <td>否</td>
-      </tr>
-      <tr>
-          <td><code>*</code></td>
-          <td>匹配前一个字符0次或多次</td>
-          <td>否</td>
-          <td>否</td>
-      </tr>
-      <tr>
-          <td><code>+</code></td>
-          <td>匹配前一个字符1次或多次</td>
-          <td>是(<code>+</code>)</td>
-          <td>否</td>
-      </tr>
-      <tr>
-          <td><code>?</code></td>
-          <td>匹配前一个字符0次或1次</td>
-          <td>是(<code>?</code>)</td>
-          <td>否</td>
-      </tr>
-      <tr>
-          <td><code>{n,m}</code></td>
-          <td>匹配前一个字符n到m次</td>
-          <td>是(<code>{n,m}</code>)</td>
-          <td>否</td>
-      </tr>
-      <tr>
-          <td><code>()</code></td>
-          <td>分组，用于反向引用</td>
-          <td>是(<code>()</code>)</td>
-          <td>否</td>
-      </tr>
-      <tr>
-          <td>`</td>
-          <td>`</td>
-          <td>或逻辑匹配</td>
-          <td>是(`</td>
-      </tr>
-      <tr>
-          <td>补充跨平台兼容规范：</td>
-          <td></td>
-          <td></td>
-          <td></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>元字符</th>
+					<th>含义</th>
+					<th>BRE是否需要转义</th>
+					<th>ERE是否需要转义</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>^</code></td>
+					<td>行开头锚点</td>
+					<td>否</td>
+					<td>否</td>
+			</tr>
+			<tr>
+					<td><code>$</code></td>
+					<td>行结尾锚点</td>
+					<td>否</td>
+					<td>否</td>
+			</tr>
+			<tr>
+					<td><code>.</code></td>
+					<td>匹配任意单个字符</td>
+					<td>否</td>
+					<td>否</td>
+			</tr>
+			<tr>
+					<td><code>*</code></td>
+					<td>匹配前一个字符0次或多次</td>
+					<td>否</td>
+					<td>否</td>
+			</tr>
+			<tr>
+					<td><code>+</code></td>
+					<td>匹配前一个字符1次或多次</td>
+					<td>是(<code>+</code>)</td>
+					<td>否</td>
+			</tr>
+			<tr>
+					<td><code>?</code></td>
+					<td>匹配前一个字符0次或1次</td>
+					<td>是(<code>?</code>)</td>
+					<td>否</td>
+			</tr>
+			<tr>
+					<td><code>{n,m}</code></td>
+					<td>匹配前一个字符n到m次</td>
+					<td>是(<code>{n,m}</code>)</td>
+					<td>否</td>
+			</tr>
+			<tr>
+					<td><code>()</code></td>
+					<td>分组，用于反向引用</td>
+					<td>是(<code>()</code>)</td>
+					<td>否</td>
+			</tr>
+			<tr>
+					<td>`</td>
+					<td>`</td>
+					<td>或逻辑匹配</td>
+					<td>是(`</td>
+			</tr>
+			<tr>
+					<td>补充跨平台兼容规范：</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+	</tbody>
 </table>
 <ul>
 <li>
@@ -651,46 +651,46 @@
 <h2 id="七高级用法模式空间保持空间交互">七、高级用法：模式空间+保持空间交互</h2>
 <p>sed的高级多行处理能力，核心是模式空间与保持空间的数据交互，核心交互命令如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th>命令</th>
-          <th>核心作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>h</code></td>
-          <td>把模式空间内容<strong>覆盖</strong>写入保持空间</td>
-      </tr>
-      <tr>
-          <td><code>H</code></td>
-          <td>把模式空间内容<strong>追加</strong>到保持空间（加换行符）</td>
-      </tr>
-      <tr>
-          <td><code>g</code></td>
-          <td>把保持空间内容<strong>覆盖</strong>写入模式空间</td>
-      </tr>
-      <tr>
-          <td><code>G</code></td>
-          <td>把保持空间内容<strong>追加</strong>到模式空间（加换行符）</td>
-      </tr>
-      <tr>
-          <td><code>x</code></td>
-          <td>交换模式空间和保持空间的内容</td>
-      </tr>
-      <tr>
-          <td><code>N</code></td>
-          <td>读取下一行，追加到模式空间（用换行符分隔，合并多行）</td>
-      </tr>
-      <tr>
-          <td><code>D</code></td>
-          <td>删除模式空间中第一个换行符之前的内容，剩余内容继续执行命令</td>
-      </tr>
-      <tr>
-          <td><code>P</code></td>
-          <td>打印模式空间中第一个换行符之前的内容</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>命令</th>
+					<th>核心作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>h</code></td>
+					<td>把模式空间内容<strong>覆盖</strong>写入保持空间</td>
+			</tr>
+			<tr>
+					<td><code>H</code></td>
+					<td>把模式空间内容<strong>追加</strong>到保持空间（加换行符）</td>
+			</tr>
+			<tr>
+					<td><code>g</code></td>
+					<td>把保持空间内容<strong>覆盖</strong>写入模式空间</td>
+			</tr>
+			<tr>
+					<td><code>G</code></td>
+					<td>把保持空间内容<strong>追加</strong>到模式空间（加换行符）</td>
+			</tr>
+			<tr>
+					<td><code>x</code></td>
+					<td>交换模式空间和保持空间的内容</td>
+			</tr>
+			<tr>
+					<td><code>N</code></td>
+					<td>读取下一行，追加到模式空间（用换行符分隔，合并多行）</td>
+			</tr>
+			<tr>
+					<td><code>D</code></td>
+					<td>删除模式空间中第一个换行符之前的内容，剩余内容继续执行命令</td>
+			</tr>
+			<tr>
+					<td><code>P</code></td>
+					<td>打印模式空间中第一个换行符之前的内容</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="经典高级用法示例">经典高级用法示例</h3>
 <ol>
@@ -810,34 +810,34 @@
 </ol>
 <h3 id="92-跨平台兼容性坑gnu-sed-vs-bsd-sed">9.2 跨平台兼容性坑（GNU sed vs BSD sed）</h3>
 <table>
-  <thead>
-      <tr>
-          <th>特性</th>
-          <th>GNU sed(Linux)</th>
-          <th>BSD sed(macOS/FreeBSD)</th>
-          <th>兼容写法</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>-i</code>无备份</td>
-          <td><code>sed -i 's/old/new/g' file</code></td>
-          <td>必须指定后缀，无备份写<code>sed -i '' 's/old/new/g' file</code></td>
-          <td>用<code>-i.bak</code>生成备份，兼容所有平台</td>
-      </tr>
-      <tr>
-          <td>单词边界</td>
-          <td>支持<code>\b</code></td>
-          <td>不支持<code>\b</code>，需用<code>[[:&lt;:]]</code>和<code>[[:&gt;:]]</code></td>
-          <td>用POSIX标准<code>[[:&lt;:]]word[[:&gt;:]]</code></td>
-      </tr>
-      <tr>
-          <td>扩展正则</td>
-          <td><code>-r</code>/<code>-E</code>等效</td>
-          <td>优先用<code>-E</code></td>
-          <td>统一用<code>-E</code>启用扩展正则</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>特性</th>
+					<th>GNU sed(Linux)</th>
+					<th>BSD sed(macOS/FreeBSD)</th>
+					<th>兼容写法</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>-i</code>无备份</td>
+					<td><code>sed -i 's/old/new/g' file</code></td>
+					<td>必须指定后缀，无备份写<code>sed -i '' 's/old/new/g' file</code></td>
+					<td>用<code>-i.bak</code>生成备份，兼容所有平台</td>
+			</tr>
+			<tr>
+					<td>单词边界</td>
+					<td>支持<code>\b</code></td>
+					<td>不支持<code>\b</code>，需用<code>[[:&lt;:]]</code>和<code>[[:&gt;:]]</code></td>
+					<td>用POSIX标准<code>[[:&lt;:]]word[[:&gt;:]]</code></td>
+			</tr>
+			<tr>
+					<td>扩展正则</td>
+					<td><code>-r</code>/<code>-E</code>等效</td>
+					<td>优先用<code>-E</code></td>
+					<td>统一用<code>-E</code>启用扩展正则</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="93-性能优化最佳实践">9.3 性能优化最佳实践</h3>
 <ol>
@@ -856,50 +856,50 @@
 </ol>
 <h2 id="十高频命令速查表">十、高频命令速查表</h2>
 <table>
-  <thead>
-      <tr>
-          <th>场景</th>
-          <th>命令</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>全局文本替换</td>
-          <td><code>sed 's/old/new/g' file</code></td>
-      </tr>
-      <tr>
-          <td>仅打印匹配行</td>
-          <td><code>sed -n '/pattern/p' file</code></td>
-      </tr>
-      <tr>
-          <td>删除纯空行</td>
-          <td><code>sed '/^$/d' file</code></td>
-      </tr>
-      <tr>
-          <td>删除注释行+空行</td>
-          <td><code>sed -e '/^#/d' -e '/^[[:space:]]*$/d' file</code></td>
-      </tr>
-      <tr>
-          <td>打印前N行</td>
-          <td><code>sed 'Nq' file</code></td>
-      </tr>
-      <tr>
-          <td>行尾追加内容</td>
-          <td><code>sed 's/$/追加内容/g' file</code></td>
-      </tr>
-      <tr>
-          <td>行首添加内容</td>
-          <td><code>sed 's/^/添加内容/g' file</code></td>
-      </tr>
-      <tr>
-          <td>反转行顺序</td>
-          <td><code>sed '1!G;h;$!d' file</code></td>
-      </tr>
-      <tr>
-          <td>打印文件最后一行</td>
-          <td><code>sed -n '$p' file</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>场景</th>
+					<th>命令</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>全局文本替换</td>
+					<td><code>sed 's/old/new/g' file</code></td>
+			</tr>
+			<tr>
+					<td>仅打印匹配行</td>
+					<td><code>sed -n '/pattern/p' file</code></td>
+			</tr>
+			<tr>
+					<td>删除纯空行</td>
+					<td><code>sed '/^$/d' file</code></td>
+			</tr>
+			<tr>
+					<td>删除注释行+空行</td>
+					<td><code>sed -e '/^#/d' -e '/^[[:space:]]*$/d' file</code></td>
+			</tr>
+			<tr>
+					<td>打印前N行</td>
+					<td><code>sed 'Nq' file</code></td>
+			</tr>
+			<tr>
+					<td>行尾追加内容</td>
+					<td><code>sed 's/$/追加内容/g' file</code></td>
+			</tr>
+			<tr>
+					<td>行首添加内容</td>
+					<td><code>sed 's/^/添加内容/g' file</code></td>
+			</tr>
+			<tr>
+					<td>反转行顺序</td>
+					<td><code>sed '1!G;h;$!d' file</code></td>
+			</tr>
+			<tr>
+					<td>打印文件最后一行</td>
+					<td><code>sed -n '$p' file</code></td>
+			</tr>
+	</tbody>
 </table>
 <blockquote>
 <p>（注：文档部分内容可能由 AI 生成）</p>
@@ -934,7 +934,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

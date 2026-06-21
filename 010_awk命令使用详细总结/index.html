@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>awk 命令使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/010_awk%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="awk 命令使用详细总结">
-  <meta property="og:description" content="awk 命令使用详细总结 awk 是 Unix/Linux 生态中模式驱动的文本处理编程语言，由 Alfred Aho、Peter Weinberger、Brian Kernighan 三位开发者创造，是 Shell 三剑客（grep/sed/awk）中功能最全面的工具，核心用于文本扫描、字段提取、数据统计、格式化输出，原生支持变量、数组、循环、函数等完整编程能力，是运维、开发人员的核心文本处理工具。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-01-15T09:00:00+08:00">
-    <meta property="article:modified_time" content="2026-01-15T09:00:00+08:00">
-    <meta property="article:tag" content="开发工具">
-    <meta property="article:tag" content="Shell">
-    <meta property="article:tag" content="Awk">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="awk 命令使用详细总结">
+	<meta property="og:description" content="awk 命令使用详细总结 awk 是 Unix/Linux 生态中模式驱动的文本处理编程语言，由 Alfred Aho、Peter Weinberger、Brian Kernighan 三位开发者创造，是 Shell 三剑客（grep/sed/awk）中功能最全面的工具，核心用于文本扫描、字段提取、数据统计、格式化输出，原生支持变量、数组、循环、函数等完整编程能力，是运维、开发人员的核心文本处理工具。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-01-15T09:00:00+08:00">
+		<meta property="article:modified_time" content="2026-01-15T09:00:00+08:00">
+		<meta property="article:tag" content="开发工具">
+		<meta property="article:tag" content="Shell">
+		<meta property="article:tag" content="Awk">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="awk 命令使用详细总结">
-  <meta name="twitter:description" content="awk 命令使用详细总结 awk 是 Unix/Linux 生态中模式驱动的文本处理编程语言，由 Alfred Aho、Peter Weinberger、Brian Kernighan 三位开发者创造，是 Shell 三剑客（grep/sed/awk）中功能最全面的工具，核心用于文本扫描、字段提取、数据统计、格式化输出，原生支持变量、数组、循环、函数等完整编程能力，是运维、开发人员的核心文本处理工具。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="awk 命令使用详细总结">
+	<meta name="twitter:description" content="awk 命令使用详细总结 awk 是 Unix/Linux 生态中模式驱动的文本处理编程语言，由 Alfred Aho、Peter Weinberger、Brian Kernighan 三位开发者创造，是 Shell 三剑客（grep/sed/awk）中功能最全面的工具，核心用于文本扫描、字段提取、数据统计、格式化输出，原生支持变量、数组、循环、函数等完整编程能力，是运维、开发人员的核心文本处理工具。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -290,272 +290,272 @@
 </ol>
 <h3 id="4-高频命令行选项">4. 高频命令行选项</h3>
 <table>
-  <thead>
-      <tr>
-          <th>选项</th>
-          <th>功能说明</th>
-          <th>典型示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>-F 分隔符</code></td>
-          <td>指定输入字段分隔符，支持字符串/正则，等价于内置变量 <code>FS</code></td>
-          <td><code>awk -F: '{print $1}' /etc/passwd</code>（冒号分隔）</td>
-      </tr>
-      <tr>
-          <td><code>-v 变量名=值</code></td>
-          <td>执行脚本前定义/传递变量，支持外部 Shell 变量传入</td>
-          <td><code>awk -v num=10 'BEGIN{print num+5}'</code></td>
-      </tr>
-      <tr>
-          <td><code>-f 脚本文件</code></td>
-          <td>从指定文件读取 awk 脚本，适合复杂逻辑封装</td>
-          <td><code>awk -f handle.awk data.txt</code></td>
-      </tr>
-      <tr>
-          <td><code>-W posix</code></td>
-          <td>严格遵循 POSIX 标准，禁用 gawk 扩展特性</td>
-          <td><code>awk -W posix '{print $1}' file</code></td>
-      </tr>
-      <tr>
-          <td><code>-W compat</code></td>
-          <td>兼容传统 awk 语法，禁用 gawk 扩展</td>
-          <td><code>awk -W compat '{print $1}' file</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>选项</th>
+					<th>功能说明</th>
+					<th>典型示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>-F 分隔符</code></td>
+					<td>指定输入字段分隔符，支持字符串/正则，等价于内置变量 <code>FS</code></td>
+					<td><code>awk -F: '{print $1}' /etc/passwd</code>（冒号分隔）</td>
+			</tr>
+			<tr>
+					<td><code>-v 变量名=值</code></td>
+					<td>执行脚本前定义/传递变量，支持外部 Shell 变量传入</td>
+					<td><code>awk -v num=10 'BEGIN{print num+5}'</code></td>
+			</tr>
+			<tr>
+					<td><code>-f 脚本文件</code></td>
+					<td>从指定文件读取 awk 脚本，适合复杂逻辑封装</td>
+					<td><code>awk -f handle.awk data.txt</code></td>
+			</tr>
+			<tr>
+					<td><code>-W posix</code></td>
+					<td>严格遵循 POSIX 标准，禁用 gawk 扩展特性</td>
+					<td><code>awk -W posix '{print $1}' file</code></td>
+			</tr>
+			<tr>
+					<td><code>-W compat</code></td>
+					<td>兼容传统 awk 语法，禁用 gawk 扩展</td>
+					<td><code>awk -W compat '{print $1}' file</code></td>
+			</tr>
+	</tbody>
 </table>
 <hr>
 <h2 id="二核心内置变量">二、核心内置变量</h2>
 <p>awk 提供了丰富的内置变量，无需声明即可直接使用，按用途分为以下几类：</p>
 <h3 id="1-记录行相关变量">1. 记录（行）相关变量</h3>
 <table>
-  <thead>
-      <tr>
-          <th>变量</th>
-          <th>功能说明</th>
-          <th>核心用法</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>$0</code></td>
-          <td>当前读取的整行完整内容</td>
-          <td><code>awk '{print $0}' file</code> 打印整行</td>
-      </tr>
-      <tr>
-          <td><code>NR</code></td>
-          <td>Number of Record，已读取的总记录数（全局行号），多文件连续计数</td>
-          <td><code>awk 'NR==5' file</code> 打印第5行</td>
-      </tr>
-      <tr>
-          <td><code>FNR</code></td>
-          <td>File Number of Record，当前文件的记录数（文件内行号），多文件单独计数</td>
-          <td><code>awk 'FNR==1{print FILENAME}' file1 file2</code> 打印每个文件名</td>
-      </tr>
-      <tr>
-          <td><code>RS</code></td>
-          <td>Record Separator，输入记录分隔符，**默认值为换行符 ** <strong><code>\n</code></strong></td>
-          <td><code>awk 'BEGIN{RS=&quot;&quot;} {print $1}' file</code> 按空行分隔段落</td>
-      </tr>
-      <tr>
-          <td><code>ORS</code></td>
-          <td>Output Record Separator，输出记录分隔符，**默认值为换行符 ** <strong><code>\n</code></strong></td>
-          <td><code>awk 'BEGIN{ORS=&quot; &quot;} {print $0}' file</code> 将所有行合并为一行</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>变量</th>
+					<th>功能说明</th>
+					<th>核心用法</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>$0</code></td>
+					<td>当前读取的整行完整内容</td>
+					<td><code>awk '{print $0}' file</code> 打印整行</td>
+			</tr>
+			<tr>
+					<td><code>NR</code></td>
+					<td>Number of Record，已读取的总记录数（全局行号），多文件连续计数</td>
+					<td><code>awk 'NR==5' file</code> 打印第5行</td>
+			</tr>
+			<tr>
+					<td><code>FNR</code></td>
+					<td>File Number of Record，当前文件的记录数（文件内行号），多文件单独计数</td>
+					<td><code>awk 'FNR==1{print FILENAME}' file1 file2</code> 打印每个文件名</td>
+			</tr>
+			<tr>
+					<td><code>RS</code></td>
+					<td>Record Separator，输入记录分隔符，**默认值为换行符 ** <strong><code>\n</code></strong></td>
+					<td><code>awk 'BEGIN{RS=&quot;&quot;} {print $1}' file</code> 按空行分隔段落</td>
+			</tr>
+			<tr>
+					<td><code>ORS</code></td>
+					<td>Output Record Separator，输出记录分隔符，**默认值为换行符 ** <strong><code>\n</code></strong></td>
+					<td><code>awk 'BEGIN{ORS=&quot; &quot;} {print $0}' file</code> 将所有行合并为一行</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-字段列相关变量">2. 字段（列）相关变量</h3>
 <table>
-  <thead>
-      <tr>
-          <th>变量</th>
-          <th>功能说明</th>
-          <th>核心用法</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>$1~$n</code></td>
-          <td>当前行的第 n 个字段，由 <code>FS</code> 拆分</td>
-          <td><code>awk '{print $1, $3}' file</code> 打印第1、3列</td>
-      </tr>
-      <tr>
-          <td><code>NF</code></td>
-          <td>Number of Fields，当前行的字段总数（列数）</td>
-          <td><code>awk '{print $NF}' file</code> 打印最后一列；<code>$(NF-1)</code> 打印倒数第二列</td>
-      </tr>
-      <tr>
-          <td><code>FS</code></td>
-          <td>Field Separator，输入字段分隔符，<strong>默认值为连续空白符（空格/制表符/换行符）</strong></td>
-          <td><code>awk 'BEGIN{FS=&quot;:&quot;} {print $1}' /etc/passwd</code></td>
-      </tr>
-      <tr>
-          <td><code>OFS</code></td>
-          <td>Output Field Separator，输出字段分隔符，<strong>默认值为单个空格</strong></td>
-          <td><code>awk 'BEGIN{OFS=&quot;,&quot;} {print $1,$3}' file</code> 输出用逗号分隔</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>变量</th>
+					<th>功能说明</th>
+					<th>核心用法</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>$1~$n</code></td>
+					<td>当前行的第 n 个字段，由 <code>FS</code> 拆分</td>
+					<td><code>awk '{print $1, $3}' file</code> 打印第1、3列</td>
+			</tr>
+			<tr>
+					<td><code>NF</code></td>
+					<td>Number of Fields，当前行的字段总数（列数）</td>
+					<td><code>awk '{print $NF}' file</code> 打印最后一列；<code>$(NF-1)</code> 打印倒数第二列</td>
+			</tr>
+			<tr>
+					<td><code>FS</code></td>
+					<td>Field Separator，输入字段分隔符，<strong>默认值为连续空白符（空格/制表符/换行符）</strong></td>
+					<td><code>awk 'BEGIN{FS=&quot;:&quot;} {print $1}' /etc/passwd</code></td>
+			</tr>
+			<tr>
+					<td><code>OFS</code></td>
+					<td>Output Field Separator，输出字段分隔符，<strong>默认值为单个空格</strong></td>
+					<td><code>awk 'BEGIN{OFS=&quot;,&quot;} {print $1,$3}' file</code> 输出用逗号分隔</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-文件与参数相关变量">3. 文件与参数相关变量</h3>
 <table>
-  <thead>
-      <tr>
-          <th>变量</th>
-          <th>功能说明</th>
-          <th>核心用法</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>FILENAME</code></td>
-          <td>当前正在处理的输入文件名</td>
-          <td><code>awk '{print FILENAME, FNR, $0}' file1 file2</code></td>
-      </tr>
-      <tr>
-          <td><code>ARGC</code></td>
-          <td>命令行参数的总个数</td>
-          <td><code>awk 'END{print ARGC}' file1 file2</code></td>
-      </tr>
-      <tr>
-          <td><code>ARGV</code></td>
-          <td>命令行参数数组，<code>ARGV[0]</code> 固定为 <code>awk</code>，<code>ARGV[1]</code> 开始为输入文件/参数</td>
-          <td><code>awk 'BEGIN{print ARGV[1]}' file1</code></td>
-      </tr>
-      <tr>
-          <td><code>ENVIRON</code></td>
-          <td>系统环境变量的关联数组</td>
-          <td><code>awk 'BEGIN{print ENVIRON[&quot;HOME&quot;]}'</code> 打印用户家目录</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>变量</th>
+					<th>功能说明</th>
+					<th>核心用法</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>FILENAME</code></td>
+					<td>当前正在处理的输入文件名</td>
+					<td><code>awk '{print FILENAME, FNR, $0}' file1 file2</code></td>
+			</tr>
+			<tr>
+					<td><code>ARGC</code></td>
+					<td>命令行参数的总个数</td>
+					<td><code>awk 'END{print ARGC}' file1 file2</code></td>
+			</tr>
+			<tr>
+					<td><code>ARGV</code></td>
+					<td>命令行参数数组，<code>ARGV[0]</code> 固定为 <code>awk</code>，<code>ARGV[1]</code> 开始为输入文件/参数</td>
+					<td><code>awk 'BEGIN{print ARGV[1]}' file1</code></td>
+			</tr>
+			<tr>
+					<td><code>ENVIRON</code></td>
+					<td>系统环境变量的关联数组</td>
+					<td><code>awk 'BEGIN{print ENVIRON[&quot;HOME&quot;]}'</code> 打印用户家目录</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="4-正则与格式相关变量">4. 正则与格式相关变量</h3>
 <table>
-  <thead>
-      <tr>
-          <th>变量</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>RSTART</code></td>
-          <td><code>match()</code> 函数匹配到的字符串的起始位置，匹配失败为0</td>
-      </tr>
-      <tr>
-          <td><code>RLENGTH</code></td>
-          <td><code>match()</code> 函数匹配到的字符串的长度，匹配失败为-1</td>
-      </tr>
-      <tr>
-          <td><code>SUBSEP</code></td>
-          <td>多维数组下标的分隔符，默认值为不可打印字符 <code>\034</code></td>
-      </tr>
-      <tr>
-          <td><code>OFMT</code></td>
-          <td>数字的默认输出格式，默认值为 <code>%.6g</code></td>
-      </tr>
-      <tr>
-          <td><code>CONVFMT</code></td>
-          <td>数字转字符串的默认格式，默认值为 <code>%.6g</code></td>
-      </tr>
-      <tr>
-          <td><code>IGNORECASE</code></td>
-          <td>gawk 扩展，设置为1时，正则匹配忽略大小写，默认0</td>
-      </tr>
-      <tr>
-          <td><code>FPAT</code></td>
-          <td>gawk 扩展，定义字段的正则匹配规则，替代分隔符模式，适合处理 CSV 等复杂格式</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>变量</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>RSTART</code></td>
+					<td><code>match()</code> 函数匹配到的字符串的起始位置，匹配失败为0</td>
+			</tr>
+			<tr>
+					<td><code>RLENGTH</code></td>
+					<td><code>match()</code> 函数匹配到的字符串的长度，匹配失败为-1</td>
+			</tr>
+			<tr>
+					<td><code>SUBSEP</code></td>
+					<td>多维数组下标的分隔符，默认值为不可打印字符 <code>\034</code></td>
+			</tr>
+			<tr>
+					<td><code>OFMT</code></td>
+					<td>数字的默认输出格式，默认值为 <code>%.6g</code></td>
+			</tr>
+			<tr>
+					<td><code>CONVFMT</code></td>
+					<td>数字转字符串的默认格式，默认值为 <code>%.6g</code></td>
+			</tr>
+			<tr>
+					<td><code>IGNORECASE</code></td>
+					<td>gawk 扩展，设置为1时，正则匹配忽略大小写，默认0</td>
+			</tr>
+			<tr>
+					<td><code>FPAT</code></td>
+					<td>gawk 扩展，定义字段的正则匹配规则，替代分隔符模式，适合处理 CSV 等复杂格式</td>
+			</tr>
+	</tbody>
 </table>
 <hr>
 <h2 id="三运算符与模式匹配">三、运算符与模式匹配</h2>
 <h3 id="1-完整运算符体系优先级从高到低">1. 完整运算符体系（优先级从高到低）</h3>
 <table>
-  <thead>
-      <tr>
-          <th>运算符类型</th>
-          <th>运算符列表</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>字段引用</td>
-          <td><code>$</code></td>
-          <td>字段引用，如 <code>$1</code>、<code>$NF</code></td>
-      </tr>
-      <tr>
-          <td>自增自减</td>
-          <td><code>++</code> <code>--</code></td>
-          <td>前缀/后缀自增、自减，同C语言</td>
-      </tr>
-      <tr>
-          <td>幂运算</td>
-          <td><code>^</code> <code>**</code></td>
-          <td>幂运算，<code>2^3=8</code>，<code>**</code> 为 gawk 扩展</td>
-      </tr>
-      <tr>
-          <td>算术运算</td>
-          <td><code>*</code> <code>/</code> <code>%</code></td>
-          <td>乘、除、取模</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td><code>+</code> <code>-</code></td>
-          <td>加、减</td>
-      </tr>
-      <tr>
-          <td>字符串拼接</td>
-          <td>空格</td>
-          <td>隐式拼接，<code>&quot;a&quot; &quot;b&quot;</code> 等价于 <code>&quot;ab&quot;</code></td>
-      </tr>
-      <tr>
-          <td>关系运算</td>
-          <td><code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code></td>
-          <td>数值/字符串比较</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td><code>==</code> <code>!=</code></td>
-          <td>精确等于、不等于</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td><code>~</code> <code>!~</code></td>
-          <td>正则匹配、正则不匹配（核心）</td>
-      </tr>
-      <tr>
-          <td>逻辑运算</td>
-          <td><code>!</code></td>
-          <td>逻辑非</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td><code>&amp;&amp;</code></td>
-          <td>逻辑与（短路）</td>
-      </tr>
-      <tr>
-          <td></td>
-          <td>`</td>
-          <td></td>
-      </tr>
-      <tr>
-          <td>三元运算</td>
-          <td><code>?:</code></td>
-          <td><code>条件?表达式1:表达式2</code>，同C语言</td>
-      </tr>
-      <tr>
-          <td>赋值运算</td>
-          <td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code> <code>^=</code></td>
-          <td>赋值与复合赋值</td>
-      </tr>
-      <tr>
-          <td>数组成员</td>
-          <td><code>in</code></td>
-          <td>判断下标是否存在于数组中</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>运算符类型</th>
+					<th>运算符列表</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>字段引用</td>
+					<td><code>$</code></td>
+					<td>字段引用，如 <code>$1</code>、<code>$NF</code></td>
+			</tr>
+			<tr>
+					<td>自增自减</td>
+					<td><code>++</code> <code>--</code></td>
+					<td>前缀/后缀自增、自减，同C语言</td>
+			</tr>
+			<tr>
+					<td>幂运算</td>
+					<td><code>^</code> <code>**</code></td>
+					<td>幂运算，<code>2^3=8</code>，<code>**</code> 为 gawk 扩展</td>
+			</tr>
+			<tr>
+					<td>算术运算</td>
+					<td><code>*</code> <code>/</code> <code>%</code></td>
+					<td>乘、除、取模</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td><code>+</code> <code>-</code></td>
+					<td>加、减</td>
+			</tr>
+			<tr>
+					<td>字符串拼接</td>
+					<td>空格</td>
+					<td>隐式拼接，<code>&quot;a&quot; &quot;b&quot;</code> 等价于 <code>&quot;ab&quot;</code></td>
+			</tr>
+			<tr>
+					<td>关系运算</td>
+					<td><code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code></td>
+					<td>数值/字符串比较</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td><code>==</code> <code>!=</code></td>
+					<td>精确等于、不等于</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td><code>~</code> <code>!~</code></td>
+					<td>正则匹配、正则不匹配（核心）</td>
+			</tr>
+			<tr>
+					<td>逻辑运算</td>
+					<td><code>!</code></td>
+					<td>逻辑非</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td><code>&amp;&amp;</code></td>
+					<td>逻辑与（短路）</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>`</td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>三元运算</td>
+					<td><code>?:</code></td>
+					<td><code>条件?表达式1:表达式2</code>，同C语言</td>
+			</tr>
+			<tr>
+					<td>赋值运算</td>
+					<td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code> <code>^=</code></td>
+					<td>赋值与复合赋值</td>
+			</tr>
+			<tr>
+					<td>数组成员</td>
+					<td><code>in</code></td>
+					<td>判断下标是否存在于数组中</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-核心模式类型">2. 核心模式类型</h3>
 <p>awk 是模式驱动的语言，模式决定了动作是否执行，支持以下6种模式：</p>
@@ -708,34 +708,34 @@
 </span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{arr[$1]++} END{for(i in arr) print i, arr[i]}&#39;</span> access.log</span></span></code></pre></div></div>
 <h3 id="3-流程控制关键字">3. 流程控制关键字</h3>
 <table>
-  <thead>
-      <tr>
-          <th>关键字</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>break</code></td>
-          <td>立即跳出当前循环，执行循环后的代码</td>
-      </tr>
-      <tr>
-          <td><code>continue</code></td>
-          <td>跳过本次循环剩余代码，直接进入下一次循环</td>
-      </tr>
-      <tr>
-          <td><code>next</code></td>
-          <td>跳过当前行的所有后续处理，直接读取下一行，进入下一轮主循环</td>
-      </tr>
-      <tr>
-          <td><code>exit n</code></td>
-          <td>立即终止主循环，执行 END 块，n 为退出码（省略则为0）</td>
-      </tr>
-      <tr>
-          <td>示例：</td>
-          <td></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>关键字</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>break</code></td>
+					<td>立即跳出当前循环，执行循环后的代码</td>
+			</tr>
+			<tr>
+					<td><code>continue</code></td>
+					<td>跳过本次循环剩余代码，直接进入下一次循环</td>
+			</tr>
+			<tr>
+					<td><code>next</code></td>
+					<td>跳过当前行的所有后续处理，直接读取下一行，进入下一轮主循环</td>
+			</tr>
+			<tr>
+					<td><code>exit n</code></td>
+					<td>立即终止主循环，执行 END 块，n 为退出码（省略则为0）</td>
+			</tr>
+			<tr>
+					<td>示例：</td>
+					<td></td>
+			</tr>
+	</tbody>
 </table>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
     <div class="code-header language-Bash">
@@ -750,70 +750,70 @@
 <p>awk 提供了丰富的内置函数，覆盖字符串、数值、时间、IO 等场景，是文本处理的核心能力。</p>
 <h3 id="1-高频字符串处理函数">1. 高频字符串处理函数</h3>
 <table>
-  <thead>
-      <tr>
-          <th>函数</th>
-          <th>语法</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>length</code></td>
-          <td><code>length(str)</code></td>
-          <td>返回字符串 str 的长度，无参数则返回 <code>$0</code> 的长度</td>
-      </tr>
-      <tr>
-          <td><code>index</code></td>
-          <td><code>index(str, substr)</code></td>
-          <td>返回 substr 在 str 中首次出现的位置，找不到返回0</td>
-      </tr>
-      <tr>
-          <td><code>substr</code></td>
-          <td><code>substr(str, start, len)</code></td>
-          <td>从 str 的 start 位置截取 len 个字符，len 省略则截取到末尾</td>
-      </tr>
-      <tr>
-          <td><code>split</code></td>
-          <td><code>split(str, arr, sep)</code></td>
-          <td>将 str 按 sep 拆分存入数组 arr，返回字段总数，sep 省略则使用 <code>FS</code></td>
-      </tr>
-      <tr>
-          <td><code>match</code></td>
-          <td><code>match(str, regex)</code></td>
-          <td>在 str 中匹配正则 regex，返回匹配起始位置，设置 <code>RSTART</code> 和 <code>RLENGTH</code>，找不到返回0</td>
-      </tr>
-      <tr>
-          <td><code>sub</code></td>
-          <td><code>sub(regex, repl, str)</code></td>
-          <td>替换 str 中<strong>第一个</strong>匹配 regex 的内容为 repl，str 省略则为 <code>$0</code>，支持 <code>&amp;</code> 引用匹配内容</td>
-      </tr>
-      <tr>
-          <td><code>gsub</code></td>
-          <td><code>sub(regex, repl, str)</code></td>
-          <td>全局替换，替换 str 中<strong>所有</strong>匹配 regex 的内容，其他同 <code>sub</code></td>
-      </tr>
-      <tr>
-          <td><code>tolower</code></td>
-          <td><code>tolower(str)</code></td>
-          <td>将字符串 str 全部转为小写</td>
-      </tr>
-      <tr>
-          <td><code>toupper</code></td>
-          <td><code>toupper(str)</code></td>
-          <td>将字符串 str 全部转为大写</td>
-      </tr>
-      <tr>
-          <td><code>sprintf</code></td>
-          <td><code>sprintf(format, args)</code></td>
-          <td>格式化字符串，返回格式化后的结果，用法同C语言 <code>sprintf</code></td>
-      </tr>
-      <tr>
-          <td>示例：</td>
-          <td></td>
-          <td></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数</th>
+					<th>语法</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>length</code></td>
+					<td><code>length(str)</code></td>
+					<td>返回字符串 str 的长度，无参数则返回 <code>$0</code> 的长度</td>
+			</tr>
+			<tr>
+					<td><code>index</code></td>
+					<td><code>index(str, substr)</code></td>
+					<td>返回 substr 在 str 中首次出现的位置，找不到返回0</td>
+			</tr>
+			<tr>
+					<td><code>substr</code></td>
+					<td><code>substr(str, start, len)</code></td>
+					<td>从 str 的 start 位置截取 len 个字符，len 省略则截取到末尾</td>
+			</tr>
+			<tr>
+					<td><code>split</code></td>
+					<td><code>split(str, arr, sep)</code></td>
+					<td>将 str 按 sep 拆分存入数组 arr，返回字段总数，sep 省略则使用 <code>FS</code></td>
+			</tr>
+			<tr>
+					<td><code>match</code></td>
+					<td><code>match(str, regex)</code></td>
+					<td>在 str 中匹配正则 regex，返回匹配起始位置，设置 <code>RSTART</code> 和 <code>RLENGTH</code>，找不到返回0</td>
+			</tr>
+			<tr>
+					<td><code>sub</code></td>
+					<td><code>sub(regex, repl, str)</code></td>
+					<td>替换 str 中<strong>第一个</strong>匹配 regex 的内容为 repl，str 省略则为 <code>$0</code>，支持 <code>&amp;</code> 引用匹配内容</td>
+			</tr>
+			<tr>
+					<td><code>gsub</code></td>
+					<td><code>sub(regex, repl, str)</code></td>
+					<td>全局替换，替换 str 中<strong>所有</strong>匹配 regex 的内容，其他同 <code>sub</code></td>
+			</tr>
+			<tr>
+					<td><code>tolower</code></td>
+					<td><code>tolower(str)</code></td>
+					<td>将字符串 str 全部转为小写</td>
+			</tr>
+			<tr>
+					<td><code>toupper</code></td>
+					<td><code>toupper(str)</code></td>
+					<td>将字符串 str 全部转为大写</td>
+			</tr>
+			<tr>
+					<td><code>sprintf</code></td>
+					<td><code>sprintf(format, args)</code></td>
+					<td>格式化字符串，返回格式化后的结果，用法同C语言 <code>sprintf</code></td>
+			</tr>
+			<tr>
+					<td>示例：</td>
+					<td></td>
+					<td></td>
+			</tr>
+	</tbody>
 </table>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
     <div class="code-header language-Bash">
@@ -831,46 +831,46 @@
 </span></span><span class="line"><span class="cl">awk <span class="s1">&#39;{split($0, arr, &#34;,&#34;); print arr[1], arr[3]}&#39;</span> file.csv</span></span></code></pre></div></div>
 <h3 id="2-数值计算函数">2. 数值计算函数</h3>
 <table>
-  <thead>
-      <tr>
-          <th>函数</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>int(x)</code></td>
-          <td>对 x 取整，向0截断，如 <code>int(3.9)=3</code>，<code>int(-3.9)=-3</code></td>
-      </tr>
-      <tr>
-          <td><code>sqrt(x)</code></td>
-          <td>返回 x 的平方根</td>
-      </tr>
-      <tr>
-          <td><code>exp(x)</code></td>
-          <td>返回 e 的 x 次方</td>
-      </tr>
-      <tr>
-          <td><code>log(x)</code></td>
-          <td>返回 x 的自然对数</td>
-      </tr>
-      <tr>
-          <td><code>sin(x)</code>/<code>cos(x)</code>/<code>atan2(y,x)</code></td>
-          <td>三角函数</td>
-      </tr>
-      <tr>
-          <td><code>rand()</code></td>
-          <td>返回 0~1 之间的随机浮点数</td>
-      </tr>
-      <tr>
-          <td><code>srand(x)</code></td>
-          <td>设置随机数种子，x 省略则使用当前系统时间，返回旧种子</td>
-      </tr>
-      <tr>
-          <td>示例：</td>
-          <td></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>int(x)</code></td>
+					<td>对 x 取整，向0截断，如 <code>int(3.9)=3</code>，<code>int(-3.9)=-3</code></td>
+			</tr>
+			<tr>
+					<td><code>sqrt(x)</code></td>
+					<td>返回 x 的平方根</td>
+			</tr>
+			<tr>
+					<td><code>exp(x)</code></td>
+					<td>返回 e 的 x 次方</td>
+			</tr>
+			<tr>
+					<td><code>log(x)</code></td>
+					<td>返回 x 的自然对数</td>
+			</tr>
+			<tr>
+					<td><code>sin(x)</code>/<code>cos(x)</code>/<code>atan2(y,x)</code></td>
+					<td>三角函数</td>
+			</tr>
+			<tr>
+					<td><code>rand()</code></td>
+					<td>返回 0~1 之间的随机浮点数</td>
+			</tr>
+			<tr>
+					<td><code>srand(x)</code></td>
+					<td>设置随机数种子，x 省略则使用当前系统时间，返回旧种子</td>
+			</tr>
+			<tr>
+					<td>示例：</td>
+					<td></td>
+			</tr>
+	</tbody>
 </table>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
     <div class="code-header language-Bash">
@@ -882,35 +882,35 @@
 </span></span><span class="line"><span class="cl">awk <span class="s1">&#39;BEGIN{srand(); print int(rand()*100)}&#39;</span></span></span></code></pre></div></div>
 <h3 id="3-时间处理函数gawk-扩展">3. 时间处理函数（gawk 扩展）</h3>
 <table>
-  <thead>
-      <tr>
-          <th>函数</th>
-          <th>语法</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>systime()</code></td>
-          <td><code>systime()</code></td>
-          <td>返回当前时间的 Unix 时间戳（秒级）</td>
-      </tr>
-      <tr>
-          <td><code>strftime</code></td>
-          <td><code>strftime(format, timestamp)</code></td>
-          <td>将时间戳格式化为指定格式的字符串，format 同 date 命令</td>
-      </tr>
-      <tr>
-          <td><code>mktime</code></td>
-          <td><code>mktime(&quot;YYYY MM DD HH MM SS&quot;)</code></td>
-          <td>将时间字符串转为 Unix 时间戳</td>
-      </tr>
-      <tr>
-          <td>示例：</td>
-          <td></td>
-          <td></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数</th>
+					<th>语法</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>systime()</code></td>
+					<td><code>systime()</code></td>
+					<td>返回当前时间的 Unix 时间戳（秒级）</td>
+			</tr>
+			<tr>
+					<td><code>strftime</code></td>
+					<td><code>strftime(format, timestamp)</code></td>
+					<td>将时间戳格式化为指定格式的字符串，format 同 date 命令</td>
+			</tr>
+			<tr>
+					<td><code>mktime</code></td>
+					<td><code>mktime(&quot;YYYY MM DD HH MM SS&quot;)</code></td>
+					<td>将时间字符串转为 Unix 时间戳</td>
+			</tr>
+			<tr>
+					<td>示例：</td>
+					<td></td>
+					<td></td>
+			</tr>
+	</tbody>
 </table>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
     <div class="code-header language-Bash">
@@ -922,34 +922,34 @@
 </span></span><span class="line"><span class="cl">awk <span class="s1">&#39;BEGIN{print strftime(&#34;%Y-%m-%d %H:%M:%S&#34;, systime())}&#39;</span></span></span></code></pre></div></div>
 <h3 id="4-io-与系统函数">4. IO 与系统函数</h3>
 <table>
-  <thead>
-      <tr>
-          <th>函数</th>
-          <th>功能说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>getline</code></td>
-          <td>读取下一行输入，可赋值给变量，成功返回1，EOF返回0，出错返回-1</td>
-      </tr>
-      <tr>
-          <td><code>close(filename)</code></td>
-          <td>关闭打开的文件/管道，避免 too many open files 错误</td>
-      </tr>
-      <tr>
-          <td><code>system(cmd)</code></td>
-          <td>执行 Shell 命令，返回命令的退出码</td>
-      </tr>
-      <tr>
-          <td><code>fflush()</code></td>
-          <td>刷新输出缓冲区，实时打印内容</td>
-      </tr>
-      <tr>
-          <td>示例：</td>
-          <td></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数</th>
+					<th>功能说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>getline</code></td>
+					<td>读取下一行输入，可赋值给变量，成功返回1，EOF返回0，出错返回-1</td>
+			</tr>
+			<tr>
+					<td><code>close(filename)</code></td>
+					<td>关闭打开的文件/管道，避免 too many open files 错误</td>
+			</tr>
+			<tr>
+					<td><code>system(cmd)</code></td>
+					<td>执行 Shell 命令，返回命令的退出码</td>
+			</tr>
+			<tr>
+					<td><code>fflush()</code></td>
+					<td>刷新输出缓冲区，实时打印内容</td>
+			</tr>
+			<tr>
+					<td>示例：</td>
+					<td></td>
+			</tr>
+	</tbody>
 </table>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
     <div class="code-header language-Bash">
@@ -1394,7 +1394,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

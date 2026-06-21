@@ -5,22 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>ARP 协议详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/003_arp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="ARP 协议详细总结">
-  <meta property="og:description" content="ARP协议详细总结 一、核心定义与协议定位 地址解析协议（Address Resolution Protocol，ARP）是TCP/IP协议族的核心基础协议，定义于RFC 826标准，在OSI七层模型中介于数据链路层与网络层之间，是衔接两层通信的关键桥梁。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-03-08T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-03-08T10:00:20+08:00">
-    <meta property="article:tag" content="协议">
-    <meta property="article:tag" content="ARP">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="ARP 协议详细总结">
+	<meta property="og:description" content="ARP协议详细总结 一、核心定义与协议定位 地址解析协议（Address Resolution Protocol，ARP）是TCP/IP协议族的核心基础协议，定义于RFC 826标准，在OSI七层模型中介于数据链路层与网络层之间，是衔接两层通信的关键桥梁。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-03-08T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-03-08T10:00:20+08:00">
+		<meta property="article:tag" content="协议">
+		<meta property="article:tag" content="ARP">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="ARP 协议详细总结">
-  <meta name="twitter:description" content="ARP协议详细总结 一、核心定义与协议定位 地址解析协议（Address Resolution Protocol，ARP）是TCP/IP协议族的核心基础协议，定义于RFC 826标准，在OSI七层模型中介于数据链路层与网络层之间，是衔接两层通信的关键桥梁。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="ARP 协议详细总结">
+	<meta name="twitter:description" content="ARP协议详细总结 一、核心定义与协议定位 地址解析协议（Address Resolution Protocol，ARP）是TCP/IP协议族的核心基础协议，定义于RFC 826标准，在OSI七层模型中介于数据链路层与网络层之间，是衔接两层通信的关键桥梁。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -191,87 +191,87 @@
 <p>ARP报文直接封装在以太网数据帧中传输，整体分为<strong>以太网帧首部（14字节）</strong> 和<strong>ARP报文本体（28字节）</strong> 两部分，总最小长度42字节，不足64字节的以太网帧会自动填充补齐。</p>
 <h3 id="1-以太网帧首部">1. 以太网帧首部</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">字段</th>
-          <th style="text-align: left">长度</th>
-          <th style="text-align: left">核心含义与取值</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">目的MAC地址</td>
-          <td style="text-align: left">6字节</td>
-          <td style="text-align: left">ARP请求时为广播地址<code>FF:FF:FF:FF:FF:FF</code>；ARP应答时为请求方的单播MAC地址</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">源MAC地址</td>
-          <td style="text-align: left">6字节</td>
-          <td style="text-align: left">报文发送方的本机MAC地址</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">帧类型</td>
-          <td style="text-align: left">2字节</td>
-          <td style="text-align: left">固定为<code>0x0806</code>，标识该帧承载ARP协议报文</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">字段</th>
+					<th style="text-align: left">长度</th>
+					<th style="text-align: left">核心含义与取值</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">目的MAC地址</td>
+					<td style="text-align: left">6字节</td>
+					<td style="text-align: left">ARP请求时为广播地址<code>FF:FF:FF:FF:FF:FF</code>；ARP应答时为请求方的单播MAC地址</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">源MAC地址</td>
+					<td style="text-align: left">6字节</td>
+					<td style="text-align: left">报文发送方的本机MAC地址</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">帧类型</td>
+					<td style="text-align: left">2字节</td>
+					<td style="text-align: left">固定为<code>0x0806</code>，标识该帧承载ARP协议报文</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-arp报文本体28字节">2. ARP报文本体（28字节）</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">字段</th>
-          <th style="text-align: left">长度</th>
-          <th style="text-align: left">核心含义与取值</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">硬件类型</td>
-          <td style="text-align: left">2字节</td>
-          <td style="text-align: left">标识链路层网络类型，以太网固定为<code>0x0001</code>，令牌环、帧中继等有对应专属编号</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">协议类型</td>
-          <td style="text-align: left">2字节</td>
-          <td style="text-align: left">标识要解析的上层协议类型，IPv4固定为<code>0x0800</code>，与以太网IP报文的帧类型值一致</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">硬件地址长度</td>
-          <td style="text-align: left">1字节</td>
-          <td style="text-align: left">硬件地址的字节长度，以太网MAC地址为6字节，固定取值<code>6</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">协议地址长度</td>
-          <td style="text-align: left">1字节</td>
-          <td style="text-align: left">上层协议地址的字节长度，IPv4地址为4字节，固定取值<code>4</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">操作类型（OP）</td>
-          <td style="text-align: left">2字节</td>
-          <td style="text-align: left">标识ARP报文类型：<code>1</code>=ARP请求，<code>2</code>=ARP应答，<code>3</code>=RARP请求，<code>4</code>=RARP应答</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">发送端MAC地址</td>
-          <td style="text-align: left">6字节</td>
-          <td style="text-align: left">报文发送方的本机MAC地址</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">发送端IP地址</td>
-          <td style="text-align: left">4字节</td>
-          <td style="text-align: left">报文发送方的本机IP地址</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">目标端MAC地址</td>
-          <td style="text-align: left">6字节</td>
-          <td style="text-align: left">ARP请求时填充<code>00:00:00:00:00:00</code>（地址未知）；ARP应答时填充目标主机MAC</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">目标端IP地址</td>
-          <td style="text-align: left">4字节</td>
-          <td style="text-align: left">待解析的目标IP地址</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">字段</th>
+					<th style="text-align: left">长度</th>
+					<th style="text-align: left">核心含义与取值</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">硬件类型</td>
+					<td style="text-align: left">2字节</td>
+					<td style="text-align: left">标识链路层网络类型，以太网固定为<code>0x0001</code>，令牌环、帧中继等有对应专属编号</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">协议类型</td>
+					<td style="text-align: left">2字节</td>
+					<td style="text-align: left">标识要解析的上层协议类型，IPv4固定为<code>0x0800</code>，与以太网IP报文的帧类型值一致</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">硬件地址长度</td>
+					<td style="text-align: left">1字节</td>
+					<td style="text-align: left">硬件地址的字节长度，以太网MAC地址为6字节，固定取值<code>6</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">协议地址长度</td>
+					<td style="text-align: left">1字节</td>
+					<td style="text-align: left">上层协议地址的字节长度，IPv4地址为4字节，固定取值<code>4</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">操作类型（OP）</td>
+					<td style="text-align: left">2字节</td>
+					<td style="text-align: left">标识ARP报文类型：<code>1</code>=ARP请求，<code>2</code>=ARP应答，<code>3</code>=RARP请求，<code>4</code>=RARP应答</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">发送端MAC地址</td>
+					<td style="text-align: left">6字节</td>
+					<td style="text-align: left">报文发送方的本机MAC地址</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">发送端IP地址</td>
+					<td style="text-align: left">4字节</td>
+					<td style="text-align: left">报文发送方的本机IP地址</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">目标端MAC地址</td>
+					<td style="text-align: left">6字节</td>
+					<td style="text-align: left">ARP请求时填充<code>00:00:00:00:00:00</code>（地址未知）；ARP应答时填充目标主机MAC</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">目标端IP地址</td>
+					<td style="text-align: left">4字节</td>
+					<td style="text-align: left">待解析的目标IP地址</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="三arp核心工作原理">三、ARP核心工作原理</h2>
 <p>ARP协议的核心机制是<strong>广播请求+单播应答</strong>，主机发送IP报文前，会先查询本地ARP缓存，仅当缓存中无对应IP-MAC映射时，才触发ARP解析流程。分为同网段和跨网段两种核心场景。</p>
@@ -347,77 +347,77 @@
 </ul>
 <h3 id="2-主流防御方案">2. 主流防御方案</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">防御方案</th>
-          <th style="text-align: left">实现原理</th>
-          <th style="text-align: left">适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">静态ARP绑定</td>
-          <td style="text-align: left">手动在主机/网关上配置核心IP与MAC的永久静态条目，禁止动态更新，优先级高于动态条目</td>
-          <td style="text-align: left">核心服务器、网关，小规模局域网</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">动态ARP检测（DAI）</td>
-          <td style="text-align: left">交换机结合DHCP Snooping生成的IP-MAC-端口绑定表，校验每一个ARP报文的合法性，直接丢弃非法报文</td>
-          <td style="text-align: left">中大型企业局域网，接入层交换机</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">端口安全</td>
-          <td style="text-align: left">交换机端口限制允许接入的MAC地址数量和具体地址，禁止伪造MAC地址的报文通过</td>
-          <td style="text-align: left">接入层终端管控，防止非法设备接入</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">VLAN广播域隔离</td>
-          <td style="text-align: left">将局域网划分为多个小的广播域，缩小ARP欺骗的影响范围，隔离攻击风险</td>
-          <td style="text-align: left">中大型网络，按部门/业务划分网段</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">主机ARP防火墙</td>
-          <td style="text-align: left">终端安装ARP防火墙软件，拦截非法ARP报文，校验应答的合法性</td>
-          <td style="text-align: left">个人终端、未做网络层管控的局域网</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">防御方案</th>
+					<th style="text-align: left">实现原理</th>
+					<th style="text-align: left">适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">静态ARP绑定</td>
+					<td style="text-align: left">手动在主机/网关上配置核心IP与MAC的永久静态条目，禁止动态更新，优先级高于动态条目</td>
+					<td style="text-align: left">核心服务器、网关，小规模局域网</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">动态ARP检测（DAI）</td>
+					<td style="text-align: left">交换机结合DHCP Snooping生成的IP-MAC-端口绑定表，校验每一个ARP报文的合法性，直接丢弃非法报文</td>
+					<td style="text-align: left">中大型企业局域网，接入层交换机</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">端口安全</td>
+					<td style="text-align: left">交换机端口限制允许接入的MAC地址数量和具体地址，禁止伪造MAC地址的报文通过</td>
+					<td style="text-align: left">接入层终端管控，防止非法设备接入</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">VLAN广播域隔离</td>
+					<td style="text-align: left">将局域网划分为多个小的广播域，缩小ARP欺骗的影响范围，隔离攻击风险</td>
+					<td style="text-align: left">中大型网络，按部门/业务划分网段</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">主机ARP防火墙</td>
+					<td style="text-align: left">终端安装ARP防火墙软件，拦截非法ARP报文，校验应答的合法性</td>
+					<td style="text-align: left">个人终端、未做网络层管控的局域网</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="七相关协议对比">七、相关协议对比</h2>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">协议</th>
-          <th style="text-align: left">核心功能</th>
-          <th style="text-align: left">适用场景</th>
-          <th style="text-align: left">现状</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">正向ARP</td>
-          <td style="text-align: left">IPv4地址→MAC地址解析</td>
-          <td style="text-align: left">以太网局域网IPv4通信</td>
-          <td style="text-align: left">广泛使用，IPv4网络必备</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">RARP</td>
-          <td style="text-align: left">MAC地址→自身IPv4地址解析</td>
-          <td style="text-align: left">早期无盘工作站</td>
-          <td style="text-align: left">已淘汰，被DHCP完全替代</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">代理ARP</td>
-          <td style="text-align: left">代理跨网段ARP应答，实现跨网段二层互通</td>
-          <td style="text-align: left">无网关主机、跨物理网段同IP通信</td>
-          <td style="text-align: left">小众场景使用，不推荐默认开启</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">NDP（邻居发现协议）</td>
-          <td style="text-align: left">IPv6地址→MAC地址解析，替代ARP、ICMP路由发现、重定向等功能</td>
-          <td style="text-align: left">IPv6网络</td>
-          <td style="text-align: left">IPv6网络必备，完全替代ARP</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">协议</th>
+					<th style="text-align: left">核心功能</th>
+					<th style="text-align: left">适用场景</th>
+					<th style="text-align: left">现状</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">正向ARP</td>
+					<td style="text-align: left">IPv4地址→MAC地址解析</td>
+					<td style="text-align: left">以太网局域网IPv4通信</td>
+					<td style="text-align: left">广泛使用，IPv4网络必备</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">RARP</td>
+					<td style="text-align: left">MAC地址→自身IPv4地址解析</td>
+					<td style="text-align: left">早期无盘工作站</td>
+					<td style="text-align: left">已淘汰，被DHCP完全替代</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">代理ARP</td>
+					<td style="text-align: left">代理跨网段ARP应答，实现跨网段二层互通</td>
+					<td style="text-align: left">无网关主机、跨物理网段同IP通信</td>
+					<td style="text-align: left">小众场景使用，不推荐默认开启</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">NDP（邻居发现协议）</td>
+					<td style="text-align: left">IPv6地址→MAC地址解析，替代ARP、ICMP路由发现、重定向等功能</td>
+					<td style="text-align: left">IPv6网络</td>
+					<td style="text-align: left">IPv6网络必备，完全替代ARP</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="八常用运维命令与故障排查">八、常用运维命令与故障排查</h2>
 <h3 id="1-常用arp运维命令">1. 常用ARP运维命令</h3>
@@ -490,7 +490,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

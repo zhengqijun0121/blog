@@ -5,22 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>现代 CMake 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/002_%E7%8E%B0%E4%BB%A3cmake%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="现代 CMake 语法详细总结">
-  <meta property="og:description" content="Modern CMake 语法详细总结 Modern CMake 特指 CMake 3.0&#43;（工业级项目推荐最低 3.15&#43;）的构建范式，核心设计哲学是面向目标（Target）编程、属性作用域隔离、依赖可传递，彻底摒弃传统 CMake 全局变量污染的写法，实现「声明式描述构建需求，而非硬编码编译步骤」，是跨平台 C/C&#43;&#43; 项目的事实标准构建方案。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-01-23T09:00:00+08:00">
-    <meta property="article:modified_time" content="2026-01-23T09:00:00+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="CMake">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="现代 CMake 语法详细总结">
+	<meta property="og:description" content="Modern CMake 语法详细总结 Modern CMake 特指 CMake 3.0&#43;（工业级项目推荐最低 3.15&#43;）的构建范式，核心设计哲学是面向目标（Target）编程、属性作用域隔离、依赖可传递，彻底摒弃传统 CMake 全局变量污染的写法，实现「声明式描述构建需求，而非硬编码编译步骤」，是跨平台 C/C&#43;&#43; 项目的事实标准构建方案。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-01-23T09:00:00+08:00">
+		<meta property="article:modified_time" content="2026-01-23T09:00:00+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="CMake">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="现代 CMake 语法详细总结">
-  <meta name="twitter:description" content="Modern CMake 语法详细总结 Modern CMake 特指 CMake 3.0&#43;（工业级项目推荐最低 3.15&#43;）的构建范式，核心设计哲学是面向目标（Target）编程、属性作用域隔离、依赖可传递，彻底摒弃传统 CMake 全局变量污染的写法，实现「声明式描述构建需求，而非硬编码编译步骤」，是跨平台 C/C&#43;&#43; 项目的事实标准构建方案。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="现代 CMake 语法详细总结">
+	<meta name="twitter:description" content="Modern CMake 语法详细总结 Modern CMake 特指 CMake 3.0&#43;（工业级项目推荐最低 3.15&#43;）的构建范式，核心设计哲学是面向目标（Target）编程、属性作用域隔离、依赖可传递，彻底摒弃传统 CMake 全局变量污染的写法，实现「声明式描述构建需求，而非硬编码编译步骤」，是跨平台 C/C&#43;&#43; 项目的事实标准构建方案。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -221,58 +221,58 @@
 <p>CMake 中所有构建行为都围绕「目标」展开，目标是构建的最小独立单元，所有编译、链接、头文件、宏定义等配置均作为目标的属性，而非全局设置。</p>
 <p>目标分为三大核心类型：</p>
 <table>
-  <thead>
-      <tr>
-          <th>目标类型</th>
-          <th>定义命令</th>
-          <th>核心用途</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>可执行目标</td>
-          <td><code>add_executable()</code></td>
-          <td>生成可执行程序</td>
-      </tr>
-      <tr>
-          <td>库目标</td>
-          <td><code>add_library()</code></td>
-          <td>生成静态库/动态库/头文件-only库/对象库</td>
-      </tr>
-      <tr>
-          <td>别名目标</td>
-          <td><code>add_library(xxx::yyy ALIAS)</code></td>
-          <td>给目标添加命名空间别名，避免名称冲突，与导出目标格式统一</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>目标类型</th>
+					<th>定义命令</th>
+					<th>核心用途</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>可执行目标</td>
+					<td><code>add_executable()</code></td>
+					<td>生成可执行程序</td>
+			</tr>
+			<tr>
+					<td>库目标</td>
+					<td><code>add_library()</code></td>
+					<td>生成静态库/动态库/头文件-only库/对象库</td>
+			</tr>
+			<tr>
+					<td>别名目标</td>
+					<td><code>add_library(xxx::yyy ALIAS)</code></td>
+					<td>给目标添加命名空间别名，避免名称冲突，与导出目标格式统一</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="12-核心传递性关键字privatepublicinterface">1.2 核心传递性关键字（PRIVATE/PUBLIC/INTERFACE）</h3>
 <p>这是 Modern CMake 最核心的设计，决定目标属性是否传递给依赖它的其他目标，<strong>所有 <code>target_*</code> 命令必须显式指定，禁止省略</strong>。</p>
 <table>
-  <thead>
-      <tr>
-          <th>关键字</th>
-          <th>作用规则</th>
-          <th>典型使用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>PRIVATE</td>
-          <td>属性仅对当前目标生效，不传递给依赖该目标的下游目标</td>
-          <td>库内部使用的头文件路径、内部编译选项、仅内部使用的依赖</td>
-      </tr>
-      <tr>
-          <td>PUBLIC</td>
-          <td>属性对当前目标生效，同时完整传递给所有依赖该目标的下游目标</td>
-          <td>库对外暴露的头文件路径、API 依赖的 C++ 标准、下游必须继承的宏定义</td>
-      </tr>
-      <tr>
-          <td>INTERFACE</td>
-          <td>属性不对当前目标生效，仅传递给依赖该目标的下游目标</td>
-          <td>纯头文件模板库的配置、仅下游需要使用的编译选项</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>关键字</th>
+					<th>作用规则</th>
+					<th>典型使用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>PRIVATE</td>
+					<td>属性仅对当前目标生效，不传递给依赖该目标的下游目标</td>
+					<td>库内部使用的头文件路径、内部编译选项、仅内部使用的依赖</td>
+			</tr>
+			<tr>
+					<td>PUBLIC</td>
+					<td>属性对当前目标生效，同时完整传递给所有依赖该目标的下游目标</td>
+					<td>库对外暴露的头文件路径、API 依赖的 C++ 标准、下游必须继承的宏定义</td>
+			</tr>
+			<tr>
+					<td>INTERFACE</td>
+					<td>属性不对当前目标生效，仅传递给依赖该目标的下游目标</td>
+					<td>纯头文件模板库的配置、仅下游需要使用的编译选项</td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>传递性示例</strong>：
 A 链接 B，B 链接 C：</p>
@@ -283,45 +283,45 @@ A 链接 B，B 链接 C：</p>
 </ul>
 <h3 id="13-传统-cmake-vs-modern-cmake-核心区别">1.3 传统 CMake vs Modern CMake 核心区别</h3>
 <table>
-  <thead>
-      <tr>
-          <th>传统 CMake 全局命令</th>
-          <th>Modern CMake 目标级替代命令</th>
-          <th>核心问题</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>include_directories()</code></td>
-          <td><code>target_include_directories()</code></td>
-          <td>全局头文件路径污染，易出现头文件冲突、作用域混乱</td>
-      </tr>
-      <tr>
-          <td><code>add_definitions()</code></td>
-          <td><code>target_compile_definitions()</code></td>
-          <td>全局宏定义泄露给所有目标</td>
-      </tr>
-      <tr>
-          <td><code>add_compile_options()</code></td>
-          <td><code>target_compile_options()</code></td>
-          <td>全局编译选项影响所有目标，跨平台适配困难</td>
-      </tr>
-      <tr>
-          <td><code>link_directories()</code></td>
-          <td><code>target_link_directories()</code>（极少推荐）</td>
-          <td>全局库搜索路径混乱，链接优先级不可控</td>
-      </tr>
-      <tr>
-          <td><code>link_libraries()</code></td>
-          <td><code>target_link_libraries()</code></td>
-          <td>全局链接库强制所有目标链接，依赖关系不清晰</td>
-      </tr>
-      <tr>
-          <td>手动设置 <code>CMAKE_CXX_FLAGS</code></td>
-          <td><code>target_compile_features()</code>/<code>target_compile_options()</code></td>
-          <td>编译器相关硬编码，跨编译器兼容性差</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>传统 CMake 全局命令</th>
+					<th>Modern CMake 目标级替代命令</th>
+					<th>核心问题</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>include_directories()</code></td>
+					<td><code>target_include_directories()</code></td>
+					<td>全局头文件路径污染，易出现头文件冲突、作用域混乱</td>
+			</tr>
+			<tr>
+					<td><code>add_definitions()</code></td>
+					<td><code>target_compile_definitions()</code></td>
+					<td>全局宏定义泄露给所有目标</td>
+			</tr>
+			<tr>
+					<td><code>add_compile_options()</code></td>
+					<td><code>target_compile_options()</code></td>
+					<td>全局编译选项影响所有目标，跨平台适配困难</td>
+			</tr>
+			<tr>
+					<td><code>link_directories()</code></td>
+					<td><code>target_link_directories()</code>（极少推荐）</td>
+					<td>全局库搜索路径混乱，链接优先级不可控</td>
+			</tr>
+			<tr>
+					<td><code>link_libraries()</code></td>
+					<td><code>target_link_libraries()</code></td>
+					<td>全局链接库强制所有目标链接，依赖关系不清晰</td>
+			</tr>
+			<tr>
+					<td>手动设置 <code>CMAKE_CXX_FLAGS</code></td>
+					<td><code>target_compile_features()</code>/<code>target_compile_options()</code></td>
+					<td>编译器相关硬编码，跨编译器兼容性差</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="二项目基础配置命令">二、项目基础配置命令</h2>
 <h3 id="21-cmake_minimum_required指定最低-cmake-版本">2.1 <code>cmake_minimum_required</code>：指定最低 CMake 版本</h3>
@@ -615,46 +615,46 @@ A 链接 B，B 链接 C：</p>
 </span></span></span><span class="line"><span class="cl"><span class="nb">target_compile_features</span><span class="p">(</span><span class="s">my_lib</span> <span class="s">PRIVATE</span> <span class="s">cxx_lambda_init_captures</span> <span class="s">cxx_constexpr</span><span class="p">)</span></span></span></code></pre></div></div>
 <h3 id="46-其他常用-target_-命令">4.6 其他常用 target_* 命令</h3>
 <table>
-  <thead>
-      <tr>
-          <th>命令</th>
-          <th>最低版本</th>
-          <th>核心作用</th>
-          <th>示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>target_sources</code></td>
-          <td>3.13+</td>
-          <td>给目标追加源文件，支持子目录中给父目标添加文件</td>
-          <td><code>target_sources(my_lib PRIVATE submodule.cpp)</code></td>
-      </tr>
-      <tr>
-          <td><code>target_link_directories</code></td>
-          <td>3.13+</td>
-          <td>指定库搜索路径，<strong>强烈不推荐</strong>，优先使用导入目标</td>
-          <td><code>target_link_directories(my_lib PRIVATE /opt/xxx/lib)</code></td>
-      </tr>
-      <tr>
-          <td><code>target_link_options</code></td>
-          <td>3.13+</td>
-          <td>指定目标专属链接选项</td>
-          <td><code>target_link_options(my_app PRIVATE -Wl,--gc-sections)</code></td>
-      </tr>
-      <tr>
-          <td><code>target_precompile_headers</code></td>
-          <td>3.16+</td>
-          <td>预编译头文件，大幅提升编译速度</td>
-          <td><code>target_precompile_headers(my_lib PRIVATE &lt;vector&gt; &lt;string&gt; &lt;memory&gt;)</code></td>
-      </tr>
-      <tr>
-          <td><code>set_target_properties</code></td>
-          <td>3.0+</td>
-          <td>批量设置目标属性</td>
-          <td>见下文</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>命令</th>
+					<th>最低版本</th>
+					<th>核心作用</th>
+					<th>示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>target_sources</code></td>
+					<td>3.13+</td>
+					<td>给目标追加源文件，支持子目录中给父目标添加文件</td>
+					<td><code>target_sources(my_lib PRIVATE submodule.cpp)</code></td>
+			</tr>
+			<tr>
+					<td><code>target_link_directories</code></td>
+					<td>3.13+</td>
+					<td>指定库搜索路径，<strong>强烈不推荐</strong>，优先使用导入目标</td>
+					<td><code>target_link_directories(my_lib PRIVATE /opt/xxx/lib)</code></td>
+			</tr>
+			<tr>
+					<td><code>target_link_options</code></td>
+					<td>3.13+</td>
+					<td>指定目标专属链接选项</td>
+					<td><code>target_link_options(my_app PRIVATE -Wl,--gc-sections)</code></td>
+			</tr>
+			<tr>
+					<td><code>target_precompile_headers</code></td>
+					<td>3.16+</td>
+					<td>预编译头文件，大幅提升编译速度</td>
+					<td><code>target_precompile_headers(my_lib PRIVATE &lt;vector&gt; &lt;string&gt; &lt;memory&gt;)</code></td>
+			</tr>
+			<tr>
+					<td><code>set_target_properties</code></td>
+					<td>3.0+</td>
+					<td>批量设置目标属性</td>
+					<td>见下文</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="47-set_target_properties设置目标通用属性">4.7 <code>set_target_properties</code>：设置目标通用属性</h3>
 <p>批量设置一个或多个目标的属性，是目标属性配置的兜底方案。</p>
@@ -679,76 +679,76 @@ A 链接 B，B 链接 C：</p>
 </span></span><span class="line"><span class="cl"><span class="p">)</span></span></span></code></pre></div></div>
 <p><strong>常用目标属性</strong>：</p>
 <table>
-  <thead>
-      <tr>
-          <th>属性名</th>
-          <th>作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>CXX_STANDARD</code></td>
-          <td>目标专属 C++ 标准版本</td>
-      </tr>
-      <tr>
-          <td><code>CXX_STANDARD_REQUIRED</code></td>
-          <td>是否强制要求该标准</td>
-      </tr>
-      <tr>
-          <td><code>CXX_EXTENSIONS</code></td>
-          <td>是否启用编译器扩展</td>
-      </tr>
-      <tr>
-          <td><code>POSITION_INDEPENDENT_CODE</code></td>
-          <td>是否生成 PIC 位置无关代码</td>
-      </tr>
-      <tr>
-          <td><code>WIN32_EXECUTABLE</code></td>
-          <td>同 <code>add_executable</code> 的 <code>WIN32</code> 参数</td>
-      </tr>
-      <tr>
-          <td><code>MACOSX_BUNDLE</code></td>
-          <td>同 <code>add_executable</code> 的 <code>MACOSX_BUNDLE</code> 参数</td>
-      </tr>
-      <tr>
-          <td><code>EXCLUDE_FROM_ALL</code></td>
-          <td>是否排除在默认构建之外</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>属性名</th>
+					<th>作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>CXX_STANDARD</code></td>
+					<td>目标专属 C++ 标准版本</td>
+			</tr>
+			<tr>
+					<td><code>CXX_STANDARD_REQUIRED</code></td>
+					<td>是否强制要求该标准</td>
+			</tr>
+			<tr>
+					<td><code>CXX_EXTENSIONS</code></td>
+					<td>是否启用编译器扩展</td>
+			</tr>
+			<tr>
+					<td><code>POSITION_INDEPENDENT_CODE</code></td>
+					<td>是否生成 PIC 位置无关代码</td>
+			</tr>
+			<tr>
+					<td><code>WIN32_EXECUTABLE</code></td>
+					<td>同 <code>add_executable</code> 的 <code>WIN32</code> 参数</td>
+			</tr>
+			<tr>
+					<td><code>MACOSX_BUNDLE</code></td>
+					<td>同 <code>add_executable</code> 的 <code>MACOSX_BUNDLE</code> 参数</td>
+			</tr>
+			<tr>
+					<td><code>EXCLUDE_FROM_ALL</code></td>
+					<td>是否排除在默认构建之外</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="五变量作用域与生成器表达式">五、变量、作用域与生成器表达式</h2>
 <h3 id="51-变量类型与语法">5.1 变量类型与语法</h3>
 <p>CMake 变量均为字符串类型，区分大小写，引用格式为 <code>${变量名}</code>，<code>if()</code> 语句中可直接使用变量名无需 <code>${}</code>。</p>
 <table>
-  <thead>
-      <tr>
-          <th>变量类型</th>
-          <th>定义语法</th>
-          <th>作用域与特性</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>普通变量</td>
-          <td><code>set(&lt;var&gt; &lt;value&gt;... [PARENT_SCOPE])</code></td>
-          <td>作用域为当前 CMakeLists.txt 及子目录，<code>PARENT_SCOPE</code> 可向上传递到父作用域</td>
-      </tr>
-      <tr>
-          <td>缓存变量</td>
-          <td><code>set(&lt;var&gt; &lt;value&gt;... CACHE &lt;type&gt; &lt;doc&gt; [FORCE])</code></td>
-          <td>全局生效，缓存到 <code>CMakeCache.txt</code>，可通过 <code>cmake -Dxxx=yyy</code> 命令行修改</td>
-      </tr>
-      <tr>
-          <td>环境变量</td>
-          <td><code>set(ENV{&lt;var&gt;} &lt;value&gt;)</code></td>
-          <td>仅当前 CMake 进程有效，读取格式为 <code>$ENV{&lt;var&gt;}</code></td>
-      </tr>
-      <tr>
-          <td>内置变量</td>
-          <td>CMake 预定义</td>
-          <td>如 <code>CMAKE_SOURCE_DIR</code>（顶层源码目录）、<code>CMAKE_BINARY_DIR</code>（顶层构建目录）、<code>CMAKE_BUILD_TYPE</code>（构建类型）</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>变量类型</th>
+					<th>定义语法</th>
+					<th>作用域与特性</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>普通变量</td>
+					<td><code>set(&lt;var&gt; &lt;value&gt;... [PARENT_SCOPE])</code></td>
+					<td>作用域为当前 CMakeLists.txt 及子目录，<code>PARENT_SCOPE</code> 可向上传递到父作用域</td>
+			</tr>
+			<tr>
+					<td>缓存变量</td>
+					<td><code>set(&lt;var&gt; &lt;value&gt;... CACHE &lt;type&gt; &lt;doc&gt; [FORCE])</code></td>
+					<td>全局生效，缓存到 <code>CMakeCache.txt</code>，可通过 <code>cmake -Dxxx=yyy</code> 命令行修改</td>
+			</tr>
+			<tr>
+					<td>环境变量</td>
+					<td><code>set(ENV{&lt;var&gt;} &lt;value&gt;)</code></td>
+					<td>仅当前 CMake 进程有效，读取格式为 <code>$ENV{&lt;var&gt;}</code></td>
+			</tr>
+			<tr>
+					<td>内置变量</td>
+					<td>CMake 预定义</td>
+					<td>如 <code>CMAKE_SOURCE_DIR</code>（顶层源码目录）、<code>CMAKE_BINARY_DIR</code>（顶层构建目录）、<code>CMAKE_BUILD_TYPE</code>（构建类型）</td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>常用示例</strong>：</p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -776,50 +776,50 @@ A 链接 B，B 链接 C：</p>
 </ul>
 <p><strong>最常用生成器表达式</strong>：</p>
 <table>
-  <thead>
-      <tr>
-          <th>表达式</th>
-          <th>作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>$&lt;BUILD_INTERFACE:path&gt;</code></td>
-          <td>构建阶段生效，安装阶段失效</td>
-      </tr>
-      <tr>
-          <td><code>$&lt;INSTALL_INTERFACE:path&gt;</code></td>
-          <td>安装阶段生效，构建阶段失效</td>
-      </tr>
-      <tr>
-          <td><code>$&lt;CXX_COMPILER_ID:id&gt;</code></td>
-          <td>编译器匹配时返回 1，如 <code>GNU</code>/<code>Clang</code>/<code>MSVC</code></td>
-      </tr>
-      <tr>
-          <td><code>$&lt;CONFIG:cfg&gt;</code></td>
-          <td>构建类型匹配时返回 1，如 <code>Debug</code>/<code>Release</code></td>
-      </tr>
-      <tr>
-          <td><code>$&lt;PLATFORM_ID:id&gt;</code></td>
-          <td>平台匹配时返回 1，如 <code>Linux</code>/<code>Windows</code>/<code>Darwin</code></td>
-      </tr>
-      <tr>
-          <td><code>$&lt;COMPILE_LANGUAGE:lang&gt;</code></td>
-          <td>编译语言匹配时返回 1，如 <code>CXX</code>/<code>C</code></td>
-      </tr>
-      <tr>
-          <td><code>$&lt;AND:a,b&gt;</code></td>
-          <td>逻辑与，a 和 b 均为 1 时返回 1</td>
-      </tr>
-      <tr>
-          <td><code>$&lt;OR:a,b&gt;</code></td>
-          <td>逻辑或，a 或 b 为 1 时返回 1</td>
-      </tr>
-      <tr>
-          <td><code>$&lt;NOT:a&gt;</code></td>
-          <td>逻辑非，a 为 0 时返回 1</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>表达式</th>
+					<th>作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>$&lt;BUILD_INTERFACE:path&gt;</code></td>
+					<td>构建阶段生效，安装阶段失效</td>
+			</tr>
+			<tr>
+					<td><code>$&lt;INSTALL_INTERFACE:path&gt;</code></td>
+					<td>安装阶段生效，构建阶段失效</td>
+			</tr>
+			<tr>
+					<td><code>$&lt;CXX_COMPILER_ID:id&gt;</code></td>
+					<td>编译器匹配时返回 1，如 <code>GNU</code>/<code>Clang</code>/<code>MSVC</code></td>
+			</tr>
+			<tr>
+					<td><code>$&lt;CONFIG:cfg&gt;</code></td>
+					<td>构建类型匹配时返回 1，如 <code>Debug</code>/<code>Release</code></td>
+			</tr>
+			<tr>
+					<td><code>$&lt;PLATFORM_ID:id&gt;</code></td>
+					<td>平台匹配时返回 1，如 <code>Linux</code>/<code>Windows</code>/<code>Darwin</code></td>
+			</tr>
+			<tr>
+					<td><code>$&lt;COMPILE_LANGUAGE:lang&gt;</code></td>
+					<td>编译语言匹配时返回 1，如 <code>CXX</code>/<code>C</code></td>
+			</tr>
+			<tr>
+					<td><code>$&lt;AND:a,b&gt;</code></td>
+					<td>逻辑与，a 和 b 均为 1 时返回 1</td>
+			</tr>
+			<tr>
+					<td><code>$&lt;OR:a,b&gt;</code></td>
+					<td>逻辑或，a 或 b 为 1 时返回 1</td>
+			</tr>
+			<tr>
+					<td><code>$&lt;NOT:a&gt;</code></td>
+					<td>逻辑非，a 为 0 时返回 1</td>
+			</tr>
+	</tbody>
 </table>
 <p><strong>综合示例</strong>：</p>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
@@ -911,30 +911,30 @@ A 链接 B，B 链接 C：</p>
 </span></span></span><span class="line"><span class="cl"><span class="nb">add_my_executable</span><span class="p">(</span><span class="s">app2</span> <span class="s">main2.cpp</span> <span class="s">module.cpp</span><span class="p">)</span></span></span></code></pre></div></div>
 <p><strong>function 与 macro 核心区别</strong>：</p>
 <table>
-  <thead>
-      <tr>
-          <th>特性</th>
-          <th>function</th>
-          <th>macro</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>作用域</td>
-          <td>有独立局部作用域，变量默认局部</td>
-          <td>无作用域，变量直接修改父作用域</td>
-      </tr>
-      <tr>
-          <td>参数处理</td>
-          <td>实参传递，支持参数校验</td>
-          <td>文本替换，参数无类型校验</td>
-      </tr>
-      <tr>
-          <td>返回值</td>
-          <td>通过 <code>PARENT_SCOPE</code> 设置父作用域变量</td>
-          <td>直接修改父作用域变量</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>特性</th>
+					<th>function</th>
+					<th>macro</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>作用域</td>
+					<td>有独立局部作用域，变量默认局部</td>
+					<td>无作用域，变量直接修改父作用域</td>
+			</tr>
+			<tr>
+					<td>参数处理</td>
+					<td>实参传递，支持参数校验</td>
+					<td>文本替换，参数无类型校验</td>
+			</tr>
+			<tr>
+					<td>返回值</td>
+					<td>通过 <code>PARENT_SCOPE</code> 设置父作用域变量</td>
+					<td>直接修改父作用域变量</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="七依赖管理">七、依赖管理</h2>
 <p>Modern CMake 提供两套标准化依赖管理方案，彻底告别手动找头文件、手动链接库的原始写法。</p>
@@ -1175,7 +1175,7 @@ A 链接 B，B 链接 C：</p>
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

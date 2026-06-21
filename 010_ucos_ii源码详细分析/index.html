@@ -5,22 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>uCOS-II 源码详细分析 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/010_ucos_ii%E6%BA%90%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="uCOS-II 源码详细分析">
-  <meta property="og:description" content="uC/OS-II 源码详细分析（基于V2.92经典稳定版） uC/OS-II 是由Jean J. Labrosse开发的可剥夺型硬实时多任务RTOS内核，专为资源受限的嵌入式系统设计，全部源码遵循ANSI C标准编写，仅少量CPU架构相关代码用汇编实现，具备可裁剪、可移植、可固化、调度时间恒定、实时性强的核心特点，广泛应用于工业控制、医疗设备、汽车电子等对确定性和可靠性有严苛要求的领域。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-03-03T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-03-03T10:00:20+08:00">
-    <meta property="article:tag" content="OS">
-    <meta property="article:tag" content="UCOS-II">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="uCOS-II 源码详细分析">
+	<meta property="og:description" content="uC/OS-II 源码详细分析（基于V2.92经典稳定版） uC/OS-II 是由Jean J. Labrosse开发的可剥夺型硬实时多任务RTOS内核，专为资源受限的嵌入式系统设计，全部源码遵循ANSI C标准编写，仅少量CPU架构相关代码用汇编实现，具备可裁剪、可移植、可固化、调度时间恒定、实时性强的核心特点，广泛应用于工业控制、医疗设备、汽车电子等对确定性和可靠性有严苛要求的领域。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-03-03T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-03-03T10:00:20+08:00">
+		<meta property="article:tag" content="OS">
+		<meta property="article:tag" content="UCOS-II">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="uCOS-II 源码详细分析">
-  <meta name="twitter:description" content="uC/OS-II 源码详细分析（基于V2.92经典稳定版） uC/OS-II 是由Jean J. Labrosse开发的可剥夺型硬实时多任务RTOS内核，专为资源受限的嵌入式系统设计，全部源码遵循ANSI C标准编写，仅少量CPU架构相关代码用汇编实现，具备可裁剪、可移植、可固化、调度时间恒定、实时性强的核心特点，广泛应用于工业控制、医疗设备、汽车电子等对确定性和可靠性有严苛要求的领域。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="uCOS-II 源码详细分析">
+	<meta name="twitter:description" content="uC/OS-II 源码详细分析（基于V2.92经典稳定版） uC/OS-II 是由Jean J. Labrosse开发的可剥夺型硬实时多任务RTOS内核，专为资源受限的嵌入式系统设计，全部源码遵循ANSI C标准编写，仅少量CPU架构相关代码用汇编实现，具备可裁剪、可移植、可固化、调度时间恒定、实时性强的核心特点，广泛应用于工业控制、医疗设备、汽车电子等对确定性和可靠性有严苛要求的领域。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -216,102 +216,102 @@
 <h3 id="1-硬件无关层内核通用核心无需修改">1. 硬件无关层（内核通用核心，无需修改）</h3>
 <p>该层是uC/OS-II的核心主体，与CPU/硬件平台完全无关，跨平台通用，每个模块对应独立的C文件，职责清晰：</p>
 <table>
-  <thead>
-      <tr>
-          <th>源文件</th>
-          <th>核心功能</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>os_core.c</td>
-          <td>内核中枢，实现初始化、任务调度、中断管理、临界区、TCB/ECB链表管理等核心逻辑</td>
-      </tr>
-      <tr>
-          <td>os_task.c</td>
-          <td>任务管理，实现任务创建/删除/挂起/恢复/优先级修改等专属API</td>
-      </tr>
-      <tr>
-          <td>os_time.c</td>
-          <td>时间管理，实现时钟节拍处理、任务延时、延时恢复等时间相关功能</td>
-      </tr>
-      <tr>
-          <td>os_mem.c</td>
-          <td>内存管理，实现固定大小内存分区管理，解决内存碎片问题</td>
-      </tr>
-      <tr>
-          <td>os_sem.c</td>
-          <td>计数型/二值信号量，实现任务同步与资源互斥访问</td>
-      </tr>
-      <tr>
-          <td>os_mutex.c</td>
-          <td>互斥信号量，基于优先级继承协议解决优先级反转问题</td>
-      </tr>
-      <tr>
-          <td>os_mbox.c</td>
-          <td>消息邮箱，实现单指针消息的任务间通信</td>
-      </tr>
-      <tr>
-          <td>os_q.c</td>
-          <td>消息队列，邮箱的增强版，支持多消息FIFO异步通信</td>
-      </tr>
-      <tr>
-          <td>os_flag.c</td>
-          <td>事件标志组，支持多事件的逻辑与/或组合等待</td>
-      </tr>
-      <tr>
-          <td>ucos_ii.h</td>
-          <td>内核总头文件，定义所有数据结构、宏、枚举、函数声明</td>
-      </tr>
-      <tr>
-          <td>ucos_ii.c</td>
-          <td>内核入口，统一包含所有核心源文件，方便工程管理</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>源文件</th>
+					<th>核心功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>os_core.c</td>
+					<td>内核中枢，实现初始化、任务调度、中断管理、临界区、TCB/ECB链表管理等核心逻辑</td>
+			</tr>
+			<tr>
+					<td>os_task.c</td>
+					<td>任务管理，实现任务创建/删除/挂起/恢复/优先级修改等专属API</td>
+			</tr>
+			<tr>
+					<td>os_time.c</td>
+					<td>时间管理，实现时钟节拍处理、任务延时、延时恢复等时间相关功能</td>
+			</tr>
+			<tr>
+					<td>os_mem.c</td>
+					<td>内存管理，实现固定大小内存分区管理，解决内存碎片问题</td>
+			</tr>
+			<tr>
+					<td>os_sem.c</td>
+					<td>计数型/二值信号量，实现任务同步与资源互斥访问</td>
+			</tr>
+			<tr>
+					<td>os_mutex.c</td>
+					<td>互斥信号量，基于优先级继承协议解决优先级反转问题</td>
+			</tr>
+			<tr>
+					<td>os_mbox.c</td>
+					<td>消息邮箱，实现单指针消息的任务间通信</td>
+			</tr>
+			<tr>
+					<td>os_q.c</td>
+					<td>消息队列，邮箱的增强版，支持多消息FIFO异步通信</td>
+			</tr>
+			<tr>
+					<td>os_flag.c</td>
+					<td>事件标志组，支持多事件的逻辑与/或组合等待</td>
+			</tr>
+			<tr>
+					<td>ucos_ii.h</td>
+					<td>内核总头文件，定义所有数据结构、宏、枚举、函数声明</td>
+			</tr>
+			<tr>
+					<td>ucos_ii.c</td>
+					<td>内核入口，统一包含所有核心源文件，方便工程管理</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-硬件相关层移植层需根据cpu编译器修改">2. 硬件相关层（移植层，需根据CPU/编译器修改）</h3>
 <p>该层是内核与硬件之间的抽象层，所有与CPU架构、编译器相关的代码均集中在此，是移植的核心修改对象：</p>
 <table>
-  <thead>
-      <tr>
-          <th>源文件</th>
-          <th>核心功能</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>os_cpu.h</td>
-          <td>CPU相关宏定义、基本数据类型、编译器配置、关/开中断宏、任务切换宏</td>
-      </tr>
-      <tr>
-          <td>os_cpu_c.c</td>
-          <td>C语言实现的移植函数，核心是<strong>任务栈初始化函数OSTaskStkInit()</strong>，以及各类钩子函数</td>
-      </tr>
-      <tr>
-          <td>os_cpu_a.asm</td>
-          <td>汇编实现的底层核心函数，包括任务启动OSStartHighRdy()、任务级切换OSCtxSw()、中断级切换OSIntCtxSw()</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>源文件</th>
+					<th>核心功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>os_cpu.h</td>
+					<td>CPU相关宏定义、基本数据类型、编译器配置、关/开中断宏、任务切换宏</td>
+			</tr>
+			<tr>
+					<td>os_cpu_c.c</td>
+					<td>C语言实现的移植函数，核心是<strong>任务栈初始化函数OSTaskStkInit()</strong>，以及各类钩子函数</td>
+			</tr>
+			<tr>
+					<td>os_cpu_a.asm</td>
+					<td>汇编实现的底层核心函数，包括任务启动OSStartHighRdy()、任务级切换OSCtxSw()、中断级切换OSIntCtxSw()</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-用户配置层可裁剪定制按需修改">3. 用户配置层（可裁剪定制，按需修改）</h3>
 <p>通过宏开关实现内核功能的精细化裁剪与配置，无需修改内核源码，适配不同资源的硬件平台：</p>
 <table>
-  <thead>
-      <tr>
-          <th>源文件</th>
-          <th>核心功能</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>os_cfg.h</td>
-          <td>内核配置文件，通过宏定义配置最大任务数、最大事件数、是否启用统计任务/模块裁剪、时钟节拍频率等核心参数</td>
-      </tr>
-      <tr>
-          <td>includes.h</td>
-          <td>工程总头文件，统一包含内核头文件、硬件驱动头文件、用户代码头文件，集中管理工程依赖</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>源文件</th>
+					<th>核心功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>os_cfg.h</td>
+					<td>内核配置文件，通过宏定义配置最大任务数、最大事件数、是否启用统计任务/模块裁剪、时钟节拍频率等核心参数</td>
+			</tr>
+			<tr>
+					<td>includes.h</td>
+					<td>工程总头文件，统一包含内核头文件、硬件驱动头文件、用户代码头文件，集中管理工程依赖</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="二核心数据结构详解">二、核心数据结构详解</h2>
 <p>理解uC/OS-II源码的核心是吃透三大基础数据结构，它们是整个内核运行的基石。</p>
@@ -548,40 +548,40 @@
 </ol>
 <h4 id="12-核心任务管理api">1.2 核心任务管理API</h4>
 <table>
-  <thead>
-      <tr>
-          <th>API函数</th>
-          <th>核心功能</th>
-          <th>调用限制</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>OSTaskCreateExt()</td>
-          <td>扩展任务创建，支持栈检测、任务名、用户数据等扩展功能</td>
-          <td>任务级/启动前</td>
-      </tr>
-      <tr>
-          <td>OSTaskDel()</td>
-          <td>删除任务，将任务从就绪表/等待表移除，TCB归还空闲链表</td>
-          <td>仅任务级，禁止删除空闲任务</td>
-      </tr>
-      <tr>
-          <td>OSTaskSuspend()</td>
-          <td>强制挂起任务，任务进入挂起态，即使就绪也无法被调度</td>
-          <td>任务级，支持嵌套挂起</td>
-      </tr>
-      <tr>
-          <td>OSTaskResume()</td>
-          <td>恢复被挂起的任务，解除挂起态，就绪则写入就绪表</td>
-          <td>任务级</td>
-      </tr>
-      <tr>
-          <td>OSTaskChangePrio()</td>
-          <td>动态修改任务的优先级，同步更新就绪表和TCB预计算参数</td>
-          <td>任务级，禁止修改空闲任务优先级</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>API函数</th>
+					<th>核心功能</th>
+					<th>调用限制</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>OSTaskCreateExt()</td>
+					<td>扩展任务创建，支持栈检测、任务名、用户数据等扩展功能</td>
+					<td>任务级/启动前</td>
+			</tr>
+			<tr>
+					<td>OSTaskDel()</td>
+					<td>删除任务，将任务从就绪表/等待表移除，TCB归还空闲链表</td>
+					<td>仅任务级，禁止删除空闲任务</td>
+			</tr>
+			<tr>
+					<td>OSTaskSuspend()</td>
+					<td>强制挂起任务，任务进入挂起态，即使就绪也无法被调度</td>
+					<td>任务级，支持嵌套挂起</td>
+			</tr>
+			<tr>
+					<td>OSTaskResume()</td>
+					<td>恢复被挂起的任务，解除挂起态，就绪则写入就绪表</td>
+					<td>任务级</td>
+			</tr>
+			<tr>
+					<td>OSTaskChangePrio()</td>
+					<td>动态修改任务的优先级，同步更新就绪表和TCB预计算参数</td>
+					<td>任务级，禁止修改空闲任务优先级</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-时间管理模块os_timec">2. 时间管理模块（os_time.c）</h3>
 <p>uC/OS-II的时间管理完全基于<strong>时钟节拍（SysTick）</strong>，时钟节拍是固定频率的硬件定时器中断，是系统的“心跳”，默认频率10~1000Hz，频率越高实时性越好，但系统开销越大。</p>
@@ -610,30 +610,30 @@
 </ol>
 <h4 id="23-核心时间管理api">2.3 核心时间管理API</h4>
 <table>
-  <thead>
-      <tr>
-          <th>API函数</th>
-          <th>核心功能</th>
-          <th>调用限制</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>OSTimeDlyHMSM()</td>
-          <td>按小时/分钟/秒/毫秒延时，内部转换为节拍数调用OSTimeDly()</td>
-          <td>仅任务级</td>
-      </tr>
-      <tr>
-          <td>OSTimeDlyResume()</td>
-          <td>强制结束任务的延时，提前将其置为就绪态</td>
-          <td>仅任务级</td>
-      </tr>
-      <tr>
-          <td>OSTimeGet()/OSTimeSet()</td>
-          <td>获取/设置系统时钟节拍计数器，用于计时</td>
-          <td>无限制</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>API函数</th>
+					<th>核心功能</th>
+					<th>调用限制</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>OSTimeDlyHMSM()</td>
+					<td>按小时/分钟/秒/毫秒延时，内部转换为节拍数调用OSTimeDly()</td>
+					<td>仅任务级</td>
+			</tr>
+			<tr>
+					<td>OSTimeDlyResume()</td>
+					<td>强制结束任务的延时，提前将其置为就绪态</td>
+					<td>仅任务级</td>
+			</tr>
+			<tr>
+					<td>OSTimeGet()/OSTimeSet()</td>
+					<td>获取/设置系统时钟节拍计数器，用于计时</td>
+					<td>无限制</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-内存管理模块os_memc">3. 内存管理模块（os_mem.c）</h3>
 <p>uC/OS-II采用<strong>固定大小内存分区管理</strong>机制，彻底解决了嵌入式系统中标准malloc/free带来的内存碎片、分配时间不确定的问题，实现了O(1)级别的内存分配与释放。</p>
@@ -656,30 +656,30 @@
 </span></span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">OS_MEM</span><span class="p">;</span></span></span></code></pre></div></div>
 <h4 id="32-核心内存管理api源码逻辑">3.2 核心内存管理API源码逻辑</h4>
 <table>
-  <thead>
-      <tr>
-          <th>API函数</th>
-          <th>核心功能</th>
-          <th>执行核心流程</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>OSMemCreate()</td>
-          <td>创建内存分区，将连续内存划分为固定大小的内存块</td>
-          <td>1. 校验内存地址、块大小、块数量合法性；2. 从OSMemFreeList分配空闲OS_MEM；3. 将内存划分为多个块，串联成空闲链表；4. 初始化OS_MEM所有成员，返回分区指针</td>
-      </tr>
-      <tr>
-          <td>OSMemGet()</td>
-          <td>从分区申请一个内存块，O(1)复杂度</td>
-          <td>1. 校验分区指针和空闲块数量；2. 关中断，从空闲链表头部取出第一个空闲块；3. 更新空闲链表头指针，空闲计数减1；4. 开中断，返回内存块指针</td>
-      </tr>
-      <tr>
-          <td>OSMemPut()</td>
-          <td>释放内存块到对应分区，O(1)复杂度</td>
-          <td>1. 校验分区和内存块指针合法性；2. 关中断，将内存块插入空闲链表头部；3. 空闲计数加1；4. 开中断，返回执行结果</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>API函数</th>
+					<th>核心功能</th>
+					<th>执行核心流程</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>OSMemCreate()</td>
+					<td>创建内存分区，将连续内存划分为固定大小的内存块</td>
+					<td>1. 校验内存地址、块大小、块数量合法性；2. 从OSMemFreeList分配空闲OS_MEM；3. 将内存划分为多个块，串联成空闲链表；4. 初始化OS_MEM所有成员，返回分区指针</td>
+			</tr>
+			<tr>
+					<td>OSMemGet()</td>
+					<td>从分区申请一个内存块，O(1)复杂度</td>
+					<td>1. 校验分区指针和空闲块数量；2. 关中断，从空闲链表头部取出第一个空闲块；3. 更新空闲链表头指针，空闲计数减1；4. 开中断，返回内存块指针</td>
+			</tr>
+			<tr>
+					<td>OSMemPut()</td>
+					<td>释放内存块到对应分区，O(1)复杂度</td>
+					<td>1. 校验分区和内存块指针合法性；2. 关中断，将内存块插入空闲链表头部；3. 空闲计数加1；4. 开中断，返回执行结果</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="4-同步与通信模块">4. 同步与通信模块</h3>
 <p>uC/OS-II提供了完整的任务间同步与通信机制，全部基于ECB统一管理，覆盖信号量、互斥锁、邮箱、消息队列、事件标志组。</p>
@@ -796,7 +796,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

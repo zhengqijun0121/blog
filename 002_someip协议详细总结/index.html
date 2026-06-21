@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>SOME/IP 协议详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/002_someip%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="SOME/IP 协议详细总结">
-  <meta property="og:description" content="SOME/IP协议 全面详细总结 SOME/IP 全称 Scalable service-Oriented MiddlewarE over IP（基于IP的可扩展面向服务中间件），是专为汽车电子电气（EE）架构设计的车载以太网核心通信协议，也是AUTOSAR架构中实现车载SOA（面向服务架构）的基石，解决了传统CAN/CAN FD总线带宽不足、扩展性差、无法支撑软件定义汽车动态功能部署的核心痛点。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-03-26T09:00:00+08:00">
-    <meta property="article:modified_time" content="2026-03-26T10:00:00+08:00">
-    <meta property="article:tag" content="AUTOSAR">
-    <meta property="article:tag" content="AUTOSAR AP">
-    <meta property="article:tag" content="SOMEIP">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="SOME/IP 协议详细总结">
+	<meta property="og:description" content="SOME/IP协议 全面详细总结 SOME/IP 全称 Scalable service-Oriented MiddlewarE over IP（基于IP的可扩展面向服务中间件），是专为汽车电子电气（EE）架构设计的车载以太网核心通信协议，也是AUTOSAR架构中实现车载SOA（面向服务架构）的基石，解决了传统CAN/CAN FD总线带宽不足、扩展性差、无法支撑软件定义汽车动态功能部署的核心痛点。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-03-26T09:00:00+08:00">
+		<meta property="article:modified_time" content="2026-03-26T10:00:00+08:00">
+		<meta property="article:tag" content="AUTOSAR">
+		<meta property="article:tag" content="AUTOSAR AP">
+		<meta property="article:tag" content="SOMEIP">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="SOME/IP 协议详细总结">
-  <meta name="twitter:description" content="SOME/IP协议 全面详细总结 SOME/IP 全称 Scalable service-Oriented MiddlewarE over IP（基于IP的可扩展面向服务中间件），是专为汽车电子电气（EE）架构设计的车载以太网核心通信协议，也是AUTOSAR架构中实现车载SOA（面向服务架构）的基石，解决了传统CAN/CAN FD总线带宽不足、扩展性差、无法支撑软件定义汽车动态功能部署的核心痛点。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="SOME/IP 协议详细总结">
+	<meta name="twitter:description" content="SOME/IP协议 全面详细总结 SOME/IP 全称 Scalable service-Oriented MiddlewarE over IP（基于IP的可扩展面向服务中间件），是专为汽车电子电气（EE）架构设计的车载以太网核心通信协议，也是AUTOSAR架构中实现车载SOA（面向服务架构）的基石，解决了传统CAN/CAN FD总线带宽不足、扩展性差、无法支撑软件定义汽车动态功能部署的核心痛点。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -197,26 +197,26 @@
 <p>SOME/IP 是介于传输层（UDP/TCP）与应用层之间的轻量级通信中间件，原生适配车载嵌入式场景，同时支持<strong>请求-响应RPC</strong>、<strong>发布-订阅Pub/Sub</strong>等多种通信模式，实现跨ECU、跨域的服务化通信，是新一代车载中央计算+域控架构的核心通信协议。</p>
 <h3 id="2-核心标准化规范">2. 核心标准化规范</h3>
 <table>
-  <thead>
-      <tr>
-          <th>标准体系</th>
-          <th>核心规范内容</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>AUTOSAR 规范</td>
-          <td>AUTOSAR CP/AP 全平台支持，包含协议核心、服务发现SD、序列化Transformer、分段传输TP、一致性测试等全套规范</td>
-      </tr>
-      <tr>
-          <td>ISO 标准</td>
-          <td>ISO 21111 系列道路车辆标准，覆盖SOME/IP协议、服务发现、分段传输、互操作性测试等国际标准化内容</td>
-      </tr>
-      <tr>
-          <td>底层基础</td>
-          <td>基于IEEE 802.3车载以太网、IPv4/IPv6网络层、UDP/TCP传输层</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>标准体系</th>
+					<th>核心规范内容</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>AUTOSAR 规范</td>
+					<td>AUTOSAR CP/AP 全平台支持，包含协议核心、服务发现SD、序列化Transformer、分段传输TP、一致性测试等全套规范</td>
+			</tr>
+			<tr>
+					<td>ISO 标准</td>
+					<td>ISO 21111 系列道路车辆标准，覆盖SOME/IP协议、服务发现、分段传输、互操作性测试等国际标准化内容</td>
+			</tr>
+			<tr>
+					<td>底层基础</td>
+					<td>基于IEEE 802.3车载以太网、IPv4/IPv6网络层、UDP/TCP传输层</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-典型应用场景">3. 典型应用场景</h3>
 <p>智能驾驶传感器数据传输、智能座舱多屏交互、车身域控制、动力总成状态上报、车载诊断（UDS over SOME/IP）、OTA固件升级、车云协同服务代理等。</p>
@@ -233,34 +233,34 @@
 <h3 id="3-服务接口三要素">3. 服务接口三要素</h3>
 <p>服务的核心能力由三类接口元素定义，覆盖车载全场景通信需求：</p>
 <table>
-  <thead>
-      <tr>
-          <th>元素类型</th>
-          <th>通信模式</th>
-          <th>核心能力</th>
-          <th>典型场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Method（方法）</td>
-          <td>请求-响应RPC</td>
-          <td>消费者发起请求，提供者返回响应；支持无响应的Fire&amp;Forget模式</td>
-          <td>车门控制、诊断指令、参数读写</td>
-      </tr>
-      <tr>
-          <td>Event（事件）</td>
-          <td>发布-订阅Pub/Sub</td>
-          <td>提供者按周期/事件触发推送数据，仅订阅的消费者可接收，单向传输</td>
-          <td>车速、电池状态、传感器数据上报</td>
-      </tr>
-      <tr>
-          <td>Field（属性）</td>
-          <td>读写+通知组合</td>
-          <td>包含Getter/Setter Method（读写属性）+ Notifier Event（属性变更主动通知）</td>
-          <td>空调温度、驾驶模式、系统状态管理</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>元素类型</th>
+					<th>通信模式</th>
+					<th>核心能力</th>
+					<th>典型场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Method（方法）</td>
+					<td>请求-响应RPC</td>
+					<td>消费者发起请求，提供者返回响应；支持无响应的Fire&amp;Forget模式</td>
+					<td>车门控制、诊断指令、参数读写</td>
+			</tr>
+			<tr>
+					<td>Event（事件）</td>
+					<td>发布-订阅Pub/Sub</td>
+					<td>提供者按周期/事件触发推送数据，仅订阅的消费者可接收，单向传输</td>
+					<td>车速、电池状态、传感器数据上报</td>
+			</tr>
+			<tr>
+					<td>Field（属性）</td>
+					<td>读写+通知组合</td>
+					<td>包含Getter/Setter Method（读写属性）+ Notifier Event（属性变更主动通知）</td>
+					<td>空调温度、驾驶模式、系统状态管理</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="4-全局唯一标识体系">4. 全局唯一标识体系</h3>
 <p>SOME/IP通过一套标准化的ID体系实现服务寻址、报文匹配与权限控制，核心标识如下：</p>
@@ -278,149 +278,149 @@
 <p>SOME/IP报文分为<strong>固定头部（16字节）</strong>、<strong>可选扩展头部</strong>、**载荷（Payload）**三部分，所有字段采用大端序（网络字节序）传输。</p>
 <h3 id="1-固定头部必选16字节">1. 固定头部（必选，16字节）</h3>
 <table>
-  <thead>
-      <tr>
-          <th>字段</th>
-          <th>长度</th>
-          <th>核心说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Message ID</td>
-          <td>4字节</td>
-          <td>高16位=Service ID，低16位=Method/Event ID，唯一标识目标服务接口</td>
-      </tr>
-      <tr>
-          <td>Length</td>
-          <td>4字节</td>
-          <td>从Request ID字段开始到报文末尾的总字节数（固定头部剩余8字节+扩展头部+载荷）</td>
-      </tr>
-      <tr>
-          <td>Request ID</td>
-          <td>4字节</td>
-          <td>高16位=Client ID，低16位=Session ID，用于RPC请求与响应的精准匹配</td>
-      </tr>
-      <tr>
-          <td>Protocol Version</td>
-          <td>1字节</td>
-          <td>SOME/IP协议版本，当前标准固定为1</td>
-      </tr>
-      <tr>
-          <td>Interface Version</td>
-          <td>1字节</td>
-          <td>服务接口的主版本号，用于版本兼容性校验</td>
-      </tr>
-      <tr>
-          <td>Message Type</td>
-          <td>1字节</td>
-          <td>核心字段，定义报文类型与属性：<br>bit7：响应标志（1=响应类，0=请求类）<br>bit6：TP分段标志（1=TP分段报文，0=普通报文）<br>bit5-0：消息类型编码</td>
-      </tr>
-      <tr>
-          <td>Return Code</td>
-          <td>1字节</td>
-          <td>调用结果返回码，仅响应类报文有效，请求类报文固定为0x00</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>字段</th>
+					<th>长度</th>
+					<th>核心说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Message ID</td>
+					<td>4字节</td>
+					<td>高16位=Service ID，低16位=Method/Event ID，唯一标识目标服务接口</td>
+			</tr>
+			<tr>
+					<td>Length</td>
+					<td>4字节</td>
+					<td>从Request ID字段开始到报文末尾的总字节数（固定头部剩余8字节+扩展头部+载荷）</td>
+			</tr>
+			<tr>
+					<td>Request ID</td>
+					<td>4字节</td>
+					<td>高16位=Client ID，低16位=Session ID，用于RPC请求与响应的精准匹配</td>
+			</tr>
+			<tr>
+					<td>Protocol Version</td>
+					<td>1字节</td>
+					<td>SOME/IP协议版本，当前标准固定为1</td>
+			</tr>
+			<tr>
+					<td>Interface Version</td>
+					<td>1字节</td>
+					<td>服务接口的主版本号，用于版本兼容性校验</td>
+			</tr>
+			<tr>
+					<td>Message Type</td>
+					<td>1字节</td>
+					<td>核心字段，定义报文类型与属性：<br>bit7：响应标志（1=响应类，0=请求类）<br>bit6：TP分段标志（1=TP分段报文，0=普通报文）<br>bit5-0：消息类型编码</td>
+			</tr>
+			<tr>
+					<td>Return Code</td>
+					<td>1字节</td>
+					<td>调用结果返回码，仅响应类报文有效，请求类报文固定为0x00</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-核心message-type取值">2. 核心Message Type取值</h3>
 <table>
-  <thead>
-      <tr>
-          <th>取值</th>
-          <th>类型名称</th>
-          <th>核心用途</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>0x00</td>
-          <td>REQUEST</td>
-          <td>带响应的RPC请求，需提供者返回RESPONSE/ERROR</td>
-      </tr>
-      <tr>
-          <td>0x01</td>
-          <td>REQUEST_NO_RETURN</td>
-          <td>无响应的Fire&amp;Forget请求，无需提供者回复</td>
-      </tr>
-      <tr>
-          <td>0x02</td>
-          <td>NOTIFICATION</td>
-          <td>事件/属性通知报文，发布-订阅模式核心报文</td>
-      </tr>
-      <tr>
-          <td>0x80</td>
-          <td>RESPONSE</td>
-          <td>RPC请求的成功响应报文</td>
-      </tr>
-      <tr>
-          <td>0x81</td>
-          <td>ERROR</td>
-          <td>RPC请求的错误响应报文，携带错误码</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>取值</th>
+					<th>类型名称</th>
+					<th>核心用途</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>0x00</td>
+					<td>REQUEST</td>
+					<td>带响应的RPC请求，需提供者返回RESPONSE/ERROR</td>
+			</tr>
+			<tr>
+					<td>0x01</td>
+					<td>REQUEST_NO_RETURN</td>
+					<td>无响应的Fire&amp;Forget请求，无需提供者回复</td>
+			</tr>
+			<tr>
+					<td>0x02</td>
+					<td>NOTIFICATION</td>
+					<td>事件/属性通知报文，发布-订阅模式核心报文</td>
+			</tr>
+			<tr>
+					<td>0x80</td>
+					<td>RESPONSE</td>
+					<td>RPC请求的成功响应报文</td>
+			</tr>
+			<tr>
+					<td>0x81</td>
+					<td>ERROR</td>
+					<td>RPC请求的错误响应报文，携带错误码</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-核心return-code取值">3. 核心Return Code取值</h3>
 <table>
-  <thead>
-      <tr>
-          <th>取值</th>
-          <th>枚举值</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>0x00</td>
-          <td>E_OK</td>
-          <td>调用成功</td>
-      </tr>
-      <tr>
-          <td>0x01</td>
-          <td>E_NOT_OK</td>
-          <td>通用调用失败</td>
-      </tr>
-      <tr>
-          <td>0x02</td>
-          <td>E_UNKNOWN_SERVICE</td>
-          <td>未知服务ID</td>
-      </tr>
-      <tr>
-          <td>0x03</td>
-          <td>E_UNKNOWN_METHOD</td>
-          <td>未知方法ID</td>
-      </tr>
-      <tr>
-          <td>0x04</td>
-          <td>E_NOT_READY</td>
-          <td>服务未就绪</td>
-      </tr>
-      <tr>
-          <td>0x05</td>
-          <td>E_NOT_REACHABLE</td>
-          <td>服务不可达</td>
-      </tr>
-      <tr>
-          <td>0x06</td>
-          <td>E_TIMEOUT</td>
-          <td>调用超时</td>
-      </tr>
-      <tr>
-          <td>0x07</td>
-          <td>E_WRONG_PROTOCOL_VERSION</td>
-          <td>协议版本不匹配</td>
-      </tr>
-      <tr>
-          <td>0x08</td>
-          <td>E_WRONG_INTERFACE_VERSION</td>
-          <td>接口版本不匹配</td>
-      </tr>
-      <tr>
-          <td>0x09</td>
-          <td>E_MALFORMED_MESSAGE</td>
-          <td>报文格式错误</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>取值</th>
+					<th>枚举值</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>0x00</td>
+					<td>E_OK</td>
+					<td>调用成功</td>
+			</tr>
+			<tr>
+					<td>0x01</td>
+					<td>E_NOT_OK</td>
+					<td>通用调用失败</td>
+			</tr>
+			<tr>
+					<td>0x02</td>
+					<td>E_UNKNOWN_SERVICE</td>
+					<td>未知服务ID</td>
+			</tr>
+			<tr>
+					<td>0x03</td>
+					<td>E_UNKNOWN_METHOD</td>
+					<td>未知方法ID</td>
+			</tr>
+			<tr>
+					<td>0x04</td>
+					<td>E_NOT_READY</td>
+					<td>服务未就绪</td>
+			</tr>
+			<tr>
+					<td>0x05</td>
+					<td>E_NOT_REACHABLE</td>
+					<td>服务不可达</td>
+			</tr>
+			<tr>
+					<td>0x06</td>
+					<td>E_TIMEOUT</td>
+					<td>调用超时</td>
+			</tr>
+			<tr>
+					<td>0x07</td>
+					<td>E_WRONG_PROTOCOL_VERSION</td>
+					<td>协议版本不匹配</td>
+			</tr>
+			<tr>
+					<td>0x08</td>
+					<td>E_WRONG_INTERFACE_VERSION</td>
+					<td>接口版本不匹配</td>
+			</tr>
+			<tr>
+					<td>0x09</td>
+					<td>E_MALFORMED_MESSAGE</td>
+					<td>报文格式错误</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="4-可选扩展头部与载荷">4. 可选扩展头部与载荷</h3>
 <ul>
@@ -437,40 +437,40 @@
 </ul>
 <h4 id="核心报文能力">核心报文能力</h4>
 <table>
-  <thead>
-      <tr>
-          <th>报文类型</th>
-          <th>发起方</th>
-          <th>核心作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Offer Service</td>
-          <td>服务提供者</td>
-          <td>发布服务上线，携带服务ID、实例ID、IP、端口、TTL、版本等信息</td>
-      </tr>
-      <tr>
-          <td>Stop Offer Service</td>
-          <td>服务提供者</td>
-          <td>通知服务下线，撤销之前的Offer</td>
-      </tr>
-      <tr>
-          <td>Subscribe Eventgroup</td>
-          <td>服务消费者</td>
-          <td>向提供者订阅指定事件组，申请接收对应事件数据</td>
-      </tr>
-      <tr>
-          <td>Stop Subscribe Eventgroup</td>
-          <td>服务消费者</td>
-          <td>取消事件组订阅</td>
-      </tr>
-      <tr>
-          <td>Subscribe ACK/NACK</td>
-          <td>服务提供者</td>
-          <td>响应订阅请求，确认订阅成功/失败</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>报文类型</th>
+					<th>发起方</th>
+					<th>核心作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Offer Service</td>
+					<td>服务提供者</td>
+					<td>发布服务上线，携带服务ID、实例ID、IP、端口、TTL、版本等信息</td>
+			</tr>
+			<tr>
+					<td>Stop Offer Service</td>
+					<td>服务提供者</td>
+					<td>通知服务下线，撤销之前的Offer</td>
+			</tr>
+			<tr>
+					<td>Subscribe Eventgroup</td>
+					<td>服务消费者</td>
+					<td>向提供者订阅指定事件组，申请接收对应事件数据</td>
+			</tr>
+			<tr>
+					<td>Stop Subscribe Eventgroup</td>
+					<td>服务消费者</td>
+					<td>取消事件组订阅</td>
+			</tr>
+			<tr>
+					<td>Subscribe ACK/NACK</td>
+					<td>服务提供者</td>
+					<td>响应订阅请求，确认订阅成功/失败</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="核心机制">核心机制</h4>
 <ul>
@@ -506,28 +506,28 @@
 <h3 id="4-通信模式与传输层适配">4. 通信模式与传输层适配</h3>
 <p>SOME/IP 原生适配UDP与TCP两种传输层协议，根据通信场景灵活选择：</p>
 <table>
-  <thead>
-      <tr>
-          <th>传输层协议</th>
-          <th>适用通信模式</th>
-          <th>核心优势</th>
-          <th>典型场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>UDP</td>
-          <td>发布-订阅、Fire&amp;Forget、短报文RPC</td>
-          <td>低延迟、低开销、支持组播，适配实时性场景</td>
-          <td>传感器数据上报、事件通知、高频状态更新</td>
-      </tr>
-      <tr>
-          <td>TCP</td>
-          <td>长报文RPC、大数据传输</td>
-          <td>面向连接、可靠传输、有序交付，适配高可靠性场景</td>
-          <td>诊断指令、OTA升级、配置参数读写</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>传输层协议</th>
+					<th>适用通信模式</th>
+					<th>核心优势</th>
+					<th>典型场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>UDP</td>
+					<td>发布-订阅、Fire&amp;Forget、短报文RPC</td>
+					<td>低延迟、低开销、支持组播，适配实时性场景</td>
+					<td>传感器数据上报、事件通知、高频状态更新</td>
+			</tr>
+			<tr>
+					<td>TCP</td>
+					<td>长报文RPC、大数据传输</td>
+					<td>面向连接、可靠传输、有序交付，适配高可靠性场景</td>
+					<td>诊断指令、OTA升级、配置参数读写</td>
+			</tr>
+	</tbody>
 </table>
 <ul>
 <li>单播：一对一通信，用于RPC调用、点对点控制指令</li>
@@ -560,35 +560,35 @@
 </ol>
 <h2 id="七主流实现方案">七、主流实现方案</h2>
 <table>
-  <thead>
-      <tr>
-          <th>实现类型</th>
-          <th>方案名称</th>
-          <th>适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>开源实现</td>
-          <td>vsomeip（COVESA/Genivi）</td>
-          <td>最主流的开源SOME/IP协议栈，兼容AUTOSAR规范，支持Linux/QNX系统，广泛用于预研、原型开发与量产项目</td>
-      </tr>
-      <tr>
-          <td>商用实现</td>
-          <td>Vector MICROSAR SOME/IP</td>
-          <td>车载行业主流商用方案，完美适配AUTOSAR CP/AP，配套完整的配置、测试、诊断工具链，广泛用于量产车型</td>
-      </tr>
-      <tr>
-          <td>商用实现</td>
-          <td>EB tresos SOME/IP</td>
-          <td>Elektrobit出品，兼容AUTOSAR全平台，适配高功能安全等级场景，支持多芯片平台</td>
-      </tr>
-      <tr>
-          <td>商用实现</td>
-          <td>国产协议栈</td>
-          <td>华为、东软、中科创达等厂商的国产方案，适配国产芯片与车载平台，满足国产化替代需求</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>实现类型</th>
+					<th>方案名称</th>
+					<th>适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>开源实现</td>
+					<td>vsomeip（COVESA/Genivi）</td>
+					<td>最主流的开源SOME/IP协议栈，兼容AUTOSAR规范，支持Linux/QNX系统，广泛用于预研、原型开发与量产项目</td>
+			</tr>
+			<tr>
+					<td>商用实现</td>
+					<td>Vector MICROSAR SOME/IP</td>
+					<td>车载行业主流商用方案，完美适配AUTOSAR CP/AP，配套完整的配置、测试、诊断工具链，广泛用于量产车型</td>
+			</tr>
+			<tr>
+					<td>商用实现</td>
+					<td>EB tresos SOME/IP</td>
+					<td>Elektrobit出品，兼容AUTOSAR全平台，适配高功能安全等级场景，支持多芯片平台</td>
+			</tr>
+			<tr>
+					<td>商用实现</td>
+					<td>国产协议栈</td>
+					<td>华为、东软、中科创达等厂商的国产方案，适配国产芯片与车载平台，满足国产化替代需求</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="八优势与局限性">八、优势与局限性</h2>
 <h3 id="1-核心优势">1. 核心优势</h3>
@@ -637,7 +637,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

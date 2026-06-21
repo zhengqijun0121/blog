@@ -5,22 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>UDP 协议详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/002_udp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="UDP 协议详细总结">
-  <meta property="og:description" content="UDP协议详细总结 用户数据报协议（User Datagram Protocol, UDP） 是TCP/IP协议簇中传输层的两大核心协议之一，与TCP并列，由IETF在RFC 768中正式定义。它是一种无连接、轻量级、不可靠的传输层协议，核心设计哲学是极简主义，以最小的协议机制实现端到端的数据报传输，牺牲可靠性换取极致的低延迟与高灵活性，将传输控制的主动权完全交给应用层，是实时性场景的首选传输协议。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-03-07T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-03-07T10:00:20+08:00">
-    <meta property="article:tag" content="协议">
-    <meta property="article:tag" content="UDP">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="UDP 协议详细总结">
+	<meta property="og:description" content="UDP协议详细总结 用户数据报协议（User Datagram Protocol, UDP） 是TCP/IP协议簇中传输层的两大核心协议之一，与TCP并列，由IETF在RFC 768中正式定义。它是一种无连接、轻量级、不可靠的传输层协议，核心设计哲学是极简主义，以最小的协议机制实现端到端的数据报传输，牺牲可靠性换取极致的低延迟与高灵活性，将传输控制的主动权完全交给应用层，是实时性场景的首选传输协议。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-03-07T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-03-07T10:00:20+08:00">
+		<meta property="article:tag" content="协议">
+		<meta property="article:tag" content="UDP">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="UDP 协议详细总结">
-  <meta name="twitter:description" content="UDP协议详细总结 用户数据报协议（User Datagram Protocol, UDP） 是TCP/IP协议簇中传输层的两大核心协议之一，与TCP并列，由IETF在RFC 768中正式定义。它是一种无连接、轻量级、不可靠的传输层协议，核心设计哲学是极简主义，以最小的协议机制实现端到端的数据报传输，牺牲可靠性换取极致的低延迟与高灵活性，将传输控制的主动权完全交给应用层，是实时性场景的首选传输协议。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="UDP 协议详细总结">
+	<meta name="twitter:description" content="UDP协议详细总结 用户数据报协议（User Datagram Protocol, UDP） 是TCP/IP协议簇中传输层的两大核心协议之一，与TCP并列，由IETF在RFC 768中正式定义。它是一种无连接、轻量级、不可靠的传输层协议，核心设计哲学是极简主义，以最小的协议机制实现端到端的数据报传输，牺牲可靠性换取极致的低延迟与高灵活性，将传输控制的主动权完全交给应用层，是实时性场景的首选传输协议。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -212,35 +212,35 @@
 <h2 id="三udp报文结构详解">三、UDP报文结构详解</h2>
 <p>UDP数据报由<strong>固定8字节的头部</strong>和<strong>可变长度的数据载荷</strong>两部分组成，结构极简，按32位对齐设计，具体字段定义如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">字段名称</th>
-          <th style="text-align: left">长度（位）</th>
-          <th style="text-align: left">核心说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">源端口号</td>
-          <td style="text-align: left">16</td>
-          <td style="text-align: left">发送端应用进程的端口号，<strong>可选字段</strong>；若应用无需接收回复，可置为0，节省带宽</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">目的端口号</td>
-          <td style="text-align: left">16</td>
-          <td style="text-align: left">接收端应用进程的端口号，<strong>必填字段</strong>；IP层交付后，UDP通过该字段匹配对应应用进程</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">报文总长度</td>
-          <td style="text-align: left">16</td>
-          <td style="text-align: left">UDP头部 + 数据部分的总字节长度，最小值为8（仅头部，无数据），理论最大值65535字节；受IPv4协议限制，实际最大数据长度为65507字节</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">校验和</td>
-          <td style="text-align: left">16</td>
-          <td style="text-align: left">用于校验UDP报文（头部+数据）的端到端完整性，IPv4中可选，IPv6中强制必填</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">字段名称</th>
+					<th style="text-align: left">长度（位）</th>
+					<th style="text-align: left">核心说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">源端口号</td>
+					<td style="text-align: left">16</td>
+					<td style="text-align: left">发送端应用进程的端口号，<strong>可选字段</strong>；若应用无需接收回复，可置为0，节省带宽</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">目的端口号</td>
+					<td style="text-align: left">16</td>
+					<td style="text-align: left">接收端应用进程的端口号，<strong>必填字段</strong>；IP层交付后，UDP通过该字段匹配对应应用进程</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">报文总长度</td>
+					<td style="text-align: left">16</td>
+					<td style="text-align: left">UDP头部 + 数据部分的总字节长度，最小值为8（仅头部，无数据），理论最大值65535字节；受IPv4协议限制，实际最大数据长度为65507字节</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">校验和</td>
+					<td style="text-align: left">16</td>
+					<td style="text-align: left">用于校验UDP报文（头部+数据）的端到端完整性，IPv4中可选，IPv6中强制必填</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="关键补充校验和与伪首部">关键补充：校验和与伪首部</h3>
 <p>UDP校验和是传输层首个端到端的差错检测机制，其计算会引入<strong>IP伪首部</strong>（包含源IP地址、目的IP地址、协议号、UDP报文长度等IP层字段），伪首部仅用于校验和计算，不会随报文一起传输。</p>
@@ -325,65 +325,65 @@ WireGuard、IPSec、OpenVPN（UDP模式）等隧道协议普遍优先使用UDP�
 </ol>
 <h2 id="七udp与tcp核心对比">七、UDP与TCP核心对比</h2>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">对比维度</th>
-          <th style="text-align: left">UDP</th>
-          <th style="text-align: left">TCP</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><strong>连接特性</strong></td>
-          <td style="text-align: left">无连接，无需建立/释放连接，全程无状态</td>
-          <td style="text-align: left">面向连接，必须通过三次握手建立连接，四次挥手释放连接，全程维护连接状态</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>可靠性</strong></td>
-          <td style="text-align: left">原生不可靠，无确认、重传、排序、去重机制</td>
-          <td style="text-align: left">可靠传输，通过确认、重传、序列号保证数据完整、有序、无重复送达</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>流量控制</strong></td>
-          <td style="text-align: left">无原生流量控制，需应用层实现</td>
-          <td style="text-align: left">原生支持滑动窗口流量控制，匹配接收端处理能力</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>拥塞控制</strong></td>
-          <td style="text-align: left">无原生拥塞控制，发送速率不受网络状态约束</td>
-          <td style="text-align: left">原生支持成熟的拥塞控制算法，自适应网络状态</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>头部开销</strong></td>
-          <td style="text-align: left">固定8字节，开销极小</td>
-          <td style="text-align: left">最小20字节，最大60字节（含选项字段），开销更高</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>传输特性</strong></td>
-          <td style="text-align: left">面向报文，保留消息边界，每个报文独立传输</td>
-          <td style="text-align: left">面向字节流，无消息边界，将数据视为连续字节流传输</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>通信模式</strong></td>
-          <td style="text-align: left">支持单播、广播、多播</td>
-          <td style="text-align: left">仅支持单播</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>队头阻塞</strong></td>
-          <td style="text-align: left">无，单个报文丢失不影响后续报文交付</td>
-          <td style="text-align: left">有，单个报文丢失会阻塞后续所有字节的交付</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>传输效率</strong></td>
-          <td style="text-align: left">极高，延迟低，带宽利用率高</td>
-          <td style="text-align: left">较低，连接与控制开销大，延迟更高</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>适用场景</strong></td>
-          <td style="text-align: left">实时音视频、游戏、DNS、DHCP、HTTP/3等实时性优先的场景</td>
-          <td style="text-align: left">文件传输、网页浏览、邮件、远程登录等数据完整性优先的场景</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">对比维度</th>
+					<th style="text-align: left">UDP</th>
+					<th style="text-align: left">TCP</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><strong>连接特性</strong></td>
+					<td style="text-align: left">无连接，无需建立/释放连接，全程无状态</td>
+					<td style="text-align: left">面向连接，必须通过三次握手建立连接，四次挥手释放连接，全程维护连接状态</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>可靠性</strong></td>
+					<td style="text-align: left">原生不可靠，无确认、重传、排序、去重机制</td>
+					<td style="text-align: left">可靠传输，通过确认、重传、序列号保证数据完整、有序、无重复送达</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>流量控制</strong></td>
+					<td style="text-align: left">无原生流量控制，需应用层实现</td>
+					<td style="text-align: left">原生支持滑动窗口流量控制，匹配接收端处理能力</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>拥塞控制</strong></td>
+					<td style="text-align: left">无原生拥塞控制，发送速率不受网络状态约束</td>
+					<td style="text-align: left">原生支持成熟的拥塞控制算法，自适应网络状态</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>头部开销</strong></td>
+					<td style="text-align: left">固定8字节，开销极小</td>
+					<td style="text-align: left">最小20字节，最大60字节（含选项字段），开销更高</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>传输特性</strong></td>
+					<td style="text-align: left">面向报文，保留消息边界，每个报文独立传输</td>
+					<td style="text-align: left">面向字节流，无消息边界，将数据视为连续字节流传输</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>通信模式</strong></td>
+					<td style="text-align: left">支持单播、广播、多播</td>
+					<td style="text-align: left">仅支持单播</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>队头阻塞</strong></td>
+					<td style="text-align: left">无，单个报文丢失不影响后续报文交付</td>
+					<td style="text-align: left">有，单个报文丢失会阻塞后续所有字节的交付</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>传输效率</strong></td>
+					<td style="text-align: left">极高，延迟低，带宽利用率高</td>
+					<td style="text-align: left">较低，连接与控制开销大，延迟更高</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>适用场景</strong></td>
+					<td style="text-align: left">实时音视频、游戏、DNS、DHCP、HTTP/3等实时性优先的场景</td>
+					<td style="text-align: left">文件传输、网页浏览、邮件、远程登录等数据完整性优先的场景</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="八基于udp的可靠传输实现">八、基于UDP的可靠传输实现</h2>
 <p>UDP的不可靠性是原生设计的取舍，而非能力缺陷。工业界已基于UDP实现了大量成熟的可靠传输协议，在保留UDP低延迟、无队头阻塞优势的同时，补齐了可靠传输能力。</p>
@@ -482,7 +482,7 @@ WireGuard、IPSec、OpenVPN（UDP模式）等隧道协议普遍优先使用UDP�
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

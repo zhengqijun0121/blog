@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>CUDA 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_cuda%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="CUDA 语法详细总结">
-  <meta property="og:description" content="CUDA语法详细总结 本文基于CUDA 11&#43; 现代标准，覆盖CUDA核心编程模型、语法规范、运行时API、内置函数、进阶特性与使用约束，兼容NVIDIA主流GPU架构，是CUDA开发的完整语法参考。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-02-26T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-02-26T10:00:20+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="CUDA">
-    <meta property="article:tag" content="GPU">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="CUDA 语法详细总结">
+	<meta property="og:description" content="CUDA语法详细总结 本文基于CUDA 11&#43; 现代标准，覆盖CUDA核心编程模型、语法规范、运行时API、内置函数、进阶特性与使用约束，兼容NVIDIA主流GPU架构，是CUDA开发的完整语法参考。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-02-26T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-02-26T10:00:20+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="CUDA">
+		<meta property="article:tag" content="GPU">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="CUDA 语法详细总结">
-  <meta name="twitter:description" content="CUDA语法详细总结 本文基于CUDA 11&#43; 现代标准，覆盖CUDA核心编程模型、语法规范、运行时API、内置函数、进阶特性与使用约束，兼容NVIDIA主流GPU架构，是CUDA开发的完整语法参考。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="CUDA 语法详细总结">
+	<meta name="twitter:description" content="CUDA语法详细总结 本文基于CUDA 11&#43; 现代标准，覆盖CUDA核心编程模型、语法规范、运行时API、内置函数、进阶特性与使用约束，兼容NVIDIA主流GPU架构，是CUDA开发的完整语法参考。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -264,45 +264,45 @@
 <h3 id="21-核心函数类型限定符">2.1 核心函数类型限定符</h3>
 <p>CUDA通过限定符明确函数的执行位置与调用规则，是最基础的语法核心：</p>
 <table>
-  <thead>
-      <tr>
-          <th>限定符</th>
-          <th>标准语法</th>
-          <th>执行位置</th>
-          <th>可调用位置</th>
-          <th>核心规则与约束</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>__global__</code></td>
-          <td><code>__global__ void func(...)</code></td>
-          <td>GPU设备端</td>
-          <td>主机端/设备端（动态并行）</td>
-          <td>1. 返回值必须为<code>void</code>；2. 必须通过<code>&lt;&lt;&lt;&gt;&gt;&gt;</code>执行配置调用；3. 异步执行，主机端需显式同步；4. 不支持递归；5. 不能是类的非静态成员函数</td>
-      </tr>
-      <tr>
-          <td><code>__device__</code></td>
-          <td><code>__device__ T func(...)</code></td>
-          <td>GPU设备端</td>
-          <td>设备端（<code>__global__</code>/<code>__device__</code>函数内）</td>
-          <td>1. 可带任意返回值；2. 仅能在设备端调用；3. 支持内联控制；4. 可作为类的成员函数</td>
-      </tr>
-      <tr>
-          <td><code>__host__</code></td>
-          <td><code>__host__ T func(...)</code></td>
-          <td>CPU主机端</td>
-          <td>主机端</td>
-          <td>等价于普通C/C++函数，可省略；可与<code>__device__</code>联用，同时编译出主机/设备双版本函数</td>
-      </tr>
-      <tr>
-          <td><code>__noinline__</code>/<code>__forceinline__</code></td>
-          <td>配合<code>__device__</code>使用</td>
-          <td>设备端</td>
-          <td>-</td>
-          <td>强制控制设备函数是否内联，优化性能</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>限定符</th>
+					<th>标准语法</th>
+					<th>执行位置</th>
+					<th>可调用位置</th>
+					<th>核心规则与约束</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>__global__</code></td>
+					<td><code>__global__ void func(...)</code></td>
+					<td>GPU设备端</td>
+					<td>主机端/设备端（动态并行）</td>
+					<td>1. 返回值必须为<code>void</code>；2. 必须通过<code>&lt;&lt;&lt;&gt;&gt;&gt;</code>执行配置调用；3. 异步执行，主机端需显式同步；4. 不支持递归；5. 不能是类的非静态成员函数</td>
+			</tr>
+			<tr>
+					<td><code>__device__</code></td>
+					<td><code>__device__ T func(...)</code></td>
+					<td>GPU设备端</td>
+					<td>设备端（<code>__global__</code>/<code>__device__</code>函数内）</td>
+					<td>1. 可带任意返回值；2. 仅能在设备端调用；3. 支持内联控制；4. 可作为类的成员函数</td>
+			</tr>
+			<tr>
+					<td><code>__host__</code></td>
+					<td><code>__host__ T func(...)</code></td>
+					<td>CPU主机端</td>
+					<td>主机端</td>
+					<td>等价于普通C/C++函数，可省略；可与<code>__device__</code>联用，同时编译出主机/设备双版本函数</td>
+			</tr>
+			<tr>
+					<td><code>__noinline__</code>/<code>__forceinline__</code></td>
+					<td>配合<code>__device__</code>使用</td>
+					<td>设备端</td>
+					<td>-</td>
+					<td>强制控制设备函数是否内联，优化性能</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="基础核函数定义示例">基础核函数定义示例</h4>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
@@ -329,40 +329,40 @@
     </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">kernel_name</span><span class="o">&lt;&lt;&lt;</span><span class="n">grid_dim</span><span class="p">,</span> <span class="n">block_dim</span><span class="p">,</span> <span class="n">shared_mem_size</span><span class="p">,</span> <span class="n">stream</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span><span class="err">参数列表</span><span class="p">);</span></span></span></code></pre></div></div>
 <h4 id="执行配置4个参数详解">执行配置4个参数详解</h4>
 <table>
-  <thead>
-      <tr>
-          <th>参数</th>
-          <th>类型</th>
-          <th>作用</th>
-          <th>约束与规范</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>grid_dim</code></td>
-          <td><code>dim3</code></td>
-          <td>Grid的维度，指定Grid中Block的数量</td>
-          <td>支持1D/2D/3D，默认值<code>dim3(1,1,1)</code>；主流架构x维度最大支持<code>2^31-1</code>，y/z维度最大65535</td>
-      </tr>
-      <tr>
-          <td><code>block_dim</code></td>
-          <td><code>dim3</code></td>
-          <td>Block的维度，指定单个Block内的线程数量</td>
-          <td>支持1D/2D/3D，默认值<code>dim3(1,1,1)</code>；<strong>单Block内线程总数最大为1024（全架构通用）</strong>，必须是32的倍数（Warp对齐，避免性能损耗）</td>
-      </tr>
-      <tr>
-          <td><code>shared_mem_size</code></td>
-          <td><code>size_t</code></td>
-          <td>动态共享内存大小，单位字节</td>
-          <td>可选参数，默认0；用于核函数内<code>extern __shared__</code>声明的动态共享内存</td>
-      </tr>
-      <tr>
-          <td><code>stream</code></td>
-          <td><code>cudaStream_t</code></td>
-          <td>核函数执行的CUDA流</td>
-          <td>可选参数，默认0（默认流）；用于异步执行、多流并行</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>参数</th>
+					<th>类型</th>
+					<th>作用</th>
+					<th>约束与规范</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>grid_dim</code></td>
+					<td><code>dim3</code></td>
+					<td>Grid的维度，指定Grid中Block的数量</td>
+					<td>支持1D/2D/3D，默认值<code>dim3(1,1,1)</code>；主流架构x维度最大支持<code>2^31-1</code>，y/z维度最大65535</td>
+			</tr>
+			<tr>
+					<td><code>block_dim</code></td>
+					<td><code>dim3</code></td>
+					<td>Block的维度，指定单个Block内的线程数量</td>
+					<td>支持1D/2D/3D，默认值<code>dim3(1,1,1)</code>；<strong>单Block内线程总数最大为1024（全架构通用）</strong>，必须是32的倍数（Warp对齐，避免性能损耗）</td>
+			</tr>
+			<tr>
+					<td><code>shared_mem_size</code></td>
+					<td><code>size_t</code></td>
+					<td>动态共享内存大小，单位字节</td>
+					<td>可选参数，默认0；用于核函数内<code>extern __shared__</code>声明的动态共享内存</td>
+			</tr>
+			<tr>
+					<td><code>stream</code></td>
+					<td><code>cudaStream_t</code></td>
+					<td>核函数执行的CUDA流</td>
+					<td>可选参数，默认0（默认流）；用于异步执行、多流并行</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="核函数调用完整示例">核函数调用完整示例</h4>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -441,46 +441,46 @@
 <p>核函数内通过<strong>只读内置变量</strong>获取线程/块的坐标与维度，是并行计算的核心，所有变量仅在设备端可用。</p>
 <h3 id="31-核心内置变量详解">3.1 核心内置变量详解</h3>
 <table>
-  <thead>
-      <tr>
-          <th>内置变量</th>
-          <th>类型</th>
-          <th>含义</th>
-          <th>取值范围</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>threadIdx</code></td>
-          <td><code>dim3</code></td>
-          <td>线程在Block内的相对坐标</td>
-          <td><code>threadIdx.x ∈ [0, blockDim.x-1]</code>，y/z维度同理</td>
-      </tr>
-      <tr>
-          <td><code>blockIdx</code></td>
-          <td><code>dim3</code></td>
-          <td>Block在Grid内的相对坐标</td>
-          <td><code>blockIdx.x ∈ [0, gridDim.x-1]</code>，y/z维度同理</td>
-      </tr>
-      <tr>
-          <td><code>blockDim</code></td>
-          <td><code>dim3</code></td>
-          <td>单个Block的线程维度（核函数调用时的<code>block_dim</code>）</td>
-          <td>核函数执行期间固定不变</td>
-      </tr>
-      <tr>
-          <td><code>gridDim</code></td>
-          <td><code>dim3</code></td>
-          <td>Grid的Block维度（核函数调用时的<code>grid_dim</code>）</td>
-          <td>核函数执行期间固定不变</td>
-      </tr>
-      <tr>
-          <td><code>warpSize</code></td>
-          <td><code>int</code></td>
-          <td>硬件Warp的线程数</td>
-          <td>固定为32（全NVIDIA架构通用）</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>内置变量</th>
+					<th>类型</th>
+					<th>含义</th>
+					<th>取值范围</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>threadIdx</code></td>
+					<td><code>dim3</code></td>
+					<td>线程在Block内的相对坐标</td>
+					<td><code>threadIdx.x ∈ [0, blockDim.x-1]</code>，y/z维度同理</td>
+			</tr>
+			<tr>
+					<td><code>blockIdx</code></td>
+					<td><code>dim3</code></td>
+					<td>Block在Grid内的相对坐标</td>
+					<td><code>blockIdx.x ∈ [0, gridDim.x-1]</code>，y/z维度同理</td>
+			</tr>
+			<tr>
+					<td><code>blockDim</code></td>
+					<td><code>dim3</code></td>
+					<td>单个Block的线程维度（核函数调用时的<code>block_dim</code>）</td>
+					<td>核函数执行期间固定不变</td>
+			</tr>
+			<tr>
+					<td><code>gridDim</code></td>
+					<td><code>dim3</code></td>
+					<td>Grid的Block维度（核函数调用时的<code>grid_dim</code>）</td>
+					<td>核函数执行期间固定不变</td>
+			</tr>
+			<tr>
+					<td><code>warpSize</code></td>
+					<td><code>int</code></td>
+					<td>硬件Warp的线程数</td>
+					<td>固定为32（全NVIDIA架构通用）</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="32-全局线程id计算高频使用">3.2 全局线程ID计算（高频使用）</h3>
 <p>全局线程ID用于定位当前线程处理的数据索引，是核函数内的必备代码，分维度场景如下：</p>
@@ -678,122 +678,122 @@
 <p>CUDA运行时API封装了设备管理、内存管理、同步、流与事件等核心能力，是主机端控制GPU的核心接口，所有API均返回<code>cudaError_t</code>错误码，成功返回<code>cudaSuccess</code>。</p>
 <h3 id="51-设备管理api">5.1 设备管理API</h3>
 <table>
-  <thead>
-      <tr>
-          <th>API函数</th>
-          <th>函数原型</th>
-          <th>核心功能</th>
-          <th>常用示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>cudaGetDeviceCount</code></td>
-          <td><code>cudaError_t cudaGetDeviceCount(int* count)</code></td>
-          <td>获取当前系统支持的CUDA设备数量</td>
-          <td><code>int deviceCount; cudaGetDeviceCount(&amp;deviceCount);</code></td>
-      </tr>
-      <tr>
-          <td><code>cudaSetDevice</code></td>
-          <td><code>cudaError_t cudaSetDevice(int device)</code></td>
-          <td>设置当前使用的CUDA设备（多GPU场景）</td>
-          <td><code>cudaSetDevice(0); // 使用0号GPU</code></td>
-      </tr>
-      <tr>
-          <td><code>cudaGetDeviceProperties</code></td>
-          <td><code>cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int device)</code></td>
-          <td>获取指定GPU的硬件属性（型号、内存大小、核心数、最大线程数等）</td>
-          <td><code>cudaDeviceProp prop; cudaGetDeviceProperties(&amp;prop, 0); printf(&quot;GPU: %s\n&quot;, prop.name);</code></td>
-      </tr>
-      <tr>
-          <td><code>cudaDeviceReset</code></td>
-          <td><code>cudaError_t cudaDeviceReset()</code></td>
-          <td>重置当前设备，释放所有分配的资源</td>
-          <td><code>cudaDeviceReset();</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>API函数</th>
+					<th>函数原型</th>
+					<th>核心功能</th>
+					<th>常用示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>cudaGetDeviceCount</code></td>
+					<td><code>cudaError_t cudaGetDeviceCount(int* count)</code></td>
+					<td>获取当前系统支持的CUDA设备数量</td>
+					<td><code>int deviceCount; cudaGetDeviceCount(&amp;deviceCount);</code></td>
+			</tr>
+			<tr>
+					<td><code>cudaSetDevice</code></td>
+					<td><code>cudaError_t cudaSetDevice(int device)</code></td>
+					<td>设置当前使用的CUDA设备（多GPU场景）</td>
+					<td><code>cudaSetDevice(0); // 使用0号GPU</code></td>
+			</tr>
+			<tr>
+					<td><code>cudaGetDeviceProperties</code></td>
+					<td><code>cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int device)</code></td>
+					<td>获取指定GPU的硬件属性（型号、内存大小、核心数、最大线程数等）</td>
+					<td><code>cudaDeviceProp prop; cudaGetDeviceProperties(&amp;prop, 0); printf(&quot;GPU: %s\n&quot;, prop.name);</code></td>
+			</tr>
+			<tr>
+					<td><code>cudaDeviceReset</code></td>
+					<td><code>cudaError_t cudaDeviceReset()</code></td>
+					<td>重置当前设备，释放所有分配的资源</td>
+					<td><code>cudaDeviceReset();</code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="52-内存管理api核心">5.2 内存管理API（核心）</h3>
 <table>
-  <thead>
-      <tr>
-          <th>API函数</th>
-          <th>函数原型</th>
-          <th>核心功能</th>
-          <th>关键参数说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>cudaMalloc</code></td>
-          <td><code>cudaError_t cudaMalloc(void** devPtr, size_t size)</code></td>
-          <td>分配设备全局内存</td>
-          <td><code>devPtr</code>：设备指针的地址；<code>size</code>：分配大小（字节）</td>
-      </tr>
-      <tr>
-          <td><code>cudaFree</code></td>
-          <td><code>cudaError_t cudaFree(void* devPtr)</code></td>
-          <td>释放设备全局内存</td>
-          <td><code>devPtr</code>：设备内存指针</td>
-      </tr>
-      <tr>
-          <td><code>cudaMemcpy</code></td>
-          <td><code>cudaError_t cudaMemcpy(void* dst, const void* src, size_t count, cudaMemcpyKind kind)</code></td>
-          <td>主机与设备间阻塞式内存拷贝</td>
-          <td><code>kind</code>：拷贝方向，核心枚举值：<br><code>cudaMemcpyHostToDevice</code>：主机→设备<br><code>cudaMemcpyDeviceToHost</code>：设备→主机<br><code>cudaMemcpyDeviceToDevice</code>：设备→设备</td>
-      </tr>
-      <tr>
-          <td><code>cudaMemcpyAsync</code></td>
-          <td><code>cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream = 0)</code></td>
-          <td>异步内存拷贝，非阻塞</td>
-          <td>新增<code>stream</code>参数，指定执行的CUDA流</td>
-      </tr>
-      <tr>
-          <td><code>cudaMemset</code></td>
-          <td><code>cudaError_t cudaMemset(void* devPtr, int value, size_t count)</code></td>
-          <td>设备内存按字节初始化</td>
-          <td><code>value</code>：要设置的字节值；<code>count</code>：初始化字节数</td>
-      </tr>
-      <tr>
-          <td><code>cudaMallocManaged</code></td>
-          <td><code>cudaError_t cudaMallocManaged(void** devPtr, size_t size, unsigned int flags = cudaMemAttachGlobal)</code></td>
-          <td>分配统一内存，主机和设备可通过同一指针访问，自动处理数据迁移</td>
-          <td><code>devPtr</code>：统一内存指针地址；<code>size</code>：分配大小</td>
-      </tr>
-      <tr>
-          <td><code>cudaMemcpyToSymbol</code></td>
-          <td><code>cudaError_t cudaMemcpyToSymbol(const void* symbol, const void* src, size_t count)</code></td>
-          <td>主机数据拷贝到常量内存/全局符号</td>
-          <td><code>symbol</code>：<code>__constant__</code>声明的符号名</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>API函数</th>
+					<th>函数原型</th>
+					<th>核心功能</th>
+					<th>关键参数说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>cudaMalloc</code></td>
+					<td><code>cudaError_t cudaMalloc(void** devPtr, size_t size)</code></td>
+					<td>分配设备全局内存</td>
+					<td><code>devPtr</code>：设备指针的地址；<code>size</code>：分配大小（字节）</td>
+			</tr>
+			<tr>
+					<td><code>cudaFree</code></td>
+					<td><code>cudaError_t cudaFree(void* devPtr)</code></td>
+					<td>释放设备全局内存</td>
+					<td><code>devPtr</code>：设备内存指针</td>
+			</tr>
+			<tr>
+					<td><code>cudaMemcpy</code></td>
+					<td><code>cudaError_t cudaMemcpy(void* dst, const void* src, size_t count, cudaMemcpyKind kind)</code></td>
+					<td>主机与设备间阻塞式内存拷贝</td>
+					<td><code>kind</code>：拷贝方向，核心枚举值：<br><code>cudaMemcpyHostToDevice</code>：主机→设备<br><code>cudaMemcpyDeviceToHost</code>：设备→主机<br><code>cudaMemcpyDeviceToDevice</code>：设备→设备</td>
+			</tr>
+			<tr>
+					<td><code>cudaMemcpyAsync</code></td>
+					<td><code>cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream = 0)</code></td>
+					<td>异步内存拷贝，非阻塞</td>
+					<td>新增<code>stream</code>参数，指定执行的CUDA流</td>
+			</tr>
+			<tr>
+					<td><code>cudaMemset</code></td>
+					<td><code>cudaError_t cudaMemset(void* devPtr, int value, size_t count)</code></td>
+					<td>设备内存按字节初始化</td>
+					<td><code>value</code>：要设置的字节值；<code>count</code>：初始化字节数</td>
+			</tr>
+			<tr>
+					<td><code>cudaMallocManaged</code></td>
+					<td><code>cudaError_t cudaMallocManaged(void** devPtr, size_t size, unsigned int flags = cudaMemAttachGlobal)</code></td>
+					<td>分配统一内存，主机和设备可通过同一指针访问，自动处理数据迁移</td>
+					<td><code>devPtr</code>：统一内存指针地址；<code>size</code>：分配大小</td>
+			</tr>
+			<tr>
+					<td><code>cudaMemcpyToSymbol</code></td>
+					<td><code>cudaError_t cudaMemcpyToSymbol(const void* symbol, const void* src, size_t count)</code></td>
+					<td>主机数据拷贝到常量内存/全局符号</td>
+					<td><code>symbol</code>：<code>__constant__</code>声明的符号名</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="53-同步api">5.3 同步API</h3>
 <table>
-  <thead>
-      <tr>
-          <th>API函数</th>
-          <th>核心功能</th>
-          <th>适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>cudaDeviceSynchronize()</code></td>
-          <td>阻塞主机端，等待当前设备上所有任务（核函数、异步拷贝）执行完成</td>
-          <td>单流场景、核函数调试、错误定位</td>
-      </tr>
-      <tr>
-          <td><code>cudaStreamSynchronize(cudaStream_t stream)</code></td>
-          <td>阻塞主机端，等待指定流上的所有任务执行完成</td>
-          <td>多流场景，仅同步指定流，不阻塞其他流</td>
-      </tr>
-      <tr>
-          <td><code>cudaEventSynchronize(cudaEvent_t event)</code></td>
-          <td>阻塞主机端，等待指定事件记录完成</td>
-          <td>核函数计时、流间依赖同步</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>API函数</th>
+					<th>核心功能</th>
+					<th>适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>cudaDeviceSynchronize()</code></td>
+					<td>阻塞主机端，等待当前设备上所有任务（核函数、异步拷贝）执行完成</td>
+					<td>单流场景、核函数调试、错误定位</td>
+			</tr>
+			<tr>
+					<td><code>cudaStreamSynchronize(cudaStream_t stream)</code></td>
+					<td>阻塞主机端，等待指定流上的所有任务执行完成</td>
+					<td>多流场景，仅同步指定流，不阻塞其他流</td>
+			</tr>
+			<tr>
+					<td><code>cudaEventSynchronize(cudaEvent_t event)</code></td>
+					<td>阻塞主机端，等待指定事件记录完成</td>
+					<td>核函数计时、流间依赖同步</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="54-cuda流与事件api">5.4 CUDA流与事件API</h3>
 <h4 id="1-cuda流">1. CUDA流</h4>
@@ -896,46 +896,46 @@
 <p>原子操作是不可分割的读-改-写操作，避免多线程同时修改同一内存地址导致的数据竞争，所有原子操作均返回操作前的旧值。</p>
 <p>高频使用的原子操作函数：</p>
 <table>
-  <thead>
-      <tr>
-          <th>函数</th>
-          <th>标准语法</th>
-          <th>核心功能</th>
-          <th>支持数据类型</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>atomicAdd</code></td>
-          <td><code>T atomicAdd(T* address, T val)</code></td>
-          <td>原子加法：<code>*address += val</code></td>
-          <td>int、unsigned int、long long、float、double（计算能力6.0+）</td>
-      </tr>
-      <tr>
-          <td><code>atomicCAS</code></td>
-          <td><code>T atomicCAS(T* address, T compare, T val)</code></td>
-          <td>原子比较并交换：<code>if(*address == compare) *address = val</code></td>
-          <td>int、unsigned int、long long、float</td>
-      </tr>
-      <tr>
-          <td><code>atomicExch</code></td>
-          <td><code>T atomicExch(T* address, T val)</code></td>
-          <td>原子赋值：<code>*address = val</code></td>
-          <td>int、unsigned int、float、long long</td>
-      </tr>
-      <tr>
-          <td><code>atomicMin/Max</code></td>
-          <td><code>T atomicMin(T* address, T val)</code></td>
-          <td>原子取最小/最大值：<code>*address = min(*address, val)</code></td>
-          <td>int、unsigned int、long long、float</td>
-      </tr>
-      <tr>
-          <td><code>atomicSub</code></td>
-          <td><code>T atomicSub(T* address, T val)</code></td>
-          <td>原子减法：<code>*address -= val</code></td>
-          <td>int、unsigned int</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数</th>
+					<th>标准语法</th>
+					<th>核心功能</th>
+					<th>支持数据类型</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>atomicAdd</code></td>
+					<td><code>T atomicAdd(T* address, T val)</code></td>
+					<td>原子加法：<code>*address += val</code></td>
+					<td>int、unsigned int、long long、float、double（计算能力6.0+）</td>
+			</tr>
+			<tr>
+					<td><code>atomicCAS</code></td>
+					<td><code>T atomicCAS(T* address, T compare, T val)</code></td>
+					<td>原子比较并交换：<code>if(*address == compare) *address = val</code></td>
+					<td>int、unsigned int、long long、float</td>
+			</tr>
+			<tr>
+					<td><code>atomicExch</code></td>
+					<td><code>T atomicExch(T* address, T val)</code></td>
+					<td>原子赋值：<code>*address = val</code></td>
+					<td>int、unsigned int、float、long long</td>
+			</tr>
+			<tr>
+					<td><code>atomicMin/Max</code></td>
+					<td><code>T atomicMin(T* address, T val)</code></td>
+					<td>原子取最小/最大值：<code>*address = min(*address, val)</code></td>
+					<td>int、unsigned int、long long、float</td>
+			</tr>
+			<tr>
+					<td><code>atomicSub</code></td>
+					<td><code>T atomicSub(T* address, T val)</code></td>
+					<td>原子减法：<code>*address -= val</code></td>
+					<td>int、unsigned int</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="原子操作示例多线程累加求和">原子操作示例：多线程累加求和</h4>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
@@ -961,30 +961,30 @@
 <h3 id="64-warp-shuffle函数">6.4 Warp Shuffle函数</h3>
 <p>CUDA 3.0+支持，无需共享内存，直接在Warp内的线程之间交换数据，延迟更低、性能更高，核心函数如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th>函数</th>
-          <th>核心功能</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>__shfl_sync(mask, var, srcLane)</code></td>
-          <td>从Warp内<code>srcLane</code>号线程获取<code>var</code>的值</td>
-      </tr>
-      <tr>
-          <td><code>__shfl_down_sync(mask, var, delta)</code></td>
-          <td>从当前线程ID + <code>delta</code>的线程获取<code>var</code>的值</td>
-      </tr>
-      <tr>
-          <td><code>__shfl_up_sync(mask, var, delta)</code></td>
-          <td>从当前线程ID - <code>delta</code>的线程获取<code>var</code>的值</td>
-      </tr>
-      <tr>
-          <td><code>__shfl_xor_sync(mask, var, laneMask)</code></td>
-          <td>从当前线程ID ^ <code>laneMask</code>的线程获取<code>var</code>的值</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>函数</th>
+					<th>核心功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>__shfl_sync(mask, var, srcLane)</code></td>
+					<td>从Warp内<code>srcLane</code>号线程获取<code>var</code>的值</td>
+			</tr>
+			<tr>
+					<td><code>__shfl_down_sync(mask, var, delta)</code></td>
+					<td>从当前线程ID + <code>delta</code>的线程获取<code>var</code>的值</td>
+			</tr>
+			<tr>
+					<td><code>__shfl_up_sync(mask, var, delta)</code></td>
+					<td>从当前线程ID - <code>delta</code>的线程获取<code>var</code>的值</td>
+			</tr>
+			<tr>
+					<td><code>__shfl_xor_sync(mask, var, laneMask)</code></td>
+					<td>从当前线程ID ^ <code>laneMask</code>的线程获取<code>var</code>的值</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="示例warp内归约求和">示例：Warp内归约求和</h4>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
@@ -1192,7 +1192,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

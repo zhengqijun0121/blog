@@ -5,21 +5,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>ROS2 使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_ros2%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="ROS2 使用详细总结">
-  <meta property="og:description" content="ROS2 使用详细总结 本文基于ROS2最新LTS版本（Humble Hawksbill / Jazzy Jalisco）编写，覆盖从环境搭建、核心概念、开发流程、进阶特性到生态应用、避坑指南的全链路内容，兼顾入门与实战，是一份可直接落地的ROS2全栈使用手册。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-04-01T09:00:00+08:00">
-    <meta property="article:modified_time" content="2026-04-01T10:00:00+08:00">
-    <meta property="article:tag" content="ROS2">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="ROS2 使用详细总结">
+	<meta property="og:description" content="ROS2 使用详细总结 本文基于ROS2最新LTS版本（Humble Hawksbill / Jazzy Jalisco）编写，覆盖从环境搭建、核心概念、开发流程、进阶特性到生态应用、避坑指南的全链路内容，兼顾入门与实战，是一份可直接落地的ROS2全栈使用手册。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-04-01T09:00:00+08:00">
+		<meta property="article:modified_time" content="2026-04-01T10:00:00+08:00">
+		<meta property="article:tag" content="ROS2">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="ROS2 使用详细总结">
-  <meta name="twitter:description" content="ROS2 使用详细总结 本文基于ROS2最新LTS版本（Humble Hawksbill / Jazzy Jalisco）编写，覆盖从环境搭建、核心概念、开发流程、进阶特性到生态应用、避坑指南的全链路内容，兼顾入门与实战，是一份可直接落地的ROS2全栈使用手册。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="ROS2 使用详细总结">
+	<meta name="twitter:description" content="ROS2 使用详细总结 本文基于ROS2最新LTS版本（Humble Hawksbill / Jazzy Jalisco）编写，覆盖从环境搭建、核心概念、开发流程、进阶特性到生态应用、避坑指南的全链路内容，兼顾入门与实战，是一份可直接落地的ROS2全栈使用手册。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -253,55 +253,55 @@
 <p>ROS2（Robot Operating System 2）是新一代开源机器人软件开发中间件，基于工业级DDS通信标准重构，彻底解决了ROS1中心化架构、实时性不足、跨平台能力弱、安全性缺失等核心痛点，完成了从「学术原型验证」到「工业级生产环境部署」的定位升级。</p>
 <h3 id="12-ros2-核心优势对比ros1">1.2 ROS2 核心优势（对比ROS1）</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">对比维度</th>
-          <th style="text-align: left">ROS1</th>
-          <th style="text-align: left">ROS2</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">核心架构</td>
-          <td style="text-align: left">中心化（依赖Master节点，单点故障全局瘫痪）</td>
-          <td style="text-align: left">去中心化（DDS自动发现，无Master，系统健壮性极强）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">实时性</td>
-          <td style="text-align: left">无原生硬实时支持，仅适用于非实时场景</td>
-          <td style="text-align: left">原生支持μs级硬实时，适配Linux PREEMPT_RT、FreeRTOS等实时系统</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">跨平台</td>
-          <td style="text-align: left">仅原生支持Linux</td>
-          <td style="text-align: left">全平台原生支持Linux、Windows、macOS、嵌入式RTOS</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">通信机制</td>
-          <td style="text-align: left">仅基础TCP/UDP传输，无通信质量保障</td>
-          <td style="text-align: left">基于DDS的QoS服务质量配置，可精准适配不同场景的通信需求</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">编译系统</td>
-          <td style="text-align: left">catkin_make/catkin_tools</td>
-          <td style="text-align: left">colcon 通用编译工具，支持ament_cmake/ament_python/cmake等多种构建类型</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">节点管理</td>
-          <td style="text-align: left">节点启停无状态控制，故障容错能力弱</td>
-          <td style="text-align: left">生命周期节点（Lifecycle Node），支持可控的状态机管理，适配工业级启停与故障处理</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">多机通信</td>
-          <td style="text-align: left">需复杂配置，依赖Master节点</td>
-          <td style="text-align: left">原生支持，同网段+相同ROS_DOMAIN_ID即可自动发现，无需额外配置</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">安全性</td>
-          <td style="text-align: left">无原生安全机制，仅适用于内网封闭环境</td>
-          <td style="text-align: left">原生支持SROS2安全层，提供身份认证、数据加密、访问控制，适配工业敏感场景</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">对比维度</th>
+					<th style="text-align: left">ROS1</th>
+					<th style="text-align: left">ROS2</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">核心架构</td>
+					<td style="text-align: left">中心化（依赖Master节点，单点故障全局瘫痪）</td>
+					<td style="text-align: left">去中心化（DDS自动发现，无Master，系统健壮性极强）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">实时性</td>
+					<td style="text-align: left">无原生硬实时支持，仅适用于非实时场景</td>
+					<td style="text-align: left">原生支持μs级硬实时，适配Linux PREEMPT_RT、FreeRTOS等实时系统</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">跨平台</td>
+					<td style="text-align: left">仅原生支持Linux</td>
+					<td style="text-align: left">全平台原生支持Linux、Windows、macOS、嵌入式RTOS</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">通信机制</td>
+					<td style="text-align: left">仅基础TCP/UDP传输，无通信质量保障</td>
+					<td style="text-align: left">基于DDS的QoS服务质量配置，可精准适配不同场景的通信需求</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">编译系统</td>
+					<td style="text-align: left">catkin_make/catkin_tools</td>
+					<td style="text-align: left">colcon 通用编译工具，支持ament_cmake/ament_python/cmake等多种构建类型</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">节点管理</td>
+					<td style="text-align: left">节点启停无状态控制，故障容错能力弱</td>
+					<td style="text-align: left">生命周期节点（Lifecycle Node），支持可控的状态机管理，适配工业级启停与故障处理</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">多机通信</td>
+					<td style="text-align: left">需复杂配置，依赖Master节点</td>
+					<td style="text-align: left">原生支持，同网段+相同ROS_DOMAIN_ID即可自动发现，无需额外配置</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">安全性</td>
+					<td style="text-align: left">无原生安全机制，仅适用于内网封闭环境</td>
+					<td style="text-align: left">原生支持SROS2安全层，提供身份认证、数据加密、访问控制，适配工业敏感场景</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="13-版本选择2026年推荐">1.3 版本选择（2026年推荐）</h3>
 <p>优先选择<strong>LTS长期支持版本</strong>，生产环境严禁使用非LTS版本：</p>
@@ -453,40 +453,40 @@
 <h3 id="33-四大核心通信机制">3.3 四大核心通信机制</h3>
 <p>ROS2的核心是节点间的通信，提供了4种适配不同场景的通信模式，全部支持QoS服务质量配置，是机器人系统的「神经网络」。</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">通信模式</th>
-          <th style="text-align: left">架构模式</th>
-          <th style="text-align: left">通信特性</th>
-          <th style="text-align: left">核心适用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">话题（Topic）</td>
-          <td style="text-align: left">发布-订阅（Pub/Sub）</td>
-          <td style="text-align: left">异步、一对多/多对多、无应答、无阻塞</td>
-          <td style="text-align: left">高频连续数据流：传感器数据、里程计、图像、点云</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">服务（Service）</td>
-          <td style="text-align: left">客户端-服务器（Client/Server）</td>
-          <td style="text-align: left">同步、一对一、请求-应答、阻塞式</td>
-          <td style="text-align: left">一次性触发任务：开关设备、参数查询、单次计算</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">动作（Action）</td>
-          <td style="text-align: left">客户端-服务端</td>
-          <td style="text-align: left">异步、长时任务、支持反馈/取消/抢占、结果返回</td>
-          <td style="text-align: left">长耗时可控任务：机械臂运动、导航、路径规划、相机标定</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">参数（Parameter）</td>
-          <td style="text-align: left">节点级配置管理</td>
-          <td style="text-align: left">去中心化、动态修改、类型校验、事件通知</td>
-          <td style="text-align: left">节点运行时配置：PID参数、阈值、帧率、功能开关</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">通信模式</th>
+					<th style="text-align: left">架构模式</th>
+					<th style="text-align: left">通信特性</th>
+					<th style="text-align: left">核心适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">话题（Topic）</td>
+					<td style="text-align: left">发布-订阅（Pub/Sub）</td>
+					<td style="text-align: left">异步、一对多/多对多、无应答、无阻塞</td>
+					<td style="text-align: left">高频连续数据流：传感器数据、里程计、图像、点云</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">服务（Service）</td>
+					<td style="text-align: left">客户端-服务器（Client/Server）</td>
+					<td style="text-align: left">同步、一对一、请求-应答、阻塞式</td>
+					<td style="text-align: left">一次性触发任务：开关设备、参数查询、单次计算</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">动作（Action）</td>
+					<td style="text-align: left">客户端-服务端</td>
+					<td style="text-align: left">异步、长时任务、支持反馈/取消/抢占、结果返回</td>
+					<td style="text-align: left">长耗时可控任务：机械臂运动、导航、路径规划、相机标定</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">参数（Parameter）</td>
+					<td style="text-align: left">节点级配置管理</td>
+					<td style="text-align: left">去中心化、动态修改、类型校验、事件通知</td>
+					<td style="text-align: left">节点运行时配置：PID参数、阈值、帧率、功能开关</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="关键补充qos服务质量">关键补充：QoS服务质量</h4>
 <p>QoS是ROS2区别于ROS1的核心特性，可精准配置通信的传输规则，解决ROS1通信不可控、丢包、延迟高等问题。核心配置项与常用预设：</p>
@@ -1127,7 +1127,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>正则表达式语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="正则表达式语法详细总结">
-  <meta property="og:description" content="正则表达式（Regex/RegExp）语法详细总结 正则表达式是一套用于匹配、查找、替换、校验字符串的规则语法，被绝大多数编程语言、文本编辑器、数据库原生支持，核心是通过元字符定义匹配模式，实现精准高效的文本处理。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-02-25T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-02-25T10:00:20+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="Regex">
-    <meta property="article:tag" content="RegExp">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="正则表达式语法详细总结">
+	<meta property="og:description" content="正则表达式（Regex/RegExp）语法详细总结 正则表达式是一套用于匹配、查找、替换、校验字符串的规则语法，被绝大多数编程语言、文本编辑器、数据库原生支持，核心是通过元字符定义匹配模式，实现精准高效的文本处理。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-02-25T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-02-25T10:00:20+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="Regex">
+		<meta property="article:tag" content="RegExp">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="正则表达式语法详细总结">
-  <meta name="twitter:description" content="正则表达式（Regex/RegExp）语法详细总结 正则表达式是一套用于匹配、查找、替换、校验字符串的规则语法，被绝大多数编程语言、文本编辑器、数据库原生支持，核心是通过元字符定义匹配模式，实现精准高效的文本处理。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="正则表达式语法详细总结">
+	<meta name="twitter:description" content="正则表达式（Regex/RegExp）语法详细总结 正则表达式是一套用于匹配、查找、替换、校验字符串的规则语法，被绝大多数编程语言、文本编辑器、数据库原生支持，核心是通过元字符定义匹配模式，实现精准高效的文本处理。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -210,78 +210,78 @@
 <h2 id="二字符类方括号表达式">二、字符类（方括号表达式）</h2>
 <p>匹配<strong>方括号内的任意一个字符</strong>，单次匹配仅命中一个字符，是正则的基础匹配单元。</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">语法</th>
-          <th style="text-align: left">说明</th>
-          <th style="text-align: left">匹配示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>[abc]</code></td>
-          <td style="text-align: left">普通字符类，匹配a/b/c中的任意一个</td>
-          <td style="text-align: left"><code>[abc]at</code> 匹配<code>aat</code>/<code>bat</code>/<code>cat</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>[^abc]</code></td>
-          <td style="text-align: left">否定字符类，匹配<strong>除了</strong>a/b/c之外的任意字符</td>
-          <td style="text-align: left"><code>[^abc]at</code> 匹配<code>dat</code>/<code>eat</code>，不匹配<code>aat</code>/<code>bat</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>[a-z]</code></td>
-          <td style="text-align: left">范围字符类，匹配指定区间内的字符</td>
-          <td style="text-align: left"><code>[0-9a-fA-F]</code> 匹配16进制字符</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>.</code></td>
-          <td style="text-align: left">通配符，匹配<strong>除换行符<code>\n</code>外</strong>的任意单个字符（单行模式下可匹配换行）</td>
-          <td style="text-align: left"><code>h.t</code> 匹配<code>hat</code>/<code>hot</code>/<code>h t</code>，不匹配<code>heet</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">语法</th>
+					<th style="text-align: left">说明</th>
+					<th style="text-align: left">匹配示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>[abc]</code></td>
+					<td style="text-align: left">普通字符类，匹配a/b/c中的任意一个</td>
+					<td style="text-align: left"><code>[abc]at</code> 匹配<code>aat</code>/<code>bat</code>/<code>cat</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>[^abc]</code></td>
+					<td style="text-align: left">否定字符类，匹配<strong>除了</strong>a/b/c之外的任意字符</td>
+					<td style="text-align: left"><code>[^abc]at</code> 匹配<code>dat</code>/<code>eat</code>，不匹配<code>aat</code>/<code>bat</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>[a-z]</code></td>
+					<td style="text-align: left">范围字符类，匹配指定区间内的字符</td>
+					<td style="text-align: left"><code>[0-9a-fA-F]</code> 匹配16进制字符</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>.</code></td>
+					<td style="text-align: left">通配符，匹配<strong>除换行符<code>\n</code>外</strong>的任意单个字符（单行模式下可匹配换行）</td>
+					<td style="text-align: left"><code>h.t</code> 匹配<code>hat</code>/<code>hot</code>/<code>h t</code>，不匹配<code>heet</code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="预定义字符类简写">预定义字符类（简写）</h3>
 <p>系统预设的高频字符类，简化书写，所有预定义类均为<strong>单个字符匹配</strong>：</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">简写</th>
-          <th style="text-align: left">等价写法</th>
-          <th style="text-align: left">核心说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>\d</code></td>
-          <td style="text-align: left"><code>[0-9]</code></td>
-          <td style="text-align: left">匹配任意数字</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\D</code></td>
-          <td style="text-align: left"><code>[^0-9]</code></td>
-          <td style="text-align: left">匹配任意非数字</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\w</code></td>
-          <td style="text-align: left"><code>[a-zA-Z0-9_]</code></td>
-          <td style="text-align: left">匹配任意单词字符（字母、数字、下划线）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\W</code></td>
-          <td style="text-align: left"><code>[^a-zA-Z0-9_]</code></td>
-          <td style="text-align: left">匹配任意非单词字符</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\s</code></td>
-          <td style="text-align: left"><code>[ \t\n\r\f\v]</code></td>
-          <td style="text-align: left">匹配任意空白字符（空格、制表符、换行等）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\S</code></td>
-          <td style="text-align: left"><code>[^ \t\n\r\f\v]</code></td>
-          <td style="text-align: left">匹配任意非空白字符</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">简写</th>
+					<th style="text-align: left">等价写法</th>
+					<th style="text-align: left">核心说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>\d</code></td>
+					<td style="text-align: left"><code>[0-9]</code></td>
+					<td style="text-align: left">匹配任意数字</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\D</code></td>
+					<td style="text-align: left"><code>[^0-9]</code></td>
+					<td style="text-align: left">匹配任意非数字</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\w</code></td>
+					<td style="text-align: left"><code>[a-zA-Z0-9_]</code></td>
+					<td style="text-align: left">匹配任意单词字符（字母、数字、下划线）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\W</code></td>
+					<td style="text-align: left"><code>[^a-zA-Z0-9_]</code></td>
+					<td style="text-align: left">匹配任意非单词字符</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\s</code></td>
+					<td style="text-align: left"><code>[ \t\n\r\f\v]</code></td>
+					<td style="text-align: left">匹配任意空白字符（空格、制表符、换行等）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\S</code></td>
+					<td style="text-align: left"><code>[^ \t\n\r\f\v]</code></td>
+					<td style="text-align: left">匹配任意非空白字符</td>
+			</tr>
+	</tbody>
 </table>
 <blockquote>
 <p>关键注意：方括号内的特殊元字符，除<code>^</code>(开头否定)、<code>-</code>(区间)、<code>\</code>(转义)、<code>]</code>(闭合)外，其余均无需转义，例如<code>[.]</code>仅匹配<code>.</code>本身，而非任意字符。</p>
@@ -291,72 +291,72 @@
 <p>控制<strong>前面的单个字符/分组</strong>的重复出现次数，是实现批量匹配的核心，分为3种匹配模式。</p>
 <h3 id="1-基础量词语法">1. 基础量词语法</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">语法</th>
-          <th style="text-align: left">匹配规则</th>
-          <th style="text-align: left">典型场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>{n}</code></td>
-          <td style="text-align: left">前面的单元<strong>必须恰好出现n次</strong></td>
-          <td style="text-align: left">固定长度校验，如<code>\d{6}</code>匹配6位验证码</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>{n,}</code></td>
-          <td style="text-align: left">前面的单元<strong>至少出现n次</strong>，无上限</td>
-          <td style="text-align: left">最小长度限制，如<code>\w{6,}</code>匹配至少6位单词字符</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>{n,m}</code></td>
-          <td style="text-align: left">前面的单元<strong>出现n~m次</strong>，包含n和m</td>
-          <td style="text-align: left">区间长度限制，如<code>\d{8,16}</code>匹配8-16位数字</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>*</code></td>
-          <td style="text-align: left">零次或多次，等价于<code>{0,}</code></td>
-          <td style="text-align: left">可选重复内容，如<code>a.*b</code>匹配a开头、b结尾的任意字符串</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>+</code></td>
-          <td style="text-align: left">一次或多次，等价于<code>{1,}</code></td>
-          <td style="text-align: left">必选重复内容，如<code>\d+</code>匹配连续数字</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>?</code></td>
-          <td style="text-align: left">零次或一次，等价于<code>{0,1}</code></td>
-          <td style="text-align: left">可选内容，如<code>colou?r</code>匹配<code>color</code>和<code>colour</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">语法</th>
+					<th style="text-align: left">匹配规则</th>
+					<th style="text-align: left">典型场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>{n}</code></td>
+					<td style="text-align: left">前面的单元<strong>必须恰好出现n次</strong></td>
+					<td style="text-align: left">固定长度校验，如<code>\d{6}</code>匹配6位验证码</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>{n,}</code></td>
+					<td style="text-align: left">前面的单元<strong>至少出现n次</strong>，无上限</td>
+					<td style="text-align: left">最小长度限制，如<code>\w{6,}</code>匹配至少6位单词字符</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>{n,m}</code></td>
+					<td style="text-align: left">前面的单元<strong>出现n~m次</strong>，包含n和m</td>
+					<td style="text-align: left">区间长度限制，如<code>\d{8,16}</code>匹配8-16位数字</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>*</code></td>
+					<td style="text-align: left">零次或多次，等价于<code>{0,}</code></td>
+					<td style="text-align: left">可选重复内容，如<code>a.*b</code>匹配a开头、b结尾的任意字符串</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>+</code></td>
+					<td style="text-align: left">一次或多次，等价于<code>{1,}</code></td>
+					<td style="text-align: left">必选重复内容，如<code>\d+</code>匹配连续数字</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>?</code></td>
+					<td style="text-align: left">零次或一次，等价于<code>{0,1}</code></td>
+					<td style="text-align: left">可选内容，如<code>colou?r</code>匹配<code>color</code>和<code>colour</code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-贪婪-vs-非贪婪懒惰模式">2. 贪婪 vs 非贪婪（懒惰）模式</h3>
 <p>正则默认是<strong>贪婪模式</strong>：尽可能匹配最长的符合规则的字符串；
 在量词后加<code>?</code>，切换为<strong>非贪婪模式</strong>：尽可能匹配最短的符合规则的字符串。</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">模式</th>
-          <th style="text-align: left">语法</th>
-          <th style="text-align: left">示例</th>
-          <th style="text-align: left">匹配字符串<code>a123b456b</code>的结果</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">贪婪模式</td>
-          <td style="text-align: left">量词默认</td>
-          <td style="text-align: left"><code>a.*b</code></td>
-          <td style="text-align: left">匹配整个字符串<code>a123b456b</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">非贪婪模式</td>
-          <td style="text-align: left">量词+<code>?</code></td>
-          <td style="text-align: left"><code>a.*?b</code></td>
-          <td style="text-align: left">仅匹配最短片段<code>a123b</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">模式</th>
+					<th style="text-align: left">语法</th>
+					<th style="text-align: left">示例</th>
+					<th style="text-align: left">匹配字符串<code>a123b456b</code>的结果</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">贪婪模式</td>
+					<td style="text-align: left">量词默认</td>
+					<td style="text-align: left"><code>a.*b</code></td>
+					<td style="text-align: left">匹配整个字符串<code>a123b456b</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">非贪婪模式</td>
+					<td style="text-align: left">量词+<code>?</code></td>
+					<td style="text-align: left"><code>a.*?b</code></td>
+					<td style="text-align: left">仅匹配最短片段<code>a123b</code></td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-占有模式">3. 占有模式</h3>
 <p>在量词后加<code>+</code>，语法如<code>*+</code>/<code>++</code>/<code>{n,m}+</code>，匹配时<strong>一次性吞入所有符合规则的字符，匹配失败不回溯</strong>，性能更高，仅PCRE、Java等引擎支持，JS原生不支持。</p>
@@ -364,50 +364,50 @@
 <h2 id="四锚点与边界匹配零宽匹配">四、锚点与边界匹配（零宽匹配）</h2>
 <p><strong>零宽度核心特性</strong>：仅匹配字符串中的<strong>位置</strong>，不匹配任何字符，不消耗字符串长度，核心用于限定匹配内容的位置。</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">语法</th>
-          <th style="text-align: left">名称</th>
-          <th style="text-align: left">匹配规则</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>^</code></td>
-          <td style="text-align: left">行开头锚点</td>
-          <td style="text-align: left">匹配字符串的开头；多行模式<code>m</code>下，匹配每一行的开头</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>$</code></td>
-          <td style="text-align: left">行结尾锚点</td>
-          <td style="text-align: left">匹配字符串的结尾；多行模式<code>m</code>下，匹配每一行的结尾</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\b</code></td>
-          <td style="text-align: left">单词边界</td>
-          <td style="text-align: left">匹配单词字符(<code>\w</code>)和非单词字符(<code>\W</code>)之间的位置</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\B</code></td>
-          <td style="text-align: left">非单词边界</td>
-          <td style="text-align: left">匹配两个单词字符/两个非单词字符之间的位置，与<code>\b</code>相反</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\A</code></td>
-          <td style="text-align: left">字符串绝对开头</td>
-          <td style="text-align: left">仅匹配整个字符串的开头，不受多行模式<code>m</code>影响</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\Z</code></td>
-          <td style="text-align: left">字符串结尾</td>
-          <td style="text-align: left">仅匹配整个字符串的结尾，或结尾换行符前的位置，不受多行模式影响</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\z</code></td>
-          <td style="text-align: left">字符串绝对结尾</td>
-          <td style="text-align: left">仅匹配整个字符串的最末尾，忽略结尾换行符</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">语法</th>
+					<th style="text-align: left">名称</th>
+					<th style="text-align: left">匹配规则</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>^</code></td>
+					<td style="text-align: left">行开头锚点</td>
+					<td style="text-align: left">匹配字符串的开头；多行模式<code>m</code>下，匹配每一行的开头</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>$</code></td>
+					<td style="text-align: left">行结尾锚点</td>
+					<td style="text-align: left">匹配字符串的结尾；多行模式<code>m</code>下，匹配每一行的结尾</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\b</code></td>
+					<td style="text-align: left">单词边界</td>
+					<td style="text-align: left">匹配单词字符(<code>\w</code>)和非单词字符(<code>\W</code>)之间的位置</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\B</code></td>
+					<td style="text-align: left">非单词边界</td>
+					<td style="text-align: left">匹配两个单词字符/两个非单词字符之间的位置，与<code>\b</code>相反</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\A</code></td>
+					<td style="text-align: left">字符串绝对开头</td>
+					<td style="text-align: left">仅匹配整个字符串的开头，不受多行模式<code>m</code>影响</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\Z</code></td>
+					<td style="text-align: left">字符串结尾</td>
+					<td style="text-align: left">仅匹配整个字符串的结尾，或结尾换行符前的位置，不受多行模式影响</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\z</code></td>
+					<td style="text-align: left">字符串绝对结尾</td>
+					<td style="text-align: left">仅匹配整个字符串的最末尾，忽略结尾换行符</td>
+			</tr>
+	</tbody>
 </table>
 <p>核心示例：</p>
 <ul>
@@ -421,30 +421,30 @@
 <h3 id="1-捕获分组">1. 捕获分组</h3>
 <p>普通括号<code>()</code>会将分组内匹配的内容<strong>捕获并存储</strong>，系统自动按左括号的顺序从<code>1</code>开始编号，<code>0</code>固定为整个正则匹配的完整内容。</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">语法</th>
-          <th style="text-align: left">说明</th>
-          <th style="text-align: left">示例</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>(pattern)</code></td>
-          <td style="text-align: left">普通捕获分组，自动编号</td>
-          <td style="text-align: left"><code>(\d{4})-(\d{2})-(\d{2})</code>：匹配日期，分组1=年，分组2=月，分组3=日</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>(?&lt;name&gt;pattern)</code></td>
-          <td style="text-align: left">命名捕获分组，自定义分组名</td>
-          <td style="text-align: left"><code>(?&lt;year&gt;\d{4})-(?&lt;month&gt;\d{2})</code>：给年、月分组命名，JS/Java/.NET支持</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>(?P&lt;name&gt;pattern)</code></td>
-          <td style="text-align: left">Python专属命名捕获分组</td>
-          <td style="text-align: left">Python中通过<code>group('name')</code>获取对应匹配内容</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">语法</th>
+					<th style="text-align: left">说明</th>
+					<th style="text-align: left">示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>(pattern)</code></td>
+					<td style="text-align: left">普通捕获分组，自动编号</td>
+					<td style="text-align: left"><code>(\d{4})-(\d{2})-(\d{2})</code>：匹配日期，分组1=年，分组2=月，分组3=日</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>(?&lt;name&gt;pattern)</code></td>
+					<td style="text-align: left">命名捕获分组，自定义分组名</td>
+					<td style="text-align: left"><code>(?&lt;year&gt;\d{4})-(?&lt;month&gt;\d{2})</code>：给年、月分组命名，JS/Java/.NET支持</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>(?P&lt;name&gt;pattern)</code></td>
+					<td style="text-align: left">Python专属命名捕获分组</td>
+					<td style="text-align: left">Python中通过<code>group('name')</code>获取对应匹配内容</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-非捕获分组">2. 非捕获分组</h3>
 <p>语法<code>(?:pattern)</code>，仅用于<strong>分组打包，不捕获内容，不占用分组编号</strong>，适合仅需分组控制量词/分支、无需后续引用的场景，可节省内存、提升匹配效率。</p>
@@ -483,40 +483,40 @@
 <h2 id="七零宽断言环视lookaround">七、零宽断言（环视/Lookaround）</h2>
 <p>进阶零宽匹配，<strong>仅匹配位置，不消耗字符</strong>，核心是判断「当前位置的前后」是否符合指定模式，是实现精准条件匹配的核心能力。</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">断言类型</th>
-          <th style="text-align: left">语法</th>
-          <th style="text-align: left">匹配规则</th>
-          <th style="text-align: left">核心说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">正向先行断言</td>
-          <td style="text-align: left"><code>(?=pattern)</code></td>
-          <td style="text-align: left">匹配<strong>后面紧跟</strong>pattern的位置</td>
-          <td style="text-align: left">向右看，符合条件才匹配</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">负向先行断言</td>
-          <td style="text-align: left"><code>(?!pattern)</code></td>
-          <td style="text-align: left">匹配<strong>后面不紧跟</strong>pattern的位置</td>
-          <td style="text-align: left">向右看，不符合条件才匹配</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">正向后行断言</td>
-          <td style="text-align: left"><code>(?&lt;=pattern)</code></td>
-          <td style="text-align: left">匹配<strong>前面紧跟</strong>pattern的位置</td>
-          <td style="text-align: left">向左看，符合条件才匹配</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">负向后行断言</td>
-          <td style="text-align: left"><code>(?&lt;!pattern)</code></td>
-          <td style="text-align: left">匹配<strong>前面不紧跟</strong>pattern的位置</td>
-          <td style="text-align: left">向左看，不符合条件才匹配</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">断言类型</th>
+					<th style="text-align: left">语法</th>
+					<th style="text-align: left">匹配规则</th>
+					<th style="text-align: left">核心说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">正向先行断言</td>
+					<td style="text-align: left"><code>(?=pattern)</code></td>
+					<td style="text-align: left">匹配<strong>后面紧跟</strong>pattern的位置</td>
+					<td style="text-align: left">向右看，符合条件才匹配</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">负向先行断言</td>
+					<td style="text-align: left"><code>(?!pattern)</code></td>
+					<td style="text-align: left">匹配<strong>后面不紧跟</strong>pattern的位置</td>
+					<td style="text-align: left">向右看，不符合条件才匹配</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">正向后行断言</td>
+					<td style="text-align: left"><code>(?&lt;=pattern)</code></td>
+					<td style="text-align: left">匹配<strong>前面紧跟</strong>pattern的位置</td>
+					<td style="text-align: left">向左看，符合条件才匹配</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">负向后行断言</td>
+					<td style="text-align: left"><code>(?&lt;!pattern)</code></td>
+					<td style="text-align: left">匹配<strong>前面不紧跟</strong>pattern的位置</td>
+					<td style="text-align: left">向左看，不符合条件才匹配</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="核心示例">核心示例</h3>
 <ol>
@@ -545,45 +545,45 @@
 <h2 id="八修饰符标志位">八、修饰符（标志位）</h2>
 <p>写在正则表达式的末尾，用于<strong>全局控制匹配模式</strong>，不同语言的写法略有差异（JS：<code>/pattern/flags</code>；Python：<code>re.compile(pattern, flags)</code>）。</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">修饰符</th>
-          <th style="text-align: left">全称</th>
-          <th style="text-align: left">核心作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>i</code></td>
-          <td style="text-align: left">Ignore Case</td>
-          <td style="text-align: left">忽略大小写，匹配时不区分字母大小写</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>g</code></td>
-          <td style="text-align: left">Global</td>
-          <td style="text-align: left">全局匹配，找到所有符合规则的匹配项，而非仅第一个</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>m</code></td>
-          <td style="text-align: left">Multiline</td>
-          <td style="text-align: left">多行模式，<code>^</code>和<code>$</code>匹配每一行的开头和结尾，而非整个字符串</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>s</code></td>
-          <td style="text-align: left">Dot All / Singleline</td>
-          <td style="text-align: left">单行模式，通配符<code>.</code>可以匹配换行符<code>\n</code>，默认不匹配</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>u</code></td>
-          <td style="text-align: left">Unicode</td>
-          <td style="text-align: left">Unicode模式，支持匹配4字节的Unicode字符（如emoji、生僻字）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>x</code></td>
-          <td style="text-align: left">Extended</td>
-          <td style="text-align: left">扩展模式，忽略正则中的空白字符，支持行内注释，提升可读性</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">修饰符</th>
+					<th style="text-align: left">全称</th>
+					<th style="text-align: left">核心作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>i</code></td>
+					<td style="text-align: left">Ignore Case</td>
+					<td style="text-align: left">忽略大小写，匹配时不区分字母大小写</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>g</code></td>
+					<td style="text-align: left">Global</td>
+					<td style="text-align: left">全局匹配，找到所有符合规则的匹配项，而非仅第一个</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>m</code></td>
+					<td style="text-align: left">Multiline</td>
+					<td style="text-align: left">多行模式，<code>^</code>和<code>$</code>匹配每一行的开头和结尾，而非整个字符串</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>s</code></td>
+					<td style="text-align: left">Dot All / Singleline</td>
+					<td style="text-align: left">单行模式，通配符<code>.</code>可以匹配换行符<code>\n</code>，默认不匹配</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>u</code></td>
+					<td style="text-align: left">Unicode</td>
+					<td style="text-align: left">Unicode模式，支持匹配4字节的Unicode字符（如emoji、生僻字）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>x</code></td>
+					<td style="text-align: left">Extended</td>
+					<td style="text-align: left">扩展模式，忽略正则中的空白字符，支持行内注释，提升可读性</td>
+			</tr>
+	</tbody>
 </table>
 <p>示例：</p>
 <ul>
@@ -594,50 +594,50 @@
 <h2 id="九特殊转义字符">九、特殊转义字符</h2>
 <p>用于匹配不可见字符、特殊编码字符，常用如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">语法</th>
-          <th style="text-align: left">匹配内容</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>\t</code></td>
-          <td style="text-align: left">水平制表符（Tab键）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\n</code></td>
-          <td style="text-align: left">换行符</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\r</code></td>
-          <td style="text-align: left">回车符</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\f</code></td>
-          <td style="text-align: left">换页符</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\v</code></td>
-          <td style="text-align: left">垂直制表符</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\0</code></td>
-          <td style="text-align: left">空字符（NULL）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\xhh</code></td>
-          <td style="text-align: left">两位十六进制ASCII字符，如<code>\x41</code>匹配<code>A</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\uhhhh</code></td>
-          <td style="text-align: left">四位十六进制Unicode字符，如<code>\u4e2d</code>匹配中文<code>中</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>\cX</code></td>
-          <td style="text-align: left">控制字符，X为A-Z，如<code>\cM</code>匹配Ctrl+M（回车符）</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">语法</th>
+					<th style="text-align: left">匹配内容</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>\t</code></td>
+					<td style="text-align: left">水平制表符（Tab键）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\n</code></td>
+					<td style="text-align: left">换行符</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\r</code></td>
+					<td style="text-align: left">回车符</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\f</code></td>
+					<td style="text-align: left">换页符</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\v</code></td>
+					<td style="text-align: left">垂直制表符</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\0</code></td>
+					<td style="text-align: left">空字符（NULL）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\xhh</code></td>
+					<td style="text-align: left">两位十六进制ASCII字符，如<code>\x41</code>匹配<code>A</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\uhhhh</code></td>
+					<td style="text-align: left">四位十六进制Unicode字符，如<code>\u4e2d</code>匹配中文<code>中</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>\cX</code></td>
+					<td style="text-align: left">控制字符，X为A-Z，如<code>\cM</code>匹配Ctrl+M（回车符）</td>
+			</tr>
+	</tbody>
 </table>
 <hr>
 <h2 id="十高级语法与特殊构造">十、高级语法与特殊构造</h2>
@@ -674,38 +674,38 @@
 <hr>
 <h2 id="十二高频常用正则示例">十二、高频常用正则示例</h2>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">场景</th>
-          <th style="text-align: left">正则表达式</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">手机号（中国大陆）</td>
-          <td style="text-align: left"><code>^1[3-9]\d{9}$</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">邮箱地址</td>
-          <td style="text-align: left"><code>^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">身份证号（18位）</td>
-          <td style="text-align: left">`^[1-9]\d{5}(19</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">中文匹配</td>
-          <td style="text-align: left"><code>^[\u4e00-\u9fa5]+$</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">URL地址</td>
-          <td style="text-align: left"><code>^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&amp;//=]*)$</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">强密码（8-20位，含大小写+数字+特殊字符）</td>
-          <td style="text-align: left"><code>^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&amp;*])[a-zA-Z0-9!@#$%^&amp;*]{8,20}$</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">场景</th>
+					<th style="text-align: left">正则表达式</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">手机号（中国大陆）</td>
+					<td style="text-align: left"><code>^1[3-9]\d{9}$</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">邮箱地址</td>
+					<td style="text-align: left"><code>^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">身份证号（18位）</td>
+					<td style="text-align: left">`^[1-9]\d{5}(19</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">中文匹配</td>
+					<td style="text-align: left"><code>^[\u4e00-\u9fa5]+$</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">URL地址</td>
+					<td style="text-align: left"><code>^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&amp;//=]*)$</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">强密码（8-20位，含大小写+数字+特殊字符）</td>
+					<td style="text-align: left"><code>^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&amp;*])[a-zA-Z0-9!@#$%^&amp;*]{8,20}$</code></td>
+			</tr>
+	</tbody>
 </table>
 <hr>
 <h2 id="十三常见误区与避坑指南">十三、常见误区与避坑指南</h2>
@@ -747,7 +747,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

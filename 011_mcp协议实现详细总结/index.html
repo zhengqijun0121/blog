@@ -5,22 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>MCP 协议详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/011_mcp%E5%8D%8F%E8%AE%AE%E5%AE%9E%E7%8E%B0%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="MCP 协议详细总结">
-  <meta property="og:description" content="MCP（Model Context Protocol）协议实现详细总结 一、MCP核心定义与定位 1. 基础定义 MCP（Model Context Protocol，模型上下文协议）是由Anthropic牵头、多家AI厂商联合推出的开源标准化通信协议，基于JSON-RPC 2.0构建，为大语言模型(LLM)应用与外部工具、数据源、系统服务之间提供统一、安全、可互操作的通信标准，彻底解决了传统Function Calling碎片化开发、多平台适配成本高、安全边界模糊、能力复用性差的行业痛点，实现了“一次开发，全生态兼容”的能力复用。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-03-17T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-03-17T10:00:20+08:00">
-    <meta property="article:tag" content="协议">
-    <meta property="article:tag" content="MCP">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="MCP 协议详细总结">
+	<meta property="og:description" content="MCP（Model Context Protocol）协议实现详细总结 一、MCP核心定义与定位 1. 基础定义 MCP（Model Context Protocol，模型上下文协议）是由Anthropic牵头、多家AI厂商联合推出的开源标准化通信协议，基于JSON-RPC 2.0构建，为大语言模型(LLM)应用与外部工具、数据源、系统服务之间提供统一、安全、可互操作的通信标准，彻底解决了传统Function Calling碎片化开发、多平台适配成本高、安全边界模糊、能力复用性差的行业痛点，实现了“一次开发，全生态兼容”的能力复用。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-03-17T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-03-17T10:00:20+08:00">
+		<meta property="article:tag" content="协议">
+		<meta property="article:tag" content="MCP">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="MCP 协议详细总结">
-  <meta name="twitter:description" content="MCP（Model Context Protocol）协议实现详细总结 一、MCP核心定义与定位 1. 基础定义 MCP（Model Context Protocol，模型上下文协议）是由Anthropic牵头、多家AI厂商联合推出的开源标准化通信协议，基于JSON-RPC 2.0构建，为大语言模型(LLM)应用与外部工具、数据源、系统服务之间提供统一、安全、可互操作的通信标准，彻底解决了传统Function Calling碎片化开发、多平台适配成本高、安全边界模糊、能力复用性差的行业痛点，实现了“一次开发，全生态兼容”的能力复用。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="MCP 协议详细总结">
+	<meta name="twitter:description" content="MCP（Model Context Protocol）协议实现详细总结 一、MCP核心定义与定位 1. 基础定义 MCP（Model Context Protocol，模型上下文协议）是由Anthropic牵头、多家AI厂商联合推出的开源标准化通信协议，基于JSON-RPC 2.0构建，为大语言模型(LLM)应用与外部工具、数据源、系统服务之间提供统一、安全、可互操作的通信标准，彻底解决了传统Function Calling碎片化开发、多平台适配成本高、安全边界模糊、能力复用性差的行业痛点，实现了“一次开发，全生态兼容”的能力复用。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -188,74 +188,74 @@
 <p>MCP（Model Context Protocol，模型上下文协议）是由Anthropic牵头、多家AI厂商联合推出的<strong>开源标准化通信协议</strong>，基于JSON-RPC 2.0构建，为大语言模型(LLM)应用与外部工具、数据源、系统服务之间提供统一、安全、可互操作的通信标准，彻底解决了传统Function Calling碎片化开发、多平台适配成本高、安全边界模糊、能力复用性差的行业痛点，实现了“一次开发，全生态兼容”的能力复用。</p>
 <h3 id="2-核心价值与传统function-calling的核心区别">2. 核心价值（与传统Function Calling的核心区别）</h3>
 <table>
-  <thead>
-      <tr>
-          <th>维度</th>
-          <th>MCP</th>
-          <th>传统Function Calling</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>核心目标</td>
-          <td>标准化LLM与外部系统的通信协议，实现跨平台互操作</td>
-          <td>解决单一场景下LLM与特定工具的调用逻辑</td>
-      </tr>
-      <tr>
-          <td>实现方式</td>
-          <td>Client-Server解耦架构，基于统一协议规范</td>
-          <td>与特定模型/应用强绑定，无通用标准</td>
-      </tr>
-      <tr>
-          <td>开发成本</td>
-          <td>一次开发，多宿主（Claude/Cursor/Windsurf等）兼容</td>
-          <td>需为每个应用/模型单独开发适配</td>
-      </tr>
-      <tr>
-          <td>能力边界</td>
-          <td>支持工具调用、资源访问、提示模板、采样回调四大核心原语</td>
-          <td>仅支持基础函数调用</td>
-      </tr>
-      <tr>
-          <td>安全机制</td>
-          <td>内置权限隔离、用户同意、沙箱机制，明确安全边界</td>
-          <td>无统一安全规范，需开发者自行实现</td>
-      </tr>
-      <tr>
-          <td>复用性</td>
-          <td>高，Server可跨场景、跨宿主复用</td>
-          <td>低，函数通常为特定任务/场景定制</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>维度</th>
+					<th>MCP</th>
+					<th>传统Function Calling</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>核心目标</td>
+					<td>标准化LLM与外部系统的通信协议，实现跨平台互操作</td>
+					<td>解决单一场景下LLM与特定工具的调用逻辑</td>
+			</tr>
+			<tr>
+					<td>实现方式</td>
+					<td>Client-Server解耦架构，基于统一协议规范</td>
+					<td>与特定模型/应用强绑定，无通用标准</td>
+			</tr>
+			<tr>
+					<td>开发成本</td>
+					<td>一次开发，多宿主（Claude/Cursor/Windsurf等）兼容</td>
+					<td>需为每个应用/模型单独开发适配</td>
+			</tr>
+			<tr>
+					<td>能力边界</td>
+					<td>支持工具调用、资源访问、提示模板、采样回调四大核心原语</td>
+					<td>仅支持基础函数调用</td>
+			</tr>
+			<tr>
+					<td>安全机制</td>
+					<td>内置权限隔离、用户同意、沙箱机制，明确安全边界</td>
+					<td>无统一安全规范，需开发者自行实现</td>
+			</tr>
+			<tr>
+					<td>复用性</td>
+					<td>高，Server可跨场景、跨宿主复用</td>
+					<td>低，函数通常为特定任务/场景定制</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="二mcp核心架构与核心规范">二、MCP核心架构与核心规范</h2>
 <h3 id="1-三层核心架构">1. 三层核心架构</h3>
 <p>MCP采用<strong>Host-Client-Server三层解耦架构</strong>，核心为Client-Server CS模式，每个Host可管理多个Client实例，每个Client与Server保持<strong>1:1独占的有状态长连接</strong>。</p>
 <table>
-  <thead>
-      <tr>
-          <th>核心角色</th>
-          <th>定义与典型代表</th>
-          <th>核心职责</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>MCP Host（宿主）</td>
-          <td>承载LLM能力的AI应用，协议发起方与消费方<br>典型代表：Claude Desktop、Cursor IDE、自研AI平台</td>
-          <td>1. 管理多个Client生命周期，协调多Server连接<br>2. 对接LLM，将模型意图转化为MCP标准指令<br>3. 负责用户交互与权限审批，确保操作获得用户知情同意<br>4. 接收Server返回结果，注入模型上下文完成推理闭环</td>
-      </tr>
-      <tr>
-          <td>MCP Client（客户端）</td>
-          <td>嵌入Host内部的通信中间件，Host与Server的唯一桥梁</td>
-          <td>1. 与对应Server建立并维护长连接，处理保活与异常重连<br>2. 完成协议序列化/反序列化，实现Host与Server的消息双向路由<br>3. 处理初始化握手与能力协商，校验协议版本与能力集<br>4. 管理资源订阅、通知推送与会话状态，维护Server间安全隔离</td>
-      </tr>
-      <tr>
-          <td>MCP Server（服务端）</td>
-          <td>实现MCP协议、封装并暴露特定能力的轻量级程序<br>部署形态：本地子进程、远程HTTP服务、容器化服务</td>
-          <td>1. 通过标准原语对外暴露工具、资源、提示模板三类能力<br>2. 实现业务逻辑，对接数据库、API、文件系统等底层系统<br>3. 响应Client请求，处理能力发现与调用，遵守协议安全约束<br>4. 可主动发起采样请求，反向回调Host的LLM能力<br>5. 维护会话状态，处理资源变更通知与权限校验</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>核心角色</th>
+					<th>定义与典型代表</th>
+					<th>核心职责</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>MCP Host（宿主）</td>
+					<td>承载LLM能力的AI应用，协议发起方与消费方<br>典型代表：Claude Desktop、Cursor IDE、自研AI平台</td>
+					<td>1. 管理多个Client生命周期，协调多Server连接<br>2. 对接LLM，将模型意图转化为MCP标准指令<br>3. 负责用户交互与权限审批，确保操作获得用户知情同意<br>4. 接收Server返回结果，注入模型上下文完成推理闭环</td>
+			</tr>
+			<tr>
+					<td>MCP Client（客户端）</td>
+					<td>嵌入Host内部的通信中间件，Host与Server的唯一桥梁</td>
+					<td>1. 与对应Server建立并维护长连接，处理保活与异常重连<br>2. 完成协议序列化/反序列化，实现Host与Server的消息双向路由<br>3. 处理初始化握手与能力协商，校验协议版本与能力集<br>4. 管理资源订阅、通知推送与会话状态，维护Server间安全隔离</td>
+			</tr>
+			<tr>
+					<td>MCP Server（服务端）</td>
+					<td>实现MCP协议、封装并暴露特定能力的轻量级程序<br>部署形态：本地子进程、远程HTTP服务、容器化服务</td>
+					<td>1. 通过标准原语对外暴露工具、资源、提示模板三类能力<br>2. 实现业务逻辑，对接数据库、API、文件系统等底层系统<br>3. 响应Client请求，处理能力发现与调用，遵守协议安全约束<br>4. 可主动发起采样请求，反向回调Host的LLM能力<br>5. 维护会话状态，处理资源变更通知与权限校验</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-底层协议规范">2. 底层协议规范</h3>
 <p>MCP完全基于<strong>JSON-RPC 2.0</strong>标准构建，定义了三种核心消息类型，所有通信严格遵循该规范：</p>
@@ -489,38 +489,38 @@
 <h2 id="六传输层实现方案">六、传输层实现方案</h2>
 <p>MCP传输层与业务逻辑完全解耦，官方支持3种主流传输方式，适配不同部署场景：</p>
 <table>
-  <thead>
-      <tr>
-          <th>传输方式</th>
-          <th>实现原理</th>
-          <th>适用场景</th>
-          <th>核心优势</th>
-          <th>注意事项</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>stdio（标准输入输出）</td>
-          <td>Client通过子进程启动Server，通过进程stdin/stdout进行二进制流通信</td>
-          <td>本地部署场景，Claude Desktop/Cursor等本地AI应用</td>
-          <td>开发简单、无端口暴露、安全性高、延迟极低</td>
-          <td>禁止向stdout打印业务日志（需用stderr），仅支持单客户端连接</td>
-      </tr>
-      <tr>
-          <td>SSE+HTTP</td>
-          <td>Client通过HTTP POST发送请求，通过SSE长连接接收服务端响应与通知</td>
-          <td>远程部署、企业内网/云端服务</td>
-          <td>支持跨网络访问、多客户端并发、兼容HTTP网关/鉴权/负载均衡</td>
-          <td>必须配置CORS、HTTPS加密、身份认证，处理网络重连</td>
-      </tr>
-      <tr>
-          <td>WebSocket</td>
-          <td>基于WebSocket全双工长连接实现双向通信</td>
-          <td>实时性要求高、双向消息频繁的场景（如实时数据推送）</td>
-          <td>全双工通信、低延迟、支持双向实时推送</td>
-          <td>官方原生支持度低于前两种，需自行实现心跳保活与消息顺序保证</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>传输方式</th>
+					<th>实现原理</th>
+					<th>适用场景</th>
+					<th>核心优势</th>
+					<th>注意事项</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>stdio（标准输入输出）</td>
+					<td>Client通过子进程启动Server，通过进程stdin/stdout进行二进制流通信</td>
+					<td>本地部署场景，Claude Desktop/Cursor等本地AI应用</td>
+					<td>开发简单、无端口暴露、安全性高、延迟极低</td>
+					<td>禁止向stdout打印业务日志（需用stderr），仅支持单客户端连接</td>
+			</tr>
+			<tr>
+					<td>SSE+HTTP</td>
+					<td>Client通过HTTP POST发送请求，通过SSE长连接接收服务端响应与通知</td>
+					<td>远程部署、企业内网/云端服务</td>
+					<td>支持跨网络访问、多客户端并发、兼容HTTP网关/鉴权/负载均衡</td>
+					<td>必须配置CORS、HTTPS加密、身份认证，处理网络重连</td>
+			</tr>
+			<tr>
+					<td>WebSocket</td>
+					<td>基于WebSocket全双工长连接实现双向通信</td>
+					<td>实时性要求高、双向消息频繁的场景（如实时数据推送）</td>
+					<td>全双工通信、低延迟、支持双向实时推送</td>
+					<td>官方原生支持度低于前两种，需自行实现心跳保活与消息顺序保证</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="七安全机制实现">七、安全机制实现</h2>
 <p>MCP内置多层安全机制，开发者必须严格落地，避免安全风险：</p>
@@ -590,7 +590,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

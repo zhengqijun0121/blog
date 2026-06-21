@@ -5,22 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>RTP 协议详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/007_rtp%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="RTP 协议详细总结">
-  <meta property="og:description" content="RTP协议详细总结 RTP（Real-time Transport Protocol，实时传输协议）是IETF在RFC3550中定义的端到端传输协议（替代旧版RFC1889），专为IP网络中音视频等实时数据传输设计，是实时流媒体、音视频通信领域的核心基石协议。它通常基于UDP运行，核心解决实时媒体的时序同步、丢包检测、流标识等核心问题，本身不提供端到端的可靠性与QoS资源预留，配套的RTCP协议负责质量监控、反馈与会话管理。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-03-13T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-03-13T10:00:20+08:00">
-    <meta property="article:tag" content="协议">
-    <meta property="article:tag" content="RTP">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="RTP 协议详细总结">
+	<meta property="og:description" content="RTP协议详细总结 RTP（Real-time Transport Protocol，实时传输协议）是IETF在RFC3550中定义的端到端传输协议（替代旧版RFC1889），专为IP网络中音视频等实时数据传输设计，是实时流媒体、音视频通信领域的核心基石协议。它通常基于UDP运行，核心解决实时媒体的时序同步、丢包检测、流标识等核心问题，本身不提供端到端的可靠性与QoS资源预留，配套的RTCP协议负责质量监控、反馈与会话管理。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-03-13T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-03-13T10:00:20+08:00">
+		<meta property="article:tag" content="协议">
+		<meta property="article:tag" content="RTP">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="RTP 协议详细总结">
-  <meta name="twitter:description" content="RTP协议详细总结 RTP（Real-time Transport Protocol，实时传输协议）是IETF在RFC3550中定义的端到端传输协议（替代旧版RFC1889），专为IP网络中音视频等实时数据传输设计，是实时流媒体、音视频通信领域的核心基石协议。它通常基于UDP运行，核心解决实时媒体的时序同步、丢包检测、流标识等核心问题，本身不提供端到端的可靠性与QoS资源预留，配套的RTCP协议负责质量监控、反馈与会话管理。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="RTP 协议详细总结">
+	<meta name="twitter:description" content="RTP协议详细总结 RTP（Real-time Transport Protocol，实时传输协议）是IETF在RFC3550中定义的端到端传输协议（替代旧版RFC1889），专为IP网络中音视频等实时数据传输设计，是实时流媒体、音视频通信领域的核心基石协议。它通常基于UDP运行，核心解决实时媒体的时序同步、丢包检测、流标识等核心问题，本身不提供端到端的可靠性与QoS资源预留，配套的RTCP协议负责质量监控、反馈与会话管理。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -180,60 +180,60 @@
 <p>RTP报文由<strong>固定头部（最小12字节）、可选CSRC列表、可选扩展头、填充字段、媒体负载</strong>五部分组成，核心头部结构如下：</p>
 <h3 id="1-固定头部必选12字节">1. 固定头部（必选，12字节）</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">字段</th>
-          <th style="text-align: left">长度</th>
-          <th style="text-align: left">核心含义与作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">V（版本号）</td>
-          <td style="text-align: left">2bit</td>
-          <td style="text-align: left">标识RTP协议版本，<strong>当前标准版本为2</strong>，旧版版本1已废弃</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">P（填充位）</td>
-          <td style="text-align: left">1bit</td>
-          <td style="text-align: left">置1时，报文末尾包含填充字节，最后一个字节标识填充总长度，用于加密等需要固定块大小的场景</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">X（扩展位）</td>
-          <td style="text-align: left">1bit</td>
-          <td style="text-align: left">置1时，固定头部后跟随一个标准化扩展头，用于自定义功能扩展</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">CC（CSRC计数）</td>
-          <td style="text-align: left">4bit</td>
-          <td style="text-align: left">标识后续CSRC贡献源标识符的数量，取值范围0~15</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">M（标记位）</td>
-          <td style="text-align: left">1bit</td>
-          <td style="text-align: left">由应用层RTP Profile定义，典型用途是标记媒体帧边界（如视频关键帧结束、音频静音帧起始），接收端据此完成帧重组</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">PT（负载类型）</td>
-          <td style="text-align: left">7bit</td>
-          <td style="text-align: left">标识RTP负载的编码格式与时钟频率，分为两类：<br>- 静态分配（0<del>95）：标准编码预定义，如PCMU(0)、PCMA(8)<br>- 动态分配（96</del>127）：通过SDP等信令协商，如H.264(96)、AAC(97)</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">序列号</td>
-          <td style="text-align: left">16bit</td>
-          <td style="text-align: left">每个RTP报文发送后单调+1，初始值随机生成；接收端核心用于<strong>丢包检测、乱序重排</strong>，是抗抖动、丢包恢复的基础</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">时间戳</td>
-          <td style="text-align: left">32bit</td>
-          <td style="text-align: left">标记负载数据首个字节的采样时刻，初始值随机，随采样时钟单调递增；核心用于<strong>音画同步、抖动缓冲、播放时钟恢复</strong>，解决网络抖动导致的播放卡顿</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">SSRC（同步源标识符）</td>
-          <td style="text-align: left">32bit</td>
-          <td style="text-align: left">随机生成，<strong>唯一标识一个RTP流的发送源</strong>，同一会话内SSRC不可重复，冲突时需重新生成；用于区分同一会话中不同媒体流（如多人会议不同用户、同一用户的音频/视频流）</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">字段</th>
+					<th style="text-align: left">长度</th>
+					<th style="text-align: left">核心含义与作用</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">V（版本号）</td>
+					<td style="text-align: left">2bit</td>
+					<td style="text-align: left">标识RTP协议版本，<strong>当前标准版本为2</strong>，旧版版本1已废弃</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">P（填充位）</td>
+					<td style="text-align: left">1bit</td>
+					<td style="text-align: left">置1时，报文末尾包含填充字节，最后一个字节标识填充总长度，用于加密等需要固定块大小的场景</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">X（扩展位）</td>
+					<td style="text-align: left">1bit</td>
+					<td style="text-align: left">置1时，固定头部后跟随一个标准化扩展头，用于自定义功能扩展</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">CC（CSRC计数）</td>
+					<td style="text-align: left">4bit</td>
+					<td style="text-align: left">标识后续CSRC贡献源标识符的数量，取值范围0~15</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">M（标记位）</td>
+					<td style="text-align: left">1bit</td>
+					<td style="text-align: left">由应用层RTP Profile定义，典型用途是标记媒体帧边界（如视频关键帧结束、音频静音帧起始），接收端据此完成帧重组</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">PT（负载类型）</td>
+					<td style="text-align: left">7bit</td>
+					<td style="text-align: left">标识RTP负载的编码格式与时钟频率，分为两类：<br>- 静态分配（0<del>95）：标准编码预定义，如PCMU(0)、PCMA(8)<br>- 动态分配（96</del>127）：通过SDP等信令协商，如H.264(96)、AAC(97)</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">序列号</td>
+					<td style="text-align: left">16bit</td>
+					<td style="text-align: left">每个RTP报文发送后单调+1，初始值随机生成；接收端核心用于<strong>丢包检测、乱序重排</strong>，是抗抖动、丢包恢复的基础</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">时间戳</td>
+					<td style="text-align: left">32bit</td>
+					<td style="text-align: left">标记负载数据首个字节的采样时刻，初始值随机，随采样时钟单调递增；核心用于<strong>音画同步、抖动缓冲、播放时钟恢复</strong>，解决网络抖动导致的播放卡顿</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">SSRC（同步源标识符）</td>
+					<td style="text-align: left">32bit</td>
+					<td style="text-align: left">随机生成，<strong>唯一标识一个RTP流的发送源</strong>，同一会话内SSRC不可重复，冲突时需重新生成；用于区分同一会话中不同媒体流（如多人会议不同用户、同一用户的音频/视频流）</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-可选字段与扩展">2. 可选字段与扩展</h3>
 <ol>
@@ -271,46 +271,46 @@
 </ol>
 <h3 id="2-核心报文类型">2. 核心报文类型</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">报文类型</th>
-          <th style="text-align: left">类型值</th>
-          <th style="text-align: left">发送主体</th>
-          <th style="text-align: left">核心用途</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">SR（发送报告）</td>
-          <td style="text-align: left">200</td>
-          <td style="text-align: left">媒体流发送端</td>
-          <td style="text-align: left">携带发送统计、NTP-RTP时间戳映射，用于同步与质量统计</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">RR（接收报告）</td>
-          <td style="text-align: left">201</td>
-          <td style="text-align: left">媒体流接收端</td>
-          <td style="text-align: left">携带接收质量统计，反馈丢包、抖动等网络指标</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">SDES（源描述）</td>
-          <td style="text-align: left">202</td>
-          <td style="text-align: left">所有会话成员</td>
-          <td style="text-align: left">传递CNAME、用户信息等，实现成员标识与流关联</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">BYE（离开报文）</td>
-          <td style="text-align: left">203</td>
-          <td style="text-align: left">退出会话的成员</td>
-          <td style="text-align: left">标识流结束，通知其他成员释放资源</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">APP（应用扩展）</td>
-          <td style="text-align: left">204</td>
-          <td style="text-align: left">所有会话成员</td>
-          <td style="text-align: left">承载自定义应用层控制信息，扩展协议能力</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">报文类型</th>
+					<th style="text-align: left">类型值</th>
+					<th style="text-align: left">发送主体</th>
+					<th style="text-align: left">核心用途</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">SR（发送报告）</td>
+					<td style="text-align: left">200</td>
+					<td style="text-align: left">媒体流发送端</td>
+					<td style="text-align: left">携带发送统计、NTP-RTP时间戳映射，用于同步与质量统计</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">RR（接收报告）</td>
+					<td style="text-align: left">201</td>
+					<td style="text-align: left">媒体流接收端</td>
+					<td style="text-align: left">携带接收质量统计，反馈丢包、抖动等网络指标</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">SDES（源描述）</td>
+					<td style="text-align: left">202</td>
+					<td style="text-align: left">所有会话成员</td>
+					<td style="text-align: left">传递CNAME、用户信息等，实现成员标识与流关联</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">BYE（离开报文）</td>
+					<td style="text-align: left">203</td>
+					<td style="text-align: left">退出会话的成员</td>
+					<td style="text-align: left">标识流结束，通知其他成员释放资源</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">APP（应用扩展）</td>
+					<td style="text-align: left">204</td>
+					<td style="text-align: left">所有会话成员</td>
+					<td style="text-align: left">承载自定义应用层控制信息，扩展协议能力</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="五标准工作流程">五、标准工作流程</h2>
 <p>典型的端到端RTP/RTCP传输流程如下：</p>
@@ -389,7 +389,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

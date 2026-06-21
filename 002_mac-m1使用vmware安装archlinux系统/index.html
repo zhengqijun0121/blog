@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Mac M1 使用 VMWare 安装 ArchLinux 系统 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/002_mac-m1%E4%BD%BF%E7%94%A8vmware%E5%AE%89%E8%A3%85archlinux%E7%B3%BB%E7%BB%9F/">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="Mac M1 使用 VMWare 安装 ArchLinux 系统">
+	<meta property="og:description" content="一个简单、轻量级的发行版，试图保持简单。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-06-19T09:00:00+08:00">
+		<meta property="article:modified_time" content="2026-06-19T10:00:00+08:00">
+		<meta property="article:tag" content="ArchLinux">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="Mac M1 使用 VMWare 安装 ArchLinux 系统">
+	<meta name="twitter:description" content="一个简单、轻量级的发行版，试图保持简单。">
+<meta name="application-name" content="Hello World">
+<meta name="apple-mobile-web-app-title" content="Hello World">
+<meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/002_mac-m1%E4%BD%BF%E7%94%A8vmware%E5%AE%89%E8%A3%85archlinux%E7%B3%BB%E7%BB%9F/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/101_qemu%E5%90%AF%E5%8A%A8arm64%E7%89%88%E6%9C%AC%E6%9C%80%E5%B0%8F%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Mac M1 使用 VMWare 安装 ArchLinux 系统",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/zhengqijun0121.github.io\/blog\/002_mac-m1%E4%BD%BF%E7%94%A8vmware%E5%AE%89%E8%A3%85archlinux%E7%B3%BB%E7%BB%9F\/"
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "ArchLinux","wordcount":  596 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/002_mac-m1%E4%BD%BF%E7%94%A8vmware%E5%AE%89%E8%A3%85archlinux%E7%B3%BB%E7%BB%9F\/","datePublished": "2026-06-19T09:00:00+08:00","dateModified": "2026-06-19T10:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
+                "@type": "Person",
+                "name": "zhengqijun0121"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script>
+          const query = window.matchMedia('(prefers-color-scheme: dark)');
+          function applyTheme() {
+            let theme = window.localStorage?.getItem('theme') || 'auto';
+            let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
+            document.body.setAttribute('theme', isDark? 'dark' : 'light');
+            document.body.setAttribute('cfg-theme', theme);
+          }
+
+          applyTheme();
+          query.addEventListener('change', applyTheme);
+        </script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/blog/posts/"> 所有文章 </a><a class="menu-item" href="/blog/tags/"> 标签 </a><a class="menu-item" href="/blog/categories/"> 分类 </a><a class="menu-item" href="/blog/categories/documentation/"> 文档 </a><a class="menu-item" href="/blog/about/"> 关于 </a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust" aria-hidden="true"></i>
+                </a><a href="javascript:void(0);" class="menu-item language" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" id="language-select-desktop" onchange="location = this.value;"><option value="/blog/002_mac-m1%E4%BD%BF%E7%94%A8vmware%E5%AE%89%E8%A3%85archlinux%E7%B3%BB%E7%BB%9F/" selected>简体中文</option></select>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/blog/" title="LoveIt"><span class="header-title-pre"><i class='far fa-kiss-wink-heart' aria-hidden='true'></i></span>Hello World</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/blog/posts/" title="">所有文章</a><a class="menu-item" href="/blog/tags/" title="">标签</a><a class="menu-item" href="/blog/categories/" title="">分类</a><a class="menu-item" href="/blog/categories/documentation/" title="">文档</a><a class="menu-item" href="/blog/about/" title="">关于</a><a class="menu-item" href="https://github.com/zhengqijun0121" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github' aria-hidden='true'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust" aria-hidden="true"></i>
+            </a><a href="javascript:void(0);" class="menu-item" title="选择语言">
+                    <i class="fa fa-globe" aria-hidden="true"></i>
+                    <select class="language-select" onchange="location = this.value;"><option value="/blog/002_mac-m1%E4%BD%BF%E7%94%A8vmware%E5%AE%89%E8%A3%85archlinux%E7%B3%BB%E7%BB%9F/" selected>简体中文</option></select>
+                </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Mac M1 使用 VMWare 安装 ArchLinux 系统</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/archlinux/"><i class="far fa-folder" aria-hidden="true"></i>ArchLinux</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2026-06-19">2026-06-19</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 596 字&nbsp;
+                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#安装准备">安装准备</a>
+      <ul>
+        <li><a href="#mac-安装-vmware-fusion">Mac 安装 VMWare Fusion</a></li>
+        <li><a href="#下载-archbootiso">下载 archboot.iso</a></li>
+      </ul>
+    </li>
+    <li><a href="#archlinux-系统安装"><code>ArchLinux</code> 系统安装</a>
+      <ul>
+        <li><a href="#1-vmware-新建虚拟机">1. VMWare 新建虚拟机</a></li>
+        <li><a href="#2-安装启动过程">2. 安装启动过程</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>一个简单、轻量级的发行版，试图保持简单。</p>
+<h2 id="安装准备">安装准备</h2>
+<h3 id="mac-安装-vmware-fusion">Mac 安装 VMWare Fusion</h3>
+<p>通过 <a href="https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion" target="_blank" rel="noopener noreffer ">VMWare 官网</a> 下载 <code>VMWare Fusion</code> 软件，这里下载的是 26H1 版本。</p>
+<h3 id="下载-archbootiso">下载 archboot.iso</h3>
+<p>通过 <a href="https://release.archboot.net/aarch64/latest/iso/" target="_blank" rel="noopener noreffer ">archboot 官网</a> 下载 <code>archboot.iso</code>。这里下载的是 archboot-2026.05.02-02.29-7.0.3-1-aarch64-ARCH-local-aarch64.iso 版本。</p>
+<hr>
+<h2 id="archlinux-系统安装"><code>ArchLinux</code> 系统安装</h2>
+<h3 id="1-vmware-新建虚拟机">1. VMWare 新建虚拟机</h3>
+<p><code>VMWare</code> 软件点击新建虚拟机</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-01.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-01.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-01.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-01.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-01.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-01.png" /></p>
+<p>选择刚刚下载的 ISO 文件</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-02.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-02.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-02.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-02.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-02.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-02.png" /></p>
+<p>然后选择 Linux 系统 6.x 版本内核</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-03.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-03.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-03.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-03.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-03.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-03.png" /></p>
+<p>最后确认完成</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-04.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-04.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-04.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-04.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-04.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-04.png" /></p>
+<p>最后设置系统的 CPU 和内存大小，选择 2 核 4G 内存，硬盘这里选择 30G。</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-05.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-05.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-05.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-05.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-05.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-05.png" /></p>
+<h3 id="2-安装启动过程">2. 安装启动过程</h3>
+<p>开始安装 <code>ArchLinux</code> 系统可以看到安装启动界面，选择 <code>Launch UEFI Archboot - Arch Linux aarch64</code> 下一步</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-06.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-06.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-06.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-06.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-06.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-06.png" /></p>
+<p>启动完成后可以看到 Archboot 界面，按回车键下一步</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-07.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-07.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-07.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-07.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-07.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-07.png" /></p>
+<p>下面就开始正式配置安装 <code>ArchLinux</code></p>
+<p>这里 Locale 选择 <code>en_US English</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-08.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-08.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-08.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-08.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-08.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-08.png" /></p>
+<p>由于下载的是离线镜像，这里使用离线模式安装</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-09.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-09.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-09.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-09.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-09.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-09.png" /></p>
+<p>这里 Timezone Region 选择 <code>Asia</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-10.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-10.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-10.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-10.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-10.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-10.png" /></p>
+<p>Timezone 选择 <code>Shanghai</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-11.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-11.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-11.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-11.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-11.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-11.png" /></p>
+<p>Date 按回车下一步</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-12.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-12.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-12.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-12.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-12.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-12.png" /></p>
+<p>Time 按回车下一步</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-13.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-13.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-13.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-13.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-13.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-13.png" /></p>
+<p>这里 Launcher Menu 选择 <code>1 Launch Archboot Setup</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-14.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-14.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-14.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-14.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-14.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-14.png" /></p>
+<p>Setup Menu 选择 <code>1 Prepare Storage Device</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-15.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-15.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-15.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-15.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-15.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-15.png" /></p>
+<p>Prepare Storage Device 选择 <code>1 Quick Setup (erases the ENTIRE storage device)</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-16.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-16.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-16.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-16.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-16.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-16.png" /></p>
+<p>Storage Device 选择 <code>/dev/nvme0n1</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-17.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-17.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-17.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-17.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-17.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-17.png" /></p>
+<p>Device Name Scheme 选择 <code>PARTUUID</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-18.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-18.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-18.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-18.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-18.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-18.png" /></p>
+<p>EFI System Partition 选择 <code>/boot SINGLE</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-19.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-19.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-19.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-19.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-19.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-19.png" /></p>
+<p>EFI System Partition (ESP) in MiB 选择默认 <code>512</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-20.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-20.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-20.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-20.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-20.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-20.png" /></p>
+<p>Swap in MiB 选择 <code>4096</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-21.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-21.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-21.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-21.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-21.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-21.png" /></p>
+<p>Filesystem / and /home 选择 <code>ext4</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-22.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-22.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-22.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-22.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-22.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-22.png" /></p>
+<p>Confirmation 选择 <code>Yes</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-23.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-23.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-23.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-23.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-23.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-23.png" /></p>
+<p>/ in MiB 这里选择 <code>0</code>，/home 不单独分配空间</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-24.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-24.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-24.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-24.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-24.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-24.png" /></p>
+<p>Confirmation 选择 <code>Yes</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-25.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-25.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-25.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-25.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-25.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-25.png" /></p>
+<p>确认擦除 /dev/nvme0n1 选择 <code>Yes</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-26.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-26.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-26.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-26.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-26.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-26.png" /></p>
+<p>Setup Menu 选择 <code>2 Install Packages</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-27.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-27.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-27.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-27.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-27.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-27.png" /></p>
+<p>Summary 选择 <code>Yes</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-28.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-28.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-28.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-28.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-28.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-28.png" /></p>
+<p>Setup Menu 选择 <code>3 Configure System</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-29.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-29.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-29.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-29.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-29.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-29.png" /></p>
+<p>New root Password 输入 root 用户密码</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-30.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-30.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-30.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-30.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-30.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-30.png" /></p>
+<p>Retype root Password 再次输入密码</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-31.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-31.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-31.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-31.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-31.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-31.png" /></p>
+<p>Text Editor 选择 <code>Neovim</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-32.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-32.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-32.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-32.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-32.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-32.png" /></p>
+<p>MKINITCPIO EARLY USERSPACE 选择 <code>SYSTEMD</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-33.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-33.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-33.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-33.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-33.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-33.png" /></p>
+<p>System Configuration 选择 <code>/etc/hostname</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-34.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-34.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-34.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-34.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-34.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-34.png" /></p>
+<p>修复主机名为 <code>archlinux</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-35.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-35.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-35.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-35.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-35.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-35.png" /></p>
+<p>System Configuration 选择 <code>/etc/pacman.d/mirrorlist</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-36.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-36.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-36.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-36.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-36.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-36.png" /></p>
+<p>在文件第一行添加清华源 <code>Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxarm/$repo/$arch</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-37.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-37.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-37.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-37.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-37.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-37.png" /></p>
+<p>System Configuration 选择 <code>Back</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-38.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-38.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-38.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-38.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-38.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-38.png" /></p>
+<p>Setup Menu 选择 <code>4 Install Bootloader</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-39.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-39.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-39.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-39.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-39.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-39.png" /></p>
+<p>AA64 UEFI Bootloader 选择 <code>GRUB_UEFI</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-40.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-40.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-40.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-40.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-40.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-40.png" /></p>
+<p>确认 GRUB 配置文件选择 <code>OK</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-41.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-41.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-41.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-41.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-41.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-41.png" /></p>
+<p>保存 grub.cfg 文件退出</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-42.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-42.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-42.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-42.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-42.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-42.png" /></p>
+<p>Setup Menu 选择 <code>5 Exit</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-43.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-43.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-43.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-43.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-43.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-43.png" /></p>
+<p>Exit Menu 选择 <code>3 Poweroff System</code></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-44.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-44.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-44.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-44.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-44.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-44.png" /></p>
+<p>设置修改 CD/DVD 为 Autodetect</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-45.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-45.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-45.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-45.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-45.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-45.png" /></p>
+<p>启动虚拟机，可以看到登陆画面</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-46.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-46.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-46.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-46.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-46.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-46.png" /></p>
+<p>由于是安装的离线版，安装的不是最新内核，这里执行 <code>Pacman -Syu</code> 命令更新下系统</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-47.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-47.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-47.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-47.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-47.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-47.png" /></p>
+<p>再次重启后，系统已更新，安装完成！</p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-48.png"
+        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-48.png, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-48.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/24_ArchLinux/img/002-48.png 2x"
+        data-sizes="auto"
+        alt="../posts/01_学习/24_ArchLinux/img/002-48.png"
+        title="../posts/01_学习/24_ArchLinux/img/002-48.png" /></p>
+<hr></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2026-06-19</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/blog/002_mac-m1%E4%BD%BF%E7%94%A8vmware%E5%AE%89%E8%A3%85archlinux%E7%B3%BB%E7%BB%9F/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags" aria-hidden="true"></i>&nbsp;<a href="/blog/tags/archlinux/">ArchLinux</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/blog/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/blog/101_qemu%E5%90%AF%E5%8A%A8arm64%E7%89%88%E6%9C%AC%E6%9C%80%E5%B0%8F%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" class="prev" rel="prev" title="qemu 启动 arm64 版本最小根文件系统"><i class="fas fa-angle-left" aria-hidden="true"></i>qemu 启动 arm64 版本最小根文件系统</a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment" aria-hidden="true"></i>
+            </a>
+        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+</html>

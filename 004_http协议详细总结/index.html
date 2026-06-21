@@ -5,22 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>HTTP 协议详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/004_http%E5%8D%8F%E8%AE%AE%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="HTTP 协议详细总结">
-  <meta property="og:description" content="HTTP协议超详细总结 HTTP（HyperText Transfer Protocol，超文本传输协议）是基于TCP/IP协议族的应用层通信协议，是万维网（WWW）数据交互的基石，定义了客户端（浏览器、App、爬虫等）与服务端之间的报文格式、交互规则与通信流程。它是一种请求-响应模式、无状态、通用可扩展的协议，默认使用80端口（HTTP）、443端口（HTTPS），核心设计理念是资源导向——互联网上所有内容都可被视为资源，通过URL（统一资源定位符）唯一标识与寻址。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-03-09T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-03-09T10:00:20+08:00">
-    <meta property="article:tag" content="协议">
-    <meta property="article:tag" content="HTTP">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="HTTP 协议详细总结">
+	<meta property="og:description" content="HTTP协议超详细总结 HTTP（HyperText Transfer Protocol，超文本传输协议）是基于TCP/IP协议族的应用层通信协议，是万维网（WWW）数据交互的基石，定义了客户端（浏览器、App、爬虫等）与服务端之间的报文格式、交互规则与通信流程。它是一种请求-响应模式、无状态、通用可扩展的协议，默认使用80端口（HTTP）、443端口（HTTPS），核心设计理念是资源导向——互联网上所有内容都可被视为资源，通过URL（统一资源定位符）唯一标识与寻址。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-03-09T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-03-09T10:00:20+08:00">
+		<meta property="article:tag" content="协议">
+		<meta property="article:tag" content="HTTP">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="HTTP 协议详细总结">
-  <meta name="twitter:description" content="HTTP协议超详细总结 HTTP（HyperText Transfer Protocol，超文本传输协议）是基于TCP/IP协议族的应用层通信协议，是万维网（WWW）数据交互的基石，定义了客户端（浏览器、App、爬虫等）与服务端之间的报文格式、交互规则与通信流程。它是一种请求-响应模式、无状态、通用可扩展的协议，默认使用80端口（HTTP）、443端口（HTTPS），核心设计理念是资源导向——互联网上所有内容都可被视为资源，通过URL（统一资源定位符）唯一标识与寻址。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="HTTP 协议详细总结">
+	<meta name="twitter:description" content="HTTP协议超详细总结 HTTP（HyperText Transfer Protocol，超文本传输协议）是基于TCP/IP协议族的应用层通信协议，是万维网（WWW）数据交互的基石，定义了客户端（浏览器、App、爬虫等）与服务端之间的报文格式、交互规则与通信流程。它是一种请求-响应模式、无状态、通用可扩展的协议，默认使用80端口（HTTP）、443端口（HTTPS），核心设计理念是资源导向——互联网上所有内容都可被视为资源，通过URL（统一资源定位符）唯一标识与寻址。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -182,58 +182,58 @@
 <h2 id="一http协议版本演进全历程">一、HTTP协议版本演进全历程</h2>
 <p>HTTP从诞生至今经历了5个核心版本迭代，核心优化方向始终围绕<strong>降低延迟、提升性能、增强安全、解决队头阻塞</strong>展开。</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">版本</th>
-          <th style="text-align: left">发布时间</th>
-          <th style="text-align: left">核心规范</th>
-          <th style="text-align: left">核心特性</th>
-          <th style="text-align: left">解决的核心问题</th>
-          <th style="text-align: left">遗留缺陷</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">HTTP/0.9</td>
-          <td style="text-align: left">1991年</td>
-          <td style="text-align: left">无正式RFC</td>
-          <td style="text-align: left">仅支持GET方法；无请求头/响应头/状态码；仅支持HTML传输；短连接，请求完成立即关闭TCP连接</td>
-          <td style="text-align: left">实现实验室环境下的超文本文件传输</td>
-          <td style="text-align: left">功能极度简陋，无任何扩展性</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">HTTP/1.0</td>
-          <td style="text-align: left">1996年</td>
-          <td style="text-align: left">RFC 1945</td>
-          <td style="text-align: left">引入版本号、状态码、Header头部体系；支持图片、视频、二进制等多种数据类型；新增POST、HEAD方法；可选长连接</td>
-          <td style="text-align: left">实现标准化的Web通信，支持丰富的媒体类型</td>
-          <td style="text-align: left">默认短连接，每个请求都需新建/销毁TCP连接，握手开销极大，网络利用率极低</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">HTTP/1.1</td>
-          <td style="text-align: left">1997/1999年</td>
-          <td style="text-align: left">RFC 2616 → RFC 7230-7235</td>
-          <td style="text-align: left">默认开启持久连接（Keep-Alive）；支持管道化请求；强制Host头部（实现虚拟主机）；分块传输（Chunked）；增强缓存控制（Cache-Control/ETag）；新增PUT/DELETE/OPTIONS/CONNECT/TRACE方法</td>
-          <td style="text-align: left">解决1.0版本连接频繁创建销毁的开销，大幅提升传输效率</td>
-          <td style="text-align: left">应用层队头阻塞（HoL）：同一TCP连接中，请求必须按顺序响应，单个慢请求会阻塞后续所有请求</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">HTTP/2</td>
-          <td style="text-align: left">2015年</td>
-          <td style="text-align: left">RFC 7540</td>
-          <td style="text-align: left">二进制帧传输替代明文文本；单TCP连接多路复用；HPACK头部压缩；服务器主动推送；流优先级控制</td>
-          <td style="text-align: left">彻底解决应用层队头阻塞，大幅降低头部冗余，提升高并发场景性能</td>
-          <td style="text-align: left">底层TCP协议仍存在队头阻塞，TCP丢包会阻塞连接内所有流</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">HTTP/3</td>
-          <td style="text-align: left">2022年</td>
-          <td style="text-align: left">RFC 9114</td>
-          <td style="text-align: left">基于QUIC协议（UDP封装）；彻底解决全链路队头阻塞；0-RTT/1-RTT快速握手；内置TLS 1.3加密；支持连接迁移</td>
-          <td style="text-align: left">解决TCP层队头阻塞，大幅降低握手延迟，提升弱网/网络切换场景的稳定性</td>
-          <td style="text-align: left">部分老旧设备、网络环境对UDP的支持与优化不足</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">版本</th>
+					<th style="text-align: left">发布时间</th>
+					<th style="text-align: left">核心规范</th>
+					<th style="text-align: left">核心特性</th>
+					<th style="text-align: left">解决的核心问题</th>
+					<th style="text-align: left">遗留缺陷</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">HTTP/0.9</td>
+					<td style="text-align: left">1991年</td>
+					<td style="text-align: left">无正式RFC</td>
+					<td style="text-align: left">仅支持GET方法；无请求头/响应头/状态码；仅支持HTML传输；短连接，请求完成立即关闭TCP连接</td>
+					<td style="text-align: left">实现实验室环境下的超文本文件传输</td>
+					<td style="text-align: left">功能极度简陋，无任何扩展性</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">HTTP/1.0</td>
+					<td style="text-align: left">1996年</td>
+					<td style="text-align: left">RFC 1945</td>
+					<td style="text-align: left">引入版本号、状态码、Header头部体系；支持图片、视频、二进制等多种数据类型；新增POST、HEAD方法；可选长连接</td>
+					<td style="text-align: left">实现标准化的Web通信，支持丰富的媒体类型</td>
+					<td style="text-align: left">默认短连接，每个请求都需新建/销毁TCP连接，握手开销极大，网络利用率极低</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">HTTP/1.1</td>
+					<td style="text-align: left">1997/1999年</td>
+					<td style="text-align: left">RFC 2616 → RFC 7230-7235</td>
+					<td style="text-align: left">默认开启持久连接（Keep-Alive）；支持管道化请求；强制Host头部（实现虚拟主机）；分块传输（Chunked）；增强缓存控制（Cache-Control/ETag）；新增PUT/DELETE/OPTIONS/CONNECT/TRACE方法</td>
+					<td style="text-align: left">解决1.0版本连接频繁创建销毁的开销，大幅提升传输效率</td>
+					<td style="text-align: left">应用层队头阻塞（HoL）：同一TCP连接中，请求必须按顺序响应，单个慢请求会阻塞后续所有请求</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">HTTP/2</td>
+					<td style="text-align: left">2015年</td>
+					<td style="text-align: left">RFC 7540</td>
+					<td style="text-align: left">二进制帧传输替代明文文本；单TCP连接多路复用；HPACK头部压缩；服务器主动推送；流优先级控制</td>
+					<td style="text-align: left">彻底解决应用层队头阻塞，大幅降低头部冗余，提升高并发场景性能</td>
+					<td style="text-align: left">底层TCP协议仍存在队头阻塞，TCP丢包会阻塞连接内所有流</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">HTTP/3</td>
+					<td style="text-align: left">2022年</td>
+					<td style="text-align: left">RFC 9114</td>
+					<td style="text-align: left">基于QUIC协议（UDP封装）；彻底解决全链路队头阻塞；0-RTT/1-RTT快速握手；内置TLS 1.3加密；支持连接迁移</td>
+					<td style="text-align: left">解决TCP层队头阻塞，大幅降低握手延迟，提升弱网/网络切换场景的稳定性</td>
+					<td style="text-align: left">部分老旧设备、网络环境对UDP的支持与优化不足</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="二http核心报文结构">二、HTTP核心报文结构</h2>
 <p>HTTP报文分为<strong>请求报文（客户端→服务端）<strong>和</strong>响应报文（服务端→客户端）</strong>，两者结构高度一致，均由4部分组成，核心差异在于首行格式与头部字段语义。</p>
@@ -286,80 +286,80 @@ Header-Name2: Value2
 <li><strong>幂等方法</strong>：多次执行完全相同的请求，最终结果一致，无额外副作用，包括GET、HEAD、PUT、DELETE、OPTIONS、TRACE</li>
 </ul>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">方法</th>
-          <th style="text-align: left">核心用途</th>
-          <th style="text-align: left">安全/幂等</th>
-          <th style="text-align: left">核心使用场景</th>
-          <th style="text-align: left">关键特性</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">GET</td>
-          <td style="text-align: left">从服务端获取指定资源</td>
-          <td style="text-align: left">安全/幂等</td>
-          <td style="text-align: left">页面加载、数据查询、资源获取</td>
-          <td style="text-align: left">参数拼接在URL中，无请求体；浏览器默认缓存；URL长度受浏览器/服务端限制（通常建议不超过2KB）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">HEAD</td>
-          <td style="text-align: left">与GET完全一致，但仅返回响应头，无响应体</td>
-          <td style="text-align: left">安全/幂等</td>
-          <td style="text-align: left">检查资源是否存在、校验缓存有效性、探测资源大小</td>
-          <td style="text-align: left">无需下载完整资源，可快速获取元数据</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">POST</td>
-          <td style="text-align: left">向服务端提交实体数据，通常用于创建资源</td>
-          <td style="text-align: left">非安全/非幂等</td>
-          <td style="text-align: left">用户注册、表单提交、文件上传、订单创建</td>
-          <td style="text-align: left">数据放在请求体中，无长度限制；浏览器默认不缓存；多次提交可能产生重复数据</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">PUT</td>
-          <td style="text-align: left">用请求体全量替换目标资源的所有内容</td>
-          <td style="text-align: left">非安全/幂等</td>
-          <td style="text-align: left">全量更新用户信息、替换完整文件</td>
-          <td style="text-align: left">多次执行结果完全一致，要求请求体包含资源的完整数据</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">DELETE</td>
-          <td style="text-align: left">删除指定的目标资源</td>
-          <td style="text-align: left">非安全/幂等</td>
-          <td style="text-align: left">删除用户、删除文件、注销订单</td>
-          <td style="text-align: left">多次删除同一资源，最终结果一致，服务端通常返回204无内容</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">PATCH</td>
-          <td style="text-align: left">对目标资源进行部分增量修改</td>
-          <td style="text-align: left">非安全/通常非幂等</td>
-          <td style="text-align: left">更新用户昵称、修改商品库存</td>
-          <td style="text-align: left">区别于PUT的全量替换，仅需传递要修改的字段，减少传输数据量</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">CONNECT</td>
-          <td style="text-align: left">建立到目标资源的TCP隧道</td>
-          <td style="text-align: left">非安全/非幂等</td>
-          <td style="text-align: left">HTTPS正向代理、VPN穿透</td>
-          <td style="text-align: left">让代理服务器转发客户端与目标服务器的TCP通信，实现隧道穿透</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">OPTIONS</td>
-          <td style="text-align: left">获取目标资源支持的通信选项与能力</td>
-          <td style="text-align: left">安全/幂等</td>
-          <td style="text-align: left">跨域CORS预检请求、探测服务端支持的方法</td>
-          <td style="text-align: left">服务端通过Allow头部返回支持的请求方法，无需身份认证即可发起</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">TRACE</td>
-          <td style="text-align: left">回显服务端收到的原始请求报文</td>
-          <td style="text-align: left">安全/幂等</td>
-          <td style="text-align: left">网络诊断、排查代理服务器修改请求的问题</td>
-          <td style="text-align: left">服务端将收到的请求原封不动返回，客户端可对比校验请求是否被篡改</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">方法</th>
+					<th style="text-align: left">核心用途</th>
+					<th style="text-align: left">安全/幂等</th>
+					<th style="text-align: left">核心使用场景</th>
+					<th style="text-align: left">关键特性</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">GET</td>
+					<td style="text-align: left">从服务端获取指定资源</td>
+					<td style="text-align: left">安全/幂等</td>
+					<td style="text-align: left">页面加载、数据查询、资源获取</td>
+					<td style="text-align: left">参数拼接在URL中，无请求体；浏览器默认缓存；URL长度受浏览器/服务端限制（通常建议不超过2KB）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">HEAD</td>
+					<td style="text-align: left">与GET完全一致，但仅返回响应头，无响应体</td>
+					<td style="text-align: left">安全/幂等</td>
+					<td style="text-align: left">检查资源是否存在、校验缓存有效性、探测资源大小</td>
+					<td style="text-align: left">无需下载完整资源，可快速获取元数据</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">POST</td>
+					<td style="text-align: left">向服务端提交实体数据，通常用于创建资源</td>
+					<td style="text-align: left">非安全/非幂等</td>
+					<td style="text-align: left">用户注册、表单提交、文件上传、订单创建</td>
+					<td style="text-align: left">数据放在请求体中，无长度限制；浏览器默认不缓存；多次提交可能产生重复数据</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">PUT</td>
+					<td style="text-align: left">用请求体全量替换目标资源的所有内容</td>
+					<td style="text-align: left">非安全/幂等</td>
+					<td style="text-align: left">全量更新用户信息、替换完整文件</td>
+					<td style="text-align: left">多次执行结果完全一致，要求请求体包含资源的完整数据</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">DELETE</td>
+					<td style="text-align: left">删除指定的目标资源</td>
+					<td style="text-align: left">非安全/幂等</td>
+					<td style="text-align: left">删除用户、删除文件、注销订单</td>
+					<td style="text-align: left">多次删除同一资源，最终结果一致，服务端通常返回204无内容</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">PATCH</td>
+					<td style="text-align: left">对目标资源进行部分增量修改</td>
+					<td style="text-align: left">非安全/通常非幂等</td>
+					<td style="text-align: left">更新用户昵称、修改商品库存</td>
+					<td style="text-align: left">区别于PUT的全量替换，仅需传递要修改的字段，减少传输数据量</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">CONNECT</td>
+					<td style="text-align: left">建立到目标资源的TCP隧道</td>
+					<td style="text-align: left">非安全/非幂等</td>
+					<td style="text-align: left">HTTPS正向代理、VPN穿透</td>
+					<td style="text-align: left">让代理服务器转发客户端与目标服务器的TCP通信，实现隧道穿透</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">OPTIONS</td>
+					<td style="text-align: left">获取目标资源支持的通信选项与能力</td>
+					<td style="text-align: left">安全/幂等</td>
+					<td style="text-align: left">跨域CORS预检请求、探测服务端支持的方法</td>
+					<td style="text-align: left">服务端通过Allow头部返回支持的请求方法，无需身份认证即可发起</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">TRACE</td>
+					<td style="text-align: left">回显服务端收到的原始请求报文</td>
+					<td style="text-align: left">安全/幂等</td>
+					<td style="text-align: left">网络诊断、排查代理服务器修改请求的问题</td>
+					<td style="text-align: left">服务端将收到的请求原封不动返回，客户端可对比校验请求是否被篡改</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="四http状态码全分类与核心场景">四、HTTP状态码全分类与核心场景</h2>
 <p>HTTP状态码是3位数字，用于服务端向客户端明确告知请求的处理结果，第一位数字定义状态码的类别，共分为5大类，覆盖了从请求接收、处理成功、重定向、客户端错误到服务端错误的全场景。</p>
@@ -409,159 +409,159 @@ Header-Name2: Value2
 <p>HTTP头部（Header）是键值对格式的扩展字段，是HTTP协议灵活性与可扩展性的核心，分为4大类，覆盖了连接管理、缓存控制、内容协商、身份认证、安全防护等全场景。</p>
 <h3 id="1-通用头部请求响应报文均可使用">1. 通用头部（请求/响应报文均可使用）</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">字段名</th>
-          <th style="text-align: left">核心作用</th>
-          <th style="text-align: left">常见取值</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Connection</td>
-          <td style="text-align: left">控制TCP连接的复用行为</td>
-          <td style="text-align: left">keep-alive（持久连接）、close（请求完成关闭连接）、upgrade（协议升级）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Cache-Control</td>
-          <td style="text-align: left">全局缓存策略控制，优先级最高</td>
-          <td style="text-align: left">max-age=xxx（强缓存有效期）、no-cache（强制协商缓存）、no-store（禁止缓存）、public/private（缓存范围）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Date</td>
-          <td style="text-align: left">报文创建的时间</td>
-          <td style="text-align: left">标准GMT格式，例：<code>Date: Tue, 15 Apr 2025 07:28:00 GMT</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Upgrade</td>
-          <td style="text-align: left">协议升级声明</td>
-          <td style="text-align: left">HTTP/2.0、websocket、TLS/1.3</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Via</td>
-          <td style="text-align: left">报文经过的代理/网关路径</td>
-          <td style="text-align: left">用于追踪请求转发链路，防止循环转发</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">字段名</th>
+					<th style="text-align: left">核心作用</th>
+					<th style="text-align: left">常见取值</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">Connection</td>
+					<td style="text-align: left">控制TCP连接的复用行为</td>
+					<td style="text-align: left">keep-alive（持久连接）、close（请求完成关闭连接）、upgrade（协议升级）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Cache-Control</td>
+					<td style="text-align: left">全局缓存策略控制，优先级最高</td>
+					<td style="text-align: left">max-age=xxx（强缓存有效期）、no-cache（强制协商缓存）、no-store（禁止缓存）、public/private（缓存范围）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Date</td>
+					<td style="text-align: left">报文创建的时间</td>
+					<td style="text-align: left">标准GMT格式，例：<code>Date: Tue, 15 Apr 2025 07:28:00 GMT</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Upgrade</td>
+					<td style="text-align: left">协议升级声明</td>
+					<td style="text-align: left">HTTP/2.0、websocket、TLS/1.3</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Via</td>
+					<td style="text-align: left">报文经过的代理/网关路径</td>
+					<td style="text-align: left">用于追踪请求转发链路，防止循环转发</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="2-请求头部仅请求报文使用">2. 请求头部（仅请求报文使用）</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">字段名</th>
-          <th style="text-align: left">核心作用</th>
-          <th style="text-align: left">关键说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Host</td>
-          <td style="text-align: left">目标主机域名与端口</td>
-          <td style="text-align: left">HTTP/1.1强制必填字段，实现单IP服务器托管多个域名（虚拟主机）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">User-Agent</td>
-          <td style="text-align: left">客户端标识</td>
-          <td style="text-align: left">包含浏览器、操作系统、设备信息，用于服务端适配、爬虫识别</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Accept</td>
-          <td style="text-align: left">客户端可接收的媒体类型</td>
-          <td style="text-align: left">例：<code>text/html,application/json;q=0.9</code>，q值为权重，0~1之间</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Accept-Encoding</td>
-          <td style="text-align: left">客户端支持的压缩编码</td>
-          <td style="text-align: left">例：<code>gzip, deflate, br</code>，用于减少传输数据量</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Accept-Language</td>
-          <td style="text-align: left">客户端偏好的自然语言</td>
-          <td style="text-align: left">例：<code>zh-CN,zh;q=0.9,en;q=0.8</code>，用于多语言内容协商</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Authorization</td>
-          <td style="text-align: left">身份认证凭证</td>
-          <td style="text-align: left">常用格式：<code>Bearer &lt;Token&gt;</code>、<code>Basic &lt;base64编码的账号密码&gt;</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Cookie</td>
-          <td style="text-align: left">客户端携带的会话Cookie</td>
-          <td style="text-align: left">服务端通过Set-Cookie设置，后续请求自动携带，用于维持会话状态</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Referer</td>
-          <td style="text-align: left">发起请求的源页面URI</td>
-          <td style="text-align: left">用于防盗链、访问统计、CSRF防护</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">If-Modified-Since/If-None-Match</td>
-          <td style="text-align: left">缓存协商校验字段</td>
-          <td style="text-align: left">分别对应Last-Modified和ETag，用于校验资源是否更新</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">字段名</th>
+					<th style="text-align: left">核心作用</th>
+					<th style="text-align: left">关键说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">Host</td>
+					<td style="text-align: left">目标主机域名与端口</td>
+					<td style="text-align: left">HTTP/1.1强制必填字段，实现单IP服务器托管多个域名（虚拟主机）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">User-Agent</td>
+					<td style="text-align: left">客户端标识</td>
+					<td style="text-align: left">包含浏览器、操作系统、设备信息，用于服务端适配、爬虫识别</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Accept</td>
+					<td style="text-align: left">客户端可接收的媒体类型</td>
+					<td style="text-align: left">例：<code>text/html,application/json;q=0.9</code>，q值为权重，0~1之间</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Accept-Encoding</td>
+					<td style="text-align: left">客户端支持的压缩编码</td>
+					<td style="text-align: left">例：<code>gzip, deflate, br</code>，用于减少传输数据量</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Accept-Language</td>
+					<td style="text-align: left">客户端偏好的自然语言</td>
+					<td style="text-align: left">例：<code>zh-CN,zh;q=0.9,en;q=0.8</code>，用于多语言内容协商</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Authorization</td>
+					<td style="text-align: left">身份认证凭证</td>
+					<td style="text-align: left">常用格式：<code>Bearer &lt;Token&gt;</code>、<code>Basic &lt;base64编码的账号密码&gt;</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Cookie</td>
+					<td style="text-align: left">客户端携带的会话Cookie</td>
+					<td style="text-align: left">服务端通过Set-Cookie设置，后续请求自动携带，用于维持会话状态</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Referer</td>
+					<td style="text-align: left">发起请求的源页面URI</td>
+					<td style="text-align: left">用于防盗链、访问统计、CSRF防护</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">If-Modified-Since/If-None-Match</td>
+					<td style="text-align: left">缓存协商校验字段</td>
+					<td style="text-align: left">分别对应Last-Modified和ETag，用于校验资源是否更新</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-响应头部仅响应报文使用">3. 响应头部（仅响应报文使用）</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">字段名</th>
-          <th style="text-align: left">核心作用</th>
-          <th style="text-align: left">关键说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Server</td>
-          <td style="text-align: left">服务端软件标识</td>
-          <td style="text-align: left">例：nginx、Apache、Tomcat，可自定义隐藏以提升安全性</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Content-Type</td>
-          <td style="text-align: left">响应体的媒体类型与字符集</td>
-          <td style="text-align: left">例：<code>text/html; charset=utf-8</code>、<code>application/json</code>、<code>image/png</code></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Content-Length</td>
-          <td style="text-align: left">响应体的字节长度</td>
-          <td style="text-align: left">用于客户端识别响应体的结束位置，分块传输时不使用该字段</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Content-Encoding</td>
-          <td style="text-align: left">响应体的压缩编码</td>
-          <td style="text-align: left">对应客户端Accept-Encoding，告知客户端解压方式</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Location</td>
-          <td style="text-align: left">重定向目标URI</td>
-          <td style="text-align: left">配合3xx状态码使用，告知客户端跳转地址</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Set-Cookie</td>
-          <td style="text-align: left">服务端向客户端设置Cookie</td>
-          <td style="text-align: left">可配置过期时间、域名、路径、HttpOnly、Secure、SameSite等属性</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">ETag</td>
-          <td style="text-align: left">资源的唯一标识</td>
-          <td style="text-align: left">用于协商缓存，优先级高于Last-Modified，解决时间精度不足的问题</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Last-Modified</td>
-          <td style="text-align: left">资源的最后修改时间</td>
-          <td style="text-align: left">用于协商缓存，基于时间判断资源是否更新</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Access-Control-Allow-*</td>
-          <td style="text-align: left">CORS跨域控制字段</td>
-          <td style="text-align: left">例：Access-Control-Allow-Origin，控制跨域请求的权限</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Content-Disposition</td>
-          <td style="text-align: left">响应体的展示方式</td>
-          <td style="text-align: left">inline（内联展示）、attachment; filename=&ldquo;xxx.zip&rdquo;（附件下载）</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">字段名</th>
+					<th style="text-align: left">核心作用</th>
+					<th style="text-align: left">关键说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">Server</td>
+					<td style="text-align: left">服务端软件标识</td>
+					<td style="text-align: left">例：nginx、Apache、Tomcat，可自定义隐藏以提升安全性</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Content-Type</td>
+					<td style="text-align: left">响应体的媒体类型与字符集</td>
+					<td style="text-align: left">例：<code>text/html; charset=utf-8</code>、<code>application/json</code>、<code>image/png</code></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Content-Length</td>
+					<td style="text-align: left">响应体的字节长度</td>
+					<td style="text-align: left">用于客户端识别响应体的结束位置，分块传输时不使用该字段</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Content-Encoding</td>
+					<td style="text-align: left">响应体的压缩编码</td>
+					<td style="text-align: left">对应客户端Accept-Encoding，告知客户端解压方式</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Location</td>
+					<td style="text-align: left">重定向目标URI</td>
+					<td style="text-align: left">配合3xx状态码使用，告知客户端跳转地址</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Set-Cookie</td>
+					<td style="text-align: left">服务端向客户端设置Cookie</td>
+					<td style="text-align: left">可配置过期时间、域名、路径、HttpOnly、Secure、SameSite等属性</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">ETag</td>
+					<td style="text-align: left">资源的唯一标识</td>
+					<td style="text-align: left">用于协商缓存，优先级高于Last-Modified，解决时间精度不足的问题</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Last-Modified</td>
+					<td style="text-align: left">资源的最后修改时间</td>
+					<td style="text-align: left">用于协商缓存，基于时间判断资源是否更新</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Access-Control-Allow-*</td>
+					<td style="text-align: left">CORS跨域控制字段</td>
+					<td style="text-align: left">例：Access-Control-Allow-Origin，控制跨域请求的权限</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">Content-Disposition</td>
+					<td style="text-align: left">响应体的展示方式</td>
+					<td style="text-align: left">inline（内联展示）、attachment; filename=&ldquo;xxx.zip&rdquo;（附件下载）</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="六http核心工作机制">六、HTTP核心工作机制</h2>
 <h3 id="1-缓存机制">1. 缓存机制</h3>
@@ -615,40 +615,40 @@ Header-Name2: Value2
 </ul>
 <h3 id="2-http常见安全风险与防护方案">2. HTTP常见安全风险与防护方案</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">安全风险</th>
-          <th style="text-align: left">核心原理</th>
-          <th style="text-align: left">核心防护方案</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">XSS跨站脚本攻击</td>
-          <td style="text-align: left">攻击者注入恶意脚本到页面，窃取用户Cookie、伪造用户操作</td>
-          <td style="text-align: left">开启CSP内容安全策略；Cookie设置HttpOnly；输入输出内容过滤与转义</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">CSRF跨站请求伪造</td>
-          <td style="text-align: left">攻击者诱导用户在已登录状态下，发起非预期的恶意请求</td>
-          <td style="text-align: left">Cookie设置SameSite属性；使用Token替代Cookie认证；添加CSRF Token校验</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">中间人攻击</td>
-          <td style="text-align: left">攻击者拦截客户端与服务端的通信，窃听、篡改传输数据</td>
-          <td style="text-align: left">全程使用HTTPS；校验服务端证书合法性；禁用不安全的TLS版本与加密套件</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">HTTP头注入</td>
-          <td style="text-align: left">攻击者在请求头中注入恶意字符，篡改响应头、触发缓存投毒</td>
-          <td style="text-align: left">严格校验请求头参数；过滤换行符等特殊字符；禁用危险的头部配置</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">敏感信息泄露</td>
-          <td style="text-align: left">HTTP明文传输账号密码、Token、用户隐私数据</td>
-          <td style="text-align: left">全程使用HTTPS；敏感数据加密传输；禁止在URL中携带敏感信息</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">安全风险</th>
+					<th style="text-align: left">核心原理</th>
+					<th style="text-align: left">核心防护方案</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">XSS跨站脚本攻击</td>
+					<td style="text-align: left">攻击者注入恶意脚本到页面，窃取用户Cookie、伪造用户操作</td>
+					<td style="text-align: left">开启CSP内容安全策略；Cookie设置HttpOnly；输入输出内容过滤与转义</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">CSRF跨站请求伪造</td>
+					<td style="text-align: left">攻击者诱导用户在已登录状态下，发起非预期的恶意请求</td>
+					<td style="text-align: left">Cookie设置SameSite属性；使用Token替代Cookie认证；添加CSRF Token校验</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">中间人攻击</td>
+					<td style="text-align: left">攻击者拦截客户端与服务端的通信，窃听、篡改传输数据</td>
+					<td style="text-align: left">全程使用HTTPS；校验服务端证书合法性；禁用不安全的TLS版本与加密套件</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">HTTP头注入</td>
+					<td style="text-align: left">攻击者在请求头中注入恶意字符，篡改响应头、触发缓存投毒</td>
+					<td style="text-align: left">严格校验请求头参数；过滤换行符等特殊字符；禁用危险的头部配置</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">敏感信息泄露</td>
+					<td style="text-align: left">HTTP明文传输账号密码、Token、用户隐私数据</td>
+					<td style="text-align: left">全程使用HTTPS；敏感数据加密传输；禁止在URL中携带敏感信息</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="八http请求完整生命周期">八、HTTP请求完整生命周期</h2>
 <ol>
@@ -690,7 +690,7 @@ Header-Name2: Value2
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>C&#43;&#43;23 新特性详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/014_cpp23%E6%96%B0%E7%89%B9%E6%80%A7%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="C&#43;&#43;23 新特性详细总结">
-  <meta property="og:description" content="C&#43;&#43;23 新特性详细总结 C&#43;&#43;23 是 ISO C&#43;&#43; 标准在 C&#43;&#43;20 之后的正式版本，核心定位是对 C&#43;&#43;20 特性的补全与优化，同时引入大量提升开发效率、代码安全性、运行时性能的能力，整体分为核心语言特性和标准库特性两大模块，同时包含部分特性的移除与废弃。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-01-05T09:00:00+08:00">
-    <meta property="article:modified_time" content="2026-01-05T09:30:00+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="Cpp">
-    <meta property="article:tag" content="Cpp23">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="C&#43;&#43;23 新特性详细总结">
+	<meta property="og:description" content="C&#43;&#43;23 新特性详细总结 C&#43;&#43;23 是 ISO C&#43;&#43; 标准在 C&#43;&#43;20 之后的正式版本，核心定位是对 C&#43;&#43;20 特性的补全与优化，同时引入大量提升开发效率、代码安全性、运行时性能的能力，整体分为核心语言特性和标准库特性两大模块，同时包含部分特性的移除与废弃。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-01-05T09:00:00+08:00">
+		<meta property="article:modified_time" content="2026-01-05T09:30:00+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="Cpp">
+		<meta property="article:tag" content="Cpp23">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="C&#43;&#43;23 新特性详细总结">
-  <meta name="twitter:description" content="C&#43;&#43;23 新特性详细总结 C&#43;&#43;23 是 ISO C&#43;&#43; 标准在 C&#43;&#43;20 之后的正式版本，核心定位是对 C&#43;&#43;20 特性的补全与优化，同时引入大量提升开发效率、代码安全性、运行时性能的能力，整体分为核心语言特性和标准库特性两大模块，同时包含部分特性的移除与废弃。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="C&#43;&#43;23 新特性详细总结">
+	<meta name="twitter:description" content="C&#43;&#43;23 新特性详细总结 C&#43;&#43;23 是 ISO C&#43;&#43; 标准在 C&#43;&#43;20 之后的正式版本，核心定位是对 C&#43;&#43;20 特性的补全与优化，同时引入大量提升开发效率、代码安全性、运行时性能的能力，整体分为核心语言特性和标准库特性两大模块，同时包含部分特性的移除与废弃。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -434,50 +434,50 @@
 <p>C++23 对C++20的Ranges库进行了大规模补全，新增大量实用的范围适配器和算法，彻底替代传统迭代器算法。</p>
 <h4 id="1新增核心范围适配器">（1）新增核心范围适配器</h4>
 <table>
-  <thead>
-      <tr>
-          <th>适配器</th>
-          <th>核心功能</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>views::enumerate</code></td>
-          <td>遍历范围时同时获取索引和值，对标Python的enumerate</td>
-      </tr>
-      <tr>
-          <td><code>views::zip</code>/<code>views::zip_transform</code></td>
-          <td>打包多个范围同步遍历，支持元素变换</td>
-      </tr>
-      <tr>
-          <td><code>views::chunk</code>/<code>views::slide</code></td>
-          <td>范围分块/滑动窗口，适配批处理、滑动计算</td>
-      </tr>
-      <tr>
-          <td><code>views::cartesian_product</code></td>
-          <td>生成多个范围的笛卡尔积，替代嵌套循环</td>
-      </tr>
-      <tr>
-          <td><code>views::join_with</code></td>
-          <td>用指定分隔符连接范围，简化字符串拼接</td>
-      </tr>
-      <tr>
-          <td><code>views::repeat</code></td>
-          <td>生成重复元素的无限/有限范围</td>
-      </tr>
-      <tr>
-          <td><code>views::stride</code></td>
-          <td>按步长跳过范围元素</td>
-      </tr>
-      <tr>
-          <td><code>views::chunk_by</code></td>
-          <td>按谓词分组连续元素</td>
-      </tr>
-      <tr>
-          <td><code>views::adjacent</code></td>
-          <td>遍历范围的相邻元素，支持N个相邻元素</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>适配器</th>
+					<th>核心功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>views::enumerate</code></td>
+					<td>遍历范围时同时获取索引和值，对标Python的enumerate</td>
+			</tr>
+			<tr>
+					<td><code>views::zip</code>/<code>views::zip_transform</code></td>
+					<td>打包多个范围同步遍历，支持元素变换</td>
+			</tr>
+			<tr>
+					<td><code>views::chunk</code>/<code>views::slide</code></td>
+					<td>范围分块/滑动窗口，适配批处理、滑动计算</td>
+			</tr>
+			<tr>
+					<td><code>views::cartesian_product</code></td>
+					<td>生成多个范围的笛卡尔积，替代嵌套循环</td>
+			</tr>
+			<tr>
+					<td><code>views::join_with</code></td>
+					<td>用指定分隔符连接范围，简化字符串拼接</td>
+			</tr>
+			<tr>
+					<td><code>views::repeat</code></td>
+					<td>生成重复元素的无限/有限范围</td>
+			</tr>
+			<tr>
+					<td><code>views::stride</code></td>
+					<td>按步长跳过范围元素</td>
+			</tr>
+			<tr>
+					<td><code>views::chunk_by</code></td>
+					<td>按谓词分组连续元素</td>
+			</tr>
+			<tr>
+					<td><code>views::adjacent</code></td>
+					<td>遍历范围的相邻元素，支持N个相邻元素</td>
+			</tr>
+	</tbody>
 </table>
 <h4 id="2新增核心范围算法">（2）新增核心范围算法</h4>
 <ul>
@@ -593,76 +593,76 @@
 </ol>
 <h2 id="四主流编译器支持情况">四、主流编译器支持情况</h2>
 <table>
-  <thead>
-      <tr>
-          <th>核心特性</th>
-          <th>GCC</th>
-          <th>Clang</th>
-          <th>MSVC（VS2022）</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>显式this参数（Deducing this）</td>
-          <td>14+</td>
-          <td>18+</td>
-          <td>17.8+（19.43+完全支持）</td>
-      </tr>
-      <tr>
-          <td><code>if consteval</code></td>
-          <td>12+</td>
-          <td>14+</td>
-          <td>17.2+</td>
-      </tr>
-      <tr>
-          <td>多维下标运算符</td>
-          <td>12+</td>
-          <td>15+</td>
-          <td>17.6+</td>
-      </tr>
-      <tr>
-          <td><code>std::expected</code></td>
-          <td>12+</td>
-          <td>16+</td>
-          <td>17.5+</td>
-      </tr>
-      <tr>
-          <td><code>std::print</code>/<code>std::println</code></td>
-          <td>14+</td>
-          <td>18+（libc++）</td>
-          <td>17.7+</td>
-      </tr>
-      <tr>
-          <td><code>std::mdspan</code></td>
-          <td>14+</td>
-          <td>17+</td>
-          <td>17.8+</td>
-      </tr>
-      <tr>
-          <td><code>std::flat_map</code>/<code>flat_set</code></td>
-          <td>14+</td>
-          <td>18+</td>
-          <td>17.10+</td>
-      </tr>
-      <tr>
-          <td><code>std::stacktrace</code></td>
-          <td>14+</td>
-          <td>部分支持</td>
-          <td>17.6+</td>
-      </tr>
-      <tr>
-          <td><code>std::generator</code></td>
-          <td>14+</td>
-          <td>19+</td>
-          <td>17.10+</td>
-      </tr>
-      <tr>
-          <td>标准库模块<code>std</code></td>
-          <td>14+</td>
-          <td>17+</td>
-          <td>17.6+</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>核心特性</th>
+					<th>GCC</th>
+					<th>Clang</th>
+					<th>MSVC（VS2022）</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>显式this参数（Deducing this）</td>
+					<td>14+</td>
+					<td>18+</td>
+					<td>17.8+（19.43+完全支持）</td>
+			</tr>
+			<tr>
+					<td><code>if consteval</code></td>
+					<td>12+</td>
+					<td>14+</td>
+					<td>17.2+</td>
+			</tr>
+			<tr>
+					<td>多维下标运算符</td>
+					<td>12+</td>
+					<td>15+</td>
+					<td>17.6+</td>
+			</tr>
+			<tr>
+					<td><code>std::expected</code></td>
+					<td>12+</td>
+					<td>16+</td>
+					<td>17.5+</td>
+			</tr>
+			<tr>
+					<td><code>std::print</code>/<code>std::println</code></td>
+					<td>14+</td>
+					<td>18+（libc++）</td>
+					<td>17.7+</td>
+			</tr>
+			<tr>
+					<td><code>std::mdspan</code></td>
+					<td>14+</td>
+					<td>17+</td>
+					<td>17.8+</td>
+			</tr>
+			<tr>
+					<td><code>std::flat_map</code>/<code>flat_set</code></td>
+					<td>14+</td>
+					<td>18+</td>
+					<td>17.10+</td>
+			</tr>
+			<tr>
+					<td><code>std::stacktrace</code></td>
+					<td>14+</td>
+					<td>部分支持</td>
+					<td>17.6+</td>
+			</tr>
+			<tr>
+					<td><code>std::generator</code></td>
+					<td>14+</td>
+					<td>19+</td>
+					<td>17.10+</td>
+			</tr>
+			<tr>
+					<td>标准库模块<code>std</code></td>
+					<td>14+</td>
+					<td>17+</td>
+					<td>17.6+</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="五总结">五、总结</h2>
 <p>C++23 没有引入像C++20协程、概念、模块那样的革命性范式变更，而是聚焦于<strong>补全C++20的能力短板、提升代码易用性、强化内存安全、优化运行时性能</strong>，标准化了工业界长期实践的大量组件，填补了标准库的核心空白。</p>
@@ -697,7 +697,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

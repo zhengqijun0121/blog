@@ -5,22 +5,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>Lua 语法详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_lua%E8%AF%AD%E6%B3%95%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="Lua 语法详细总结">
-  <meta property="og:description" content="Lua语法详细总结 Lua是一款轻量级、高效、可嵌入的脚本语言，基于标准C实现，跨平台性强，核心设计目标是为应用程序提供灵活的扩展能力，语法简洁优雅，原生支持面向对象、函数式编程、协程等特性，主流稳定版本为Lua 5.4。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-02-07T09:00:20+08:00">
-    <meta property="article:modified_time" content="2026-02-07T10:00:20+08:00">
-    <meta property="article:tag" content="编程语言">
-    <meta property="article:tag" content="Lua">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="Lua 语法详细总结">
+	<meta property="og:description" content="Lua语法详细总结 Lua是一款轻量级、高效、可嵌入的脚本语言，基于标准C实现，跨平台性强，核心设计目标是为应用程序提供灵活的扩展能力，语法简洁优雅，原生支持面向对象、函数式编程、协程等特性，主流稳定版本为Lua 5.4。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-02-07T09:00:20+08:00">
+		<meta property="article:modified_time" content="2026-02-07T10:00:20+08:00">
+		<meta property="article:tag" content="编程语言">
+		<meta property="article:tag" content="Lua">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="Lua 语法详细总结">
-  <meta name="twitter:description" content="Lua语法详细总结 Lua是一款轻量级、高效、可嵌入的脚本语言，基于标准C实现，跨平台性强，核心设计目标是为应用程序提供灵活的扩展能力，语法简洁优雅，原生支持面向对象、函数式编程、协程等特性，主流稳定版本为Lua 5.4。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="Lua 语法详细总结">
+	<meta name="twitter:description" content="Lua语法详细总结 Lua是一款轻量级、高效、可嵌入的脚本语言，基于标准C实现，跨平台性强，核心设计目标是为应用程序提供灵活的扩展能力，语法简洁优雅，原生支持面向对象、函数式编程、协程等特性，主流稳定版本为Lua 5.4。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -316,55 +316,55 @@ in  local  nil  not  or  repeat  return  then  true  until  while</code></pre></
 <h2 id="二8种基本数据类型">二、8种基本数据类型</h2>
 <p>Lua是动态类型语言，值有固定类型，变量无类型约束，用<code>type()</code>函数可获取值的类型名称（字符串）。</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">类型</th>
-          <th style="text-align: left">说明</th>
-          <th style="text-align: left">核心特性</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>nil</code></td>
-          <td style="text-align: left">空类型</td>
-          <td style="text-align: left">唯一值为<code>nil</code>，代表无效值；未赋值的变量默认值为<code>nil</code>；条件判断中为假</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>boolean</code></td>
-          <td style="text-align: left">布尔类型</td>
-          <td style="text-align: left">仅<code>true</code>和<code>false</code>两个值；<strong>仅nil和false为假，0、空字符串、空表均为真</strong>（与多数语言不同）</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>number</code></td>
-          <td style="text-align: left">数值类型</td>
-          <td style="text-align: left">Lua5.3+分为64位整数integer和双精度浮点数float；支持十进制、十六进制(0x开头)、科学计数法(3e5)</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>string</code></td>
-          <td style="text-align: left">字符串类型</td>
-          <td style="text-align: left">不可变的字节序列，支持单引号、双引号、长括号定义；UTF-8编码友好，不可修改，操作均返回新字符串</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>function</code></td>
-          <td style="text-align: left">函数类型</td>
-          <td style="text-align: left">一等公民，可赋值给变量、作为参数/返回值，支持匿名函数、闭包、尾调用优化</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>table</code></td>
-          <td style="text-align: left">表类型</td>
-          <td style="text-align: left">Lua唯一的内置数据结构，关联数组，可同时作为数组/哈希表使用，引用传递，是实现OOP、模块的核心</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>userdata</code></td>
-          <td style="text-align: left">用户数据</td>
-          <td style="text-align: left">用于存储C/C++中的结构体数据，Lua层面无法直接修改，仅能通过元方法操作，用于扩展能力</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>thread</code></td>
-          <td style="text-align: left">线程类型</td>
-          <td style="text-align: left">对应Lua协程(coroutine)，协作式多任务，非抢占式，用于实现异步逻辑、状态机等</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">类型</th>
+					<th style="text-align: left">说明</th>
+					<th style="text-align: left">核心特性</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>nil</code></td>
+					<td style="text-align: left">空类型</td>
+					<td style="text-align: left">唯一值为<code>nil</code>，代表无效值；未赋值的变量默认值为<code>nil</code>；条件判断中为假</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>boolean</code></td>
+					<td style="text-align: left">布尔类型</td>
+					<td style="text-align: left">仅<code>true</code>和<code>false</code>两个值；<strong>仅nil和false为假，0、空字符串、空表均为真</strong>（与多数语言不同）</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>number</code></td>
+					<td style="text-align: left">数值类型</td>
+					<td style="text-align: left">Lua5.3+分为64位整数integer和双精度浮点数float；支持十进制、十六进制(0x开头)、科学计数法(3e5)</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>string</code></td>
+					<td style="text-align: left">字符串类型</td>
+					<td style="text-align: left">不可变的字节序列，支持单引号、双引号、长括号定义；UTF-8编码友好，不可修改，操作均返回新字符串</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>function</code></td>
+					<td style="text-align: left">函数类型</td>
+					<td style="text-align: left">一等公民，可赋值给变量、作为参数/返回值，支持匿名函数、闭包、尾调用优化</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>table</code></td>
+					<td style="text-align: left">表类型</td>
+					<td style="text-align: left">Lua唯一的内置数据结构，关联数组，可同时作为数组/哈希表使用，引用传递，是实现OOP、模块的核心</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>userdata</code></td>
+					<td style="text-align: left">用户数据</td>
+					<td style="text-align: left">用于存储C/C++中的结构体数据，Lua层面无法直接修改，仅能通过元方法操作，用于扩展能力</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>thread</code></td>
+					<td style="text-align: left">线程类型</td>
+					<td style="text-align: left">对应Lua协程(coroutine)，协作式多任务，非抢占式，用于实现异步逻辑、状态机等</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="重点类型详解">重点类型详解</h3>
 <ol>
@@ -425,113 +425,113 @@ Lua表的索引可以是除<code>nil</code>外的任意类型，<strong>数组�
 <h2 id="三运算符">三、运算符</h2>
 <h3 id="1-算术运算符">1. 算术运算符</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">运算符</th>
-          <th style="text-align: left">说明</th>
-          <th style="text-align: left">注意事项</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>+</code></td>
-          <td style="text-align: left">加法</td>
-          <td style="text-align: left">仅用于数值运算，字符串会自动尝试转数值</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>-</code></td>
-          <td style="text-align: left">减法/负号</td>
-          <td style="text-align: left">二元为减法，一元为负号</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>*</code></td>
-          <td style="text-align: left">乘法</td>
-          <td style="text-align: left">-</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>/</code></td>
-          <td style="text-align: left">浮点除法</td>
-          <td style="text-align: left">5/2=2.5，永远返回浮点数</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>//</code></td>
-          <td style="text-align: left">整数除法</td>
-          <td style="text-align: left">向下取整，5//2=2，Lua5.3+支持</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>%</code></td>
-          <td style="text-align: left">取模运算</td>
-          <td style="text-align: left">取余数，支持浮点数</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>^</code></td>
-          <td style="text-align: left">幂运算</td>
-          <td style="text-align: left">2^3=8，优先级最高</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">运算符</th>
+					<th style="text-align: left">说明</th>
+					<th style="text-align: left">注意事项</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>+</code></td>
+					<td style="text-align: left">加法</td>
+					<td style="text-align: left">仅用于数值运算，字符串会自动尝试转数值</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>-</code></td>
+					<td style="text-align: left">减法/负号</td>
+					<td style="text-align: left">二元为减法，一元为负号</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>*</code></td>
+					<td style="text-align: left">乘法</td>
+					<td style="text-align: left">-</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>/</code></td>
+					<td style="text-align: left">浮点除法</td>
+					<td style="text-align: left">5/2=2.5，永远返回浮点数</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>//</code></td>
+					<td style="text-align: left">整数除法</td>
+					<td style="text-align: left">向下取整，5//2=2，Lua5.3+支持</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>%</code></td>
+					<td style="text-align: left">取模运算</td>
+					<td style="text-align: left">取余数，支持浮点数</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>^</code></td>
+					<td style="text-align: left">幂运算</td>
+					<td style="text-align: left">2^3=8，优先级最高</td>
+			</tr>
+	</tbody>
 </table>
 <blockquote>
 <p>注意：Lua**不支持++、&ndash;、+=、-=**等复合赋值运算符。</p>
 </blockquote>
 <h3 id="2-关系运算符">2. 关系运算符</h3>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">运算符</th>
-          <th style="text-align: left">说明</th>
-          <th style="text-align: left">核心规则</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>==</code></td>
-          <td style="text-align: left">等于</td>
-          <td style="text-align: left">不同类型值比较永远为false；表/函数/userdata比较引用地址，{}=={}为false</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>~=</code></td>
-          <td style="text-align: left">不等于</td>
-          <td style="text-align: left">等价于not ==，<strong>禁止使用!=</strong></td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>&gt;</code> <code>&lt;</code></td>
-          <td style="text-align: left">大于/小于</td>
-          <td style="text-align: left">仅数值和字符串可比较</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>&gt;=</code> <code>&lt;=</code></td>
-          <td style="text-align: left">大于等于/小于等于</td>
-          <td style="text-align: left">同上</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">运算符</th>
+					<th style="text-align: left">说明</th>
+					<th style="text-align: left">核心规则</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>==</code></td>
+					<td style="text-align: left">等于</td>
+					<td style="text-align: left">不同类型值比较永远为false；表/函数/userdata比较引用地址，{}=={}为false</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>~=</code></td>
+					<td style="text-align: left">不等于</td>
+					<td style="text-align: left">等价于not ==，<strong>禁止使用!=</strong></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>&gt;</code> <code>&lt;</code></td>
+					<td style="text-align: left">大于/小于</td>
+					<td style="text-align: left">仅数值和字符串可比较</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>&gt;=</code> <code>&lt;=</code></td>
+					<td style="text-align: left">大于等于/小于等于</td>
+					<td style="text-align: left">同上</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-逻辑运算符">3. 逻辑运算符</h3>
 <p>核心特性：<strong>短路求值</strong>，仅在必要时计算第二个操作数，返回值为操作数本身，而非固定的boolean值。</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">运算符</th>
-          <th style="text-align: left">说明</th>
-          <th style="text-align: left">规则</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>and</code></td>
-          <td style="text-align: left">逻辑与</td>
-          <td style="text-align: left">第一个操作数为假，返回第一个值；否则返回第二个值</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>or</code></td>
-          <td style="text-align: left">逻辑或</td>
-          <td style="text-align: left">第一个操作数为真，返回第一个值；否则返回第二个值</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>not</code></td>
-          <td style="text-align: left">逻辑非</td>
-          <td style="text-align: left">永远返回true/false，取反操作</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">运算符</th>
+					<th style="text-align: left">说明</th>
+					<th style="text-align: left">规则</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>and</code></td>
+					<td style="text-align: left">逻辑与</td>
+					<td style="text-align: left">第一个操作数为假，返回第一个值；否则返回第二个值</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>or</code></td>
+					<td style="text-align: left">逻辑或</td>
+					<td style="text-align: left">第一个操作数为真，返回第一个值；否则返回第二个值</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>not</code></td>
+					<td style="text-align: left">逻辑非</td>
+					<td style="text-align: left">永远返回true/false，取反操作</td>
+			</tr>
+	</tbody>
 </table>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
     <div class="code-header language-lua">
@@ -889,65 +889,65 @@ or</code></pre></div>
 <h4 id="1算术关系运算符元方法">（1）算术/关系运算符元方法</h4>
 <p>用于重载运算符，实现自定义运算逻辑，常用如下：</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">元方法</th>
-          <th style="text-align: left">对应运算符</th>
-          <th style="text-align: left">说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>__add</code></td>
-          <td style="text-align: left"><code>+</code></td>
-          <td style="text-align: left">加法重载</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>__sub</code></td>
-          <td style="text-align: left"><code>-</code></td>
-          <td style="text-align: left">减法重载</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>__mul</code></td>
-          <td style="text-align: left"><code>*</code></td>
-          <td style="text-align: left">乘法重载</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>__div</code></td>
-          <td style="text-align: left"><code>/</code></td>
-          <td style="text-align: left">除法重载</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>__mod</code></td>
-          <td style="text-align: left"><code>%</code></td>
-          <td style="text-align: left">取模重载</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>__pow</code></td>
-          <td style="text-align: left"><code>^</code></td>
-          <td style="text-align: left">幂运算重载</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>__concat</code></td>
-          <td style="text-align: left"><code>..</code></td>
-          <td style="text-align: left">字符串拼接重载</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>__eq</code></td>
-          <td style="text-align: left"><code>==</code></td>
-          <td style="text-align: left">等于重载</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>__lt</code></td>
-          <td style="text-align: left"><code>&lt;</code></td>
-          <td style="text-align: left">小于重载</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>__le</code></td>
-          <td style="text-align: left"><code>&lt;=</code></td>
-          <td style="text-align: left">小于等于重载</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">元方法</th>
+					<th style="text-align: left">对应运算符</th>
+					<th style="text-align: left">说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>__add</code></td>
+					<td style="text-align: left"><code>+</code></td>
+					<td style="text-align: left">加法重载</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>__sub</code></td>
+					<td style="text-align: left"><code>-</code></td>
+					<td style="text-align: left">减法重载</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>__mul</code></td>
+					<td style="text-align: left"><code>*</code></td>
+					<td style="text-align: left">乘法重载</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>__div</code></td>
+					<td style="text-align: left"><code>/</code></td>
+					<td style="text-align: left">除法重载</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>__mod</code></td>
+					<td style="text-align: left"><code>%</code></td>
+					<td style="text-align: left">取模重载</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>__pow</code></td>
+					<td style="text-align: left"><code>^</code></td>
+					<td style="text-align: left">幂运算重载</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>__concat</code></td>
+					<td style="text-align: left"><code>..</code></td>
+					<td style="text-align: left">字符串拼接重载</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>__eq</code></td>
+					<td style="text-align: left"><code>==</code></td>
+					<td style="text-align: left">等于重载</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>__lt</code></td>
+					<td style="text-align: left"><code>&lt;</code></td>
+					<td style="text-align: left">小于重载</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>__le</code></td>
+					<td style="text-align: left"><code>&lt;=</code></td>
+					<td style="text-align: left">小于等于重载</td>
+			</tr>
+	</tbody>
 </table>
 <p>示例：实现两个表的加法</p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -1026,35 +1026,35 @@ or</code></pre></div>
 </ul>
 <h4 id="3其他常用元方法">（3）其他常用元方法</h4>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">元方法</th>
-          <th style="text-align: left">触发场景</th>
-          <th style="text-align: left">说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>__tostring</code></td>
-          <td style="text-align: left">表被转为字符串时（如print(t)）</td>
-          <td style="text-align: left">自定义表的字符串输出格式</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>__len</code></td>
-          <td style="text-align: left">使用#运算符取表长度时</td>
-          <td style="text-align: left">自定义长度计算逻辑</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>__call</code></td>
-          <td style="text-align: left">把表当作函数调用时（如t()）</td>
-          <td style="text-align: left">让表具备函数执行能力</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>__metatable</code></td>
-          <td style="text-align: left">获取/设置元表时</td>
-          <td style="text-align: left">保护元表，设置后getmetatable返回该值，setmetatable报错</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">元方法</th>
+					<th style="text-align: left">触发场景</th>
+					<th style="text-align: left">说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>__tostring</code></td>
+					<td style="text-align: left">表被转为字符串时（如print(t)）</td>
+					<td style="text-align: left">自定义表的字符串输出格式</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>__len</code></td>
+					<td style="text-align: left">使用#运算符取表长度时</td>
+					<td style="text-align: left">自定义长度计算逻辑</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>__call</code></td>
+					<td style="text-align: left">把表当作函数调用时（如t()）</td>
+					<td style="text-align: left">让表具备函数执行能力</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>__metatable</code></td>
+					<td style="text-align: left">获取/设置元表时</td>
+					<td style="text-align: left">保护元表，设置后getmetatable返回该值，setmetatable报错</td>
+			</tr>
+	</tbody>
 </table>
 <p>示例：<code>__tostring</code>自定义表输出</p>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
@@ -1216,34 +1216,34 @@ or</code></pre></div>
 <h3 id="2-核心api">2. 核心API</h3>
 <p>所有协程API均在<code>coroutine</code>表中：</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">API</th>
-          <th style="text-align: left">说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><code>coroutine.create(f)</code></td>
-          <td style="text-align: left">创建协程，参数为协程主函数，返回协程对象，初始状态suspended</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>coroutine.resume(co, ...)</code></td>
-          <td style="text-align: left">启动/继续执行协程co，参数传递给协程函数，返回值：是否成功 + 结果/yield参数</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>coroutine.yield(...)</code></td>
-          <td style="text-align: left">挂起当前协程，参数作为resume的返回值，下次resume的参数会作为yield的返回值</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>coroutine.status(co)</code></td>
-          <td style="text-align: left">返回协程的当前状态</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><code>coroutine.running()</code></td>
-          <td style="text-align: left">返回当前正在运行的协程对象</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th style="text-align: left">API</th>
+					<th style="text-align: left">说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>coroutine.create(f)</code></td>
+					<td style="text-align: left">创建协程，参数为协程主函数，返回协程对象，初始状态suspended</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>coroutine.resume(co, ...)</code></td>
+					<td style="text-align: left">启动/继续执行协程co，参数传递给协程函数，返回值：是否成功 + 结果/yield参数</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>coroutine.yield(...)</code></td>
+					<td style="text-align: left">挂起当前协程，参数作为resume的返回值，下次resume的参数会作为yield的返回值</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>coroutine.status(co)</code></td>
+					<td style="text-align: left">返回协程的当前状态</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>coroutine.running()</code></td>
+					<td style="text-align: left">返回当前正在运行的协程对象</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="3-基础示例">3. 基础示例</h3>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -1415,7 +1415,7 @@ or</code></pre></div>
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

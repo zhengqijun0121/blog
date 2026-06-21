@@ -5,23 +5,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>AUTOSAR ara::com 接口使用详细总结 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/001_autosar_ara_com%E6%8E%A5%E5%8F%A3%E4%BD%BF%E7%94%A8%E8%AF%A6%E7%BB%86%E6%80%BB%E7%BB%93/">
-  <meta property="og:site_name" content="LoveIt">
-  <meta property="og:title" content="AUTOSAR ara::com 接口使用详细总结">
-  <meta property="og:description" content="AUTOSAR ara::com 接口使用详细总结 ara::com 是 AUTOSAR Adaptive Platform（AP）自适应平台中通信管理（Communication Management, CM） 功能集群的标准化C&#43;&#43;接口，是AP实现面向服务通信（Service-Oriented Communication, SOC） 的核心中枢，完全区别于Classic Platform（CP）基于信号的通信范式，为车载分布式自适应应用提供了跨进程、跨ECU的标准化、类型安全、可扩展的通信能力。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-03-25T09:00:00+08:00">
-    <meta property="article:modified_time" content="2026-03-25T10:00:00+08:00">
-    <meta property="article:tag" content="AUTOSAR">
-    <meta property="article:tag" content="AUTOSAR AP">
-    <meta property="article:tag" content="Ara::com">
-    <meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta property="og:site_name" content="LoveIt">
+	<meta property="og:title" content="AUTOSAR ara::com 接口使用详细总结">
+	<meta property="og:description" content="AUTOSAR ara::com 接口使用详细总结 ara::com 是 AUTOSAR Adaptive Platform（AP）自适应平台中通信管理（Communication Management, CM） 功能集群的标准化C&#43;&#43;接口，是AP实现面向服务通信（Service-Oriented Communication, SOC） 的核心中枢，完全区别于Classic Platform（CP）基于信号的通信范式，为车载分布式自适应应用提供了跨进程、跨ECU的标准化、类型安全、可扩展的通信能力。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-03-25T09:00:00+08:00">
+		<meta property="article:modified_time" content="2026-03-25T10:00:00+08:00">
+		<meta property="article:tag" content="AUTOSAR">
+		<meta property="article:tag" content="AUTOSAR AP">
+		<meta property="article:tag" content="Ara::com">
+		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
-  <meta name="twitter:title" content="AUTOSAR ara::com 接口使用详细总结">
-  <meta name="twitter:description" content="AUTOSAR ara::com 接口使用详细总结 ara::com 是 AUTOSAR Adaptive Platform（AP）自适应平台中通信管理（Communication Management, CM） 功能集群的标准化C&#43;&#43;接口，是AP实现面向服务通信（Service-Oriented Communication, SOC） 的核心中枢，完全区别于Classic Platform（CP）基于信号的通信范式，为车载分布式自适应应用提供了跨进程、跨ECU的标准化、类型安全、可扩展的通信能力。">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
+	<meta name="twitter:title" content="AUTOSAR ara::com 接口使用详细总结">
+	<meta name="twitter:description" content="AUTOSAR ara::com 接口使用详细总结 ara::com 是 AUTOSAR Adaptive Platform（AP）自适应平台中通信管理（Communication Management, CM） 功能集群的标准化C&#43;&#43;接口，是AP实现面向服务通信（Service-Oriented Communication, SOC） 的核心中枢，完全区别于Classic Platform（CP）基于信号的通信范式，为车载分布式自适应应用提供了跨进程、跨ECU的标准化、类型安全、可扩展的通信能力。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -253,40 +253,40 @@
 <h3 id="2-分层架构">2. 分层架构</h3>
 <p>ara::com 采用分层设计，实现通信能力的标准化与可扩展：</p>
 <table>
-  <thead>
-      <tr>
-          <th>层级</th>
-          <th>核心职责</th>
-          <th>关键说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>应用层</td>
-          <td>服务逻辑实现</td>
-          <td>基于生成的Proxy/Skeleton类开发业务逻辑，仅依赖标准化API</td>
-      </tr>
-      <tr>
-          <td>语言绑定层</td>
-          <td>C++语言映射</td>
-          <td>定义ara::com标准化C++接口规范，实现服务接口到C++类的映射</td>
-      </tr>
-      <tr>
-          <td>核心中间件层</td>
-          <td>通信核心能力</td>
-          <td>实现服务发现、生命周期管理、数据序列化/反序列化、缓存管理、错误处理</td>
-      </tr>
-      <tr>
-          <td>网络绑定层</td>
-          <td>传输协议适配</td>
-          <td>适配底层传输协议（SOME/IP、DDS、共享内存IPC等），实现协议相关的通信逻辑</td>
-      </tr>
-      <tr>
-          <td>操作系统/驱动层</td>
-          <td>底层通信能力</td>
-          <td>基于OS套接字、共享内存、网络驱动提供基础数据收发能力</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>层级</th>
+					<th>核心职责</th>
+					<th>关键说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>应用层</td>
+					<td>服务逻辑实现</td>
+					<td>基于生成的Proxy/Skeleton类开发业务逻辑，仅依赖标准化API</td>
+			</tr>
+			<tr>
+					<td>语言绑定层</td>
+					<td>C++语言映射</td>
+					<td>定义ara::com标准化C++接口规范，实现服务接口到C++类的映射</td>
+			</tr>
+			<tr>
+					<td>核心中间件层</td>
+					<td>通信核心能力</td>
+					<td>实现服务发现、生命周期管理、数据序列化/反序列化、缓存管理、错误处理</td>
+			</tr>
+			<tr>
+					<td>网络绑定层</td>
+					<td>传输协议适配</td>
+					<td>适配底层传输协议（SOME/IP、DDS、共享内存IPC等），实现协议相关的通信逻辑</td>
+			</tr>
+			<tr>
+					<td>操作系统/驱动层</td>
+					<td>底层通信能力</td>
+					<td>基于OS套接字、共享内存、网络驱动提供基础数据收发能力</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="三核心概念详解">三、核心概念详解</h2>
 <h3 id="1-服务与服务接口service--service-interface">1. 服务与服务接口（Service &amp; Service Interface）</h3>
@@ -497,45 +497,45 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 <h4 id="33-服务端核心api说明">3.3 服务端核心API说明</h4>
 <table>
-  <thead>
-      <tr>
-          <th>API</th>
-          <th>核心作用</th>
-          <th>使用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>OfferService()</code></td>
-          <td>发布服务实例，向服务注册中心注册服务，对外广播服务可用性</td>
-          <td>服务初始化完成后，对外提供服务前调用</td>
-      </tr>
-      <tr>
-          <td><code>StopOfferService()</code></td>
-          <td>停止服务发布，注销服务，断开所有客户端连接</td>
-          <td>服务退出、资源释放前调用</td>
-      </tr>
-      <tr>
-          <td><code>Event::Send()</code></td>
-          <td>发布事件数据，推送给所有已订阅的客户端</td>
-          <td>周期性数据、状态变更通知</td>
-      </tr>
-      <tr>
-          <td><code>Field::Update()</code></td>
-          <td>更新字段值，若启用Notifier，会自动向订阅客户端推送变更通知</td>
-          <td>服务内部状态更新时调用</td>
-      </tr>
-      <tr>
-          <td><code>ProcessNextMethodCall()</code></td>
-          <td>处理下一个客户端方法调用请求，仅在kPoll轮询模式下使用</td>
-          <td>硬实时场景，自主控制方法调用处理时机</td>
-      </tr>
-      <tr>
-          <td><code>SetReceiveHandler()</code></td>
-          <td>设置方法调用的接收回调，仅在kEvent事件模式下使用</td>
-          <td>事件驱动场景，有请求时自动触发回调</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>API</th>
+					<th>核心作用</th>
+					<th>使用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>OfferService()</code></td>
+					<td>发布服务实例，向服务注册中心注册服务，对外广播服务可用性</td>
+					<td>服务初始化完成后，对外提供服务前调用</td>
+			</tr>
+			<tr>
+					<td><code>StopOfferService()</code></td>
+					<td>停止服务发布，注销服务，断开所有客户端连接</td>
+					<td>服务退出、资源释放前调用</td>
+			</tr>
+			<tr>
+					<td><code>Event::Send()</code></td>
+					<td>发布事件数据，推送给所有已订阅的客户端</td>
+					<td>周期性数据、状态变更通知</td>
+			</tr>
+			<tr>
+					<td><code>Field::Update()</code></td>
+					<td>更新字段值，若启用Notifier，会自动向订阅客户端推送变更通知</td>
+					<td>服务内部状态更新时调用</td>
+			</tr>
+			<tr>
+					<td><code>ProcessNextMethodCall()</code></td>
+					<td>处理下一个客户端方法调用请求，仅在kPoll轮询模式下使用</td>
+					<td>硬实时场景，自主控制方法调用处理时机</td>
+			</tr>
+			<tr>
+					<td><code>SetReceiveHandler()</code></td>
+					<td>设置方法调用的接收回调，仅在kEvent事件模式下使用</td>
+					<td>事件驱动场景，有请求时自动触发回调</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="步骤4客户端proxy开发全流程">步骤4：客户端（Proxy）开发全流程</h3>
 <p>客户端核心职责是发现服务、创建Proxy实例、调用服务方法、订阅事件/字段通知，完整开发流程如下：</p>
@@ -659,60 +659,60 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 <h4 id="43-客户端核心api说明">4.3 客户端核心API说明</h4>
 <table>
-  <thead>
-      <tr>
-          <th>API</th>
-          <th>核心作用</th>
-          <th>使用场景</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>FindService()</code></td>
-          <td>一次性查询可用的服务实例列表</td>
-          <td>静态部署、服务实例固定的场景</td>
-      </tr>
-      <tr>
-          <td><code>StartFindService()</code></td>
-          <td>启动持续服务发现，通过回调实时感知服务上下线</td>
-          <td>动态部署、需要高可用的场景</td>
-      </tr>
-      <tr>
-          <td><code>StopFindService()</code></td>
-          <td>停止持续服务发现任务，释放监听资源</td>
-          <td>客户端退出前调用</td>
-      </tr>
-      <tr>
-          <td><code>Event::Subscribe()</code></td>
-          <td>订阅服务端事件/字段/触发器，设置接收缓存深度</td>
-          <td>准备接收事件数据前调用</td>
-      </tr>
-      <tr>
-          <td><code>Event::Unsubscribe()</code></td>
-          <td>取消订阅，停止接收事件推送</td>
-          <td>资源释放、业务停止时调用</td>
-      </tr>
-      <tr>
-          <td><code>Event::SetReceiveHandler()</code></td>
-          <td>设置事件接收回调，有新数据时自动触发</td>
-          <td>事件驱动编程模式</td>
-      </tr>
-      <tr>
-          <td><code>Event::GetNewSamples()</code></td>
-          <td>获取接收缓存中的新事件数据，支持回调遍历</td>
-          <td>轮询模式/回调中处理数据</td>
-      </tr>
-      <tr>
-          <td><code>Method::operator()()</code></td>
-          <td>发起方法调用，返回Future对象，支持同步/异步获取结果</td>
-          <td>客户端调用服务端方法</td>
-      </tr>
-      <tr>
-          <td><code>Field::Get()/Set()</code></td>
-          <td>读取/写入服务端字段值，通过Method实现</td>
-          <td>访问服务端状态属性</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>API</th>
+					<th>核心作用</th>
+					<th>使用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>FindService()</code></td>
+					<td>一次性查询可用的服务实例列表</td>
+					<td>静态部署、服务实例固定的场景</td>
+			</tr>
+			<tr>
+					<td><code>StartFindService()</code></td>
+					<td>启动持续服务发现，通过回调实时感知服务上下线</td>
+					<td>动态部署、需要高可用的场景</td>
+			</tr>
+			<tr>
+					<td><code>StopFindService()</code></td>
+					<td>停止持续服务发现任务，释放监听资源</td>
+					<td>客户端退出前调用</td>
+			</tr>
+			<tr>
+					<td><code>Event::Subscribe()</code></td>
+					<td>订阅服务端事件/字段/触发器，设置接收缓存深度</td>
+					<td>准备接收事件数据前调用</td>
+			</tr>
+			<tr>
+					<td><code>Event::Unsubscribe()</code></td>
+					<td>取消订阅，停止接收事件推送</td>
+					<td>资源释放、业务停止时调用</td>
+			</tr>
+			<tr>
+					<td><code>Event::SetReceiveHandler()</code></td>
+					<td>设置事件接收回调，有新数据时自动触发</td>
+					<td>事件驱动编程模式</td>
+			</tr>
+			<tr>
+					<td><code>Event::GetNewSamples()</code></td>
+					<td>获取接收缓存中的新事件数据，支持回调遍历</td>
+					<td>轮询模式/回调中处理数据</td>
+			</tr>
+			<tr>
+					<td><code>Method::operator()()</code></td>
+					<td>发起方法调用，返回Future对象，支持同步/异步获取结果</td>
+					<td>客户端调用服务端方法</td>
+			</tr>
+			<tr>
+					<td><code>Field::Get()/Set()</code></td>
+					<td>读取/写入服务端字段值，通过Method实现</td>
+					<td>访问服务端状态属性</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="五核心通信机制深度解析">五、核心通信机制深度解析</h2>
 <h3 id="1-method方法请求-响应通信">1. Method（方法）：请求-响应通信</h3>
@@ -1007,7 +1007,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.161.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
