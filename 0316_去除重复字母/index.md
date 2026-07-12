@@ -1,20 +1,31 @@
 # 力扣316. 去除重复字母
 
 
-## 力扣316. Remove Duplicate Letters（去除重复字母）
+## 力扣316. 去除重复字母
 
-去除重复字母使结果字典序最小。
+给你一个字符串 `s` ，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证 **返回结果的字典序最小**（要求不能打乱其他字符的相对位置）。
 
-示例 1：
+**示例 1：**
 
-![](../posts/01_学习/87_LeetCode/0316_去除重复字母/img/0316-1-description.png)
 
 ```
-输入：...
-输出：...
-解释：...
+输入：s = "bcabc"
+输出："abc"
 ```
 
-提示：
-- ...
+
+**示例 2：**
+
+
+```
+输入：s = "cbacdcbc"
+输出："acdb"
+```
+
+
+**提示：**
+
+
+
+- `1 https://leetcode.cn/problems/smallest-subsequence-of-distinct-characters 相同
 

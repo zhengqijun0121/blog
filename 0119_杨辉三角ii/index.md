@@ -1,33 +1,50 @@
 # 力扣119. 杨辉三角 II
 
 
-## 力扣119. Pascal's Triangle II（杨辉三角 II）
+## 力扣119. 杨辉三角 II
 
-给定一个非负索引 rowIndex，返回杨辉三角的第 rowIndex 行。注意 rowIndex 从 0 开始。
+给定一个非负索引 `rowIndex`，返回「杨辉三角」的第 `rowIndex`* *行。
 
-示例 1：
+在「杨辉三角」中，每个数是它左上方和右上方的数的和。
 
-```
-输入：rowIndex = 3
-输出：[1,3,3,1]
-```
 
-示例 2：
+![1626927345-DZmfxB-PascalTriangleAnimated2.gif](img/1626927345-DZmfxB-PascalTriangleAnimated2.gif)
 
-```
-输入：rowIndex = 0
-输出：[1]
-```
 
-示例 3：
+ 
+
+**示例 1:**
+
 
 ```
-输入：rowIndex = 1
-输出：[1,1]
+输入: rowIndex = 3
+输出: [1,3,3,1]
 ```
 
-提示：
-- 0 <= rowIndex <= 33
 
-进阶：你能优化你的算法使其使用 O(rowIndex) 额外空间吗？
+**示例 2:**
+
+
+```
+输入: rowIndex = 0
+输出: [1]
+```
+
+
+**示例 3:**
+
+
+```
+输入: rowIndex = 1
+输出: [1,1]
+```
+
+
+ 
+
+**提示:**
+
+
+
+- `0 rowIndex)` 空间复杂度吗？
 

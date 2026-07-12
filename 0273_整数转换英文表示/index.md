@@ -1,20 +1,40 @@
 # 力扣273. 整数转换英文表示
 
 
-## 力扣273. Integer to English Words（整数转换英文表示）
+## 力扣273. 整数转换英文表示
 
-将非负整数转换为英文单词表示。
+将非负整数 `num` 转换为其对应的英文表示。
 
-示例 1：
+**示例 1：**
 
-![](../posts/01_学习/87_LeetCode/0273_整数转换英文表示/img/0273-1-description.png)
 
 ```
-输入：...
-输出：...
-解释：...
+输入：num = 123
+输出："One Hundred Twenty Three"
 ```
 
-提示：
-- ...
+
+**示例 2：**
+
+
+```
+输入：num = 12345
+输出："Twelve Thousand Three Hundred Forty Five"
+```
+
+
+**示例 3：**
+
+
+```
+输入：num = 1234567
+输出："One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
+```
+
+
+**提示：**
+
+
+
+- `0 <= num <= 2^{31} - 1`
 

@@ -1,50 +1,75 @@
 # 力扣175. 组合两个表
 
 
-## 力扣175. Combine Two Tables（组合两个表）
+## 力扣175. 组合两个表
 
-编写 SQL 查询，报告所有 Person 的 `firstName`、`lastName`、`city`、`state`，无论 Person 是否有地址信息。
+表: `Person`
 
-表结构：
-
-**Person**
-| Column Name | Type |
-|-------------|------|
-| personId    | int  |
-| lastName    | varchar |
-| firstName   | varchar |
-
-personId 是主键。
-
-**Address**
-| Column Name | Type |
-|-------------|------|
-| addressId   | int  |
-| personId    | int  |
-| city        | varchar |
-| state       | varchar |
-
-addressId 是主键。
-
-示例 1：
-
-![](../posts/01_学习/87_LeetCode/0175_组合两个表/img/0175-1-description.png)
 
 ```
-输入：
-Person 表：
++-------------+---------+
+| 列名         | 类型     |
++-------------+---------+
+| PersonId    | int     |
+| FirstName   | varchar |
+| LastName    | varchar |
++-------------+---------+
+personId 是该表的主键（具有唯一值的列）。
+该表包含一些人的 ID 和他们的姓和名的信息。
+```
+
+
+表: `Address`
+
+
+```
++-------------+---------+
+| 列名         | 类型    |
++-------------+---------+
+| AddressId   | int     |
+| PersonId    | int     |
+| City        | varchar |
+| State       | varchar |
++-------------+---------+
+addressId 是该表的主键（具有唯一值的列）。
+该表的每一行都包含一个 ID = PersonId 的人的城市和州的信息。
+```
+
+
+编写解决方案，报告 `Person` 表中每个人的姓、名、城市和州。如果 `personId` 的地址不在 `Address` 表中，则报告为 `null` 。
+
+以 **任意顺序** 返回结果表。
+
+结果格式如下所示。
+
+**示例 1:**
+
+
+```
+输入: 
+Person表:
++----------+----------+-----------+
 | personId | lastName | firstName |
-|----------|----------|-----------|
++----------+----------+-----------+
 | 1        | Wang     | Allen     |
-
-Address 表：
-| addressId | personId | city          | state    |
-|-----------|----------|---------------|----------|
-| 1         | 2        | New York City | New York |
-
-输出：
-| lastName | firstName | city          | state    |
-|----------|-----------|---------------|----------|
-| Allen    | Wang      | New York City | New York |
+| 2        | Alice    | Bob       |
++----------+----------+-----------+
+Address表:
++-----------+----------+---------------+------------+
+| addressId | personId | city          | state      |
++-----------+----------+---------------+------------+
+| 1         | 2        | New York City | New York   |
+| 2         | 3        | Leetcode      | California |
++-----------+----------+---------------+------------+
+输出: 
++-----------+----------+---------------+----------+
+| firstName | lastName | city          | state    |
++-----------+----------+---------------+----------+
+| Allen     | Wang     | Null          | Null     |
+| Bob       | Alice    | New York City | New York |
++-----------+----------+---------------+----------+
+解释: 
+地址表中没有 personId = 1 的地址，所以它们的城市和州返回 null。
+addressId = 1 包含了 personId = 2 的地址信息。
 ```
 

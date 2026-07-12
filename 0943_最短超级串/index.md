@@ -1,20 +1,44 @@
 # 力扣943. 最短超级串
 
 
-## 力扣943. Find the Shortest Superstring（最短超级串）
+## 力扣943. 最短超级串
 
-找到包含所有单词的最短串。
+给定一个字符串数组 `words`，找到以 `words` 中每个字符串作为子字符串的最短字符串。如果有多个有效最短字符串满足题目条件，返回其中 **任意一个** 即可。
 
-示例 1：
+我们可以假设 `words` 中没有字符串是 `words` 中另一个字符串的子字符串。
 
-![](../posts/01_学习/87_LeetCode/0943_最短超级串/img/0943-1-description.png)
+ 
+
+**示例 1：**
+
 
 ```
-输入：...
-输出：...
-解释：...
+输入：words = ["alex","loves","leetcode"]
+输出："alexlovesleetcode"
+解释："alex"，"loves"，"leetcode" 的所有排列都会被接受。
 ```
 
-提示：
-- ...
+
+**示例 2：**
+
+
+```
+输入：words = ["catg","ctaagt","gcta","ttca","atgcatc"]
+输出："gctaagttcatgcatc"
+```
+
+
+ 
+
+**提示：**
+
+
+
+- `1 <= words.length <= 12`
+
+- `1 <= words[i].length <= 20`
+
+- `words[i]` 由小写英文字母组成
+
+- `words` 中的所有字符串 **互不相同**
 

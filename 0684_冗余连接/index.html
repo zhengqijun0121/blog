@@ -7,30 +7,26 @@
         <title>力扣684. 冗余连接 - LoveIt</title><meta name="Description" content="Oh My Blog"><meta property="og:url" content="https://zhengqijun0121.github.io/blog/0684_%E5%86%97%E4%BD%99%E8%BF%9E%E6%8E%A5/">
 	<meta property="og:site_name" content="LoveIt">
 	<meta property="og:title" content="力扣684. 冗余连接">
-	<meta property="og:description" content="力扣684. Redundant Connection（冗余连接） 找到无向图中可删除的一条边。
-示例 1：
-输入：[[1,2],[1,3],[2,3]] 输出：[2,3] 提示：
-n == edges.length 3 &lt;= n &lt;= 1000 edges[i].length == 2 1 &lt;= ai &lt; bi &lt;= edges.length">
+	<meta property="og:description" content="力扣684. 冗余连接 树可以看成是一个连通且 **无环 **的 **无向 **图。
+给定一个图，该图从一棵 n 个节点 (节点值 1～n) 的树中添加一条边后获得。添加的边的两个不同顶点编号在 1 到 n 中间，且这条附加的边不属于树中已存在的边。图的信息记录于长度为 n 的二维数组 edges ，edges[i] = [ai, bi] 表示图中在 ai 和 bi 之间存在一条边。">
 	<meta property="og:locale" content="zh_CN">
 	<meta property="og:type" content="article">
 		<meta property="article:section" content="posts">
-		<meta property="article:published_time" content="2022-05-01T17:00:00+08:00">
-		<meta property="article:modified_time" content="2022-05-01T17:00:00+08:00">
+		<meta property="article:published_time" content="2025-07-12T00:00:00+08:00">
+		<meta property="article:modified_time" content="2025-07-12T00:00:00+08:00">
 		<meta property="article:tag" content="LeetCode">
 		<meta property="og:image" content="https://zhengqijun0121.github.io/logo.png">
 
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:image" content="https://zhengqijun0121.github.io/logo.png">
 	<meta name="twitter:title" content="力扣684. 冗余连接">
-	<meta name="twitter:description" content="力扣684. Redundant Connection（冗余连接） 找到无向图中可删除的一条边。
-示例 1：
-输入：[[1,2],[1,3],[2,3]] 输出：[2,3] 提示：
-n == edges.length 3 &lt;= n &lt;= 1000 edges[i].length == 2 1 &lt;= ai &lt; bi &lt;= edges.length">
+	<meta name="twitter:description" content="力扣684. 冗余连接 树可以看成是一个连通且 **无环 **的 **无向 **图。
+给定一个图，该图从一棵 n 个节点 (节点值 1～n) 的树中添加一条边后获得。添加的边的两个不同顶点编号在 1 到 n 中间，且这条附加的边不属于树中已存在的边。图的信息记录于长度为 n 的二维数组 edges ，edges[i] = [ai, bi] 表示图中在 ai 和 bi 之间存在一条边。">
 <meta name="application-name" content="Hello World">
 <meta name="apple-mobile-web-app-title" content="Hello World">
 <meta name="referrer" content="no-referrer" /><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/0684_%E5%86%97%E4%BD%99%E8%BF%9E%E6%8E%A5/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/0685_%E5%86%97%E4%BD%99%E8%BF%9E%E6%8E%A5ii/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/0683_k%E4%B8%AA%E5%85%B3%E9%97%AD%E7%9A%84%E7%81%AF%E6%B3%A1/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://zhengqijun0121.github.io/blog/0684_%E5%86%97%E4%BD%99%E8%BF%9E%E6%8E%A5/" /><link rel="prev" href="https://zhengqijun0121.github.io/blog/0685_%E5%86%97%E4%BD%99%E8%BF%9E%E6%8E%A5ii/" /><link rel="next" href="https://zhengqijun0121.github.io/blog/0682_%E6%A3%92%E7%90%83%E6%AF%94%E8%B5%9B/" /><link rel="stylesheet" href="/blog/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
@@ -41,8 +37,8 @@ n == edges.length 3 &lt;= n &lt;= 1000 edges[i].length == 2 1 &lt;= ai &lt; bi &
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/zhengqijun0121.github.io\/blog\/0684_%E5%86%97%E4%BD%99%E8%BF%9E%E6%8E%A5\/"
-        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "LeetCode","wordcount":  92 ,
-        "url": "https:\/\/zhengqijun0121.github.io\/blog\/0684_%E5%86%97%E4%BD%99%E8%BF%9E%E6%8E%A5\/","datePublished": "2022-05-01T17:00:00+08:00","dateModified": "2022-05-01T17:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+        },"image": ["https:\/\/zhengqijun0121.github.io\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "LeetCode","wordcount":  284 ,
+        "url": "https:\/\/zhengqijun0121.github.io\/blog\/0684_%E5%86%97%E4%BD%99%E8%BF%9E%E6%8E%A5\/","datePublished": "2025-07-12T00:00:00+08:00","dateModified": "2025-07-12T00:00:00+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "xxxx","logo": "https:\/\/zhengqijun0121.github.io\/images\/avatar.png"},"author": {
                 "@type": "Person",
@@ -132,7 +128,7 @@ n == edges.length 3 &lt;= n &lt;= 1000 edges[i].length == 2 1 &lt;= ai &lt; bi &
             <div class="toc-content always-active" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">力扣684. 冗余连接</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="./about/" title="Author" rel="author" class="author"><i class="fas fa-user-circle" aria-hidden="true"></i>zhengqijun0121</a></span>&nbsp;<span class="post-category">收录于 <a href="/blog/categories/leetcode/"><i class="far fa-folder" aria-hidden="true"></i>LeetCode</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2022-05-01">2022-05-01</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 92 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="2025-07-12">2025-07-12</time>&nbsp;<i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;约 284 字&nbsp;
                 <i class="far fa-clock" aria-hidden="true"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
@@ -141,39 +137,74 @@ n == edges.length 3 &lt;= n &lt;= 1000 edges[i].length == 2 1 &lt;= ai &lt; bi &
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#力扣684-redundant-connection冗余连接">力扣684. Redundant Connection（冗余连接）</a></li>
+    <li><a href="#力扣684-冗余连接">力扣684. 冗余连接</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="力扣684-redundant-connection冗余连接">力扣684. Redundant Connection（冗余连接）</h2>
-<p>找到无向图中可删除的一条边。</p>
-<p>示例 1：</p>
+            </div><div class="content" id="content"><h2 id="力扣684-冗余连接">力扣684. 冗余连接</h2>
+<p>树可以看成是一个连通且 **无环 **的 **无向 **图。</p>
+<p>给定一个图，该图从一棵 <code>n</code> 个节点 (节点值 <code>1～n</code>) 的树中添加一条边后获得。添加的边的两个不同顶点编号在 <code>1</code> 到 <code>n</code> 中间，且这条附加的边不属于树中已存在的边。图的信息记录于长度为 <code>n</code> 的二维数组 <code>edges</code> ，<code>edges[i] = [ai, bi]</code> 表示图中在 <code>ai</code> 和 <code>bi</code> 之间存在一条边。</p>
+<p>请找出一条可以删去的边，删除后可使得剩余部分是一个有着 <code>n</code> 个节点的树。如果有多个答案，则返回数组 <code>edges</code> 中最后出现的那个。</p>
+<p><strong>示例 1：</strong></p>
 <p><img
         class="lazyload"
         src="/blog/svg/loading.min.svg"
-        data-src="../posts/01_%e5%ad%a6%e4%b9%a0/87_LeetCode/0684_%e5%86%97%e4%bd%99%e8%bf%9e%e6%8e%a5/img/0684-1-description.png"
-        data-srcset="../posts/01_%e5%ad%a6%e4%b9%a0/87_LeetCode/0684_%e5%86%97%e4%bd%99%e8%bf%9e%e6%8e%a5/img/0684-1-description.png, ../posts/01_%e5%ad%a6%e4%b9%a0/87_LeetCode/0684_%e5%86%97%e4%bd%99%e8%bf%9e%e6%8e%a5/img/0684-1-description.png 1.5x, ../posts/01_%e5%ad%a6%e4%b9%a0/87_LeetCode/0684_%e5%86%97%e4%bd%99%e8%bf%9e%e6%8e%a5/img/0684-1-description.png 2x"
+        data-src="img/1626676174-hOEVUL-image.png"
+        data-srcset="img/1626676174-hOEVUL-image.png, img/1626676174-hOEVUL-image.png 1.5x, img/1626676174-hOEVUL-image.png 2x"
         data-sizes="auto"
-        alt="../posts/01_学习/87_LeetCode/0684_冗余连接/img/0684-1-description.png"
-        title="../posts/01_学习/87_LeetCode/0684_冗余连接/img/0684-1-description.png" /></p>
+        alt="img/1626676174-hOEVUL-image.png"
+        title="1626676174-hOEVUL-image.png" /></p>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
     <div class="code-header language-">
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
-    </div><pre tabindex="0"><code>输入：[[1,2],[1,3],[2,3]]
-输出：[2,3]</code></pre></div>
-<p>提示：</p>
+    </div><pre tabindex="0"><code>输入: edges = [[1,2], [1,3], [2,3]]
+输出: [2,3]</code></pre></div>
+<p><strong>示例 2：</strong></p>
+<p><img
+        class="lazyload"
+        src="/blog/svg/loading.min.svg"
+        data-src="img/1626676179-kGxcmu-image.png"
+        data-srcset="img/1626676179-kGxcmu-image.png, img/1626676179-kGxcmu-image.png 1.5x, img/1626676179-kGxcmu-image.png 2x"
+        data-sizes="auto"
+        alt="img/1626676179-kGxcmu-image.png"
+        title="1626676179-kGxcmu-image.png" /></p>
+<div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
+    <div class="code-header language-">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
+    </div><pre tabindex="0"><code>输入: edges = [[1,2], [2,3], [3,4], [1,4], [1,5]]
+输出: [1,4]</code></pre></div>
+<p><strong>提示:</strong></p>
 <ul>
-<li>n == edges.length</li>
-<li>3 &lt;= n &lt;= 1000</li>
-<li>edges[i].length == 2</li>
-<li>1 &lt;= ai &lt; bi &lt;= edges.length</li>
+<li>
+<p><code>n == edges.length</code></p>
+</li>
+<li>
+<p><code>3 &lt;= n &lt;= 1000</code></p>
+</li>
+<li>
+<p><code>edges[i].length == 2</code></p>
+</li>
+<li>
+<p><code>1 &lt;= ai &lt; bi &lt;= edges.length</code></p>
+</li>
+<li>
+<p><code>ai != bi</code></p>
+</li>
+<li>
+<p><code>edges</code> 中无重复元素</p>
+</li>
+<li>
+<p>给定的图是连通的</p>
+</li>
 </ul>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>更新于 2022-05-01</span>
+                <span>更新于 2025-07-12</span>
             </div></div>
         <div class="post-info-line">
             <div class="post-info-md"><span>
@@ -193,13 +224,13 @@ n == edges.length 3 &lt;= n &lt;= 1000 edges[i].length == 2 1 &lt;= ai &lt; bi &
     </div>
 
     <div class="post-nav"><a href="/blog/0685_%E5%86%97%E4%BD%99%E8%BF%9E%E6%8E%A5ii/" class="prev" rel="prev" title="力扣685. 冗余连接 II"><i class="fas fa-angle-left" aria-hidden="true"></i>力扣685. 冗余连接 II</a>
-            <a href="/blog/0683_k%E4%B8%AA%E5%85%B3%E9%97%AD%E7%9A%84%E7%81%AF%E6%B3%A1/" class="next" rel="next" title="力扣683. K 个关闭的灯泡">力扣683. K 个关闭的灯泡<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
+            <a href="/blog/0682_%E6%A3%92%E7%90%83%E6%AF%94%E8%B5%9B/" class="next" rel="next" title="力扣682. 棒球比赛">力扣682. 棒球比赛<i class="fas fa-angle-right" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.164.0">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
@@ -212,5 +243,5 @@ n == edges.length 3 &lt;= n &lt;= 1000 edges[i].length == 2 1 &lt;= ai &lt; bi &
         <div id="fixed-buttons-hidden"><a href="#" id="view-comments" class="fixed-button" title="查看评论">
                 <i class="fas fa-comment" aria-hidden="true"></i>
             </a>
-        </div><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script>window.config={"comment":{},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
+        </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css"><script src="https://.disqus.com/embed.js" defer></script><script src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script src="https://cdn.jsdelivr.net/npm/algoliasearch@5.20.2/dist/lite/builds/browser.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"></script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js"></script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/copy-tex.min.js"></script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/mhchem.min.js"></script><script>window.config={"comment":{},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"GZT24PWKNT","algoliaIndex":"index","algoliaSearchKey":"634ab679e825b815de2663de38908f9d","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script src="/blog/js/theme.js"></script></body>
 </html>

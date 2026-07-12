@@ -1,13 +1,22 @@
 # 力扣72. 编辑距离
 
 
-## 力扣72. Edit Distance（编辑距离）
+## 力扣72. 编辑距离
 
-给你两个单词 word1 和 word2，请返回将 word1 转换成 word2 所使用的最少操作数。你可以对一个单词进行如下三种操作：插入一个字符、删除一个字符、替换一个字符。
+给你两个单词 `word1` 和 `word2`， *请返回将 `word1` 转换成 `word2` 所使用的最少操作数* 。
 
-示例 1：
+你可以对一个单词进行如下三种操作：
 
-![](../posts/01_学习/87_LeetCode/0072_编辑距离/img/0072-1-description.png)
+
+
+- 插入一个字符
+
+- 删除一个字符
+
+- 替换一个字符
+
+**示例 1：**
+
 
 ```
 输入：word1 = "horse", word2 = "ros"
@@ -18,9 +27,9 @@ rorse -> rose (删除 'r')
 rose -> ros (删除 'e')
 ```
 
-示例 2：
 
-![](../posts/01_学习/87_LeetCode/0072_编辑距离/img/0072-2-description.png)
+**示例 2：**
+
 
 ```
 输入：word1 = "intention", word2 = "execution"
@@ -33,7 +42,12 @@ exention -> exection (将 'n' 替换为 'c')
 exection -> execution (插入 'u')
 ```
 
-提示：
-- 0 <= word1.length, word2.length <= 500
-- word1 和 word2 由小写英文字母组成
+
+**提示：**
+
+
+
+- `0 <= word1.length, word2.length <= 500`
+
+- `word1` 和 `word2` 由小写英文字母组成
 

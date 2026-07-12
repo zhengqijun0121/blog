@@ -223,10 +223,10 @@
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
     </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="c1">// proto3 必须显式声明
-</span></span></span><span class="line"><span class="cl"><span class="n">syntax</span> <span class="o">=</span> <span class="s">&#34;proto3&#34;</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// proto2 可省略，默认按proto2解析
-</span></span></span><span class="line"><span class="cl"><span class="n">syntax</span> <span class="o">=</span> <span class="s">&#34;proto2&#34;</span><span class="p">;</span></span></span></code></pre></div></div>
+</span></span></span><span class="line"><span class="cl"><span class="k">syntax</span> <span class="o">=</span> <span class="s">&#34;proto3&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// proto2 可省略，默认按proto2解析
+</span></span></span><span class="line"><span class="cl"><span class="k">syntax</span> <span class="o">=</span> <span class="s">&#34;proto2&#34;</span><span class="p">;</span></span></span></code></pre></div></div>
 <h3 id="2-标准文件结构">2. 标准文件结构</h3>
 <p>一个完整的<code>.proto</code>文件遵循以下结构，按顺序定义：</p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -235,40 +235,40 @@
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
     </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="c1">// 1. 版本声明
-</span></span></span><span class="line"><span class="cl"><span class="n">syntax</span> <span class="o">=</span> <span class="s">&#34;proto3&#34;</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// 2. 包声明：避免命名冲突，对应各语言的命名空间/包名
-</span></span></span><span class="line"><span class="cl"><span class="kn">package</span> <span class="nn">user</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// 3. 导入其他.proto文件
-</span></span></span><span class="line"><span class="cl"><span class="k">import</span> <span class="s">&#34;google/protobuf/any.proto&#34;</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="k">import</span> <span class="s">&#34;base.proto&#34;</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// 公共导入：导入的内容会传递给依赖当前文件的其他文件
-</span></span></span><span class="line"><span class="cl"><span class="k">import</span> <span class="n">public</span> <span class="s">&#34;common.proto&#34;</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// 4. 全局选项：针对文件级别的配置
-</span></span></span><span class="line"><span class="cl"><span class="k">option</span> <span class="n">java_package</span> <span class="o">=</span> <span class="s">&#34;com.example.user&#34;</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="k">option</span> <span class="n">java_outer_classname</span> <span class="o">=</span> <span class="s">&#34;UserProto&#34;</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="k">option</span> <span class="n">go_package</span> <span class="o">=</span> <span class="s">&#34;./user&#34;</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// 5. 枚举定义
-</span></span></span><span class="line"><span class="cl"><span class="kd">enum</span> <span class="n">Gender</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="n">MALE</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="n">FEMALE</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// 6. 消息定义：核心数据结构
-</span></span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">User</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="n">Gender</span> <span class="n">gender</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// 7. 服务定义：用于gRPC RPC接口
-</span></span></span><span class="line"><span class="cl"><span class="kd">service</span> <span class="n">UserService</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="k">rpc</span> <span class="n">GetUser</span><span class="p">(</span><span class="n">GetUserRequest</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">GetUserResponse</span><span class="p">);</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+</span></span></span><span class="line"><span class="cl"><span class="k">syntax</span> <span class="o">=</span> <span class="s">&#34;proto3&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 2. 包声明：避免命名冲突，对应各语言的命名空间/包名
+</span></span></span><span class="line"><span class="cl"><span class="kn">package</span> <span class="nn">user</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 3. 导入其他.proto文件
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="s">&#34;google/protobuf/any.proto&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="s">&#34;base.proto&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 公共导入：导入的内容会传递给依赖当前文件的其他文件
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="k">public</span> <span class="s">&#34;common.proto&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 4. 全局选项：针对文件级别的配置
+</span></span></span><span class="line"><span class="cl"><span class="k">option</span> <span class="n">java_package</span> <span class="o">=</span> <span class="s">&#34;com.example.user&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">option</span> <span class="n">java_outer_classname</span> <span class="o">=</span> <span class="s">&#34;UserProto&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">option</span> <span class="n">go_package</span> <span class="o">=</span> <span class="s">&#34;./user&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 5. 枚举定义
+</span></span></span><span class="line"><span class="cl"><span class="kd">enum</span> <span class="n">Gender</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">MALE</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">FEMALE</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 6. 消息定义：核心数据结构
+</span></span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">User</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Gender</span> <span class="n">gender</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 7. 服务定义：用于gRPC RPC接口
+</span></span></span><span class="line"><span class="cl"><span class="kd">service</span> <span class="n">UserService</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">rpc</span> <span class="n">GetUser</span><span class="p">(</span><span class="n">GetUserRequest</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">GetUserResponse</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 <h3 id="3-导入规则">3. 导入规则</h3>
 <ul>
 <li>编译器通过<code>-I/--proto_path</code>参数指定的目录查找导入的文件，未指定则使用当前工作目录</li>
@@ -383,10 +383,10 @@
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
     </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="c1">// proto3 基础字段，默认singular规则
-</span></span></span><span class="line"><span class="cl"><span class="kt">string</span> <span class="n">name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// 带规则与选项的字段
-</span></span></span><span class="line"><span class="cl"><span class="k">repeated</span> <span class="kt">string</span> <span class="n">tags</span> <span class="o">=</span> <span class="mi">2</span> <span class="p">[</span><span class="n">deprecated</span> <span class="o">=</span> <span class="kc">true</span><span class="p">];</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// proto3 3.12+ 可选字段，支持字段存在性检测
+</span></span></span><span class="line"><span class="cl"><span class="kt">string</span> <span class="n">name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 带规则与选项的字段
+</span></span></span><span class="line"><span class="cl"><span class="k">repeated</span> <span class="kt">string</span> <span class="n">tags</span> <span class="o">=</span> <span class="mi">2</span> <span class="p">[</span><span class="n">deprecated</span> <span class="o">=</span> <span class="kc">true</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// proto3 3.12+ 可选字段，支持字段存在性检测
 </span></span></span><span class="line"><span class="cl"><span class="k">optional</span> <span class="kt">int32</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span></span></span></code></pre></div></div>
 <h3 id="2-字段编号核心">2. 字段编号（核心）</h3>
 <p>字段编号是Protobuf序列化的核心，决定了字段在二进制数据中的唯一标识，<strong>一旦定义不可修改</strong>，核心规则：</p>
@@ -469,24 +469,24 @@
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
-    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kd">enum</span> <span class="err">枚举名</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 第一个枚举常量必须为0，作为枚举的默认值
-</span></span></span><span class="line"><span class="cl">  <span class="err">常量名</span><span class="mi">1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="err">常量名</span><span class="mi">2</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="err">常量名</span><span class="mi">3</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kd">enum</span> <span class="err">枚举名</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 第一个枚举常量必须为0，作为枚举的默认值
+</span></span></span><span class="line"><span class="cl">  <span class="err">常量名</span><span class="mi">1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="err">常量名</span><span class="mi">2</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="err">常量名</span><span class="mi">3</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 <p>示例：</p>
 <div class="code-block code-line-numbers open" style="counter-reset: code-block 0">
     <div class="code-header language-protobuf">
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
-    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kd">enum</span> <span class="n">UserStatus</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="n">USER_STATUS_UNSPECIFIED</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 规范：默认值用UNSPECIFIED命名
-</span></span></span><span class="line"><span class="cl">  <span class="n">USER_STATUS_NORMAL</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="n">USER_STATUS_DISABLED</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="n">USER_STATUS_DELETED</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kd">enum</span> <span class="n">UserStatus</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">USER_STATUS_UNSPECIFIED</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 规范：默认值用UNSPECIFIED命名
+</span></span></span><span class="line"><span class="cl">  <span class="n">USER_STATUS_NORMAL</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">USER_STATUS_DISABLED</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">USER_STATUS_DELETED</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 <h3 id="2-核心规则">2. 核心规则</h3>
 <ol>
 <li><strong>默认值强制要求</strong>：枚举的第一个常量编号必须为0，作为枚举的默认值</li>
@@ -496,12 +496,12 @@
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
-    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kd">enum</span> <span class="n">HttpStatus</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="k">option</span> <span class="n">allow_alias</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="n">OK</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="n">SUCCESS</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 别名，与OK同数值
-</span></span></span><span class="line"><span class="cl">  <span class="n">NOT_FOUND</span> <span class="o">=</span> <span class="mi">404</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kd">enum</span> <span class="n">HttpStatus</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">option</span> <span class="n">allow_alias</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">OK</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">SUCCESS</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 别名，与OK同数值
+</span></span></span><span class="line"><span class="cl">  <span class="n">NOT_FOUND</span> <span class="o">=</span> <span class="mi">404</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 </li>
 <li><strong>作用域</strong>：枚举可定义在message内部（嵌套枚举）或文件全局，嵌套枚举需通过<code>消息名.枚举名</code>访问</li>
 <li><strong>数值范围</strong>：枚举值为int32类型，不推荐使用负数，会降低编码效率</li>
@@ -516,25 +516,25 @@
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
-    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">User</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 标量字段
-</span></span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 枚举字段
-</span></span></span><span class="line"><span class="cl">  <span class="n">UserStatus</span> <span class="n">status</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 嵌套消息字段
-</span></span></span><span class="line"><span class="cl">  <span class="n">UserProfile</span> <span class="n">profile</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 重复字段
-</span></span></span><span class="line"><span class="cl">  <span class="k">repeated</span> <span class="kt">string</span> <span class="n">tags</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 映射字段
-</span></span></span><span class="line"><span class="cl">  <span class="n">map</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">ext_info</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 嵌套消息定义
-</span></span></span><span class="line"><span class="cl">  <span class="kd">message</span> <span class="nc">UserProfile</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">    <span class="kt">string</span> <span class="n">avatar</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">    <span class="kt">string</span> <span class="n">desc</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="p">}</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">User</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 标量字段
+</span></span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 枚举字段
+</span></span></span><span class="line"><span class="cl">  <span class="n">UserStatus</span> <span class="n">status</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 嵌套消息字段
+</span></span></span><span class="line"><span class="cl">  <span class="n">UserProfile</span> <span class="n">profile</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 重复字段
+</span></span></span><span class="line"><span class="cl">  <span class="k">repeated</span> <span class="kt">string</span> <span class="n">tags</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 映射字段
+</span></span></span><span class="line"><span class="cl">  <span class="kd">map</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">ext_info</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// 嵌套消息定义
+</span></span></span><span class="line"><span class="cl">  <span class="kd">message</span> <span class="nc">UserProfile</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">string</span> <span class="n">avatar</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">string</span> <span class="n">desc</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 <h3 id="2-嵌套与递归消息">2. 嵌套与递归消息</h3>
 <ol>
 <li><strong>嵌套消息</strong>：message内部可嵌套定义其他message，作用域仅限当前消息，外部访问需通过<code>父消息名.子消息名</code></li>
@@ -545,12 +545,12 @@
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
     </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="c1">// 树形结构示例
-</span></span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">TreeNode</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 自引用，子节点列表
-</span></span></span><span class="line"><span class="cl">  <span class="k">repeated</span> <span class="n">TreeNode</span> <span class="n">children</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+</span></span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">TreeNode</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 自引用，子节点列表
+</span></span></span><span class="line"><span class="cl">  <span class="k">repeated</span> <span class="n">TreeNode</span> <span class="n">children</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 </li>
 </ol>
 <h3 id="3-oneof-关键字">3. oneof 关键字</h3>
@@ -561,14 +561,14 @@
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
-    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">Result</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="k">oneof</span> <span class="n">data</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">    <span class="c1">// oneof内的字段不能是repeated
-</span></span></span><span class="line"><span class="cl">    <span class="kt">string</span> <span class="n">success_msg</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">    <span class="kt">int32</span> <span class="n">error_code</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">    <span class="kt">bytes</span> <span class="n">raw_data</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="p">}</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">Result</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">oneof</span> <span class="n">data</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// oneof内的字段不能是repeated
+</span></span></span><span class="line"><span class="cl">    <span class="kt">string</span> <span class="n">success_msg</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int32</span> <span class="n">error_code</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bytes</span> <span class="n">raw_data</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 <h4 id="2核心规则">（2）核心规则</h4>
 <ol>
 <li>oneof内的字段共享内存，同一时间仅一个字段生效</li>
@@ -585,26 +585,26 @@
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
-    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="n">map</span><span class="p">&lt;</span><span class="n">key_type</span><span class="p">,</span> <span class="n">value_type</span><span class="p">&gt;</span> <span class="err">字段名</span> <span class="o">=</span> <span class="err">字段编号</span><span class="p">;</span></span></span></code></pre></div></div>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kd">map</span><span class="p">&lt;</span><span class="n">key_type</span><span class="p">,</span> <span class="n">value_type</span><span class="p">&gt;</span> <span class="err">字段名</span> <span class="o">=</span> <span class="err">字段编号</span><span class="p">;</span></span></span></code></pre></div></div>
 <p>示例：</p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
     <div class="code-header language-protobuf">
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
-    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">Goods</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 字符串映射
-</span></span></span><span class="line"><span class="cl">  <span class="n">map</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">specs</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 数值key，消息value
-</span></span></span><span class="line"><span class="cl">  <span class="n">map</span><span class="p">&lt;</span><span class="kt">int64</span><span class="p">,</span> <span class="n">GoodsSku</span><span class="p">&gt;</span> <span class="n">skus</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">GoodsSku</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">sku_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">price</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">Goods</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 字符串映射
+</span></span></span><span class="line"><span class="cl">  <span class="kd">map</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">specs</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 数值key，消息value
+</span></span></span><span class="line"><span class="cl">  <span class="kd">map</span><span class="p">&lt;</span><span class="kt">int64</span><span class="p">,</span> <span class="n">GoodsSku</span><span class="p">&gt;</span> <span class="n">skus</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">GoodsSku</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">sku_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">price</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 <h4 id="2核心规则-1">（2）核心规则</h4>
 <ol>
 <li><strong>key类型限制</strong>：仅支持标量整数类型、string类型，不支持浮点型、bytes、枚举、消息、map</li>
@@ -753,28 +753,28 @@
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
     </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="c1">// 文件级选项
-</span></span></span><span class="line"><span class="cl"><span class="k">option</span> <span class="n">java_package</span> <span class="o">=</span> <span class="s">&#34;com.example.demo&#34;</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="k">option</span> <span class="n">deprecated</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">Demo</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 字段级选项
-</span></span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">old_field</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">[</span><span class="n">deprecated</span> <span class="o">=</span> <span class="kc">true</span><span class="p">];</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// proto2 自定义默认值
-</span></span></span><span class="line"><span class="cl">  <span class="k">optional</span> <span class="kt">int32</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">2</span> <span class="p">[</span><span class="k">default</span> <span class="o">=</span> <span class="mi">10</span><span class="p">];</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="kd">enum</span> <span class="n">EnumDemo</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="k">option</span> <span class="n">allow_alias</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="n">DEFAULT</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="n">START</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="kd">service</span> <span class="n">DemoService</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="k">option</span> <span class="n">deprecated</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="k">rpc</span> <span class="n">OldMethod</span><span class="p">(</span><span class="n">DemoRequest</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">DemoResponse</span><span class="p">)</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">    <span class="k">option</span> <span class="n">deprecated</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="p">}</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+</span></span></span><span class="line"><span class="cl"><span class="k">option</span> <span class="n">java_package</span> <span class="o">=</span> <span class="s">&#34;com.example.demo&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">option</span> <span class="n">deprecated</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">Demo</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 字段级选项
+</span></span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">old_field</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">[</span><span class="n">deprecated</span> <span class="o">=</span> <span class="kc">true</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// proto2 自定义默认值
+</span></span></span><span class="line"><span class="cl">  <span class="k">optional</span> <span class="kt">int32</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">2</span> <span class="p">[</span><span class="k">default</span> <span class="o">=</span> <span class="mi">10</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">enum</span> <span class="n">EnumDemo</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">option</span> <span class="n">allow_alias</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">DEFAULT</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">START</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">service</span> <span class="n">DemoService</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">option</span> <span class="n">deprecated</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">rpc</span> <span class="n">OldMethod</span><span class="p">(</span><span class="n">DemoRequest</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">DemoResponse</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">option</span> <span class="n">deprecated</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 <h3 id="2-自定义选项">2. 自定义选项</h3>
 <p>Protobuf支持通过<code>extend</code>扩展官方的选项类型，实现自定义元数据，属于高级特性，多用于框架扩展、代码生成定制等场景。</p>
 <div class="code-block code-line-numbers" style="counter-reset: code-block 0">
@@ -782,17 +782,17 @@
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
-    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="k">import</span> <span class="s">&#34;google/protobuf/descriptor.proto&#34;</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// 扩展字段级选项，自定义字段权限
-</span></span></span><span class="line"><span class="cl"><span class="kd">extend</span> <span class="nc">google</span><span class="o">.</span><span class="n">protobuf.FieldOptions</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="kt">bool</span> <span class="n">required_permission</span> <span class="o">=</span> <span class="mi">50001</span><span class="p">;</span> <span class="c1">// 自定义选项编号，需使用10000+的扩展范围
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// 使用自定义选项
-</span></span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">User</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">[(</span><span class="n">required_permission</span><span class="p">)</span> <span class="o">=</span> <span class="kc">true</span><span class="p">];</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kn">import</span> <span class="s">&#34;google/protobuf/descriptor.proto&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 扩展字段级选项，自定义字段权限
+</span></span></span><span class="line"><span class="cl"><span class="kd">extend</span> <span class="nc">google.protobuf.FieldOptions</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">bool</span> <span class="n">required_permission</span> <span class="o">=</span> <span class="mi">50001</span><span class="p">;</span> <span class="c1">// 自定义选项编号，需使用10000+的扩展范围
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 使用自定义选项
+</span></span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">User</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">[(</span><span class="n">required_permission</span><span class="p">)</span> <span class="o">=</span> <span class="kc">true</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 <hr>
 <h2 id="八服务定义-servicegrpc核心">八、服务定义 Service（gRPC核心）</h2>
 <p>Protobuf的<code>service</code>关键字用于定义RPC服务接口，配合gRPC框架实现跨服务的远程调用，支持一元RPC和流式RPC四种模式。</p>
@@ -803,27 +803,27 @@
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
     </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="c1">// 服务定义
-</span></span></span><span class="line"><span class="cl"><span class="kd">service</span> <span class="n">UserService</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 一元RPC：客户端单次请求，服务端单次响应
-</span></span></span><span class="line"><span class="cl">  <span class="k">rpc</span> <span class="n">GetUser</span><span class="p">(</span><span class="n">GetUserRequest</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">GetUserResponse</span><span class="p">);</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 服务端流式RPC：客户端单次请求，服务端多次流式响应
-</span></span></span><span class="line"><span class="cl">  <span class="k">rpc</span> <span class="n">ListUser</span><span class="p">(</span><span class="n">ListUserRequest</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">stream</span> <span class="n">ListUserResponse</span><span class="p">);</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 客户端流式RPC：客户端多次流式请求，服务端单次响应
-</span></span></span><span class="line"><span class="cl">  <span class="k">rpc</span> <span class="n">BatchCreateUser</span><span class="p">(</span><span class="n">stream</span> <span class="n">CreateUserRequest</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">BatchCreateUserResponse</span><span class="p">);</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 双向流式RPC：客户端和服务端均可双向流式读写
-</span></span></span><span class="line"><span class="cl">  <span class="k">rpc</span> <span class="n">Chat</span><span class="p">(</span><span class="n">stream</span> <span class="n">ChatRequest</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">stream</span> <span class="n">ChatResponse</span><span class="p">);</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="c1">// 请求/响应消息定义
-</span></span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">GetUserRequest</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">user_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">GetUserResponse</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+</span></span></span><span class="line"><span class="cl"><span class="kd">service</span> <span class="n">UserService</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 一元RPC：客户端单次请求，服务端单次响应
+</span></span></span><span class="line"><span class="cl">  <span class="kd">rpc</span> <span class="n">GetUser</span><span class="p">(</span><span class="n">GetUserRequest</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">GetUserResponse</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// 服务端流式RPC：客户端单次请求，服务端多次流式响应
+</span></span></span><span class="line"><span class="cl">  <span class="kd">rpc</span> <span class="n">ListUser</span><span class="p">(</span><span class="n">ListUserRequest</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="k">stream</span> <span class="n">ListUserResponse</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// 客户端流式RPC：客户端多次流式请求，服务端单次响应
+</span></span></span><span class="line"><span class="cl">  <span class="kd">rpc</span> <span class="n">BatchCreateUser</span><span class="p">(</span><span class="k">stream</span> <span class="n">CreateUserRequest</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">BatchCreateUserResponse</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// 双向流式RPC：客户端和服务端均可双向流式读写
+</span></span></span><span class="line"><span class="cl">  <span class="kd">rpc</span> <span class="n">Chat</span><span class="p">(</span><span class="k">stream</span> <span class="n">ChatRequest</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="k">stream</span> <span class="n">ChatResponse</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 请求/响应消息定义
+</span></span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">GetUserRequest</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">user_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">GetUserResponse</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 <h3 id="2-核心规则-1">2. 核心规则</h3>
 <ol>
 <li>服务内的方法名必须唯一</li>
@@ -886,22 +886,22 @@
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
-    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="k">import</span> <span class="s">&#34;google/protobuf/any.proto&#34;</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="k">import</span> <span class="s">&#34;google/protobuf/timestamp.proto&#34;</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="k">import</span> <span class="s">&#34;google/protobuf/empty.proto&#34;</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">Event</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 时间戳
-</span></span></span><span class="line"><span class="cl">  <span class="n">google.protobuf.Timestamp</span> <span class="n">create_time</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 任意消息包装
-</span></span></span><span class="line"><span class="cl">  <span class="n">google.protobuf.Any</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="kd">service</span> <span class="n">EventService</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 无参请求
-</span></span></span><span class="line"><span class="cl">  <span class="k">rpc</span> <span class="n">Heartbeat</span><span class="p">(</span><span class="n">google.protobuf.Empty</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">google.protobuf.Empty</span><span class="p">);</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kn">import</span> <span class="s">&#34;google/protobuf/any.proto&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="s">&#34;google/protobuf/timestamp.proto&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="s">&#34;google/protobuf/empty.proto&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">Event</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 时间戳
+</span></span></span><span class="line"><span class="cl">  <span class="n">google.protobuf.Timestamp</span> <span class="n">create_time</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 任意消息包装
+</span></span></span><span class="line"><span class="cl">  <span class="n">google.protobuf.Any</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">service</span> <span class="n">EventService</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 无参请求
+</span></span></span><span class="line"><span class="cl">  <span class="kd">rpc</span> <span class="n">Heartbeat</span><span class="p">(</span><span class="n">google.protobuf.Empty</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">google.protobuf.Empty</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 <hr>
 <h2 id="十保留字段-reserved">十、保留字段 Reserved</h2>
 <p><code>reserved</code>关键字用于预留字段编号和字段名，防止后续版本误用已删除的字段，<strong>是保证前后兼容性的核心手段</strong>。</p>
@@ -911,16 +911,16 @@
         <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
         <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
         <span class="copy" title="复制到剪贴板"><i class="far fa-copy" aria-hidden="true"></i></span>
-    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">User</span> <span class="p">{</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 预留字段编号，支持单个编号、范围
-</span></span></span><span class="line"><span class="cl">  <span class="n">reserved</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span> <span class="k">to</span> <span class="mi">15</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 预留字段名，防止新增同名字段
-</span></span></span><span class="line"><span class="cl">  <span class="n">reserved</span> <span class="s">&#34;old_name&#34;</span><span class="p">,</span> <span class="s">&#34;old_age&#34;</span><span class="p">,</span> <span class="s">&#34;old_status&#34;</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// 正常字段，不可使用已reserved的编号和名称
-</span></span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">name</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
+    </div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="line"><span class="cl"><span class="kd">message</span> <span class="nc">User</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 预留字段编号，支持单个编号、范围
+</span></span></span><span class="line"><span class="cl">  <span class="k">reserved</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span> <span class="k">to</span> <span class="mi">15</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 预留字段名，防止新增同名字段
+</span></span></span><span class="line"><span class="cl">  <span class="k">reserved</span> <span class="s">&#34;old_name&#34;</span><span class="p">,</span> <span class="s">&#34;old_age&#34;</span><span class="p">,</span> <span class="s">&#34;old_status&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// 正常字段，不可使用已reserved的编号和名称
+</span></span></span><span class="line"><span class="cl">  <span class="kt">int64</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">name</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div></div>
 <h3 id="2-核心规则-2">2. 核心规则</h3>
 <ol>
 <li>已删除的字段，必须将其编号和名称加入<code>reserved</code>，防止后续复用</li>
@@ -1027,7 +1027,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.163.3">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.164.0">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 1.0.0"><i class="far fa-kiss-wink-heart" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright" aria-hidden="true"></i><span itemprop="copyrightYear">2018 - 2026</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="./about/" target="_blank">zhengqijun0121</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

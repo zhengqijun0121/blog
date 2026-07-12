@@ -1,20 +1,39 @@
 # 力扣796. 旋转字符串
 
 
-## 力扣796. Rotate String（旋转字符串）
+## 力扣796. 旋转字符串
 
-判断 s 旋转后能否等于 goal。
+给定两个字符串, `s` 和 `goal`。如果在若干次旋转操作之后，`s` 能变成 `goal` ，那么返回 `true` 。
 
-示例 1：
+`s` 的 **旋转操作** 就是将 `s` 最左边的字符移动到最右边。
 
-![](../posts/01_学习/87_LeetCode/0796_旋转字符串/img/0796-1-description.png)
+
+
+- 例如, 若 `s = 'abcde'`，在旋转一次之后结果就是`'bcdea'` 。
+
+**示例 1:**
+
 
 ```
-输入：s = "abcde", goal = "cdeab"
-输出：true
-解释：...
+输入: s = "abcde", goal = "cdeab"
+输出: true
 ```
 
-提示：
-- ...
+
+**示例 2:**
+
+
+```
+输入: s = "abcde", goal = "abced"
+输出: false
+```
+
+
+**提示:**
+
+
+
+- `1 <= s.length, goal.length <= 100`
+
+- `s` 和 `goal` 由小写英文字母组成
 
